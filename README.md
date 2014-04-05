@@ -1,4 +1,1 @@
-mapserver.github.io
-===================
-
-static www.mapserver.org website
+repository for static www.mapserver.org website
