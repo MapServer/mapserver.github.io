@@ -1,0 +1,685 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Map Context &mdash; MapServer 6.4.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="shortcut icon" href="../_static/mapserver.ico"/>
+    <link rel="author" title="À propos de ces documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="MapServer 6.4.1 documentation" href="../index.html" />
+    <link rel="up" title="Support et configuration OGC" href="index.html" />
+    <link rel="next" title="Serveur WFS" href="wfs_server.html" />
+    <link rel="prev" title="WMS Dimension" href="wms_dimension.html" /> 
+  </head>
+  <body>
+
+<table width="100%" style="width: 100%; background-color: white;">
+  <tr>
+    <td rowspan="2" style="padding: 10px 0px 10px 10px;">
+      <a href="../index.html" title="Home"><img src="../_static/banner.png" alt="MapServer banner" border="0" /></a>
+    </td>
+    <td style="padding: 10px 10px 0px 0px; text-align: right; vertical-align: top;">
+      <a href="../index.html" title="Home">Home</a> |
+      <a href="../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
+      <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
+      <a href="../faq.html" title="FAQ">FAQ</a> |
+      <a href="../download.html" title="Download">Download </a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding: 0px 10px 0px 0px; text-align: right; vertical-align: bottom;">
+    
+        
+          <a href="../../en/ogc/mapcontext.html"><img src="../_static/flagicons/en.png" alt="en" title="en" border="0" /></a>
+        
+    
+        
+          <a href="../../it/ogc/mapcontext.html"><img src="../_static/flagicons/it.png" alt="it" title="it" border="0" /></a>
+        
+    
+        
+          <a href="../../es/ogc/mapcontext.html"><img src="../_static/flagicons/es.png" alt="es" title="es" border="0" /></a>
+        
+    
+        
+          <a href="../../zh_cn/ogc/mapcontext.html"><img src="../_static/flagicons/zh_cn.png" alt="zh_cn" title="zh_cn" border="0" /></a>
+        
+    
+        
+          <a href="../../de/ogc/mapcontext.html"><img src="../_static/flagicons/de.png" alt="de" title="de" border="0" /></a>
+        
+    
+        
+          <a href="../../el/ogc/mapcontext.html"><img src="../_static/flagicons/el.png" alt="el" title="el" border="0" /></a>
+        
+        <img src="../_static/flagicons/fr.png" alt="fr" title="fr" border="0" width="18px" height="13px"/>
+    
+        
+          <a href="../../id/ogc/mapcontext.html"><img src="../_static/flagicons/id.png" alt="id" title="id" border="0" /></a>
+        
+    
+        
+          <a href="../../sq/ogc/mapcontext.html"><img src="../_static/flagicons/sq.png" alt="sq" title="sq" border="0" /></a>
+        
+    
+        
+          <a href="../../tr/ogc/mapcontext.html"><img src="../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
+        
+
+    </td>
+  </tr>
+</table>
+
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="wfs_server.html" title="Serveur WFS"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="wms_dimension.html" title="WMS Dimension"
+             accesskey="P">précédent</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="../documentation.html" >Documentation de MapServer 6.4.1</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Support et configuration OGC</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="map-context">
+<span id="index-0"></span><span id="id1"></span><h1><a class="toc-backref" href="#contents">Map Context</a><a class="headerlink" href="#map-context" title="Lien permanent vers ce titre">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Jeff McKenna</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">jmckenna at gatewaygeomatics.com</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">07-10-2010</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#map-context" id="id2">Map Context</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#implementing-a-web-map-context" id="id4">Implémenter un Web Map Context (WMC)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#contents">Introduction</a><a class="headerlink" href="#introduction" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Le terme &#8216;map context&#8217; vient de la <a class="reference external" href="http://www.opengeospatial.org/docs/03-036r2.pdf">spécification v1.0.0 du Web Map Context (WMC)</a> de l&#8217;Open Geospatial Consortium (OGC) , qui coïncide avec la spécification <a class="reference external" href="http://www.opengeospatial.org/docs/01-068r2.pdf">Web Map Server (WMS)</a> de l&#8217;OGC. Un contexte de carte est un document XML qui décrit l&#8217;apparition des couches venant d&#8217;un ou plusieurs serveurs WMS, et peut être transféré entre les clients tout en maintenant les vues au démarrage, l&#8217;état de la vue (et de ses couches), et en stockant des informations de couche additionnelles.</p>
+<p>Le support du &#8220;Web Map Context&#8221; de l&#8217;OGC a été ajouté dans MapServer en version 3.7/4.0. Il permet aux applications clientes de charger et sauvegarder une configuration de carte dans un format XML standard. MapServer peut lire les documents de contexte des versions 0.1.2, 0.1.4, 0.1.7, 1.0.0, 1.1.0 et peut exporter des contenus en versions 0.1.4, 0.1.7, 1.0.0, 1.1.0. Le support &#8220;Web Map Context&#8221; 1.1.0 a été ajouté depuis MapServer 4.10</p>
+<p>Ce document assume que vous êtes déjà familier avec certains aspects de MapServer:</p>
+<ul class="simple">
+<li>Développement d&#8217;applications MapServer et configuration de <a class="reference internal" href="../mapfile/index.html#mapfile"><em>mapfiles</em></a>.</li>
+<li>La familiarité avec la spécification WMS est un avantage. Vous pouvez regarder la section suivante pour les liens vers les sources associées.</li>
+</ul>
+<div class="section" id="links-to-wms-map-context-related-information">
+<h3>Liens vers les informations liées au WMS / Map Context<a class="headerlink" href="#links-to-wms-map-context-related-information" title="Lien permanent vers ce titre">¶</a></h3>
+<ul class="simple">
+<li><a class="reference internal" href="wms_client.html#wms-client"><em>guide du client WMS MapServer</em></a></li>
+<li>Page d&#8217;accueil de l&#8217;<a class="reference external" href="http://www.opengeospatial.org/">Open Geospatial Consortium (OGC)</a></li>
+<li><a class="reference external" href="http://www.opengeospatial.org/docs/01-068r2.pdf">Spécification WMS 1.1.1</a></li>
+<li><a class="reference external" href="http://www.opengeospatial.org/docs/03-036r2.pdf">Spécification Map Context 1.0.0</a></li>
+<li><a class="reference external" href="http://ms-ogc-workshop.maptools.org/">Workshop sur les Web Services OGC dans MapServer</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="implementing-a-web-map-context">
+<h2><a class="toc-backref" href="#contents">Implémenter un Web Map Context (WMC)</a><a class="headerlink" href="#implementing-a-web-map-context" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="special-build-considerations">
+<h3>Considérations spéciales pour la compilation<a class="headerlink" href="#special-build-considerations" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Le support du &#8220;Map Context&#8221; nécessite le support des bibliothèques PROJ4, GDAL/OGR et PHP.</p>
+<p>Compilez/installez les bibliothèques ci-dessus sur votre système et compilez MapServer avec les options de configure <em>&#8216;&#8211;with-wmsclient &#8211;with-proj &#8211;with-ogr &#8211;with-gdal &#8211;with-php&#8217;</em>. Assurez vous aussi que votre compilation utilise les drapeaux (&#8220;flags&#8221;) <em>USE_WMS_LYR</em> et <em>USE_OGR</em>. Pour plus de détails sur la compilation de MapServer, voir lae guide approprié <a class="reference internal" href="../installation/win32.html#win32"><em>Unix</em></a> / <a class="reference internal" href="../installation/win32.html#win32"><em>Windows</em></a></p>
+<p>Les utilisateurs Windows peuvent utiliser <a class="reference external" href="http://www.maptools.org/ms4w/">MS4W</a>, qui est déjà prêt pour l&#8217;usage &#8220;Map Context&#8221;.</p>
+</div>
+<div class="section" id="map-context-mapfile">
+<h3>Mapfile pour le &#8220;Map Context&#8221;<a class="headerlink" href="#map-context-mapfile" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Un document &#8220;map context&#8221; peut SEULEMENT contenir des couches WMS (c&#8217;est à dire avec CONNECTIONTYPE WMS). Merci de vous réfèrer au <a class="reference internal" href="wms_client.html#wms-client"><em>guide du client WMS MapServer</em></a> pour plus d&#8217;informations sur la déclaration de couches WMS.</p>
+<div class="section" id="mapfile-metadata">
+<h4>Métadonnées du Mapfile<a class="headerlink" href="#mapfile-metadata" title="Lien permanent vers ce titre">¶</a></h4>
+<p>La métadonnée du mapfile qui suit est utilisée par MapServer pour gérer les informations du &#8220;map context&#8221;:</p>
+<p>(Notez que certains paramètres ont une &#8220;width&#8221;, une &#8220;height&#8221;, un &#8220;format&#8221;, et un &#8220;href&#8221;, et certains n&#8217;ont que &#8220;format&#8221; et &#8220;href&#8221;. C&#8217;est parce que &#8220;width&#8221; et &#8220;height&#8221; ne sont seulement  utilisés pour les images et les paramètres qui ne les ont pas sont &#8220;text&#8221; ou &#8220;html&#8221;. Pour être consistant avec la spécification, MapServer supporte &#8220;height&#8221; et &#8220;width&#8221; pour tous les paramètres, mais ils devraient seulement être utilisés pour les images)</p>
+</div>
+<div class="section" id="web-object-metadata">
+<h4>Objet Metadata de l&#8217;objet Web<a class="headerlink" href="#web-object-metadata" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li><em>ows_schemas_location</em> : Emplacement du document de schéma XML. Par défaut, c&#8217;est <a class="reference external" href="http://schemas.opengis.net">http://schemas.opengis.net</a>. Voir <a class="reference external" href="http://ogc.dmsolutions.ca">http://ogc.dmsolutions.ca</a> pour un exemple d&#8217;arbre de schéma valide.</li>
+<li><em>wms_abstract</em> : Un texte de présentation fournissant plus d&#8217;informations sur le serveur WMS.</li>
+<li><em>wms_address</em> : S&#8217;il est indiqué, il faut aussi fournir wms_addresstype, wms_city, wms_stateorprovince, wms_postcode, et wms_country)</li>
+<li><em>wms_addresstype</em> : S&#8217;il est indiqué, il faut aussi fournir wms_address, wms_city, wms_stateorprovince, wms_postcode, et wms_country)</li>
+<li><em>wms_city</em> : S&#8217;il est indiqué, il faut aussi fournir wms_address, wms_addresstype, wms_stateorprovince, wms_postcode, et wms_country)</li>
+<li><em>wms_contactelectronicmailaddress</em> : Adresse Email de contact.</li>
+<li><em>wms_contactfacsimiletelephone</em> : Numero de téléphone du fax du contact.</li>
+<li><em>wms_contactorganization</em> :</li>
+<li><em>wms_contactperson</em> :</li>
+<li><em>wms_contactposition</em> :</li>
+<li><em>wms_contactvoicetelephone</em> : numéro de téléphone pour contact audio.</li>
+<li><em>wms_context_fid</em> : l&#8217;identifiant de l&#8217;objet du contexte. Définit à 0 quand on sauvegarde s&#8217;il n&#8217;est pas spécifié.</li>
+<li><em>wms_context_version</em> : la version de la spécification &#8220;map context&#8221;.</li>
+<li><em>wms_country</em> : S&#8217;il est indiqué, il faut aussi fournir wms_address, wms_city, wms_stateorprovince, wms_postcode, et wms_addresstype.</li>
+<li><em>wms_descriptionurl_format</em> : Format de la page web qui contient les informations relatives à la vue.</li>
+<li><em>wms_descriptionurl_href</em> : Référence vers la page web qui contient les informations relatives à la vue.</li>
+<li><em>wms_keywordlist</em> : Une liste séparée par des virgules de mots-clés ou phrases -clés pour aider à la recherche du catalogue.</li>
+<li><em>wms_logourl_width</em> : Largeur du logo de contexte.</li>
+<li><em>wms_logourl_height</em> : Hauteur du logo de contexte.</li>
+<li><em>wms_logourl_format</em> : Format du logo de contexte.</li>
+<li><em>wms_logourl_href</em> : Emplacement du logo de contexte.</li>
+<li><em>wms_postcode</em> : S&#8217;il est indiqué, il faut aussi fournir wms_address, wms_city, wms_stateorprovince, wms_addresstype, et wms_country.</li>
+<li><em>wms_stateorprovince</em> : S&#8217;il est indiqué, il faut aussi fournir wms_address, wms_city, wms_addresstype, wms_postcode, et wms_country.</li>
+<li><em>wms_title</em> : (<strong>Requis</strong>) Un nom lisible par les humains pour cette couche (cette métadonnée n&#8217;existe pas au delà de la version 0.1.4)</li>
+</ul>
+</div>
+<div class="section" id="layer-object-metadata">
+<h4>Objet Metadata de l&#8217;objet Layer<a class="headerlink" href="#layer-object-metadata" title="Lien permanent vers ce titre">¶</a></h4>
+<ul>
+<li><p class="first"><em>wms_abstract</em> : Un texte de présentation fournissant plus d&#8217;informations sur le serveur WMS.</p>
+</li>
+<li><p class="first"><em>wms_dataurl_href</em> : Lien vers une &#8220;online resource&#8221; où la donnée correspondant à la couche peut être trouvée.</p>
+</li>
+<li><p class="first"><em>wms_dataurl_format</em> : Format de la &#8220;online resource&#8221; où la donnée correspondant à la couche peut être trouvée.</p>
+</li>
+<li><p class="first"><em>wms_dimension</em> : Dimension courante utilisée.</p>
+<div class="versionadded">
+<p><span>Introduit dans la version 4.10.</span></p>
+</div>
+</li>
+<li><p class="first"><em>wms_dimensionlist</em> : Liste des dimensions disponibles.</p>
+<div class="versionadded">
+<p><span>Introduit dans la version 4.10.</span></p>
+</div>
+</li>
+<li><p class="first"><em>wms_dimension_%s_default</em> : Valeur de la dimension par défaut. MapServer vérifiera les métadonnées wms_time et wms_timedefault quand  cela n&#8217;est pas spécifié. %s = le nom de la dimension.</p>
+<div class="versionadded">
+<p><span>Introduit dans la version 4.10.</span></p>
+</div>
+</li>
+<li><p class="first"><em>wms_dimension_%s_multiplevalues</em> : Multiples valeurs de dimension. %s = le nom de la dimension.</p>
+<div class="versionadded">
+<p><span>Introduit dans la version 4.10.</span></p>
+</div>
+</li>
+<li><p class="first"><em>wms_dimension_%s_nearestvalue</em> : Valeur de dimension la plus proche. La valeur par défaut est 0. %s = le nom de la dimension.</p>
+<div class="versionadded">
+<p><span>Introduit dans la version 4.10.</span></p>
+</div>
+</li>
+<li><p class="first"><em>wms_dimension_%s_units</em> : Unités pour les valeurs de dimension. La valeur par défaut est ISO8601. %s = le nom de la dimension.</p>
+<div class="versionadded">
+<p><span>Introduit dans la version 4.10.</span></p>
+</div>
+</li>
+<li><p class="first"><em>wms_dimension_%s_unitsymbol</em> : Symbole pour les unités de dimension. La valeur par défaut est t. %s = le nom de la dimension.</p>
+<div class="versionadded">
+<p><span>Introduit dans la version 4.10.</span></p>
+</div>
+</li>
+<li><p class="first"><em>wms_dimension_%s_uservalue</em> : Valeur de dimension utilisateur. MapServer vérifiera les métadonnées wms_time et wms_timedefault quand cela n&#8217;est pas spécifié. %s = le nom de la dimension.</p>
+<div class="versionadded">
+<p><span>Introduit dans la version 4.10.</span></p>
+</div>
+</li>
+<li><p class="first"><em>wms_format</em> : Format courant utilisé.</p>
+</li>
+<li><p class="first"><em>wms_formatlist</em> : Liste des formats disponibles pour cette couche.</p>
+</li>
+<li><p class="first"><em>wms_metadataurl_href</em> : Lien vers la &#8220;ressource online&#8221; où la métadonnée descriptive de la couche correspondante peut être trouvée.</p>
+</li>
+<li><p class="first"><em>wms_metadataurl_format</em> : Format de la &#8220;ressource online&#8221; où la métadonnée descriptive de la couche correspondante peut être trouvée.</p>
+</li>
+<li><p class="first"><em>wms_name</em> : Nom de la couche WMS sur le serveur.</p>
+</li>
+<li><p class="first"><em>wms_onlineresource</em> : <strong>Requise</strong> URL pour accéder au serveur.</p>
+</li>
+<li><p class="first"><em>wms_server_version</em> : La version de la spécification Web Map Server (WMS).</p>
+</li>
+<li><p class="first"><em>wms_server_title</em> : Titre du serveur cartographique.</p>
+</li>
+<li><p class="first"><em>wms_stylelist</em> : Style courant utilisé.</p>
+</li>
+<li><p class="first"><em>wms_style_%s_legendurl_width</em> : Largeur de l&#8217;image décrivant le style. %s = le nom du style.</p>
+</li>
+<li><p class="first"><em>wms_style_%s_legendurl_height</em> : Hauteur de l&#8217;image décrivant le style. %s = le nom du style.</p>
+</li>
+<li><p class="first"><em>wms_style_%s_legendurl_format</em> : Format de l&#8217;image décrivant le style. %s = le nom du style.</p>
+</li>
+<li><p class="first"><em>wms_style_%s_legendurl_href</em> :Emplacement de l&#8217;image décrivant le style. %s = le nom du style.</p>
+</li>
+<li><p class="first"><em>wms_style_%s_sld</em> : URL vers le document SLD de ce style. %s = le nom du style.</p>
+</li>
+<li><p class="first"><em>wms_style_%s_sld_body</em> : document SLD_BODY de ce style. %s = le nom du style.</p>
+</li>
+<li><p class="first"><em>wms_style_%s_title</em> : Titre de la couche. %s = le nom du style.</p>
+</li>
+<li><p class="first"><em>wms_title</em> : (<strong>Requis</strong>) Un nom lisible par les humains pour cette couche.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="sample-map-context-mapfile">
+<h4>Exemple de Mapfile pour le Map Context<a class="headerlink" href="#sample-map-context-mapfile" title="Lien permanent vers ce titre">¶</a></h4>
+<div class="highlight-mapfile"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58</pre></div></td><td class="code"><div class="highlight"><pre>    <span class="k">MAP</span>
+
+    <span class="k">NAME</span> <span class="s">&quot;mapcontext&quot;</span>
+    <span class="k">STATUS</span> <span class="nb">ON</span>
+    <span class="k">SIZE</span> <span class="mi">400</span> <span class="mi">300</span>
+    <span class="k">SYMBOLSET</span> <span class="s">&quot;../etc/symbols.txt&quot;</span>
+    <span class="k">EXTENT</span> <span class="p">-</span><span class="mi">180</span> <span class="p">-</span><span class="mi">90</span> <span class="mi">180</span> <span class="mi">90</span>
+    <span class="k">UNITS</span> <span class="nb">DD</span>
+    <span class="k">SHAPEPATH</span> <span class="s">&quot;../data&quot;</span>
+    <span class="k">IMAGECOLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
+    <span class="k">FONTSET</span> <span class="s">&quot;../etc/fonts.txt&quot;</span>
+
+
+    <span class="c">#</span>
+    <span class="c"># Start of web interface definition</span>
+    <span class="c">#</span>
+    <span class="k">WEB</span>
+      <span class="k">IMAGEPATH</span> <span class="s">&quot;/ms4w/tmp/ms_tmp/&quot;</span>
+      <span class="k">IMAGEURL</span> <span class="s">&quot;/ms_tmp/&quot;</span>
+      <span class="k">METADATA</span>
+        <span class="s">&quot;wms_abstract&quot;</span> <span class="s">&quot;Demo for map context document. Blah blah...&quot;</span>
+        <span class="s">&quot;wms_title&quot;</span> <span class="s">&quot;Map Context demo&quot;</span>   <span class="c">#### REQUIRED</span>
+      <span class="k">END</span>
+    <span class="k">END</span>
+
+    <span class="k">PROJECTION</span>
+      <span class="s">&quot;init=epsg:4326&quot;</span>
+    <span class="k">END</span>
+
+    <span class="c">#</span>
+    <span class="c"># Start of layer definitions</span>
+    <span class="c">#</span>
+
+        <span class="k">LAYER</span>
+          <span class="k">NAME</span> <span class="s">&quot;country_bounds&quot;</span>
+          <span class="k">TYPE</span> <span class="nb">RASTER</span>
+          <span class="k">STATUS</span> <span class="nb">ON</span>
+          <span class="k">CONNECTION</span> <span class="s">&quot;http://demo.mapserver.org/cgi-bin/wms?&quot;</span>
+          <span class="k">CONNECTIONTYPE</span> <span class="nb">WMS</span>
+          <span class="k">METADATA</span>
+            <span class="s">&quot;wms_title&quot;</span>                     <span class="s">&quot;World Country Boundaries&quot;</span>  <span class="c">#### REQUIRED</span>
+            <span class="s">&quot;wms_onlineresource&quot;</span>            <span class="s">&quot;http://demo.mapserver.org/cgi-bin/wms?&quot;</span>  <span class="c">#### REQUIRED</span>
+            <span class="s">&quot;wms_srs&quot;</span>                       <span class="s">&quot;EPSG:4326&quot;</span>
+            <span class="s">&quot;wms_name&quot;</span>                      <span class="s">&quot;country_bounds&quot;</span>
+            <span class="s">&quot;wms_server_version&quot;</span>            <span class="s">&quot;1.1.1&quot;</span>
+            <span class="s">&quot;wms_format&quot;</span>                    <span class="s">&quot;image/gif&quot;</span>
+            <span class="s">&quot;wms_dimensionlist&quot;</span>             <span class="s">&quot;time,width&quot;</span>
+            <span class="s">&quot;wms_dimension&quot;</span>                 <span class="s">&quot;time&quot;</span>
+            <span class="s">&quot;wms_dimension_time_unitsymbol&quot;</span> <span class="s">&quot;t&quot;</span>
+            <span class="s">&quot;wms_dimension_time_units&quot;</span>      <span class="s">&quot;ISO8601&quot;</span>
+            <span class="s">&quot;wms_dimension_time_uservalue&quot;</span>  <span class="s">&quot;1310&quot;</span>
+            <span class="s">&quot;wms_dimension_time_default&quot;</span>    <span class="s">&quot;1310&quot;</span>
+            <span class="s">&quot;wms_dimension_time_multiplevalues&quot;</span>  <span class="s">&quot;1310,1410&quot;</span>
+            <span class="s">&quot;wms_dimension_time_nearestvalue&quot;</span>  <span class="s">&quot;0&quot;</span>
+          <span class="k">END</span>
+        <span class="k">END</span>
+
+    <span class="k">END</span> <span class="c"># Map File</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="testing-map-context-support">
+<h3>Tester le support du Map Context<a class="headerlink" href="#testing-map-context-support" title="Lien permanent vers ce titre">¶</a></h3>
+<ol class="arabic">
+<li><p class="first">La première chose à faire est de sauver votre mapfile en utilisant le la fonction saveMapContext disponible depuis la bibliothèque <a class="reference internal" href="../mapscript/php/index.html#php-mapscript"><em>PHP/MapScript</em></a>. Un script exemple est montré ci-dessous:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">extension_loaded</span><span class="p">(</span><span class="s2">&quot;MapScript&quot;</span><span class="p">))</span> <span class="nb">dl</span><span class="p">(</span><span class="nx">MODULE</span><span class="p">);</span>
+  <span class="nv">$oMap</span> <span class="o">=</span> <span class="nx">ms_newMapObj</span><span class="p">(</span><span class="s2">&quot;mapcontext.map&quot;</span><span class="p">);</span>
+  <span class="nv">$oMap</span><span class="o">-&gt;</span><span class="na">saveMapContext</span><span class="p">(</span><span class="s2">&quot;mapcontext_output.xml&quot;</span><span class="p">);</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Balayer la sortie XML en cherchant les commentaires <em>&lt;!&#8211; WARNING: ... &#8211;&gt;</em>. Ensuite, faire les changements nécessaire pour corriger tous les avertissements que vous rencontrez. A la fin de ceci, vous devriez avoir un mapfile compatible avec la spécification Map Context.</p>
+</li>
+<li><p class="first">Maintenant vous pouvez charger le nouveau document Map Context dans une application utilisant la fonction <em>loadMapContext</em> de la bibliothèque PHP/MapScript.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="sample-map-context-document">
+<h3>Exemple de document Map Context<a class="headerlink" href="#sample-map-context-document" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Ce qui suit est un exemple de document Map Context:</p>
+<div class="highlight-guess"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29</pre></div></td><td class="code"><div class="highlight"><pre>    <span class="cp">&lt;?xml version=&#39;1.0&#39; encoding=&quot;ISO-8859-1&quot; standalone=&quot;no&quot; ?&gt;</span>
+    <span class="nt">&lt;ViewContext</span> <span class="na">version=</span><span class="s">&quot;1.1.0&quot;</span> <span class="na">id=</span><span class="s">&quot;mapcontext&quot;</span> <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span> <span class="na">xmlns:ogc=</span><span class="s">&quot;http://www.opengis.net/ogc&quot;</span> <span class="na">xmlns:xlink=</span><span class="s">&quot;http://www.w3.org/1999/xlink&quot;</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.opengis.net/context&quot;</span> <span class="na">xmlns:sld=</span><span class="s">&quot;http://www.opengis.net/sld&quot;</span> <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.opengis.net/context http://schemas.opengis.net/context/1.1.0/context.xsd&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;General&gt;</span>
+        <span class="nt">&lt;Window</span> <span class="na">width=</span><span class="s">&quot;400&quot;</span> <span class="na">height=</span><span class="s">&quot;300&quot;</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- Bounding box corners and spatial reference system --&gt;</span>
+        <span class="nt">&lt;BoundingBox</span> <span class="na">SRS=</span><span class="s">&quot;EPSG:4326&quot;</span> <span class="na">minx=</span><span class="s">&quot;-180.000000&quot;</span> <span class="na">miny=</span><span class="s">&quot;-90.000000&quot;</span> <span class="na">maxx=</span><span class="s">&quot;180.000000&quot;</span> <span class="na">maxy=</span><span class="s">&quot;90.000000&quot;</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- Title of Context --&gt;</span>
+        <span class="nt">&lt;Title&gt;</span>Map Context demo<span class="nt">&lt;/Title&gt;</span>
+        <span class="nt">&lt;Abstract&gt;</span>Demo for map context document. Blah blah...<span class="nt">&lt;/Abstract&gt;</span>
+        <span class="nt">&lt;ContactInformation&gt;</span>
+        <span class="nt">&lt;/ContactInformation&gt;</span>
+      <span class="nt">&lt;/General&gt;</span>
+      <span class="nt">&lt;LayerList&gt;</span>
+        <span class="nt">&lt;Layer</span> <span class="na">queryable=</span><span class="s">&quot;0&quot;</span> <span class="na">hidden=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;Server</span> <span class="na">service=</span><span class="s">&quot;OGC:WMS&quot;</span> <span class="na">version=</span><span class="s">&quot;1.1.1&quot;</span> <span class="na">title=</span><span class="s">&quot;World Country Boundaries&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;OnlineResource</span> <span class="na">xlink:type=</span><span class="s">&quot;simple&quot;</span> <span class="na">xlink:href=</span><span class="s">&quot;http://demo.mapserver.org/cgi-bin/wms?&quot;</span><span class="nt">/&gt;</span>
+          <span class="nt">&lt;/Server&gt;</span>
+          <span class="nt">&lt;Name&gt;</span>country_bounds<span class="nt">&lt;/Name&gt;</span>
+          <span class="nt">&lt;Title&gt;</span>World Country Boundaries<span class="nt">&lt;/Title&gt;</span>
+          <span class="nt">&lt;SRS&gt;</span>EPSG:4326<span class="nt">&lt;/SRS&gt;</span>
+          <span class="nt">&lt;FormatList&gt;</span>
+            <span class="nt">&lt;Format</span> <span class="na">current=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>image/gif<span class="nt">&lt;/Format&gt;</span>
+          <span class="nt">&lt;/FormatList&gt;</span>
+          <span class="nt">&lt;DimensionList&gt;</span>
+            <span class="nt">&lt;Dimension</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">units=</span><span class="s">&quot;ISO8601&quot;</span> <span class="na">unitSymbol=</span><span class="s">&quot;t&quot;</span> <span class="na">userValue=</span><span class="s">&quot;1310&quot;</span> <span class="na">default=</span><span class="s">&quot;1310&quot;</span> <span class="na">multipleValues=</span><span class="s">&quot;1310,1410&quot;</span> <span class="na">nearestValue=</span><span class="s">&quot;0&quot;</span> <span class="na">current=</span><span class="s">&quot;1&quot;</span><span class="nt">/&gt;</span>
+          <span class="nt">&lt;/DimensionList&gt;</span>
+        <span class="nt">&lt;/Layer&gt;</span>
+      <span class="nt">&lt;/LayerList&gt;</span>
+    <span class="nt">&lt;/ViewContext&gt;</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="map-context-support-through-cgi">
+<h3>Support du Map Context via CGI<a class="headerlink" href="#map-context-support-through-cgi" title="Lien permanent vers ce titre">¶</a></h3>
+<p>MapServer CGI vous permet de charger un map context via l&#8217;utilisation d&#8217;un paramètre CONTEXT, et vous pouvez pointer ce paramètre vers un fichier de &#8220;context&#8221; stocké localement ou un fichier de &#8220;context&#8221; accessible via une URL. Pour plus d&#8217;informations sur MapServer CGI, voir la <a class="reference internal" href="../cgi/index.html#cgi"><em>référence CGI</em></a>.</p>
+<div class="section" id="support-for-local-map-context-files">
+<h4>Gestion des fichiers de contexte de carte locale<a class="headerlink" href="#support-for-local-map-context-files" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Il y a un nouveau paramètre cgi appelé <em>CONTEXT</em> qui est utilisé pour spécifier un fichier de &#8220;context&#8221; local. L&#8217;utilisateur peut ensuite utiliser MapServer pour demander une carte utilisant la syntaxe suivante:</p>
+<div class="highlight-python"><pre>http://localhost/mapserver.cgi?MODE=map&amp;MAP=/path/to/mapfile.map&amp;CONTEXT=
+                     /path/to/contextfile.xml&amp;LAYERS=layer_name1 layers_name2</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Toutes les couches crées à partir du fichier contexte ont leur status à ON. Pour afficher des couches, l&#8217;utilisateur doit ajouter l&#8217;argument LAYERS dans l&#8217;URL.</p>
+</div>
+</div>
+<div class="section" id="support-for-context-files-accessed-through-a-url">
+<h4>Gestion de fichier de contexte accédé par une URL<a class="headerlink" href="#support-for-context-files-accessed-through-a-url" title="Lien permanent vers ce titre">¶</a></h4>
+<p>La syntaxe pour utiliser un fichier de contexte accessible par le web devrait être similaire à l&#8217;accès d&#8217;un fichier de contexte local.</p>
+<div class="highlight-python"><pre>http://localhost/mapserver.cgi?MODE=map&amp;MAP=/path/to/mapfile.map&amp;CONTEXT=
+            http://URL/path/to/contextfile.xml&amp;LAYERS=layers_name1 layer_name2</pre>
+</div>
+<p>A cause de problèmes de sécurité, charger un fichier depuis une URL est désactivé par défaut. Pour activer cette fonctionnalité, l&#8217;utilisateur doit définir un paramètre CONFIG appelé <em>CGI_CONTEXT_URL</em> dans le mapfile par défaut qui permettra d&#8217;activer cette fonctionnalité. Voici un exemple de fichier map avec le paramètre CONFIG:</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="c"># Start of map file</span>
+<span class="k">NAME</span> <span class="s">&quot;map-context&quot;</span>
+<span class="k">STATUS</span> <span class="nb">ON</span>
+<span class="k">SIZE</span> <span class="mi">400</span> <span class="mi">300</span>
+<span class="k">EXTENT</span> <span class="p">-</span><span class="mi">2200000</span> <span class="p">-</span><span class="mi">712631</span> <span class="mi">3072800</span> <span class="mi">3840000</span>
+<span class="k">UNITS</span> <span class="nb">METERS</span>
+<span class="k">IMAGECOLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
+<span class="k">IMAGETYPE</span> <span class="nb">png</span>
+<span class="k">CONFIG</span> <span class="s">&quot;CGI_CONTEXT_URL&quot;</span> <span class="s">&quot;1&quot;</span>
+<span class="p">...</span>
+<span class="k">WEB</span>
+  <span class="p">...</span>
+<span class="k">END</span>
+<span class="k">LAYER</span>
+  <span class="p">...</span>
+<span class="k">END</span>
+
+<span class="k">END</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="default-mapfile">
+<h4>Mapfile par défaut<a class="headerlink" href="#default-mapfile" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Pour faire fonctionner sans problème une application CGI MapServer avec un Map Context, l&#8217;administrateur de l&#8217;application doit fournir un mapfile par défaut avec au moins les paramètres requis par défaut qui seront utilisés avec le fichier de contexte. Le mapfile par défaut peut contenir aussi peu d&#8217;informations que imagepath et imageurl ou bien qu&#8217;une liste de couches. Les informations venant du contexte (c&#8217;est à dire: couches, largeur, hauteur, ...) seraient dans tous les cas ajoutées ou remplaceraient les valeurs trouvées dans le mapfile.</p>
+<p>Voici un exemple d&#8217;un fichier map par défaut contenant les paramètres minimales obligatoire :</p>
+<div class="highlight-mapfile"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">NAME</span> <span class="s">&quot;CGI-CONTEXT-DEMO&quot;</span>
+<span class="k">STATUS</span> <span class="nb">ON</span>
+<span class="k">SIZE</span> <span class="mi">400</span> <span class="mi">300</span>
+<span class="k">EXTENT</span> <span class="p">-</span><span class="mi">2200000</span> <span class="p">-</span><span class="mi">712631</span> <span class="mi">3072800</span> <span class="mi">3840000</span>
+<span class="k">UNITS</span> <span class="nb">METERS</span>
+<span class="k">IMAGECOLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
+<span class="k">IMAGETYPE</span> <span class="nb">png</span>
+<span class="c">#</span>
+<span class="c"># Start of web interface definition</span>
+<span class="c">#</span>
+<span class="k">WEB</span>
+  <span class="k">MINSCALE</span> <span class="mi">2000000</span>
+  <span class="k">MAXSCALE</span> <span class="mi">50000000</span>
+<span class="c">#</span>
+<span class="c"># On Windows systems, /tmp and /tmp/ms_tmp/ should be created at the root</span>
+<span class="c"># of the drive where the .MAP file resides.</span>
+<span class="c">#</span>
+  <span class="k">IMAGEPATH</span> <span class="s">&quot;/ms4w/tmp/ms_tmp/&quot;</span>
+  <span class="k">IMAGEURL</span> <span class="s">&quot;/ms_tmp/&quot;</span>
+<span class="k">END</span>
+<span class="k">END</span> <span class="c"># Map File</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="map-context-support-through-wms">
+<h3>Support du Map Context via WMS<a class="headerlink" href="#map-context-support-through-wms" title="Lien permanent vers ce titre">¶</a></h3>
+<p>MapServer peut aussi fournir vos couches WMS comme un document de contexte.  MapServer étend le standard WMS en ajoutant une opération request=GetContext qui vous permet de récupérer un contexte pour un mapfile basé sur le WMS avec un appel comme:</p>
+<div class="highlight-python"><pre>http://localhost/mapserver.cgi?map=/path/to/mapfile.map&amp;service=WMS&amp;
+request=GetContext&amp;version=1.1.0</pre>
+</div>
+<p>Le paramètre VERSION contrôle la version du document de contexte à retourner.</p>
+<p>GetContext est désactivé par défaut parce qu&#8217;il pourrait être considéré comme une faille de sécurité: il pourrait exposer publiquement les URLs des couches WMS utilisées (en cascade) par un mapfile.</p>
+<p>Pour l&#8217;activer, définir la métadonnée du bloc web &#8220;wms_getcontext_enabled&#8221; à &#8220;1&#8221; dans votre mapfile de serveur WMS.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+<p>
+<a href="../about.html" title="About">About</a><br>
+<a href="../products.html" title="Products">Products</a><br>
+<a href="../community/index.html" title="Community">Community</a><br>
+<a href="../development/index.html" title="Development">Development</a><br>
+<a href="../download.html" title="Downloads">Downloads</a><br>
+<a href="../documentation.html" title="Documentation">Documentation</a><br>
+<a href="../faq.html" title="FAQ">FAQ</a>
+</p>
+  <h3>Current Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Map Context</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li><a class="reference internal" href="#links-to-wms-map-context-related-information">Liens vers les informations liées au WMS / Map Context</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#implementing-a-web-map-context">Implémenter un Web Map Context (WMC)</a><ul>
+<li><a class="reference internal" href="#special-build-considerations">Considérations spéciales pour la compilation</a></li>
+<li><a class="reference internal" href="#map-context-mapfile">Mapfile pour le &#8220;Map Context&#8221;</a><ul>
+<li><a class="reference internal" href="#mapfile-metadata">Métadonnées du Mapfile</a></li>
+<li><a class="reference internal" href="#web-object-metadata">Objet Metadata de l&#8217;objet Web</a></li>
+<li><a class="reference internal" href="#layer-object-metadata">Objet Metadata de l&#8217;objet Layer</a></li>
+<li><a class="reference internal" href="#sample-map-context-mapfile">Exemple de Mapfile pour le Map Context</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-map-context-support">Tester le support du Map Context</a></li>
+<li><a class="reference internal" href="#sample-map-context-document">Exemple de document Map Context</a></li>
+<li><a class="reference internal" href="#map-context-support-through-cgi">Support du Map Context via CGI</a><ul>
+<li><a class="reference internal" href="#support-for-local-map-context-files">Gestion des fichiers de contexte de carte locale</a></li>
+<li><a class="reference internal" href="#support-for-context-files-accessed-through-a-url">Gestion de fichier de contexte accédé par une URL</a></li>
+<li><a class="reference internal" href="#default-mapfile">Mapfile par défaut</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#map-context-support-through-wms">Support du Map Context via WMS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Recherche rapide</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Saisissez un mot clef ou un nom de module, classe ou fonction.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             >index</a></li>
+        <li class="right" >
+          <a href="wfs_server.html" title="Serveur WFS"
+             >suivant</a> |</li>
+        <li class="right" >
+          <a href="wms_dimension.html" title="WMS Dimension"
+             >précédent</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="../documentation.html" >Documentation de MapServer 6.4.1</a> &raquo;</li>
+          <li><a href="index.html" >Support et configuration OGC</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; <a href="../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
+      Mis à jour le Saturday  5 April 2014, 13:08.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

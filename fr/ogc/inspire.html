@@ -1,0 +1,470 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Service de vue INSPIRE &mdash; MapServer 6.4.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="shortcut icon" href="../_static/mapserver.ico"/>
+    <link rel="author" title="À propos de ces documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="MapServer 6.4.1 documentation" href="../index.html" />
+    <link rel="up" title="Support et configuration OGC" href="index.html" />
+    <link rel="next" title="Client WMS" href="wms_client.html" />
+    <link rel="prev" title="Serveur WMS" href="wms_server.html" /> 
+  </head>
+  <body>
+
+<table width="100%" style="width: 100%; background-color: white;">
+  <tr>
+    <td rowspan="2" style="padding: 10px 0px 10px 10px;">
+      <a href="../index.html" title="Home"><img src="../_static/banner.png" alt="MapServer banner" border="0" /></a>
+    </td>
+    <td style="padding: 10px 10px 0px 0px; text-align: right; vertical-align: top;">
+      <a href="../index.html" title="Home">Home</a> |
+      <a href="../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
+      <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
+      <a href="../faq.html" title="FAQ">FAQ</a> |
+      <a href="../download.html" title="Download">Download </a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding: 0px 10px 0px 0px; text-align: right; vertical-align: bottom;">
+    
+        
+          <a href="../../en/ogc/inspire.html"><img src="../_static/flagicons/en.png" alt="en" title="en" border="0" /></a>
+        
+    
+        
+          <a href="../../it/ogc/inspire.html"><img src="../_static/flagicons/it.png" alt="it" title="it" border="0" /></a>
+        
+    
+        
+          <a href="../../es/ogc/inspire.html"><img src="../_static/flagicons/es.png" alt="es" title="es" border="0" /></a>
+        
+    
+        
+          <a href="../../zh_cn/ogc/inspire.html"><img src="../_static/flagicons/zh_cn.png" alt="zh_cn" title="zh_cn" border="0" /></a>
+        
+    
+        
+          <a href="../../de/ogc/inspire.html"><img src="../_static/flagicons/de.png" alt="de" title="de" border="0" /></a>
+        
+    
+        
+          <a href="../../el/ogc/inspire.html"><img src="../_static/flagicons/el.png" alt="el" title="el" border="0" /></a>
+        
+        <img src="../_static/flagicons/fr.png" alt="fr" title="fr" border="0" width="18px" height="13px"/>
+    
+        
+          <a href="../../id/ogc/inspire.html"><img src="../_static/flagicons/id.png" alt="id" title="id" border="0" /></a>
+        
+    
+        
+          <a href="../../sq/ogc/inspire.html"><img src="../_static/flagicons/sq.png" alt="sq" title="sq" border="0" /></a>
+        
+    
+        
+          <a href="../../tr/ogc/inspire.html"><img src="../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
+        
+
+    </td>
+  </tr>
+</table>
+
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="wms_client.html" title="Client WMS"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="wms_server.html" title="Serveur WMS"
+             accesskey="P">précédent</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="../documentation.html" >Documentation de MapServer 6.4.1</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Support et configuration OGC</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="inspire-view-service">
+<span id="index-0"></span><span id="id1"></span><h1><a class="toc-backref" href="#table-of-contents">Service de vue INSPIRE</a><a class="headerlink" href="#inspire-view-service" title="Lien permanent vers ce titre">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Stephan Meissl</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">stephan.meissl at eox.at</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">19-03-2012</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#inspire-view-service" id="id2">Service de vue INSPIRE</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#activation-of-inspire-support" id="id4">Activation du support INSPIRE</a></li>
+<li><a class="reference internal" href="#multi-language-support-for-certain-capabilities-fields" id="id5">Support multi-langues pour certains champs des &#8220;capabilities&#8221;</a></li>
+<li><a class="reference internal" href="#provision-of-inspire-specific-metadata" id="id6">Mise à disposition de métadonnées spécifiques INSPIRE</a></li>
+<li><a class="reference internal" href="#named-group-layers" id="id7">Couches de groupes nommées</a></li>
+<li><a class="reference internal" href="#style-section-for-root-layer-and-possibly-existing-group-layers" id="id8">Section de style pour la couche racine et éventuellement les groupes de couches existants</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#table-of-contents">Introduction</a><a class="headerlink" href="#introduction" title="Lien permanent vers ce titre">¶</a></h2>
+<p>INSPIRE est le nom d&#8217;<a class="reference external" href="http://inspire.jrc.ec.europa.eu/">une directive européenne</a>, établissant une infrastructure pour l&#8217;information spatiale en Europe pour supporter les politiques environnementales de la Communauté, et les politiques ou activités susceptibles d&#8217;avoir une impact sur l&#8217;environnement.</p>
+<p>Le service de vue INSPIRE est une implémentation du <a class="reference external" href="http://INSPIRE.jrc.ec.europa.eu/documents/Network_Services/TechnicalGuidance_ViewServices_v3.0.pdf">document de conseil technique INSPIRE</a> qui s&#8217;ajoute à l&#8217;implémentation <a class="reference internal" href="wms_server.html#wms-server"><em>Serveur WMS</em></a> expliqué dans le chapitre précédent.</p>
+<p>Afin d&#8217;obtenir la conformité avec le service de vue INSPIRE, les améliorations suivantes ont été implémentées dans MapServer:</p>
+<ul class="simple">
+<li>Activation du support INSPIRE (deux scénarios)</li>
+<li>Support multi-langues pour certains champs des &#8220;capabilities&#8221;</li>
+<li>Mise à disposition de métadonnées spécifiques INSPIRE</li>
+<li>Couches de groupes nommées</li>
+<li>Section de style pour la couche racine et éventuellement les groupes de couches existants</li>
+</ul>
+</div>
+<div class="section" id="activation-of-inspire-support">
+<h2><a class="toc-backref" href="#table-of-contents">Activation du support INSPIRE</a><a class="headerlink" href="#activation-of-inspire-support" title="Lien permanent vers ce titre">¶</a></h2>
+<p>La métadonnée spécifique INSPIRE peut soit être référencée dans un document de métadonnées de service INSPIRE externe (scénario 1) ou soit être directement encapsulée dans le document des &#8220;capabilities&#8221; (scénario 2). MapServer supporte les deux scénarios.</p>
+<p>L&#8217;activation du scénario correspondant pour le support INSPIRE se passe dans la section <tt class="docutils literal"><span class="pre">WEB.METADATA</span></tt> du mapfile via <tt class="docutils literal"><span class="pre">wms_inspire_capabilities</span></tt>. S&#8217;il est activé, l&#8217;espace de nom INSPIRE correspondant aussi bien que les avertissements de validation appropriés sont générés dans le document des &#8220;capabilities&#8221;.</p>
+<p>Scénario 1 - activation du support INSPIRE en utilisant une référence à une métadonnée de service externe:</p>
+<div class="highlight-python"><pre>WEB
+ METADATA
+  "wms_inspire_capabilities" "url"
+  ...
+ END
+END</pre>
+</div>
+<p>Scénario 2 - activation du support INSPIRE en utilisant une métadonnée de service encapsulée:</p>
+<div class="highlight-python"><pre>WEB
+ METADATA
+  "wms_inspire_capabilities" "embed"
+  ...
+ END
+END</pre>
+</div>
+</div>
+<div class="section" id="multi-language-support-for-certain-capabilities-fields">
+<span id="inspire-multi-language-support"></span><h2><a class="toc-backref" href="#table-of-contents">Support multi-langues pour certains champs des &#8220;capabilities&#8221;</a><a class="headerlink" href="#multi-language-support-for-certain-capabilities-fields" title="Lien permanent vers ce titre">¶</a></h2>
+<p>INSPIRE requiert le support multi-langues et demande une liste de toutes les langues supportés aussi bien que la langue par défaut dans le document des &#8220;capabilities&#8221;. En fonction du paramètre language dans la requête GetCapabilites, certaines valeurs de métadonnées spécifiques, à savoir</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">wms_title</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">wms_abstract</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">wms_rootlayer_title</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">wms_rootlayer_abstract</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">wms_group_title</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">wms_group_abstract</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">wms_style_title</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">wms_style_&lt;name&gt;_title</span></tt></li>
+</ul>
+<p>ainsi que les données de référence en fonction de la langue comme</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">DATA</span> <span class="pre">&quot;road_eng&quot;</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">CONNECTION</span> <span class="pre">&quot;db_ger&quot;</span></tt></li>
+</ul>
+<p>nécessitent d&#8217;être fournit dans la langue demandée. Si la langue n&#8217;est pas supportée (ou qu&#8217;aucun paramètre de langue n&#8217;est présent), la langue par défaut doit être utilisée.</p>
+<p>Tous les langues supportées doivent être spécifiées comme une liste séparée par des virgules (la première langue est celle par défaut) via <tt class="docutils literal"><span class="pre">wms_languages</span></tt> dans la section <tt class="docutils literal"><span class="pre">WEB.METADATA</span></tt> du mapfile. Ce paramètre de langue est aussi ajouté à <tt class="docutils literal"><span class="pre">OnlineResource</span></tt> dans la sortie de GetCapabilites:</p>
+<div class="highlight-python"><pre>WEB
+ METADATA
+  ...
+  "wms_languages" "eng,ger"       #first default, values according ISO 639-2/B
+  ...
+ END
+END</pre>
+</div>
+<p>Pour les valeurs de métadonnées spécifiques à la langue, une méthode d&#8217;extension clé est appliquée:</p>
+<div class="highlight-python"><pre>WEB
+ METADATA
+  ...
+  "wms_title.eng" "myservicetitle"
+  "wms_title.ger" "myservicetitleger"
+  "wms_abstract" "mylayerabstract"        #fallback
+  "wms_abstract.ger" "mylayerabstractger"
+  ...
+ END
+END</pre>
+</div>
+<p>Pour les données de référence dépendantes de la langue, une approche similaire à la fonctionnalité de <a class="reference internal" href="../cgi/runsub.html#runsub"><em>substitution à la volée</em></a> de MapServer a été suivie (seulement les valeurs <tt class="docutils literal"><span class="pre">DATA</span></tt> et <tt class="docutils literal"><span class="pre">CONNECTION</span></tt> avec %language% sont substituées):</p>
+<div class="highlight-python"><pre>...
+  LAYER
+   NAME TN.RoadTransportNetwork.RoadLink
+   DATA "road_%language%"
+   ...
+  END
+...</pre>
+</div>
+<p>Si la langue n&#8217;est pas supportée (ou qu&#8217;aucun paramètre de langue n&#8217;est présent), la langue par défaut est substituée.</p>
+</div>
+<div class="section" id="provision-of-inspire-specific-metadata">
+<h2><a class="toc-backref" href="#table-of-contents">Mise à disposition de métadonnées spécifiques INSPIRE</a><a class="headerlink" href="#provision-of-inspire-specific-metadata" title="Lien permanent vers ce titre">¶</a></h2>
+<p>En fonction du scénario, une information de métadonnées supplémentaire est requise pour supporter la spécification. Les champs relatifs à INSPIRE sont fournis ci-dessous.</p>
+<p>Scénario 1 - champs liés à INSPIRE utilisant une référence à une métadonnée de service externe:</p>
+<div class="highlight-python"><pre>WEB
+ METADATA
+  "wms_inspire_capabilities" "url"
+  "wms_languages" "eng,ger"               #first default, values according ISO 639-2/B
+  "wms_inspire_metadataurl_href" "http://INSPIRE.service/metadata"
+  "wms_inspire_metadataurl_format" "application/vnd.ogc.csw.capabilities.response_xml"
+  "wms_keywordlist_ISO_items" "infoMapAccessService" #value according "classification of spatial data services"
+  "wms_keywordlist_vocabulary" "ISO"
+  "wms_title" "myservicetitle"
+  "wms_abstract" "myabstract"
+  "wms_fees" "conditions unknown"         #value either "no conditions apply"|default "conditions unknown"|&lt;specific conditions&gt;
+  "wms_accessconstraints" "None"          #value according ISO 19115 (MD_RestrictionCode codelist) or default "None"
+  "wms_contactorganization" "MapServer"   #responsible organization
+  "wms_contactposition" "owner"           #responsible organization, value according "INSPIRE Metadata Regulation" (part D6)
+  ...
+ END
+END</pre>
+</div>
+<p>Scénario 2 - champs liés à INSPIRE utilisant une métadonnée de service encapsulée:</p>
+<div class="highlight-python"><pre>WEB
+ METADATA
+  "wms_inspire_capabilities" "embed"
+  "wms_languages" "eng,ger"               #first default, values according ISO 639-2/B
+  "wms_inspire_temporal_reference" "2011-09-19" #date of last revision, value according YYYY-MM-DD
+  "wms_inspire_mpoc_name" "mympocname"    #point of contact
+  "wms_inspire_mpoc_email" "mympoc@e.mail" #point of contact
+  "wms_inspire_metadatadate" "2011-09-19" #value according YYYY-MM-DD
+  "wms_inspire_resourcelocator" "http://myinspireresource" #URL for ResourceLocator
+  "wms_inspire_keyword" "infoMapAccessService" #value according "classification of spatial data services"
+  "wms_keywordlist_ISO_items" "infoMapAccessService"
+  "wms_keywordlist_vocabulary" "ISO"
+  "wms_title" "myservicetitle"
+  "wms_abstract" "myabstract"
+  "wms_fees" "conditions unknown"         #value either "no conditions apply"|default "conditions unknown"|&lt;specific conditions&gt;
+  "wms_accessconstraints" "None"          #value according ISO 19115 (MD_RestrictionCode codelist) or default "None"
+  "wms_contactorganization" "MapServer"   #responsible organization
+  "wms_contactposition" "owner"           #responsible organization, value according "INSPIRE Metadata Regulation" (part D6)
+  ...
+ END
+END</pre>
+</div>
+<p>Notes:</p>
+<ul class="simple">
+<li>plusieurs champs nécessitent certaines valeurs, ces valeurs ne sont pas validées par MapServer lui-même, à la place une validation manuelle vis à vis des <a class="reference external" href="http://inspire.ec.europa.eu/schemas/inspire_vs/1.0/inspire_vs.xsd">schémas INSPIRE</a> et du <a class="reference external" href="http://inspire_tester.neogeo-online.net/">testeur INSPIRE WMS</a> est recommandée</li>
+<li>comme suggéré dans le document en ce qui concerne le scénario 2, <tt class="docutils literal"><span class="pre">&lt;inspire_common:ResourceType&gt;</span></tt> est toujours défini à service et <tt class="docutils literal"><span class="pre">&lt;inspire_common:SpatialDataServiceType&gt;</span></tt> est toujours défini à view, les deux valeurs ne peuvent pas être altérées via le mapfile</li>
+<li>la conformité est toujours défini à non évaluée, selon les dernières <a class="reference external" href="http://inspire.jrc.ec.europa.eu/documents/Metadata/Changes_to_MD_Guidelines_from_v1-1_to_v1-2_20100616-1.pdf">régles d&#8217;implémentation de métadonnée INSPIRE</a> (page 7). Un document de spécification, une date de spécification et une URI ou URL de spécification doivent être fournis pour le degré de conformité/non conformité, ce qui n&#8217;est actuellement non implémenté</li>
+</ul>
+</div>
+<div class="section" id="named-group-layers">
+<h2><a class="toc-backref" href="#table-of-contents">Couches de groupes nommées</a><a class="headerlink" href="#named-group-layers" title="Lien permanent vers ce titre">¶</a></h2>
+<p>INSPIRE exige l&#8217;usage de couches de groupes nommés. Ainsi, la fonctionnalité de <tt class="docutils literal"><span class="pre">wms_layer_group</span></tt> est étendue pour supporter les couches de groupes nommés. Si une couche avec le même nom qu&#8217;utilisée dans <tt class="docutils literal"><span class="pre">wms_layer_group</span></tt> est trouvée, elle est traitée comme un groupe nommé et si aucune couche avec le nom  n&#8217;est trouvée comme un groupe sans nom, comme avant.</p>
+<p>Fournit cette capacité, une hiérarchie de n&#8217;importe quel niveau peut être réalisée. Voir par exemple le groupement utilisé dans le mapfile <a class="reference external" href="https://svn.osgeo.org/mapserver/sandbox/inspire_soc2011/msautotest/wxs/wms_inspire.map">wms_inspire.map</a> mapfile dans msautotest:</p>
+<div class="highlight-python"><pre>TN
++--- TN.CommonTransportElements
+     +--- TN.CommonTransportElements.TransportArea
+     +--- TN.CommonTransportElements.TransportLink
+     +--- TN.CommonTransportElements.TransportNode
++--- TN.RoadTransportNetwork
+     +--- TN.RoadTransportNetwork
+     +--- TN.RoadTransportNetwork.VehicleTrafficArea
+     +--- TN.RoadTransportNetwork.RoadServiceArea
+     +--- TN.RoadTransportNetwork.RoadArea
++--- TN.RailTransportNetwork
+     +--- TN.RailTransportNetwork.RailwayLink
+     +--- TN.RailTransportNetwork.RailwayStationArea
+     +--- TN.RailTransportNetwork.RailwayYardArea
+     +--- TN.RailTransportNetwork.RailwayArea</pre>
+</div>
+</div>
+<div class="section" id="style-section-for-root-layer-and-possibly-existing-group-layers">
+<h2><a class="toc-backref" href="#table-of-contents">Section de style pour la couche racine et éventuellement les groupes de couches existants</a><a class="headerlink" href="#style-section-for-root-layer-and-possibly-existing-group-layers" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Pour les couches régulières, le concept de GROUP et CLASSGROUP peut être utilisé pour définir le nom du style de la couche selon la valeur renseignée. De plus, les titres du style de couche peuvent être remplacés via <tt class="docutils literal"><span class="pre">wms_style_&lt;stylename&gt;_title</span></tt> et les legendURLs du style de couche via <tt class="docutils literal"><span class="pre">wms_style_&lt;stylename&gt;_legendurl_*</span></tt> (width, height, format, and href doivent être fournis):</p>
+<div class="highlight-python"><pre>...
+  LAYER
+   NAME TN.RoadTransportNetwork.RoadLink
+   DATA "road"
+   METADATA
+    "wms_title.eng" "Transport networks: Road Link"
+    "wms_title.ger" "Verkehrsnetze: Strassensegment"
+    ...
+    "wms_style_inspire_common:DEFAULT_title" "mylayerstyletitle"     #style title
+    "wms_style_inspire_common:DEFAULT_legendurl_width" "85"          #override style legendurl (mandatory: width, height, format, href)
+    "wms_style_inspire_common:DEFAULT_legendurl_height" "40"
+    "wms_style_inspire_common:DEFAULT_legendurl_format" "image/png"
+    "wms_style_inspire_common:DEFAULT_legendurl_href" "http://path/to/onlineresource...roadlink"
+   END
+   ...
+  END
+  ...
+  CLASSGROUP "inspire_common:DEFAULT"
+  CLASSITEM "NAME_E"
+
+  CLASS
+   NAME "myclass1"
+   GROUP "inspire_common:DEFAULT"
+   EXPRESSION "Trans-Canada Highway"
+   COLOR 255 0 0
+  END
+
+  CLASS
+   NAME "myclass2"
+   GROUP "inspire_common:DEFAULT"
+   COLOR 0 255 0
+  END
+...</pre>
+</div>
+<p>La méthode suivante est implémentée pour supporter des sections de style (personnalisable) dans la couche racine:</p>
+<ul class="simple">
+<li>utilisation de <tt class="docutils literal"><span class="pre">wms_style_name</span></tt> dans la section <tt class="docutils literal"><span class="pre">WEB.METADATA</span></tt> pour ajouter une section de style à la couche racine</li>
+<li>utilisation de <tt class="docutils literal"><span class="pre">wms_style_title</span></tt> pour remplacer le title du style (optionnel)</li>
+<li>utilisation de <tt class="docutils literal"><span class="pre">wms_style_legendurl_*</span></tt> pour remplacer width, heigth, format et href de la legendURL (optionnel)</li>
+</ul>
+<p>et éventuellement les couches de groupes existantes:</p>
+<ul class="simple">
+<li>utilisation de <tt class="docutils literal"><span class="pre">wms_group_style_name</span></tt> dans la première section <tt class="docutils literal"><span class="pre">LAYER.METADATA</span></tt> correspondante pour ajouter une section de style à une couche de groupe</li>
+<li>utilisation de <tt class="docutils literal"><span class="pre">wms_group_style_title</span></tt> pour remplacer le title du style (optionnel)</li>
+<li>utilisation de <tt class="docutils literal"><span class="pre">wms_group_style_legendurl_*</span></tt> pour remplacer width, heigth, format et href de la legendURL (optionnel)</li>
+</ul>
+<div class="highlight-python"><pre>...
+  WEB
+   METADATA
+    ...
+    "wms_style_name" "inspire_common:DEFAULT"      #style name
+    "wms_style_title" "myroadarealayerstyletitle"  #style title
+    "wms_style_legendurl_width" "85"               #override style legendurl (mandatory: width, height, format, href)
+    "wms_style_legendurl_height" "40"
+    "wms_style_legendurl_format" "image/png"
+    "wms_style_legendurl_href" "http://path/to/onlineresource...roadarea"
+   END
+  END
+
+  LAYER
+   NAME TN.RailTransportNetwork.RailwayLink
+   GROUP TN.CommonTransportElements.TransportLink
+    DATA "road"
+    METADATA
+     "wms_group_title.eng" "Transport networks: Generic Transport Link"
+     "wms_group_title.ger" "Verkehrsnetze: Generisches Verkehrssegment"
+     "wms_group_abstract" "mygenerictransportlinklayerabstract" #fallback
+     "wms_group_abstract.ger" "mygenerictransportlinklayerabstract"
+     "wms_group_style_name" "inspire_common:DEFAULT" #style name
+     "wms_group_style_title" "mygenerictransportlinklayerstyletitle" #style title
+     "wms_group_style_legendurl_width" "85"        #override style legendurl (mandatory: width, height, format, href)
+     "wms_group_style_legendurl_height" "40"
+     "wms_group_style_legendurl_format" "image/png"
+     "wms_group_style_legendurl_href" "http://path/to/onlineresource...generictransportlink"
+     "wms_title.eng" "Transport networks: Railway Link"
+     "wms_title.ger" "Verkehrsnetze: Eisenbahnverbindung"
+     "wms_abstract" "myrailwaylinklayerabstract"   #fallback
+     "wms_abstract.ger" "myrailwaylinklayerabstractger"
+     ...
+    END
+   ...
+  END
+...</pre>
+</div>
+<p>Fournit cette capacité, 3 niveaux de hiérarchies peuvent être utilisés comme dans les mapfiles exemples <a class="reference external" href="https://svn.osgeo.org/mapserver/sandbox/inspire_soc2011/msautotest/wxs/wms_inspire_scenario1.map">wms_inspire_scenario1.map</a> et <a class="reference external" href="https://svn.osgeo.org/mapserver/sandbox/inspire_soc2011/msautotest/wxs/wms_inspire_scenario2.map">wms_inspire_scenario2.map</a> dans msautotest:</p>
+<div class="highlight-python"><pre>TN.RoadTransportNetwork.RoadArea
++--- TN.RoadTransportNetwork.RoadLink
++--- TN.CommonTransportElements.TransportLink
+     +--- TN.RailTransportNetwork.RailwayLink
+     +--- TN.AirTransportNetwork.AirLink</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+<p>
+<a href="../about.html" title="About">About</a><br>
+<a href="../products.html" title="Products">Products</a><br>
+<a href="../community/index.html" title="Community">Community</a><br>
+<a href="../development/index.html" title="Development">Development</a><br>
+<a href="../download.html" title="Downloads">Downloads</a><br>
+<a href="../documentation.html" title="Documentation">Documentation</a><br>
+<a href="../faq.html" title="FAQ">FAQ</a>
+</p>
+  <h3>Current Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Service de vue INSPIRE</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#activation-of-inspire-support">Activation du support INSPIRE</a></li>
+<li><a class="reference internal" href="#multi-language-support-for-certain-capabilities-fields">Support multi-langues pour certains champs des &#8220;capabilities&#8221;</a></li>
+<li><a class="reference internal" href="#provision-of-inspire-specific-metadata">Mise à disposition de métadonnées spécifiques INSPIRE</a></li>
+<li><a class="reference internal" href="#named-group-layers">Couches de groupes nommées</a></li>
+<li><a class="reference internal" href="#style-section-for-root-layer-and-possibly-existing-group-layers">Section de style pour la couche racine et éventuellement les groupes de couches existants</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Recherche rapide</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Saisissez un mot clef ou un nom de module, classe ou fonction.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             >index</a></li>
+        <li class="right" >
+          <a href="wms_client.html" title="Client WMS"
+             >suivant</a> |</li>
+        <li class="right" >
+          <a href="wms_server.html" title="Serveur WMS"
+             >précédent</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="../documentation.html" >Documentation de MapServer 6.4.1</a> &raquo;</li>
+          <li><a href="index.html" >Support et configuration OGC</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; <a href="../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
+      Mis à jour le Saturday  5 April 2014, 13:08.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

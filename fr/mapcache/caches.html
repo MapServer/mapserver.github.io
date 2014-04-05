@@ -1,0 +1,501 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Types de cache &mdash; MapServer 6.4.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="shortcut icon" href="../_static/mapserver.ico"/>
+    <link rel="author" title="À propos de ces documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="MapServer 6.4.1 documentation" href="../index.html" />
+    <link rel="up" title="MapCache" href="index.html" />
+    <link rel="next" title="Formats d’image" href="formats.html" />
+    <link rel="prev" title="Alimentation du cache" href="seed.html" /> 
+  </head>
+  <body>
+
+<table width="100%" style="width: 100%; background-color: white;">
+  <tr>
+    <td rowspan="2" style="padding: 10px 0px 10px 10px;">
+      <a href="../index.html" title="Home"><img src="../_static/banner.png" alt="MapServer banner" border="0" /></a>
+    </td>
+    <td style="padding: 10px 10px 0px 0px; text-align: right; vertical-align: top;">
+      <a href="../index.html" title="Home">Home</a> |
+      <a href="../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
+      <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
+      <a href="../faq.html" title="FAQ">FAQ</a> |
+      <a href="../download.html" title="Download">Download </a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding: 0px 10px 0px 0px; text-align: right; vertical-align: bottom;">
+    
+        
+          <a href="../../en/mapcache/caches.html"><img src="../_static/flagicons/en.png" alt="en" title="en" border="0" /></a>
+        
+    
+        
+          <a href="../../it/mapcache/caches.html"><img src="../_static/flagicons/it.png" alt="it" title="it" border="0" /></a>
+        
+    
+        
+          <a href="../../es/mapcache/caches.html"><img src="../_static/flagicons/es.png" alt="es" title="es" border="0" /></a>
+        
+    
+        
+          <a href="../../zh_cn/mapcache/caches.html"><img src="../_static/flagicons/zh_cn.png" alt="zh_cn" title="zh_cn" border="0" /></a>
+        
+    
+        
+          <a href="../../de/mapcache/caches.html"><img src="../_static/flagicons/de.png" alt="de" title="de" border="0" /></a>
+        
+    
+        
+          <a href="../../el/mapcache/caches.html"><img src="../_static/flagicons/el.png" alt="el" title="el" border="0" /></a>
+        
+        <img src="../_static/flagicons/fr.png" alt="fr" title="fr" border="0" width="18px" height="13px"/>
+    
+        
+          <a href="../../id/mapcache/caches.html"><img src="../_static/flagicons/id.png" alt="id" title="id" border="0" /></a>
+        
+    
+        
+          <a href="../../sq/mapcache/caches.html"><img src="../_static/flagicons/sq.png" alt="sq" title="sq" border="0" /></a>
+        
+    
+        
+          <a href="../../tr/mapcache/caches.html"><img src="../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
+        
+
+    </td>
+  </tr>
+</table>
+
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="formats.html" title="Formats d’image"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="seed.html" title="Alimentation du cache"
+             accesskey="P">précédent</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="../documentation.html" >Documentation de MapServer 6.4.1</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">MapCache</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="cache-types">
+<span id="mapcache-caches"></span><h1>Types de cache<a class="headerlink" href="#cache-types" title="Lien permanent vers ce titre">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Thomas Bonfort</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">tbonfort at terriscope.fr</td>
+</tr>
+</tbody>
+</table>
+<p>Ce document détaille les différents backend pour le cache qui peuvent être utilisés pour stocker des tuiles</p>
+<div class="section" id="disk-caches">
+<span id="mapcache-cache-disk"></span><h2>Caches disque<a class="headerlink" href="#disk-caches" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Le cache basé  sur le stockage disque est le plus simple à configurer parmi les types de cache, et celui avec l&#8217;accès le plus rapide aux tuiles existantes. Il est idéal pour les petites dépôts de tuiles, mais est susceptible de causer des problèmes pour les sites qui hébergent des millions de tuiles, comme le nombre de fichiers ou répertoire est susceptible de dépasser les capacités du système de fichier sous-jacent. En plus, la taille des blocs de fichiers choisis pour le système de fichiers doit correspondre le plus possible à la taille moyenne d&#8217;une tuile stockée: idéalement, n&#8217;importe quelle tuile devrait juste correspondre dans un bloc de système de fichiers, afin de ne pas gaspiller de l&#8217;espace de stockage dans chaque bloc et ne pas utiliser plusieurs blocs par tuile.</p>
+<p>L&#8217;emplacement des répertoires/fichiers doit être en lecture/écriture pour l&#8217;utilisateur qui fait fonctionner le serveur de tuiles.</p>
+<p>Il ya deux types de caches disque , cela créé une hiérarchie de fichiers différente:</p>
+<div class="section" id="default-structure">
+<h3>Structure par défaut<a class="headerlink" href="#default-structure" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Le système de stockage de tuiles par défaut stocke les tuiles dans une structure pratiquement identique à la hiérarchie de fichiers/répertoires utilisée par TileCache (une solution plus ancienne de mise en cache). le seul changement est que le répertoire de niveau le plus élevé correspondant au nom de la grille est ajouté (comme MapCache supporte de multiples grilles par jeux de tuiles)</p>
+<p>Ce cache est capable de détecter les tuiles &#8220;blanches&#8221; (c&#8217;est à dire avec une couleur uniforme) et d&#8217;utiliser un lien symbolique vers une seule tuile &#8220;blanche&#8221;pour gagner de l&#8217;espace disque.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;disk&quot;</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;base&gt;</span>/tmp<span class="nt">&lt;/base&gt;</span>
+   <span class="nt">&lt;symlink_blank/&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>Les deux seules clés dans la configuration sont le répertoire racine où les tuiles seront stockées, et la clé pour activer la mise en lien symbolique des tuiles vides</p>
+</div>
+<div class="section" id="template-structure">
+<h3>Structure du &#8220;template&#8221;<a class="headerlink" href="#template-structure" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Le modèle basé sur le cache disque vous permet de créer (ou réutiliser) une structure de tuiles (existante) que vous avez défini à l&#8217;avance. Le paramètre &lt;template&gt; prend une chaîne en argument où les différentes entrées du modèle seront remplacées à l&#8217;exécution par la valeur correcte pour chacune des tuiles à stocker.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tmpl&quot;</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="nt">&gt;</span>
+   <span class="c">&lt;!-- template</span>
+
+<span class="c">       string template that will be used to map a tile (by tileset, grid name, dimension,</span>
+<span class="c">       format, x, y, and z) to a filename on the filesystem.</span>
+<span class="c">       the following replacements are performed:</span>
+<span class="c">       - {tileset} : the tileset name</span>
+<span class="c">       - {grid} : the grid name</span>
+<span class="c">       - {dim} : a string that concatenates the tile&#39;s dimension</span>
+<span class="c">       - {ext} : the filename extension for the tile&#39;s image format</span>
+<span class="c">       - {x},{y},{z} : the tile x,y,z values</span>
+<span class="c">       - {inv_x}, {inv_y}, {inv_z} : inverted x,y,z values (inv_x = level-&gt;maxx - x - 1). This</span>
+<span class="c">            is mainly used to support grids where one axis is inverted (e.g. the google schema)</span>
+<span class="c">            and you want to create on offline cache.</span>
+
+<span class="c">      * note that this type of cache does not support blank-tile detection and symlinking.</span>
+
+<span class="c">      * warning: it is up to you to make sure that the template you chose creates a unique</span>
+<span class="c">        filename for your given tilesets. e.g. do not ommit the {grid} parameter if your</span>
+<span class="c">        tilesets reference multiple grids. Failure to do so will result in filename</span>
+<span class="c">        collisions !</span>
+
+<span class="c">   --&gt;</span>
+   <span class="nt">&lt;template&gt;</span>/tmp/template-test/{tileset}#{grid}#{dim}/{z}/{x}/{y}.{ext}<span class="nt">&lt;/template&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="berkeleydb-caches">
+<span id="mapcache-cache-bdb"></span><h2>Caches BerkeleyDB<a class="headerlink" href="#berkeleydb-caches" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Le cache du backend BerkeleyDB stocke les tuiles dans une base de données clé-valeur à plat et donc n&#8217;a pas les désavantages des caches disques au regard du nombre de fichiers de tuiles stockées sur le système de fichiers. Comme les &#8220;blobs&#8221; d&#8217;images sont stockés de manière contiguë, la taille du bloc choisi pour le système de fichiers n&#8217;a pas d&#8217;influence sur la capacité de stockage du volume.</p>
+<p>Notez que pour un cache BerkeleyDB donné, seule un seul fichier de base de données est créé, qui stockera les tuiles des jeux de tuiles associés (c&#8217;est à dire qu&#8217;il n&#8217;y a pas de fichier de base de données créé par jeu de tuiles, grilles, et ou dimensions). Si vous avez besoin de stocker différents jeux de donnés dans différents fichiers, alors utilisez de multiples entrées dans le cache BerkeleyDB. Il n&#8217;est pas possible d&#8217;utiliser de multiples fichiers de base de données pour des grilles de jeux de tuiles ou des dimensions.</p>
+<p>Les caches basés sur BerkeleyDB sont un peu plus rapides que les caches basés sur le stockage disque mais sont un peu plus lents pour les écritures concurrentes si de nombreux threads essayent tous d&#8217;insérer des tuiles de manière concurrentes.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;bdb&quot;</span> <span class="na">type=</span><span class="s">&quot;bdb&quot;</span><span class="nt">&gt;</span>
+   <span class="c">&lt;!-- base (required)</span>
+<span class="c">      absolute filesystem path where the berkeley db database file is to be stored.</span>
+<span class="c">      this directory must exist, and be writable</span>
+<span class="c">   --&gt;</span>
+   <span class="nt">&lt;base&gt;</span>/tmp/foo/<span class="nt">&lt;/base&gt;</span>
+
+   <span class="c">&lt;!-- key_template (optional)</span>
+<span class="c">      string template used to create the key for a tile entry in the database.</span>
+<span class="c">      defaults to the value below. you should include {tileset}, {grid} and {dim} here</span>
+<span class="c">      unless you know what you are doing, or you will end up with mixed tiles</span>
+<span class="c">   &lt;key_template&gt;{tileset}-{grid}-{dim}-{z}-{y}-{x}.{ext}&lt;/key_template&gt;</span>
+<span class="c">   --&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sqlite-caches">
+<span id="mapcache-cache-sqlite"></span><h2>Caches Sqlite<a class="headerlink" href="#sqlite-caches" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Il y a deux caches sqlite différents qui varient par le schéma de la base de données qu&#8217;ils créent et interrogent. Les caches Sqlite ont l&#8217;avantage qu&#8217;ils stockent les tuiles dans des &#8220;blobs&#8221; dans une seule base de données et donc ils n&#8217;ont pas les désavantages des caches disques au regard du nombre de fichiers de tuiles stockées. Comme les &#8220;blobs&#8221; d&#8217;images sont stockés de manière contiguë, la taille du bloc choisi pour le système de fichiers n&#8217;a pas d&#8217;influence sur la capacité de stockage du volume.</p>
+<p>Les caches SQLite sont un peu plus lents que les caches disques, et peuvent avoir des problèmes de blocage en écriture au moment du remplissage si un nombre élevé de threads essaient tous d&#8217;insérer de nouvelles tuiles en même temps.</p>
+<div class="section" id="default-schema">
+<h3>Schéma par défaut<a class="headerlink" href="#default-schema" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Les tuiles sont stockées dans le fichier SQLite configuré créé par MapCache avec</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">create</span> <span class="k">table</span> <span class="n">if</span> <span class="k">not</span> <span class="k">exists</span> <span class="n">tiles</span><span class="p">(</span>
+   <span class="n">tileset</span> <span class="nb">text</span><span class="p">,</span>
+   <span class="n">grid</span> <span class="nb">text</span><span class="p">,</span>
+   <span class="n">x</span> <span class="nb">integer</span><span class="p">,</span>
+   <span class="n">y</span> <span class="nb">integer</span><span class="p">,</span>
+   <span class="n">z</span> <span class="nb">integer</span><span class="p">,</span>
+   <span class="k">data</span> <span class="nb">blob</span><span class="p">,</span>
+   <span class="n">dim</span> <span class="nb">text</span><span class="p">,</span>
+   <span class="n">ctime</span> <span class="n">datetime</span><span class="p">,</span>
+   <span class="k">primary</span> <span class="k">key</span><span class="p">(</span><span class="n">tileset</span><span class="p">,</span><span class="n">grid</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">dim</span><span class="p">)</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>Vous pouvez également ajouter des commandes pragmas SQLite personnalisées qui seront exécutées lors de la première connexion à la base de données, de sorte à modifier les réglages SQlite par défaut</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqlitetemplate&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;dbfile&gt;</span>/tmp/sqlitefile.db<span class="nt">&lt;/dbfile&gt;</span>
+   <span class="nt">&lt;pragma</span> <span class="na">name=</span><span class="s">&quot;max_page_count&quot;</span><span class="nt">&gt;</span>10000000<span class="nt">&lt;/pragma&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>Les entrées &lt;pragma&gt; résulteront en un appel à</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="n">PRAGMA</span> <span class="n">max_page_count</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-schema">
+<h3>Schéma customisé<a class="headerlink" href="#custom-schema" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Ce cache peut utiliser n&#8217;importe quel schéma de base de données. C&#8217;est à vous de fournir le SQL qui sera utilisé pour sélectionner ou insérer une nouvelle tuile.</p>
+<p>Ce type de cache n&#8217;est pas encore complètement implémenté (il n&#8217;y a encore aucun moyen de le configurer depuis le fichier de configuration mapcache.xml)</p>
+</div>
+<div class="section" id="mbtiles-schema">
+<h3>Schéma MBTiles<a class="headerlink" href="#mbtiles-schema" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Ce type de cache est un raccourci vers la précédente version de schéma de cache SQlite personnalisée, avec des requêtes SQL pré-remplies correspondant aux spécifications MBTiles.</p>
+<p>Bien que le schéma MBTiles par défaut soit très simple, MapCache utilise le même schéma multi-tables que l&#8217;on retrouve dans la plupart des fichiers MBTiles téléchargeables, principalement afin de permettre le stockage des tuiles vierges (uniformes) sans avoir à dupliquer les données (de la même manière que le cache disque utilise des liens symboliques vers un fichier unique)</p>
+<p>Le schéma mbtiles est créé avec:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">create</span> <span class="k">table</span> <span class="n">if</span> <span class="k">not</span> <span class="k">exists</span> <span class="n">images</span><span class="p">(</span>
+  <span class="n">tile_id</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">tile_data</span> <span class="nb">blob</span><span class="p">,</span>
+  <span class="k">primary</span> <span class="k">key</span><span class="p">(</span><span class="n">tile_id</span><span class="p">));</span>
+<span class="k">create</span> <span class="k">table</span> <span class="n">if</span> <span class="k">not</span> <span class="k">exists</span> <span class="k">map</span> <span class="p">(</span>
+  <span class="n">zoom_level</span> <span class="nb">integer</span><span class="p">,</span>
+  <span class="n">tile_column</span> <span class="nb">integer</span><span class="p">,</span>
+  <span class="n">tile_row</span> <span class="nb">integer</span><span class="p">,</span>
+  <span class="n">tile_id</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="k">foreign</span> <span class="k">key</span><span class="p">(</span><span class="n">tile_id</span><span class="p">)</span> <span class="k">references</span> <span class="n">images</span><span class="p">(</span><span class="n">tile_id</span><span class="p">),</span>
+  <span class="k">primary</span> <span class="k">key</span><span class="p">(</span><span class="n">tile_row</span><span class="p">,</span><span class="n">tile_column</span><span class="p">,</span><span class="n">zoom_level</span><span class="p">));</span>
+<span class="k">create</span> <span class="k">table</span> <span class="n">if</span> <span class="k">not</span> <span class="k">exists</span> <span class="n">metadata</span><span class="p">(</span>
+  <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
+  <span class="n">value</span> <span class="nb">text</span><span class="p">);</span> <span class="c1">-- not used or populated yet</span>
+<span class="k">create</span> <span class="k">view</span> <span class="n">if</span> <span class="k">not</span> <span class="k">exists</span> <span class="n">tiles</span>
+  <span class="k">as</span> <span class="k">select</span>
+     <span class="k">map</span><span class="p">.</span><span class="n">zoom_level</span> <span class="k">as</span> <span class="n">zoom_level</span><span class="p">,</span>
+     <span class="k">map</span><span class="p">.</span><span class="n">tile_column</span> <span class="k">as</span> <span class="n">tile_column</span><span class="p">,</span>
+     <span class="k">map</span><span class="p">.</span><span class="n">tile_row</span> <span class="k">as</span> <span class="n">tile_row</span><span class="p">,</span>
+     <span class="n">images</span><span class="p">.</span><span class="n">tile_data</span> <span class="k">as</span> <span class="n">tile_data</span>
+  <span class="k">from</span> <span class="k">map</span>
+     <span class="k">join</span> <span class="n">images</span> <span class="k">on</span> <span class="n">images</span><span class="p">.</span><span class="n">tile_id</span> <span class="o">=</span> <span class="k">map</span><span class="p">.</span><span class="n">tile_id</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;mbtiles&quot;</span> <span class="na">type=</span><span class="s">&quot;mbtiles&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;dbfile&gt;</span>/Users/XXX/Documents/MapBox/tiles/natural-earth-1.mbtiles<span class="nt">&lt;/dbfile&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Contrarily to the standard sqlite mapcache schema, the mbtiles db file only
+supports a single tileset per cache. The behavior if multiple tilesets are
+associated to the same mbtiles cache is undefined, and will definitely
+produce incorrect results.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">When working with multiple processes (-p switch) and sqlite cache
+backends, some errors may appear under high concurrency when writing to the
+sqlite database (error: SQL logic error or missing database (1)).
+Upgrading to sqlite &gt;= 3.7.15 seems to resolve this issue.</p>
+</div>
+</div>
+</div>
+<div class="section" id="memcache-caches">
+<span id="mapcache-cache-memcache"></span><h2>Caches Memcache<a class="headerlink" href="#memcache-caches" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Ce type de cache stocke les tuiles au sein d&#8217;un serveur memcached externe, fonctionnant soit sur la machine elle-même soit accessible via le réseau. Ce type de cache a l&#8217;avantage de bien gérer l&#8217;expiration des tuiles, de sorte que la taille du cache ne dépassera jamais ce qui a été configuré dans l&#8217;instance memcache.</p>
+<p>L&#8217;utilisation de Memcache nécessite une version plutôt récente de la librairie apr-util. Veuillez noter que sous de très fortes charges (généralement uniquement atteignable via des outils de benchmarking en localhost), l&#8217;implémentation memcache d&#8217;apr-util peut tomber et se mettre à abandonner les connexions pendant quelques intervalles de temps avant de revenir à la normale.</p>
+<p>Vous pouvez ajouter de multiple entrées &lt;server&gt;.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;memcache&quot;</span> <span class="na">type=</span><span class="s">&quot;memcache&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;server&gt;</span>
+      <span class="nt">&lt;host&gt;</span>localhost<span class="nt">&lt;/host&gt;</span>
+      <span class="nt">&lt;port&gt;</span>11211<span class="nt">&lt;/port&gt;</span>
+   <span class="nt">&lt;/server&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Les tuiles stockées au travers de memcache sont configurées pour expirer au bout d&#8217;une journée par défaut. Ce réglage peut être modifié au niveau du jeu de données en utilisant le mot-clé &lt;auto_expire&gt;.</p>
+</div>
+</div>
+<div class="section" id="geo-tiff-caches">
+<span id="mapcache-cache-tiff"></span><h2>Caches (Geo)TIFF<a class="headerlink" href="#geo-tiff-caches" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Les caches TIFF sont le plus récent ajout à la famille des caches. Ils utilisent la structure interne tuilée de la spécification TIFF pour accéder aux données tuilées. Les tuiles ne peuvent être stockées qu&#8217;en JPEG (TIFF n&#8217;implémente pas le format PNG).</p>
+<p>Comme un fichier TIFF unique peut contenir beaucoup de tuiles, il y a une réduction drastique du nombre de fichiers qui doivent être stockés sur le système de fichiers, ce qui résoud les principaux défauts des caches disques. Un autre avantage est que les mêmes fichiers TIFF peuvent être utilisés par des logiciels ou des serveurs WMS qui n&#8217;accèdent qu&#8217;à des formats SIG raster courants tout en étant utilisés pour un accès tuilé hautes performances.</p>
+<p>Le cache TIFF doit être considéré comme étant en lecture-seule pour le moment. L&#8217;accès en écriture est déjà possible mais doit être considéré comme expérimental en cela qu&#8217;il peut y avoir des problèmes de corruption de fichier, surtout dans le contexte de montages réseaux du système de fichiers. Veuillez noter que jusqu&#8217;à ce que toutes les tuiles d&#8217;un fichier TIFF donné aient été générées, le fichier TIFF est réputé &#8220;clairsemé&#8221; au sens qu&#8217;il manque des tuiles. La plupart des logiciels autres que GDAL auront des difficultés à ouvrir ces fichiers incomplets.</p>
+<p>Veuillez noter que la structure des tuiles TIFF doit respecter exactement la structure de la grille devant être utilisée par le jeu de tuile, et les noms des fichiers TIFF doivent respecter de strictes conventions de nommage.</p>
+<div class="section" id="defining-the-tiff-file-sizes">
+<h3>Définir les tailles de fichier TIFF<a class="headerlink" href="#defining-the-tiff-file-sizes" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Le nombre de tuiles stockées chacune des directions horizontales et verticales doit être défini:</p>
+<ul class="simple">
+<li>&lt;xcount&gt; le nombre de tuiles stocké le long de la direction x (horizontal) du fichier TIFF.</li>
+<li>&lt;ycount&gt; le nombre de tuiles stocké le long de la direction y (horizontal) du fichier TIFF.</li>
+</ul>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tiff&quot;</span> <span class="na">type=</span><span class="s">&quot;tiff&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;xcount&gt;</span>64<span class="nt">&lt;/xcount&gt;</span>
+   <span class="nt">&lt;ycount&gt;</span>64<span class="nt">&lt;/ycount&gt;</span>
+   ...
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-up-the-file-naming-convention">
+<h3>Configurer la convention de nommage fichier<a class="headerlink" href="#setting-up-the-file-naming-convention" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Le tag &lt;template&gt; détermine le modèle à utiliser lors de la recherche d&#8217;un fichier TIFF en fonction des x,y,z de la tuile demandée</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tiff&quot;</span> <span class="na">type=</span><span class="s">&quot;tiff&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;template&gt;</span>/data/tiffs/{tileset}/{grid}/L{z}/R{inv_y}/C{x}.tif<span class="nt">&lt;/template&gt;</span>
+   ...
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>Les paramètres suivants sont disponibles pour manipuler les x,y et z d&#8217;une tuile donnée</p>
+<ul class="simple">
+<li>{x} est remplacé par la valeur x de la tuile la plus à gauche dans le fichier TIFF contenant la tuile demandée</li>
+<li>{inv_x} est remplacé par la valeur x de la tuile la plus à droite</li>
+<li>{y} est remplacé par la valeur y de la tuile la plus en bas</li>
+<li>{inv_y} est remplacé par la valeur y de la tuile la plus en haut</li>
+<li>{div_x} est remplacé par l&#8217;index du fichier TIFF commençant à gauche de la grille (i.e. {div_x} = {x}/&lt;countx&gt;)</li>
+<li>{inv_div_x} comme {div_x} mais en commençant à droite.</li>
+<li>{div_y} est remplacé par l&#8217;index du fichier TIFF commençant au bas de la grille (i.e. {div_y} = {y}/&lt;county&gt;)</li>
+<li>{inv_div_y} est similaire {div_y} mais en commençant par le haut.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">{inv_x} et {inv_div_x} seront probablement rarement utilisés, tandix que {inv_y} et {inv_div_y} trouveront un usage approprié pour les personnes préférant indexer leurs fichiers TIFF de haut en bas plutôt que de bas en haut.</p>
+</div>
+</div>
+<div class="section" id="customizing-the-template-keys">
+<h3>Customiser les clés du &#8220;template&#8221;<a class="headerlink" href="#customizing-the-template-keys" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Dans certains cas, il peut être souhaitable d&#8217;avoir un contrôle précis sur le nom du fichier à utiliser pour une tuile x,y,z particulière, par exemple pour retrouver un fichier nommé &#8220;Z03-R00003-C000009.tif&#8221; plutôt que &#8220;Z3-R3-C9.tif&#8221;. Le paramètre &lt;template&gt; permet d&#8217;utiliser des éléments de formatage pour peu qu&#8217;ils suivent la syntaxe unix printf ( c.f.: <a class="reference external" href="http://linux.die.net/man/3/printf">http://linux.die.net/man/3/printf</a> ), en suffixant chacun des éléments &lt;template&gt; avec &#8220;_fmt&#8221; comme par exemple :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tiff&quot;</span> <span class="na">type=</span><span class="s">&quot;tiff&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;template</span>
+      <span class="na">x_fmt=</span><span class="s">&quot;%08d&quot;</span>
+      <span class="na">inv_y_fmt=</span><span class="s">&quot;%08d&quot;</span>
+   <span class="nt">&gt;</span>/data/tiffs/{tileset}/{grid}/L{z}/R{inv_y}/C{x}.tif<span class="nt">&lt;/template&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Sans indication, le fonctionnement par défaut utilise &#8220;%d&#8221; pour le formatage.</p>
+</div>
+</div>
+<div class="section" id="setting-jpeg-compression-options">
+<h3>Définir les options de compression JPEG<a class="headerlink" href="#setting-jpeg-compression-options" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Un paramètre optionnel complémentaire définit la compression JPEG à appliquer aux tuiles quand elles sont enregistrées dans le fichier TIFF:</p>
+<ul class="simple">
+<li>&lt;format&gt; le nom du format (jpeg) à utiliser</li>
+</ul>
+<div class="admonition seealso">
+<p class="first admonition-title">Voir aussi</p>
+<p class="last"><a class="reference internal" href="formats.html#mapcache-jpeg-format"><em>Format JPEG</em></a></p>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tiff&quot;</span> <span class="na">type=</span><span class="s">&quot;tiff&quot;</span><span class="nt">&gt;</span>
+   ...
+   <span class="nt">&lt;format&gt;</span>myjpeg<span class="nt">&lt;/format&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>Dans cet exemple, en utilisant une grille de 256x256 tuiles, les fichiers qui sont lus pour charger les tuiles sont des TIFFs tuilés avec une compression JPEG, dont la taille est de 16384x16384. Le nombre de fichiers à stocker sur le disque est ainsi réduit 4096 fois comparativement à un cache disque standard.</p>
+</div>
+<div class="section" id="geotiff-support">
+<h3>Support GeoTIFF<a class="headerlink" href="#geotiff-support" title="Lien permanent vers ce titre">¶</a></h3>
+<p>S&#8217;il est compilé avec le support GeoTiff en écriture, MapCache ajoutera les informations de référencement aux fichiers TIFF qu&#8217;il créé, de sorte que les fichiers TIFF puissent être utilisés par n&#8217;importe quel logiciel utilisant du geotiff. Le support en écriture ne produit pas des geotiffs complets avec la définition de la projection utilisée, mais uniquement l&#8217;échelle du pixel et les points de calage, ce qu&#8217;on trouve généralement dans les fichiers .tfw.</p>
+<p>Pour référence, voici la sortie produite par gdalinfo sur une fichier TIFF créé par MapCache quand il est compilé avec le support geotiff:</p>
+<div class="highlight-python"><pre>LOCAL_CS["unnamed",
+    UNIT["metre",1,
+        AUTHORITY["EPSG","9001"]]]
+Origin = (-20037508.342789247632027,20037508.342789247632027)
+Pixel Size = (156543.033928040997125,-156543.033928040997125)
+Metadata:
+  AREA_OR_POINT=Area
+Image Structure Metadata:
+  COMPRESSION=YCbCr JPEG
+  INTERLEAVE=PIXEL
+  SOURCE_COLOR_SPACE=YCbCr
+Corner Coordinates:
+Upper Left  (-20037508.343,20037508.343)
+Lower Left  (-20037508.343,-20037508.343)
+Upper Right (20037508.343,20037508.343)
+Lower Right (20037508.343,-20037508.343)
+Center      (   0.0000000,   0.0000000)</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+<p>
+<a href="../about.html" title="About">About</a><br>
+<a href="../products.html" title="Products">Products</a><br>
+<a href="../community/index.html" title="Community">Community</a><br>
+<a href="../development/index.html" title="Development">Development</a><br>
+<a href="../download.html" title="Downloads">Downloads</a><br>
+<a href="../documentation.html" title="Documentation">Documentation</a><br>
+<a href="../faq.html" title="FAQ">FAQ</a>
+</p>
+  <h3>Current Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Types de cache</a><ul>
+<li><a class="reference internal" href="#disk-caches">Caches disque</a><ul>
+<li><a class="reference internal" href="#default-structure">Structure par défaut</a></li>
+<li><a class="reference internal" href="#template-structure">Structure du &#8220;template&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#berkeleydb-caches">Caches BerkeleyDB</a></li>
+<li><a class="reference internal" href="#sqlite-caches">Caches Sqlite</a><ul>
+<li><a class="reference internal" href="#default-schema">Schéma par défaut</a></li>
+<li><a class="reference internal" href="#custom-schema">Schéma customisé</a></li>
+<li><a class="reference internal" href="#mbtiles-schema">Schéma MBTiles</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#memcache-caches">Caches Memcache</a></li>
+<li><a class="reference internal" href="#geo-tiff-caches">Caches (Geo)TIFF</a><ul>
+<li><a class="reference internal" href="#defining-the-tiff-file-sizes">Définir les tailles de fichier TIFF</a></li>
+<li><a class="reference internal" href="#setting-up-the-file-naming-convention">Configurer la convention de nommage fichier</a></li>
+<li><a class="reference internal" href="#customizing-the-template-keys">Customiser les clés du &#8220;template&#8221;</a></li>
+<li><a class="reference internal" href="#setting-jpeg-compression-options">Définir les options de compression JPEG</a></li>
+<li><a class="reference internal" href="#geotiff-support">Support GeoTIFF</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Recherche rapide</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Saisissez un mot clef ou un nom de module, classe ou fonction.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             >index</a></li>
+        <li class="right" >
+          <a href="formats.html" title="Formats d’image"
+             >suivant</a> |</li>
+        <li class="right" >
+          <a href="seed.html" title="Alimentation du cache"
+             >précédent</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="../documentation.html" >Documentation de MapServer 6.4.1</a> &raquo;</li>
+          <li><a href="index.html" >MapCache</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; <a href="../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
+      Mis à jour le Saturday  5 April 2014, 13:08.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

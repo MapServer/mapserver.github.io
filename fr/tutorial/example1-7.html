@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Exemple 1.7 &mdash; MapServer 6.4.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="shortcut icon" href="../_static/mapserver.ico"/>
+    <link rel="author" title="À propos de ces documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="MapServer 6.4.1 documentation" href="../index.html" /> 
+  </head>
+  <body>
+
+<table width="100%" style="width: 100%; background-color: white;">
+  <tr>
+    <td rowspan="2" style="padding: 10px 0px 10px 10px;">
+      <a href="../index.html" title="Home"><img src="../_static/banner.png" alt="MapServer banner" border="0" /></a>
+    </td>
+    <td style="padding: 10px 10px 0px 0px; text-align: right; vertical-align: top;">
+      <a href="../index.html" title="Home">Home</a> |
+      <a href="../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
+      <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
+      <a href="../faq.html" title="FAQ">FAQ</a> |
+      <a href="../download.html" title="Download">Download </a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding: 0px 10px 0px 0px; text-align: right; vertical-align: bottom;">
+    
+        
+          <a href="../../en/tutorial/example1-7.html"><img src="../_static/flagicons/en.png" alt="en" title="en" border="0" /></a>
+        
+    
+        
+          <a href="../../it/tutorial/example1-7.html"><img src="../_static/flagicons/it.png" alt="it" title="it" border="0" /></a>
+        
+    
+        
+          <a href="../../es/tutorial/example1-7.html"><img src="../_static/flagicons/es.png" alt="es" title="es" border="0" /></a>
+        
+    
+        
+          <a href="../../zh_cn/tutorial/example1-7.html"><img src="../_static/flagicons/zh_cn.png" alt="zh_cn" title="zh_cn" border="0" /></a>
+        
+    
+        
+          <a href="../../de/tutorial/example1-7.html"><img src="../_static/flagicons/de.png" alt="de" title="de" border="0" /></a>
+        
+    
+        
+          <a href="../../el/tutorial/example1-7.html"><img src="../_static/flagicons/el.png" alt="el" title="el" border="0" /></a>
+        
+        <img src="../_static/flagicons/fr.png" alt="fr" title="fr" border="0" width="18px" height="13px"/>
+    
+        
+          <a href="../../id/tutorial/example1-7.html"><img src="../_static/flagicons/id.png" alt="id" title="id" border="0" /></a>
+        
+    
+        
+          <a href="../../sq/tutorial/example1-7.html"><img src="../_static/flagicons/sq.png" alt="sq" title="sq" border="0" /></a>
+        
+    
+        
+          <a href="../../tr/tutorial/example1-7.html"><img src="../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
+        
+
+    </td>
+  </tr>
+</table>
+
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="example-1-7">
+<span id="example1-7"></span><h1>Exemple 1.7<a class="headerlink" href="#example-1-7" title="Lien permanent vers ce titre">¶</a></h1>
+<div class="section" id="adding-ogc-wms-layers">
+<h2>Ajouter des couches WMS OGC<a class="headerlink" href="#adding-ogc-wms-layers" title="Lien permanent vers ce titre">¶</a></h2>
+<img alt="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-7.map&amp;layers=states+states_label+modis_jpl&amp;mode=map" src="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-7.map&amp;layers=states+states_label+modis_jpl&amp;mode=map" />
+<p>Une autre fonctionnalité excitante de MapServer est sa capacité à utiliser des couches provenant d&#8217;autres serveurs de carte. Dans ce cas, une application MapServer devient un client WMS (ou WFS). MapServer peut aussi partager (ou servir) les couches dans le mapfile à d&#8217;autres serveurs de carte. Cela fait d&#8217;une application un serveur WMS (ou WFS). Qu&#8217;est ce que le WMS ou le WFS? Ce sont des spécifications de &#8220;services d&#8217;interopérabilité basés sur le web&#8221; publiés par l&#8217;Open Geospatial Consortium (OGC). WMS équivaut à Web Map Service et WFS à Web Feature Service. La différence entre ces deux spécifications, en termes simples, est que le WMS utilise des formats raster (PNG, GIF, JPEG) pour partager des couches tandis que le WFS utilise le GML ou Geography Markup Language. Une troisième spécification OGC est la spécification Web Coverage Services specification ou WCS&#8211;MapServer supporte ce dernier au niveau du serveur seulement. Pour trouver plus d&#8217;informations sur le WMS, WFS et WCS, aller sur <a class="reference external" href="http://www.opengeospatial.org">le site web de l&#8217;OGC</a> et allez voir <a class="reference external" href="http://www.opengeospatial.org/specs/?page=specs">Les spécifications des implémentations OGC</a> ou <a class="reference external" href="http://www.opengeospatial.org/specs/?page=abstract">les résumés des spécifications OGC</a>. Le site web MapServer a aussi <a class="reference internal" href="../documentation.html#documentation"><em>une documentation</em></a> et  <a class="reference external" href="https://github.com/mapserver/mapserver/wiki">des pages de WIKI</a> pour ces spécifications.</p>
+<p>Cet exemple montre comment ajouter une couche WMS dans votre mapfile.</p>
+<div class="section" id="the-mapfile">
+<h3>Le Mapfile<a class="headerlink" href="#the-mapfile" title="Lien permanent vers ce titre">¶</a></h3>
+<p>C&#8217;est ce à quoi le mapfile ressemble: <a class="reference internal" href="example1-7-map.html#example1-7-map"><em>Example1-7.map</em></a>.</p>
+<div class="section" id="layer-object-and-wms-parameters">
+<h4>Paramètres WMS et objet LAYER<a class="headerlink" href="#layer-object-and-wms-parameters" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Regardons la couche WMS:</p>
+<dl class="docutils">
+<dt><strong>LAYER # MODIS WMS map from JPL</strong></dt>
+<dd>Marquer le début de l&#8217;objet LAYER WMS.</dd>
+<dt><strong>NAME modis_jpl</strong></dt>
+<dd>L&#8217;identifiant de couche LAYER.</dd>
+<dt><strong>TYPE RASTER</strong></dt>
+<dd>Comme cette couche WMS est une image, nous utilisons RASTER comme TYPE de couche.</dd>
+<dt><strong>OFFSITE 0 0 0</strong></dt>
+<dd>Ignorer la couleur de fond noir</dd>
+<dt><strong>STATUS OFF</strong></dt>
+<dd>Désactiver cette couche par défaut.</dd>
+<dt><strong>CONNECTIONTYPE WMS</strong></dt>
+<dd><p class="first">Le type de connection de la LAYER à utiliser. Par défaut c&#8217;est LOCAL</p>
+<div class="last admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Si nous voulons être explicite, nous ajouterions CONNECTIONTYPE LOCAL à toutes nos autres couches vecteur et raster dans notre mapfile. A la place, nous définissons seulement les type de connection qui sont externes. WMS est une couche de donnée externe, venant d&#8217;un autre serveur de carte.</p>
+</div>
+</dd>
+<dt><strong>CONNECTION &#8220;http://mapus.jpl.nasa.gov/wms.cgi?&#8221;</strong></dt>
+<dd>La chaîne de connection qui nous permet <em>d&#8217;obtenir</em> la donnée d&#8217;un autre serveur. Dans le cas de connections WMS, c&#8217;est une URL. Si nous utilisions une base de données PostGIS, cela serait une requête SQL. Remarquez que la chaîne doit être écrite sur une seule ligne dans votre mapfile.</dd>
+<dt><strong>METADATA</strong></dt>
+<dd>marque le début de l&#8217;objet METADATA pour votre couche WMS. MapServer utilise les paramètres définis dans cet objet avec le paramètre CONNECTION au dessus pour former une requête WMS valide au serveur WMS.</dd>
+<dt><strong>&#8220;wms_srs&#8221; &#8220;epsg:4326&#8221;</strong></dt>
+<dd>La projection WMS. Quelquefois, le serveur WMS supporte plus qu&#8217;une seule projection. Si c&#8217;est le cas, vous voudrez peut être interroger la carte dans votre projection de sortie (epsg:2163). Malheureusement, le serveur JPL ne supporte pas cette projection.</dd>
+<dt><strong>&#8220;wms_name&#8221; &#8220;modis&#8221;</strong></dt>
+<dd>Le nom de la couche WMS. C&#8217;est comme ajouter le paramètre &#8220;layers=modis&#8221;.</dd>
+<dt><strong>&#8220;wms_server_version&#8221; &#8220;1.1.1&#8221;</strong></dt>
+<dd>La version du WMS avec lequel on doit se conformer.  Pour plus d&#8217;options, voir see <a class="reference internal" href="../ogc/ogc_support.html#ogc-support"><em>Support des spécifications OGC dans MapServer</em></a>.</dd>
+<dt><strong>&#8220;wms_format&#8221; &#8220;image/jpeg&#8221;</strong></dt>
+<dd>Le format image que nous attendons de recevoir du serveur WMS. Vous piuvez essayer de remplacer la valeur avec <em>image/png</em> ou quelque chose d&#8217;autre.</dd>
+<dt><strong>END</strong></dt>
+<dd>marque la fin de l&#8217;objet METADATA</dd>
+</dl>
+<p>Pour en savoir plus sur l&#8217;ajout de couches WMS dans vos applications, merci de visiter <a class="reference internal" href="../ogc/wms_client.html#wms-client"><em>le Howto du client WMS Mapserver</em></a>.</p>
+</div>
+<div class="section" id="web-object-parameters">
+<h4>Paramètres de l&#8217;objet WEB<a class="headerlink" href="#web-object-parameters" title="Lien permanent vers ce titre">¶</a></h4>
+<p>En plus d&#8217;ajouter l&#8217;objet de la couche WMS, il y a aussi un autre objet dessous le MAP. C&#8217;est l&#8217;objet WEB. A l&#8217;intérieur de l&#8217;objet WEB se trouvent deux paramètres:</p>
+<dl class="docutils">
+<dt><strong>IMAGEPATH &#8216;/data/tmp/&#8217;</strong></dt>
+<dd>Le chemin local absolu vers un répertoire temporaire accessible par le web. L&#8217;utilisateur qui fait fonctionner les processus du serveur web devrait être capable d&#8217;écrire dans ce répertoire. Assurez-vous que le chemin inclus un slash (/) à la fin. (Votre IMAGEPATH devrait ressembler à quelque chose comme ça: &#8220;/home/apache/htdocs/tmp/&#8221; ou &#8220;C:/Inetpub/wwwroot/tmp/&#8221;.)</dd>
+<dt><strong>IMAGEURL &#8216;/tmp/&#8217;</strong></dt>
+<dd>C&#8217;est comment IMAGEPATH apparaitra de manière relative à la racine du serveur web. Si nous devons taper l&#8217;URL complète pour cela, ce sera &#8220;<a class="reference external" href="http://terrasip.gis.umn.edu/tmp/">http://terrasip.gis.umn.edu/tmp/</a>&#8221;. Assurez-vous que la chemin inclus un slash (/) à la fin.</dd>
+</dl>
+<hr class="docutils" />
+<p>Enfin, à l&#8217;intérieur de l&#8217;object MAP, j&#8217;ai ajouter un nouveau paramètre: NAME. C&#8217;est l&#8217;identifiant pour l&#8217;objet MAP. MapServer utilise ceci comme préfixe de toutes les images qu&#8217;il créé et écrit dans le répertoire <em>tmp</em>;Cela n&#8217;est pas nécessaire à ce point mais cela ne fait pas de mal de l&#8217;avoir.</p>
+<p>Si vous voulez partager vos couches de données avec d&#8217;autres serveurs de carte, vous devrez ajouter des objets METADATA à lintérieur de votre objet MAP et dans chacun des objets LAYER que vous voudrez partager. Toutes les couches WMS que vous ajoutez d&#8217;un autre serveur seront automatiquement récupérées et seront aussi mises à disposition des autres. Pour en savoir plus sur comment faire de votre application Mapserver un serveur WMS, merci de lire <a class="reference internal" href="../ogc/wfs_client.html#wfs-client"><em>le HowTo du serveur WMS MapServer</em></a>.  De la documentation existe aussi pour configurer les applications MapServer pour supporter le standard WFS, à la fois comme <a class="reference internal" href="../ogc/wfs_client.html#wfs-client"><em>serveur</em></a> et comme <a class="reference internal" href="../ogc/wfs_client.html#wfs-client"><em>client</em></a>.</p>
+<hr class="docutils" />
+<p><a class="reference internal" href="example1-8.html#example1-8"><em>Revenir à l&#8217;exemple 1.6</em></a> | <a class="reference internal" href="example1-8.html#example1-8"><em>Aller à l&#8217;exemple 1.8</em></a></p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+<p>
+<a href="../about.html" title="About">About</a><br>
+<a href="../products.html" title="Products">Products</a><br>
+<a href="../community/index.html" title="Community">Community</a><br>
+<a href="../development/index.html" title="Development">Development</a><br>
+<a href="../download.html" title="Downloads">Downloads</a><br>
+<a href="../documentation.html" title="Documentation">Documentation</a><br>
+<a href="../faq.html" title="FAQ">FAQ</a>
+</p>
+  <h3>Current Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Exemple 1.7</a><ul>
+<li><a class="reference internal" href="#adding-ogc-wms-layers">Ajouter des couches WMS OGC</a><ul>
+<li><a class="reference internal" href="#the-mapfile">Le Mapfile</a><ul>
+<li><a class="reference internal" href="#layer-object-and-wms-parameters">Paramètres WMS et objet LAYER</a></li>
+<li><a class="reference internal" href="#web-object-parameters">Paramètres de l&#8217;objet WEB</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Recherche rapide</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Saisissez un mot clef ou un nom de module, classe ou fonction.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             >index</a></li>
+        <li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; <a href="../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
+      Mis à jour le Saturday  5 April 2014, 13:08.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Comment configurer MapServer comme client pour accéder à un service via https &mdash; MapServer 6.4.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="shortcut icon" href="../_static/mapserver.ico"/>
+    <link rel="author" title="À propos de ces documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="MapServer 6.4.1 documentation" href="../index.html" />
+    <link rel="up" title="Support et configuration OGC" href="index.html" />
+    <link rel="next" title="Wrappers MapScript pour les Services WxS" href="mapscript.html" />
+    <link rel="prev" title="Serveur SOS" href="sos_server.html" /> 
+  </head>
+  <body>
+
+<table width="100%" style="width: 100%; background-color: white;">
+  <tr>
+    <td rowspan="2" style="padding: 10px 0px 10px 10px;">
+      <a href="../index.html" title="Home"><img src="../_static/banner.png" alt="MapServer banner" border="0" /></a>
+    </td>
+    <td style="padding: 10px 10px 0px 0px; text-align: right; vertical-align: top;">
+      <a href="../index.html" title="Home">Home</a> |
+      <a href="../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
+      <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
+      <a href="../faq.html" title="FAQ">FAQ</a> |
+      <a href="../download.html" title="Download">Download </a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding: 0px 10px 0px 0px; text-align: right; vertical-align: bottom;">
+    
+        
+          <a href="../../en/ogc/wxs_secure.html"><img src="../_static/flagicons/en.png" alt="en" title="en" border="0" /></a>
+        
+    
+        
+          <a href="../../it/ogc/wxs_secure.html"><img src="../_static/flagicons/it.png" alt="it" title="it" border="0" /></a>
+        
+    
+        
+          <a href="../../es/ogc/wxs_secure.html"><img src="../_static/flagicons/es.png" alt="es" title="es" border="0" /></a>
+        
+    
+        
+          <a href="../../zh_cn/ogc/wxs_secure.html"><img src="../_static/flagicons/zh_cn.png" alt="zh_cn" title="zh_cn" border="0" /></a>
+        
+    
+        
+          <a href="../../de/ogc/wxs_secure.html"><img src="../_static/flagicons/de.png" alt="de" title="de" border="0" /></a>
+        
+    
+        
+          <a href="../../el/ogc/wxs_secure.html"><img src="../_static/flagicons/el.png" alt="el" title="el" border="0" /></a>
+        
+        <img src="../_static/flagicons/fr.png" alt="fr" title="fr" border="0" width="18px" height="13px"/>
+    
+        
+          <a href="../../id/ogc/wxs_secure.html"><img src="../_static/flagicons/id.png" alt="id" title="id" border="0" /></a>
+        
+    
+        
+          <a href="../../sq/ogc/wxs_secure.html"><img src="../_static/flagicons/sq.png" alt="sq" title="sq" border="0" /></a>
+        
+    
+        
+          <a href="../../tr/ogc/wxs_secure.html"><img src="../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
+        
+
+    </td>
+  </tr>
+</table>
+
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="mapscript.html" title="Wrappers MapScript pour les Services WxS"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="sos_server.html" title="Serveur SOS"
+             accesskey="P">précédent</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="../documentation.html" >Documentation de MapServer 6.4.1</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Support et configuration OGC</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="how-to-set-up-mapserver-as-a-client-to-access-a-service-over-https">
+<span id="wxs-secure"></span><span id="index-0"></span><h1><a class="toc-backref" href="#table-of-contents">Comment configurer MapServer comme client pour accéder à un service via https</a><a class="headerlink" href="#how-to-set-up-mapserver-as-a-client-to-access-a-service-over-https" title="Lien permanent vers ce titre">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Revision:</th><td class="field-body">$Revision: 12521 $</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">$Date: 2011-09-06 19:48:20 +0200 (Tue, 06 Sep 2011) $</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#how-to-set-up-mapserver-as-a-client-to-access-a-service-over-https" id="id1">Comment configurer MapServer comme client pour accéder à un service via https</a><ul>
+<li><a class="reference internal" href="#introduction" id="id2">Introduction</a></li>
+<li><a class="reference internal" href="#requirements" id="id3">Prérequis</a></li>
+<li><a class="reference internal" href="#default-installation-with-apt-get-install-rpm-manual-etc" id="id4">Installation par défaut (avec apt-get install, rpm, manuelle, etc)</a></li>
+<li><a class="reference internal" href="#non-standard-installation-common-with-ms4w-and-fgs" id="id5">Installation non courante (commune avec ms4w et fgs</a></li>
+<li><a class="reference internal" href="#remote-server-with-a-self-signed-ssl-certificate" id="id6">Serveur distant avec un certificat SSL auto-signé</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#table-of-contents">Introduction</a><a class="headerlink" href="#introduction" title="Lien permanent vers ce titre">¶</a></h2>
+<p>La documentation suivante explique comment configurer MapServer comme client pour accéder à un serveur WMS/WFS via une connection SSL sécurisée utilisant le protocole HTTPS.  Il décrit les problèmes courants qu&#8217;un utilisateur peut rencontrer et comment les résoudre.</p>
+</div>
+<div class="section" id="requirements">
+<h2><a class="toc-backref" href="#table-of-contents">Prérequis</a><a class="headerlink" href="#requirements" title="Lien permanent vers ce titre">¶</a></h2>
+<p>MapServer 5.4.1 et supérieur, compilé avec CURL.  CURL doit être compilé avec le support SSL.</p>
+</div>
+<div class="section" id="default-installation-with-apt-get-install-rpm-manual-etc">
+<h2><a class="toc-backref" href="#table-of-contents">Installation par défaut (avec apt-get install, rpm, manuelle, etc)</a><a class="headerlink" href="#default-installation-with-apt-get-install-rpm-manual-etc" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Le fichier &#8220;CA bundle&#8221; de CURL devrait être situé dans le répertoire par défaut.</p>
+<p>Vérifiez votre connection avec CURL en ligne de commande:</p>
+<div class="highlight-python"><pre>curl https://targethostname:port/gmap-demo/gmap75.phtml</pre>
+</div>
+<p>Editez votre fichier map et ajoutez l&#8217;URL de connection WMS.  Par exemple:</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">CONNECTION</span> <span class="s">&quot;https://domainname:port/cgi-bin/mapserv?map=/path/to/wms.map&quot;</span>
+<span class="k">CONNECTIONTYPE</span> <span class="nb">WMS</span>
+</pre></div>
+</div>
+<p>Si la couche est correctement affichée, vous n&#8217;avez pas besoin de lire plus loin.</p>
+</div>
+<div class="section" id="non-standard-installation-common-with-ms4w-and-fgs">
+<h2><a class="toc-backref" href="#table-of-contents">Installation non courante (commune avec ms4w et fgs</a><a class="headerlink" href="#non-standard-installation-common-with-ms4w-and-fgs" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Si vous avez l&#8217;erreur suivante, cela veut dire que votre fichier &#8220;CA bundle&#8221; n&#8217;est pas trouvé.</p>
+<div class="highlight-python"><pre>curl https://localhost:port/gmap-demo/gmap75.phtml
+curl: (77) error setting certificate verify locations:
+  CAfile: /home/nsavard/fgsfull/share/curl/cacert.pem
+  CApath: none</pre>
+</div>
+<p>Cela est peut être causé par la variable d&#8217;environnement CURL_CA_BUNDLE qui pointe vers un mauvais emplacement ou le fichier &#8220;CA bundle&#8221; qui n&#8217;est pas présent. Suivez les étapes ci-dessous pour corriger ces cas.</p>
+<p>Définir la variable d&#8217;environnement CURL_CA_BUNDLE qui pointe vers le fichier &#8220;bundle&#8221; (c&#8217;est à dire avec export CURL_CA_BUNDLE=/chemin/vers/mon-bundle-ca.ext où mon-bundle-ca.ext peut être cacert.pem ou ca-bundle.crt).</p>
+<p>Téléchargez le fichier &#8220;CA bundle&#8221; &#8220;cacert.pem&#8221; trouvable sur <a class="reference external" href="http://curl.haxx.se/docs/caextract.html">http://curl.haxx.se/docs/caextract.html</a> ou si vous avez les sources de CURL, vous pouvez créer le fichier &#8220;CA bundle&#8221; en exécutant &#8220;make ca-bundle&#8221; ou &#8220;make ca-firefox&#8221; (si vous avez Firefox et l&#8217;utilitaire certutil installé).  Si vous faites le second choix, le fichier &#8220;bundle&#8221; sera nommé ca-bundle.crt et pourra être trouvé dans le répertoire lib  dans le répertoire racine de CURL.  Voir <a class="reference external" href="http://curl.haxx.se/docs/caextract.html">http://curl.haxx.se/docs/caextract.html</a> pour plus de détails.  Stockez ce fichier dans l&#8217;emplacement vers lequel pointe la variable d&#8217;environnement URL_CA_BUNDLE.</p>
+<p>Vérifiez votre connection en utilisant CURL en ligne de commande</p>
+<div class="highlight-python"><pre>curl https://targethostname:port/gmap-demo/gmap75.phtml</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Si vous utilisez l&#8217;installation ms4w, osgeo4w ou fgs, ces installeurs doivent prendre en compte le problème pour vous.</p>
+</div>
+</div>
+<div class="section" id="remote-server-with-a-self-signed-ssl-certificate">
+<h2><a class="toc-backref" href="#table-of-contents">Serveur distant avec un certificat SSL auto-signé</a><a class="headerlink" href="#remote-server-with-a-self-signed-ssl-certificate" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Si vous avez l&#8217;erreur suivante, cela veut dire que votre serveur distant utilise probablement un certificat SSL auto-signé et que le certificat du serveur n&#8217;est pas inclut dans votre fichier .ca_bundle (fichier d&#8217;une autorité certifiée)</p>
+<div class="highlight-python"><pre>curl: (60) SSL certificate problem, verify that the CA cert is OK. Details:
+error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed
+More details here: http://curl.haxx.se/docs/sslcerts.html
+
+curl performs SSL certificate verification by default, using a "bundle"
+of Certificate Authority (CA) public keys (CA certs). If the default
+bundle file isn't adequate, you can specify an alternate file
+using the --cacert option.
+If this HTTPS server uses a certificate signed by a CA represented in
+the bundle, the certificate verification probably failed due to a
+problem with the certificate (it might be expired, or the name might
+not match the domain name in the URL).
+If you'd like to turn off curl's verification of the certificate, use
+the -k (or --insecure) option.</pre>
+</div>
+<p>Pour obtenir le certificat du serveur distant, vous devez exécuter cette commande:</p>
+<div class="highlight-python"><pre>openssl s_client -connect domainname:port</pre>
+</div>
+<p>Copiez tout depuis le tag &#8220;&#8212;&#8211;BEGIN CERTIFICATE&#8212;&#8211;&#8221; jusqu&#8217;au tag &#8220;&#8212;&#8211;END CERTIFICATE&#8212;&#8211;&#8221;.  Copiez ce contenu à la fin de votre fichier mon-bundle-ca.ext.</p>
+<p>Vérifiez votre connection avec CURL en ligne de commande:</p>
+<div class="highlight-python"><pre>curl https://targethostname:port/gmap-demo/gmap75.phtml</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Si vous avez l&#8217;erreur suivante, cela veut dire que le nom du domaine dans la requête vers URL ne correspond pas à celui qui a été déclaré quand vous avez créé le certificat du serveur distant.</p>
+<div class="last highlight-python"><pre>curl: (51) SSL: certificate subject name 'domainname' does not match target host name 'domainname'</pre>
+</div>
+</div>
+<p>Vous devez utiliser exactement le même nom de domaine que celui qui apparaît dans l&#8217;invite de commande &#8220;Common Name&#8221; utilisée quand vous générez le certificat du serveur distant. Vous ne pouvez pas utiliser l&#8217;IP du serveur distant par exemple. Cela veut dire que l&#8217;URL suivante n&#8217;est pas acceptable.</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">CONNECTION</span> <span class="s">&quot;https://xxx.xxx.xxx.xxx:port/cgi-bin/mapserv?map=/path/to/wms.map&quot;</span>
+<span class="k">CONNECTIONTYPE</span> <span class="nb">WMS</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+<p>
+<a href="../about.html" title="About">About</a><br>
+<a href="../products.html" title="Products">Products</a><br>
+<a href="../community/index.html" title="Community">Community</a><br>
+<a href="../development/index.html" title="Development">Development</a><br>
+<a href="../download.html" title="Downloads">Downloads</a><br>
+<a href="../documentation.html" title="Documentation">Documentation</a><br>
+<a href="../faq.html" title="FAQ">FAQ</a>
+</p>
+  <h3>Current Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Comment configurer MapServer comme client pour accéder à un service via https</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#requirements">Prérequis</a></li>
+<li><a class="reference internal" href="#default-installation-with-apt-get-install-rpm-manual-etc">Installation par défaut (avec apt-get install, rpm, manuelle, etc)</a></li>
+<li><a class="reference internal" href="#non-standard-installation-common-with-ms4w-and-fgs">Installation non courante (commune avec ms4w et fgs</a></li>
+<li><a class="reference internal" href="#remote-server-with-a-self-signed-ssl-certificate">Serveur distant avec un certificat SSL auto-signé</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Recherche rapide</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Saisissez un mot clef ou un nom de module, classe ou fonction.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             >index</a></li>
+        <li class="right" >
+          <a href="mapscript.html" title="Wrappers MapScript pour les Services WxS"
+             >suivant</a> |</li>
+        <li class="right" >
+          <a href="sos_server.html" title="Serveur SOS"
+             >précédent</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="../documentation.html" >Documentation de MapServer 6.4.1</a> &raquo;</li>
+          <li><a href="index.html" >Support et configuration OGC</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; <a href="../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
+      Mis à jour le Saturday  5 April 2014, 13:08.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

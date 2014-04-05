@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>msencrypt &mdash; MapServer 6.4.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="shortcut icon" href="../_static/mapserver.ico"/>
+    <link rel="author" title="À propos de ces documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="MapServer 6.4.1 documentation" href="../index.html" />
+    <link rel="up" title="Utilitaires" href="index.html" />
+    <link rel="next" title="scalebar" href="scalebar.html" />
+    <link rel="prev" title="legend" href="legend.html" /> 
+  </head>
+  <body>
+
+<table width="100%" style="width: 100%; background-color: white;">
+  <tr>
+    <td rowspan="2" style="padding: 10px 0px 10px 10px;">
+      <a href="../index.html" title="Home"><img src="../_static/banner.png" alt="MapServer banner" border="0" /></a>
+    </td>
+    <td style="padding: 10px 10px 0px 0px; text-align: right; vertical-align: top;">
+      <a href="../index.html" title="Home">Home</a> |
+      <a href="../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
+      <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
+      <a href="../faq.html" title="FAQ">FAQ</a> |
+      <a href="../download.html" title="Download">Download </a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding: 0px 10px 0px 0px; text-align: right; vertical-align: bottom;">
+    
+        
+          <a href="../../en/utilities/msencrypt.html"><img src="../_static/flagicons/en.png" alt="en" title="en" border="0" /></a>
+        
+    
+        
+          <a href="../../it/utilities/msencrypt.html"><img src="../_static/flagicons/it.png" alt="it" title="it" border="0" /></a>
+        
+    
+        
+          <a href="../../es/utilities/msencrypt.html"><img src="../_static/flagicons/es.png" alt="es" title="es" border="0" /></a>
+        
+    
+        
+          <a href="../../zh_cn/utilities/msencrypt.html"><img src="../_static/flagicons/zh_cn.png" alt="zh_cn" title="zh_cn" border="0" /></a>
+        
+    
+        
+          <a href="../../de/utilities/msencrypt.html"><img src="../_static/flagicons/de.png" alt="de" title="de" border="0" /></a>
+        
+    
+        
+          <a href="../../el/utilities/msencrypt.html"><img src="../_static/flagicons/el.png" alt="el" title="el" border="0" /></a>
+        
+        <img src="../_static/flagicons/fr.png" alt="fr" title="fr" border="0" width="18px" height="13px"/>
+    
+        
+          <a href="../../id/utilities/msencrypt.html"><img src="../_static/flagicons/id.png" alt="id" title="id" border="0" /></a>
+        
+    
+        
+          <a href="../../sq/utilities/msencrypt.html"><img src="../_static/flagicons/sq.png" alt="sq" title="sq" border="0" /></a>
+        
+    
+        
+          <a href="../../tr/utilities/msencrypt.html"><img src="../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
+        
+
+    </td>
+  </tr>
+</table>
+
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="scalebar.html" title="scalebar"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="legend.html" title="legend"
+             accesskey="P">précédent</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="../documentation.html" >Documentation de MapServer 6.4.1</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Utilitaires</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <span class="target" id="index-0"></span><span class="target" id="index-1"></span><div class="section" id="msencrypt">
+<span id="index-2"></span><span id="id1"></span><h1>msencrypt<a class="headerlink" href="#msencrypt" title="Lien permanent vers ce titre">¶</a></h1>
+<div class="section" id="purpose">
+<h2>Objectif<a class="headerlink" href="#purpose" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Utilisé pour créer une clé de chiffrage ou pour chiffrer des parties de la chaîne de connexion dans le mapfile (ajouté dans la version 4.10). Typiquement vous pouvez vouloir chiffrer une partir du paramètre CONNECTION pour la connexion à une base de données. Les types de connexion suivantes sont gérés pour utiliser la méthode de chiffrage :</p>
+<div class="highlight-python"><pre>OGR
+Oracle Spatial
+PostGIS
+SDE</pre>
+</div>
+</div>
+<div class="section" id="syntax">
+<h2>Syntaxe<a class="headerlink" href="#syntax" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Pour créer une nouvelle clé de chiffrage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">msencrypt</span> <span class="o">-</span><span class="n">keygen</span> <span class="p">[</span><span class="n">key_filename</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Pour chiffrer une chaîne de caractères:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">msencrypt</span> <span class="o">-</span><span class="n">key</span> <span class="p">[</span><span class="n">key_filename</span><span class="p">]</span> <span class="p">[</span><span class="n">string_to_encrypt</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="use-in-mapfile">
+<h2>Utilisation dans un Mapfile<a class="headerlink" href="#use-in-mapfile" title="Lien permanent vers ce titre">¶</a></h2>
+<p>La localisation de la clé de chiffrage peut être définie par deux mécanismes, soit en définissant la variable d&#8217;environnement MS_ENCRYPTION_KEY soit en utilisant le paramètre CONFIG  dans l&#8217;objet MAP de votre mapfile. Par exemple:</p>
+<div class="highlight-python"><pre>CONFIG MS_ENCRYPTION_KEY "/path/to/mykey.txt"</pre>
+</div>
+<p>Utiliser les caractères { et } comme délimiteur pour chiffrer les chaînes de caractères au sein du paramètre CONNECTION d&#8217;une base de données dans votre mapfile. Par exemple :</p>
+<div class="highlight-python"><pre>CONNECTIONTYPE ORACLESPATIAL
+CONNECTION "user/{MIIBugIBAAKBgQCP0Yj+Seh8==}@service"</pre>
+</div>
+<div class="section" id="example">
+<h3>Exemple<a class="headerlink" href="#example" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="highlight-python"><pre>LAYER
+  NAME "provinces"
+  TYPE POLYGON
+  CONNECTIONTYPE POSTGIS
+  CONNECTION "host=127.0.0.1 dbname=gmap user=postgres password=iluvyou18 port=5432"
+  DATA "the_geom FROM province using SRID=42304"
+  STATUS DEFAULT
+  CLASS
+    NAME "Countries"
+    COLOR 255 0 0
+  END
+END</pre>
+</div>
+<p>Voici les étapes pour chiffre le mot de passe dans la connexion ci-dessus:</p>
+<ol class="arabic simple">
+<li>Générez une clé de chiffrage (notez que cette clé ne doit pas être stockée quelque part dans un répertoire accessible par le serveur web):</li>
+</ol>
+<div class="highlight-python"><pre>msencrypt -keygen "E:\temp\mykey.txt"</pre>
+</div>
+<p>et ce fichier de clé généré devrait contenir quelque chose comme:</p>
+<div class="highlight-python"><pre>2137FEFDB5611448738D9FBB1DC59055</pre>
+</div>
+<ol class="arabic simple" start="2">
+<li>Chiffrez le mot de passe de la connexion en utilisant la clé générée:</li>
+</ol>
+<div class="highlight-python"><pre>msencrypt -key "E:\temp\mykey.txt" "iluvyou18"</pre>
+</div>
+<p>qui renvoie le mot de passe chiffré, en ligne de commande (vous allez l&#8217;utiliser rapidement)</p>
+<div class="highlight-python"><pre>3656026A23DBAFC04C402EDFAB7CE714</pre>
+</div>
+<ol class="arabic simple" start="3">
+<li>Éditez le mapfile pour vous assurez que le fichier :<a class="reference external" href="file:'mykey.txt">file:&#8217;mykey.txt</a>&#8216; peut être trouvé, en utilisant la variable d&#8217;environnement &#8220;MS_ENCRYPTION_KEY&#8221;. Le paramètre CONFIG dans l&#8217;objet MAP peut être utilisé pour définir la variable d&#8217;environnement dans le mapfile :</li>
+</ol>
+<div class="highlight-python"><pre>MAP
+    ...
+    CONFIG "MS_ENCRYPTION_KEY" "E:/temp/mykey.txt"
+    ...
+END #mapfile</pre>
+</div>
+<ol class="arabic simple" start="4">
+<li>Modifiez le paramètre CONNECTION de la couche pour utiliser la clé du mot de passe généré, assurez vous d&#8217;utiliser les accolades “{}” autour de la clé:</li>
+</ol>
+<div class="highlight-python"><pre>CONNECTION "host=127.0.0.1 dbname=gmap user=postgres
+            password={3656026A23DBAFC04C402EDFAB7CE714} port=5432"</pre>
+</div>
+<ol class="arabic simple" start="5">
+<li>Terminé ! Testez le nouveau mapfile chiffré avec la commande <a class="reference internal" href="shp2img.html#shp2img"><em>shp2img</em></a>!</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+<p>
+<a href="../about.html" title="About">About</a><br>
+<a href="../products.html" title="Products">Products</a><br>
+<a href="../community/index.html" title="Community">Community</a><br>
+<a href="../development/index.html" title="Development">Development</a><br>
+<a href="../download.html" title="Downloads">Downloads</a><br>
+<a href="../documentation.html" title="Documentation">Documentation</a><br>
+<a href="../faq.html" title="FAQ">FAQ</a>
+</p>
+  <h3>Current Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">msencrypt</a><ul>
+<li><a class="reference internal" href="#purpose">Objectif</a></li>
+<li><a class="reference internal" href="#syntax">Syntaxe</a></li>
+<li><a class="reference internal" href="#use-in-mapfile">Utilisation dans un Mapfile</a><ul>
+<li><a class="reference internal" href="#example">Exemple</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Recherche rapide</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Saisissez un mot clef ou un nom de module, classe ou fonction.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             >index</a></li>
+        <li class="right" >
+          <a href="scalebar.html" title="scalebar"
+             >suivant</a> |</li>
+        <li class="right" >
+          <a href="legend.html" title="legend"
+             >précédent</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="../documentation.html" >Documentation de MapServer 6.4.1</a> &raquo;</li>
+          <li><a href="index.html" >Utilitaires</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; <a href="../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
+      Mis à jour le Saturday  5 April 2014, 13:08.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

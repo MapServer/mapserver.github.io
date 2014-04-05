@@ -1,0 +1,749 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configurer TinyOWS avec un fichier XML &mdash; MapServer 6.4.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="shortcut icon" href="../_static/mapserver.ico"/>
+    <link rel="author" title="À propos de ces documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="MapServer 6.4.1 documentation" href="../index.html" />
+    <link rel="up" title="TinyOWS" href="index.html" />
+    <link rel="next" title="Configurer TinyOWS avec un fichier Mapfile standard" href="mapfileconfig.html" />
+    <link rel="prev" title="Installation de TinyOWS" href="serverinstallation.html" /> 
+  </head>
+  <body>
+
+<table width="100%" style="width: 100%; background-color: white;">
+  <tr>
+    <td rowspan="2" style="padding: 10px 0px 10px 10px;">
+      <a href="../index.html" title="Home"><img src="../_static/banner.png" alt="MapServer banner" border="0" /></a>
+    </td>
+    <td style="padding: 10px 10px 0px 0px; text-align: right; vertical-align: top;">
+      <a href="../index.html" title="Home">Home</a> |
+      <a href="../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
+      <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
+      <a href="../faq.html" title="FAQ">FAQ</a> |
+      <a href="../download.html" title="Download">Download </a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding: 0px 10px 0px 0px; text-align: right; vertical-align: bottom;">
+    
+        
+          <a href="../../en/tinyows/configfile.html"><img src="../_static/flagicons/en.png" alt="en" title="en" border="0" /></a>
+        
+    
+        
+          <a href="../../it/tinyows/configfile.html"><img src="../_static/flagicons/it.png" alt="it" title="it" border="0" /></a>
+        
+    
+        
+          <a href="../../es/tinyows/configfile.html"><img src="../_static/flagicons/es.png" alt="es" title="es" border="0" /></a>
+        
+    
+        
+          <a href="../../zh_cn/tinyows/configfile.html"><img src="../_static/flagicons/zh_cn.png" alt="zh_cn" title="zh_cn" border="0" /></a>
+        
+    
+        
+          <a href="../../de/tinyows/configfile.html"><img src="../_static/flagicons/de.png" alt="de" title="de" border="0" /></a>
+        
+    
+        
+          <a href="../../el/tinyows/configfile.html"><img src="../_static/flagicons/el.png" alt="el" title="el" border="0" /></a>
+        
+        <img src="../_static/flagicons/fr.png" alt="fr" title="fr" border="0" width="18px" height="13px"/>
+    
+        
+          <a href="../../id/tinyows/configfile.html"><img src="../_static/flagicons/id.png" alt="id" title="id" border="0" /></a>
+        
+    
+        
+          <a href="../../sq/tinyows/configfile.html"><img src="../_static/flagicons/sq.png" alt="sq" title="sq" border="0" /></a>
+        
+    
+        
+          <a href="../../tr/tinyows/configfile.html"><img src="../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
+        
+
+    </td>
+  </tr>
+</table>
+
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="mapfileconfig.html" title="Configurer TinyOWS avec un fichier Mapfile standard"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="serverinstallation.html" title="Installation de TinyOWS"
+             accesskey="P">précédent</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="../documentation.html" >Documentation de MapServer 6.4.1</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">TinyOWS</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="configuring-tinyows-with-an-xml-file">
+<span id="tinyows-configfile"></span><h1>Configurer TinyOWS avec un fichier XML<a class="headerlink" href="#configuring-tinyows-with-an-xml-file" title="Lien permanent vers ce titre">¶</a></h1>
+<p>La manière la plus simple de configurer TinyOWS est avec un simple fichier XML appelé <tt class="docutils literal"><span class="pre">tinyows.xml</span></tt>.</p>
+<p>Le chemin par défaut est <tt class="docutils literal"><span class="pre">/etc/tinyows.xml</span></tt>. Vous pouvez aussi utiliser You can also use <tt class="docutils literal"><span class="pre">TINYOWS_CONFIG_FILE</span></tt> environment variable to set your own path.</p>
+<div class="section" id="configuration-file-simple-example">
+<h2>Exemple simple de fichier de configuration<a class="headerlink" href="#configuration-file-simple-example" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Un exemple de fichier <tt class="docutils literal"><span class="pre">config.xml</span></tt> est dans le répertoire de démo:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;tinyows</span> <span class="na">online_resource=</span><span class="s">&quot;http://127.0.0.1/cgi-bin/tinyows&quot;</span>
+         <span class="na">schema_dir=</span><span class="s">&quot;/usr/local/tinyows/schema/&quot;</span><span class="nt">&gt;</span>
+
+ <span class="nt">&lt;pg</span> <span class="na">host=</span><span class="s">&quot;127.0.0.1&quot;</span> <span class="na">user=</span><span class="s">&quot;postgres&quot;</span> <span class="na">password=</span><span class="s">&quot;postgres&quot;</span> <span class="na">dbname=</span><span class="s">&quot;tinyows_demo&quot;</span> <span class="na">port=</span><span class="s">&quot;5432&quot;</span><span class="nt">/&gt;</span>
+
+ <span class="nt">&lt;metadata</span> <span class="na">name=</span><span class="s">&quot;TinyOWS Server&quot;</span>
+           <span class="na">title=</span><span class="s">&quot;TinyOWS Server - Demo Service&quot;</span> <span class="nt">/&gt;</span>
+
+ <span class="nt">&lt;layer</span> <span class="na">retrievable=</span><span class="s">&quot;1&quot;</span>
+        <span class="na">writable=</span><span class="s">&quot;1&quot;</span>
+        <span class="na">ns_prefix=</span><span class="s">&quot;tows&quot;</span>
+        <span class="na">ns_uri=</span><span class="s">&quot;http://www.tinyows.org/&quot;</span>
+        <span class="na">name=</span><span class="s">&quot;world&quot;</span>
+        <span class="na">title=</span><span class="s">&quot;World Administrative Boundaries&quot;</span> <span class="nt">/&gt;</span>
+
+ <span class="nt">&lt;layer</span> <span class="na">retrievable=</span><span class="s">&quot;1&quot;</span>
+        <span class="na">writable=</span><span class="s">&quot;1&quot;</span>
+        <span class="na">ns_prefix=</span><span class="s">&quot;tows&quot;</span>
+        <span class="na">ns_uri=</span><span class="s">&quot;http://www.tinyows.org/&quot;</span>
+        <span class="na">name=</span><span class="s">&quot;france&quot;</span>
+        <span class="na">title=</span><span class="s">&quot;French Administrative Sub Boundaries (IGN - GeoFLA Departements)&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/tinyows&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="testing-your-config-xml-file">
+<h2>Testez le fichier config.xml<a class="headerlink" href="#testing-your-config-xml-file" title="Lien permanent vers ce titre">¶</a></h2>
+<p>A partir du moment où vous avez un fichier config.xml associé à votre service, lancez TinyOWS avec l&#8217;option &#8211;check pour valider votre fichier de configuration, testez votre connexion à la base de données et listez les couches à utiliser</p>
+<div class="highlight-bash"><div class="highlight"><pre>./tinyows --check
+ TinyOWS version:   1.1.0
+ FCGI support:      Yes
+ Config File Path:  /etc/tinyows.xml <span class="o">(</span>TinyOWS XML<span class="o">)</span>
+ PostGIS Version:   2.1.0
+ PostGIS dsn:       <span class="nv">host</span><span class="o">=</span>127.0.0.1 <span class="nv">user</span><span class="o">=</span>postgres <span class="nv">password</span><span class="o">=</span>postgres <span class="nv">dbname</span><span class="o">=</span>foo <span class="nv">port</span><span class="o">=</span>5432
+ Output Encoding:   UTF-8
+ Database Encoding: UTF8
+ Schema dir:        /usr/local/share/tinyows/schema/
+ Display bbox:      Yes
+ Estimated extent:  No
+ Check schema:      Yes
+ Check valid geoms: No
+ Available layers:
+  - public.commune <span class="o">(</span>2154<span class="o">)</span> -&gt; tows.commune <span class="o">[</span>RW<span class="o">]</span>
+  - public.world <span class="o">(</span>4326<span class="o">)</span> -&gt; tows.world <span class="o">[</span>RW<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="structure-of-the-config-xml-file">
+<h2>Structure d&#8217;un fichier config.xml<a class="headerlink" href="#structure-of-the-config-xml-file" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="tinyows-element">
+<h3>Elément TinyOWS<a class="headerlink" href="#tinyows-element" title="Lien permanent vers ce titre">¶</a></h3>
+<p>TinyOWS est l&#8217;élement racine. Il est obligatoire et doit contenir certaines informations système sur le service lui-même. Quelques options de service globales peuvent aussi être activées/désactivées à ce niveau</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="4%" />
+<col width="3%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Attribut</th>
+<th class="head">Requis?</th>
+<th class="head">Par défaut</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>online_resource</td>
+<td>obligatoire</td>
+<td>&nbsp;</td>
+<td>URL où le service est situé, c&#8217;est à dire <tt class="docutils literal"><span class="pre">http://127.0.0.1/cgi-bin/tinyows</span></tt></td>
+</tr>
+<tr class="row-odd"><td>schema_dir</td>
+<td>obligatoire</td>
+<td>&nbsp;</td>
+<td>Chemin où le répertoire de schéma de TinyOWS est situé, c&#8217;est à dire <tt class="docutils literal"><span class="pre">/usr/local/tinyows/schema/</span></tt></td>
+</tr>
+<tr class="row-even"><td>log</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Chemin où TinyOWS loggue les requêtes en entrée, c&#8217;est à dire <tt class="docutils literal"><span class="pre">/var/log/tinyows.log</span></tt>. Ce fichier doit avoir des droits en écriture pour l&#8217;utilisateur qui a lancé le processus TinyOWS.</td>
+</tr>
+<tr class="row-odd"><td>log_level</td>
+<td>optionnel</td>
+<td>0</td>
+<td>Valeur du champ pour indiquer ce qu&#8217;on loggue: 1: ERREUR, 2: EVENEMENT, 4: REQUETES HTTP, 8: SQL. e.g: 15 pour tout logguer.</td>
+</tr>
+<tr class="row-even"><td>degree_precision</td>
+<td>optionnel</td>
+<td>6</td>
+<td>Indique le  nombre de chiffres après la virgule pour la précision quand les coordonnées sont exprimées en latitude/longitude</td>
+</tr>
+<tr class="row-odd"><td>meter_precision</td>
+<td>optionnel</td>
+<td>0</td>
+<td>Indique le  nombre de chiffres après la virgule pour la précision quand les coordonnées sont projetées (donc en mètres).</td>
+</tr>
+<tr class="row-even"><td>display_bbox</td>
+<td>optionnel</td>
+<td>1</td>
+<td>&#8220;Drapeau&#8221; pour indiquer si le rectangle englobant dedoit être généré pour la sortie <tt class="docutils literal"><span class="pre">GetFeature</span></tt> du GML WFS. Il est obligatoire dans la spécification WFS. Mais comme il consomme du temps, il peut être intéressant d&#8217;avoir la possibilité de le désactiver.</td>
+</tr>
+<tr class="row-odd"><td>estimated_extent</td>
+<td>optionnel</td>
+<td>0</td>
+<td>&#8220;Drapeau&#8221; pour indiquer si TinyOWS doit utiliser estimated_extent (plus rapide mais un peu moins juste).</td>
+</tr>
+<tr class="row-even"><td>check_schema</td>
+<td>optionnel</td>
+<td>1</td>
+<td>&#8220;Drapeau&#8221; pour indiquer si la donnée en entrée doit être vérifiée vis à vis du schéma avant d&#8217;être exécutée. Attention, la validation de schéma est une part importante du processus de sécurité. Désactiver cet attribut est à vos risques et périls.</td>
+</tr>
+<tr class="row-odd"><td>check_valid_geom</td>
+<td>optionnel</td>
+<td>1</td>
+<td>&#8220;Drapeau&#8221; pour indiquer si la validation des géométries OGC SFS 1.1 doit être effectuée avant d&#8217;exécuter la transaction.</td>
+</tr>
+<tr class="row-even"><td>encoding</td>
+<td>optionnel</td>
+<td>UTF-8</td>
+<td>Encodage de sortie. Les autres valeurs par exemple pourrait être ISO-8859-1. Aucune conversion des données n&#8217;est effectuée sur les données. Cet attribut est déclaratif.</td>
+</tr>
+<tr class="row-odd"><td>expose_pk</td>
+<td>optionnel</td>
+<td>0</td>
+<td>&#8220;Drapeau&#8221; pour indiquer si TinYOWS devrait exposer la clé primaire dans le schéma (et donc si elle est requise dans la requête transactionnelle)</td>
+</tr>
+<tr class="row-even"><td>wfs_default_version</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Chaîne de version permettant d&#8217;indiquer la version par défaut de WFS, 1.0.0 ou 1.1.0 par exemple.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="limits-element">
+<h3>Elément Limits<a class="headerlink" href="#limits-element" title="Lien permanent vers ce titre">¶</a></h3>
+<p>L&#8217;élément Limits fournit un maximum pour la sortie du serveur. Il peut aider à prévenir une attaque par dénis de service (DDOS), ou empêcher une requête vraiment trop importante de crasher votre serveur. Cet élement est optionnel</p>
+<p>Attributs de Limits</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="7%" />
+<col width="6%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Attribut</th>
+<th class="head">Requis?</th>
+<th class="head">Par défaut</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>features</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Utilisé pour définir un nombre maximum de géométries retournées au client XFS lors on d&#8217;une requête <tt class="docutils literal"><span class="pre">GetFeature</span></tt></td>
+</tr>
+<tr class="row-odd"><td>geobbox</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Etendue géographique du rectangle englobant de l&#8217;étendue maximale: Est,Ouest,Nord,Sud</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;tinyows&gt;</span>
+ ...
+ <span class="nt">&lt;limits</span> <span class="na">features=</span><span class="s">&quot;10000&quot;</span> <span class="nt">/&gt;</span>
+ ...
+<span class="nt">&lt;/tinyows&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="postgresql-connection">
+<h3>Connexion PostgreSQL<a class="headerlink" href="#postgresql-connection" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Elément de connexion PostgreSQL. Cet élément est obligatoire.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="6%" />
+<col width="6%" />
+<col width="74%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Attribut</th>
+<th class="head">Requis?</th>
+<th class="head">Par défaut</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>host</td>
+<td>optionnel</td>
+<td>localhost</td>
+<td>Nom (ou IP) du serveur PostgreSQL (par défaut, c&#8217;est localhost)</td>
+</tr>
+<tr class="row-odd"><td>user</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Utilisateur PostgreSQL pour se connecter (par défaut c&#8217;est l&#8217;utilisateur système utilisé pour faire tourner le serveur)</td>
+</tr>
+<tr class="row-even"><td>password</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Mot de passe de connexion PostgreSQL</td>
+</tr>
+<tr class="row-odd"><td>dbname</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Nom de la base de donnée PostGIS (par défaut, le même que celui que l&#8217;utilisateur système utilise pour faire tourner le serveur)</td>
+</tr>
+<tr class="row-even"><td>port</td>
+<td>optionnel</td>
+<td>5432</td>
+<td>Numéro du port PostgreSQL</td>
+</tr>
+<tr class="row-odd"><td>encoding</td>
+<td>optionnel</td>
+<td>UTF-8</td>
+<td>Encodage de la base de données, comme spécifié dans <a class="reference external" href="http://www.postgresql.org/docs/9.0/static/multibyte.html#CHARSET-TABLE">http://www.postgresql.org/docs/9.0/static/multibyte.html#CHARSET-TABLE</a></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;tinyows&gt;</span>
+ ...
+ <span class="nt">&lt;pg</span> <span class="na">host=</span><span class="s">&quot;127.0.0.1&quot;</span>
+        <span class="na">user=</span><span class="s">&quot;postgres&quot;</span>
+        <span class="na">password=</span><span class="s">&quot;postgres&quot;</span>
+        <span class="na">dbname=</span><span class="s">&quot;gis_data&quot;</span>
+        <span class="na">port=</span><span class="s">&quot;5432&quot;</span> <span class="nt">/&gt;</span>
+  ...
+<span class="nt">&lt;/tinyows&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="metadata-and-contact-elements">
+<h3>Eléments Metadata et Contact<a class="headerlink" href="#metadata-and-contact-elements" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Utilisé pour fournir l&#8217;information sur le service en lui-même. Ces deux éléments sont obligatoires.</p>
+<div class="section" id="metadata-attributes">
+<h4>Attributs de Metadata<a class="headerlink" href="#metadata-attributes" title="Lien permanent vers ce titre">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="11%" />
+<col width="8%" />
+<col width="57%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Attribut</th>
+<th class="head">Requis?</th>
+<th class="head">Par défaut</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>name</td>
+<td>obligatoire</td>
+<td>&nbsp;</td>
+<td>Nom du service web</td>
+</tr>
+<tr class="row-odd"><td>title</td>
+<td>obligatoire</td>
+<td>&nbsp;</td>
+<td>Titre du service web</td>
+</tr>
+<tr class="row-even"><td>keywords</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>List des mots clés du service web (séparé par des virgules)</td>
+</tr>
+<tr class="row-odd"><td>fees</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Coût du service web</td>
+</tr>
+<tr class="row-even"><td>access_constraints</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Contraintes d&#8217;accès du service web</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="abstract-element">
+<h4>Elément Abstract<a class="headerlink" href="#abstract-element" title="Lien permanent vers ce titre">¶</a></h4>
+<p>L&#8217;élément Abstract est un élement optionnel, fils de Metadata. C&#8217;est l&#8217;endroit pour une description sans contrainte de format du service.</p>
+</div>
+<div class="section" id="contact-attributes">
+<h4>Attributs du Contact<a class="headerlink" href="#contact-attributes" title="Lien permanent vers ce titre">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="10%" />
+<col width="8%" />
+<col width="58%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Attribut</th>
+<th class="head">Requis?</th>
+<th class="head">Par défaut</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>name</td>
+<td>obligatoire</td>
+<td>&nbsp;</td>
+<td>Nom du contact du service web</td>
+</tr>
+<tr class="row-odd"><td>site</td>
+<td>obligatoire</td>
+<td>&nbsp;</td>
+<td>URL de contact du service web</td>
+</tr>
+<tr class="row-even"><td>email</td>
+<td>obligatoire</td>
+<td>&nbsp;</td>
+<td>Email de contact du service web</td>
+</tr>
+<tr class="row-odd"><td>individual_name</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Nom du contact individuel du service web</td>
+</tr>
+<tr class="row-even"><td>position</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Position géographique du contact du service web</td>
+</tr>
+<tr class="row-odd"><td>phone</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Téléphone du contact du service web</td>
+</tr>
+<tr class="row-even"><td>fax</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Fax du contact du service web</td>
+</tr>
+<tr class="row-odd"><td>online_resource</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>URl de contact du service web (c&#8217;est à dire des métadonnées additionnelles)</td>
+</tr>
+<tr class="row-even"><td>address</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Adresse postale du contact du service web</td>
+</tr>
+<tr class="row-odd"><td>postcode</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Code postal du contact du service web</td>
+</tr>
+<tr class="row-even"><td>city</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Ville du contact du service web</td>
+</tr>
+<tr class="row-odd"><td>administrative_area</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Aire administrative du contact du service web</td>
+</tr>
+<tr class="row-even"><td>country</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>pays du contact du service web</td>
+</tr>
+<tr class="row-odd"><td>hours_of_service</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Horaires de services du contact du service web</td>
+</tr>
+<tr class="row-even"><td>contact_instructions</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Instructions du contact du service web ||</td>
+</tr>
+</tbody>
+</table>
+<p>Exemple avec Contact et Metadata avec seulement les paramètres obligatoires:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;metadata</span> <span class="na">name=</span><span class="s">&quot;TinyOWS Server&quot;</span>
+          <span class="na">title=</span><span class="s">&quot;TinyOWS Server - Demo Service&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;contact</span> <span class="na">name=</span><span class="s">&quot;TinyOWS Server&quot;</span>
+         <span class="na">site=</span><span class="s">&quot;http://www.tinyows.org/&quot;</span>
+         <span class="na">email=</span><span class="s">&quot;tinyows-users@lists.maptools.org&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="layer-element">
+<h3>Elément Layer<a class="headerlink" href="#layer-element" title="Lien permanent vers ce titre">¶</a></h3>
+<p>L&#8217;élément Layer est utilisé pour définir toutes les couches forunies par le service. Même si cet élément est techniquement optionnel, l&#8217;omettre implique de ne fournir aucune couche.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Attribut</th>
+<th class="head">Requis?</th>
+<th class="head">Par défaut</th>
+<th class="head">Hérite?</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>ns_prefix</td>
+<td>obligatoire</td>
+<td>&nbsp;</td>
+<td>Oui</td>
+<td>Préfixe de l&#8217;espace de nom de la couche dans le WFS</td>
+</tr>
+<tr class="row-odd"><td>ns_uri</td>
+<td>obligatoire</td>
+<td>&nbsp;</td>
+<td>Oui</td>
+<td>URI de l&#8217;espace de nom de la couche dans le WFS</td>
+</tr>
+<tr class="row-even"><td>name</td>
+<td>obligatoire</td>
+<td>&nbsp;</td>
+<td>Non</td>
+<td>Nom de la couche</td>
+</tr>
+<tr class="row-odd"><td>title</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Non</td>
+<td>Itre de la couche</td>
+</tr>
+<tr class="row-even"><td>retrievable</td>
+<td>optionnel</td>
+<td>false</td>
+<td>Oui</td>
+<td>Si True, la couche est récupérable depuis une requête <tt class="docutils literal"><span class="pre">GetFeature</span></tt> WFS</td>
+</tr>
+<tr class="row-odd"><td>writable</td>
+<td>optionnel</td>
+<td>false</td>
+<td>Oui</td>
+<td>Si True, la couche est éditable avec une requête transactionnelle WFS</td>
+</tr>
+<tr class="row-even"><td>schema</td>
+<td>optionnel</td>
+<td>&#8216;public&#8217;</td>
+<td>Oui</td>
+<td>Nom du schéma PostgreSQL</td>
+</tr>
+<tr class="row-odd"><td>table</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Non</td>
+<td>Nom de la table PostgreSQL (par défaut, on utilise le nom de la couche).</td>
+</tr>
+<tr class="row-even"><td>abstract</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Non</td>
+<td>Texte de présentation</td>
+</tr>
+<tr class="row-odd"><td>keywords</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Oui</td>
+<td>Mots-clés &#8216;séparés par des virgules)</td>
+</tr>
+<tr class="row-even"><td>srid</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Oui</td>
+<td>List séparée par des virgules des SRID en sortie</td>
+</tr>
+<tr class="row-odd"><td>geobbox</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Oui</td>
+<td>Etendue en WGS-84 du rectangle englobant de l&#8217;étendue maximale: Est,Ouest,Nord,Sud</td>
+</tr>
+<tr class="row-even"><td>include_items</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Oui</td>
+<td>Liste des colonnes séparées par des virgules à récupérer (seulement)</td>
+</tr>
+<tr class="row-odd"><td>exclude_items</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Oui</td>
+<td>Liste des colonnes séparées par des virgules à ne pas récupérer</td>
+</tr>
+<tr class="row-even"><td>pkey</td>
+<td>optionnel</td>
+<td>&nbsp;</td>
+<td>Oui</td>
+<td>Le nom de la colonne à utiliser en tant que clé primaire, when il n&#8217;y a pas de clé PostgreSQL (utile pour être utilisé avec les vues PostgreSQL)</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;tinyows&gt;</span>
+ ...
+     <span class="nt">&lt;layer</span> <span class="na">retrievable=</span><span class="s">&quot;1&quot;</span>
+        <span class="na">writable=</span><span class="s">&quot;1&quot;</span>
+        <span class="na">ns_prefix=</span><span class="s">&quot;tows&quot;</span>
+        <span class="na">ns_uri=</span><span class="s">&quot;http://www.tinyows.org/&quot;</span>
+        <span class="na">name=</span><span class="s">&quot;world&quot;</span>
+        <span class="na">title=</span><span class="s">&quot;World Administrative Boundaries&quot;</span> <span class="nt">/&gt;</span>
+ ...
+<span class="nt">&lt;/tinyows&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="nested-layers">
+<h4>Couches imbriquées<a class="headerlink" href="#nested-layers" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Les entités Layer peuvent être imbriquées, les propriétés dans ce cas peuvent être héritées. Une Layer sans titre est considéré comme une couche &#8216;virtuelle&#8217;</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;tinyows&gt;</span>
+ ...
+     <span class="nt">&lt;layer</span> <span class="na">name=</span><span class="s">&quot;root&quot;</span>
+            <span class="na">retrievable=</span><span class="s">&quot;1&quot;</span> <span class="na">writable=</span><span class="s">&quot;1&quot;</span>
+            <span class="na">ns_prefix=</span><span class="s">&quot;tows&quot;</span>
+            <span class="na">ns_uri=</span><span class="s">&quot;http://www.tinyows.org/&quot;</span>
+            <span class="na">schema=</span><span class="s">&quot;my_db_schema&quot;</span><span class="nt">&gt;</span>
+
+          <span class="nt">&lt;layer</span> <span class="na">name=</span><span class="s">&quot;foo&quot;</span> <span class="na">title=</span><span class="s">&quot;foo&quot;</span> <span class="nt">/&gt;</span>
+          <span class="nt">&lt;layer</span> <span class="na">name=</span><span class="s">&quot;bar&quot;</span> <span class="na">title=</span><span class="s">&quot;bar&quot;</span> <span class="nt">/&gt;</span>
+
+     <span class="nt">&lt;/layer&gt;</span>
+
+ ...
+<span class="nt">&lt;/tinyows&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+<p>
+<a href="../about.html" title="About">About</a><br>
+<a href="../products.html" title="Products">Products</a><br>
+<a href="../community/index.html" title="Community">Community</a><br>
+<a href="../development/index.html" title="Development">Development</a><br>
+<a href="../download.html" title="Downloads">Downloads</a><br>
+<a href="../documentation.html" title="Documentation">Documentation</a><br>
+<a href="../faq.html" title="FAQ">FAQ</a>
+</p>
+  <h3>Current Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Configurer TinyOWS avec un fichier XML</a><ul>
+<li><a class="reference internal" href="#configuration-file-simple-example">Exemple simple de fichier de configuration</a></li>
+<li><a class="reference internal" href="#testing-your-config-xml-file">Testez le fichier config.xml</a></li>
+<li><a class="reference internal" href="#structure-of-the-config-xml-file">Structure d&#8217;un fichier config.xml</a><ul>
+<li><a class="reference internal" href="#tinyows-element">Elément TinyOWS</a></li>
+<li><a class="reference internal" href="#limits-element">Elément Limits</a></li>
+<li><a class="reference internal" href="#postgresql-connection">Connexion PostgreSQL</a></li>
+<li><a class="reference internal" href="#metadata-and-contact-elements">Eléments Metadata et Contact</a><ul>
+<li><a class="reference internal" href="#metadata-attributes">Attributs de Metadata</a></li>
+<li><a class="reference internal" href="#abstract-element">Elément Abstract</a></li>
+<li><a class="reference internal" href="#contact-attributes">Attributs du Contact</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#layer-element">Elément Layer</a><ul>
+<li><a class="reference internal" href="#nested-layers">Couches imbriquées</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Recherche rapide</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Saisissez un mot clef ou un nom de module, classe ou fonction.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             >index</a></li>
+        <li class="right" >
+          <a href="mapfileconfig.html" title="Configurer TinyOWS avec un fichier Mapfile standard"
+             >suivant</a> |</li>
+        <li class="right" >
+          <a href="serverinstallation.html" title="Installation de TinyOWS"
+             >précédent</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="../documentation.html" >Documentation de MapServer 6.4.1</a> &raquo;</li>
+          <li><a href="index.html" >TinyOWS</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; <a href="../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
+      Mis à jour le Saturday  5 April 2014, 13:08.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>
