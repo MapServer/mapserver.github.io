@@ -163,9 +163,10 @@ to features much the same way as the native MapServer shapefile and tiled shapef
 <div class="section" id="driver-filter-translation">
 <h2>2.1 Driver Filter Translation<a class="headerlink" href="#driver-filter-translation" title="Permalink to this headline">¶</a></h2>
 <p>Drivers that support complex expressions (e.g. PostGIS and Oracle Spatial) will need to implement a new layer API function
-(propose msXXXLayerTranslateFilter()) to translate a MapServer common expression to a native representation. MapServer
-exressions consist of a series of tokens that are from from left to right. It should be possible then to conver these tokens
-to a native representation of that the driver will handle independently of MapServer&#8211; typically some flavor of SQL.</p>
+(propose msXXXLayerTranslateFilter(layerObj <a href="#id1"><span class="problematic" id="id2">*</span></a>layer, expressionObj <a href="#id3"><span class="problematic" id="id4">*</span></a>filter, char <a href="#id5"><span class="problematic" id="id6">*</span></a>filteritem)) to translate both simple filters
+amd MapServer logical expressions to a native representation. MapServer logical exressions consist of a series of tokens that
+are processed from from left to right. It should be possible then to convert these tokens to a native representation of
+that the driver will handle independently of MapServer&#8211; typically some flavor of SQL.</p>
 </div>
 <div class="section" id="filter-merging">
 <h2>2.2 Filter Merging<a class="headerlink" href="#filter-merging" title="Permalink to this headline">¶</a></h2>
@@ -176,8 +177,6 @@ operation is will result in a filter expressed using the <em>common</em> syntax 
 <blockquote>
 <div>expressionObj *msMergeFilters(expressionObj *filter1, expressionObj *filter2)</div></blockquote>
 <p>The resulting filter will then be translated to native representation if applicable later.</p>
-<p>NOTE: It is not possible to merge a native filter with a filter given in common syntax. This really shouldn&#8217;t happen very
-often since filters aren&#8217;t as useful for those drivers that already support SQL in the data definition.</p>
 </div>
 <div class="section" id="filter-merging-examples">
 <h2>2.3 Filter Merging Examples<a class="headerlink" href="#filter-merging-examples" title="Permalink to this headline">¶</a></h2>
@@ -190,13 +189,24 @@ often since filters aren&#8217;t as useful for those drivers that already suppor
 <p>Case 3: FILTER (string) with no FILTERITEM</p>
 <blockquote>
 <div>New FILTER becomes a logical expression: ((string) AND (new filter))</div></blockquote>
-<p>Case 4: FILTER &#8220;native string&#8221;</p>
-<blockquote>
-<div>Not supported...</div></blockquote>
+<p>In the case where the old filter is already native filter and the translation fails we will leave the old filter in place
+so the driver can at least process that portion and then fall back to MapServer for the new filter.</p>
 </div>
-<div class="section" id="discussion">
-<h2>2.4 Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h2>
-<p>TODO (bulleted list of topics)</p>
+<div class="section" id="query-function-simplification">
+<h2>2.4 Query Function Simplification<a class="headerlink" href="#query-function-simplification" title="Permalink to this headline">¶</a></h2>
+<p>The msQueryByAttribute() function can be turned into an alias for the msQueryByFilter() function. They do basically the
+same thing: define a new filter and execute a query using it. This simplifies the code base. A few functional changes will
+need to be made within msQueryByFilter(), specifically handling the case when only 1 result is returned (mode=itemquery)
+but that is a simple check at the bottom of the result processing loop.</p>
+<p>This does not impact the CGi or MapScript APIs although we could choose to simplify those at a later date.</p>
+</div>
+<div class="section" id="future-enhancements">
+<h2>2.5 Future Enhancements<a class="headerlink" href="#future-enhancements" title="Permalink to this headline">¶</a></h2>
+<p>Work on this RFC indicates that the linked-list of tokens, while optimal for Bison/Yacc grammars, can be difficult to
+translate in some cases. For example, if a driver needs to add an argument to a function call: buffer([shape], 500) needs
+to translate to buffer(the_geom, 500, 1) if is difficult to know when to output the 1 in complex filter. It may be
+beneficial rewrite the token handling to use tree storage instead of a list. That change doesn&#8217;t affect the larger
+implementation approach, instead it offers an opportunity for more complete translations. Time will tell.</p>
 </div>
 <div class="section" id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this headline">¶</a></h2>
@@ -212,25 +222,29 @@ often since filters aren&#8217;t as useful for those drivers that already suppor
 <li>MS SQL Server: supports FITLER -&gt; native SQL snippet</li>
 </ul>
 </div>
-<div class="section" id="id1">
-<h2>3.2 Overview<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id7">
+<h2>3.2 Overview<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>there are no new keywords with minor structure changes (expressionObj)</li>
+<li>limited additions to logial expression syntax are recommended:
+- spatial operator syntax (e.g. A INTERSECTS B) will be deprecated in favor of a functional notation (e.g. INTERSECTS(A, B) = TRUE). This is more consistent with spatialally enabled SQL syntax and easer to translate.
+- BEYOND/DWITHIN operators will <em>only</em> exist in the functional form, they are useless in logical expressions as they site now</li>
 <li>there are no changes to the MapScript API</li>
 <li>drivers that support complex expressions (e.g. PostGIS, Oracle, SDE, MS SQL Server, OGR) need to implement a translation</li>
 </ul>
-<p>funcion to construct a partial &#8220;WHERE&#8221; clause from a set of expression/filter tokens
-- ...</p>
+<p>funcion to construct a partial &#8220;WHERE&#8221; clause from a set of expression/filter tokens</p>
 </div>
 <div class="section" id="files-affected">
 <h2>3.2 Files affected<a class="headerlink" href="#files-affected" title="Permalink to this headline">¶</a></h2>
 <p>The following files will be modified by this RFC:</p>
 <ul class="simple">
-<li>mapserver.h: extend expressionObj to contain a native_string (char <a href="#id2"><span class="problematic" id="id3">*</span></a>). This will hold a the native expression of the filter.</li>
+<li>mapserver.h: extend expressionObj to contain a native_string (char <a href="#id8"><span class="problematic" id="id9">*</span></a>). This will hold a the native expression of the filter.</li>
 <li>mapquery.c: call merging function in msQueryByAttribute() and msQueryByFilter(), call translation function in all query functions.</li>
-<li>mapdraw.c: call translation function in drawing functions (maybe just in msPrepareImage()?)</li>
+<li>mapdraw.c: call fitler translation function in msDrawVectorLayer()</li>
 <li>maplayer.c: changes/additions to layer API function</li>
 <li>mapshape.c, mappostgis.c, mapogr.c.... : changes/additions to driver functions</li>
+<li>mapparser.y: add function-based versions of spatial operators, add BOOLEAN token type</li>
+<li>maplexer.l: recognize TRUE/FALSE as boolean tokens (store in token-&gt;dblval) in expression context</li>
+<li>mapogcfilter.c/mapogccommonfilter.c: update expression writing to use functional notation, fix dwithin/beyond processing</li>
 </ul>
 <p>Notes:</p>
 <p>Drivers: This can be implemented incrementally within drivers. At a minimum all drivers <em>must</em> implement the
@@ -278,6 +292,8 @@ provides msPostGISEscapeSQLParam().</p>
 <p>The token replacement is only done in msLayerOpen(), the performance impact should be negligeable as this happens
 only once per rendered layer. Performance will improve greatly in some cases where operations are offloaded to the
 database - less network traffic, more efficient algorithms.</p>
+<p>With WFS-based dwithin/beyond operators we currently apply the distance values as buffers and then hand off to MapServer.
+The suggested changes would remove that step and improve performane in <em>all</em> cases.</p>
 </div>
 <div class="section" id="bug-id">
 <h2>6. Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this headline">¶</a></h2>
@@ -312,10 +328,11 @@ database - less network traffic, more efficient algorithms.</p>
 <li><a class="reference internal" href="#driver-filter-translation">2.1 Driver Filter Translation</a></li>
 <li><a class="reference internal" href="#filter-merging">2.2 Filter Merging</a></li>
 <li><a class="reference internal" href="#filter-merging-examples">2.3 Filter Merging Examples</a></li>
-<li><a class="reference internal" href="#discussion">2.4 Discussion</a></li>
+<li><a class="reference internal" href="#query-function-simplification">2.4 Query Function Simplification</a></li>
+<li><a class="reference internal" href="#future-enhancements">2.5 Future Enhancements</a></li>
 <li><a class="reference internal" href="#implementation-details">3. Implementation Details</a></li>
 <li><a class="reference internal" href="#summary-of-current-behaviour-by-driver">3.1 Summary of Current Behaviour (by driver)</a></li>
-<li><a class="reference internal" href="#id1">3.2 Overview</a></li>
+<li><a class="reference internal" href="#id7">3.2 Overview</a></li>
 <li><a class="reference internal" href="#files-affected">3.2 Files affected</a></li>
 <li><a class="reference internal" href="#mapscript">3.3 MapScript</a></li>
 <li><a class="reference internal" href="#backwards-compatibilty-issues">3.4 Backwards Compatibilty Issues</a></li>
