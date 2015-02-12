@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>OGR Output &mdash; MapServer 6.4.1 documentation</title>
+    <title>OGR Output &mdash; MapServer 7.0.0-beta1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.4.1',
+        VERSION:     '7.0.0-beta1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,7 +28,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 6.4.1 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../index.html" />
     <link rel="up" title="Output Generation" href="index.html" />
     <link rel="next" title="PDF Output" href="pdf.html" />
     <link rel="prev" title="HTML Imagemaps" href="imagemaps.html" /> 
@@ -97,7 +97,7 @@
           <a href="imagemaps.html" title="HTML Imagemaps"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
-          <li><a href="../documentation.html" >MapServer 6.4.1 Documentation</a> &raquo;</li>
+          <li><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Output Generation</a> &raquo;</li> 
       </ul>
     </div>
@@ -180,6 +180,16 @@ build the result on disk or in memory.</p>
   <span class="k">FORMATOPTION</span> <span class="s">&quot;FORM=zip&quot;</span>
   <span class="k">FORMATOPTION</span> <span class="s">&quot;FILENAME=result.zip&quot;</span>
 <span class="k">END</span>
+
+<span class="k">OUTPUTFORMAT</span>
+  <span class="k">NAME</span> <span class="s">&quot;SPATIALITEZIP&quot;</span>
+  <span class="k">DRIVER</span> <span class="s">&quot;OGR/SQLITE&quot;</span>
+  <span class="k">MIMETYPE</span> <span class="s">&quot;application/zip&quot;</span>
+  <span class="k">FORMATOPTION</span> <span class="s">&quot;DSCO:SPATIALITE=YES&quot;</span>
+  <span class="k">FORMATOPTION</span> <span class="s">&quot;STORAGE=memory&quot;</span>
+  <span class="k">FORMATOPTION</span> <span class="s">&quot;FORM=zip&quot;</span>
+  <span class="k">FORMATOPTION</span> <span class="s">&quot;FILENAME=result.db.zip&quot;</span>
+<span class="k">END</span>
 </pre></div>
 </div>
 <p>The OGR format driver to be used is determined by the name appearing
@@ -215,7 +225,11 @@ as an attempt to write directly to stdout.  Only a few OGR drivers will
 work properly in this mode (ie. CSV, perhaps kml, gml).</p>
 </dd>
 <dt><strong>FILENAME=name</strong></dt>
-<dd>Provides a name for the datasource created, default is &#8220;result.dat&#8221;.</dd>
+<dd>Provides a name for the datasource created, default is &#8220;result.dat&#8221; for single
+file or multipart form, or &#8220;result.zip&#8221; for zip form.
+In the case of zip form, the filename can be of the format basename.ext.zip where
+basename.ext will be used as the actual OGR datasource name (i.e. generally
+the filename that will be put inside the zip file).</dd>
 </dl>
 </div>
 <div class="section" id="layer-metadata">
@@ -228,6 +242,21 @@ primarily intended to support WFS.</p>
 <dd><p class="first">(Optional) A comma delimited list of formats supported for WFS GetFeature
 responses.  The OUTPUTFORMAT NAME values should be listed.</p>
 <div class="last highlight-python"><div class="highlight"><pre><span class="s">&quot;wfs_getfeature_formatlist&quot;</span> <span class="s">&quot;OGRGML,SHAPEZIP,CSV&quot;</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>wfs_additional_files_in_output</strong></dt>
+<dd><p class="first">(Optional) A comma delimited list of filenames that should be included as
+additional files in the response to a WFS GetFeature request for this layer,
+for output formats whose FORM FORMATOPTION is &#8220;zip&#8221; or &#8220;multipart&#8221;. This is typically
+used to add technical information, metadata or licencing information.
+The filenames can also be directory names, in which case all the files contained
+in the directory will be taken into account.
+Relative filenames will be evaluated against the mapfile directory, and the
+SHAPEPATH value if defined.
+Filenames can also be URLs (starting with <a class="reference external" href="http://">http://</a> or <a class="reference external" href="https://">https://</a>). For that latter
+capability, note that this requires OGR to be compiled with Curl support.</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="s">&quot;wfs_additional_files_in_output&quot;</span> <span class="s">&quot;license.pdf,my_layer_metadata.xml&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -269,7 +298,8 @@ precision metadata for the layer based on the source file.</p>
 </div>
 </dd>
 <dt><strong>ows/wfs_geomtype</strong></dt>
-<dd><p class="first">(Optional) Set the geometry type of OGR layers created from this MapServer
+<dd><p class="first">(Optional, metadata shared with <a class="reference internal" href="../ogc/wfs_server.html#wfs-server"><em>WFS server GML output</em></a>)
+Set the geometry type of OGR layers created from this MapServer
 LAYER.  One of &#8220;Point&#8221;, &#8220;LineString&#8221;, &#8220;Polygon&#8221;, &#8220;MultiPoint&#8221;,
 &#8220;MultiLineString&#8221;, &#8220;MultiPolygon&#8221;, &#8220;GeometryCollection&#8221;, &#8220;Geometry&#8221;,
 or &#8220;None&#8221;.  Most are fairly obvious, but &#8220;Geometry&#8221; can be used to represent
@@ -292,6 +322,21 @@ are only carried by MapServer if built with USE_POINT_Z_M support.</p>
 the mime type associated with the OUTPUTFORMAT must be listed in this metadata
 item.</p>
 <div class="last highlight-python"><div class="highlight"><pre><span class="s">&quot;wms_feature_info_mime_type&quot;</span> <span class="s">&quot;text/csv&quot;</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>wfs_additional_files_in_output</strong></dt>
+<dd><p class="first">(Optional) A comma delimited list of filenames that should be included as
+additional files in the response to a WFS GetFeature request, for any layer of
+the mapfile, for output formats whose FORM FORMATOPTION is &#8220;zip&#8221; or &#8220;multipart&#8221;. This is typically
+used to add technical information, metadata or licencing information.
+The filenames can also be directory names, in which case all the files contained
+in the directory will be taken into account.
+Relative filenames will be evaluated against the mapfile directory, and the
+SHAPEPATH value if defined.
+Filenames can also be URLs (starting with <a class="reference external" href="http://">http://</a> or <a class="reference external" href="https://">https://</a>). For that latter
+capability, note that this requires OGR to be compiled with Curl support.</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="s">&quot;wfs_additional_files_in_output&quot;</span> <span class="s">&quot;license.pdf&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -454,7 +499,7 @@ msautotest/wxs directory.</p>
           <a href="imagemaps.html" title="HTML Imagemaps"
              >previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
-          <li><a href="../documentation.html" >MapServer 6.4.1 Documentation</a> &raquo;</li>
+          <li><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
           <li><a href="index.html" >Output Generation</a> &raquo;</li> 
       </ul>
     </div>

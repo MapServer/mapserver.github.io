@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>WFS Client &mdash; MapServer 6.4.1 documentation</title>
+    <title>WFS Client &mdash; MapServer 7.0.0-beta1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.4.1',
+        VERSION:     '7.0.0-beta1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,10 +28,10 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 6.4.1 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../index.html" />
     <link rel="up" title="OGC Support and Configuration" href="index.html" />
     <link rel="next" title="WFS-T Server" href="wfs_t_server.html" />
-    <link rel="prev" title="WFS Server" href="wfs_server.html" /> 
+    <link rel="prev" title="INSPIRE Download Service" href="inspire_dl.html" /> 
   </head>
   <body>
 
@@ -94,10 +94,10 @@
           <a href="wfs_t_server.html" title="WFS-T Server"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="wfs_server.html" title="WFS Server"
+          <a href="inspire_dl.html" title="INSPIRE Download Service"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
-          <li><a href="../documentation.html" >MapServer 6.4.1 Documentation</a> &raquo;</li>
+          <li><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">OGC Support and Configuration</a> &raquo;</li> 
       </ul>
     </div>
@@ -289,6 +289,113 @@ in mapfiles that support multiple OGC interfaces since
 &#8220;ows_*&#8221; metadata can be used almost everywhere for common
 metadata items shared by multiple OGC interfaces.</p>
 </div>
+<div class="section" id="optional-layer-parameters-and-metadata">
+<h4>Optional Layer Parameters and Metadata<a class="headerlink" href="#optional-layer-parameters-and-metadata" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><p class="first"><strong>&#8220;wfs_auth_username&#8221; metadata</strong>
+- msEncrypt-style authorization string.  Empty strings are also
+accepted.</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">METADATA</span>
+  <span class="s">&quot;wfs_auth_username&quot;</span> <span class="s">&quot;foo&quot;</span>
+  <span class="s">&quot;wfs_auth_password&quot;</span> <span class="s">&quot;{FF88CFDAAE1A5E33}&quot;</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><strong>&#8220;wfs_auth_type&#8221; metadata</strong>
+- Authorization type.  Supported types include:</p>
+<blockquote>
+<div><ul class="simple">
+<li>basic</li>
+<li>digest</li>
+<li>ntlm</li>
+<li>any (the underlying http library picks the best among the
+options supported by the remote server)</li>
+<li>anysafe (the underlying http library picks only safe methods
+among the options supported by the remote server)</li>
+</ul>
+</div></blockquote>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">METADATA</span>
+  <span class="s">&quot;wfs_auth_type&quot;</span> <span class="s">&quot;ntlm&quot;</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><strong>&#8220;wfs_connectiontimeout&#8221; metadata</strong></p>
+<ul class="simple">
+<li>the maximum time to wait for a remote WFS layer to load, set in</li>
+</ul>
+<p>seconds (default is 30 seconds). This metadata can be added at the
+layer level so that it affects only that layer, or it can be added
+at the map level (in the web object) so that it affects all of the
+layers.  Note that wfs_connectiontimeout at the layer level has
+priority over the map level.</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">METADATA</span>
+  <span class="p">...</span>
+  <span class="s">&quot;wfs_connectiontimeout&quot;</span> <span class="s">&quot;60&quot;</span>
+  <span class="p">...</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><strong>&#8220;wfs_proxy_auth_type&#8221; metadata</strong>
+- the authorization type to use for a proxy connection.  Supported
+types include:</p>
+<blockquote>
+<div><ul class="simple">
+<li>basic</li>
+<li>digest</li>
+<li>ntlm</li>
+<li>any (the underlying http library picks the best among the
+opotions supported by the remote server)</li>
+<li>anysafe (the underlying http library picks only safe methods
+among the options supported by the remote server)</li>
+</ul>
+</div></blockquote>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">METADATA</span>
+  <span class="s">&quot;wfs_proxy_auth_type&quot;</span> <span class="s">&quot;ntlm&quot;</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><strong>&#8220;wfs_proxy_host&#8221; metadata</strong>
+- the hostname of the proxy to use, in &#8220;dot-quad&#8221; format, with an
+optional port component (e.g. &#8216;192.168.2.10:8080&#8217;).</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">METADATA</span>
+  <span class="s">&quot;wfs_proxy_host&quot;</span> <span class="s">&quot;192.168.2.10&quot;</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><strong>&#8220;wfs_proxy_port&#8221; metadata</strong>
+- the port to use for a proxy connection.</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">METADATA</span>
+  <span class="s">&quot;wfs_proxy_port&quot;</span> <span class="s">&quot;8080&quot;</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><strong>&#8220;wfs_proxy_type&#8221; metadata</strong>
+- the type of the proxy connection.  Valid values are &#8216;http&#8217; and
+&#8216;socks5&#8217;, which are case sensitive.</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">METADATA</span>
+  <span class="s">&quot;wfs_proxy_type&quot;</span> <span class="s">&quot;http&quot;</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><strong>&#8220;wfs_proxy_username&#8221; metadata</strong>
+- msEncrypt-style string for a proxy connection.  Empty strings are
+also accepted.</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">METADATA</span>
+  <span class="s">&quot;wfs_proxy_username&quot;</span> <span class="s">&quot;foo&quot;</span>
+  <span class="s">&quot;wfs_proxy_password&quot;</span> <span class="s">&quot;{FF88CFDAAE1A5E33}&quot;</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
 </div>
 <div class="section" id="example-wfs-layer">
 <h3>Example WFS Layer<a class="headerlink" href="#example-wfs-layer" title="Permalink to this headline">¶</a></h3>
@@ -369,7 +476,10 @@ The default would still be to use the value of IMAGEPATH if
 </li>
 <li><a class="reference internal" href="#setting-up-a-wfs-client-mapfile">Setting up a WFS-client Mapfile</a><ul>
 <li><a class="reference internal" href="#storing-temporary-files">Storing Temporary Files</a></li>
-<li><a class="reference internal" href="#wfs-layer">WFS Layer</a></li>
+<li><a class="reference internal" href="#wfs-layer">WFS Layer</a><ul>
+<li><a class="reference internal" href="#optional-layer-parameters-and-metadata">Optional Layer Parameters and Metadata</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#example-wfs-layer">Example WFS Layer</a></li>
 <li><a class="reference internal" href="#connection-deprecated">Connection - deprecated</a></li>
 </ul>
@@ -406,10 +516,10 @@ The default would still be to use the value of IMAGEPATH if
           <a href="wfs_t_server.html" title="WFS-T Server"
              >next</a> |</li>
         <li class="right" >
-          <a href="wfs_server.html" title="WFS Server"
+          <a href="inspire_dl.html" title="INSPIRE Download Service"
              >previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
-          <li><a href="../documentation.html" >MapServer 6.4.1 Documentation</a> &raquo;</li>
+          <li><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
           <li><a href="index.html" >OGC Support and Configuration</a> &raquo;</li> 
       </ul>
     </div>

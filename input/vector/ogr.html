@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>OGR &mdash; MapServer 6.4.1 documentation</title>
+    <title>OGR &mdash; MapServer 7.0.0-beta1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '6.4.1',
+        VERSION:     '7.0.0-beta1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,7 +28,7 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 6.4.1 documentation" href="../../index.html" />
+    <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../../index.html" />
     <link rel="up" title="Vector Data" href="index.html" />
     <link rel="next" title="Oracle Spatial" href="oracle.html" />
     <link rel="prev" title="NTF" href="ntf.html" /> 
@@ -97,7 +97,7 @@
           <a href="ntf.html" title="NTF"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../../documentation.html" >MapServer 6.4.1 Documentation</a> &raquo;</li>
+          <li><a href="../../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
           <li><a href="../index.html" >Data Input</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Vector Data</a> &raquo;</li> 
       </ul>
@@ -119,7 +119,7 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">jmckenna at gatewaygeomatics.com</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2010-10-16</td>
+<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2014-06-11</td>
 </tr>
 </tbody>
 </table>
@@ -134,22 +134,17 @@
 <li><a class="reference internal" href="#styleitem-auto-rendering-layers-using-style-information-from-the-ogr-file" id="id7">STYLEITEM &#8220;AUTO&#8221; - Rendering Layers Using Style Information from the OGR File</a></li>
 <li><a class="reference internal" href="#sample-sites-using-ogr-mapserver" id="id8">Sample Sites Using OGR/MapServer</a></li>
 <li><a class="reference internal" href="#faq-common-problems" id="id9">FAQ / Common Problems</a></li>
+<li><a class="reference internal" href="#credits" id="id10">Credits</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="introduction">
 <h2><a class="toc-backref" href="#table-of-contents">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>Starting with version 3.5, MapServer included the ability to access vector
+<p>MapServer includes the ability to access vector
 data sets in formats other than Shapefile in their native format using the OGR
 library. The following document describes the process for implementing OGR
 support within MapServer applications.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Experimental OGR support was included in MapServer version 3.4 but this
-initial implementation had some limitations and is not covered in this
-document.</p>
-</div>
 <p>This document assumes that you are already familiar with certain aspects of
 MapServer:</p>
 <ul class="simple">
@@ -255,14 +250,22 @@ integration of OGR within MapServer was done by Daniel Morissette.</p>
 <li>Follow the instructions on the <a class="reference external" href="http://www.gdal.org/ogr/">OGR page</a> to compile/install OGR/GDAL.</li>
 <li>Obtain the MapServer <a class="reference internal" href="../../download.html#download"><em>source</em></a>.</li>
 </ul>
-<p>For UNIX users, see the README.CONFIGURE file in the MapServer source, or see
+<p>For UNIX users, see
 the <a class="reference internal" href="../../installation/unix.html#unix"><em>UNIX Compilation and Installation</em></a>. If GDAL/OGR is normally
-installed it should be sufficient to add &#8211;with-ogr to the configure line
+installed it should be sufficient to add -DWITH_OGR=ON to the cmake line
 before (re)building MapServer. Linux users might want to try <a class="reference external" href="http://www.maptools.org/fgs/">FGS</a>, a Linux
 installer for MapServer.</p>
 <p>For Windows users, it is recommended to look for a pre-compiled binary on the
 MapServer site (<a class="reference external" href="http://www.maptools.org/ms4w/">MS4W</a> is recommended). If you want to compile your own
 then see the README.WIN32 file in the MapServer source.</p>
+<p>Starting with MapServer 7.0, 2.5D geometries, when handled by OGR drivers and
+data sources, can be taken into account by MapServer if it is built with
+-DWITH_POINT_Z_M=ON.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Output of 2.5D geometries in WFS requires explicit metadata item to be
+specified at the layer level. See <a class="reference internal" href="../../ogc/wfs_server.html#wfs-server"><em>WFS server</em></a> documentation.</p>
+</div>
 </div>
 <div class="section" id="integrating-ogr-support-with-mapserver-applications">
 <h2><a class="toc-backref" href="#table-of-contents">Integrating OGR Support with MapServer Applications</a><a class="headerlink" href="#integrating-ogr-support-with-mapserver-applications" title="Permalink to this headline">¶</a></h2>
@@ -745,27 +748,50 @@ ogrinfo output for each shape that is read.</p>
 OGR data sources and how they&#8217;re mapped in MapServer:</p>
 <dl class="docutils">
 <dt>Line color</dt>
-<dd>The line colour is mapped to CLASS.COLOR</dd>
+<dd>The line colour (PEN.c) is mapped to CLASS.STYLE.COLOR</dd>
 <dt>Line thickness</dt>
-<dd>The line thickness is mapped to CLASS.STYLE.WIDTH. The default will
-be 1 pixel line (as it always is with MapServer).</dd>
-<dt>Polygon fill color</dt>
-<dd><p class="first">Polygon fill color is mapped directly to CLASS.COLOR</p>
-<p class="last">Note that at this time, transparent polygons are not supported (they&#8217;re always
-opaque).</p>
+<dd><blockquote class="first">
+<div>The line thickness (PEN.w) is mapped to CLASS.STYLE.WIDTH. The default will
+be 1 pixel line (as</div></blockquote>
+<p class="last">it always is with MapServer).</p>
 </dd>
+<dt>Line pattern</dt>
+<dd>The line pattern (PEN.p) is mapped to CLASS.STYLE.PATTERN. The default is a solid line.</dd>
+<dt>Line cap and join</dt>
+<dd>The line cap (PEN.cap) is mapped to CLASS.STYLE.CAP and the join to CLASS.STYLE.JOIN.</dd>
+<dt>Line offset</dt>
+<dd>The line perpendicular offset (PEN.dp) is mapped to CLASS.STYLE.OFFSET</dd>
+<dt>Line symbol</dt>
+<dd>OGR provides MapServer with symbol names (PEN.id), and
+if the symbol name returned by OGR to MapServer matches the name of one of
+the symbols in your symbolset then this symbol will be used.</dd>
+<dt>Polygon background color</dt>
+<dd>Polygon background color (BRUSH.bc) is mapped directly to CLASS.STYLE.BACKGROUNDCOLOR</dd>
+<dt>Polygon fill color</dt>
+<dd>Polygon fill color (BRUSH.fc) is mapped directly to CLASS.STYLE.COLOR</dd>
 <dt>Polygon outline</dt>
-<dd>If a polygon has an outline color and thickness defined in the data source
+<dd>If a polygon has an outline color (PEN.c) and thickness defined in the data source
 then the same rule as for line color and thickness above will apply, except
-that the outline color is mapped to CLASS.OUTLINECOLOR</dd>
+that the outline color is mapped to CLASS.STYLE.OUTLINECOLOR</dd>
+<dt>Polygon symbols</dt>
+<dd><p class="first">OGR provides MapServer with symbol names (BRUSH.id), and
+if the symbol name returned by OGR to MapServer matches the name of one of
+the symbols in your symbolset then this symbol will be used.</p>
+<p class="last">Polygon symbol color (BRUSH.fc) is directly mapped to CLASS.STYLE.COLOR.
+Polygon symbol size (BRUSH.s) is directly mapped to CLASS.STYLE.SIZE.
+Polygon symbol spacing (note the OGR BRUSH.dx and BRUSH?dy parameters mus be equal) is
+directly mapped to CLASS.STYLE.GAP.
+Polygon symbol angle (BRUSH.a) is directly mapped to CLASS.STYLE.ANGLE.</p>
+</dd>
 <dt>Point symbols</dt>
-<dd><p class="first">Point symbol color is directly mapped to CLASS.COLOR.
-Point symbol size is directly mapped to CLASS.SIZE.</p>
+<dd><p class="first">Point symbol color (SYMBOL.c) is directly mapped to CLASS.STYLE.COLOR.
+Point symbol outline color (SYMBOL.c) is directly mapped to CLASS.STYLE.OUTLINECOLOR.
+Point symbol size (SYMBOL.s) is directly mapped to CLASS.STYLE.SIZE.</p>
 <p>If your symbolset contains a symbol called &#8220;default-marker&#8221; then
 this symbol will be used, otherwise the default will be
 CLASS.SYMBOL=0 (i.e. a 1 pixel dot)</p>
 <p>It is also possible (with a bit of work) to control which symbol gets used
-in rendering point symbols. OGR provides MapServer with symbol names, and
+in rendering point symbols. OGR provides MapServer with symbol names (SYMBOL.id), and
 if the symbol name returned by OGR to MapServer matches the name of one of
 the symbols in your symbolset then this symbol will be used.</p>
 <p>For MapInfo point symbols (numbered 32 to 67 in the MapInfo MIF
@@ -777,11 +803,14 @@ the symbol will be downloaded and a new symbol entry will be
 created referring to it.</p>
 </dd>
 <dt>Text labels</dt>
-<dd><p class="first">The text string is mapped to CLASS.TEXT</p>
-<p>Text color is mapped to CLASS.LABEL.COLOR</p>
-<p>Text background color is mapped to CLASS.LABEL.BACKGROUNDCOLOR</p>
-<p>Text height is mapped to CLASS.LABEL.SIZE</p>
-<p>Text angle is mapped to CLASS.LABEL.ANGLE</p>
+<dd><p class="first">The text string (LABEL.t) is mapped to CLASS.LABEL.TEXT</p>
+<p>Text color (LABEL.c) is mapped to CLASS.LABEL.COLOR</p>
+<p>Text background color (LABEL.b) is mapped to CLASS.LABEL.BACKGROUNDCOLOR</p>
+<p>Text shadow color (LABEL.h) is mapped to CLASS.LABEL.SHADOWCOLOR</p>
+<p>Text outline color (LABEL.h) is mapped to CLASS.LABEL.OUTLINECOLOR</p>
+<p>Text height (LABEL.s) is mapped to CLASS.LABEL.SIZE</p>
+<p>Text angle (LABEL.a) is mapped to CLASS.LABEL.ANGLE</p>
+<p>Text anchor position (LABEL.p) is mapped to CLASS.LABEL.POSITION</p>
 <p>Text font mapping follows the following rules:</p>
 <ol class="last arabic simple">
 <li>If TTF fonts are supported:<ol class="loweralpha">
@@ -800,11 +829,13 @@ fontset then this &#8220;default&#8221; font will be used.</li>
 MEDIUM font will be used.</li>
 </ol>
 </dd>
-<dt>Transparency</dt>
-<dd>If the color parameter from the OGR style contains an alpha value,
-the value will be used to set the <cite>OPACITY</cite> parameter in the <cite>STYLE</cite>
-object.</dd>
 </dl>
+<p>Starting with MapServer 7.0, multiple OGR tools (i.e. pen, brush, symbols) can
+be supported per feature. The corresponding STYLE object are created in the
+order the OGR tools appear in the OGR FeatureStyle string, i.e. the last one
+in the string is drawn on top of previous ones. This rule is true except if
+the priority level parameters (PEN/BRUSH/SYMBOL.l) of OGR tools is defined, in which case it has
+precedence over the apparition order of the OGR tools.</p>
 </div>
 <div class="section" id="accessing-ogr-styleitemauto-label-styles-through-mapscript">
 <span id="styleitemauto-label-styles"></span><h3>Accessing OGR STYLEITEMAUTO Label Styles Through MapScript<a class="headerlink" href="#accessing-ogr-styleitemauto-label-styles-through-mapscript" title="Permalink to this headline">¶</a></h3>
@@ -997,6 +1028,12 @@ the ogrinfo output for each shape that is read.</p>
 </tbody>
 </table>
 </div>
+<div class="section" id="credits">
+<h2><a class="toc-backref" href="#table-of-contents">Credits</a><a class="headerlink" href="#credits" title="Permalink to this headline">¶</a></h2>
+<p>Improvements in mapping from OGR Feature style to MapServer styling developed for
+Faunalia (<a class="reference external" href="http://www.faunalia.it">http://www.faunalia.it</a>) with funding from Regione Toscana - Settore
+SISTEMA INFORMATIVO TERRITORIALE ED AMBIENTALE ( <a class="reference external" href="http://www.geografia.toscana.it">http://www.geografia.toscana.it</a> ) (CIG:Z410C90D94)</p>
+</div>
 </div>
 
 
@@ -1044,6 +1081,7 @@ the ogrinfo output for each shape that is read.</p>
 </li>
 <li><a class="reference internal" href="#sample-sites-using-ogr-mapserver">Sample Sites Using OGR/MapServer</a></li>
 <li><a class="reference internal" href="#faq-common-problems">FAQ / Common Problems</a></li>
+<li><a class="reference internal" href="#credits">Credits</a></li>
 </ul>
 </li>
 </ul>
@@ -1078,7 +1116,7 @@ the ogrinfo output for each shape that is read.</p>
           <a href="ntf.html" title="NTF"
              >previous</a> |</li>
         <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../../documentation.html" >MapServer 6.4.1 Documentation</a> &raquo;</li>
+          <li><a href="../../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
           <li><a href="../index.html" >Data Input</a> &raquo;</li>
           <li><a href="index.html" >Vector Data</a> &raquo;</li> 
       </ul>

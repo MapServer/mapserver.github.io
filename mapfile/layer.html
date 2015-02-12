@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>LAYER &mdash; MapServer 6.4.1 documentation</title>
+    <title>LAYER &mdash; MapServer 7.0.0-beta1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.4.1',
+        VERSION:     '7.0.0-beta1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,7 +28,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 6.4.1 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../index.html" />
     <link rel="up" title="Mapfile" href="index.html" />
     <link rel="next" title="LEADER" href="leader.html" />
     <link rel="prev" title="LABEL" href="label.html" /> 
@@ -97,7 +97,7 @@
           <a href="label.html" title="LABEL"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
-          <li><a href="../documentation.html" >MapServer 6.4.1 Documentation</a> &raquo;</li>
+          <li><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Mapfile</a> &raquo;</li> 
       </ul>
     </div>
@@ -297,7 +297,7 @@ SQL WHERE clause that is valid with respect to the underlying database.</p>
 Multiresult query modes only.</dd>
 </dl>
 <dl class="docutils" id="index-26">
-<dt>GEOMTRANSFORM [&lt;expression&gt;]</dt>
+<dt>GEOMTRANSFORM [&lt;expression&gt;|&lt;Javascript file&gt;]</dt>
 <dd><p class="first">Used to indicate that the current feature will be transformed.
 Introduced in version 6.4.</p>
 <ul id="index-27">
@@ -333,15 +333,13 @@ will smooth a geometry (<cite>[shape]</cite>) using the SIA algorithm</p>
 </div>
 </li>
 </ul>
-</li>
-</ul>
-<p>There is a difference between STYLE and LAYER GEOMTRANSFORM.
-LAYER-level will receive ground coordinates (meters, degress, etc)
-and STYLE-level will receive pixel coordinates. The argument to
-methods such as simplify() must be in the same units as the
-coordinates of the shapes at that point of the rendering workflow,
-i.e. pixels at the STYLE-level and in ground units at the
-LAYER-level.</p>
+<p>There is a difference between STYLE and LAYER
+GEOMTRANSFORM. LAYER-level will receive ground coordinates
+(meters, degress, etc) and STYLE-level will receive pixel
+coordinates. The argument to methods such as simplify() must be
+in the same units as the coordinates of the shapes at that point
+of the rendering workflow, i.e. pixels at the STYLE-level and in
+ground units at the LAYER-level.</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span> <span class="k">NAME</span> <span class="s">&quot;my_layer&quot;</span>
     <span class="k">TYPE</span> <span class="nb">LINE</span>
     <span class="k">STATUS</span> <span class="nb">DEFAULT</span>
@@ -373,17 +371,43 @@ at the LAYER-level.</p>
 the [map_cellsize] has to be converted into the layer ground unit.
 If you choose to use [map_cellsize] in your GEOMTRANSFORM expression,
 you must explicitly set the UNITS option in the layer.</p>
-<div class="admonition-see-also last admonition seealso">
+</li>
+</ul>
+<ul class="last" id="index-33">
+<li><p class="first"><em>&lt;Javascript file&gt;</em>: A Javascript file that returns a new
+geometry.  See <a class="reference internal" href="geomtransform.html#geomtransformjs"><em>GEOMTRANSFORM Javascript</em></a>.</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">GEOMTRANSFORM</span> <span class="s">&quot;javascript://transform.js&quot;</span> <span class="c"># relative path</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">GEOMTRANSFORM</span> <span class="s">&quot;javascript:///home/user/transform.js&quot;</span> <span class="c"># absolute path</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 7.0.</span></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires <a class="reference internal" href="../installation/v8.html#v8-support"><em>V8 MapScript Support</em></a>.</p>
+</div>
+<div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="geomtransform.html#geomtransform"><em>Geometry Transformations</em></a></p>
 </div>
+</li>
+</ul>
 </dd>
 </dl>
-<dl class="docutils" id="index-33">
+<dl class="docutils" id="index-34">
 <dt><a class="reference internal" href="grid.html#grid"><em>GRID</em></a></dt>
 <dd>Signals the start of a <a class="reference internal" href="grid.html#grid"><em>GRID</em></a> object.</dd>
 </dl>
-<dl class="docutils" id="index-34">
+<dl class="docutils" id="index-35">
 <dt>GROUP [name]</dt>
 <dd><p class="first">Name of a group that this layer belongs to. The group name can then be
 reference as a regular layer name in the template files, allowing to do
@@ -393,12 +417,12 @@ request, all the layers of the group are returned (the <cite>STATUS</cite> of
 the <cite>LAYER</cite>s have no effect).</p>
 </dd>
 </dl>
-<dl class="docutils" id="index-35">
+<dl class="docutils" id="index-36">
 <dt>HEADER [filename]</dt>
 <dd>Template to use <em>before</em> a layer&#8217;s set of results have been sent.
 Multiresult query modes only.</dd>
 </dl>
-<dl class="docutils" id="index-36">
+<dl class="docutils" id="index-37">
 <dt><a class="reference internal" href="join.html#join"><em>JOIN</em></a></dt>
 <dd>Signals the start of a <a class="reference internal" href="join.html#join"><em>JOIN</em></a> object.</dd>
 <dt>LABELANGLEITEM [attribute]</dt>
@@ -410,18 +434,18 @@ to use for class annotation angles. Values should be in degrees.</p>
 <span class="versionmodified">Deprecated since version 5.0.</span></p>
 </dd>
 </dl>
-<dl class="docutils" id="index-37">
+<dl class="docutils" id="index-38">
 <dt>LABELCACHE [on|off]</dt>
 <dd>Specifies whether labels should be drawn as the features for this layer
 are drawn, or whether they should be cached and drawn after all layers
 have been drawn. Default is on. Label overlap removal, auto placement
 etc... are only available when the label cache is active.</dd>
 </dl>
-<dl class="docutils" id="index-38">
+<dl class="docutils" id="index-39">
 <dt>LABELITEM [attribute]</dt>
 <dd>Item name in attribute table to use for class annotation (i.e. labeling).</dd>
 </dl>
-<dl class="docutils" id="index-39">
+<dl class="docutils" id="index-40">
 <dt>LABELMAXSCALEDENOM [double]</dt>
 <dd><p class="first">Minimum scale at which this LAYER is labeled.  Scale is given as the
 denominator of the actual scale fraction, for example for a map at a scale
@@ -433,7 +457,7 @@ deprecated LABELMAXSCALE parameter.</p>
 </div>
 </dd>
 </dl>
-<dl class="docutils" id="index-40">
+<dl class="docutils" id="index-41">
 <dt>LABELMINSCALEDENOM [double]</dt>
 <dd><p class="first">Maximum scale at which this LAYER is labeled.  Scale is given as the
 denominator of the actual scale fraction, for example for a map at a scale
@@ -446,7 +470,7 @@ deprecated LABELMINSCALE parameter.</p>
 </dd>
 </dl>
 <dl class="docutils" id="labelrequires">
-<span id="index-41"></span><dt>LABELREQUIRES [expression]</dt>
+<span id="index-42"></span><dt>LABELREQUIRES [expression]</dt>
 <dd><p class="first">Sets context for labeling this layer, for example:</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LABELREQUIRES</span> <span class="s">&quot;![orthoquads]&quot;</span>
 </pre></div>
@@ -466,7 +490,7 @@ use for class annotation sizes. Values should be in pixels.</p>
 <span class="versionmodified">Deprecated since version 5.0.</span></p>
 </dd>
 </dl>
-<dl class="docutils" id="index-42">
+<dl class="docutils" id="index-43">
 <dt>MASK [layername]</dt>
 <dd><p class="first">The data from the current layer will only be rendered where it intersects
 features from the [layername] layer. [layername] must reference the NAME of
@@ -486,13 +510,13 @@ generated map, [layername] should usually be set to <a class="reference internal
 </div>
 </dd>
 </dl>
-<dl class="docutils" id="index-43">
+<dl class="docutils" id="index-44">
 <dt>MAXFEATURES [integer]</dt>
 <dd>Specifies the number of features that should be drawn for this layer in
 the CURRENT window. Has some interesting uses with annotation and with
 sorted data (i.e. lakes by area).</dd>
 </dl>
-<dl class="docutils" id="index-44">
+<dl class="docutils" id="index-45">
 <dt>MAXGEOWIDTH [double]</dt>
 <dd><p class="first">Maximum width, in the map&#8217;s geographic units, at which this LAYER
 is drawn.  If MAXSCALEDENOM is also specified then MAXSCALEDENOM
@@ -506,7 +530,7 @@ following from the extents:</p>
 <span class="versionmodified">New in version 5.4.0.</span></p>
 </dd>
 </dl>
-<dl class="docutils" id="index-45">
+<dl class="docutils" id="index-46">
 <dt>MAXSCALEDENOM [double]</dt>
 <dd><p class="first">Minimum scale at which this LAYER is drawn.  Scale is given as the
 denominator of the actual scale fraction, for example for a map at a scale
@@ -519,7 +543,7 @@ of 1:24,000 use 24000.</p>
 </div>
 </dd>
 </dl>
-<dl class="docutils" id="index-46">
+<dl class="docutils" id="index-47">
 <dt>METADATA</dt>
 <dd><p class="first">This keyword allows for arbitrary data to be stored as name value pairs.
 This is used with <a class="reference internal" href="../ogc/wms_server.html#wms-server"><em>OGC WMS</em></a> to define things such as
@@ -534,7 +558,7 @@ anything you put in here will be accessible via template tags.</p>
 </div>
 </dd>
 </dl>
-<p id="index-47">MINGEOWIDTH [double]</p>
+<p id="index-48">MINGEOWIDTH [double]</p>
 <blockquote>
 <div><p>Minimum width, in the map&#8217;s geographic units, at which this LAYER
 is drawn.  If MINSCALEDENOM is also specified then MINSCALEDENOM
@@ -547,7 +571,7 @@ following from the extents:</p>
 <p class="versionadded">
 <span class="versionmodified">New in version 5.4.0.</span></p>
 </div></blockquote>
-<dl class="docutils" id="index-48">
+<dl class="docutils" id="index-49">
 <dt>MINSCALEDENOM [double]</dt>
 <dd><p class="first">Maximum scale at which this LAYER is drawn.  Scale is given as the
 denominator of the actual scale fraction, for example for a map at a scale
@@ -559,7 +583,7 @@ deprecated MINSCALE parameter.</p>
 </div>
 </dd>
 </dl>
-<dl class="docutils" id="index-49">
+<dl class="docutils" id="index-50">
 <dt>NAME [string]</dt>
 <dd>Short name for this layer. This name is the link between the
 mapfile and web interfaces that refer to this name. They must be
@@ -569,12 +593,12 @@ layers with each other.  It is recommended that the name not
 contain spaces, special characters, or begin with a number (which
 could cause problems through interfaces such as OGC services).</dd>
 </dl>
-<dl class="docutils" id="index-50">
+<dl class="docutils" id="index-51">
 <dt>OFFSITE [r] [g] [b]</dt>
 <dd>Sets the color index to treat as transparent for raster layers.</dd>
 </dl>
 <dl class="docutils" id="opacity">
-<span id="index-51"></span><dt>OPACITY [integer|alpha]</dt>
+<span id="index-52"></span><dt>OPACITY [integer|alpha]</dt>
 <dd><p class="first">Sets the opacity level (or the inability to see through the layer) of all
 classed pixels for a given layer. The value can either be an integer in the
 range (0-100) or the named symbol &#8220;ALPHA&#8221;. A value of 100 is opaque and
@@ -587,7 +611,7 @@ only when necessary as it is expensive to render transparent pixmap
 symbols onto an RGB map image.</p>
 </dd>
 </dl>
-<dl class="docutils" id="index-52">
+<dl class="docutils" id="index-53">
 <dt>PLUGIN [filename]</dt>
 <dd><p class="first">Additional library to load by MapServer, for this layer.  This is commonly
 used to load specific support for SDE and Microsoft SQL Server layers,
@@ -602,18 +626,18 @@ such as:</p>
 </div></blockquote>
 </dd>
 </dl>
-<dl class="docutils" id="index-53">
+<dl class="docutils" id="index-54">
 <dt>POSTLABELCACHE [true|false]</dt>
 <dd>Tells MapServer to render this layer after all labels in the cache have
 been drawn. Useful for adding neatlines and similar elements.
 Default is false.</dd>
 </dl>
-<span class="target" id="index-54"></span><dl class="docutils" id="index-55">
+<span class="target" id="index-55"></span><dl class="docutils" id="index-56">
 <dt>PROCESSING [string]</dt>
 <dd><p class="first">Passes a processing directive to be used with this layer. The supported
 processing directives vary by layer type, and the underlying driver that
 processes them.</p>
-<ul id="index-56">
+<ul id="index-57">
 <li><p class="first"><strong>Attributes Directive</strong> - The ITEMS processing option allows to
 specify the name of attributes for inline layers or specify the subset
 of the attributes to be used by the layer, such as:</p>
@@ -622,7 +646,7 @@ of the attributes to be used by the layer, such as:</p>
 </div>
 </li>
 </ul>
-<ul id="index-57">
+<ul id="index-58">
 <li><p class="first"><strong>Connection Pooling Directive</strong> - This is where you can enable
 connection pooling for certain layer layer types. Connection pooling
 will allow MapServer to share the handle to an open database or layer
@@ -636,7 +660,7 @@ or according to the options specified in the
 </div>
 </li>
 </ul>
-<ul id="index-58">
+<ul id="index-59">
 <li><p class="first"><strong>Label Directive</strong> - The LABEL_NO_CLIP processing option can be
 used to skip clipping of shapes when determining associated
 label anchor points. This avoids changes in label position as
@@ -648,7 +672,7 @@ creating tiled maps.</p>
 </div>
 </li>
 </ul>
-<ul id="index-59">
+<ul id="index-60">
 <li><p class="first"><strong>Line Rendering Directive</strong> - The POLYLINE_NO_CLIP processing
 option can be used to skip clipping of shapes when rendering
 styled lines (dashed or styled with symbols).  This avoids
@@ -660,7 +684,7 @@ multiple adjacent tiles when creating tiled maps.</p>
 </div>
 </li>
 </ul>
-<ul id="index-60">
+<ul id="index-61">
 <li><p class="first"><strong>OGR Styles Directive</strong> - This directive can be used for obtaining
 label styles through MapScript.  For more information see the
 <a class="reference internal" href="../input/vector/ogr.html#styleitemauto-label-styles"><em>MapServer&#8217;s OGR document</em></a>.</p>
@@ -669,7 +693,19 @@ label styles through MapScript.  For more information see the
 </div>
 </li>
 </ul>
-<ul class="last" id="index-61">
+<ul id="index-62">
+<li><p class="first"><strong>AGG renderer tweaking</strong> - This directive can be used for setting
+the linear gamma to be used when rendering polygon features. The
+default value of 0.75 (that can be overriden at the <a class="reference internal" href="outputformat.html#outputformat"><em>OUTPUTFORMAT</em></a>
+level) can be set to a lower value to limit/remove the faint outlines
+that appear between adjacent polygons. A value of 0.5 is usually good
+enough.</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">PROCESSING</span> <span class="s">&quot;GAMMA=0.5&quot;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<ul class="last" id="index-63">
 <li><p class="first"><strong>Raster Directives</strong> - All raster processing options are described
 in <a class="reference internal" href="../input/raster.html#raster"><em>Raster Data</em></a>.  Here we see the SCALE and BANDs directives used to
 autoscale raster data and alter the band mapping.</p>
@@ -681,22 +717,22 @@ autoscale raster data and alter the band mapping.</p>
 </ul>
 </dd>
 </dl>
-<dl class="docutils" id="index-62">
+<dl class="docutils" id="index-64">
 <dt><a class="reference internal" href="projection.html#projection"><em>PROJECTION</em></a></dt>
 <dd>Signals the start of a <a class="reference internal" href="projection.html#projection"><em>PROJECTION</em></a> object.</dd>
 </dl>
-<dl class="docutils" id="index-63">
+<dl class="docutils" id="index-65">
 <dt>REQUIRES [expression]</dt>
 <dd>Sets context for displaying this layer (see <a class="reference internal" href="#labelrequires">LABELREQUIRES</a>).</dd>
 </dl>
-<span class="target" id="index-64"></span><span class="target" id="index-65"></span><span class="target" id="index-66"></span><span class="target" id="index-67"></span><span class="target" id="index-68"></span><span class="target" id="index-69"></span><span class="target" id="index-70"></span><dl class="docutils" id="index-71">
+<span class="target" id="index-66"></span><span class="target" id="index-67"></span><span class="target" id="index-68"></span><span class="target" id="index-69"></span><span class="target" id="index-70"></span><span class="target" id="index-71"></span><span class="target" id="index-72"></span><dl class="docutils" id="index-73">
 <dt>SIZEUNITS [feet|inches|kilometers|meters|miles|nauticalmiles|pixels]</dt>
 <dd>Sets the unit of <a class="reference internal" href="class.html#class"><em>CLASS</em></a> object SIZE values (default is
 pixels).  Useful for simulating buffering. <cite>nauticalmiles</cite> was
 added in MapServer 5.6.</dd>
 </dl>
 <dl class="docutils" id="status">
-<span id="index-72"></span><dt>STATUS [on|off|default]</dt>
+<span id="index-74"></span><dt>STATUS [on|off|default]</dt>
 <dd><p class="first">Sets the current status of the layer. Often modified by MapServer itself.
 Default turns the layer on permanently.</p>
 <div class="admonition note">
@@ -719,45 +755,82 @@ request - all the layers of the group will be returned.</p>
 </div>
 </dd>
 </dl>
-<dl class="docutils" id="index-73">
-<dt>STYLEITEM [&lt;attribute&gt;|auto]</dt>
-<dd><p class="first">Item to use for feature specific styling. The style information may be
-represented by a separate attribute (style string) attached to the feature.
-MapServer supports the following style string representations:</p>
+<dl class="docutils" id="index-75">
+<dt>STYLEITEM [&lt;attribute&gt;|auto|&lt;javascript file&gt;]</dt>
+<dd><p class="first">Styling based on attributes or generated with Javascript</p>
+<ul id="index-76">
+<li><p class="first"><em>&lt;attribute&gt;</em>: Item to use for feature specific styling. The
+style information may be represented by a separate attribute
+(style string) attached to the feature.  MapServer supports the
+following style string representations:</p>
 <ul>
-<li><p class="first"><strong>MapServer STYLE definition</strong> - The style string can be represented as a
-MapServer <a class="reference internal" href="style.html#style"><em>STYLE</em></a> block according to the following example:</p>
+<li><p class="first"><strong>MapServer STYLE definition</strong> - The style string can be
+represented as a MapServer <a class="reference internal" href="style.html#style"><em>STYLE</em></a> block according to the
+following example:</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span class="k">STYLE</span> <span class="k">BACKGROUNDCOLOR</span> <span class="mi">128</span> <span class="mi">0</span> <span class="mi">0</span> <span class="k">COLOR</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">208</span> <span class="k">END</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>MapServer CLASS definition</strong> - By specifying the entire <a class="reference internal" href="class.html#class"><em>CLASS</em></a>
-instead of a single style allows to use further options (like setting
-expressions, label attributes, multiple styles) on a per feature basis.</p>
+<li><p class="first"><strong>MapServer CLASS definition</strong> - By specifying the entire
+<a class="reference internal" href="class.html#class"><em>CLASS</em></a> instead of a single style allows to use further
+options (like setting expressions, label attributes, multiple
+styles) on a per feature basis.</p>
 </li>
-<li><p class="first"><strong>OGR Style String</strong> - MapServer support rendering the OGR style
-string format according to the <a class="reference external" href="http://www.gdal.org/ogr/ogr_feature_style.html">OGR - Feature Style
+<li><p class="first"><strong>OGR Style String</strong> - MapServer support rendering the OGR
+style string format according to the <a class="reference external" href="http://www.gdal.org/ogr/ogr_feature_style.html">OGR - Feature Style
 Specification</a> documentation.  Currently only a few data
-sources support storing the styles along with the features (like
-MapInfo, AutoCAD DXF, Microstation DGN), however those styles
-can easily be transferred to many other data sources as a
-separate attribute by using the <a class="reference external" href="http://www.gdal.org/ogr2ogr.html">ogr2ogr</a> command line tool as
-follows:</p>
-<div class="highlight-python"><pre>ogr2ogr -sql "select *, OGR_STYLE from srclayer" "dstlayer" "srclayer"</pre>
-</div>
+sources support storing the styles along with the features
+(like MapInfo, AutoCAD DXF, Microstation DGN), however those
+styles can easily be transferred to many other data sources as
+a separate attribute by using the <a class="reference external" href="http://www.gdal.org/ogr2ogr.html">ogr2ogr</a> command line tool
+as follows:</p>
+<p>ogr2ogr -sql &#8220;select <a href="#id2"><span class="problematic" id="id3">*</span></a>, OGR_STYLE from srclayer&#8221; &#8220;dstlayer&#8221; &#8220;srclayer&#8221;</p>
 </li>
 </ul>
-<p id="index-74">The value: <cite>AUTO</cite> can be used for automatic styling.</p>
-<ul class="last simple">
-<li>Automatic styling can be provided by the driver. Currently, only
-the OGR driver supports automatic styling.</li>
-<li>When used for a <a class="reference internal" href="union.html#union"><em>Union Layer</em></a>, the styles from the source layers
-will be used.</li>
+</li>
+</ul>
+<ul class="simple" id="index-77">
+<li><em>AUTO</em>: The value: <cite>AUTO</cite> can be used for automatic styling.<ul>
+<li>Automatic styling can be provided by the driver. Currently,
+only the OGR driver supports automatic styling.</li>
+<li>When used for a <a class="reference internal" href="union.html#union"><em>Union Layer</em></a>, the styles from the source
+layers will be used.</li>
+</ul>
+</li>
+</ul>
+<ul class="last" id="index-78">
+<li><p class="first"><em>&lt;Javascript file&gt;</em>: A Javascript file that returns a new string
+containing either a <a class="reference internal" href="style.html#style"><em>STYLE</em></a> definition or a <a class="reference internal" href="class.html#class"><em>CLASS</em></a>
+definition with one or multiple styles.  See <a class="reference internal" href="styleitem.html#styleitemjs"><em>STYLEITEM Javascript</em></a>.</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">STYLEITEM</span> <span class="s">&quot;javascript://myscript.js&quot;</span> <span class="c"># relative path</span>
+  <span class="k">CLASS</span>
+  <span class="k">END</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">STYLEITEM</span> <span class="s">&quot;javascript:///home/user/myscript.js&quot;</span> <span class="c"># absolute path</span>
+  <span class="k">CLASS</span>
+  <span class="k">END</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 6.6.</span></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires <a class="reference internal" href="../installation/v8.html#v8-support"><em>V8 MapScript Support</em></a>.</p>
+</div>
+</li>
 </ul>
 </dd>
 </dl>
 <dl class="docutils" id="symbolscaledenom">
-<span id="index-75"></span><dt>SYMBOLSCALEDENOM [double]</dt>
+<span id="index-79"></span><dt>SYMBOLSCALEDENOM [double]</dt>
 <dd><p class="first">The scale at which symbols and/or text appear full size. This
 allows for dynamic scaling of objects based on the scale of the
 map. If not set then this layer will always appear at the same
@@ -772,13 +845,13 @@ deprecated SYMBOLSCALE parameter.</p>
 </div>
 </dd>
 </dl>
-<dl class="docutils" id="index-76">
+<dl class="docutils" id="index-80">
 <dt><a class="reference internal" href="template.html#template"><em>TEMPLATE</em></a> [file|url]</dt>
 <dd>Used as a global alternative to <a class="reference internal" href="class.html#class"><em>CLASS</em></a> <cite>TEMPLATE</cite>.
 See <a class="reference internal" href="template.html#template"><em>Templating</em></a> for more info.</dd>
 </dl>
 <dl class="docutils" id="tileindex-keyword">
-<span id="index-77"></span><dt><a class="reference internal" href="../optimization/tileindex.html#tileindex"><em>TILEINDEX</em></a> [filename|layername]</dt>
+<span id="index-81"></span><dt><a class="reference internal" href="../optimization/tileindex.html#tileindex"><em>TILEINDEX</em></a> [filename|layername]</dt>
 <dd><p class="first">Name of the tileindex file or layer.  A tileindex is similar to
 an ArcInfo library index.  The tileindex contains polygon features for
 each tile. The item that contains the location of the tiled data is given
@@ -805,12 +878,12 @@ with tiles of different projections. For that, the
 </dd>
 </dl>
 <dl class="docutils" id="tileitem">
-<span id="index-78"></span><dt>TILEITEM [attribute]</dt>
+<span id="index-82"></span><dt>TILEITEM [attribute]</dt>
 <dd>Item that contains the location of an individual tile, default is
 &#8220;location&#8221;.</dd>
 </dl>
 <dl class="docutils" id="tilesrs">
-<span id="index-79"></span><dt>TILESRS [attribute]</dt>
+<span id="index-83"></span><dt>TILESRS [attribute]</dt>
 <dd><p class="first">Name of the attribute that contains the SRS of an individual tile.
 That SRS can be expressed in WKT format, as an EPSG:XXXX code or as a
 PROJ.4 string.
@@ -825,7 +898,7 @@ gdaltindex (GDAL &gt;= 2.0), the value of TILESRS is the value of the
 </dd>
 </dl>
 <dl class="docutils" id="tolerance">
-<span id="index-80"></span><dt>TOLERANCE [double]</dt>
+<span id="index-84"></span><dt>TOLERANCE [double]</dt>
 <dd>Sensitivity for point based queries (i.e. via mouse and/or map
 coordinates). Given in TOLERANCEUNITS. If the layer is a POINT or a LINE,
 the default is 3. For all other layer types, the default is 0.  To
@@ -833,7 +906,7 @@ restrict polygon searches so that the point must occur in the polygon
 set the tolerance to zero. This setting does not apply to WFS GetFeature
 operations.</dd>
 </dl>
-<dl class="docutils" id="index-81">
+<dl class="docutils" id="index-85">
 <dt>TOLERANCEUNITS [pixels|feet|inches|kilometers|meters|miles|nauticalmiles|dd]</dt>
 <dd>Units of the TOLERANCE value. Default is pixels.
 <cite>Nauticalmiles</cite> was added in MapServer 5.6.</dd>
@@ -843,7 +916,7 @@ operations.</dd>
 <div><p class="deprecated">
 <span class="versionmodified">Deprecated since version 5.0: </span>Use <a class="reference internal" href="#opacity">OPACITY</a> instead.</p>
 </div></blockquote>
-<dl class="docutils" id="index-82">
+<dl class="docutils" id="index-86">
 <dt>TRANSFORM [true|false ul|uc|ur|lc|cc|lr|ll|lc|lr]</dt>
 <dd><p class="first">Tells MapServer whether or not a particular layer needs to be transformed
 from some coordinate system to image coordinates. Default is true. This
@@ -860,7 +933,7 @@ to anchor something like a copyright statement to another portion of the
 image in a way that is independent of image size.</p>
 </dd>
 </dl>
-<span class="target" id="index-83"></span><span class="target" id="index-84"></span><span class="target" id="index-85"></span><span class="target" id="index-86"></span><span class="target" id="index-87"></span><span class="target" id="index-88"></span><span class="target" id="index-89"></span><span class="target" id="index-90"></span><dl class="docutils" id="index-91">
+<span class="target" id="index-87"></span><span class="target" id="index-88"></span><span class="target" id="index-89"></span><span class="target" id="index-90"></span><span class="target" id="index-91"></span><span class="target" id="index-92"></span><span class="target" id="index-93"></span><span class="target" id="index-94"></span><dl class="docutils" id="index-95">
 <dt>TYPE [chart|circle|line|point|polygon|raster|query]</dt>
 <dd><p class="first">Specifies how the data should be drawn. Need not be the same as the
 shapefile type. For example, a polygon shapefile may be drawn as a point
@@ -908,13 +981,13 @@ layers of <cite>TYPE</cite> <cite>annotation</cite>.</p>
 </div>
 </dd>
 </dl>
-<span class="target" id="index-92"></span><span class="target" id="index-93"></span><span class="target" id="index-94"></span><span class="target" id="index-95"></span><span class="target" id="index-96"></span><span class="target" id="index-97"></span><span class="target" id="index-98"></span><span class="target" id="index-99"></span><span class="target" id="index-100"></span><dl class="docutils" id="index-101">
+<span class="target" id="index-96"></span><span class="target" id="index-97"></span><span class="target" id="index-98"></span><span class="target" id="index-99"></span><span class="target" id="index-100"></span><span class="target" id="index-101"></span><span class="target" id="index-102"></span><span class="target" id="index-103"></span><span class="target" id="index-104"></span><dl class="docutils" id="index-105">
 <dt>UNITS [dd|feet|inches|kilometers|meters|miles|nauticalmiles|percentages|pixels]</dt>
 <dd>Units of the layer.  <cite>percentages</cite> (in this case a value between 0
 and 1) was added in MapServer 4.10 and is mostly geared for inline
 features.  <cite>nauticalmiles</cite> was added in MapServer 5.6.</dd>
 </dl>
-<dl class="docutils" id="index-102">
+<dl class="docutils" id="index-106">
 <dt>VALIDATION</dt>
 <dd><p class="first">Signals the start of a <cite>VALIDATION</cite> block.</p>
 <p class="last">As of MapServer 5.4.0, <cite>VALIDATION</cite> blocks are the preferred
@@ -969,7 +1042,7 @@ substitutions.  See <a class="reference internal" href="../cgi/runsub.html#runsu
           <a href="label.html" title="LABEL"
              >previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
-          <li><a href="../documentation.html" >MapServer 6.4.1 Documentation</a> &raquo;</li>
+          <li><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
           <li><a href="index.html" >Mapfile</a> &raquo;</li> 
       </ul>
     </div>

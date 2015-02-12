@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>WCS Server &mdash; MapServer 6.4.1 documentation</title>
+    <title>WCS Server &mdash; MapServer 7.0.0-beta1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.4.1',
+        VERSION:     '7.0.0-beta1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,7 +28,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 6.4.1 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../index.html" />
     <link rel="up" title="OGC Support and Configuration" href="index.html" />
     <link rel="next" title="WCS Use Cases" href="wcs_format.html" />
     <link rel="prev" title="SLD" href="sld.html" /> 
@@ -97,7 +97,7 @@
           <a href="sld.html" title="SLD"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
-          <li><a href="../documentation.html" >MapServer 6.4.1 Documentation</a> &raquo;</li>
+          <li><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">OGC Support and Configuration</a> &raquo;</li> 
       </ul>
     </div>
@@ -525,6 +525,11 @@ Standard page</a>:</p>
 <li><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=48428">WCS 2.0 Specification - Core</a></li>
 <li><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=41439">WCS 2.0 Specification - KVP Protocol Binding Extension</a></li>
 <li><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=41440">WCS 2.0 Specification - XML/POST Protocol Binding Extension</a></li>
+<li><a class="reference external" href="https://portal.opengeospatial.org/files/?artifact_id=54502">WCS 2.0 Specification - Interpolation Extension</a></li>
+<li><a class="reference external" href="https://portal.opengeospatial.org/files/?artifact_id=54503">WCS 2.0 Specification - Range Subsetting Extension</a></li>
+<li>WCS 2.0 Specification - GeoTIFF Format Extension</li>
+<li><a class="reference external" href="https://portal.opengeospatial.org/files/?artifact_id=54209">WCS 2.0 Specification - CRS Extension</a></li>
+<li><a class="reference external" href="https://portal.opengeospatial.org/files/?artifact_id=54504">WCS 2.0 Specification - Scaling Extension</a></li>
 </ul>
 <p>Technical changes from WCS version 1.1.2 include entirely building on
 the <a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=48553">GML 3.2.1 Application Schema Coverages</a> and adoption of <a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=38867">OWS
@@ -550,11 +555,70 @@ either be an EPSG definition (like EPSG:4326), an URN or an URI or
 axis in imageCRS and another in EPSG:4326).</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The syntax of the <strong>crs</strong> sub-parameter is likely to need to be changed
-when new specification documents become available (see <a class="reference internal" href="#wcs-to-do"><em>To-do Items
-and Known Limitations</em></a>).</p>
+<p class="last">The syntax of the <strong>crs</strong> sub-parameter is non-standard and deprecated.
+Please use the <em>SUBSETTINGCRS</em> parameter instead.</p>
 </div>
-<p><strong>SIZE=axis(value):</strong> This parameter sets the size of the desired
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Recognized values for the axis sub-parameter are: &#8220;x&#8221;, &#8220;xaxis&#8221;,
+&#8220;x-axis&#8221;, &#8220;x_axis&#8221;, &#8220;long&#8221;, &#8220;long_axis&#8221;, &#8220;long-axis&#8221;, &#8220;lon&#8221;,
+&#8220;lon_axis&#8221;, &#8220;lon-axis&#8221;, &#8220;y&#8221;, &#8220;yaxis&#8221;, &#8220;y-axis&#8221;, &#8220;y_axis&#8221;, &#8220;lat&#8221;,
+&#8220;lat_axis&#8221; and &#8220;lat-axis&#8221;.</p>
+</div>
+<p><strong>SUBSETTINGCRS=crs:</strong> This parameter defines the crs subsetting all
+<em>SUBSETs</em> are expressed in, and also the output CRS if no <em>OUTPUTCRS</em> is
+specified.</p>
+<p><strong>OUTPUTCRS=crs:</strong> This parameter defines in which crs the output
+image should be expressed in.</p>
+<p><strong>MEDIATYPE=mediatype:</strong> This parameter is relevant to GetCoverage
+requests, when multipart XML/image output is desired. It should be
+set to &#8216;multipart/related&#8217; (which is currently the only possible
+value for this parameter).</p>
+<p><strong>SCALEFACTOR=factor:</strong> With this parameter (a positive float) the size of
+the output image can be adjusted. All axes are scaled equally.</p>
+<p><strong>SCALEAXES=axis(value)[,axis(value)]:</strong> With this parameter, an axis
+specific scaling can be applied. Any axis not mentioned</p>
+<p><strong>SCALESIZE=axis(size)[,axis(size)]:</strong> This is similar to the <em>SCALEAXES</em>
+parameter, but allows an axis specific setting of the absolute pixel size
+of the returned coverage.</p>
+<p><strong>SCALEEXTENT=axis(min:max)[,axis(min:max)]:</strong> This parameter is treated
+like a <em>SCALESIZE</em> parameter with &#8220;axis(max-min)&#8221;.</p>
+<p><strong>INTERPOLATION=intperolation_method:</strong> This defines the
+interpolation method used, for rescaled images. Possible values
+are &#8220;NEAREST&#8221;, &#8220;BILINEAR&#8221; and &#8220;AVERAGE&#8221;.</p>
+<p><strong>RANGESUBSET=band1[,band2[,...]]:</strong> With this parameter, a
+selection of bands can be made. Also the bands can be
+reordered.  The bands can be referred to either by name (which can
+be retrieved using the DescribeCoverage request) or by index
+(starting with &#8216;1&#8217; for the first band). Also a range of bands can be given:
+<em>bandX:bandY</em>. This also includes the lower and upper bounds. As the name
+implies, the lower bound must reference the band with the lower index. You
+can mix direct references to the bands with intervals. E.g:
+<em>RANGESUBSET=band1,band3:band:5,band7</em></p>
+</div></blockquote>
+<p>The following parameters are part of the GeoTIFF extension and are only
+available for the GeoTIFF outputformat:</p>
+<blockquote>
+<div><p><strong>GEOTIFF:COMPRESSION=compression:</strong> The compression method used for the
+returned image. Valid options are: None, PackBits, Deflate, Huffman, LZW
+and JPEG.</p>
+<p><strong>GEOTIFF:JPEG_QUALITY=1-100:</strong> When the compression method JPEG is chosen,
+this value defines the quality of the algorithm.</p>
+<p><strong>GEOTIFF:PREDICTOR=None|Horizontal|FloatingPoint:</strong> The predictor value
+for the LZW and Deflate compression methods.</p>
+<p><strong>GEOTIFF:INTERLEAVE=Band|Pixel:</strong> Defines wether the image shall be band
+or pixel interleaved.</p>
+<p><strong>GEOTIFF:TILING=true|false:</strong> Defines if the output image shall be
+internally tiled.</p>
+<p><strong>GEOTIFF:TILEWIDTH=tilewidth</strong>, <strong>GEOTIFF:TILEHEIGHT=tileheight</strong>: Define
+the size of the internal tiles. Must be positive integer divisible by 16.</p>
+</div></blockquote>
+<p>The following request parameters are not part of the WCS 2.0 Core or any
+extension thereof, and are kept for backward compatibility. They originate from
+a time where the most vital standard extensions were not specified and the WCS
+core was not quite useful without. They are deprecated.</p>
+<blockquote>
+<div><p><strong>SIZE=axis(value):</strong> This parameter sets the size of the desired
 axis to the desired value (pixels).</p>
 <p><strong>RESOLUTION=axis(value):</strong> This parameter sets the resolution of
 the desired axis to the desired value (pixels/unit).</p>
@@ -566,34 +630,6 @@ and RESOLUTION on y-axis). Also axis names in <strong>SUBSET</strong>,
 <strong>SIZE</strong> and <strong>RESOLUTION</strong> parameters cannot be mixed. E.g:
 ...&amp;SUBSET=x(0,100)&amp;SIZE=lon(200)&amp;... is not legal although the
 axis names logically refer to the same axis.</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Recognized values for the axis sub-parameter are: &#8220;x&#8221;, &#8220;xaxis&#8221;,
-&#8220;x-axis&#8221;, &#8220;x_axis&#8221;, &#8220;long&#8221;, &#8220;long_axis&#8221;, &#8220;long-axis&#8221;, &#8220;lon&#8221;,
-&#8220;lon_axis&#8221;, &#8220;lon-axis&#8221;, &#8220;y&#8221;, &#8220;yaxis&#8221;, &#8220;y-axis&#8221;, &#8220;y_axis&#8221;, &#8220;lat&#8221;,
-&#8220;lat_axis&#8221; and &#8220;lat-axis&#8221;.</p>
-</div>
-<p><strong>OUTPUTCRS=crs:</strong> This parameter defines in which crs the output
-image should be expressed in.</p>
-<p><strong>MEDIATYPE=mediatype:</strong> This parameter is relevant to GetCoverage
-requests, when multipart XML/image output is desired. It should be
-set to &#8216;multipart/related&#8217; (which is currently the only possible
-value for this parameter).</p>
-<p><strong>INTERPOLATION=intperolation_method:</strong> This defines the
-interpolation method used, for rescaled images. Possible values
-are &#8220;NEAREST&#8221;, &#8220;BILINEAR&#8221; and &#8220;AVERAGE&#8221;.</p>
-<p><strong>RANGESUBSET=band1[,band2[,...]]:</strong> With this parameter, a
-selection of bands can be made. Also the bands can be
-reordered.  The bands can be referred to either by name (which can
-be retrieved using the DescribeCoverage request) or by index
-(starting with &#8216;1&#8217; for the first band).</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The paramter names <strong>SIZE</strong>, <strong>RESOLUTION</strong>, <strong>OUTPUTCRS=crs:</strong>,
-<strong>INTERPOLATION</strong>, and <strong>RANGESUBSET</strong> might need to be changed when new
-specification documents become available (see <a class="reference internal" href="#wcs-to-do"><em>To-do Items and
-Known Limitations</em></a>).</p>
 </div>
 </div></blockquote>
 <div class="section" id="unchanged-kvp-parameters">
@@ -645,7 +681,8 @@ http://www.yourserver.com/wcs?SERVICE=WCS&amp;VERSION=2.0.1
 # GetCoverage 2.0 reproject to EPSG 4326
 http://www.yourserver.com/wcs?SERVICE=WCS&amp;VERSION=2.0.1
   &amp;REQUEST=GetCoverage&amp;COVERAGEID=grey&amp;FORMAT=image/tiff
-  &amp;SUBSET=x,http://www.opengis.net/def/crs/EPSG/0/4326(-121.488744,-121.485169)</pre>
+  &amp;SUBSET=x(-121.488744,-121.485169)
+  &amp;SUBSETTINGCRS=http://www.opengis.net/def/crs/EPSG/0/4326</pre>
 </div>
 <p>Please refer to the <a class="reference external" href="http://trac.osgeo.org/mapserver/browser/trunk/msautotest/wxs/wcs_simple.map">WCS 2.0 tests in msautotest</a> for further sample
 requests.</p>
@@ -858,25 +895,114 @@ request:</p>
 <span class="s">    http://schemas.opengis.net/wcs/2.0/wcsAll.xsd&quot;</span>
   <span class="na">xmlns=</span><span class="s">&quot;http://www.opengis.net/wcs/2.0&quot;</span>
   <span class="na">xmlns:wcs=</span><span class="s">&quot;http://www.opengis.net/wcs/2.0&quot;</span>
+  <span class="na">xmlns:wcscrs=</span><span class="s">&quot;http://www.opengis.net/wcs/crs/1.0&quot;</span>
+  <span class="na">xmlns:scal=</span><span class="s">&quot;http://www.opengis.net/wcs/scaling/1.0&quot;</span>
+  <span class="na">xmlns:int=</span><span class="s">&quot;http://www.opengis.net/wcs/interpolation/1.0&quot;</span>
   <span class="na">service=</span><span class="s">&quot;WCS&quot;</span>
   <span class="na">version=</span><span class="s">&quot;2.0.1&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;wcs:CoverageId&gt;</span>SOME_ID<span class="nt">&lt;/wcs:CoverageId&gt;</span>
   <span class="nt">&lt;wcs:DimensionTrim&gt;</span>
-    <span class="nt">&lt;wcs:Dimension</span> <span class="na">crs=</span><span class="s">&quot;http://www.opengis.net/def/crs/EPSG/0/4326&quot;</span><span class="nt">&gt;</span>x
-    <span class="nt">&lt;/wcs:Dimension&gt;</span>
+    <span class="nt">&lt;wcs:Dimension&gt;</span>x<span class="nt">&lt;/wcs:Dimension&gt;</span>
     <span class="nt">&lt;wcs:TrimLow&gt;</span>16.5<span class="nt">&lt;/wcs:TrimLow&gt;</span>
     <span class="nt">&lt;wcs:TrimHigh&gt;</span>17.25<span class="nt">&lt;/wcs:TrimHigh&gt;</span>
   <span class="nt">&lt;/wcs:DimensionTrim&gt;</span>
   <span class="nt">&lt;wcs:DimensionTrim&gt;</span>
-    <span class="nt">&lt;wcs:Dimension</span> <span class="na">crs=</span><span class="s">&quot;http://www.opengis.net/def/crs/EPSG/0/4326&quot;</span><span class="nt">&gt;</span>y
-    <span class="nt">&lt;/wcs:Dimension&gt;</span>
+    <span class="nt">&lt;wcs:Dimension&gt;</span>y<span class="nt">&lt;/wcs:Dimension&gt;</span>
     <span class="nt">&lt;wcs:TrimLow&gt;</span>47.9<span class="nt">&lt;/wcs:TrimLow&gt;</span>
   <span class="nt">&lt;/wcs:DimensionTrim&gt;</span>
   <span class="nt">&lt;wcs:format&gt;</span>image/tiff<span class="nt">&lt;/wcs:format&gt;</span>
   <span class="nt">&lt;wcs:mediaType&gt;</span>multipart/related<span class="nt">&lt;/wcs:mediaType&gt;</span>
-  <span class="nt">&lt;wcs:Resolution</span> <span class="na">dimension=</span><span class="s">&quot;x&quot;</span><span class="nt">&gt;</span>0.01<span class="nt">&lt;/wcs:Resolution&gt;</span>
-  <span class="nt">&lt;wcs:Size</span> <span class="na">dimension=</span><span class="s">&quot;y&quot;</span><span class="nt">&gt;</span>50<span class="nt">&lt;/wcs:Size&gt;</span>
+  <span class="nt">&lt;wcs:Extension&gt;</span>
+    <span class="nt">&lt;wcscrs:subsettingCrs&gt;</span>http://www.opengis.net/def/crs/EPSG/0/4326<span class="nt">&lt;/wcscrs:subsettingCrs&gt;</span>
+    <span class="nt">&lt;wcscrs:outputCrs&gt;</span>http://www.opengis.net/def/crs/EPSG/0/32611<span class="nt">&lt;/wcscrs:outputCrs&gt;</span>
+    <span class="nt">&lt;scal:ScaleToSize&gt;</span>
+      <span class="nt">&lt;scal:TargetAxisSize&gt;</span>
+        <span class="nt">&lt;scal:axis&gt;</span>x<span class="nt">&lt;/scal:axis&gt;</span>
+        <span class="nt">&lt;scal:targetSize&gt;</span>50<span class="nt">&lt;/scal:targetSize&gt;</span>
+      <span class="nt">&lt;/scal:TargetAxisSize&gt;</span>
+      <span class="nt">&lt;scal:TargetAxisSize&gt;</span>
+        <span class="nt">&lt;scal:axis&gt;</span>y<span class="nt">&lt;/scal:axis&gt;</span>
+        <span class="nt">&lt;scal:targetSize&gt;</span>50<span class="nt">&lt;/scal:targetSize&gt;</span>
+      <span class="nt">&lt;/scal:TargetAxisSize&gt;</span>
+    <span class="nt">&lt;/scal:ScaleToSize&gt;</span>
+    <span class="nt">&lt;int:Interpolation&gt;</span>
+      <span class="nt">&lt;int:globalInterpolation&gt;</span>NEAREST<span class="nt">&lt;/int:globalInterpolation&gt;</span>
+    <span class="nt">&lt;/int:Interpolation&gt;</span>
+  <span class="nt">&lt;/wcs:Extension&gt;</span>
 <span class="nt">&lt;/wcs:GetCoverage&gt;</span>
+</pre></div>
+</div>
+<p>These are some other scaling options:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;wcs:GetCoverage</span>
+  <span class="na">xmlns:xsi=</span><span class="s">&#39;http://www.w3.org/2001/XMLSchema-instance&#39;</span>
+  <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.opengis.net/wcs/2.0</span>
+<span class="s">    http://schemas.opengis.net/wcs/2.0/wcsAll.xsd&quot;</span>
+  <span class="na">xmlns=</span><span class="s">&quot;http://www.opengis.net/wcs/2.0&quot;</span>
+  <span class="na">xmlns:wcs=</span><span class="s">&quot;http://www.opengis.net/wcs/2.0&quot;</span>
+  <span class="na">xmlns:scal=</span><span class="s">&quot;http://www.opengis.net/wcs/scaling/1.0&quot;</span>
+  <span class="na">service=</span><span class="s">&quot;WCS&quot;</span>
+  <span class="na">version=</span><span class="s">&quot;2.0.1&quot;</span><span class="nt">&gt;</span>
+
+  <span class="c">&lt;!-- ... --&gt;</span>
+  <span class="nt">&lt;wcs:Extension&gt;</span>
+    <span class="nt">&lt;scal:ScaleByFactor&gt;</span>
+      <span class="nt">&lt;scal:scaleFactor&gt;</span>1.5<span class="nt">&lt;/scal:scaleFactor&gt;</span>
+    <span class="nt">&lt;/scal:ScaleByFactor&gt;</span>
+
+    <span class="c">&lt;!-- or --&gt;</span>
+
+    <span class="nt">&lt;scal:ScaleAxesByFactor&gt;</span>
+      <span class="nt">&lt;scal:ScaleAxis&gt;</span>
+        <span class="nt">&lt;scal:axis&gt;</span>x<span class="nt">&lt;/scal:axis&gt;</span>
+        <span class="nt">&lt;scal:scaleFactor&gt;</span>1.5<span class="nt">&lt;/scal:scaleFactor&gt;</span>
+      <span class="nt">&lt;/scal:ScaleAxis&gt;</span>
+      <span class="nt">&lt;scal:ScaleAxis&gt;</span>
+        <span class="nt">&lt;scal:axis&gt;</span>y<span class="nt">&lt;/scal:axis&gt;</span>
+        <span class="nt">&lt;scal:scaleFactor&gt;</span>2.0<span class="nt">&lt;/scal:scaleFactor&gt;</span>
+      <span class="nt">&lt;/scal:ScaleAxis&gt;</span>
+    <span class="nt">&lt;/scal:ScaleAxesByFactor&gt;</span>
+
+    <span class="c">&lt;!-- or --&gt;</span>
+
+    <span class="nt">&lt;scal:ScaleToExtent&gt;</span>
+      <span class="nt">&lt;scal:TargetAxisExtent&gt;</span>
+        <span class="nt">&lt;scal:axis&gt;</span>x<span class="nt">&lt;/scal:axis&gt;</span>
+        <span class="nt">&lt;scal:low&gt;</span>10<span class="nt">&lt;/scal:low&gt;</span>
+        <span class="nt">&lt;scal:high&gt;</span>20<span class="nt">&lt;/scal:high&gt;</span>
+      <span class="nt">&lt;/scal:TargetAxisExtent&gt;</span>
+      <span class="nt">&lt;scal:TargetAxisExtent&gt;</span>
+        <span class="nt">&lt;scal:axis&gt;</span>y<span class="nt">&lt;/scal:axis&gt;</span>
+        <span class="nt">&lt;scal:low&gt;</span>20<span class="nt">&lt;/scal:low&gt;</span>
+        <span class="nt">&lt;scal:high&gt;</span>30<span class="nt">&lt;/scal:high&gt;</span>
+      <span class="nt">&lt;/scal:TargetAxisExtent&gt;</span>
+    <span class="nt">&lt;/scal:ScaleToExtent&gt;</span>
+  <span class="nt">&lt;/wcs:Extension&gt;</span>
+<span class="nt">&lt;/wcs:GetCoverage&gt;</span>
+</pre></div>
+</div>
+<p>GeoTIFF parameters are used as follows:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;wcs:GetCoverage</span>
+   <span class="na">xmlns:xsi=</span><span class="s">&#39;http://www.w3.org/2001/XMLSchema-instance&#39;</span>
+   <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.opengis.net/wcs/2.0</span>
+<span class="s">     http://schemas.opengis.net/wcs/2.0/wcsAll.xsd&quot;</span>
+   <span class="na">xmlns=</span><span class="s">&quot;http://www.opengis.net/wcs/2.0&quot;</span>
+   <span class="na">xmlns:wcs=</span><span class="s">&quot;http://www.opengis.net/wcs/2.0&quot;</span>
+   <span class="na">xmlns:geotiff=</span><span class="s">&quot;http://www.opengis.net/gmlcov/geotiff/1.0&quot;</span>
+   <span class="na">service=</span><span class="s">&quot;WCS&quot;</span>
+   <span class="na">version=</span><span class="s">&quot;2.0.1&quot;</span><span class="nt">&gt;</span>
+
+   <span class="c">&lt;!-- ... --&gt;</span>
+   <span class="nt">&lt;wcs:Extension&gt;</span>
+     <span class="nt">&lt;geotiff:parameters&gt;</span>
+       <span class="nt">&lt;geotiff:compression&gt;</span>LZW<span class="nt">&lt;/geotiff:compression&gt;</span>
+       <span class="nt">&lt;geotiff:predictor&gt;</span>Horizontal<span class="nt">&lt;/geotiff:predictor&gt;</span>
+       <span class="nt">&lt;geotiff:interleave&gt;</span>Band<span class="nt">&lt;/geotiff:interleave&gt;</span>
+       <span class="nt">&lt;geotiff:tiling&gt;</span>yes<span class="nt">&lt;/geotiff:tiling&gt;</span>
+       <span class="nt">&lt;geotiff:tilewidth&gt;</span>256<span class="nt">&lt;/geotiff:tilewidth&gt;</span>
+       <span class="nt">&lt;geotiff:tileheight&gt;</span>256<span class="nt">&lt;/geotiff:tileheight&gt;</span>
+     <span class="nt">&lt;/geotiff:parameters&gt;</span>
+   <span class="nt">&lt;/wcs:Extension&gt;</span>
+ <span class="nt">&lt;/wcs:GetCoverage&gt;</span>
 </pre></div>
 </div>
 <p>Please refer to the <a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=41440">WCS 2.0 Specification - XML/POST Protocol Binding
@@ -1376,7 +1502,7 @@ breaks the validation of GML 3.2.1.</li>
           <a href="sld.html" title="SLD"
              >previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
-          <li><a href="../documentation.html" >MapServer 6.4.1 Documentation</a> &raquo;</li>
+          <li><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
           <li><a href="index.html" >OGC Support and Configuration</a> &raquo;</li> 
       </ul>
     </div>

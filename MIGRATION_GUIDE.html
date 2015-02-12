@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MapServer Migration Guide &mdash; MapServer 6.4.1 documentation</title>
+    <title>MapServer Migration Guide &mdash; MapServer 7.0.0-beta1 documentation</title>
     
     <link rel="stylesheet" href="_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '6.4.1',
+        VERSION:     '7.0.0-beta1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,7 +28,7 @@
     <link rel="shortcut icon" href="_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="copyright" title="Copyright" href="copyright.html" />
-    <link rel="top" title="MapServer 6.4.1 documentation" href="index.html" /> 
+    <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="index.html" /> 
   </head>
   <body>
 
@@ -103,7 +103,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2014-03-25</td>
+<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2015-02-12</td>
 </tr>
 </tbody>
 </table>
@@ -125,8 +125,70 @@
 <div class="section" id="mapserver-6-4-to-7-0-migration">
 <h2><a class="toc-backref" href="#table-of-contents">MapServer 6.4 to 7.0 Migration</a><a class="headerlink" href="#mapserver-6-4-to-7-0-migration" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>ExternalGraphics added through SLD must now validate against the
-&#8220;sld_external_graphic&#8221; entry of the MAP-&gt;WEB-&gt;VALIDATION block</li>
+<li>The predefined field names for the union and cluster layers have been changed.
+Colons in the field names have been replaced with underscores to avoid producing
+invalid GetFeatureInfo results. The field names in the mapfiles should be modified
+according to this change.</li>
+<li>Layer FILTERs <em>must</em> use MapServer expression syntax only. Drivers will attempt to translate
+from MapServer syntax to native syntax (e.g. SQL). Native expressions can still be set either
+using: 1) sub-selects in the DATA statement or 2) using the new NATIVE_FILTER processing key.</li>
+</ul>
+<div class="highlight-python"><pre># OGR Layer Before
+LAYER
+  ...
+  FILTER 'where id=234'
+END
+
+# OGR Layer After
+LAYER
+  ...
+  PROCESSING 'NATIVE_FILTER=id=234'
+END</pre>
+</div>
+<ul class="simple">
+<li>MapServer attrribute queries (e.g. mode=item[n]query) <em>must</em> be specified using MapServer
+expression syntax (qstring and qitem (opt)). For RDBMS backends you no longer send SQL snippets,
+rather the underlying driver will attempt to translate the expression to native systax (e.g. SQL).
+If translation fails (or the driver doesn&#8217;t support translation) then MapServer will evaluate
+the expression instead.</li>
+<li>Layer opacity is now depricated a result of RFC 113 - Layer Compositing. The mapfile parser
+and MapScript getter/setter functions will continue to function but unpredicable results will
+occur if used in conjunction with COMPOSITE blocks. For more information see <a class="reference external" href="http://www.mapserver.org/development/rfc/ms-rfc-113.html">http://www.mapserver.org/development/rfc/ms-rfc-113.html</a>.</li>
+</ul>
+<div class="highlight-python"><pre># Before
+LAYER
+  ...
+  OPACITY 70
+END
+
+# After
+LAYER
+  ...
+  COMPOSITE
+    OPACITY 70
+  END
+END</pre>
+</div>
+<ul>
+<li><p class="first">Native ESRI SDE layers are no longer supported (see <a class="reference external" href="https://github.com/mapserver/mapserver/pull/5068">https://github.com/mapserver/mapserver/pull/5068</a>).
+OGR remains an alternative for those that really need it although the OGR/SDE driver suffers from the
+same issues that prompted the removal from MapServer.</p>
+</li>
+<li><p class="first">GD graphics library support was removed (<a class="reference external" href="http://www.mapserver.org/development/rfc/ms-rfc-99.html">http://www.mapserver.org/development/rfc/ms-rfc-99.html</a>) and
+had been optional since 6.2.</p>
+<blockquote>
+<div><ul class="simple">
+<li>GIF output cannot be produced from MapServer although 8-bit PNG output can be be produced using the AGG/PNG8 driver.</li>
+<li>Bitmap fonts have been replaced with an embedded TrueType font (see <a class="reference external" href="http://www.mapserver.org/development/rfc/ms-rfc-104.html">http://www.mapserver.org/development/rfc/ms-rfc-104.html</a>)</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">RFC 98 - Label/Text Rendering Overhaul (<a class="reference external" href="http://www.mapserver.org/development/rfc/ms-rfc-98.html">http://www.mapserver.org/development/rfc/ms-rfc-98.html</a>) may
+result in subtle label/character placement changes.</p>
+</li>
+<li><p class="first">ExternalGraphics added through SLD must now validate against the
+&#8220;sld_external_graphic&#8221; entry of the MAP-&gt;WEB-&gt;VALIDATION block</p>
+</li>
 </ul>
 <div class="highlight-python"><pre>MAP
  WEB
