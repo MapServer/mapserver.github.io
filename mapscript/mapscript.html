@@ -1306,19 +1306,12 @@ associations.</p>
 <div class="section" id="colorobj-attributes">
 <h4>colorObj Attributes<a class="headerlink" href="#colorobj-attributes" title="Permalink to this headline">¶</a></h4>
 <dl class="docutils">
+<dt>alpha <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Alpha (opacity) component of color in range [0-255]</dd>
 <dt>blue <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
 <dd>Blue component of color in range [0-255]</dd>
 <dt>green <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
 <dd>Green component of color in range [0-255]</dd>
-<dt>pen <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first">Don&#8217;t mess with this unless you know what you are doing!</p>
-<div class="last admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Because of the issue with <em>pen</em>, setting colors by
-individual components is unreliable.  Best practice is to use
-setRGB(), setHex(), or assign to a new instance of colorObj().</p>
-</div>
-</dd>
 <dt>red <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
 <dd>Red component of color in range [0-255]</dd>
 </dl>
@@ -1326,17 +1319,25 @@ setRGB(), setHex(), or assign to a new instance of colorObj().</p>
 <div class="section" id="colorobj-methods">
 <h4>colorObj Methods<a class="headerlink" href="#colorobj-methods" title="Permalink to this headline">¶</a></h4>
 <dl class="docutils">
-<dt>new colorObj( [ int red=0, int green=0, int blue=0, int pens=-4 ] ) <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference internal" href="#colorobj">colorObj</a></span></dt>
+<dt>new colorObj( [ int red=0, int green=0, int blue=0, int alpha=255 ] ) <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference internal" href="#colorobj">colorObj</a></span></dt>
 <dd>Create a new instance.  The color arguments are optional.</dd>
 <dt>setHex( string hexcolor ) <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Set the color to values specified in case-independent hexadecimal
-notation.  Calling setHex(&#8216;#ffffff&#8217;) assigns values of 255 to each
-color component.  Returns MS_SUCCESS or MS_FAILURE.</dd>
-<dt>setRGB( int red, int green, int blue ) <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Set all three RGB components.  Returns MS_SUCCESS or MS_FAILURE.</dd>
+<dd><p class="first">Set the color to values specified in case-independent hexadecimal
+notation.  hex must start with a &#8216;#&#8217; followed by three or four hex bytes,
+e.g. &#8216;#ffffff&#8217; or &#8216;#ffffffff&#8217;.  If only three hex bytes are supplied, the</p>
+<blockquote class="last">
+<div>alpha will be set to 255.  Calling setHex(&#8216;#ffffff&#8217;) therefore assigns
+values of 255 to each color component, including the alpha.  Returns
+MS_SUCCESS or MS_FAILURE.</div></blockquote>
+</dd>
+<dt>setRGB( int red, int green, int blue, int alpha=255 ) <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Set all four RGBA components.  Returns MS_SUCCESS or MS_FAILURE.</dd>
 <dt>toHex() <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
-<dd>Complement to setHex, returning a hexadecimal representation of the
-color components.</dd>
+<dd><p class="first">Complement to setHex, returning a hexadecimal representation of the
+color components.  If alpha is 255 then this is three hex bytes &#8220;#rrggbb&#8221;,</p>
+<blockquote class="last">
+<div>otherwise four hex bytes &#8220;#rrggbbaa&#8221;.</div></blockquote>
+</dd>
 </dl>
 </div>
 </div>
