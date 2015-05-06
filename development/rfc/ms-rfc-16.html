@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -31,9 +29,13 @@
     <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 17: Dynamic Allocation of layers, styles, classes and symbols" href="ms-rfc-17.html" />
-    <link rel="prev" title="MS RFC 15: Support for thread neutral operation of MapServer/MapScript" href="ms-rfc-15.html" /> 
+    <link rel="prev" title="MS RFC 15: Support for thread neutral operation of MapServer/MapScript" href="ms-rfc-15.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
+  <body role="document">
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -84,7 +86,7 @@
 </table>
 
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -96,9 +98,9 @@
         <li class="right" >
           <a href="ms-rfc-15.html" title="MS RFC 15: Support for thread neutral operation of MapServer/MapScript"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../index.html" >Development</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -106,7 +108,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="ms-rfc-16-mapscript-wxs-services">
 <span id="rfc16"></span><h1>MS RFC 16: MapScript WxS Services<a class="headerlink" href="#ms-rfc-16-mapscript-wxs-services" title="Permalink to this headline">¶</a></h1>
@@ -169,7 +171,8 @@ customized services.</li>
 <div class="section" id="wxs-functions">
 <h2>WxS Functions<a class="headerlink" href="#wxs-functions" title="Permalink to this headline">¶</a></h2>
 <p>Add the following methods on the mapObj in mapscript/swiginc/map.i.</p>
-<div class="highlight-python"><pre>int OWSDispatch( OWSRequest *req );</pre>
+<div class="highlight-python"><div class="highlight"><pre>int OWSDispatch( OWSRequest *req );
+</pre></div>
 </div>
 <p>We can&#8217;t call the lower level functions, like msWMSGetCapabilities()
 directly very easily because these functions require some pre-processing
@@ -195,7 +198,8 @@ OWSRequest:</p>
 <li>Loads the parameters from the normal sources (QUERY_STRING env. variable
 for instance).</li>
 </ul>
-<div class="highlight-python"><pre>loadParams( const char * url );</pre>
+<div class="highlight-python"><div class="highlight"><pre>loadParams( const char * url );
+</pre></div>
 </div>
 <ul class="simple">
 <li>Loads the parameters from the given url portion as would have appeared in
@@ -247,18 +251,21 @@ be defined.</li>
 <ul class="simple">
 <li>Install handler to get stdin from a buffer, clear buffer.</li>
 </ul>
-<div class="highlight-python"><pre>msIO_setStdinBuffer( unsigned char *data, int length );</pre>
+<div class="highlight-python"><div class="highlight"><pre>msIO_setStdinBuffer( unsigned char *data, int length );
+</pre></div>
 </div>
 <ul class="simple">
 <li>Set data for stdin buffer.</li>
 </ul>
-<div class="highlight-python"><pre>gdBuffer msIO_getStdoutBufferBytes();</pre>
+<div class="highlight-python"><div class="highlight"><pre>gdBuffer msIO_getStdoutBufferBytes();
+</pre></div>
 </div>
 <ul class="simple">
 <li>Fetch stdout buffer pointer and length.</li>
 <li>gdBuffer already provides language specific bindings to get byte data.</li>
 </ul>
-<div class="highlight-python"><pre>const char *msIO_getStdoutBufferString();</pre>
+<div class="highlight-python"><div class="highlight"><pre>const char *msIO_getStdoutBufferString();
+</pre></div>
 </div>
 <ul class="simple">
 <li>Fetch stdout buffer as a string.  Appropriate for XML and HTML results for
@@ -287,26 +294,29 @@ bindings already have a way of using this as a &#8220;array of raw bytes&#8221; 
 It is normally used for fetched gdImage buffers.  But because the msIO
 function returns a gdBuffer referring to an internally memory array not
 &#8220;owned&#8221; by the gdBuffer we need to add a owns_data flag.</p>
-<div class="highlight-python"><pre>typedef struct {
+<div class="highlight-python"><div class="highlight"><pre>typedef struct {
    unsigned char *data;
    int size;
    int owns_data;
-} gdBuffer;</pre>
+} gdBuffer;
+</pre></div>
 </div>
 <p>Likewise, each of the language bindings needs to be modified to only
 call gdFree() on data if owns_data is true.</p>
 <p>This:</p>
-<div class="highlight-python"><pre>%typemap(out) gdBuffer {
+<div class="highlight-python"><div class="highlight"><pre>%typemap(out) gdBuffer {
    $result = PyString_FromStringAndSize($1.data, $1.size);
    gdFree($1.data);
-}</pre>
+}
+</pre></div>
 </div>
 <p>becomes this:</p>
-<div class="highlight-python"><pre>%typemap(out) gdBuffer {
+<div class="highlight-python"><div class="highlight"><pre>%typemap(out) gdBuffer {
    $result = PyString_FromStringAndSize($1.data, $1.size);
    if( $1.owns_data )
        gdFree($1.data);
-}</pre>
+}
+</pre></div>
 </div>
 <p>And similarly for the other bindings.</p>
 </div>
@@ -397,7 +407,7 @@ and on the map object.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -429,7 +439,7 @@ and on the map object.</p>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -446,26 +456,17 @@ and on the map object.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="ms-rfc-17.html" title="MS RFC 17: Dynamic Allocation of layers, styles, classes and symbols"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="ms-rfc-15.html" title="MS RFC 15: Support for thread neutral operation of MapServer/MapScript"
-             >previous</a> |</li>
-        <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../index.html" >Development</a> &raquo;</li>
-          <li><a href="index.html" >Request for Comments</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; <a href="../../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      &copy;2014, Regents of the University of Minnesota.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      
     </div>
+
+    
+
+    
   </body>
 </html>

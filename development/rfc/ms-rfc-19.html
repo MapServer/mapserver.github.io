@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -31,9 +29,13 @@
     <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 21: MapServer Raster Color Correction" href="ms-rfc-21.html" />
-    <link rel="prev" title="MS RFC 18: Encryption of passwords in mapfiles" href="ms-rfc-18.html" /> 
+    <link rel="prev" title="MS RFC 18: Encryption of passwords in mapfiles" href="ms-rfc-18.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
+  <body role="document">
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -84,7 +86,7 @@
 </table>
 
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -96,9 +98,9 @@
         <li class="right" >
           <a href="ms-rfc-18.html" title="MS RFC 18: Encryption of passwords in mapfiles"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../index.html" >Development</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -106,7 +108,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="ms-rfc-19-style-label-attribute-binding">
 <span id="rfc19"></span><h1>MS RFC 19: Style &amp; Label attribute binding<a class="headerlink" href="#ms-rfc-19-style-label-attribute-binding" title="Permalink to this headline">¶</a></h1>
@@ -135,10 +137,11 @@ easier to achieve.</p>
 <div class="section" id="c-structural-changes">
 <h2>C Structural Changes<a class="headerlink" href="#c-structural-changes" title="Permalink to this headline">¶</a></h2>
 <p>A new structure called attributeBindingObj would be added:</p>
-<div class="highlight-python"><pre>typedef struct {
+<div class="highlight-python"><div class="highlight"><pre>typedef struct {
   char *item;
   char index;
-} attributeBindingObj;</pre>
+} attributeBindingObj;
+</pre></div>
 </div>
 <p>Several new enumerations would then define what properties could be bound:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#define MS_STYLE_BINDING_LENGTH ...</span>
@@ -151,20 +154,22 @@ easier to achieve.</p>
 <p>Several elements would be removed from layerObj and styleObj. For example,
 angleitem, angleitemindex and similar members would be removed.
 styleObj&#8217;s and labelObj&#8217;s would each take on 2 new members:</p>
-<div class="highlight-python"><pre>char hasBindings;
-attributeBindingObj bindings[MS_STYLE_BINDING_LENGTH];</pre>
+<div class="highlight-python"><div class="highlight"><pre>char hasBindings;
+attributeBindingObj bindings[MS_STYLE_BINDING_LENGTH];
+</pre></div>
 </div>
 </div>
 <div class="section" id="mapfile-mapscript-changes">
 <h2>Mapfile/MapScript Changes<a class="headerlink" href="#mapfile-mapscript-changes" title="Permalink to this headline">¶</a></h2>
 <p>Options like SIZEITEM and ANGLEITEM would go away. Instead a more
 logical syntax such as:</p>
-<div class="highlight-python"><pre>STYLE
+<div class="highlight-python"><div class="highlight"><pre>STYLE
   SIZE [mySizeItem]
   ANGLE [myAngleItem]
   COLOR 255 0 0
-  SYMBOL 'square'
-END</pre>
+  SYMBOL &#39;square&#39;
+END
+</pre></div>
 </div>
 <p>Square brackets have been used in MapServer templates and expressions to
 bind to attributes so they are a natural choice to denote attribute
@@ -172,9 +177,10 @@ bindings in this case.</p>
 <p>Similarly MapScript would loose the ability to set/get the xxxITEM
 properties. Instead the style and label objects would get setBinding
 and deleteBinding methods:</p>
-<div class="highlight-python"><pre>(in Perl)
-$style-&gt;setBinding($mapscript::MS_STYLE_BINDING_SIZE, 'mySizeItem');
-$style-&gt;deleteBinding($mapscript::MS_STYLE_BINDING_COLOR);</pre>
+<div class="highlight-python"><div class="highlight"><pre>(in Perl)
+$style-&gt;setBinding($mapscript::MS_STYLE_BINDING_SIZE, &#39;mySizeItem&#39;);
+$style-&gt;deleteBinding($mapscript::MS_STYLE_BINDING_COLOR);
+</pre></div>
 </div>
 </div>
 <div class="section" id="files-affected">
@@ -183,14 +189,15 @@ $style-&gt;deleteBinding($mapscript::MS_STYLE_BINDING_COLOR);</pre>
 <li>map.h =&gt; structure changes, enum and define additions</li>
 <li>maputil.c =&gt; add msStyleBindAttributes();</li>
 </ul>
-<div class="highlight-python"><pre>void msStyleBindAttributes(shapeObj *shape, styleObj *style)
+<div class="highlight-python"><div class="highlight"><pre>void msStyleBindAttributes(shapeObj *shape, styleObj *style)
 {
   if(style-&gt;bindings[MS_STYLE_BINDING_SIZE].item)
     style-&gt;size = atoi(shape-&gt;values[style-&gt;bindings[MS_STYLE_BINDING_SIZE].index]);
   if(style-&gt;bindings[MS_STYLE_BINDING_ANGLE].item)
     style-&gt;angle = atoi(shape-&gt;values[style-&gt;bindings[MS_STYLE_BINDING_ANGLE].index]);
   ...
-}</pre>
+}
+</pre></div>
 </div>
 <ul class="simple">
 <li>maplabel.c =&gt; add msLabelBindAttributes();</li>
@@ -237,7 +244,7 @@ think it is most appropriate as a 5.0 change.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -262,7 +269,7 @@ think it is most appropriate as a 5.0 change.</p>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -279,26 +286,17 @@ think it is most appropriate as a 5.0 change.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="ms-rfc-21.html" title="MS RFC 21: MapServer Raster Color Correction"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="ms-rfc-18.html" title="MS RFC 18: Encryption of passwords in mapfiles"
-             >previous</a> |</li>
-        <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../index.html" >Development</a> &raquo;</li>
-          <li><a href="index.html" >Request for Comments</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; <a href="../../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      &copy;2014, Regents of the University of Minnesota.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      
     </div>
+
+    
+
+    
   </body>
 </html>

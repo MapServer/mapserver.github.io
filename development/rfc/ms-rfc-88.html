@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -31,9 +29,13 @@
     <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 89: Layer Geomtransforms" href="ms-rfc-89.html" />
-    <link rel="prev" title="MS RFC 87: Bitmap pattern support" href="ms-rfc-87.html" /> 
+    <link rel="prev" title="MS RFC 87: Bitmap pattern support" href="ms-rfc-87.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
+  <body role="document">
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -84,7 +86,7 @@
 </table>
 
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -96,9 +98,9 @@
         <li class="right" >
           <a href="ms-rfc-87.html" title="MS RFC 87: Bitmap pattern support"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../index.html" >Development</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -106,7 +108,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="ms-rfc-88-saving-mapserver-objects-to-strings">
 <span id="rfc88"></span><h1>MS RFC 88: Saving MapServer Objects to Strings<a class="headerlink" href="#ms-rfc-88-saving-mapserver-objects-to-strings" title="Permalink to this headline">¶</a></h1>
@@ -143,7 +145,7 @@ and mapsymbol.c. This replacement will establish the option to redirect mapfile 
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this headline">¶</a></h2>
 <p>Assuming the replacement of fprintf is done, writing objects to strings could be implemented
 by adding a new function for each object type something like:</p>
-<div class="highlight-python"><pre>char* msWriteLayerToString(layerObj *layer)
+<div class="highlight-python"><div class="highlight"><pre>char* msWriteLayerToString(layerObj *layer)
 {
   msIOContext  context;
   msIOBuffer buffer;
@@ -159,42 +161,44 @@ by adding a new function for each object type something like:</p>
   msIO_installHandlers( NULL, &amp;context, NULL );
 
   writeLayer(stdout, 0, layer);
-  msIO_bufferWrite( &amp;buffer, "", 1 );
+  msIO_bufferWrite( &amp;buffer, &quot;&quot;, 1 );
 
   msIO_installHandlers( NULL, NULL, NULL );
 
   return buffer.data;
-}</pre>
+}
+</pre></div>
 </div>
 <p>The owneship of the returned buffer is passed to the caller, so we should hook this function
 in layer.i as follows:</p>
-<div class="highlight-python"><pre>%newobject convertToString;
+<div class="highlight-python"><div class="highlight"><pre>%newobject convertToString;
 char* convertToString()
 {
   return msWriteLayerToString(self);
-}</pre>
+}
+</pre></div>
 </div>
 <p>In order to implement the writer for mapObj (msWriteMapToString) we will require to isolate
 the bulk of the writing code in a separate function writeMap from msSaveMap.
 In this regard msSaveMap will now look something like:</p>
-<div class="highlight-python"><pre>int msSaveMap(mapObj *map, char *filename)
+<div class="highlight-python"><div class="highlight"><pre>int msSaveMap(mapObj *map, char *filename)
 {
   FILE *stream;
   char szPath[MS_MAXPATHLEN];
 
   if(!map) {
-    msSetError(MS_MISCERR, "Map is undefined.", "msSaveMap()");
+    msSetError(MS_MISCERR, &quot;Map is undefined.&quot;, &quot;msSaveMap()&quot;);
     return(-1);
   }
 
   if(!filename) {
-    msSetError(MS_MISCERR, "Filename is undefined.", "msSaveMap()");
+    msSetError(MS_MISCERR, &quot;Filename is undefined.&quot;, &quot;msSaveMap()&quot;);
     return(-1);
   }
 
-  stream = fopen(msBuildPath(szPath, map-&gt;mappath, filename), "w");
+  stream = fopen(msBuildPath(szPath, map-&gt;mappath, filename), &quot;w&quot;);
   if(!stream) {
-    msSetError(MS_IOERR, "(%s)", "msSaveMap()", filename);
+    msSetError(MS_IOERR, &quot;(%s)&quot;, &quot;msSaveMap()&quot;, filename);
     return(-1);
   }
 
@@ -202,10 +206,11 @@ In this regard msSaveMap will now look something like:</p>
   fclose(stream);
 
   return(0);
-}</pre>
+}
+</pre></div>
 </div>
 <p>As the result of this implementation the following new functions will be exposed in mapserver.h</p>
-<div class="highlight-python"><pre>MS_DLL_EXPORT char *msWriteLayerToString(layerObj *layer);
+<div class="highlight-python"><div class="highlight"><pre>MS_DLL_EXPORT char *msWriteLayerToString(layerObj *layer);
 MS_DLL_EXPORT char *msWriteMapToString(layerObj *layer);
 MS_DLL_EXPORT char *msWriteClassToString(classObj *_class);
 MS_DLL_EXPORT char *msWriteStyleToString(styleObj *style);
@@ -215,7 +220,8 @@ MS_DLL_EXPORT char *msWriteScalebarToString(scalebarObj *scalebar)
 MS_DLL_EXPORT char *msWriteQueryMapToString(queryMapObj *querymap)
 MS_DLL_EXPORT char *msWriteReferenceMapToString(referenceMapObj *ref)
 MS_DLL_EXPORT char *msWriteLegendToString(legendObj *legend)
-MS_DLL_EXPORT char *msWriteClusterToString(clusterObj *cluster)</pre>
+MS_DLL_EXPORT char *msWriteClusterToString(clusterObj *cluster)
+</pre></div>
 </div>
 </div>
 <div class="section" id="files-affected">
@@ -283,7 +289,7 @@ Stephen Woodbridge +1</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -309,7 +315,7 @@ Stephen Woodbridge +1</p>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -326,26 +332,17 @@ Stephen Woodbridge +1</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="ms-rfc-89.html" title="MS RFC 89: Layer Geomtransforms"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="ms-rfc-87.html" title="MS RFC 87: Bitmap pattern support"
-             >previous</a> |</li>
-        <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../index.html" >Development</a> &raquo;</li>
-          <li><a href="index.html" >Request for Comments</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; <a href="../../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      &copy;2014, Regents of the University of Minnesota.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      
     </div>
+
+    
+
+    
   </body>
 </html>

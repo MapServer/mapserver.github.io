@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -31,9 +29,13 @@
     <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../index.html" />
     <link rel="up" title="Installation" href="index.html" />
     <link rel="next" title="V8 MapScript Support" href="v8.html" />
-    <link rel="prev" title="IIS Setup for MapServer" href="iis.html" /> 
+    <link rel="prev" title="IIS Setup for MapServer" href="iis.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
+  <body role="document">
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -84,7 +86,7 @@
 </table>
 
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -96,9 +98,9 @@
         <li class="right" >
           <a href="iis.html" title="IIS Setup for MapServer"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Home</a> &raquo;</li>
-          <li><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Installation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Installation</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -106,7 +108,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="oracle-installation">
 <span id="oci-install"></span><span id="index-0"></span><h1><a class="toc-backref" href="#table-of-contents">Oracle Installation</a><a class="headerlink" href="#oracle-installation" title="Permalink to this headline">¶</a></h1>
@@ -135,7 +137,7 @@
 <div class="section" id="preface">
 <h2><a class="toc-backref" href="#table-of-contents">Preface</a><a class="headerlink" href="#preface" title="Permalink to this headline">¶</a></h2>
 <p>This document explains the whole configuration needed to get the connect
-between MapServer <a class="reference internal" href="../cgi/index.html#cgi"><em>CGI</em></a> and an Oracle database server on a linux (Ubuntu)
+between MapServer <a class="reference internal" href="../cgi/index.html#cgi"><span>CGI</span></a> and an Oracle database server on a linux (Ubuntu)
 box. The aim of this document is just to put a lot of googled knowledge in ONE
 place. Hopefully it will preserve many of people spending analog amount of
 time than I did!</p>
@@ -143,7 +145,7 @@ time than I did!</p>
 my UMN having access to an oracle database. I&#8217;m NOT an oracle expert, so the
 aim of this document is just to put a lot of googled knowledge in ONE place.
 Hopefully it will preserve many of people spending analog amount of time than
-I did! (Or: If you have the choice: Try <a class="reference internal" href="../input/vector/postgis.html#input-postgis"><em>PostGIS</em></a> ;-))</p>
+I did! (Or: If you have the choice: Try <a class="reference internal" href="../input/vector/postgis.html#input-postgis"><span>PostGIS</span></a> ;-))</p>
 <p>Before we start, some basic knowledge, I didn&#8217;t know before:</p>
 <ul class="simple">
 <li>MapServer can access oracle spatial as well as geodata from any oracle
@@ -166,31 +168,34 @@ reader:</p>
 </ul>
 <p>We also assume that you have installed <strong>apache2</strong> (our version was 2.0.49)
 and you are used to work with Linux/UNIX systems. We also think you are able
-to handle the editor <a class="reference internal" href="../development/editing/vim.html#vim"><em>vi/vim</em></a>.</p>
+to handle the editor <a class="reference internal" href="../development/editing/vim.html#vim"><span>vi/vim</span></a>.</p>
 <p>We ensure that the Oracle user who later accesses the database has
 write-access to the oracle_home directory.</p>
 <p>We also assume, that you already have setup the tnsnames.ora file. It should
 look like that:</p>
-<div class="highlight-python"><pre>MY_ORACLE =
+<div class="highlight-python"><div class="highlight"><pre>MY_ORACLE =
     (DESCRIPTION =
         (ADDRESS = (PROTOCOL = TCP)(HOST = host)(PORT = 1521))
         (CONNECT_DATA =
             (SERVICE_NAME = your_name)
         )
-    )</pre>
+    )
+</pre></div>
 </div>
 <p>It is important that you know the NAME of the datasource, in this example this
 is &#8220;MY_ORACLE&#8221; and will be used further on. Done that, you&#8217;re fine using
-<tt class="docutils literal"><span class="pre">User/Password&#64;MY_ORACLE</span></tt> in your mapfile to connect to the oracle database.
+<code class="docutils literal"><span class="pre">User/Password&#64;MY_ORACLE</span></code> in your mapfile to connect to the oracle database.
 But first we have to do some more stuff.</p>
 </div>
 <div class="section" id="compile-mapserver">
 <h2><a class="toc-backref" href="#table-of-contents">Compile MapServer</a><a class="headerlink" href="#compile-mapserver" title="Permalink to this headline">¶</a></h2>
 <p>Compile as normal compilation and set this flag:</p>
-<div class="highlight-python"><pre>--with-oraclespatial=/path/to/oracle/home/&lt;/p&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>--with-oraclespatial=/path/to/oracle/home/&lt;/p&gt;
+</pre></div>
 </div>
 <p>If MapServer configure and make runs well, try</p>
-<div class="highlight-python"><pre>./mapserv -v</pre>
+<div class="highlight-python"><div class="highlight"><pre>./mapserv -v
+</pre></div>
 </div>
 <p>This should at least give this output:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">INPUT</span><span class="o">=</span><span class="n">ORACLESPATIAL</span>
@@ -211,7 +216,7 @@ user-specific environment variables by editing the users &#8221;.profile&#8221; 
 their home directory, but usually the oracle database users are not users of
 the system with their own home)</p>
 <p>Set the following variables:</p>
-<div class="highlight-python"><pre>$ cd /etc
+<div class="highlight-python"><div class="highlight"><pre>$ cd /etc
 
 
 $ echo export ORACLE_HOME=/path/to/oracle/home &gt;&gt; /etc/profile
@@ -226,7 +231,8 @@ $ echo export ORACLE_SID=MY_ORACLE &gt;&gt; /etc/profile
 
 $ echo export LD_LIBRARY_PATH=path/to/oracle/home/lib &gt;&gt; /etc/profile
 
-# **(e.g. ORACLE_HOME=/app/oracle/ora10g/lib)</pre>
+# **(e.g. ORACLE_HOME=/app/oracle/ora10g/lib)
+</pre></div>
 </div>
 <p>The command comes silent, so there is no system output if you didn&#8217;t mistype
 anything!</p>
@@ -238,33 +244,36 @@ apache2.conf-files. In the folder &#8220;/etc/apache2/sites_available&#8221; you
 sites-file. If you did not do sth. Special e.g. installing virtual hosts, the
 file is named &#8220;default&#8221;. In this file, the apache cgi-directory is defined.
 Our file looks like this:</p>
-<div class="highlight-python"><pre>ScriptAlias /cgi-bin/ /var/www/cgi-bin/
-&lt;Directory "/var/www/cgi-bin"&gt;
+<div class="highlight-python"><div class="highlight"><pre>ScriptAlias /cgi-bin/ /var/www/cgi-bin/
+&lt;Directory &quot;/var/www/cgi-bin&quot;&gt;
        AllowOverride None
        Options ExecCGI -MultiViews +SymLinksIfOwnerMatch
        Order allow,deny
        Allow from all
-&lt;/Directory&gt;&lt;/p&gt;</pre>
+&lt;/Directory&gt;&lt;/p&gt;
+</pre></div>
 </div>
 <p>In this file, the local apache
 environment variables must be set. We did it within a location-block
 like this:</p>
-<div class="highlight-python"><pre>&lt;Location "/cgi-bin/"&gt;
-    SetEnv ORACLE_HOME "/path/to/oracle/home"
-&lt;/Location&gt;&lt;/p&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;Location &quot;/cgi-bin/&quot;&gt;
+    SetEnv ORACLE_HOME &quot;/path/to/oracle/home&quot;
+&lt;/Location&gt;&lt;/p&gt;
+</pre></div>
 </div>
 <p>Where /cgi-bin/ in the opening location block refers to the script alias
 /cgi-bin/ and the TNS_ADMIN directory point to the location of the
 tnsnames.ora file.</p>
 <p>Then restart apache:</p>
-<div class="highlight-python"><pre>$ /etc/init.d/apache2 force-reload</pre>
+<div class="highlight-python"><div class="highlight"><pre>$ /etc/init.d/apache2 force-reload
+</pre></div>
 </div>
 </div>
 <div class="section" id="create-mapfile">
 <h3>Create mapfile<a class="headerlink" href="#create-mapfile" title="Permalink to this headline">¶</a></h3>
 <p>Before we start creating our mapfile ensure that you have a your access data
 (User/Password) and that you know the Oracle SRID, which could be different
-from the proj-<a class="reference internal" href="../glossary.html#term-epsg"><em class="xref std std-term">EPSG</em></a>!</p>
+from the proj-<a class="reference internal" href="../glossary.html#term-epsg"><span class="xref std std-term">EPSG</span></a>!</p>
 <p>The data access parameters:</p>
 <ul class="simple">
 <li>CONNECTIONTYPE oraclespatial</li>
@@ -285,30 +294,33 @@ from the proj-<a class="reference internal" href="../glossary.html#term-epsg"><e
 everything goes well: Great, if not, possibly this ugly error-emssage occurs
 (this one cmae by querying MapServer through the WMS interface as a
 GetMap-request):</p>
-<div class="highlight-python"><pre>&lt;ServiceExceptionReport version="1.0.1"&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;ServiceExceptionReport version=&quot;1.0.1&quot;&gt;
     &lt;ServiceException&gt;
-        msDrawMap(): Image handling error. Failed to draw layer named 'test1'.
+        msDrawMap(): Image handling error. Failed to draw layer named &#39;test1&#39;.
         msOracleSpatialLayerOpen(): OracleSpatial error. Cannot create OCI Handlers.
         Connection failure. Check the connection string. Error: .
     &lt;/ServiceException&gt;
-&lt;/ServiceExceptionReport&gt;</pre>
+&lt;/ServiceExceptionReport&gt;
+</pre></div>
 </div>
 <p>This points us towards, that there might be a problem with the connection to
 the database. First of all, let&#8217;s check, if the mapfile is all right.
-Therefore we use the MapServer utility program <a class="reference internal" href="../utilities/shp2img.html#shp2img"><em>shp2img</em></a>.</p>
+Therefore we use the MapServer utility program <a class="reference internal" href="../utilities/shp2img.html#shp2img"><span>shp2img</span></a>.</p>
 <p>Let&#8217;s assume you are in the directory, where you compiled MapServer and run
 shp2img:</p>
-<div class="highlight-python"><pre>$ cd /var/src/mapserver_version/
+<div class="highlight-python"><div class="highlight"><pre>$ cd /var/src/mapserver_version/
 
-$ shp2img -m /path/to/mapfile/mapfile.map -i png -o /path/to/output/output.png</pre>
+$ shp2img -m /path/to/mapfile/mapfile.map -i png -o /path/to/output/output.png
+</pre></div>
 </div>
 <p>The output of the command should look like this:</p>
-<div class="highlight-python"><pre>[Fri Feb  2 14:32:17 2007].522395 msDrawMap(): Layer 0 (test1), 0.074s
+<div class="highlight-python"><div class="highlight"><pre>[Fri Feb  2 14:32:17 2007].522395 msDrawMap(): Layer 0 (test1), 0.074s
 [Fri Feb  2 14:32:17 2007].522578 msDrawMap(): Drawing Label Cache, 0.000s
-[Fri Feb  2 14:32:17 2007].522635 msDrawMap() total time: 0.075s</pre>
+[Fri Feb  2 14:32:17 2007].522635 msDrawMap() total time: 0.075s
+</pre></div>
 </div>
 <p>If not, this possibly points you towards any error in your mapfile or in the
-way to access the data directly. In this case, take a look at <a class="reference internal" href="../input/vector/oracle.html#oci"><em>Oracle Spatial</em></a>. If
+way to access the data directly. In this case, take a look at <a class="reference internal" href="../input/vector/oracle.html#oci"><span>Oracle Spatial</span></a>. If
 there is a problem with your oracle connect, the same message as above
 (MsDrawMap() ...) occurs. Check your mapfile syntax and/or the environment
 settings for Oracle.</p>
@@ -327,7 +339,7 @@ Ubuntu, which should be the same as Debian.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p>
 <a href="../about.html" title="About">About</a><br>
@@ -355,7 +367,7 @@ Ubuntu, which should be the same as Debian.</p>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -372,26 +384,17 @@ Ubuntu, which should be the same as Debian.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="v8.html" title="V8 MapScript Support"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="iis.html" title="IIS Setup for MapServer"
-             >previous</a> |</li>
-        <li><a href="../index.html">Home</a> &raquo;</li>
-          <li><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
-          <li><a href="index.html" >Installation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; <a href="../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      &copy;2014, Regents of the University of Minnesota.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      
     </div>
+
+    
+
+    
   </body>
 </html>

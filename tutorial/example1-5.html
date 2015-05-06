@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -28,9 +26,13 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../index.html" /> 
+    <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
+  <body role="document">
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -81,13 +83,13 @@
 </table>
 
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="../index.html">Home</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -95,7 +97,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="example-1-5">
 <span id="example1-5"></span><h1>Example 1.5<a class="headerlink" href="#example-1-5" title="Permalink to this headline">¶</a></h1>
@@ -127,18 +129,19 @@ using PNG compared to PNG8.</p>
 </div>
 <p>MapServer can actually use GDAL to generate output images as well, but
 that&#8217;s another topic. If you want to know more about it, look at the
-<a class="reference internal" href="../mapfile/outputformat.html#outputformat"><em>OUTPUTFORMAT</em></a> object in the mapfile reference.</p>
+<a class="reference internal" href="../mapfile/outputformat.html#outputformat"><span>OUTPUTFORMAT</span></a> object in the mapfile reference.</p>
 <div class="section" id="mapfile-structure">
 <h3>MapFile Structure<a class="headerlink" href="#mapfile-structure" title="Permalink to this headline">¶</a></h3>
-<p>This is what the mapfile looks like: <a class="reference internal" href="example1-5-map.html#example1-5-map"><em>Example1-5.map</em></a></p>
+<p>This is what the mapfile looks like: <a class="reference internal" href="example1-5-map.html#example1-5-map"><span>Example1-5.map</span></a></p>
 <p>The mapfile structure, by objects, looks like this:</p>
-<div class="highlight-python"><pre>                                             MAP
+<div class="highlight-python"><div class="highlight"><pre>                                             MAP
              LAYER #1-------------LAYER #2----|----LAYER #3--------LAYER #4
           (states_poly)           (modis)       (states_line)   (states_label)
              |                                     |               |
 (land) CLASS-|-CLASS (water)                       |-CLASS         |-CLASS
           |     |                                     |               |
-    STYLE-|     |-STYLE                               |-STYLE   STYLE-|-LABEL</pre>
+    STYLE-|     |-STYLE                               |-STYLE   STYLE-|-LABEL
+</pre></div>
 </div>
 <p>When you look at the mapfile, you&#8217;ll see that the new LAYER object is added below
 (after) the state POLYGON layer. Why? MapServer displays layers in reverse order:
@@ -168,23 +171,23 @@ color and indexed color, take into account the time it takes to
 generate the image.</dd>
 <dt><strong>SYMBOLSET</strong></dt>
 <dd>Points to the path of the symbol definition file. The symbols in
-this file are referenced by the SYMBOL parameter in the <a class="reference internal" href="../mapfile/class.html#class"><em>CLASS</em></a> object.  It&#8217;s not really needed at this point but I thought
-I&#8217;d throw this here now.  Please refer to the <a class="reference internal" href="../mapfile/symbology/construction.html#sym-construction"><em>Cartographic
-Symbol Reference</em></a> for further information.</dd>
+this file are referenced by the SYMBOL parameter in the <a class="reference internal" href="../mapfile/class.html#class"><span>CLASS</span></a> object.  It&#8217;s not really needed at this point but I thought
+I&#8217;d throw this here now.  Please refer to the <a class="reference internal" href="../mapfile/symbology/construction.html#sym-construction"><span>Cartographic
+Symbol Reference</span></a> for further information.</dd>
 <dt><strong>DATA raster/mod09a12003161_ugl_ll_8bit.tif</strong></dt>
 <dd>In the newly added LAYER object, the DATA parameter points to a
 GeoTIFF image.  Like vector datasets, MapServer supports multiple
 raster file formats. This support is accomplished through use of the
 GDAL library. For more information on the different raster formats
 supported by MapServer and for general discussion on the use of
-rasters in MapServer, please read the <a class="reference internal" href="../input/raster.html#raster"><em>Raster Data Reference</em></a>.</dd>
+rasters in MapServer, please read the <a class="reference internal" href="../input/raster.html#raster"><span>Raster Data Reference</span></a>.</dd>
 <dt><strong>TYPE RASTER</strong></dt>
 <dd>When using raster data (images) we use the value RASTER for the
 parameter TYPE, as opposed to the POLYGON, LINE, and POINT values
 for vector data and ANNOTATION for label IDs.</dd>
 <dt><strong>PROCESSING &#8220;BANDS=1,2,3&#8221;</strong></dt>
 <dd>This LAYER object parameter was added in MapServer 4.x. The
-<a class="reference internal" href="../mapfile/layer.html#layer"><em>PROCESSING</em></a> keyword has many values but in this case
+<a class="reference internal" href="../mapfile/layer.html#layer"><span>PROCESSING</span></a> keyword has many values but in this case
 we are using it to select which bands in a multispectral image to
 display. The values here are strings that will be passed to the GDAL
 library.</dd>
@@ -215,7 +218,7 @@ image, replace the following lines in the mapfile:</p>
 </div>
 <p>Also, try changing the IMAGETYPE from PNG to PNG8.</p>
 <hr class="docutils" />
-<p><a class="reference internal" href="example1-4.html#example1-4"><em>Back to Example 1.4</em></a> | <a class="reference internal" href="example1-6.html#example1-6"><em>Proceed to Example 1.6</em></a></p>
+<p><a class="reference internal" href="example1-4.html#example1-4"><span>Back to Example 1.4</span></a> | <a class="reference internal" href="example1-6.html#example1-6"><span>Proceed to Example 1.6</span></a></p>
 </div>
 </div>
 </div>
@@ -224,7 +227,7 @@ image, replace the following lines in the mapfile:</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p>
 <a href="../about.html" title="About">About</a><br>
@@ -248,7 +251,7 @@ image, replace the following lines in the mapfile:</p>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -265,18 +268,17 @@ image, replace the following lines in the mapfile:</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li><a href="../index.html">Home</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; <a href="../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      &copy;2014, Regents of the University of Minnesota.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      
     </div>
+
+    
+
+    
   </body>
 </html>

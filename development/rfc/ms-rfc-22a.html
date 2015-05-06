@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -31,9 +29,13 @@
     <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 23: Technical Steering Committee Guidelines" href="ms-rfc-23.html" />
-    <link rel="prev" title="MS RFC 21: MapServer Raster Color Correction" href="ms-rfc-21.html" /> 
+    <link rel="prev" title="MS RFC 21: MapServer Raster Color Correction" href="ms-rfc-21.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
+  <body role="document">
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -84,7 +86,7 @@
 </table>
 
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -96,9 +98,9 @@
         <li class="right" >
           <a href="ms-rfc-21.html" title="MS RFC 21: MapServer Raster Color Correction"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../index.html" >Development</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -106,7 +108,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="ms-rfc-22a-feature-cache-for-long-running-processes-and-query-processing">
 <span id="rfc22a"></span><h1>MS RFC 22a: Feature cache for long running processes and query processing<a class="headerlink" href="#ms-rfc-22a-feature-cache-for-long-running-processes-and-query-processing" title="Permalink to this headline">¶</a></h1>
@@ -181,34 +183,36 @@ In some cases the source layer doesn&#8217;t participate in the renderings and s
 <ol class="loweralpha simple">
 <li>Specify a reference relative to the map:</li>
 </ol>
-<div class="highlight-python"><pre>LAYER
-  NAME "roads"
+<div class="highlight-python"><div class="highlight"><pre>LAYER
+  NAME &quot;roads&quot;
   CONNECTIONTYPE OGR
-  CONNECTION "roads.tab"
+  CONNECTION &quot;roads.tab&quot;
   ...
 END
 LAYER
-  NAME "cache"
+  NAME &quot;cache&quot;
   CONNECTIONTYPE CACHE
-  CONNECTION "/roads"
+  CONNECTION &quot;/roads&quot;
   ...
-END</pre>
+END
+</pre></div>
 </div>
 <ol class="loweralpha simple" start="2">
 <li>Specify a reference relative to the outer layer</li>
 </ol>
-<div class="highlight-python"><pre>LAYER
-  NAME "cache"
+<div class="highlight-python"><div class="highlight"><pre>LAYER
+  NAME &quot;cache&quot;
   CONNECTIONTYPE CACHE
-  CONNECTION "roads"
+  CONNECTION &quot;roads&quot;
   ...
   LAYER
-    NAME "roads"
+    NAME &quot;roads&quot;
     CONNECTIONTYPE OGR
-    CONNECTION "roads.tab"
+    CONNECTION &quot;roads.tab&quot;
     ...
   END
-END</pre>
+END
+</pre></div>
 </div>
 <p>The main difference between these 2 options is that in the first case the referred layer is contained by the layers collection of the map, so the layer will participate in the drawings. In the second case the referred layer is internal to the outer layer.
 It is supported that 2 or more layers connect to the same base layer so that the features will be served from the same cache repository. The base layer can reside in any place of the layer hierarchy.</p>
@@ -225,10 +229,12 @@ This provider will be implemented in a separate file (mapcache.c).</p>
 <div class="section" id="shape-retrieval-options">
 <h2>3.1.1 Shape retrieval options<a class="headerlink" href="#shape-retrieval-options" title="Permalink to this headline">¶</a></h2>
 <p>This provider will be capable to populate the cache with all of the shapes in the given extent or only with the shapes in the resultcache of the source layer. The first one is the default option and the latter can be selected by the following PROCESSING directive:</p>
-<div class="highlight-python"><pre>PROCESSING "fetch_mode=selection"</pre>
+<div class="highlight-python"><div class="highlight"><pre>PROCESSING &quot;fetch_mode=selection&quot;
+</pre></div>
 </div>
 <p>The cache will be populated upon the WhichShapes call of the caching provider when the given rect falls outside of the previous one. We can also specify that the provider will retieve all the shapes of the current map extent regardless to the search area using the following setting:</p>
-<div class="highlight-python"><pre>PROCESSING "spatial_selection_mode=mapextent"</pre>
+<div class="highlight-python"><div class="highlight"><pre>PROCESSING &quot;spatial_selection_mode=mapextent&quot;
+</pre></div>
 </div>
 </div>
 <div class="section" id="items-selection">
@@ -250,14 +256,15 @@ This provider will be implemented in a separate file (mapcache.c).</p>
 <div class="section" id="id1">
 <h2>3.2.1 Items selection<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>This provider will serve the same subset of the items as the source layer provides. Therefore the InitIteminfo will copy the items and the numitems of the external layer to the source layer, like:</p>
-<div class="highlight-python"><pre>int msGeomTransLayerInitItemInfo( layerObj *layer )
+<div class="highlight-python"><div class="highlight"><pre>int msGeomTransLayerInitItemInfo( layerObj *layer )
 {
     /* copying the item array an call the subsequent InitItemInfo*/
     return msLayerSetItems(((GeomTransLayerInfo*)layer-&gt;layerinfo)-&gt;srclayer, layer-&gt;items, layer-&gt;numitems);
-}</pre>
+}
+</pre></div>
 </div>
 <p>And upon the GetItems call these values will be copied back to the external layer, like:</p>
-<div class="highlight-python"><pre>int msGeomTransLayerGetItems(layerObj *layer)
+<div class="highlight-python"><div class="highlight"><pre>int msGeomTransLayerGetItems(layerObj *layer)
 {
     /* copying the item array back */
     int result;
@@ -265,37 +272,43 @@ This provider will be implemented in a separate file (mapcache.c).</p>
     result = msLayerGetItems(layerinfo-&gt;srclayer);
     msLayerSetItems(layer, layerinfo-&gt;srclayer-&gt;items, layerinfo-&gt;srclayer-&gt;numitems);
     return result;
-}</pre>
+}
+</pre></div>
 </div>
 </div>
 <div class="section" id="applying-the-transformations">
 <h2>3.2.2 Applying the transformations<a class="headerlink" href="#applying-the-transformations" title="Permalink to this headline">¶</a></h2>
 <p>The proposed implementation will support most of the GEOS transformations supported by mapserver (buffer, convexhull, boundary, union, intersection, difference, symdifference). The transformations will be applied right before retrieving a shape to the caller.
 The desired transformation can be selected using a PROCESSING option, like:</p>
-<div class="highlight-python"><pre>PROCESSING "transformation=buffer"</pre>
+<div class="highlight-python"><div class="highlight"><pre>PROCESSING &quot;transformation=buffer&quot;
+</pre></div>
 </div>
 <p>Some of the transformations will accept further parameters:</p>
-<div class="highlight-python"><pre>PROCESSING "buffer_width=0.2"</pre>
+<div class="highlight-python"><div class="highlight"><pre>PROCESSING &quot;buffer_width=0.2&quot;
+</pre></div>
 </div>
 <p>Some of these operations will use 2 shapes to create the transformed shape. The reference shape of these transformations can be set externally using the WKT representation of a processing option:</p>
-<div class="highlight-python"><pre>PROCESSING "ref_shape=[WKT of the shape]"</pre>
+<div class="highlight-python"><div class="highlight"><pre>PROCESSING &quot;ref_shape=[WKT of the shape]&quot;
+</pre></div>
 </div>
 <p>I&#8217;m also planning to support retrieving this shape from the features collection of the layer and from an external layer as well.</p>
 </div>
 <div class="section" id="layer-filter-provider">
 <h2>3.3 Layer filter provider<a class="headerlink" href="#layer-filter-provider" title="Permalink to this headline">¶</a></h2>
 <p>The layer filter provider (implemented in mapfilter.c) will provide the shape retrieved from the source layer and will not apply any transformation on that. However some of the shapes will be skipped in the NextShape operations depending on the spatial and the attribute selection options. This provider ensures transparent access to the source layer (just as the previous one) but uses a cache for storing the selection shapes. The selection shapes will be retrieved from another layer which can be specified in the following processing option:</p>
-<div class="highlight-python"><pre>PROCESSING "selection_layer=[path to the layer]"</pre>
+<div class="highlight-python"><div class="highlight"><pre>PROCESSING &quot;selection_layer=[path to the layer]&quot;
+</pre></div>
 </div>
 <p>When populating the selection cache I&#8217;ll support to retrieve all of the shapes or only the shapes in the result cache as for the caching provider mentioned before:</p>
-<div class="highlight-python"><pre>PROCESSING "fetch_mode=selection"</pre>
+<div class="highlight-python"><div class="highlight"><pre>PROCESSING &quot;fetch_mode=selection&quot;
+</pre></div>
 </div>
 </div>
 <div class="section" id="putting-the-things-together-example">
 <h2>4. Putting the things together (example)<a class="headerlink" href="#putting-the-things-together-example" title="Permalink to this headline">¶</a></h2>
 <p>In this chapter I&#8217;ll describe the solution of the scenario have been mentioned earlier. I&#8217;ll start with a simple map file definition with 2 layers the counties and the citypoints of the country:</p>
-<div class="highlight-python"><pre>MAP
-      NAME "Hungary"
+<div class="highlight-python"><div class="highlight"><pre>MAP
+      NAME &quot;Hungary&quot;
       STATUS ON
       EXTENT 421543.362603 47885.103526 933973.563202 367180.479761
       SIZE 800 600
@@ -303,18 +316,18 @@ The desired transformation can be selected using a PROCESSING option, like:</p>
       IMAGECOLOR 255 255 255
 
       PROJECTION
-              "proj=somerc"
-              "lat_0=47.14439372222222"
-              "lon_0=19.04857177777778"
-              "x_0=650000"
-              "y_0=200000"
-              "ellps=GRS67"
-              "units=m"
-              "no_defs"
+              &quot;proj=somerc&quot;
+              &quot;lat_0=47.14439372222222&quot;
+              &quot;lon_0=19.04857177777778&quot;
+              &quot;x_0=650000&quot;
+              &quot;y_0=200000&quot;
+              &quot;ellps=GRS67&quot;
+              &quot;units=m&quot;
+              &quot;no_defs&quot;
       END
 
       SYMBOL
-          Name 'point'
+          Name &#39;point&#39;
           Type ELLIPSE
           POINTS
               1 1
@@ -324,16 +337,16 @@ The desired transformation can be selected using a PROCESSING option, like:</p>
 
       LAYER
               PROJECTION
-                      "AUTO"
+                      &quot;AUTO&quot;
               END
-              NAME "Hun_Counties"
+              NAME &quot;Hun_Counties&quot;
               CONNECTIONTYPE OGR
-              CONNECTION "Hun_Megye.TAB"
+              CONNECTION &quot;Hun_Megye.TAB&quot;
               STATUS default
               TYPE POLYGON
-              LABELITEM "name"
+              LABELITEM &quot;name&quot;
               CLASS
-                      TEMPLATE "query.html"
+                      TEMPLATE &quot;query.html&quot;
                       LABEL
                               SIZE medium
                               COLOR 64 128 64
@@ -346,22 +359,23 @@ The desired transformation can be selected using a PROCESSING option, like:</p>
       END
       LAYER
               PROJECTION
-                      "AUTO"
+                      &quot;AUTO&quot;
               END
-              NAME "Hun_CityPoints"
+              NAME &quot;Hun_CityPoints&quot;
               CONNECTIONTYPE OGR
-              CONNECTION "Hun_CityPoints.TAB"
+              CONNECTION &quot;Hun_CityPoints.TAB&quot;
               STATUS default
               TYPE POINT
               CLASS
                       STYLE
                               COLOR 255 0 0
-                              SYMBOL "point"
+                              SYMBOL &quot;point&quot;
                               SIZE 2
                       END
               END
       END
-END</pre>
+END
+</pre></div>
 </div>
 <p>This map will look like this:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample.png">http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample.png</a></p>
@@ -369,18 +383,18 @@ END</pre>
 <div class="section" id="adding-the-feature-cache-for-the-layers">
 <h2>4.1 Adding the feature cache for the layers<a class="headerlink" href="#adding-the-feature-cache-for-the-layers" title="Permalink to this headline">¶</a></h2>
 <p>Any of the layers might be cached by using the CACHE layer provider. The original provider might be nested inside the cache. The parameters related to the drawing should be specified for the outer layer, like:</p>
-<div class="highlight-python"><pre>LAYER
+<div class="highlight-python"><div class="highlight"><pre>LAYER
             PROJECTION
-                    "AUTO"
+                    &quot;AUTO&quot;
             END
-            NAME "Hun_Counties_cache"
+            NAME &quot;Hun_Counties_cache&quot;
             CONNECTIONTYPE CACHE
-            CONNECTION "Hun_Counties"
+            CONNECTION &quot;Hun_Counties&quot;
             STATUS default
             TYPE POLYGON
-            LABELITEM "name"
+            LABELITEM &quot;name&quot;
             CLASS
-                    TEMPLATE "query.html"
+                    TEMPLATE &quot;query.html&quot;
                     LABEL
                             SIZE medium
                             COLOR 64 128 64
@@ -392,17 +406,19 @@ END</pre>
             END
             LAYER
                 PROJECTION
-                        "AUTO"
+                        &quot;AUTO&quot;
                 END
-                NAME "Hun_Counties"
+                NAME &quot;Hun_Counties&quot;
                 CONNECTIONTYPE OGR
-                CONNECTION "Hun_Megye.TAB"
+                CONNECTION &quot;Hun_Megye.TAB&quot;
                 TYPE POLYGON
             END
-    END</pre>
+    END
+</pre></div>
 </div>
 <p>The Hun_Counties_cache layer is queryable and all of the existing methods are available to populate the resultcache. In my example I&#8217;ll use the mapscript C# drawquery example (implemented in drawquery.cs) to execute an attribute query and use the drawquery afterwards. The following command will be used along with this sample:</p>
-<div class="highlight-python"><pre>drawquery sample.map "('[Name]'='Tolna')" sample.png</pre>
+<div class="highlight-python"><div class="highlight"><pre>drawquery sample.map &quot;(&#39;[Name]&#39;=&#39;Tolna&#39;)&quot; sample.png
+</pre></div>
 </div>
 <p>Which passes the (&#8216;[Name]&#8217;=&#8217;Tolna&#8217;) query string to the queryByAttributes of the first layer.</p>
 <p>The result of the rendering will look like:</p>
@@ -413,10 +429,10 @@ END</pre>
 <div class="section" id="applying-transformations-on-the-counties">
 <h2>4.2 Applying transformations on the counties<a class="headerlink" href="#applying-transformations-on-the-counties" title="Permalink to this headline">¶</a></h2>
 <p>In the next step I&#8217;ll apply a cascaded GEOS convexhull and buffer operations on the first layer. The results will be rendered in a separate layer using the following definition:</p>
-<div class="highlight-python"><pre>LAYER
-             NAME "selectionshape"
+<div class="highlight-python"><div class="highlight"><pre>LAYER
+             NAME &quot;selectionshape&quot;
              CONNECTIONTYPE GEOMTRANS
-             CONNECTION "simplify"
+             CONNECTION &quot;simplify&quot;
              STATUS default
              TYPE POLYGON
              TRANSPARENCY 50
@@ -426,26 +442,27 @@ END</pre>
                              OUTLINECOLOR 64 64 64
                      END
              END
-             PROCESSING "transformation=buffer"
-             PROCESSING "buffer_width=0.2"
+             PROCESSING &quot;transformation=buffer&quot;
+             PROCESSING &quot;buffer_width=0.2&quot;
              LAYER
-                NAME "simplify"
+                NAME &quot;simplify&quot;
                 TYPE POLYGON
                 CONNECTIONTYPE GEOMTRANS
-                CONNECTION "/Hun_Counties_cache"
-                PROCESSING "transformation=convexhull"
+                CONNECTION &quot;/Hun_Counties_cache&quot;
+                PROCESSING &quot;transformation=convexhull&quot;
              END
-     END</pre>
+     END
+</pre></div>
 </div>
 <p>The result of the rendering will look like:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample2.png">http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample2.png</a></p>
 <p>The corresponding mapfile:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample2.map">http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample2.map</a></p>
 <p>Which is not the desired result since all of the polygons were transformed. So as to transform only the selected shape an additional cache should be specified by using the &#8220;fetch_mode=selection&#8221; processing option:</p>
-<div class="highlight-python"><pre>LAYER
-            NAME "selectionshape"
+<div class="highlight-python"><div class="highlight"><pre>LAYER
+            NAME &quot;selectionshape&quot;
             CONNECTIONTYPE GEOMTRANS
-            CONNECTION "simplify"
+            CONNECTION &quot;simplify&quot;
             STATUS default
             TYPE POLYGON
             TRANSPARENCY 50
@@ -455,23 +472,24 @@ END</pre>
                             OUTLINECOLOR 64 64 64
                     END
             END
-            PROCESSING "transformation=buffer"
-            PROCESSING "buffer_width=0.2"
+            PROCESSING &quot;transformation=buffer&quot;
+            PROCESSING &quot;buffer_width=0.2&quot;
             LAYER
-               NAME "simplify"
+               NAME &quot;simplify&quot;
                TYPE POLYGON
                CONNECTIONTYPE GEOMTRANS
-               CONNECTION "selectioncache"
-               PROCESSING "transformation=convexhull"
+               CONNECTION &quot;selectioncache&quot;
+               PROCESSING &quot;transformation=convexhull&quot;
                LAYER
-                   NAME "selectioncache"
+                   NAME &quot;selectioncache&quot;
                    TYPE POLYGON
                    CONNECTIONTYPE CACHE
-                   CONNECTION "/Hun_Counties_cache"
-                   PROCESSING "fetch_mode=selection"
+                   CONNECTION &quot;/Hun_Counties_cache&quot;
+                   PROCESSING &quot;fetch_mode=selection&quot;
                END
             END
-    END</pre>
+    END
+</pre></div>
 </div>
 <p>And here is the result of the drawing:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample3.png">http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample3.png</a></p>
@@ -481,30 +499,31 @@ END</pre>
 <div class="section" id="using-the-transformed-shape-as-the-selection-shape">
 <h2>4.3 Using the transformed shape as the selection shape<a class="headerlink" href="#using-the-transformed-shape-as-the-selection-shape" title="Permalink to this headline">¶</a></h2>
 <p>My final goal is to select the features of the point layer using the transformed shape as the selection shape. Therefore I&#8217;ll have to use the layer filter provider on the point layer and setting the selection_layer to the transformed layer:</p>
-<div class="highlight-python"><pre>LAYER
+<div class="highlight-python"><div class="highlight"><pre>LAYER
          TYPE POINT
          CONNECTIONTYPE LAYERFILTER
-         CONNECTION "Hun_CityPoints"
-         NAME "selectedpoints"
+         CONNECTION &quot;Hun_CityPoints&quot;
+         NAME &quot;selectedpoints&quot;
          STATUS default
-         PROCESSING "selection_layer=/selectionshape"
+         PROCESSING &quot;selection_layer=/selectionshape&quot;
          CLASS
              STYLE
                      COLOR 255 0 0
-                     SYMBOL "point"
+                     SYMBOL &quot;point&quot;
                      SIZE 2
              END
          END
          LAYER
                  PROJECTION
-                         "AUTO"
+                         &quot;AUTO&quot;
                  END
-                 NAME "Hun_CityPoints"
+                 NAME &quot;Hun_CityPoints&quot;
                  CONNECTIONTYPE OGR
-                 CONNECTION "Hun_CityPoints.TAB"
+                 CONNECTION &quot;Hun_CityPoints.TAB&quot;
                  TYPE POINT
          END
-     END</pre>
+     END
+</pre></div>
 </div>
 <p>Here is the result:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample4.png">http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample4.png</a></p>
@@ -514,33 +533,33 @@ END</pre>
 <p>The resulting image can be found here:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample4a.png">http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample4a.png</a></p>
 <p>Note2: If there&#8217;s no need to render the selection layer I can specify that configuration inline:</p>
-<div class="highlight-python"><pre>LAYER
+<div class="highlight-python"><div class="highlight"><pre>LAYER
         TYPE POINT
         CONNECTIONTYPE LAYERFILTER
-        CONNECTION "Hun_CityPoints"
-        NAME "selectedpoints"
+        CONNECTION &quot;Hun_CityPoints&quot;
+        NAME &quot;selectedpoints&quot;
         STATUS default
-        PROCESSING "selection_layer=selectionshape"
+        PROCESSING &quot;selection_layer=selectionshape&quot;
         CLASS
             STYLE
                     COLOR 255 0 0
-                    SYMBOL "point"
+                    SYMBOL &quot;point&quot;
                     SIZE 2
             END
         END
         LAYER
                 PROJECTION
-                        "AUTO"
+                        &quot;AUTO&quot;
                 END
-                NAME "Hun_CityPoints"
+                NAME &quot;Hun_CityPoints&quot;
                 CONNECTIONTYPE OGR
-                CONNECTION "Hun_CityPoints.TAB"
+                CONNECTION &quot;Hun_CityPoints.TAB&quot;
                 TYPE POINT
         END
         LAYER
-                NAME "selectionshape"
+                NAME &quot;selectionshape&quot;
                 CONNECTIONTYPE GEOMTRANS
-                CONNECTION "simplify"
+                CONNECTION &quot;simplify&quot;
                 STATUS default
                 TYPE POLYGON
                 TRANSPARENCY 50
@@ -550,24 +569,25 @@ END</pre>
                                 OUTLINECOLOR 64 64 64
                         END
                 END
-                PROCESSING "transformation=buffer"
-                PROCESSING "buffer_width=0.2"
+                PROCESSING &quot;transformation=buffer&quot;
+                PROCESSING &quot;buffer_width=0.2&quot;
                 LAYER
-                    NAME "simplify"
+                    NAME &quot;simplify&quot;
                     TYPE POLYGON
                     CONNECTIONTYPE GEOMTRANS
-                    CONNECTION "selectioncache"
-                    PROCESSING "transformation=convexhull"
+                    CONNECTION &quot;selectioncache&quot;
+                    PROCESSING &quot;transformation=convexhull&quot;
                     LAYER
-                        NAME "selectioncache"
+                        NAME &quot;selectioncache&quot;
                         TYPE POLYGON
                         CONNECTIONTYPE CACHE
-                        CONNECTION "/Hun_Counties_cache"
-                        PROCESSING "fetch_mode=selection"
+                        CONNECTION &quot;/Hun_Counties_cache&quot;
+                        PROCESSING &quot;fetch_mode=selection&quot;
                     END
                 END
         END
-    END</pre>
+    END
+</pre></div>
 </div>
 <p>Here is the result:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample5.png">http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample5.png</a></p>
@@ -583,12 +603,13 @@ END</pre>
 <div class="section" id="hashtable-implementation">
 <h2>5.1 Hashtable implementation<a class="headerlink" href="#hashtable-implementation" title="Permalink to this headline">¶</a></h2>
 <p>The current hashtable implementation (in maphash.c) will be generalized to be capable to store objects as well as strings. Currently the hashtable can store only string values. In addition the we will provide support for specifying the hashsize upon the construction of the hashtable. The objects will be stored in the hashtable by reference and the destroy function of the objects can also be specified externally. The following functions will be added to maphash.c</p>
-<div class="highlight-python"><pre>int initHashTableEx( hashTableObj *table, int hashSize );
+<div class="highlight-python"><div class="highlight"><pre>int initHashTableEx( hashTableObj *table, int hashSize );
 void msClearHashItems( hashTableObj *table );
 struct hashObj *msInsertHashTablePtr(hashTableObj *table, const char *key, const char *value);
 struct hashObj *msFirstItemFromHashTable( hashTableObj *table);
 struct hashObj *msNextItemFromHashTable( hashTableObj *table, struct hashObj *lastItem );
-int msGetHashTableItemCount(hashTableObj *table);</pre>
+int msGetHashTableItemCount(hashTableObj *table);
+</pre></div>
 </div>
 <p>initHashTableEx can be called to specify the hash size externally. Actually the original initHashTable will be implemented as calling initHashTableEx with MS_HASHSIZE.
 msClearHashItems will clear all of the elements of the hashtable but does not clear the items array.
@@ -599,17 +620,18 @@ msGetHashTableItemCount will retrieve the actual number of the hashtable items.<
 <div class="section" id="extending-the-layerobj-structure-to-support-nesting-the-layers-map-h">
 <h2>5.2 Extending the layerObj structure to support nesting the layers (map.h)<a class="headerlink" href="#extending-the-layerobj-structure-to-support-nesting-the-layers-map-h" title="Permalink to this headline">¶</a></h2>
 <p>The sublayers in the layerObj structure will be stored as an array of layers.</p>
-<div class="highlight-python"><pre>typedef struct layer_obj {
+<div class="highlight-python"><div class="highlight"><pre>typedef struct layer_obj {
   ...
   #ifndef SWIG
   struct layer_obj **layers;
   int numlayers; /* number of sublayers in layer */
   #endif /* SWIG */
   ...
-} layerObj;</pre>
+} layerObj;
+</pre></div>
 </div>
 <p>The parser will take care of loading the nested layers:</p>
-<div class="highlight-python"><pre>int loadLayer(layerObj *layer, mapObj *map)
+<div class="highlight-python"><div class="highlight"><pre>int loadLayer(layerObj *layer, mapObj *map)
 {
   ...
   case (LAYER):
@@ -619,7 +641,7 @@ msGetHashTableItemCount will retrieve the actual number of the hashtable items.<
         layer-&gt;layers = (layerObj**) realloc(layer-&gt;layers, sizeof(layerObj*) * (layer-&gt;numlayers));
     layer-&gt;layers[layer-&gt;numlayers]=(layerObj*)malloc(sizeof(layerObj));
     if (layer-&gt;layers[layer-&gt;numlayers] == NULL) {
-         msSetError(MS_MEMERR, "Malloc of a new layer failed.", "loadLayer()");
+         msSetError(MS_MEMERR, &quot;Malloc of a new layer failed.&quot;, &quot;loadLayer()&quot;);
              return MS_FAILURE;
     }
     if(loadLayer(layer-&gt;layers[layer-&gt;numlayers], map) == -1) return MS_FAILURE;
@@ -627,13 +649,15 @@ msGetHashTableItemCount will retrieve the actual number of the hashtable items.<
     ++layer-&gt;numlayers;
     break;
   ...
-}</pre>
+}
+</pre></div>
 </div>
 </div>
 <div class="section" id="adding-a-new-built-in-data-connection-types-map-h">
 <h2>5.3 Adding a new built in data connection types (map.h)<a class="headerlink" href="#adding-a-new-built-in-data-connection-types-map-h" title="Permalink to this headline">¶</a></h2>
 <p>A new data connection type is established for the new providers.</p>
-<div class="highlight-python"><pre>enum MS_CONNECTION_TYPE {MS_INLINE, MS_SHAPEFILE, MS_TILED_SHAPEFILE, MS_SDE, MS_OGR, MS_UNUSED_1, MS_POSTGIS, MS_WMS,   MS_ORACLESPATIAL, MS_WFS, MS_GRATICULE, MS_MYGIS, MS_RASTER, MS_PLUGIN, MS_GEOMTRANS, MS_LAYERFILTER, MS_CACHE };</pre>
+<div class="highlight-python"><div class="highlight"><pre>enum MS_CONNECTION_TYPE {MS_INLINE, MS_SHAPEFILE, MS_TILED_SHAPEFILE, MS_SDE, MS_OGR, MS_UNUSED_1, MS_POSTGIS, MS_WMS,   MS_ORACLESPATIAL, MS_WFS, MS_GRATICULE, MS_MYGIS, MS_RASTER, MS_PLUGIN, MS_GEOMTRANS, MS_LAYERFILTER, MS_CACHE };
+</pre></div>
 </div>
 <p>The lexer will be modified to interpret the new connection types.</p>
 </div>
@@ -646,7 +670,7 @@ msGetHashTableItemCount will retrieve the actual number of the hashtable items.<
 </div>
 <div class="section" id="vtable-initialization-for-the-new-data-providers-maplayer-c">
 <h2>5.5 Vtable initialization for the new data providers (maplayer.c)<a class="headerlink" href="#vtable-initialization-for-the-new-data-providers-maplayer-c" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><pre>int
+<div class="highlight-python"><div class="highlight"><pre>int
 msInitializeVirtualTable(layerObj *layer)
 {
   if (layer-&gt;baselayer)
@@ -666,13 +690,14 @@ msInitializeVirtualTable(layerObj *layer)
   ...
   }
   ..
-}</pre>
+}
+</pre></div>
 </div>
 </div>
 <div class="section" id="files-affected">
 <h2>6. Files affected<a class="headerlink" href="#files-affected" title="Permalink to this headline">¶</a></h2>
 <p>The following files will be affected by this RFC:</p>
-<div class="highlight-python"><pre>maphash.c
+<div class="highlight-python"><div class="highlight"><pre>maphash.c
 maphash.h
 maplayer.c
 maplexer.l
@@ -682,7 +707,8 @@ Makefile.vc
 Makefile.in
 mapcache.c  (new)
 mapgeomtrans.c  (new)
-mapfilter.c  (new)</pre>
+mapfilter.c  (new)
+</pre></div>
 </div>
 </div>
 <div class="section" id="backwards-compatibility-issues">
@@ -704,7 +730,7 @@ mapfilter.c  (new)</pre>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -748,7 +774,7 @@ mapfilter.c  (new)</pre>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -765,26 +791,17 @@ mapfilter.c  (new)</pre>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="ms-rfc-23.html" title="MS RFC 23: Technical Steering Committee Guidelines"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="ms-rfc-21.html" title="MS RFC 21: MapServer Raster Color Correction"
-             >previous</a> |</li>
-        <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../index.html" >Development</a> &raquo;</li>
-          <li><a href="index.html" >Request for Comments</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; <a href="../../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      &copy;2014, Regents of the University of Minnesota.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      
     </div>
+
+    
+
+    
   </body>
 </html>

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -31,9 +29,13 @@
     <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 7: MapServer CVS Commit Management" href="ms-rfc-7.html" />
-    <link rel="prev" title="MS RFC 5: MapServer Horizon Reprojection Improvements" href="ms-rfc-5.html" /> 
+    <link rel="prev" title="MS RFC 5: MapServer Horizon Reprojection Improvements" href="ms-rfc-5.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
+  <body role="document">
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -84,7 +86,7 @@
 </table>
 
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -96,9 +98,9 @@
         <li class="right" >
           <a href="ms-rfc-5.html" title="MS RFC 5: MapServer Horizon Reprojection Improvements"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../index.html" >Development</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -106,7 +108,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="ms-rfc-6-color-range-mapping-of-continuous-feature-values">
 <span id="rfc6"></span><h1>MS RFC 6: Color Range Mapping of Continuous Feature Values<a class="headerlink" href="#ms-rfc-6-color-range-mapping-of-continuous-feature-values" title="Permalink to this headline">¶</a></h1>
@@ -143,23 +145,25 @@ wrote had MapServer  do a linear interpolation of the value for each
 feature on to that color range.</p>
 <p>The initial syntax for this feature simply added 5 new keywords to the
 STYLE block and looked as follows:</p>
-<div class="highlight-python"><pre>STYLE
+<div class="highlight-python"><div class="highlight"><pre>STYLE
   COLOR 60 60 60
   MINCOLOR 0 0 0
   MAXCOLOR 255 255 0
   MINVALUE 0.0
   MAXVALUE 300000.0
-  GRADIENTITEM "sale_price"
-END</pre>
+  GRADIENTITEM &quot;sale_price&quot;
+END
+</pre></div>
 </div>
 <p>After some discussion, the term Gradient was shown to be problematic.
 Also, the number of new keywords seemed high.  After some discussion,
 the syntax was changed to this format:</p>
-<div class="highlight-python"><pre>STYLE
+<div class="highlight-python"><div class="highlight"><pre>STYLE
   COLORRANGE 0 0 0  255 255 0 # black to yellow
   DATARANGE 0.0 100.0
-  RANGEITEM "foobar"
-END</pre>
+  RANGEITEM &quot;foobar&quot;
+END
+</pre></div>
 </div>
 <p>While this is still just a set of keywords under a Style, it seemed
 simpler and is now working in the MapServer  4.6 branch.</p>
@@ -182,15 +186,16 @@ actually used by rounding values before interopolation.</li>
 <div class="section" id="proposed-new-syntax">
 <h2>Proposed New Syntax<a class="headerlink" href="#proposed-new-syntax" title="Permalink to this headline">¶</a></h2>
 <p>To meet the above needs, I propose the following new Block Syntax:</p>
-<div class="highlight-python"><pre>COLORRANGE
-  RANGEITEM 'itemname' #required
+<div class="highlight-python"><div class="highlight"><pre>COLORRANGE
+  RANGEITEM &#39;itemname&#39; #required
   MINCOLOR 0 0 0 #optional - default = Black
   MAXCOLOR 255 255 0 #optional -default = White
   MINVALUE 0.0 #optional - default = 0
   MAXVALUE 100.0 #optional - default = 1
   INTERVALS 10 #optional - default = 0 (unlimited)
-  METHOD LINEAR #optional - default = 'LINEAR'
-END</pre>
+  METHOD LINEAR #optional - default = &#39;LINEAR&#39;
+END
+</pre></div>
 </div>
 <p>I propose that this block lives at the CLASS level.  My reasons for
 putting it at the CLASS, rather than the LAYER (or above) level are as
@@ -229,21 +234,24 @@ encapsulated in MapScript as a class.  While I disagree with his
 putting it on the LAYER (see above), the rest of his suggestions all
 seem right in line.</p>
 <p>I Propose a class named ColorRamp with the following read/write attributes:</p>
-<div class="highlight-python"><pre>Color minColor
+<div class="highlight-python"><div class="highlight"><pre>Color minColor
 Color maxColor
 double minValue
 double maxValue
 String rangeItem
 String method
-int intervals</pre>
+int intervals
+</pre></div>
 </div>
 <p>and two methods</p>
-<div class="highlight-python"><pre>Color findColor(double value)
-double findValue(Color color)</pre>
+<div class="highlight-python"><div class="highlight"><pre>Color findColor(double value)
+double findValue(Color color)
+</pre></div>
 </div>
 <p>ColorRamps can be obtained through an appropriate constructor or
 through a new (read/write) attribute on the ClassObj object:</p>
-<div class="highlight-python"><pre>ColorRange colorRange</pre>
+<div class="highlight-python"><div class="highlight"><pre>ColorRange colorRange
+</pre></div>
 </div>
 <p>Note: I will need help in adding these to MapScript as I do not have
 the SWIG experience to do it well.</p>
@@ -279,10 +287,11 @@ defined by this RFC, it should be a simple as:</p>
 <ol class="arabic simple">
 <li>Implement a function with the signature</li>
 </ol>
-<div class="highlight-python"><pre>int mappingFn(colorRangeObj\* range, shapeObj\* shape, colorObj \*color)
+<div class="highlight-python"><div class="highlight"><pre>int mappingFn(colorRangeObj\* range, shapeObj\* shape, colorObj \*color)
 
 This function should use the shape and range parameters to determine the
-shapes color, and modify the color parameter accordingly.</pre>
+shapes color, and modify the color parameter accordingly.
+</pre></div>
 </div>
 <ol class="arabic simple" start="2">
 <li>Choose a unique method name (&#8216;linear&#8217;, &#8216;logarithmic&#8217;, &#8216;discrete&#8217;)
@@ -311,7 +320,7 @@ methods into a mapColorRange.c file.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -339,7 +348,7 @@ methods into a mapColorRange.c file.</p>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -356,26 +365,17 @@ methods into a mapColorRange.c file.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="ms-rfc-7.html" title="MS RFC 7: MapServer CVS Commit Management"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="ms-rfc-5.html" title="MS RFC 5: MapServer Horizon Reprojection Improvements"
-             >previous</a> |</li>
-        <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../index.html" >Development</a> &raquo;</li>
-          <li><a href="index.html" >Request for Comments</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; <a href="../../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      &copy;2014, Regents of the University of Minnesota.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      
     </div>
+
+    
+
+    
   </body>
 </html>

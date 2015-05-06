@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -31,9 +29,13 @@
     <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 66: Better handling of temporary files" href="ms-rfc-66.html" />
-    <link rel="prev" title="MS RFC 64 - MapServer Expression Parser Overhaul" href="ms-rfc-64.html" /> 
+    <link rel="prev" title="MS RFC 64 - MapServer Expression Parser Overhaul" href="ms-rfc-64.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
+  <body role="document">
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -84,7 +86,7 @@
 </table>
 
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -96,9 +98,9 @@
         <li class="right" >
           <a href="ms-rfc-64.html" title="MS RFC 64 - MapServer Expression Parser Overhaul"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../index.html" >Development</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -106,7 +108,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="ms-rfc-65-single-pass-query-changes-for-6-0">
 <span id="rfc65"></span><h1>MS RFC 65 - Single-pass Query Changes for 6.0<a class="headerlink" href="#ms-rfc-65-single-pass-query-changes-for-6-0" title="Permalink to this headline">¶</a></h1>
@@ -166,8 +168,9 @@ forward. We wouldn&#8217;t necessarily have to change the driver implementations
 be done later.</li>
 </ol>
 <p>The refactored getShape() signature would like so (in layer.i for SWIG):</p>
-<div class="highlight-python"><pre>%newobject getShape;
-shapeObj *getShape(resultCacheMemberObj *r)</pre>
+<div class="highlight-python"><div class="highlight"><pre>%newobject getShape;
+shapeObj *getShape(resultCacheMemberObj *r)
+</pre></div>
 </div>
 <p>I&#8217;d also like to consider adding another query saving function to MapScript, something like saveQueryFeatures(). This function would write
 a pre-5.6 query file which consisted of a series of shape and tile indexes. We wouldn&#8217;t write tile indexes for layers that weren&#8217;t tiled
@@ -179,7 +182,7 @@ and improve security.</li>
 of just the query parameters.</li>
 </ol>
 <p>Post RFC a query action in MapScript would look like so:</p>
-<div class="highlight-python"><pre>...
+<div class="highlight-python"><div class="highlight"><pre>...
 my $rect = new mapscript::rectObj(420000, 5120000, 582000, 5200000);
 $layer-&gt;queryByRect($map, $rect); # layer is left open after this operation
 
@@ -189,8 +192,9 @@ for(my $i=0; $i&lt;$layer-&gt;getNumResults(); $i++) {
 }
 
 # save query
-$map-&gt;saveQuery('myquery.qy'); # new style (query parameters)
-$map-&gt;saveQuery('myquery.qy', 1); # old style (query feature indexes)</pre>
+$map-&gt;saveQuery(&#39;myquery.qy&#39;); # new style (query parameters)
+$map-&gt;saveQuery(&#39;myquery.qy&#39;, 1); # old style (query feature indexes)
+</pre></div>
 </div>
 <p>The changes are relatively technically mild. The changes in MapScript are big in that scripts that process query results will need
 an update. In the end I think that&#8217;s worth it and this will be more intuitive for users.</p>
@@ -209,7 +213,7 @@ an update. In the end I think that&#8217;s worth it and this will be more intuit
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -232,7 +236,7 @@ an update. In the end I think that&#8217;s worth it and this will be more intuit
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -249,26 +253,17 @@ an update. In the end I think that&#8217;s worth it and this will be more intuit
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="ms-rfc-66.html" title="MS RFC 66: Better handling of temporary files"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="ms-rfc-64.html" title="MS RFC 64 - MapServer Expression Parser Overhaul"
-             >previous</a> |</li>
-        <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../index.html" >Development</a> &raquo;</li>
-          <li><a href="index.html" >Request for Comments</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; <a href="../../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      &copy;2014, Regents of the University of Minnesota.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      
     </div>
+
+    
+
+    
   </body>
 </html>

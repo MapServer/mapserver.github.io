@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -31,9 +29,13 @@
     <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../index.html" />
     <link rel="up" title="Installation" href="index.html" />
     <link rel="next" title="Mapfile" href="../mapfile/index.html" />
-    <link rel="prev" title="Oracle Installation" href="oracle.html" /> 
+    <link rel="prev" title="Oracle Installation" href="oracle.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
+  <body role="document">
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -84,7 +86,7 @@
 </table>
 
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -96,9 +98,9 @@
         <li class="right" >
           <a href="oracle.html" title="Oracle Installation"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Home</a> &raquo;</li>
-          <li><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Installation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Installation</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -106,7 +108,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="v8-mapscript-support">
 <span id="v8-support"></span><h1><a class="toc-backref" href="#table-of-contents">V8 MapScript Support</a><a class="headerlink" href="#v8-mapscript-support" title="Permalink to this headline">¶</a></h1>
@@ -139,8 +141,8 @@
 <p>The V8/MapScript cannot be used as its own like other mapscripts. V8 is
 currently used internally to add 2 functionalities:</p>
 <ul class="simple">
-<li>Javascript Styleitem: <a class="reference internal" href="../development/rfc/ms-rfc-102.html#rfc102"><em>MS RFC 102: Support of Styleitem JavaScript Plugin</em></a></li>
-<li>Javascript Geomtransform: <a class="reference internal" href="../development/rfc/ms-rfc-106.html#rfc106"><em>MS RFC 106: Support of Geomtransform JavaScript Plugin</em></a></li>
+<li>Javascript Styleitem: <a class="reference internal" href="../development/rfc/ms-rfc-102.html#rfc102"><span>MS RFC 102: Support of Styleitem JavaScript Plugin</span></a></li>
+<li>Javascript Geomtransform: <a class="reference internal" href="../development/rfc/ms-rfc-106.html#rfc106"><span>MS RFC 106: Support of Geomtransform JavaScript Plugin</span></a></li>
 </ul>
 <p>These instructions are for Unix/Linux users.</p>
 <div class="section" id="version-of-v8-supported">
@@ -157,49 +159,56 @@ future compatibility, this is a good thing to be synchronized to nodejs project.
 <li>The V8 source can be obtained from the <a class="reference external" href="https://code.google.com/p/v8/">v8 website</a>.</li>
 </ul>
 <p><strong>Download v8:</strong></p>
-<div class="highlight-python"><pre>git clone git://github.com/v8/v8.git v8</pre>
+<div class="highlight-python"><div class="highlight"><pre>git clone git://github.com/v8/v8.git v8
+</pre></div>
 </div>
 <p><strong>Compile the v8 library:</strong></p>
-<div class="highlight-python"><pre>cd v8
+<div class="highlight-python"><div class="highlight"><pre>cd v8
 git checkout 3.20
 make dependencies
-library=shared make -j8 x64.release</pre>
+library=shared make -j8 x64.release
+</pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Use ia32.release if you are using a 32bits machine.</p>
 </div>
 <p><strong>Install the v8 library and include headers:</strong></p>
-<div class="highlight-python"><pre>mkdir -p /opt/v8/lib &amp;&amp; cp ./out/x64.release/lib.target/libv8.so /opt/v8/lib
-mkdir /opt/v8/include &amp;&amp; cp include/v8* /opt/v8/include</pre>
+<div class="highlight-python"><div class="highlight"><pre>mkdir -p /opt/v8/lib &amp;&amp; cp ./out/x64.release/lib.target/libv8.so /opt/v8/lib
+mkdir /opt/v8/include &amp;&amp; cp include/v8* /opt/v8/include
+</pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Modify the library path if needed (32bits)</p>
 </div>
 <p><strong>Setup the v8 lib in the system paths:</strong></p>
-<div class="highlight-python"><pre>echo "/opt/v8/lib" &gt; /etc/ld.so.conf.d/v8.conf
-ldconfig</pre>
+<div class="highlight-python"><div class="highlight"><pre>echo &quot;/opt/v8/lib&quot; &gt; /etc/ld.so.conf.d/v8.conf
+ldconfig
+</pre></div>
 </div>
 </div>
 <div class="section" id="compile-mapserver-with-v8-support">
 <h3>Compile MapServer with V8 Support<a class="headerlink" href="#compile-mapserver-with-v8-support" title="Permalink to this headline">¶</a></h3>
 <p><strong>Configure:</strong></p>
-<div class="highlight-python"><pre>cd mapserver
+<div class="highlight-python"><div class="highlight"><pre>cd mapserver
 mkdir build
 cd build
-cmake -DCMAKE_PREFIX_PATH=/opt/v8 -DWITH_V8=yes ..</pre>
+cmake -DCMAKE_PREFIX_PATH=/opt/v8 -DWITH_V8=yes ..
+</pre></div>
 </div>
 <p><strong>Compile and install:</strong> (from the build directory)</p>
-<div class="highlight-python"><pre>make install</pre>
+<div class="highlight-python"><div class="highlight"><pre>make install
+</pre></div>
 </div>
 <p><strong>Verify the V8 support:</strong></p>
-<div class="highlight-python"><pre>/path/to/mapserv -v</pre>
+<div class="highlight-python"><div class="highlight"><pre>/path/to/mapserv -v
+</pre></div>
 </div>
 <p>You should see: <strong>SUPPORTS=V8</strong>. You can now refer to the following pages to try the javascript functionalities:</p>
 <ul class="simple">
-<li>Javascript Styleitem: <a class="reference internal" href="../mapfile/styleitem.html#styleitemjs"><em>STYLEITEM Javascript</em></a></li>
-<li>Javascript Geomtransform: <a class="reference internal" href="../mapfile/geomtransform.html#geomtransformjs"><em>GEOMTRANSFORM Javascript</em></a></li>
+<li>Javascript Styleitem: <a class="reference internal" href="../mapfile/styleitem.html#styleitemjs"><span>STYLEITEM Javascript</span></a></li>
+<li>Javascript Geomtransform: <a class="reference internal" href="../mapfile/geomtransform.html#geomtransformjs"><span>GEOMTRANSFORM Javascript</span></a></li>
 </ul>
 </div>
 </div>
@@ -209,7 +218,7 @@ cmake -DCMAKE_PREFIX_PATH=/opt/v8 -DWITH_V8=yes ..</pre>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p>
 <a href="../about.html" title="About">About</a><br>
@@ -236,7 +245,7 @@ cmake -DCMAKE_PREFIX_PATH=/opt/v8 -DWITH_V8=yes ..</pre>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -253,26 +262,17 @@ cmake -DCMAKE_PREFIX_PATH=/opt/v8 -DWITH_V8=yes ..</pre>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../mapfile/index.html" title="Mapfile"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="oracle.html" title="Oracle Installation"
-             >previous</a> |</li>
-        <li><a href="../index.html">Home</a> &raquo;</li>
-          <li><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
-          <li><a href="index.html" >Installation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; <a href="../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      &copy;2014, Regents of the University of Minnesota.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      
     </div>
+
+    
+
+    
   </body>
 </html>

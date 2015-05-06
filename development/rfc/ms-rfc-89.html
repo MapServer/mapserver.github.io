@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -31,9 +29,13 @@
     <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 90: Enable/Disable Layers in OGC Web Services by IP Lists" href="ms-rfc-90.html" />
-    <link rel="prev" title="MS RFC 88: Saving MapServer Objects to Strings" href="ms-rfc-88.html" /> 
+    <link rel="prev" title="MS RFC 88: Saving MapServer Objects to Strings" href="ms-rfc-88.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
+  <body role="document">
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -84,7 +86,7 @@
 </table>
 
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -96,9 +98,9 @@
         <li class="right" >
           <a href="ms-rfc-88.html" title="MS RFC 88: Saving MapServer Objects to Strings"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../index.html" >Development</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
       </ul>
     </div>
   
@@ -106,7 +108,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="ms-rfc-89-layer-geomtransforms">
 <span id="rfc89"></span><h1>MS RFC 89: Layer Geomtransforms<a class="headerlink" href="#ms-rfc-89-layer-geomtransforms" title="Permalink to this headline">¶</a></h1>
@@ -130,10 +132,11 @@
 <h2>1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>MapServer 6.0 introduced the concept of geometry expressions within a styleObj-geomtransform. For
 example, one could write:</p>
-<div class="highlight-python"><pre>STYLE
+<div class="highlight-python"><div class="highlight"><pre>STYLE
   GEOMTRANSFORM (buffer([shape], -5)
   ...
-END</pre>
+END
+</pre></div>
 </div>
 <p>This would cause a buffer operation to be run on the shape before being rendered
 with a given style. However, if we want to work with the transformed shape and
@@ -153,17 +156,18 @@ not <em>all</em> the parameters will be implemented. Unless we really see a need
 the following transformations at the layer level, they <em>wont</em> be implemented:
 bbox, start, end, vertices. All other parameters will be accepted (EXPRESSIONS).</p>
 <p>To set a geomtransform to a layer, you just need to add this option in the mapfile:</p>
-<div class="highlight-python"><pre>LAYER NAME "my_layer"
+<div class="highlight-python"><div class="highlight"><pre>LAYER NAME &quot;my_layer&quot;
   TYPE LINE
   STATUS DEFAULT
-  DATA "lines.shp"
+  DATA &quot;lines.shp&quot;
   GEOMTRANSFORM (simplify([shape], 10))
   CLASS
     STYLE
       WIDTH 2
       COLOR 255 0 0
     END
-  END</pre>
+  END
+</pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -187,10 +191,10 @@ GEOMTRANSFORM will receive the raw shape in ground coordinates (meters, degrees,
 etc.). The argument to methods such as simplify() must be in the same units as
 the coordinates of the shapes at that point of the rendering workflow,
 i.e. pixels at the STYLE-level and in ground units at the LAYER-level.</p>
-<div class="highlight-python"><pre>LAYER NAME "my_layer"
+<div class="highlight-python"><div class="highlight"><pre>LAYER NAME &quot;my_layer&quot;
   TYPE LINE
   STATUS DEFAULT
-  DATA "lines.shp"
+  DATA &quot;lines.shp&quot;
   GEOMTRANSFORM (simplify([shape], 10))  ## 10 ground units
   CLASS
     STYLE
@@ -199,7 +203,8 @@ i.e. pixels at the STYLE-level and in ground units at the LAYER-level.</p>
       COLOR 255 0 0
     END
   END
-END</pre>
+END
+</pre></div>
 </div>
 <p>It is also not possible at all to deal with values in ground units at the style
 level because we do not have information about map cellsize at that level in the
@@ -209,13 +214,14 @@ code</p>
 <h2>2.3 Pixel value at Layer level<a class="headerlink" href="#pixel-value-at-layer-level" title="Permalink to this headline">¶</a></h2>
 <p>In cases where we want to pass a pixel value at the layer level, a
 [map_cellsize] variable will be available.</p>
-<div class="highlight-python"><pre>LAYER NAME "my_layer"
+<div class="highlight-python"><div class="highlight"><pre>LAYER NAME &quot;my_layer&quot;
   TYPE LINE
   STATUS DEFAULT
-  DATA "lines.shp"
+  DATA &quot;lines.shp&quot;
   # 10 * [map_cellsize] == 10 pixels converted to ground units
   GEOMTRANSFORM (simplify([shape], [map_cellsize]*10))
-...</pre>
+...
+</pre></div>
 </div>
 <p>To get this variable working in the math expression parser, the [map_cellsize]
 has to be converted into the layer ground unit. If you choose to use [map_cellsize]
@@ -275,7 +281,7 @@ compatibility issues being considered.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -305,7 +311,7 @@ compatibility issues being considered.</p>
 </li>
 </ul>
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -322,26 +328,17 @@ compatibility issues being considered.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="ms-rfc-90.html" title="MS RFC 90: Enable/Disable Layers in OGC Web Services by IP Lists"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="ms-rfc-88.html" title="MS RFC 88: Saving MapServer Objects to Strings"
-             >previous</a> |</li>
-        <li><a href="../../index.html">Home</a> &raquo;</li>
-          <li><a href="../index.html" >Development</a> &raquo;</li>
-          <li><a href="index.html" >Request for Comments</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; <a href="../../copyright.html">Copyright</a> 2014, Regents of the University of Minnesota.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      &copy;2014, Regents of the University of Minnesota.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      
     </div>
+
+    
+
+    
   </body>
 </html>
