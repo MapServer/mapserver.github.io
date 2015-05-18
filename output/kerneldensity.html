@@ -119,249 +119,260 @@
 <div class="versionadded">
 <p><span class="versionmodified">New in version 7.0.</span></p>
 </div>
-<p>Heatmaps are a popular method to represent sparse data on a regular raster
-grid, where each pixel on the grid is influenced inversely to its distance to
-each sample of the sparse dataset. They are usually represented with a
-color-ramp where the hue encodes the density of the data sample, optionally
-along with the intensity of an attribute. The &#8220;heatmap&#8221; term itself is used
-with varying meanings; in the context of this RFC, we will be using it to
-reference <a class="reference external" href="http://en.wikipedia.org/wiki/Multivariate_kernel_density_estimation">Kernel Density Estimation</a>
-maps.</p>
+<p>A heatmap is a popular method for representing sparse data on a
+regular raster grid, where each pixel on the grid is influenced
+inversely to its distance to each sample of the sparse dataset.
+Heatmaps are usually represented with a color-ramp where the hue
+encodes the density of the data sample, optionally along with the
+intensity of an attribute.  The &#8220;heatmap&#8221; term itself is used with
+varying meanings.  We will be using it to reference
+<a class="reference external" href="http://en.wikipedia.org/wiki/Multivariate_kernel_density_estimation">Kernel Density Estimation</a> maps.</p>
 <div class="figure align-center" id="id1">
-<img alt="output/../../images/heatmap-wikipedia.png" src="output/../../images/heatmap-wikipedia.png" />
+<img alt="../_images/heatmap-wikipedia1.png" src="../_images/heatmap-wikipedia1.png" />
 <p class="caption"><span class="caption-text">Example Kernel Density Estimation Map (image cc-by-sa wikipedia)</span></p>
 </div>
 </div>
 <div class="section" id="configuration">
 <h2><a class="toc-backref" href="#table-of-contents">Configuration</a><a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
-<p>First, you should set up CONNECTIONTYPE parameter to KERNELDENSITY. The heatmap
-vector-to-raster takes the following parameters:</p>
+<p>First, you must set the <cite>LAYER</cite> <cite>CONNECTIONTYPE</cite> parameter to
+<cite>KERNELDENSITY</cite>.  The heatmap vector-to-raster takes the following
+parameters:</p>
 <ul class="simple">
-<li><strong>CONNECTION &#8220;layername&#8221;</strong> : reference to the NAME or GROUP of a layer to use
-as an input vector datasource. NAME takes precedence, followed by the first
-layer from GROUP who&#8217;s minscale/maxscale matches the current map scale. The
-referenced layer should probably a TYPE POINT layer. Other layer types will
-result in one sample being added for each vertex of the input features.</li>
-<li><strong>PROCESSING &#8220;KERNELDENSITY_RADIUS=10&#8221;</strong> : radius in pixels of the gaussian
-filter to apply to the bitmap array once all features have been accumulated.
-Higher values result in increased cpu time needed to compute the filtered
-data.</li>
+<li><strong>CONNECTION &#8220;layername&#8221;</strong> : reference to the <cite>NAME</cite> or <cite>GROUP</cite> of a
+<cite>LAYER</cite> to use as an input vector datasource.  <cite>NAME</cite> takes
+precedence, followed by the first layer from <cite>GROUP</cite> who&#8217;s
+minscaledenom/maxscaledenom matches the current map scale.  The
+referenced layer should be a <cite>TYPE</cite> <cite>POINT</cite> layer.  Other layer
+types will result in one sample being added for each vertex of the
+input features.</li>
+<li><strong>PROCESSING &#8220;KERNELDENSITY_RADIUS=10&#8221;</strong> : radius in pixels of the
+gaussian filter to apply to the bitmap array once all features have
+been accumulated.  Higher values result in increased cpu time needed
+to compute the filtered data.</li>
 </ul>
 <div class="figure align-center" id="id2">
-<img alt="output/../../images/heatmap-hsl-10.png" src="output/../../images/heatmap-hsl-10.png" />
-<p class="caption"><span class="caption-text">result with a radius set to 10 pixels</span></p>
+<img alt="../_images/heatmap-hsl-101.png" src="../_images/heatmap-hsl-101.png" />
+<p class="caption"><span class="caption-text">Result with kerneldensity_radius set to 10 (pixels)</span></p>
 </div>
 <div class="figure align-center" id="id3">
-<img alt="output/../../images/heatmap-hsl.png" src="output/../../images/heatmap-hsl.png" />
-<p class="caption"><span class="caption-text">result with a radius set to 20 pixels</span></p>
+<img alt="../_images/heatmap-hsl1.png" src="../_images/heatmap-hsl1.png" />
+<p class="caption"><span class="caption-text">Result with kerneldensity_radius set to 20 (pixels)</span></p>
 </div>
 <ul class="simple">
-<li><strong>PROCESSING &#8220;KERNELDENSITY_COMPUTE_BORDERS=ON|OFF&#8221;</strong> : A kernel of radius
-&#8220;r&#8221; cannot be applied to &#8220;r&#8221; pixels along the borders of the image.  The
-default is to extend the searchrect of the input datasource to include
-features &#8220;r&#8221; pixels outside of the current map extent so that the computed
-heatmap extends to the full extent of the resulting image. This can be
-deactivated when tiling if the tiling software applies a metabuffer of &#8220;r&#8221;
-pixels to its requests, to avoid the performance overhead of computing this
-extra information.</li>
-<li><strong>PROCESSING &#8220;KERNELDENSITY_NORMALIZATION=AUTO|numeric&#8221;</strong> : if set to &#8220;AUTO&#8221;,
-the created raster band will be scaled such that its intensities range from 0
-to 255, in order to fully span the configured color ramp. Such behavior may
-not be desirable (typically for tiling) as the resulting intensity of a pixel
-at a given location will vary depending on the extent of the current map
-request.If set to a numeric value, the samples will be multiplied by the
-given value. It is up to the user to determine which scaling value to use so
-the resulting pixels span the full 0-255 range; determining that value is
-mostly a process of trial and error. Pixels that fall outside the 0-255 range
-will be clipped to 0 or 255.</li>
+<li><strong>PROCESSING &#8220;KERNELDENSITY_COMPUTE_BORDERS=ON|OFF&#8221;</strong> : A kernel of
+radius &#8220;r&#8221; cannot be applied to &#8220;r&#8221; pixels along the borders of the
+image.  The default is to extend the search rectangle of the input
+datasource to include features &#8220;r&#8221; pixels outside of the current map
+extent so that the computed heatmap extends to the full extent of
+the resulting image.  This can be deactivated when tiling if the
+tiling software applies a metabuffer of &#8220;r&#8221; pixels to its requests,
+to avoid the performance overhead of computing this extra
+information.</li>
+<li><strong>PROCESSING &#8220;KERNELDENSITY_NORMALIZATION=AUTO|numeric&#8221;</strong> : If set
+to &#8220;AUTO&#8221;, the created raster band will be scaled such that its
+intensities range from 0 to 255, in order to fully span the
+configured color ramp.  Such behavior may not be desirable
+(typically for tiling) as the resulting intensity of a pixel at a
+given location will vary depending on the extent of the current map
+request.  If set to a numeric value, the samples will be multiplied
+by the given value.  It is up to the user to determine which scaling
+value to use to make the resulting pixels span the full 0-255 range;
+determining that value is mostly a process of trial and error.
+Pixels that fall outside the 0-255 range will be clipped to 0 or
+255.</li>
 </ul>
 <div class="figure align-center" id="id4">
-<img alt="output/../../images/heatmap-hsl-fix-scale.png" src="output/../../images/heatmap-hsl-fix-scale.png" />
-<p class="caption"><span class="caption-text">fixed scaling applied. compared to the previous images, the greater number
-of red areas results from the fact that the chosen scaling factor made a
-large number of pixels overshoot the 255 limit</span></p>
+<img alt="../_images/heatmap-hsl-fix-scale1.png" src="../_images/heatmap-hsl-fix-scale1.png" />
+<p class="caption"><span class="caption-text">Fixed scaling applied.  Compared to the previous images, the
+greater number of red areas results from the fact that the chosen
+scaling factor made a large number of pixels overshoot the 255
+limit.</span></p>
 </div>
 <div class="figure align-center" id="id5">
-<img alt="output/../../images/heatmap-hsl-fix-scale2.png" src="output/../../images/heatmap-hsl-fix-scale2.png" />
-<p class="caption"><span class="caption-text">lower fixed scaling applied. no pixels have attained the 255 limit</span></p>
+<img alt="../_images/heatmap-hsl-fix-scale21.png" src="../_images/heatmap-hsl-fix-scale21.png" />
+<p class="caption"><span class="caption-text">Lower fixed scaling applied. No pixels have attained the 255 limit.</span></p>
 </div>
 </div>
 <div class="section" id="advanced-sample-weighting-and-filtering">
 <h2><a class="toc-backref" href="#table-of-contents">Advanced sample weighting and filtering</a><a class="headerlink" href="#advanced-sample-weighting-and-filtering" title="Permalink to this headline">¶</a></h2>
-<p>By default, each feature is assigned a weight of 1.0, and the resulting heatmap
-will represent the spatial density of the vector features. If this is not the
-desired behavior, different weights can be applied on a feature by feature
-basis by using regular CLASS/STYLE syntax on the source vector layer. The
-weight used will be read from the SIZE value of the matched STYLE. Standard
-EXPRESSION and MIN/MAXSCALEDENOM apply; if a feature results in no matching
-CLASS and/or STYLE, it is ignored and discarded from the resulting heatmap. The
-examples at the end of this RFC give some examples as to how this can be
-achieved.</p>
+<p>By default, each feature is assigned a weight of 1.0, and the
+resulting heatmap will represent the spatial density of the vector
+features. If this is not the desired behavior, different weights can
+be applied on a feature by feature basis by using regular <cite>CLASS</cite> /
+<cite>STYLE</cite> syntax on the source vector layer.  The weight used will be
+read from the <cite>SIZE</cite> value of the matched <cite>STYLE</cite>.  Standard
+<cite>EXPRESSION</cite> and <cite>MINSCALEDENOM</cite> / <cite>MAXSCALEDENOM</cite> apply; if a feature
+results in no matching <cite>CLASS</cite> and/or <cite>STYLE</cite>, it is ignored and
+discarded from the resulting heatmap. The examples at the end give
+some examples as to how this can be achieved.</p>
 <div class="figure align-center" id="id6">
-<img alt="output/../../images/heatmap-hsl-density.png" src="output/../../images/heatmap-hsl-density.png" />
-<p class="caption"><span class="caption-text">heatmap representing pure feature density when sample weighting or filtering
-are not applied, the actual vector points are represented alongside. (Other
-examples in this RFC are rendered with attribute weighting on each sample)</span></p>
+<img alt="../_images/heatmap-hsl-density1.png" src="../_images/heatmap-hsl-density1.png" />
+<p class="caption"><span class="caption-text">Heatmap representing pure feature density when sample weighting or
+filtering is not applied, the actual vector points are represented
+alongside. (The other examples are rendered with attribute
+weighting on each sample)</span></p>
 </div>
 </div>
 <div class="section" id="raster-color-ramping">
 <h2><a class="toc-backref" href="#table-of-contents">Raster Color Ramping</a><a class="headerlink" href="#raster-color-ramping" title="Permalink to this headline">¶</a></h2>
-<p>The features added in <a class="reference internal" href="../development/rfc/ms-rfc-6.html#rfc6"><span>MS RFC 6: Color Range Mapping of Continuous Feature Values</span></a> for vector features, and since extended to
-support raster layers, will be extended in order to support more complex color
-ramps. Note that these additions will apply to all raster classifications, not
-only for heatmap layers.</p>
+<p>The features added in <a class="reference internal" href="../development/rfc/ms-rfc-6.html#rfc6"><span>MS RFC 6: Color Range Mapping of Continuous Feature Values</span></a> for vector features, and since
+extended to support raster layers, will be extended in order to
+support more complex color ramps.  Note that these additions will
+apply to all raster classifications, not only for heatmap layers.</p>
 <ul>
-<li><p class="first"><strong>Support for multiple stops</strong> : The actual support for ranges for raster
-layers is limited to a single COLORRANGE/DATARANGE. We will support multiple
-ranges in order to allow multiple color stops, and will also account for
-optional alpha values. The following example creates a ramp ranging from
-fully transparent blue to blue for values between 0 and 32, then blue to red
-for values ranging from 32 to 255.</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">class</span>
-  <span class="k">style</span>
+<li><p class="first"><strong>Support for multiple stops</strong> : The actual support for ranges for
+raster layers is limited to a single <cite>COLORRANGE</cite> / <cite>DATARANGE</cite>.  We
+will support multiple ranges in order to allow multiple color stops,
+and will also account for optional alpha values.  The following
+example creates a ramp ranging from fully transparent blue to blue
+for values between 0 and 32, then blue to red for values ranging
+from 32 to 255.</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">CLASS</span>
+  <span class="k">STYLE</span>
     <span class="k">COLORRANGE</span>  <span class="s">&quot;#0000ff00&quot;</span>  <span class="s">&quot;#0000ffff&quot;</span>
     <span class="k">DATARANGE</span> <span class="mi">0</span> <span class="mi">32</span>
-  <span class="k">end</span>
-  <span class="k">style</span>
+  <span class="k">END</span> <span class="c"># STYLE</span>
+  <span class="k">STYLE</span>
     <span class="k">COLORRANGE</span>  <span class="s">&quot;#0000ffff&quot;</span>  <span class="s">&quot;#ff0000ff&quot;</span>
     <span class="k">DATARANGE</span> <span class="mi">32</span> <span class="mi">255</span>
-  <span class="k">end</span>
-<span class="k">end</span>
+  <span class="k">END</span> <span class="c"># STYLE</span>
+<span class="k">END</span> <span class="c"># CLASS</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">A single style block will be used for each pixel value. It is up to the
-user to ensure that the supplied DATARANGEs span 0 to 255 with no overlap,
-and that the chosen COLORRANGE stops are continous from one stop to the
-next.</p>
+<p class="last">A single style block will be used for each pixel value. It is up
+to the user to ensure that the supplied <cite>DATARANGE`s span 0 to
+255 with no overlap, and that the chosen `COLORRANGE</cite> stops are
+continous from one stop to the next.</p>
 </div>
 </li>
-<li><p class="first"><strong>PROCESSING RANGE_COLORSPACE=RGB|HSL</strong>: The current RANGE support
-interpolates colors between stops in RGB space, which usually results in
-washed out colors. The interpolation can be done in HSL space which usually
-results in wanted output for heatmaps.</p>
+<li><p class="first"><strong>PROCESSING RANGE_COLORSPACE=RGB|HSL</strong>: The current <cite>RANGE</cite> support
+interpolates colors between stops in RGB space, which usually
+results in washed out colors.  The interpolation can be done in HSL
+space which usually results in wanted output for heatmaps.</p>
 </li>
 </ul>
 <div class="figure align-center" id="id7">
-<img alt="output/../../images/heatmap-rgb.png" src="output/../../images/heatmap-rgb.png" />
-<p class="caption"><span class="caption-text">washed out colors when interpolating in RGB space</span></p>
+<img alt="../_images/heatmap-rgb1.png" src="../_images/heatmap-rgb1.png" />
+<p class="caption"><span class="caption-text">washed out colors when interpolating in RGB space.</span></p>
 </div>
 </div>
 <div class="section" id="example-mapfiles">
 <h2><a class="toc-backref" href="#table-of-contents">Example mapfiles</a><a class="headerlink" href="#example-mapfiles" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">map</span>
-  <span class="k">size</span> <span class="mi">1000</span> <span class="mi">500</span>
-  <span class="k">extent</span> <span class="p">-</span><span class="mi">180</span> <span class="p">-</span><span class="mi">90</span> <span class="mi">180</span> <span class="mi">90</span>
-  <span class="k">name</span> <span class="s">&quot;test heat&quot;</span>
-  <span class="k">imagetype</span> <span class="s">&quot;png&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">MAP</span>
+  <span class="k">SIZE</span> <span class="mi">1000</span> <span class="mi">500</span>
+  <span class="k">EXTENT</span> <span class="p">-</span><span class="mi">180</span> <span class="p">-</span><span class="mi">90</span> <span class="mi">180</span> <span class="mi">90</span>
+  <span class="k">NAME</span> <span class="s">&quot;test heat&quot;</span>
+  <span class="k">IMAGETYPE</span> <span class="s">&quot;png&quot;</span>
 
-  <span class="k">web</span>
-    <span class="k">metadata</span>
+  <span class="k">WEB</span>
+    <span class="k">METADATA</span>
       <span class="s">&quot;ows_srs&quot;</span> <span class="s">&quot;epsg:4326  epsg:3857 epsg:900913&quot;</span>
       <span class="s">&quot;ows_enable_request&quot;</span> <span class="s">&quot;*&quot;</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
+    <span class="k">END</span> <span class="c"># METADATA</span>
+  <span class="k">END</span> <span class="c"># WEB</span>
 
-  <span class="k">projection</span>
+  <span class="k">PROJECTION</span>
     <span class="s">&quot;+init=epsg:4326&quot;</span>
-  <span class="k">end</span>
+  <span class="k">END</span> <span class="c"># PROJECTION</span>
 
-  <span class="k">layer</span>
-    <span class="k">name</span> <span class="s">&quot;heatmap&quot;</span>
-    <span class="k">type</span> <span class="nb">raster</span>
-    <span class="k">connectiontype</span> <span class="err">kerneldensity</span>
-    <span class="k">connection</span> <span class="s">&quot;points&quot;</span>
-    <span class="k">status</span> <span class="nb">on</span>
-    <span class="k">processing</span> <span class="s">&quot;RANGE_COLORSPACE=HSL&quot;</span>
-    <span class="k">processing</span> <span class="s">&quot;KERNELDENSITY_RADIUS=20&quot;</span>
-    <span class="k">processing</span> <span class="s">&quot;KERNELDENSITY_COMPUTE_BORDERS=ON&quot;</span>
-    <span class="k">processing</span> <span class="s">&quot;KERNELDENSITY_NORMALIZATION=AUTO&quot;</span>
-    <span class="k">offsite</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
-    <span class="k">class</span>
-      <span class="k">style</span>
+  <span class="k">LAYER</span>
+    <span class="k">NAME</span> <span class="s">&quot;heatmap&quot;</span>
+    <span class="k">TYPE</span> <span class="nb">raster</span>
+    <span class="k">CONNECTIONTYPE</span> <span class="nb">kerneldensity</span>
+    <span class="k">CONNECTION</span> <span class="s">&quot;points&quot;</span>
+    <span class="k">STATUS</span> <span class="nb">on</span>
+    <span class="k">PROCESSING</span> <span class="s">&quot;RANGE_COLORSPACE=HSL&quot;</span>
+    <span class="k">PROCESSING</span> <span class="s">&quot;KERNELDENSITY_RADIUS=20&quot;</span>
+    <span class="k">PROCESSING</span> <span class="s">&quot;KERNELDENSITY_COMPUTE_BORDERS=ON&quot;</span>
+    <span class="k">PROCESSING</span> <span class="s">&quot;KERNELDENSITY_NORMALIZATION=AUTO&quot;</span>
+    <span class="k">OFFSITE</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+    <span class="k">CLASS</span>
+      <span class="k">STYLE</span>
         <span class="k">COLORRANGE</span>  <span class="s">&quot;#0000ff00&quot;</span>  <span class="s">&quot;#0000ffff&quot;</span>
         <span class="k">DATARANGE</span> <span class="mi">0</span> <span class="mi">32</span>
-      <span class="k">end</span>
-      <span class="k">style</span>
+      <span class="k">END</span> <span class="c"># STYLE</span>
+      <span class="k">STYLE</span>
         <span class="k">COLORRANGE</span>  <span class="s">&quot;#0000ffff&quot;</span>  <span class="s">&quot;#ff0000ff&quot;</span>
         <span class="k">DATARANGE</span> <span class="mi">32</span> <span class="mi">255</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
+      <span class="k">END</span> <span class="c"># STYLE</span>
+    <span class="k">END</span> <span class="c"># CLASS</span>
+  <span class="k">END</span> <span class="c"># LAYER</span>
 
-  <span class="k">layer</span>
-      <span class="k">name</span> <span class="s">&quot;points&quot;</span>
-      <span class="k">status</span> <span class="nb">on</span>
-      <span class="k">type</span> <span class="nb">POINT</span>
-      <span class="k">data</span> <span class="s">&quot;pnts.shp&quot;</span>
-   <span class="k">end</span>
-<span class="k">end</span>
+  <span class="k">LAYER</span>
+      <span class="k">NAME</span> <span class="s">&quot;points&quot;</span>
+      <span class="k">STATUS</span> <span class="nb">on</span>
+      <span class="k">TYPE</span> <span class="nb">POINT</span>
+      <span class="k">DATA</span> <span class="s">&quot;pnts.shp&quot;</span>
+   <span class="k">END</span> <span class="c"># LAYER</span>
+<span class="k">END</span> <span class="c"># MAPFILE</span>
 </pre></div>
 </div>
-<p>The kernel radius can be set dynamically depending on the scale. Note that any
-other PROCESSING key can be updated by the same method. In the following
-example, the kernel radius will be of 50 pixels for scales 1/1 to 1/25000000,
-and of 10 pixels for scales 1/25000000 and smaller:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">layer</span>
-  <span class="k">name</span> <span class="s">&quot;heatmap&quot;</span>
+<p>The kernel radius can be set dynamically depending on the scale.  Note
+that any other <cite>PROCESSING</cite> key can be updated by the same method.  In
+the following example, the kernel radius will be 50 pixels for scales
+1/1 to 1/25000000, and 10 pixels for scales 1/25000000 and smaller:</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;heatmap&quot;</span>
   <span class="p">...</span>
-  <span class="k">processing</span> <span class="s">&quot;KERNELDENSITY_RADIUS=</span><span class="si">%r</span><span class="s">adius%&quot;</span>
+  <span class="k">PROCESSING</span> <span class="s">&quot;KERNELDENSITY_RADIUS=</span><span class="si">%r</span><span class="s">adius%&quot;</span>
   <span class="k">SCALETOKEN</span>
     <span class="k">NAME</span> <span class="s">&quot;</span><span class="si">%r</span><span class="s">adius%&quot;</span>
     <span class="k">VALUES</span>
       <span class="s">&quot;0&quot;</span> <span class="s">&quot;50&quot;</span>
       <span class="s">&quot;25000000&quot;</span> <span class="s">&quot;10&quot;</span>
-    <span class="k">END</span>
-  <span class="k">END</span>
+    <span class="k">END</span> <span class="c"># VALUES</span>
+  <span class="k">END</span> <span class="c"># SCALETOKEN</span>
   <span class="p">...</span>
-<span class="k">end</span>
+<span class="k">END</span> <span class="c"># LAYER</span>
 </pre></div>
 </div>
-<p>Different weights can be applied by using CLASS-&gt;STYLE-&gt;SIZE syntax on the
-source vector layer to apply a non default weight to each sample:</p>
+<p>Different weights can be applied by using <cite>CLASS</cite>-&gt;`STYLE`-&gt;`SIZE`
+syntax on the source vector layer to apply a non default weight to
+each sample:</p>
 <ul>
 <li><p class="first">Weight read from a feature attribute:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">layer</span>
-  <span class="k">name</span> <span class="s">&quot;points&quot;</span>
-  <span class="k">status</span> <span class="nb">on</span>
-  <span class="k">type</span> <span class="nb">POINT</span>
-  <span class="k">data</span> <span class="s">&quot;pnts.shp&quot;</span>
-  <span class="k">class</span>
-    <span class="k">style</span>
-      <span class="k">size</span> <span class="nx">[attribute]</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;points&quot;</span>
+  <span class="k">STATUS</span> <span class="nb">on</span>
+  <span class="k">TYPE</span> <span class="nb">POINT</span>
+  <span class="k">DATA</span> <span class="s">&quot;pnts.shp&quot;</span>
+  <span class="k">CLASS</span>
+    <span class="k">STYLE</span>
+      <span class="k">SIZE</span> <span class="nx">[attribute]</span>
+    <span class="k">END</span> <span class="c"># STYLE</span>
+  <span class="k">END</span> <span class="c"># CLASS</span>
+<span class="k">END</span> <span class="c"># LAYER</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Weight read from a non numeric attribute:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">layer</span>
-  <span class="k">name</span> <span class="s">&quot;points&quot;</span>
-  <span class="k">status</span> <span class="nb">on</span>
-  <span class="k">type</span> <span class="nb">POINT</span>
-  <span class="k">data</span> <span class="s">&quot;pnts.shp&quot;</span>
-  <span class="k">classitem</span> <span class="s">&quot;risk&quot;</span>
-  <span class="k">class</span>
-    <span class="k">expression</span> <span class="s">&quot;high&quot;</span>
-    <span class="k">style</span>
-      <span class="k">size</span> <span class="mi">5</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-  <span class="k">class</span>
-    <span class="k">expression</span> <span class="s">&quot;medium&quot;</span>
-    <span class="k">style</span>
-      <span class="k">size</span> <span class="mi">3</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-  <span class="k">class</span>
-    <span class="k">expression</span> <span class="s">&quot;low&quot;</span>
-    <span class="k">style</span>
-      <span class="k">size</span> <span class="mi">1</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;points&quot;</span>
+  <span class="k">STATUS</span> <span class="nb">on</span>
+  <span class="k">TYPE</span> <span class="nb">point</span>
+  <span class="k">DATA</span> <span class="s">&quot;pnts.shp&quot;</span>
+  <span class="k">CLASSITEM</span> <span class="s">&quot;risk&quot;</span>
+  <span class="k">CLASS</span>
+    <span class="k">EXPRESSION</span> <span class="s">&quot;high&quot;</span>
+    <span class="k">STYLE</span>
+      <span class="k">SIZE</span> <span class="mi">5</span>
+    <span class="k">END</span> <span class="c"># STYLE</span>
+  <span class="k">END</span> <span class="c"># CLASS</span>
+  <span class="k">CLASS</span>
+    <span class="k">EXPRESSION</span> <span class="s">&quot;medium&quot;</span>
+    <span class="k">STYLE</span>
+      <span class="k">SIZE</span> <span class="mi">3</span>
+    <span class="k">END</span> <span class="c"># STYLE</span>
+  <span class="k">END</span> <span class="c"># CLASS</span>
+  <span class="k">CLASS</span>
+    <span class="k">EXPRESSION</span> <span class="s">&quot;low&quot;</span>
+    <span class="k">STYLE</span>
+      <span class="k">SIZE</span> <span class="mi">1</span>
+    <span class="k">END</span> <span class="c"># STYLE</span>
+  <span class="k">END</span> <span class="c"># CLASS</span>
+<span class="k">END</span> <span class="c"># LAYER</span>
 </pre></div>
 </div>
 </li>
