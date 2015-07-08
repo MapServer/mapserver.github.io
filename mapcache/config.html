@@ -27,7 +27,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../index.html" />
-    <link rel="up" title="MapCache" href="index.html" />
+    <link rel="up" title="MapCache 1.4" href="index.html" />
     <link rel="next" title="Supported Tile Services" href="services.html" />
     <link rel="prev" title="Compilation &amp; Installation" href="install.html" />
    
@@ -712,22 +712,22 @@ to. You should of course enable at least one.</p>
 <span class="c">     if you&#39;re paranoid, or to &quot;empty_img&quot; if you want to play nice with non-conforming clients.</span>
 <span class="c">--&gt;</span>
 <span class="nt">&lt;errors&gt;</span>report<span class="nt">&lt;/errors&gt;</span>
-
-
+</pre></div>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;locker</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="nt">&gt;</span>  <span class="c">&lt;!-- this is the default --&gt;</span>
 <span class="c">&lt;!--</span>
 <span class="c">     location to put lockfiles (to block other clients while a metatile is being rendered.</span>
 <span class="c">     defaults to /tmp</span>
 <span class="c">     this location should be writable by the apache user</span>
 <span class="c">--&gt;</span>
-<span class="nt">&lt;lock_dir&gt;</span>/tmp<span class="nt">&lt;/lock_dir&gt;</span>
-
-<span class="c">&lt;!--</span>
-<span class="c">     interval in microseconds to sleep before checking that a lockfile is still present.</span>
-<span class="c">     default is 1/100th of a second (i.e. 10000 microseconds)</span>
-<span class="c">--&gt;</span>
-<span class="nt">&lt;lock_retry&gt;</span>10000<span class="nt">&lt;/lock_retry&gt;</span>
-
-<span class="c">&lt;!-- log_level</span>
+  <span class="nt">&lt;directory&gt;</span>/tmp<span class="nt">&lt;/directory&gt;</span>
+  <span class="nt">&lt;retry&gt;</span>0.01<span class="nt">&lt;/retry&gt;</span> <span class="c">&lt;!-- check back every .01 seconds --&gt;</span>
+  <span class="nt">&lt;timeout&gt;</span>60<span class="nt">&lt;/timeout&gt;</span> <span class="c">&lt;!-- consider a lock has gone stale after this many seconds. may cause issues if WMS rendering times is longer than this value --&gt;</span>
+<span class="nt">&lt;/locker&gt;</span>
+</pre></div>
+</div>
+<p>For specific information about locking, read <a class="reference internal" href="locks.html#mapcache-locks"><span>this</span></a></p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- log_level</span>
 <span class="c">   For CGI/FastCGI only - For the apache module use the httpd.conf</span>
 <span class="c">   LogLevel key.</span>
 <span class="c">   Defines the verbosity of the what is sent to the logs.</span>
