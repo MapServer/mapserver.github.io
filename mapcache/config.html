@@ -173,6 +173,9 @@ arises)</p>
 <span class="c">         key: value\r\n</span>
 
 <span class="c">         HTTP header.</span>
+
+<span class="c">         You may also forward a header from the incoming client request</span>
+<span class="c">         using the &lt;MyHeader&gt;{X-Header-To-Forward}&lt;MyHeader&gt; syntax</span>
 <span class="c">      --&gt;</span>
       <span class="nt">&lt;headers&gt;</span>
          <span class="nt">&lt;User-Agent&gt;</span>mod-mapcache/r175<span class="nt">&lt;/User-Agent&gt;</span>
@@ -521,7 +524,23 @@ given <em>format</em>.</p>
       <span class="nt">&lt;grid</span> <span class="na">restricted_extent=</span><span class="s">&quot;-10 40 10 50&quot;</span> <span class="na">minzoom=</span><span class="s">&quot;4&quot;</span> <span class="na">maxzoom=</span><span class="s">&quot;17&quot;</span><span class="nt">&gt;</span>WGS84<span class="nt">&lt;/grid&gt;</span>
       <span class="nt">&lt;grid&gt;</span>g<span class="nt">&lt;/grid&gt;</span>
 
-   <span class="c">&lt;!-- metadata</span>
+   <span class="c">&lt;!-- You may store hidden intermediate levels of tiles to enable higher quality output when reassembling</span>
+<span class="c">      tiles. This may be needed when caching maps containing labels to avoid the text from becoming too</span>
+<span class="c">      small or too blurry when requesting resolutions that are far away from the native grid resolutions.</span>
+
+<span class="c">      Supposing grid &quot;mygrid&quot; consists of 256x256 pixel tiles, with resolutions r1,r2,r3,r4,...rn, mapcache</span>
+<span class="c">      will populate a hidden grid called &quot;mygrid_intermediate_0.5&quot; containing tiles of size `256+256*0.5=384`</span>
+<span class="c">      with resolutions r1+(r2-r1)*0.5, r2+(r3-r2)*0.5, ... r(n-1)+(r(n)-r(n-1)*0.5. i.e. a tile with a given</span>
+<span class="c">      extent will be stored once in a 256x256 tile, and once in a 384x384 one.</span>
+
+<span class="c">      This intermediate grid is private to mapcache and will not be exposed to tiled requests. It will only be</span>
+<span class="c">      used for WMS requests that require horizontal assembling.</span>
+<span class="c">   &lt;--</span>
+
+<span class="c">      &lt;grid use_wms_intermediate_resolutions=&quot;true&quot;&gt;mygrid&lt;/grid&gt;</span>
+
+
+<span class="c">   &lt;!-- metadata</span>
 <span class="c">      optional metadata tags used for responding to GetCapabilities request.</span>
 <span class="c">      you can put anything in here, although only the title and abstract tags</span>
 <span class="c">      are currently used to populate the GetCapabilities document.</span>
@@ -671,7 +690,7 @@ to. You should of course enable at least one.</p>
    <span class="c">&lt;!-- format</span>
 <span class="c">      image format to use when assembling tiles</span>
 <span class="c">   --&gt;</span>
-   <span class="nt">&lt;format&gt;</span>myjpeg<span class="nt">&lt;/format&gt;</span>
+   <span class="nt">&lt;format</span> <span class="na">allow_client_override=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>myjpeg<span class="nt">&lt;/format&gt;</span>
 
 <span class="nt">&lt;/service&gt;</span>
 <span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wmts&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>

@@ -120,22 +120,42 @@
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This page is a work in progress</p>
-</div>
 <p>MapCache uses the concept of a &#8220;source&#8221; as a service that is able to return
 image data given a set of parameters (namely an extent, an image size, and a
 projection). Typically, a source is the third party WMS server that you want
 to put a tilecache infront of.</p>
-<div class="section" id="http-service-definition">
-<span id="mapcache-http"></span><h2>HTTP Service Definition<a class="headerlink" href="#http-service-definition" title="Permalink to this headline">¶</a></h2>
-</div>
 <div class="section" id="wms-sources">
 <span id="mapcache-source-wms"></span><h2>WMS Sources<a class="headerlink" href="#wms-sources" title="Permalink to this headline">¶</a></h2>
+<p>A WMS server is the main upstream server type used by mapcache. When processing a
+given tile, if it is not found in its cache, MapCache will query a WMS server with
+a GetMap request, split the returned image data into individual tiles, and store
+those tiles in its cache for subsequent requests.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;source</span> <span class="na">name=</span><span class="s">&quot;mywmsserver&quot;</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;http&gt;</span> .... <span class="nt">&lt;/http&gt;</span>
+  <span class="nt">&lt;getmap&gt;</span>
+    <span class="nt">&lt;params&gt;</span>
+      <span class="nt">&lt;map&gt;</span>/path/to/mapserver/mapfile.map<span class="nt">&lt;/map&gt;</span>
+      <span class="nt">&lt;layers&gt;</span>value2<span class="nt">&lt;/layers&gt;</span>
+    <span class="nt">&lt;/params&gt;</span>
+  <span class="nt">&lt;/getmap&gt;</span>
+<span class="nt">&lt;/source&gt;</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="http.html#mapcache-http"><span>HTTP Requests</span></a> to configure how the <cite>&lt;http&gt;</cite> block should be expressed</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">You should usually only supply vendor specific parameter to the
+<cite>&lt;params&gt;</cite> block.  <strong>Never</strong> include any hardcoded BBOX, WIDTH, HEIGHT, SRS or
+any parameters related to dimensions inside this block, as these are calculated
+by MapCache itself at runtime.</p>
+</div>
 </div>
 <div class="section" id="mapfile-sources">
 <span id="mapcache-source-mapfile"></span><h2>MapFile Sources<a class="headerlink" href="#mapfile-sources" title="Permalink to this headline">¶</a></h2>
+<p>Experimental</p>
 </div>
 </div>
 
@@ -157,7 +177,6 @@ to put a tilecache infront of.</p>
   <h3>Current Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Data Sources</a><ul>
-<li><a class="reference internal" href="#http-service-definition">HTTP Service Definition</a></li>
 <li><a class="reference internal" href="#wms-sources">WMS Sources</a></li>
 <li><a class="reference internal" href="#mapfile-sources">MapFile Sources</a></li>
 </ul>
