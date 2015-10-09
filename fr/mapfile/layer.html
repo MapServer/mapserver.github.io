@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>LAYER &mdash; MapServer 7.0.0-beta1 documentation</title>
+    <title>LAYER &mdash; MapServer 7.0.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0-beta1',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
     <link rel="up" title="Mapfile" href="index.html" />
     <link rel="next" title="LEADER" href="leader.html" />
     <link rel="prev" title="LABEL" href="label.html" />
@@ -130,23 +130,6 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="Index général"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="leader.html" title="LEADER"
-             accesskey="N">suivant</a> |</li>
-        <li class="right" >
-          <a href="label.html" title="LABEL"
-             accesskey="P">précédent</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.0-beta1</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Mapfile</a> &raquo;</li> 
-      </ul>
-    </div>
   
 
     <div class="document">
@@ -306,12 +289,29 @@ data sources.</p>
 <dd><p class="first last">Indique le commencement d&#8217;un objet <a class="reference internal" href="feature.html#feature"><span>FEATURE</span></a></p>
 </dd>
 </dl>
-<dl class="docutils" id="filter">
-<span id="index-25"></span><dt>FILTER [chaîne]</dt>
-<dd><p class="first">Ce paramètre permet de filtrer les données selon un attribut particulier en même temps que le filtrage spatial, mais avant que toute expression de CLASS soit évaluée. Pour OGR et les fichiers Shape, la chaîne de caractères est simplement une expression régulière MapServer. Pour les bases de données spatiales, la chaîne de caractères est une requête SQL &#8220;WHERE&#8221; adaptée à la base de données concernée.</p>
-<p class="last">Par exemple : FILTER ([type]=&#8217;road&#8217; and [size]&lt;2)</p>
-</dd>
-</dl>
+<p id="filter"><span id="index-25"></span>FILTER [chaîne]</p>
+<blockquote>
+<div><p>This parameter allows for data specific attribute filtering that
+is done at the same time spatial filtering is done, but before any
+CLASS expressions are evaluated.  The string is simply a mapserver
+regular expression:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">FILTER</span> <span class="p">([</span><span class="nb">type</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;road&#39;</span> <span class="ow">and</span> <span class="p">[</span><span class="n">size</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Native filters are supported through the <cite>NATIVE_FILTER</cite>
+<cite>PROCESSING</cite> key:</p>
+<div class="highlight-python"><div class="highlight"><pre>PROCESSING &#39;NATIVE_FILTER=id=234&#39;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Until Mapserver 6, native filters could be specified as:</p>
+<div class="highlight-python"><div class="highlight"><pre>FILTER &#39;where id=234&#39;.
+</pre></div>
+</div>
+<p class="last">But this is no longer supported.</p>
+</div>
+</div></blockquote>
 <dl class="docutils" id="index-26">
 <dt>FILTERITEM [attribut]</dt>
 <dd><p class="first last">Élément à utiliser avec des expressions <a class="reference internal" href="#filter">FILTER</a> simples. OGR et fichiers Shape seulement.</p>
@@ -716,6 +716,19 @@ multiple adjacent tiles when creating tiled maps.</p>
 </li>
 </ul>
 <ul id="index-67">
+<li><p class="first"><strong>Native filter Directive</strong> - This directive can be used to do
+driver specific filtering.  For database connections the string
+is a SQL WHERE clause that is valid with respect to the
+underlying database.</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">PROCESSING</span> <span class="s">&quot;NATIVE_FILTER=id=234&quot;</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">Nouveau dans la version 7.0.</span></p>
+</div>
+</li>
+</ul>
+<ul id="index-68">
 <li><p class="first"><strong>AGG renderer tweaking</strong> - This directive can be used for setting
 the linear gamma to be used when rendering polygon features. The
 default value of 0.75 (that can be overriden at the <a class="reference internal" href="outputformat.html#outputformat"><span>OUTPUTFORMAT</span></a>
@@ -727,7 +740,7 @@ enough.</p>
 </div>
 </li>
 </ul>
-<ul class="last" id="index-68">
+<ul class="last" id="index-69">
 <li><p class="first"><strong>Raster Directives</strong> - Toutes les options des procédures raster sont décrites dans le HOWTO:ref:raster. Ici nous voyons les directives SCALE et BAND utilisées pour redimensionner les données raster et modifier le mappage des bandes.</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span class="k">PROCESSING</span> <span class="s">&quot;SCALE=AUTO&quot;</span>
 <span class="k">PROCESSING</span> <span class="s">&quot;BANDS=3,2,1&quot;</span>
@@ -737,24 +750,24 @@ enough.</p>
 </ul>
 </dd>
 </dl>
-<dl class="docutils" id="index-69">
+<dl class="docutils" id="index-70">
 <dt><a class="reference internal" href="projection.html#projection"><span>PROJECTION</span></a></dt>
 <dd><p class="first last">Indique le début d&#8217;un objet <a class="reference internal" href="projection.html#projection"><span>PROJECTION</span></a>.</p>
 </dd>
 </dl>
-<dl class="docutils" id="index-70">
+<dl class="docutils" id="index-71">
 <dt>REQUIRES [expression]</dt>
 <dd><p class="first last">Définit le contexte pour l&#8217;affichage de cette couche (voir <a class="reference internal" href="#labelrequires">LABELREQUIRES</a>).</p>
 </dd>
 </dl>
-<span class="target" id="index-71"></span><span class="target" id="index-72"></span><span class="target" id="index-73"></span><span class="target" id="index-74"></span><span class="target" id="index-75"></span><span class="target" id="index-76"></span><span class="target" id="index-77"></span><dl class="docutils" id="index-78">
+<span class="target" id="index-72"></span><span class="target" id="index-73"></span><span class="target" id="index-74"></span><span class="target" id="index-75"></span><span class="target" id="index-76"></span><span class="target" id="index-77"></span><span class="target" id="index-78"></span><dl class="docutils" id="index-79">
 <dt>SIZEUNITS [feet|inches|kilometers|meters|miles|nauticalmiles|pixels]</dt>
 <dd>Sets the unit of <a class="reference internal" href="class.html#class"><span>CLASS</span></a> object SIZE values (default is
 pixels).  Useful for simulating buffering. <cite>nauticalmiles</cite> was
 added in MapServer 5.6.</dd>
 </dl>
 <dl class="docutils" id="status">
-<span id="index-79"></span><dt>STATUS [on|off|default]</dt>
+<span id="index-80"></span><dt>STATUS [on|off|default]</dt>
 <dd><p class="first">Définit le statut actuel de la couche. Fréquemment modifié par MapServer lui-même. &#8220;Default&#8221; active la couche (&#8220;on&#8221;) en permanence.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -770,10 +783,10 @@ added in MapServer 5.6.</dd>
 </div>
 </dd>
 </dl>
-<dl class="docutils" id="index-80">
+<dl class="docutils" id="index-81">
 <dt>STYLEITEM [&lt;attribute&gt;|auto|&lt;javascript file&gt;]</dt>
 <dd><p class="first">Styling based on attributes or generated with Javascript</p>
-<ul id="index-81">
+<ul id="index-82">
 <li><p class="first"><em>&lt;attribute&gt;</em>: Item to use for feature specific styling. The
 style information may be represented by a separate attribute
 (style string) attached to the feature.  MapServer supports the
@@ -801,7 +814,7 @@ as follows:</p>
 </ul>
 </li>
 </ul>
-<ul class="simple" id="index-82">
+<ul class="simple" id="index-83">
 <li><em>AUTO</em>: The value: <cite>AUTO</cite> can be used for automatic styling.<ul>
 <li><p class="first">Le stylage automatique peut être fourni par le pilote. Actuellement, le pilote OGR supporte le stylage automatique</p>
 </li>
@@ -810,7 +823,7 @@ as follows:</p>
 </ul>
 </li>
 </ul>
-<ul class="last" id="index-83">
+<ul class="last" id="index-84">
 <li><p class="first"><em>&lt;Javascript file&gt;</em>: A Javascript file that returns a new string
 containing either a <a class="reference internal" href="style.html#style"><span>STYLE</span></a> definition or a <a class="reference internal" href="class.html#class"><span>CLASS</span></a>
 definition with one or multiple styles.  See <a class="reference internal" href="styleitem.html#styleitemjs"><span>STYLEITEM Javascript</span></a>.</p>
@@ -843,7 +856,7 @@ definition with one or multiple styles.  See <a class="reference internal" href=
 </dd>
 </dl>
 <dl class="docutils" id="symbolscaledenom">
-<span id="index-84"></span><dt>SYMBOLSCALEDENOM [double]</dt>
+<span id="index-85"></span><dt>SYMBOLSCALEDENOM [double]</dt>
 <dd><p class="first">L&#8217;échelle à laquelle les symboles et/ou les textes apparaissent à leur taille normale. Cela permet une échelle dynamique des objets en fonction de l&#8217;échelle de la carte. S&#8217;il n&#8217;est pas défini alors cette couche apparaitra toujours à la même taille. La mise à l&#8217;échelle a lieu seulement entre les limites comprises entre MINSIZE et MAXSIZE comme décrit plus haut. L&#8217;échelle est donnée comme le dénominateur de la fraction de l&#8217;échelle, par exemple, pour une carte à l&#8217;échelle de 1:24 000 utilisez 24000. Implémenté dans MapServer 5.0, pour remplacer le paramètre déprécié SYMBOLSCALE.</p>
 <div class="last admonition seealso">
 <p class="first admonition-title">Voir aussi</p>
@@ -851,13 +864,13 @@ definition with one or multiple styles.  See <a class="reference internal" href=
 </div>
 </dd>
 </dl>
-<dl class="docutils" id="index-85">
+<dl class="docutils" id="index-86">
 <dt><a class="reference internal" href="template.html#template"><span>TEMPLATE</span></a> [fichier|url]</dt>
 <dd><p class="first last">Utilisé comme une alternative globale au <cite>TEMPLATE</cite> <a class="reference internal" href="class.html#class"><span>CLASS</span></a>. Voir la partie <a class="reference internal" href="template.html#template"><span>Templating</span></a> pour plus d&#8217;informations.</p>
 </dd>
 </dl>
 <dl class="docutils" id="tileindex-keyword">
-<span id="index-86"></span><dt><a class="reference internal" href="../optimization/tileindex.html#tileindex"><span>TILEINDEX</span></a> [nom du fichier|nom de la couche]</dt>
+<span id="index-87"></span><dt><a class="reference internal" href="../optimization/tileindex.html#tileindex"><span>TILEINDEX</span></a> [nom du fichier|nom de la couche]</dt>
 <dd><p class="first">Nom du fichier d&#8217;index de tuile ou de la couche. Un index de tuile est similaire à un index de bibliothèque d&#8217;ArcInfo. L&#8217;index de tuile contient des objets polygones pour chaque tuile. Le champ qui contient la localisation des données tuilées est données par le paramètre TILEITEM. Quand un fichier est utilisé comme index de tuile pour des couches shapefile ou raster, l&#8217;index de tuile doit être un shapefile. Pour les couches OGR avec CONNECTIONTYPE, n&#8217;importe quelle source de données gérée par OGR peut être un index de tuile. Normallement la localisation doit contenir le chemin vers le fichier tuile relatif au shapepath, non à l&#8217;index de tuile lui-même. Si le paramètre DATA contient une valeur alors il est ajouté à la fin de la localisation. Quand une couche d&#8217;index de tuile est utilisée, elle fonctionne de la même manière qu&#8217;en référençant directement un fichier, mais n&#8217;importe quel source de données peut être utilisé (ie. postgres, oracle).</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -872,12 +885,12 @@ with tiles of different projections. For that, the
 </dd>
 </dl>
 <dl class="docutils" id="tileitem">
-<span id="index-87"></span><dt>TILEITEM [attribut]</dt>
+<span id="index-88"></span><dt>TILEITEM [attribut]</dt>
 <dd><p class="first last">Champ qui contient la localisation d&#8217;une tuile individuelle, &#8220;location&#8221; par défaut.</p>
 </dd>
 </dl>
 <dl class="docutils" id="tilesrs">
-<span id="index-88"></span><dt>TILESRS [attribut]</dt>
+<span id="index-89"></span><dt>TILESRS [attribut]</dt>
 <dd><p class="first">Name of the attribute that contains the SRS of an individual tile.
 That SRS can be expressed in WKT format, as an EPSG:XXXX code or as a
 PROJ.4 string.
@@ -892,7 +905,7 @@ gdaltindex (GDAL &gt;= 2.0), the value of TILESRS is the value of the
 </dd>
 </dl>
 <dl class="docutils" id="tolerance">
-<span id="index-89"></span><dt>TOLERANCE [double]</dt>
+<span id="index-90"></span><dt>TOLERANCE [double]</dt>
 <dd>Sensitivity for point based queries (i.e. via mouse and/or map
 coordinates). Given in TOLERANCEUNITS. If the layer is a POINT or a LINE,
 the default is 3. For all other layer types, the default is 0.  To
@@ -900,7 +913,7 @@ restrict polygon searches so that the point must occur in the polygon
 set the tolerance to zero. This setting does not apply to WFS GetFeature
 operations.</dd>
 </dl>
-<dl class="docutils" id="index-90">
+<dl class="docutils" id="index-91">
 <dt>TOLERANCEUNITS [pixels|feet|inches|kilometers|meters|miles|nauticalmiles|dd]</dt>
 <dd><p class="first last">Unités de la valeur de la TOLERANCE. pixels est la valeur par défaut. <cite>Nauticalmiles</cite> a été ajouté dans MapServer 5.6.</p>
 </dd>
@@ -914,13 +927,13 @@ operations.</dd>
 <p><span class="versionmodified">Obsolète depuis la version 7.0: </span>Use <a class="reference internal" href="composite.html#composite"><span>COMPOSITE</span></a> instead.</p>
 </div>
 </div></blockquote>
-<dl class="docutils" id="index-91">
+<dl class="docutils" id="index-92">
 <dt>TRANSFORM [true|false ul|uc|ur|lc|cc|lr|ll|lc|lr]</dt>
 <dd><p class="first">Informe MapServer si une couche particulière nécessite ou non d&#8217;être transformée à partir d&#8217;un système de coordonnées vers des coordonnées image. True par défaut. Cela vous permet de créer des shapefiles en coordonnées image ou graphique et donc d&#8217;avoir des objets qui seront toujours affichées dans au même endroit pour chaque carte. L&#8217;idéal pour placer des logos ou du texte sur des cartes. Souvenez vous que le système de coordonnés graphique a une origine en haut à gauche de l&#8217;image, contrairement à la plupart des systèmes de coordonnées des cartes.</p>
 <p class="last">La version 4.10 introduit la possibilité de définir des features avec des coordonnées données en pixel (ou en pourcentage, voir UNITS), la plupart du temps des features inline, relative à un autre endroit que le coin UL (haut, gauche) d&#8217;une image. C&#8217;est ce que signifie &#8216;TRANSFORM FALSE&#8217;. En définissant une origine alternative cela vous permet d&#8217;ancrer quelque chose comme un copyright ou un autre morceau d&#8217;image d&#8217;une manière indépendante de la taille de l&#8217;image.</p>
 </dd>
 </dl>
-<span class="target" id="index-92"></span><span class="target" id="index-93"></span><span class="target" id="index-94"></span><span class="target" id="index-95"></span><span class="target" id="index-96"></span><span class="target" id="index-97"></span><span class="target" id="index-98"></span><span class="target" id="index-99"></span><dl class="docutils" id="index-100">
+<span class="target" id="index-93"></span><span class="target" id="index-94"></span><span class="target" id="index-95"></span><span class="target" id="index-96"></span><span class="target" id="index-97"></span><span class="target" id="index-98"></span><span class="target" id="index-99"></span><span class="target" id="index-100"></span><dl class="docutils" id="index-101">
 <dt>TYPE [chart|circle|line|point|polygon|raster|query]</dt>
 <dd><p class="first">Specifies how the data should be drawn. Need not be the same as the
 shapefile type. For example, a polygon shapefile may be drawn as a point
@@ -965,12 +978,12 @@ layers of <cite>TYPE</cite> <cite>annotation</cite>.</p>
 </div>
 </dd>
 </dl>
-<span class="target" id="index-101"></span><span class="target" id="index-102"></span><span class="target" id="index-103"></span><span class="target" id="index-104"></span><span class="target" id="index-105"></span><span class="target" id="index-106"></span><span class="target" id="index-107"></span><span class="target" id="index-108"></span><span class="target" id="index-109"></span><dl class="docutils" id="index-110">
+<span class="target" id="index-102"></span><span class="target" id="index-103"></span><span class="target" id="index-104"></span><span class="target" id="index-105"></span><span class="target" id="index-106"></span><span class="target" id="index-107"></span><span class="target" id="index-108"></span><span class="target" id="index-109"></span><span class="target" id="index-110"></span><dl class="docutils" id="index-111">
 <dt>UNITS [dd|feet|inches|kilometers|meters|miles|nauticalmiles|percentages|pixels]</dt>
 <dd><p class="first last">Unités de la couche. <cite>Percentages</cite> a été ajouté dans MapServer 4.10 (dans ce cas, une valeur entre 0 et 1) et est plutôt utilisé pour les entités &#8220;en ligne&#8221;. <cite>Nauticalmiles</cite> a été ajouté dans MapServer 5.6.</p>
 </dd>
 </dl>
-<dl class="docutils" id="index-111">
+<dl class="docutils" id="index-112">
 <dt>VALIDATION</dt>
 <dd><p class="first">Indique lle commencement d&#8217;un bloc <cite>VALIDATION</cite></p>
 <p class="last">A partir de MapServer 5.4.0, les blocs <cite>VALIDATION</cite> sont le mécanisme préféré pour spécifier les patterns de validation pour les paramètres CGI de substitution de variables. Voir la <a class="reference internal" href="../cgi/runsub.html#runsub"><span>Substitution à la volée</span></a>.</p>
@@ -1015,7 +1028,7 @@ layers of <cite>TYPE</cite> <cite>annotation</cite>.</p>
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
       
     </div>
 

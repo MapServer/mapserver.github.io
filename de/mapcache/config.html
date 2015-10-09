@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuration File &mdash; MapServer 7.0.0-beta1 documentation</title>
+    <title>Configuration File &mdash; MapServer 7.0.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0-beta1',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,8 +27,8 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="Über dieses Dokument" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../index.html" />
-    <link rel="up" title="MapCache" href="index.html" />
+    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="up" title="MapCache 1.4" href="index.html" />
     <link rel="next" title="Supported Tile Services" href="services.html" />
     <link rel="prev" title="Compilation &amp; Installation" href="install.html" />
    
@@ -130,23 +130,6 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="Stichwortverzeichnis"
-             accesskey="I">Index</a></li>
-        <li class="right" >
-          <a href="services.html" title="Supported Tile Services"
-             accesskey="N">weiter</a> |</li>
-        <li class="right" >
-          <a href="install.html" title="Compilation &amp; Installation"
-             accesskey="P">zurück</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapCache</a> &raquo;</li> 
-      </ul>
-    </div>
   
 
     <div class="document">
@@ -180,7 +163,7 @@ outlined here:</p>
 </pre></div>
 </div>
 <div class="section" id="source">
-<span id="mapcache-sources"></span><h2>Quelle<a class="headerlink" href="#source" title="Link zu dieser Überschrift">¶</a></h2>
+<span id="mapcache-config-source"></span><h2>Quelle<a class="headerlink" href="#source" title="Link zu dieser Überschrift">¶</a></h2>
 <p>A source is a service mod-mapcache can query to obtain image data. This is
 typically a WMS server accessible by a url (there are currently no other
 sources than WMS implemented, others may be added later if the need
@@ -219,6 +202,9 @@ arises)</p>
 <span class="c">         key: value\r\n</span>
 
 <span class="c">         HTTP header.</span>
+
+<span class="c">         You may also forward a header from the incoming client request</span>
+<span class="c">         using the &lt;MyHeader&gt;{X-Header-To-Forward}&lt;MyHeader&gt; syntax</span>
 <span class="c">      --&gt;</span>
       <span class="nt">&lt;headers&gt;</span>
          <span class="nt">&lt;User-Agent&gt;</span>mod-mapcache/r175<span class="nt">&lt;/User-Agent&gt;</span>
@@ -534,7 +520,7 @@ its default srs is EPSG:3857 instead of EPSG:900913.</p>
 </div>
 </div>
 <div class="section" id="tileset">
-<h2>Tileset<a class="headerlink" href="#tileset" title="Link zu dieser Überschrift">¶</a></h2>
+<span id="mapcache-config-tileset"></span><h2>Tileset<a class="headerlink" href="#tileset" title="Link zu dieser Überschrift">¶</a></h2>
 <p>A tileset is the essential configuration item for mod-mapcache, and corresponds to a set of tiles
 coming from a <em>source</em>, stored in a <em>cache</em>, and returned to the client in a
 given <em>format</em>.</p>
@@ -564,8 +550,24 @@ given <em>format</em>.</p>
 <span class="c">      NOTE: when adding a &lt;grid&gt; element, you *MUST* make sure that the source you have selected is able to</span>
 <span class="c">      return images in the grid&#39;s srs.</span>
 <span class="c">   --&gt;</span>
-      <span class="nt">&lt;grid</span> <span class="na">restricted_extent=</span><span class="s">&quot;-10 40 10 50&quot;</span> <span class="na">minzoom=</span><span class="s">&quot;4&quot;</span> <span class="na">maxzoom=</span><span class="s">&quot;17&quot;</span><span class="nt">&gt;</span>WGS84<span class="nt">&lt;/grid&gt;</span>
-      <span class="nt">&lt;grid&gt;</span>g<span class="nt">&lt;/grid&gt;</span>
+   <span class="nt">&lt;grid</span> <span class="na">restricted_extent=</span><span class="s">&quot;-10 40 10 50&quot;</span> <span class="na">minzoom=</span><span class="s">&quot;4&quot;</span> <span class="na">maxzoom=</span><span class="s">&quot;17&quot;</span><span class="nt">&gt;</span>WGS84<span class="nt">&lt;/grid&gt;</span>
+   <span class="nt">&lt;grid&gt;</span>g<span class="nt">&lt;/grid&gt;</span>
+
+   <span class="c">&lt;!-- You may store hidden intermediate levels of tiles to enable higher quality output when reassembling</span>
+<span class="c">      tiles. This may be needed when caching maps containing labels to avoid the text from becoming too</span>
+<span class="c">      small or too blurry when requesting resolutions that are far away from the native grid resolutions.</span>
+
+<span class="c">      Supposing grid &quot;mygrid&quot; consists of 256x256 pixel tiles, with resolutions r1,r2,r3,r4,...rn, mapcache</span>
+<span class="c">      will populate a hidden grid called &quot;mygrid_intermediate_0.5&quot; containing tiles of size `256+256*0.5=384`</span>
+<span class="c">      with resolutions r1+(r2-r1)*0.5, r2+(r3-r2)*0.5, ... r(n-1)+(r(n)-r(n-1)*0.5. i.e. a tile with a given</span>
+<span class="c">      extent will be stored once in a 256x256 tile, and once in a 384x384 one.</span>
+
+<span class="c">      This intermediate grid is private to mapcache and will not be exposed to tiled requests. It will only be</span>
+<span class="c">      used for WMS requests that require horizontal assembling.</span>
+<span class="c">   --&gt;</span>
+
+   <span class="nt">&lt;grid</span> <span class="na">use_wms_intermediate_resolutions=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>mygrid<span class="nt">&lt;/grid&gt;</span>
+
 
    <span class="c">&lt;!-- metadata</span>
 <span class="c">      optional metadata tags used for responding to GetCapabilities request.</span>
@@ -585,8 +587,8 @@ given <em>format</em>.</p>
 <span class="c">      the supplied image is read when the configuration is loaded.</span>
 <span class="c">      if you make changes to the image, they will NOT be reflected on tiles already</span>
 <span class="c">      stored in the cache, nor on newly stored tiles until the server is restarted</span>
-<span class="c">   &lt;watermark&gt;/path/to/static/watermark.png&lt;/watermark&gt;</span>
 <span class="c">   --&gt;</span>
+   <span class="nt">&lt;watermark&gt;</span>/path/to/static/watermark.png<span class="nt">&lt;/watermark&gt;</span>
 
    <span class="c">&lt;!-- format</span>
 <span class="c">      (optional) format to use when storing a tile. this should be a format with high</span>
@@ -717,7 +719,7 @@ to. You should of course enable at least one.</p>
    <span class="c">&lt;!-- format</span>
 <span class="c">      image format to use when assembling tiles</span>
 <span class="c">   --&gt;</span>
-   <span class="nt">&lt;format&gt;</span>myjpeg<span class="nt">&lt;/format&gt;</span>
+   <span class="nt">&lt;format</span> <span class="na">allow_client_override=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>myjpeg<span class="nt">&lt;/format&gt;</span>
 
 <span class="nt">&lt;/service&gt;</span>
 <span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wmts&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
@@ -758,22 +760,22 @@ to. You should of course enable at least one.</p>
 <span class="c">     if you&#39;re paranoid, or to &quot;empty_img&quot; if you want to play nice with non-conforming clients.</span>
 <span class="c">--&gt;</span>
 <span class="nt">&lt;errors&gt;</span>report<span class="nt">&lt;/errors&gt;</span>
-
-
+</pre></div>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;locker</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="nt">&gt;</span>  <span class="c">&lt;!-- this is the default --&gt;</span>
 <span class="c">&lt;!--</span>
 <span class="c">     location to put lockfiles (to block other clients while a metatile is being rendered.</span>
 <span class="c">     defaults to /tmp</span>
 <span class="c">     this location should be writable by the apache user</span>
 <span class="c">--&gt;</span>
-<span class="nt">&lt;lock_dir&gt;</span>/tmp<span class="nt">&lt;/lock_dir&gt;</span>
-
-<span class="c">&lt;!--</span>
-<span class="c">     interval in microseconds to sleep before checking that a lockfile is still present.</span>
-<span class="c">     default is 1/100th of a second (i.e. 10000 microseconds)</span>
-<span class="c">--&gt;</span>
-<span class="nt">&lt;lock_retry&gt;</span>10000<span class="nt">&lt;/lock_retry&gt;</span>
-
-<span class="c">&lt;!-- log_level</span>
+  <span class="nt">&lt;directory&gt;</span>/tmp<span class="nt">&lt;/directory&gt;</span>
+  <span class="nt">&lt;retry&gt;</span>0.01<span class="nt">&lt;/retry&gt;</span> <span class="c">&lt;!-- check back every .01 seconds --&gt;</span>
+  <span class="nt">&lt;timeout&gt;</span>60<span class="nt">&lt;/timeout&gt;</span> <span class="c">&lt;!-- consider a lock has gone stale after this many seconds. may cause issues if WMS rendering times is longer than this value --&gt;</span>
+<span class="nt">&lt;/locker&gt;</span>
+</pre></div>
+</div>
+<p>For specific information about locking, read <a class="reference internal" href="locks.html#mapcache-locks"><span>this</span></a></p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- log_level</span>
 <span class="c">   For CGI/FastCGI only - For the apache module use the httpd.conf</span>
 <span class="c">   LogLevel key.</span>
 <span class="c">   Defines the verbosity of the what is sent to the logs.</span>
@@ -855,7 +857,7 @@ to. You should of course enable at least one.</p>
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
       
     </div>
 

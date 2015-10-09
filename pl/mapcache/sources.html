@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Data Sources &mdash; MapServer 7.0.0-beta1 documentation</title>
+    <title>Data Sources &mdash; MapServer 7.0.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0-beta1',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,8 +27,8 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="O tych dokumentach" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../index.html" />
-    <link rel="up" title="MapCache" href="index.html" />
+    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="up" title="MapCache 1.4" href="index.html" />
     <link rel="next" title="Tile Assembling" href="tile_assembling.html" />
     <link rel="prev" title="Proxying Unsupported Requests" href="proxying.html" />
    
@@ -130,23 +130,6 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Nawigacja</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="Indeks ogólny"
-             accesskey="I">indeks</a></li>
-        <li class="right" >
-          <a href="tile_assembling.html" title="Tile Assembling"
-             accesskey="N">dalej</a> |</li>
-        <li class="right" >
-          <a href="proxying.html" title="Proxying Unsupported Requests"
-             accesskey="P">wstecz</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapCache</a> &raquo;</li> 
-      </ul>
-    </div>
   
 
     <div class="document">
@@ -166,22 +149,42 @@
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
-<p class="first admonition-title">Informacja</p>
-<p class="last">This page is a work in progress</p>
-</div>
 <p>MapCache uses the concept of a &#8220;source&#8221; as a service that is able to return
 image data given a set of parameters (namely an extent, an image size, and a
 projection). Typically, a source is the third party WMS server that you want
 to put a tilecache infront of.</p>
-<div class="section" id="http-service-definition">
-<span id="mapcache-http"></span><h2>HTTP Service Definition<a class="headerlink" href="#http-service-definition" title="Stały odnośnik do tego nagłówka">¶</a></h2>
-</div>
 <div class="section" id="wms-sources">
 <span id="mapcache-source-wms"></span><h2>WMS Sources<a class="headerlink" href="#wms-sources" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<p>A WMS server is the main upstream server type used by mapcache. When processing a
+given tile, if it is not found in its cache, MapCache will query a WMS server with
+a GetMap request, split the returned image data into individual tiles, and store
+those tiles in its cache for subsequent requests.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;source</span> <span class="na">name=</span><span class="s">&quot;mywmsserver&quot;</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;http&gt;</span> .... <span class="nt">&lt;/http&gt;</span>
+  <span class="nt">&lt;getmap&gt;</span>
+    <span class="nt">&lt;params&gt;</span>
+      <span class="nt">&lt;map&gt;</span>/path/to/mapserver/mapfile.map<span class="nt">&lt;/map&gt;</span>
+      <span class="nt">&lt;layers&gt;</span>value2<span class="nt">&lt;/layers&gt;</span>
+    <span class="nt">&lt;/params&gt;</span>
+  <span class="nt">&lt;/getmap&gt;</span>
+<span class="nt">&lt;/source&gt;</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">Zobacz także</p>
+<p class="last"><a class="reference internal" href="http.html#mapcache-http"><span>HTTP Requests</span></a> to configure how the <cite>&lt;http&gt;</cite> block should be expressed</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Ostrzeżenie</p>
+<p class="last">You should usually only supply vendor specific parameter to the
+<cite>&lt;params&gt;</cite> block.  <strong>Never</strong> include any hardcoded BBOX, WIDTH, HEIGHT, SRS or
+any parameters related to dimensions inside this block, as these are calculated
+by MapCache itself at runtime.</p>
+</div>
 </div>
 <div class="section" id="mapfile-sources">
 <span id="mapcache-source-mapfile"></span><h2>MapFile Sources<a class="headerlink" href="#mapfile-sources" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<p>Experimental</p>
 </div>
 </div>
 
@@ -203,7 +206,6 @@ to put a tilecache infront of.</p>
   <h3>Current Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Data Sources</a><ul>
-<li><a class="reference internal" href="#http-service-definition">HTTP Service Definition</a></li>
 <li><a class="reference internal" href="#wms-sources">WMS Sources</a></li>
 <li><a class="reference internal" href="#mapfile-sources">MapFile Sources</a></li>
 </ul>
@@ -232,7 +234,7 @@ to put a tilecache infront of.</p>
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
       
     </div>
 

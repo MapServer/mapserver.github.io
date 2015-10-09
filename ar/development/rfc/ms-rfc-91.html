@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MS RFC 91: Layer Filter Normalization &mdash; MapServer 7.0.0-beta1 documentation</title>
+    <title>MS RFC 91: Layer Filter Normalization &mdash; MapServer 7.0.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '7.0.0-beta1',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../../index.html" />
+    <link rel="top" title="MapServer 7.0.0 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 92: Migrating from Autotools to CMake" href="ms-rfc-92.html" />
     <link rel="prev" title="MS RFC 90: Enable/Disable Layers in OGC Web Services by IP Lists" href="ms-rfc-90.html" />
@@ -129,23 +129,6 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="ms-rfc-92.html" title="MS RFC 92: Migrating from Autotools to CMake"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="ms-rfc-90.html" title="MS RFC 90: Enable/Disable Layers in OGC Web Services by IP Lists"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
-      </ul>
-    </div>
   
 
     <div class="document">
@@ -208,7 +191,7 @@ to features much the same way as the native MapServer shapefile and tiled shapef
 <div class="section" id="driver-filter-translation">
 <h2>2.1 Driver Filter Translation<a class="headerlink" href="#driver-filter-translation" title="Permalink to this headline">¶</a></h2>
 <p>Drivers that support complex expressions (e.g. PostGIS and Oracle Spatial) will need to implement a new layer API function
-(propose msXXXLayerTranslateFilter(layerObj <a href="#id1"><span class="problematic" id="id2">*</span></a>layer, expressionObj <a href="#id3"><span class="problematic" id="id4">*</span></a>filter, char <a href="#id5"><span class="problematic" id="id6">*</span></a>filteritem)) to translate both simple filters
+(propose msXXXLayerTranslateFilter(layerObj *layer, expressionObj *filter, char *filteritem)) to translate both simple filters
 amd MapServer logical expressions to a native representation. MapServer logical exressions consist of a series of tokens that
 are processed from from left to right. It should be possible then to convert these tokens to a native representation of
 that the driver will handle independently of MapServer&#8211; typically some flavor of SQL.</p>
@@ -267,22 +250,24 @@ implementation approach, instead it offers an opportunity for more complete tran
 <li>MS SQL Server: supports FITLER -&gt; native SQL snippet</li>
 </ul>
 </div>
-<div class="section" id="id7">
-<h2>3.2 Overview<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h2>3.2 Overview<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>limited additions to logial expression syntax are recommended:
-- spatial operator syntax (e.g. A INTERSECTS B) will be deprecated in favor of a functional notation (e.g. INTERSECTS(A, B) = TRUE). This is more consistent with spatialally enabled SQL syntax and easer to translate.
-- BEYOND/DWITHIN operators will <em>only</em> exist in the functional form, they are useless in logical expressions as they site now</li>
-<li>there are no changes to the MapScript API</li>
-<li>drivers that support complex expressions (e.g. PostGIS, Oracle, SDE, MS SQL Server, OGR) need to implement a translation</li>
+<li>limited additions to logial expression syntax are recommended:<ul>
+<li>spatial operator syntax (e.g. A INTERSECTS B) will be deprecated in favor of a functional notation (e.g. INTERSECTS(A, B) = TRUE). This is more consistent with spatialally enabled SQL syntax and easer to translate.</li>
+<li>BEYOND/DWITHIN operators will <em>only</em> exist in the functional form, they are useless in logical expressions as they site now</li>
 </ul>
-<p>funcion to construct a partial &#8220;WHERE&#8221; clause from a set of expression/filter tokens</p>
+</li>
+<li>there are no changes to the MapScript API</li>
+<li>drivers that support complex expressions (e.g. PostGIS, Oracle, SDE, MS SQL Server, OGR) need to implement a translation
+funcion to construct a partial &#8220;WHERE&#8221; clause from a set of expression/filter tokens</li>
+</ul>
 </div>
 <div class="section" id="files-affected">
 <h2>3.2 Files affected<a class="headerlink" href="#files-affected" title="Permalink to this headline">¶</a></h2>
 <p>The following files will be modified by this RFC:</p>
 <ul class="simple">
-<li>mapserver.h: extend expressionObj to contain a native_string (char <a href="#id8"><span class="problematic" id="id9">*</span></a>). This will hold a the native expression of the filter.</li>
+<li>mapserver.h: extend expressionObj to contain a native_string (char *). This will hold a the native expression of the filter.</li>
 <li>mapquery.c: call merging function in msQueryByAttribute() and msQueryByFilter(), call translation function in all query functions.</li>
 <li>mapdraw.c: call fitler translation function in msDrawVectorLayer()</li>
 <li>maplayer.c: changes/additions to layer API function</li>
@@ -378,7 +363,7 @@ The suggested changes would remove that step and improve performane in <em>all</
 <li><a class="reference internal" href="#future-enhancements">2.5 Future Enhancements</a></li>
 <li><a class="reference internal" href="#implementation-details">3. Implementation Details</a></li>
 <li><a class="reference internal" href="#summary-of-current-behaviour-by-driver">3.1 Summary of Current Behaviour (by driver)</a></li>
-<li><a class="reference internal" href="#id7">3.2 Overview</a></li>
+<li><a class="reference internal" href="#id1">3.2 Overview</a></li>
 <li><a class="reference internal" href="#files-affected">3.2 Files affected</a></li>
 <li><a class="reference internal" href="#mapscript">3.3 MapScript</a></li>
 <li><a class="reference internal" href="#backwards-compatibilty-issues">3.4 Backwards Compatibilty Issues</a></li>
@@ -412,7 +397,7 @@ The suggested changes would remove that step and improve performane in <em>all</
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
       
     </div>
 

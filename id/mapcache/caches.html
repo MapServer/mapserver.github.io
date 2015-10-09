@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Cache Types &mdash; MapServer 7.0.0-beta1 documentation</title>
+    <title>Cache Types &mdash; MapServer 7.0.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0-beta1',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,8 +27,8 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="Tentang dokumen ini" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../index.html" />
-    <link rel="up" title="MapCache" href="index.html" />
+    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="up" title="MapCache 1.4" href="index.html" />
     <link rel="next" title="Image Formats" href="formats.html" />
     <link rel="prev" title="Seeder" href="seed.html" />
    
@@ -130,23 +130,6 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigasi</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="Indeks Umum"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="formats.html" title="Image Formats"
-             accesskey="N">berikut</a> |</li>
-        <li class="right" >
-          <a href="seed.html" title="Seeder"
-             accesskey="P">sebelum</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Dokumentasi MapServer 7.0.0-beta1</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapCache</a> &raquo;</li> 
-      </ul>
-    </div>
   
 
     <div class="document">
@@ -171,7 +154,7 @@
 <span id="mapcache-cache-disk"></span><h2>Disk Caches<a class="headerlink" href="#disk-caches" title="Link permanen untuk headline ini">¶</a></h2>
 <p>The disk based cache is the simplest cache to configure, and the one with the
 the fastest access to existing tiles. It is ideal for small tile repositories,
-but may cause trouble for sites hosting millions of tiles, as the number of
+but will often cause trouble for sites hosting millions of tiles, as the number of
 files or directory may rapidly overcome the capabilities of the underlying
 filesystem. Additionaly, the block size chosen for the filesystem must closely
 match the mean size of a stored tile: ideally, any given tile should just fit
@@ -179,13 +162,31 @@ inside a filesystem block, so as not to waste storage space inside each block,
 and not have to use up multiple blocks per tile.</p>
 <p>The location of the files/directories has to be readable and writable by the
 user running the tile server.</p>
-<p>There are two types of disk caches, that create a different hierarchy of files:</p>
+<div class="section" id="common-configuration">
+<h3>Common Configuration<a class="headerlink" href="#common-configuration" title="Link permanen untuk headline ini">¶</a></h3>
+<p>Disk caches are added via</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;disk_cache&quot;</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span> <span class="na">layout=</span><span class="s">&quot;...&quot;</span><span class="nt">&gt;</span>
+  ...
+  <span class="nt">&lt;symlink_blank/&gt;</span>
+  <span class="nt">&lt;creation_retry&gt;</span>3<span class="nt">&lt;/creation_retry&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>All caches except the &#8220;template&#8221; one support the &lt;symlink_blank/&gt; option which
+(depending on platform availability) will detect tiles of uniform color and
+create a symbolic link to a single uniform color tile instead of storing the
+actual blank data in the tile&#8217;s file.</p>
+<p>All caches support the &lt;creation_retry&gt; option, which specifies the number of
+times mapcache should retry if it failed to create a tile&#8217;s file or symlink. The
+default is to fail immediately, you may want to set this to a positive value
+if using a network mounted filesystem where transient errors are common.</p>
+</div>
 <div class="section" id="default-structure">
 <h3>Default Structure<a class="headerlink" href="#default-structure" title="Link permanen untuk headline ini">¶</a></h3>
 <p>The default disk cache stores tiles in a structure nearly identical to the
 file/directory hierarchy used by TileCache. The only change is that a top level
-directory corresponding to the name of the grid is added (as MapCache supports
-multiple grids per tileset)</p>
+directory structure corresponding to the name of the grid and the eventual value
+of the tileset&#8217;s dimensions is added.</p>
 <p>This cache is capable of detecting blank (i.e. uniform color) tiles and using
 a symbolic link to a single blank tile to gain disk space.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;disk&quot;</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="nt">&gt;</span>
@@ -197,13 +198,35 @@ a symbolic link to a single blank tile to gain disk space.</p>
 <p>The two only configuration keys are the root directory where the tiles will be
 stored, and a key to activate the symbolic linking of blank tiles</p>
 </div>
+<div class="section" id="arcgis-compatible-structure">
+<h3>Arcgis Compatible Structure<a class="headerlink" href="#arcgis-compatible-structure" title="Link permanen untuk headline ini">¶</a></h3>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;arcgis&quot;</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span> <span class="na">layout=</span><span class="s">&quot;arcgis&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;base&gt;</span>/tmp<span class="nt">&lt;/base&gt;</span>
+   <span class="nt">&lt;symlink_blank/&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>This layout creates a tile structure compatible with an arcgis exploded cache. Tiles
+will be stored in files that ressemble <cite>/tmp/{tileset}/{grid}/{dimension}/L{z}/R{y}/C{x}.{ext}</cite></p>
+</div>
+<div class="section" id="worldwind-compatible-structure">
+<h3>Worldwind Compatible Structure<a class="headerlink" href="#worldwind-compatible-structure" title="Link permanen untuk headline ini">¶</a></h3>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;worldwind&quot;</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span> <span class="na">layout=</span><span class="s">&quot;worldwind&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;base&gt;</span>/tmp<span class="nt">&lt;/base&gt;</span>
+   <span class="nt">&lt;symlink_blank/&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>This layout creates a tile structure compatible with a worldwind cache. Tiles
+will be stored in files that ressemble <cite>/tmp/{tileset}/{grid}/{dimension}/{z}/{y}/{y}_{x}.ext</cite></p>
+</div>
 <div class="section" id="template-structure">
 <h3>Template Structure<a class="headerlink" href="#template-structure" title="Link permanen untuk headline ini">¶</a></h3>
 <p>The template based disk cache allows you to create (or reuse an existing) tile
 structure that you define in advance. The &lt;template&gt; parameter takes a string
 argument where various template entries will be replaced at runtime by the correct
 value for each tile to store.</p>
-<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tmpl&quot;</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="nt">&gt;</span>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tmpl&quot;</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span> <span class="na">layout=</span><span class="s">&quot;template&quot;</span><span class="nt">&gt;</span>
    <span class="c">&lt;!-- template</span>
 
 <span class="c">       string template that will be used to map a tile (by tileset, grid name, dimension,</span>
@@ -292,13 +315,14 @@ insert new tiles concurrently.</p>
 </pre></div>
 </div>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;dbfile&gt;</span>/path/to/dbfile.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
 <p>You may also add custom sqlite pragmas that will be executed when first
 connecting to a sqlite db, e.g. to override some compiled in sqlite
 defaults</p>
-<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqlitetemplate&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
    <span class="nt">&lt;dbfile&gt;</span>/tmp/sqlitefile.db<span class="nt">&lt;/dbfile&gt;</span>
    <span class="nt">&lt;pragma</span> <span class="na">name=</span><span class="s">&quot;max_page_count&quot;</span><span class="nt">&gt;</span>10000000<span class="nt">&lt;/pragma&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
@@ -313,11 +337,115 @@ defaults</p>
 <h3>Custom Schema<a class="headerlink" href="#custom-schema" title="Link permanen untuk headline ini">¶</a></h3>
 <p>This cache can use any database schema, it is up to you to supply the SQL that
 will be exectuted to select or insert a new tile.</p>
-<p>This cache type is not fully implemented yet (there is no way to configure it
-from the mapcache.xml configuration file yet)</p>
+<p>In order to use such a functionality you should supply the sql queries that will
+be used against your custom schema. It is up to you to make sure your queries are
+correct and will return the correct data for a given tileset, dimension, grid, x,
+y and z.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqlitecustom&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;dbfile&gt;</span>/tmp/sqlitefile.db<span class="nt">&lt;/dbfile&gt;</span>
+   <span class="nt">&lt;queries&gt;</span>
+     <span class="nt">&lt;create&gt;</span>create table if not exists tiles(tileset text, grid text, x integer, y integer, z integer, data blob, dim text, ctime datetime, primary key(tileset,grid,x,y,z,dim))<span class="nt">&lt;/create&gt;</span>
+     <span class="nt">&lt;exists&gt;</span>select 1 from tiles where x=:x and y=:y and z=:z and dim=:dim and tileset=:tileset and grid=:grid<span class="nt">&lt;/exists&gt;</span>
+     <span class="nt">&lt;get&gt;</span>select data,strftime(&quot;%s&quot;,ctime) from tiles where tileset=:tileset and grid=:grid and x=:x and y=:y and z=:z and dim=:dim<span class="nt">&lt;/get&gt;</span>
+     <span class="nt">&lt;set&gt;</span>insert or replace into tiles(tileset,grid,x,y,z,data,dim,ctime) values (:tileset,:grid,:x,:y,:z,:data,:dim,datetime(&#39;now&#39;))<span class="nt">&lt;/set&gt;</span>
+     <span class="nt">&lt;delete&gt;</span>delete from tiles where x=:x and y=:y and z=:z and dim=:dim and tileset=:tileset and grid=:grid<span class="nt">&lt;/delete&gt;</span>
+   <span class="nt">&lt;/queries&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
 </div>
-<div class="section" id="mbtiles-schema">
-<h3>MBTiles Schema<a class="headerlink" href="#mbtiles-schema" title="Link permanen untuk headline ini">¶</a></h3>
+<p>Note that for the &lt;get&gt; query that returns data for a given tile, the first returned argument
+is considered to be the image blob, and the second optional one a timestamp representing the
+creation timestamp for that tile.</p>
+</div>
+<div class="section" id="blank-tile-detection">
+<h3>Blank Tile Detection<a class="headerlink" href="#blank-tile-detection" title="Link permanen untuk headline ini">¶</a></h3>
+<p>Mapcache&#8217;s sqlite caches support the detection and storage of blank (i.e. uniform
+color) tiles, and will store a quadruplet of the rgba color component in the data
+blob instead of the compressed image data itself. That quadruplet will be
+transformed on-the-fly to a 1-bit paletted png before being returned to the client.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqliteblank&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;dbfile&gt;</span>/tmp/sqlitefile.db<span class="nt">&lt;/dbfile&gt;</span>
+   <span class="nt">&lt;detect_blank/&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Catatan</p>
+<p class="last">sqlite files created with this option will only be fully understood by
+mapcache as each tile blob may contain a #rgba quadruplet instead of
+the expected png or jpeg data.</p>
+</div>
+</div>
+<div class="section" id="using-multiple-sqlite-database-files">
+<h3>Using multiple sqlite database files<a class="headerlink" href="#using-multiple-sqlite-database-files" title="Link permanen untuk headline ini">¶</a></h3>
+<p>You may want to split an sqlite cache into multiple files, for organisational
+purposes, or to keep the size of each file to a reasonable limit if caching
+large amounts of data.</p>
+<p>In order to do so you may use a template to determine which file should be
+used for a given file:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;dbfile&gt;</span>/path/to/{grid}/{dim}/{tileset}.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>You may also limit the x and y number of tiles to be stored inside a single database
+file:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;dbfile&gt;</span>/path/to/{grid}/{dim}/{tileset}/{z}/{x}-{y}.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
+   <span class="nt">&lt;xcount&gt;</span>1000<span class="nt">&lt;/xcount&gt;</span>
+   <span class="nt">&lt;ycount&gt;</span>1000<span class="nt">&lt;/ycount&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>In this case you <strong>should</strong> include the {x}, {y} and {z} replacements in the
+template determining the file to use.
+In the previous example, tile (z,x,y)=(15,3024,1534) would be stored in a file
+named /path/to/g/mytileset/15/3000-1000.sqlite3 and tile (5,2,8) would be stored
+in a file named /path/to/g/mytileset/5/0-0.sqlite3</p>
+<p>The following template keys are available for operating on the given tile&#8217;s
+x,y, and z:</p>
+<ul class="simple">
+<li><cite>{z}</cite> is replaced by the zoom level</li>
+<li><cite>{x}</cite> is replaced by the x value of the leftmost tile inside the sqlite file
+containing the requested tile</li>
+<li><cite>{inv_x}</cite> is replaced by the x value of the rightmost tile.</li>
+<li><cite>{y}</cite> is replaced by the y value of the bottommost tile.</li>
+<li><cite>{inv_y}</cite> is replaced by the y value of the topmost tile.</li>
+<li><cite>{div_x}</cite> is replaced by the index of the sqlite file starting from the left
+of the grid (i.e. <cite>{div_x} = {x}/&lt;xcount&gt;</cite>)</li>
+<li><cite>{inv_div_x}</cite> same as {div_x} but starting from the right.</li>
+<li><cite>{div_y}</cite> is replaced by the index of the sqlite file starting from the bottom
+of the grid (i.e. <cite>{div_y} = {y}/&lt;ycount&gt;</cite>)</li>
+<li><cite>{inv_div_y}</cite> same as <cite>{div_y}</cite> but starting from the top.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Catatan</p>
+<p class="last">{inv_x} and {inv_div_x} will probably be rarely used, whereas
+{inv_y} and {inv_div_y} will find some usage for people who prefer to index
+their dbfiles files from top to bottom rather than bottom to top.</p>
+</div>
+<p>In some occurences, it may be desirable to have a precise hand on the
+filename to use for a given x,y,z, tile lookup, e.g. to look for a file
+named <cite>Z03-R00003-C000009.sqlite3</cite> instead of just <cite>Z3-R3-C9.sqlite3</cite>. The
+&lt;dbfile&gt; entry supports formatting attributes, following the unix
+printf syntax ( c.f.: <a class="reference external" href="http://linux.die.net/man/3/printf">http://linux.die.net/man/3/printf</a> ), by suffixing
+each template key with &#8220;_fmt&#8221;, e.g.:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;mysqlite&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;dbfile</span>
+      <span class="na">x_fmt=</span><span class="s">&quot;%08d&quot;</span>
+      <span class="na">inv_y_fmt=</span><span class="s">&quot;%08d&quot;</span>
+   <span class="nt">&gt;</span>/data/{tileset}/{grid}/L{z}/R{inv_y}/C{x}.sqlite<span class="nt">&lt;/template&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Catatan</p>
+<p class="last">If not specified, the default behavior is to use &#8220;%d&#8221; for formatting.</p>
+</div>
+</div>
+</div>
+<div class="section" id="mbtiles-caches">
+<span id="mapcache-cache-mbtiles"></span><h2>MBTiles caches<a class="headerlink" href="#mbtiles-caches" title="Link permanen untuk headline ini">¶</a></h2>
 <p>This cache type is a shortcut to the previous custom schema sqlite cache, with
 pre-populated SQL queries that correspond to the MBTiles specification.</p>
 <p>Although the default mbtiles schema is very simple, mapcache uses the same multi-
@@ -369,7 +497,6 @@ sqlite database (error: SQL logic error or missing database (1)).
 Upgrading to sqlite &gt;= 3.7.15 seems to resolve this issue.</p>
 </div>
 </div>
-</div>
 <div class="section" id="memcache-caches">
 <span id="mapcache-cache-memcache"></span><h2>Memcache Caches<a class="headerlink" href="#memcache-caches" title="Link permanen untuk headline ini">¶</a></h2>
 <p>This cache type stores tile to an external memcached server running on the local
@@ -394,6 +521,16 @@ connections for some intervals of time before coming back online afterwards.</p>
 <p class="last">Tiles stored in memcache backends are configured to expire in 1 day by
 default. This can be overriden at the tileset level with the &lt;auto_expire&gt;
 keyword.</p>
+</div>
+<p>To limit the memory used by blank tiles inside the memcache instance, you
+may enable blank tile detection, in which case a <cite>#rgba</cite> quadruplet will
+be stored to the cache instead of the actual image data. MapCache will convert
+that on the fly to a 1-bit paletted PNG image before returning it to the client.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;memcache&quot;</span> <span class="na">type=</span><span class="s">&quot;memcache&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;detect_blank/&gt;</span>
+   ...
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
 </div>
 </div>
 <div class="section" id="geo-tiff-caches">
@@ -453,10 +590,10 @@ containing the requested tile</li>
 <li>{y} is replaced by the y value of the bottommost tile.</li>
 <li>{inv_y} is replaced by the y value of the topmost tile.</li>
 <li>{div_x} is replaced by the index of the TIFF file starting from the left
-of the grid (i.e. {div_x} = {x}/&lt;countx&gt;)</li>
+of the grid (i.e. {div_x} = {x}/&lt;xcount&gt;)</li>
 <li>{inv_div_x} same as {div_x} but starting from the right.</li>
 <li>{div_y} is replaced by the index of the TIFF file starting from the bottom
-of the grid (i.e. {div_y} = {y}/&lt;county&gt;)</li>
+of the grid (i.e. {div_y} = {y}/&lt;ycount&gt;)</li>
 <li>{inv_div_y} same as {div_y} but starting from the top.</li>
 </ul>
 <div class="admonition note">
@@ -509,6 +646,24 @@ to load the tiles are tiled TIFFs with jpeg compression, who&#8217;s size are
 16384x16384. The number of files to store on disk is thus reduced 4096 times
 compared to the basic disk cache.</p>
 </div>
+<div class="section" id="using-a-specific-locker">
+<h3>Using a specific locker<a class="headerlink" href="#using-a-specific-locker" title="Link permanen untuk headline ini">¶</a></h3>
+<p>Mapcache needs to create a <a class="reference internal" href="locks.html#mapcache-locks"><span>lock</span></a> when writing inside a
+TIFF file to ensure that no two instances are updating the same file
+concurrently. By default the global mapcache locker will be used, you can
+however configure a different locking mechanism or behavior by configuring it
+inside the TIFF cache itself.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">lihat juga</p>
+<p class="last"><a class="reference internal" href="locks.html#mapcache-locks"><span>Locking Mechanisms</span></a></p>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tiff&quot;</span> <span class="na">type=</span><span class="s">&quot;tiff&quot;</span><span class="nt">&gt;</span>
+   ...
+   <span class="nt">&lt;locker&gt;</span> .... <span class="nt">&lt;/locker&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="geotiff-support">
 <h3>GeoTIFF Support<a class="headerlink" href="#geotiff-support" title="Link permanen untuk headline ini">¶</a></h3>
 <p>If compiled with GeoTiff and write support, MapCache will add referencing
@@ -539,6 +694,226 @@ Center      (   0.0000000,   0.0000000)
 </div>
 </div>
 </div>
+<div class="section" id="rest-caches">
+<span id="mapcache-cache-rest"></span><h2>REST Caches<a class="headerlink" href="#rest-caches" title="Link permanen untuk headline ini">¶</a></h2>
+<p>The following cache types store and retrieve tiles through standard HTTP GET
+and PUT operations, and can be used to store tiles in popular cloud storage
+providers.</p>
+<div class="section" id="pure-rest-cache">
+<h3>Pure REST Cache<a class="headerlink" href="#pure-rest-cache" title="Link permanen untuk headline ini">¶</a></h3>
+<p>This cache type can be used to store tiles to a webdav enabled server. You
+must provide a template URL that should be used when accessing a tile with
+a given x,y,z, etc...</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;myrestcache&quot;</span> <span class="na">type=</span><span class="s">&quot;rest&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;url&gt;</span>https://myserver/webdav/{tileset}/{grid}/{z}/{x}/{y}.{ext}<span class="nt">&lt;/url&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="specifying-specific-http-headers">
+<h3>Specifying specific HTTP headers<a class="headerlink" href="#specifying-specific-http-headers" title="Link permanen untuk headline ini">¶</a></h3>
+<p>You can customize which headers get added to the HTTP request, either
+globally for every HTTP request, or specifically for a given type of request
+(i.e. when getting, setting or deleting a tile):</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;myrestcache&quot;</span> <span class="na">type=</span><span class="s">&quot;rest&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;url&gt;</span>https://myserver/webdav/{tileset}/{grid}/{z}/{x}/{y}.{ext}<span class="nt">&lt;/url&gt;</span>
+  <span class="nt">&lt;headers&gt;</span>
+    <span class="nt">&lt;Host&gt;</span>my-virtualhost-alias.domain.com<span class="nt">&lt;/Host&gt;</span>
+  <span class="nt">&lt;/headers&gt;</span>
+  <span class="nt">&lt;operation</span> <span class="na">type=</span><span class="s">&quot;put&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;headers&gt;</span>
+      <span class="nt">&lt;X-my-specific-put-header&gt;</span>foo<span class="nt">&lt;/X-my-specific-put-header&gt;</span>
+    <span class="nt">&lt;/headers&gt;</span>
+  <span class="nt">&lt;/operation&gt;</span>
+  <span class="nt">&lt;operation</span> <span class="na">type=</span><span class="s">&quot;get&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;headers&gt;</span>
+      <span class="nt">&lt;X-my-specific-get-header&gt;</span>foo<span class="nt">&lt;/X-my-specific-get-header&gt;</span>
+    <span class="nt">&lt;/headers&gt;</span>
+  <span class="nt">&lt;/operation&gt;</span>
+  <span class="nt">&lt;operation</span> <span class="na">type=</span><span class="s">&quot;head&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;headers&gt;</span>
+      <span class="nt">&lt;X-my-specific-head-header&gt;</span>foo<span class="nt">&lt;/X-my-specific-head-header&gt;</span>
+    <span class="nt">&lt;/headers&gt;</span>
+  <span class="nt">&lt;/operation&gt;</span>
+  <span class="nt">&lt;operation</span> <span class="na">type=</span><span class="s">&quot;delete&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;headers&gt;</span>
+      <span class="nt">&lt;X-my-specific-delete-header&gt;</span>foo<span class="nt">&lt;/X-my-specific-delete-header&gt;</span>
+    <span class="nt">&lt;/headers&gt;</span>
+  <span class="nt">&lt;/operation&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="amazon-s3-rest-caches">
+<span id="mapcache-cache-rest-s3"></span><h3>Amazon S3 REST Caches<a class="headerlink" href="#amazon-s3-rest-caches" title="Link permanen untuk headline ini">¶</a></h3>
+<p>The REST cache has been specialized to enable access to Amazon S3, in order
+to add the layer of authentication/authorization needed for that platform.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;s3&quot;</span> <span class="na">type=</span><span class="s">&quot;s3&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;url&gt;</span>https://foo.s3.amazonaws.com/tiles/{tileset}/{grid}/{z}/{x}/{y}/{ext}<span class="nt">&lt;/url&gt;</span>
+  <span class="nt">&lt;headers&gt;</span>
+    <span class="nt">&lt;Host&gt;</span>foo.s3.amazonaws.com<span class="nt">&lt;/Host&gt;</span>
+  <span class="nt">&lt;/headers&gt;</span>
+  <span class="nt">&lt;id&gt;</span>AKIE3SDEIT6TUG8DXEQI<span class="nt">&lt;/id&gt;</span>
+  <span class="nt">&lt;secret&gt;</span>5F+dGsTfsdfkjdsfSDdasf4555d/sSff56sd/RDS<span class="nt">&lt;/secret&gt;</span>
+  <span class="nt">&lt;region&gt;</span>eu-west-1<span class="nt">&lt;/region&gt;</span>
+  <span class="nt">&lt;operation</span> <span class="na">type=</span><span class="s">&quot;put&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;headers&gt;</span>
+      <span class="nt">&lt;x-amz-storage-class&gt;</span>REDUCED_REDUNDANCY<span class="nt">&lt;/x-amz-storage-class&gt;</span>
+      <span class="nt">&lt;x-amz-acl&gt;</span>public-read<span class="nt">&lt;/x-amz-acl&gt;</span>
+    <span class="nt">&lt;/headers&gt;</span>
+  <span class="nt">&lt;/operation&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>The &lt;id&gt; &lt;secret&gt; and &lt;region&gt; tags are required and are obtained and configured
+through your amazon management console. You should read the documentation as to
+what headers you want to be adding to your requests depending on your usecase (the
+supplied example hosts tiles on cheaper storage, and allows them to be publicly
+accessible).</p>
+</div>
+<div class="section" id="microsoft-azure-rest-caches">
+<span id="mapcache-cache-rest-azure"></span><h3>Microsoft Azure REST Caches<a class="headerlink" href="#microsoft-azure-rest-caches" title="Link permanen untuk headline ini">¶</a></h3>
+<p>The REST cache has been specialized to enable access to Azure storage, in order
+to add the layer of authentication/authorization needed for that platform.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;azure&quot;</span> <span class="na">type=</span><span class="s">&quot;azure&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;url&gt;</span>https://foo.blob.core.windows.net/tiles/{tileset}/{grid}/{z}/{x}/{y}/{ext}<span class="nt">&lt;/url&gt;</span>
+  <span class="nt">&lt;headers&gt;</span>
+    <span class="nt">&lt;Host&gt;</span>foo.blob.core.windows.net<span class="nt">&lt;/Host&gt;</span>
+  <span class="nt">&lt;/headers&gt;</span>
+  <span class="nt">&lt;id&gt;</span>foo<span class="nt">&lt;/id&gt;</span>
+  <span class="nt">&lt;secret&gt;</span>foobarcccccccccccccccccccccyA==<span class="nt">&lt;/secret&gt;</span>
+  <span class="nt">&lt;container&gt;</span>tiles<span class="nt">&lt;/container&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>The &lt;id&gt; &lt;secret&gt; and &lt;container&gt; tags are required and are obtained and configured
+through your management console. You should read the documentation as to
+what headers you want to be adding to your requests depending on your usecase.</p>
+</div>
+<div class="section" id="google-cloud-storage-rest-caches">
+<span id="mapcache-cache-rest-google"></span><h3>Google Cloud Storage REST Caches<a class="headerlink" href="#google-cloud-storage-rest-caches" title="Link permanen untuk headline ini">¶</a></h3>
+<p>The REST cache has been specialized to enable access to Google cloud storage, in order
+to add the layer of authentication/authorization needed for that platform.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;google&quot;</span> <span class="na">type=</span><span class="s">&quot;google&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;url&gt;</span>https://storage.googleapis.com/mytiles-mapcache/{tileset}/{grid}/{z}/{x}/{y}.{ext}<span class="nt">&lt;/url&gt;</span>
+  <span class="nt">&lt;access&gt;</span>GOOGPGDWFDG345SDFGSD<span class="nt">&lt;/access&gt;</span>
+  <span class="nt">&lt;secret&gt;</span>sdfgsdSDFwedfwefr2345324dfsGdsfgs<span class="nt">&lt;/secret&gt;</span>
+  <span class="nt">&lt;operation</span> <span class="na">type=</span><span class="s">&quot;put&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;headers&gt;</span>
+      <span class="nt">&lt;x-amz-acl&gt;</span>public-read<span class="nt">&lt;/x-amz-acl&gt;</span>
+    <span class="nt">&lt;/headers&gt;</span>
+  <span class="nt">&lt;/operation&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>The &lt;access&gt; and &lt;secret&gt; tags are required and are obtained and configured
+through your management console. You should read the documentation as to
+what headers you want to be adding to your requests depending on your usecase.
+Note that support for Google cloud storage uses its Amazon compatibility layer.</p>
+</div>
+</div>
+<div class="section" id="meta-caches">
+<span id="mapcache-cache-meta"></span><h2>Meta Caches<a class="headerlink" href="#meta-caches" title="Link permanen untuk headline ini">¶</a></h2>
+<p>These cache types do not store tiles themselves, however they delegate the
+storage of a tile to a number of child caches based on a set of rules or
+behaviors. These caches are mostly usefull for large mapcache deployments
+across multiple instances, with shared cache backends (i.e. dedicated memcache
+servers, and network mounted filer filesystems).</p>
+<div class="section" id="composite-caches">
+<span id="mapcache-cache-composite"></span><h3>Composite Caches<a class="headerlink" href="#composite-caches" title="Link permanen untuk headline ini">¶</a></h3>
+<p>This cache uses different child caches depending on the tile&#8217;s zoom level, and
+can be used for example to store low zoom-level tiles to permanent storage, and
+higher zoom-level to a temporary (i.e. memcache) cache.</p>
+<div class="highlight-xml"><div class="highlight"><pre>&lt;cache name=&quot;mydisk&quot; ...&gt; ... &lt;/cache&gt;
+&lt;cache name=&quot;mymemcache&quot; ...&gt; ... &lt;/cache&gt;
+&lt;cache name=&quot;composite&quot; type=&quot;composite&quot;&gt;
+   &lt;cache grids=&quot;mygrid,g&quot;&gt;mycache&lt;/cache&gt;
+   &lt;cache min-zoom=&quot;0&quot; max-zoom=&quot;8&quot;&gt;mydisk&lt;/cache&gt;
+   &lt;cache min-zoom=&quot;9&quot;&gt;mymemcache&lt;/cache&gt;
+&lt;/cache&gt;
+&lt;tileset ...&gt;
+   &lt;cache&gt;composite&lt;/cache&gt;
+   ...
+&lt;/tileset&gt;
+</pre></div>
+</div>
+<p>For each tile, the caches are tested in the order in which they have been
+defined in the configuration file, and the first one to satisfy the min/max
+zoom and grids constraints is used. It&#8217;s up to the user to make sure the
+succession of min/max zoom values and grids makes sense, e.g.:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;composite&quot;</span> <span class="na">type=</span><span class="s">&quot;composite&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;cache</span> <span class="na">min-zoom=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>cache1<span class="nt">&lt;/cache&gt;</span>
+   <span class="nt">&lt;cache</span> <span class="na">min-zoom=</span><span class="s">&quot;9&quot;</span><span class="nt">&gt;</span>this_cache_will_never_be_used<span class="nt">&lt;/cache&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fallback-caches">
+<span id="mapcache-cache-fallback"></span><h3>Fallback Caches<a class="headerlink" href="#fallback-caches" title="Link permanen untuk headline ini">¶</a></h3>
+<p>These cache types will return tiles from the first configured subcache that does
+not return an error. They can be used when one of the caches is prone to error
+conditions (e.g. remote rest caches, memcache)</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;fallback&quot;</span> <span class="na">type=</span><span class="s">&quot;fallback&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;cache&gt;</span>mymemcache<span class="nt">&lt;/cache&gt;</span>
+   <span class="nt">&lt;cache&gt;</span>mysqlitecache<span class="nt">&lt;/cache&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>When writing a tile to such a cache, it will be written to all the child caches.</p>
+</div>
+<div class="section" id="multitier-caches">
+<span id="mapcache-cache-multitier"></span><h3>Multitier Caches<a class="headerlink" href="#multitier-caches" title="Link permanen untuk headline ini">¶</a></h3>
+<p>These cache types can be used to combine fast/expensive caches with slow/cheap ones.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;multitier&quot;</span> <span class="na">type=</span><span class="s">&quot;multitier&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;cache&gt;</span>fast<span class="nt">&lt;/cache&gt;</span>
+   <span class="nt">&lt;cache&gt;</span>cheap<span class="nt">&lt;/cache&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>If a given tile isn&#8217;t found in the first child cache, it will be read from the second
+child cache <strong>and</strong> copied into the first child cache for subsequent accesses. This cache
+type is meant to be used when the first cache does automatic pruning of the least recently
+used tiles (i.e. a memcache one).</p>
+<p>When writing a tile to such a cache, it will be written to the last child.</p>
+</div>
+<div class="section" id="cache-combinations">
+<h3>Cache Combinations<a class="headerlink" href="#cache-combinations" title="Link permanen untuk headline ini">¶</a></h3>
+<p>All these meta caches can be combined together to fine tune the availability and
+performance depending on storage costs, time to recreate missing tiles, etc...</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;slow_and_permanent&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite&quot;</span><span class="nt">&gt;</span>...<span class="nt">&lt;/cache&gt;</span>
+<span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;fast_and_transient&quot;</span> <span class="na">type=</span><span class="s">&quot;memcache&quot;</span><span class="nt">&gt;</span>...<span class="nt">&lt;/cache&gt;</span>
+<span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;low_zooms&quot;</span> <span class="na">type=</span><span class="s">&quot;multitier&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;cache&gt;</span>fast_and_transient<span class="nt">&lt;/cache&gt;</span>
+   <span class="nt">&lt;cache&gt;</span>slow_and_permanent<span class="nt">&lt;/cache&gt;</span>
+<span class="nt">&lt;cache&gt;</span>
+<span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;mycache&quot;</span> <span class="na">type=</span><span class="s">&quot;composite&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;cache</span> <span class="na">maxzoom=</span><span class="s">&quot;12&quot;</span><span class="nt">&gt;</span>low_zooms<span class="nt">&lt;/cache&gt;</span>
+   <span class="nt">&lt;cache&gt;</span>fast_and_transient<span class="nt">&lt;/cache&gt;</span>
+<span class="nt">&lt;cache&gt;</span>
+<span class="nt">&lt;tileset&gt;</span>
+   <span class="nt">&lt;cache&gt;</span>mycache<span class="nt">&lt;/cache&gt;</span>
+   ...
+<span class="nt">&lt;/tileset&gt;</span>
+</pre></div>
+</div>
+<p>In the previous example, all tiles are primarily accessed from a memcache instance, however
+the lower zoom level tiles are backed up to a permanent sqlite cache which will be used to
+populate the fast memcache cache e.g. on restarts.</p>
+</div>
+</div>
+<div class="section" id="riak-caches">
+<span id="mapcache-cache-riak"></span><h2>Riak Caches<a class="headerlink" href="#riak-caches" title="Link permanen untuk headline ini">¶</a></h2>
+<p>requires <a class="reference external" href="https://github.com/trifork/riack">https://github.com/trifork/riack</a></p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;myriak&quot;</span> <span class="na">type=</span><span class="s">&quot;riak&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;server&gt;</span>
+    <span class="nt">&lt;host&gt;</span>riakhost<span class="nt">&lt;/host&gt;</span>
+    <span class="nt">&lt;port&gt;</span>12345<span class="nt">&lt;/port&gt;</span>
+    <span class="nt">&lt;bucket&gt;</span>mytiles<span class="nt">&lt;/bucket&gt;</span>
+  <span class="nt">&lt;/server&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -560,7 +935,10 @@ Center      (   0.0000000,   0.0000000)
   <ul>
 <li><a class="reference internal" href="#">Cache Types</a><ul>
 <li><a class="reference internal" href="#disk-caches">Disk Caches</a><ul>
+<li><a class="reference internal" href="#common-configuration">Common Configuration</a></li>
 <li><a class="reference internal" href="#default-structure">Default Structure</a></li>
+<li><a class="reference internal" href="#arcgis-compatible-structure">Arcgis Compatible Structure</a></li>
+<li><a class="reference internal" href="#worldwind-compatible-structure">Worldwind Compatible Structure</a></li>
 <li><a class="reference internal" href="#template-structure">Template Structure</a></li>
 </ul>
 </li>
@@ -568,18 +946,37 @@ Center      (   0.0000000,   0.0000000)
 <li><a class="reference internal" href="#sqlite-caches">Sqlite Caches</a><ul>
 <li><a class="reference internal" href="#default-schema">Default Schema</a></li>
 <li><a class="reference internal" href="#custom-schema">Custom Schema</a></li>
-<li><a class="reference internal" href="#mbtiles-schema">MBTiles Schema</a></li>
+<li><a class="reference internal" href="#blank-tile-detection">Blank Tile Detection</a></li>
+<li><a class="reference internal" href="#using-multiple-sqlite-database-files">Using multiple sqlite database files</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#mbtiles-caches">MBTiles caches</a></li>
 <li><a class="reference internal" href="#memcache-caches">Memcache Caches</a></li>
 <li><a class="reference internal" href="#geo-tiff-caches">(Geo)TIFF Caches</a><ul>
 <li><a class="reference internal" href="#defining-the-tiff-file-sizes">Defining the TIFF file sizes</a></li>
 <li><a class="reference internal" href="#setting-up-the-file-naming-convention">Setting up the file naming convention</a></li>
 <li><a class="reference internal" href="#customizing-the-template-keys">Customizing the template keys</a></li>
 <li><a class="reference internal" href="#setting-jpeg-compression-options">Setting JPEG compression options</a></li>
+<li><a class="reference internal" href="#using-a-specific-locker">Using a specific locker</a></li>
 <li><a class="reference internal" href="#geotiff-support">GeoTIFF Support</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#rest-caches">REST Caches</a><ul>
+<li><a class="reference internal" href="#pure-rest-cache">Pure REST Cache</a></li>
+<li><a class="reference internal" href="#specifying-specific-http-headers">Specifying specific HTTP headers</a></li>
+<li><a class="reference internal" href="#amazon-s3-rest-caches">Amazon S3 REST Caches</a></li>
+<li><a class="reference internal" href="#microsoft-azure-rest-caches">Microsoft Azure REST Caches</a></li>
+<li><a class="reference internal" href="#google-cloud-storage-rest-caches">Google Cloud Storage REST Caches</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#meta-caches">Meta Caches</a><ul>
+<li><a class="reference internal" href="#composite-caches">Composite Caches</a></li>
+<li><a class="reference internal" href="#fallback-caches">Fallback Caches</a></li>
+<li><a class="reference internal" href="#multitier-caches">Multitier Caches</a></li>
+<li><a class="reference internal" href="#cache-combinations">Cache Combinations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#riak-caches">Riak Caches</a></li>
 </ul>
 </li>
 </ul>
@@ -606,7 +1003,7 @@ Center      (   0.0000000,   0.0000000)
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
       
     </div>
 

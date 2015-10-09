@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Supported Tile Services &mdash; MapServer 7.0.0-beta1 documentation</title>
+    <title>Supported Tile Services &mdash; MapServer 7.0.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0-beta1',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,8 +27,8 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="Bu belgeler hakkında" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0-beta1 documentation" href="../index.html" />
-    <link rel="up" title="MapCache" href="index.html" />
+    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="up" title="MapCache 1.4" href="index.html" />
     <link rel="next" title="Seeder" href="seed.html" />
     <link rel="prev" title="Configuration File" href="config.html" />
    
@@ -130,23 +130,6 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Gezinti</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="Genel Dizin"
-             accesskey="I">dizin</a></li>
-        <li class="right" >
-          <a href="seed.html" title="Seeder"
-             accesskey="N">sonraki</a> |</li>
-        <li class="right" >
-          <a href="config.html" title="Configuration File"
-             accesskey="P">önceki</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.0-beta1 Documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapCache</a> &raquo;</li> 
-      </ul>
-    </div>
   
 
     <div class="document">
@@ -353,6 +336,57 @@ of the BBOX parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre>http://myhost.com/mapcache?service=wms&amp;request=getcapabilities
 </pre></div>
 </div>
+<div class="section" id="optional-wms-configuration-options">
+<h3>Optional WMS Configuration Options<a class="headerlink" href="#optional-wms-configuration-options" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
+<div class="section" id="untiled-getmap-support">
+<h4>Untiled GetMap Support<a class="headerlink" href="#untiled-getmap-support" title="Bu başlığın kalıcı bağlantısı">¶</a></h4>
+<p>Support for untiled (non WMS-C) GetMap requests can be enabled or disabled:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+   <span class="c">&lt;!-- full_wms</span>
+<span class="c">        configure response to wms requests that are not aligned to a tileset&#39;s grids.</span>
+<span class="c">        responding to requests that are not in the SRS of a configured grid is not supported, but</span>
+<span class="c">        this should never happen as only the supported SRSs are publicized in the capabilities</span>
+<span class="c">        document.</span>
+
+<span class="c">        allowed values are:</span>
+<span class="c">          - error: return a 404 error (default)</span>
+<span class="c">          - assemble: build the full image by assembling the tiles from the cache</span>
+<span class="c">          - forward: forward the request to the configured source.</span>
+<span class="c">   --&gt;</span>
+   <span class="nt">&lt;full_wms&gt;</span>assemble<span class="nt">&lt;/full_wms&gt;</span>
+<span class="nt">&lt;/service&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getmap-image-format">
+<span id="mapcache-getmap-format"></span><h4>GetMap Image Format<a class="headerlink" href="#getmap-image-format" title="Bu başlığın kalıcı bağlantısı">¶</a></h4>
+<p>You may explicitely set which image format should be returned to the client for
+an untiled WMS request (i.e. whenever the tile data cannot be served directly
+from the caches but needs to go through a decompression/recompression phase.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;format</span> <span class="na">allow_client_override=</span><span class="s">&quot;true/false&quot;</span><span class="nt">&gt;</span>myjpegformat<span class="nt">&lt;/format&gt;</span>
+<span class="nt">&lt;/service&gt;</span>
+</pre></div>
+</div>
+<p>If the <cite>allow_client_override</cite> attribute is set to true, then MapCache will honor
+the <cite>FORMAT=...</cite> parameter sent by the client. By default MapCache ignores this
+parameter and uses its configured image format.</p>
+</div>
+<div class="section" id="image-resampling-quality">
+<h4>Image Resampling Quality<a class="headerlink" href="#image-resampling-quality" title="Bu başlığın kalıcı bağlantısı">¶</a></h4>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+   <span class="c">&lt;!-- resample mode</span>
+<span class="c">   filter applied when resampling tiles for full wms requests.</span>
+<span class="c">   can be either:</span>
+<span class="c">   - nearest : fastest, poor quality</span>
+<span class="c">   - bilinear: slower, higher qulity</span>
+<span class="c">   --&gt;</span>
+   <span class="nt">&lt;resample_mode&gt;</span>bilinear<span class="nt">&lt;/resample_mode&gt;</span>
+<span class="nt">&lt;/service&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <div class="section" id="googlemaps-xyz-service">
 <span id="mapcache-gmaps"></span><h2>GoogleMaps XYZ Service<a class="headerlink" href="#googlemaps-xyz-service" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
@@ -502,7 +536,15 @@ http://myhost.com/mapcache/ve?LAYER=osm@WGS84&amp;tile=13
 <li><a class="reference internal" href="#tms-service">TMS service</a></li>
 <li><a class="reference internal" href="#kml-service">KML Service</a></li>
 <li><a class="reference internal" href="#ogc-wmts-service">OGC WMTS Service</a></li>
-<li><a class="reference internal" href="#ogc-wms-service">OGC WMS Service</a></li>
+<li><a class="reference internal" href="#ogc-wms-service">OGC WMS Service</a><ul>
+<li><a class="reference internal" href="#optional-wms-configuration-options">Optional WMS Configuration Options</a><ul>
+<li><a class="reference internal" href="#untiled-getmap-support">Untiled GetMap Support</a></li>
+<li><a class="reference internal" href="#getmap-image-format">GetMap Image Format</a></li>
+<li><a class="reference internal" href="#image-resampling-quality">Image Resampling Quality</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#googlemaps-xyz-service">GoogleMaps XYZ Service</a><ul>
 <li><a class="reference internal" href="#v2-api">V2 API</a></li>
 <li><a class="reference internal" href="#v3-api">V3 API</a></li>
@@ -535,7 +577,7 @@ http://myhost.com/mapcache/ve?LAYER=osm@WGS84&amp;tile=13
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
       
     </div>
 
