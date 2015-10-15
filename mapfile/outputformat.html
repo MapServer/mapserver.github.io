@@ -192,19 +192,27 @@ with GDAL support, and the PDF and SVG depend on building with cairo support.</p
   <span class="k">IMAGEMODE</span> <span class="nb">RGB</span>
   <span class="k">EXTENSION</span> <span class="s">&quot;png&quot;</span>
 <span class="k">END</span>
+<span class="k">OUTPUTFORMAT</span>
+  <span class="k">NAME</span> <span class="s">&quot;myUTFGrid&quot;</span>
+  <span class="k">DRIVER</span> <span class="nb">UTFGRID</span>
+  <span class="k">FORMATOPTION</span> <span class="s">&quot;LABELS=true&quot;</span>
+  <span class="k">FORMATOPTION</span> <span class="s">&quot;UTFRESOLUTION=4&quot;</span>
+  <span class="k">FORMATOPTION</span> <span class="s">&quot;DUPLICATES=false&quot;</span>
+<span class="k">END</span>
 </pre></div>
 </div>
 <dl class="docutils" id="index-1">
 <dt>DRIVER [name]</dt>
 <dd>The name of the driver to use to generate this output format. Some driver
 names include the definition of the format if the driver supports multiple
-formats. For AGG, the possbile driver names are &#8220;AGG/PNG&#8221; and &#8220;AGG/JPEG&#8221;.
+formats. For AGG, the possible driver names are &#8220;AGG/PNG&#8221; and &#8220;AGG/JPEG&#8221;.
 For GD the possible driver names are &#8220;GD/Gif&#8221; and &#8220;GD/PNG&#8221;.
 For output through OGR the OGR driver name is appended, such as
 &#8220;OGR/Mapinfo File&#8221;.  For output through GDAL the GDAL shortname for the
 format is appended, such as &#8220;GDAL/GTiff&#8221;. Note that PNG, JPEG and GIF
 output can be generated with either GDAL or GD (GD is generally more
-efficient).  TEMPLATE should be used for template based output. (mandatory)</dd>
+efficient).  TEMPLATE should be used for template based output. (mandatory).
+Other drivers: KML, KMZ and UTFGRID.</dd>
 </dl>
 <dl class="docutils" id="index-2">
 <dt>EXTENSION [type]</dt>
@@ -333,67 +341,88 @@ options.</li>
 Options supported by GDAL are described in the detailed documentation
 for each GDAL format.</li>
 </ul>
-<ul class="last simple" id="index-20">
-<li>GDAL/*: &#8220;NULLVALUE=n&#8221; is used in raw image modes (IMAGEMODE
+<ul class="last" id="index-20">
+<li><p class="first">GDAL/*: &#8220;NULLVALUE=n&#8221; is used in raw image modes (IMAGEMODE
 BYTE/INT16/FLOAT) to pre-initialize the raster and an attempt is made
 to record this in the resulting file as the nodata value. This is
-automatically set in WCS mode if rangeset_nullvalue is set.</li>
-<li>OGR/*: See the <a class="reference internal" href="../output/ogr_output.html#ogr-output"><span>OGR Output</span></a> document for details of OGR
-format options.</li>
+automatically set in WCS mode if rangeset_nullvalue is set.</p>
+</li>
+<li><p class="first">OGR/*: See the <a class="reference internal" href="../output/ogr_output.html#ogr-output"><span>OGR Output</span></a> document for details of OGR
+format options.</p>
+</li>
+<li><p class="first">UTFGRID: See <a class="reference internal" href="../development/rfc/ms-rfc-93.html#rfc93"><span>MS RFC 93: UTF Grid Support</span></a>.</p>
+<ul class="simple" id="index-21">
+<li>&#8220;LABELS=true&#8221;.  Labels can be rendered using their parent
+feature id (derived via UTFITEM) where the labels bounding box
+is drawn to the map.</li>
 </ul>
-<span class="target" id="index-21"></span></dd>
+<ul class="simple" id="index-22">
+<li>&#8220;UTFRESOLUTION=4&#8221;.  The resolution of the grid.  A larger
+resolution will make the grid smaller and therefore reduce its
+weight but also its precision.</li>
+</ul>
+<ul class="simple" id="index-23">
+<li>&#8220;DUPLICATES=false&#8221;.  It may be desireable NOT to remove
+duplicate feature id/key pairs since that process could be
+expensive depending on the number of features in the map. This
+option can be used to skip this step. The resulting JSON file
+will be a bit larger.</li>
+</ul>
+</li>
+</ul>
+</dd>
 </dl>
-<dl class="docutils" id="index-22">
+<dl class="docutils" id="index-24">
 <dt>IMAGEMODE [PC256/RGB/RGBA/INT16/FLOAT32/FEATURE]</dt>
 <dd><p class="first">Selects the imaging mode in which the output is generated. Does matter
 for non-raster formats like Flash. Not all formats support all
 combinations. For instance GD supports only PC256. (optional)</p>
-<ul class="simple" id="index-23">
+<ul class="simple" id="index-25">
 <li>PC256: Produced a pseudocolored result with up to 256 colors in
 the palette (legacy MapServer mode). Only supported for GD/GIF
 and GD/PNG.</li>
 </ul>
-<ul class="simple" id="index-24">
+<ul class="simple" id="index-26">
 <li>RGB: Render in 24bit Red/Green/Blue mode. Supports all colors
 but does not support transparency.</li>
 </ul>
-<ul class="simple" id="index-25">
+<ul class="simple" id="index-27">
 <li>RGBA: Render in 32bit Red/Green/Blue/Alpha mode. Supports all
 colors, and alpha based transparency. All features are rendered
 against an initially transparent background.</li>
 </ul>
-<ul class="simple" id="index-26">
+<ul class="simple" id="index-28">
 <li>BYTE:  Render raw 8bit pixel values (no presentation).  Only
 works for RASTER layers (through GDAL) and WMS layers currently.</li>
 </ul>
-<ul class="simple" id="index-27">
+<ul class="simple" id="index-29">
 <li>INT16: Render raw 16bit signed pixel values (no presentation).
 Only works for RASTER layers (through GDAL) and WMS layers currently.</li>
 </ul>
-<ul class="simple" id="index-28">
+<ul class="simple" id="index-30">
 <li>FLOAT32: Render raw 32bit floating point pixel values
 (no presentation). Only works for RASTER layers (through GDAL)
 and WMS layers currently.</li>
 </ul>
-<ul class="last simple" id="index-29">
+<ul class="last simple" id="index-31">
 <li>FEATURE: Output is a non-image result, such as features written
 via templates or OGR.</li>
 </ul>
 </dd>
 </dl>
-<dl class="docutils" id="index-30">
+<dl class="docutils" id="index-32">
 <dt>MIMETYPE [type]</dt>
 <dd>Provide the mime type to be used when returning results over the web.
 (optional)</dd>
 </dl>
-<dl class="docutils" id="index-31">
+<dl class="docutils" id="index-33">
 <dt>NAME [name]</dt>
 <dd>The name to use in the IMAGETYPE keyword of the map file to
 select this output format.  This name is also used in metadata describing
 wxs formats allowed, and can be used (sometimes along with mimetype) to
 select the output format via keywords in OGC requests. (optional)</dd>
 </dl>
-<dl class="docutils" id="index-32">
+<dl class="docutils" id="index-34">
 <dt>TRANSPARENT [ON/OFF]</dt>
 <dd>Indicates whether transparency should be enabled for this format. Note
 that transparency does not work for IMAGEMODE RGB output. Not all formats
