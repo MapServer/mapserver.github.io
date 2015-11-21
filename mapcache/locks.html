@@ -137,18 +137,18 @@
 </tr>
 </tbody>
 </table>
-<p>Mapcache sometimes needs exclusive access to a given ressource, and provides
-some mechanisms to ensure that no more than one mapcache instance may be
-operating on that given ressource. This may happen when:</p>
+<p>MapCache sometimes needs exclusive access to a given resource, and provides
+some mechanisms to ensure that no more than one MapCache instance can
+operate on that ressource. This may happen when:</p>
 <ul class="simple">
 <li>Sending a request to a source WMS server for a given metatile. Only a single
-mapcache instance should be sending that request, other mapcache instances
+MapCache instance should be sending that request; other MapCache instances
 processing a tile from that same metatile should wait for that request to
 finish rather than sending the same exact request again (in order not to
-overload the WMS server)</li>
+overload the WMS server).</li>
 <li>Writing a tile inside a TIFF cache. The TIFF library does not handle concurrent
-writes, MapCache must thus ensure that only a single instance is accessing a
-given TIFF file for writing</li>
+writes, so MapCache must ensure that only a single instance is accessing a
+given TIFF file for writing.</li>
 </ul>
 <p>A locker is configured with:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;locker</span> <span class="na">type=</span><span class="s">&quot;...&quot;</span><span class="nt">&gt;</span>
@@ -158,28 +158,28 @@ given TIFF file for writing</li>
 <span class="nt">&lt;/locker&gt;</span>
 </pre></div>
 </div>
-<p>When a MapCache instance cannot aquire a lock because it has already been aquired
+<p>When a MapCache instance cannot acquire a lock because it has already been acquired
 by another instance, it will:</p>
 <ul class="simple">
 <li>Check back every <cite>&lt;retry&gt;</cite> seconds to see if the lock has been released by the
 other instance.</li>
 <li>Consider that after <cite>&lt;timeout&gt;</cite> seconds the other instance has failed, and delete
-the lock before aquiring it itself.</li>
+the lock before acquiring it itself.</li>
 </ul>
 <div class="section" id="disk-locks">
 <h2>Disk Locks<a class="headerlink" href="#disk-locks" title="Permalink to this headline">¶</a></h2>
-<p>This locking mechanism places a file somewhere on the filesystem. The filesystem
-can be a network share in order to synchronize multiple mapcache instances.</p>
+<p>This locking mechanism places a file somewhere in the filesystem. The filesystem
+can be a network share in order to synchronize multiple MapCache instances.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;locker</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;directory&gt;</span>/path/to/lockdir<span class="nt">&lt;/directory&gt;</span>
 <span class="nt">&lt;/locker&gt;</span>
 </pre></div>
 </div>
-<p>The configured directory should be read/write accessible by the mapcache instance.</p>
+<p>The configured directory should be read/write accessible by the MapCache instance.</p>
 </div>
 <div class="section" id="memcache-locks">
 <h2>Memcache Locks<a class="headerlink" href="#memcache-locks" title="Permalink to this headline">¶</a></h2>
-<p>This locking mechanism uses a third party memcache instance to keep track of the locks</p>
+<p>This locking mechanism uses a third-party memcache instance to keep track of the locks.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;locker</span> <span class="na">type=</span><span class="s">&quot;memcache&quot;</span><span class="nt">&gt;</span>
    <span class="nt">&lt;server&gt;</span>
      <span class="nt">&lt;host&gt;</span>localhost<span class="nt">&lt;/host&gt;</span>
@@ -195,9 +195,9 @@ can be a network share in order to synchronize multiple mapcache instances.</p>
 </div>
 <div class="section" id="fallback-locks">
 <h2>Fallback Locks<a class="headerlink" href="#fallback-locks" title="Permalink to this headline">¶</a></h2>
-<p>This &#8220;meta&#8221; locker will fall back to its seconf configured locker if the first
-one failed (typically used with a memcache instance if the memcache instance
-went down)</p>
+<p>This &#8220;meta&#8221; locker will fall back to its second configured locker if the first
+one fails (typically used with a memcache instance if the memcache instance
+goes down).</p>
 <div class="highlight-xml"><div class="highlight"><pre>&lt;locker type=&quot;fallback&quot;
   &lt;locker type=&quot;memcache&quot;&gt;
      &lt;server&gt;
