@@ -152,18 +152,19 @@
 <li><a class="reference internal" href="#restructuredtext-reference-guides" id="id6">reStructuredText Reference Guides</a></li>
 <li><a class="reference internal" href="#restructuredtext-formatting" id="id7">reStructuredText Formatting</a></li>
 <li><a class="reference internal" href="#installing-and-using-sphinx-for-rst-html-generation" id="id8">Installing and Using Sphinx for rst-html Generation</a></li>
-<li><a class="reference internal" href="#how-translations-are-handled" id="id9">How translations are handled</a><ul>
-<li><a class="reference internal" href="#the-old-way-for-translations" id="id10">The &#8220;old&#8221; way for translations</a></li>
-<li><a class="reference internal" href="#the-standard-internationalization-system-i18n-for-translations" id="id11">The standard internationalization system (i18n) for translations</a><ul>
-<li><a class="reference internal" href="#initial-translation-process-for-a-new-language" id="id12">Initial translation process for a new language</a></li>
-<li><a class="reference internal" href="#the-usual-workflow-for-already-existing-translation" id="id13">The usual workflow for already existing translation</a></li>
-<li><a class="reference internal" href="#how-to-use-transifex-client-to-manage-translation-process" id="id14">How to use Transifex client to manage translation process</a></li>
+<li><a class="reference internal" href="#english-typo-fixing-script" id="id9">(English) typo fixing script</a></li>
+<li><a class="reference internal" href="#how-translations-are-handled" id="id10">How translations are handled</a><ul>
+<li><a class="reference internal" href="#the-old-way-for-translations" id="id11">The &#8220;old&#8221; way for translations</a></li>
+<li><a class="reference internal" href="#the-standard-internationalization-system-i18n-for-translations" id="id12">The standard internationalization system (i18n) for translations</a><ul>
+<li><a class="reference internal" href="#initial-translation-process-for-a-new-language" id="id13">Initial translation process for a new language</a></li>
+<li><a class="reference internal" href="#the-usual-workflow-for-already-existing-translation" id="id14">The usual workflow for already existing translation</a></li>
+<li><a class="reference internal" href="#how-to-use-transifex-client-to-manage-translation-process" id="id15">How to use Transifex client to manage translation process</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#reference-labels" id="id15">Reference Labels</a><ul>
-<li><a class="reference internal" href="#regenerating-the-reference-labels" id="id16">Regenerating the reference labels</a></li>
+<li><a class="reference internal" href="#reference-labels" id="id16">Reference Labels</a><ul>
+<li><a class="reference internal" href="#regenerating-the-reference-labels" id="id17">Regenerating the reference labels</a></li>
 </ul>
 </li>
 </ul>
@@ -374,6 +375,34 @@ make latex
 <p class="last">If there are more than one translation, the above commands will automatically
 build all translations.</p>
 </div>
+</div>
+<div class="section" id="english-typo-fixing-script">
+<h2><a class="toc-backref" href="#table-of-contents">(English) typo fixing script</a><a class="headerlink" href="#english-typo-fixing-script" title="Permalink to this headline">¶</a></h2>
+<p>(Tested on Linux. Should also likely run on MacOSX. Windows users might need
+to install Cygwin, Python 3, git, curl, sed, grep, awk)</p>
+<p>The script in scripts/fix_typos.sh is an interactive script to detect and correct
+common spelling issues in the English documentation (en/ directory).</p>
+<p>It requires Python 3 (python3 executable) to run. The first time it is run,
+it also uses &#8216;git&#8217; and &#8216;curl&#8217; binaries to download the codespell engine,
+its own dictionary, as well as the Debian Lintian and QGIS dictionaries.
+They are downloaded in the fix_typos/ subdirectories. This directory can be
+safely removed at any time (to enable getting new versions of the dictionaries
+or the codespell engine).</p>
+<p>The script is launched with :</p>
+<div class="highlight-python"><div class="highlight"><pre>./scripts/fix_typos.sh
+</pre></div>
+</div>
+<p>Whenever a typo is detected, it asks if it must be fixed with the proposed
+replacement (Y/N), or in case if there are several options, to select the option
+(0, 1, etc..).</p>
+<p>It contains a white list of words that are marked as not being typo errors (in
+the WORDS_WHITE_LIST variable). The EXCLUDED_FILES variable can also be edited
+to add files fully ignored. The scripts/typos_whitelist.txt file can be edited
+to add full lines that should be ignored (sensitive to starting and trailing
+whitespace/tabulations, and only work on LF terminated files, hence prior conversion
+from CRLF to LF might be needed). scripts/typos_whitelist.txt should be used rather
+than WORDS_WHITE_LIST, only when a word is not a typo in a given context, but
+might be a typo in another context.</p>
 </div>
 <div class="section" id="how-translations-are-handled">
 <h2><a class="toc-backref" href="#table-of-contents">How translations are handled</a><a class="headerlink" href="#how-translations-are-handled" title="Permalink to this headline">¶</a></h2>
@@ -1403,6 +1432,7 @@ hostname = https://www.transifex.com/
 <li><a class="reference internal" href="#restructuredtext-reference-guides">reStructuredText Reference Guides</a></li>
 <li><a class="reference internal" href="#restructuredtext-formatting">reStructuredText Formatting</a></li>
 <li><a class="reference internal" href="#installing-and-using-sphinx-for-rst-html-generation">Installing and Using Sphinx for rst-html Generation</a></li>
+<li><a class="reference internal" href="#english-typo-fixing-script">(English) typo fixing script</a></li>
 <li><a class="reference internal" href="#how-translations-are-handled">How translations are handled</a><ul>
 <li><a class="reference internal" href="#the-old-way-for-translations">The &#8220;old&#8221; way for translations</a></li>
 <li><a class="reference internal" href="#the-standard-internationalization-system-i18n-for-translations">The standard internationalization system (i18n) for translations</a><ul>
