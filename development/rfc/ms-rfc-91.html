@@ -148,7 +148,7 @@
 <p>Layer filters are driver specific expressions that are used within MapServer in a couple of ways:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>to define feature subsets for rendering (indpendent of classes)</li>
+<li>to define feature subsets for rendering (independent of classes)</li>
 <li>to define feature subsets for selected query operations</li>
 </ol>
 </div></blockquote>
@@ -165,14 +165,14 @@ a data source. This leads to a number of issues:</p>
 <li>performance limitations because only the simplest filters are easy to represent and secure</li>
 </ul>
 </div></blockquote>
-<p>Futhermore, the above two use cases are mutually excluseive which again can lead to user confusion. Existing query
+<p>Furthermore, the above two use cases are mutually excluseive which again can lead to user confusion. Existing query
 operations that rely on filters (by attribute, by operator) cache the existing filter before defining and applying a new one.
 While this limitation could be addressed independently it becomes a much more manageable task when using a
 standardized filter definition.</p>
 </div>
 <div class="section" id="proposed-solution">
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Permalink to this headline">¶</a></h2>
-<p>This SLA proposed standardizing filter definitions using the common expresion syntax implemented as part of RFC XX.
+<p>This SLA proposed standardizing filter definitions using the common expression syntax implemented as part of RFC XX.
 Driverscapable of handling complex expressions will translate MapServer expressions to an internal representation which
 should lead to <em>very</em> significant performance improvements. Drivers that don&#8217;t have that capability would apply filtering
 to features much the same way as the native MapServer shapefile and tiled shapefiles already do (via msXXXLayerNextShape())</p>
@@ -249,7 +249,7 @@ implementation approach, instead it offers an opportunity for more complete tran
 </li>
 <li>there are no changes to the MapScript API</li>
 <li>drivers that support complex expressions (e.g. PostGIS, Oracle, SDE, MS SQL Server, OGR) need to implement a translation
-funcion to construct a partial &#8220;WHERE&#8221; clause from a set of expression/filter tokens</li>
+function to construct a partial &#8220;WHERE&#8221; clause from a set of expression/filter tokens</li>
 </ul>
 </div>
 <div class="section" id="files-affected">
@@ -268,7 +268,7 @@ funcion to construct a partial &#8220;WHERE&#8221; clause from a set of expressi
 <p>Notes:</p>
 <p>Drivers: This can be implemented incrementally within drivers. At a minimum all drivers <em>must</em> implement the
 msXXXLayerTranslateFilter() and the function should at least detect the case where a native filter is already supplied
-(for backwards compatability). For relational databases this is the case where the filter is a plain old string expression.
+(for backwards compatibility). For relational databases this is the case where the filter is a plain old string expression.
 For OGR this is where the plain old string expression starts with &#8220;WHERE &#8221;. In these cases the new native_string should
 be populated with the filter string contents.</p>
 <p>msLayerNextShape(): Evaluation of the common syntax (e.g. pure-MapServer) filter can happen here rather than within the driver
@@ -294,8 +294,8 @@ after a call to msXXXLayerTranslateFilter().</p>
 <h2>3.3 MapScript<a class="headerlink" href="#mapscript" title="Permalink to this headline">¶</a></h2>
 <p>No changes necessary.</p>
 </div>
-<div class="section" id="backwards-compatibilty-issues">
-<h2>3.4 Backwards Compatibilty Issues<a class="headerlink" href="#backwards-compatibilty-issues" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="backwards-compatibility-issues">
+<h2>3.4 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this headline">¶</a></h2>
 <p>By respecting a pre-defined FILTER with attribute and OGC filter queries it&#8217;s possible that users could get confused and/or
 have to re-architect certain aspects of an application. For example, they may have actually already build filter merging into their
 process.</p>
@@ -355,7 +355,7 @@ The suggested changes would remove that step and improve performane in <em>all</
 <li><a class="reference internal" href="#id1">3.2 Overview</a></li>
 <li><a class="reference internal" href="#files-affected">3.2 Files affected</a></li>
 <li><a class="reference internal" href="#mapscript">3.3 MapScript</a></li>
-<li><a class="reference internal" href="#backwards-compatibilty-issues">3.4 Backwards Compatibilty Issues</a></li>
+<li><a class="reference internal" href="#backwards-compatibility-issues">3.4 Backwards Compatibility Issues</a></li>
 <li><a class="reference internal" href="#security-implications">4. Security implications</a></li>
 <li><a class="reference internal" href="#performance-implications">5. Performance implications</a></li>
 <li><a class="reference internal" href="#bug-id">6. Bug ID</a></li>

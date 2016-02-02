@@ -237,7 +237,7 @@ for pointing it out.</p>
 <h2>3. Proposed implementation<a class="headerlink" href="#proposed-implementation" title="Permalink to this headline">¶</a></h2>
 <p>To solve the problems shown at items 2.1, 2.2 and 2.3 this RCF proposes that:</p>
 <ol class="arabic simple">
-<li>each mapscript wrapper objects acting as a container or as content will have its mapscript language class augmented to mantain references to the contained objects and, when it is available, to the container object. These references allow the GC to make better informed decisions on which objects can be freed. From now on, and only for the purpose of this RFC, we will call <em>cache</em> these references.</li>
+<li>each mapscript wrapper objects acting as a container or as content will have its mapscript language class augmented to maintain references to the contained objects and, when it is available, to the container object. These references allow the GC to make better informed decisions on which objects can be freed. From now on, and only for the purpose of this RFC, we will call <em>cache</em> these references.</li>
 <li>getters must be wrapped so that they look up references in the <em>cache</em> first and setters/mutators must be wrapped so that they keep the references in the <em>cache</em> up to date when they are changed</li>
 <li>when an object has a non-null parent its memory must be <em>disowned</em> (in SWIG terms) and <em>owned</em> when it is removed from the parent</li>
 </ol>
@@ -440,8 +440,8 @@ As of Tcl I currently don&#8217;t know if it&#8217;s possible.</p>
 <p>The two following section describe in detail the required SWIG-mapscript
 features (injection of code and constructor customization).
 Each language gets then a specific section to deal with its own characteristics</p>
-<div class="section" id="checking-swig-mapscript-capabilites-javacode">
-<h3>4.1 Checking SWIG-Mapscript capabilites: %javacode<a class="headerlink" href="#checking-swig-mapscript-capabilites-javacode" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="checking-swig-mapscript-capabilities-javacode">
+<h3>4.1 Checking SWIG-Mapscript capabilities: %javacode<a class="headerlink" href="#checking-swig-mapscript-capabilities-javacode" title="Permalink to this headline">¶</a></h3>
 <p>Swig provides the equivalent of <em>%javacode</em> for the following languages:</p>
 <ol class="arabic simple">
 <li>perl through %perlcode</li>
@@ -453,8 +453,8 @@ Each language gets then a specific section to deal with its own characteristics<
 <p>This swig construct will be used to inject in the wrapper the definition for
 the references described in 3.1 and the wrapper methods.</p>
 </div>
-<div class="section" id="checking-swig-mapscript-capabilites-constructor-customization">
-<h3>4.1 Checking SWIG-Mapscript capabilites: constructor customization<a class="headerlink" href="#checking-swig-mapscript-capabilites-constructor-customization" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="checking-swig-mapscript-capabilities-constructor-customization">
+<h3>4.1 Checking SWIG-Mapscript capabilities: constructor customization<a class="headerlink" href="#checking-swig-mapscript-capabilities-constructor-customization" title="Permalink to this headline">¶</a></h3>
 <p>The %csconstruct used to wrap and customize the costructor of mapscript objects (item 3.3)
 is only available in csharp and java.
 It should be possible to simulate its behaviour with <em>%pythonprepend</em> or <em>%pythonprepend</em>
@@ -474,7 +474,7 @@ prefix into <em>cs</em> (i.e. <em>javacode</em> in <em>cscode</em>, <em>javacons
 <p>As in the example above most of the perl customization can be done
 with the use of the <em>shadow</em> construct.</p>
 <p>The implementation will differ from the RFC in the following manners:</p>
-<p>1) the Perl wrapper will mantain references only in one direction (layer -&gt; map, or generally
+<p>1) the Perl wrapper will maintain references only in one direction (layer -&gt; map, or generally
 contained -&gt; container)
 and not both because of the implementation of the Perl GC (<a class="reference external" href="http://www.perl.com/doc/manual/html/pod/perlobj.html">http://www.perl.com/doc/manual/html/pod/perlobj.html</a>).
 If we had circular references this <em>island</em> of objects would normally never be garbage collected.</p>
@@ -494,7 +494,7 @@ Differently from Perl Python&#8217;s GC can find and free cycles of objects (<a 
 </div>
 <div class="section" id="ruby">
 <h3>4.5 Ruby<a class="headerlink" href="#ruby" title="Permalink to this headline">¶</a></h3>
-<p>Needs investigation, probably we&#8217;ll have to use rb_gc_* funtions to mark objects
+<p>Needs investigation, probably we&#8217;ll have to use rb_gc_* functions to mark objects
 and prevent their garbage collection or use <em>%trackobjects</em>.
 Ruby will not implement this RFC.</p>
 </div>
@@ -508,7 +508,7 @@ At the time of this writing Tcl will probably not implement this RFC.</p>
 <h2>5.1 Implementation checklist<a class="headerlink" href="#implementation-checklist" title="Permalink to this headline">¶</a></h2>
 <p>The following table will be used to track the implementation status of this RFC.
 There is a table for each mapscript object and when a language has implemented this RFC
-for a given object the mantainer will populate the relative cell with one of the following
+for a given object the maintainer will populate the relative cell with one of the following
 marks:</p>
 <ul class="simple">
 <li>&gt; if <em>cache</em> and wrappers have been implemented in the parent-&gt;child direction</li>
@@ -1917,8 +1917,8 @@ RFC undergoing revision after discussion on mapserver-dev.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#implementation-plan">4. Implementation plan</a><ul>
-<li><a class="reference internal" href="#checking-swig-mapscript-capabilites-javacode">4.1 Checking SWIG-Mapscript capabilites: %javacode</a></li>
-<li><a class="reference internal" href="#checking-swig-mapscript-capabilites-constructor-customization">4.1 Checking SWIG-Mapscript capabilites: constructor customization</a></li>
+<li><a class="reference internal" href="#checking-swig-mapscript-capabilities-javacode">4.1 Checking SWIG-Mapscript capabilities: %javacode</a></li>
+<li><a class="reference internal" href="#checking-swig-mapscript-capabilities-constructor-customization">4.1 Checking SWIG-Mapscript capabilities: constructor customization</a></li>
 <li><a class="reference internal" href="#java-and-c-sharp">4.2 Java and C-Sharp</a></li>
 <li><a class="reference internal" href="#perl">4.3 Perl</a></li>
 <li><a class="reference internal" href="#python">4.4 Python</a></li>
