@@ -170,9 +170,11 @@ number of shapes returned by msLayerNextShape(), honouring layer-&gt;maxfeatures
 limitation if layer-&gt;maxfeatures&gt;=0, and honouring layer-&gt;startindex if
 layer-&gt;startindex &gt;= 1 and paging is enabled.
 It should returns -1 in case of failure.</p>
-<p>This method will be called by msQueryByRect() when only feature count is
-requested (i.e. map-&gt;query.only_cache_result_count == 1). Such query is only
-done by the WFS server code.</p>
+<p>This method will be called by msQueryByRect() and msQueryByFilter() when only
+feature count is requested (i.e. map-&gt;query.only_cache_result_count == 1), and
+that a layer template is defined (the WFS code has traditionnaly set a fake
+layer template &#8216;ttt.html&#8217; if none was defined, so as to disable any class template).
+Such query is only done by the WFS server code.</p>
 <p>A default implementation of LayerGetShapeCount() using msLayerWhichShapes()
 and msLayerNextShape() is provided, and a specialized implementation is done in
 the PostGIS driver. This implementation consists in calling
@@ -221,7 +223,7 @@ have SQL semantics and implement LayerTranslateFilter(): Oracle, MSSQL Spatial</
 <div class="section" id="affected-files">
 <h3>3.1 Affected files<a class="headerlink" href="#affected-files" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>mapquery.c: to use msLayerGetFeatureCount()</li>
+<li>mapquery.c: to use msLayerGetFeatureCount() in msQueryByRect() and msQueryByFilter()</li>
 <li>maplayer.c: defines msLayerGetFeatureCount() and LayerDefaultGetFeatureCount()</li>
 <li>mapwfs.c: to take into account &#8220;wfs_ignore_maxfeatures_for_hits&#8221;</li>
 <li>mappostgis.c: implement LayerGetFeatureCount()</li>
@@ -232,7 +234,8 @@ have SQL semantics and implement LayerTranslateFilter(): Oracle, MSSQL Spatial</
 <h3>3.2 Tracking Issue<a class="headerlink" href="#tracking-issue" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>code: <a class="reference external" href="https://github.com/rouault/mapserver/tree/wfs_fast_hits">https://github.com/rouault/mapserver/tree/wfs_fast_hits</a></li>
-<li>tests: existing WFS tests cover the modified code</li>
+<li>tests: 4 new test cases have been added (<a class="reference external" href="https://github.com/mapserver/msautotest/commit/05e8264ce737a795d81f1a87614fa5c87399de91">https://github.com/mapserver/msautotest/commit/05e8264ce737a795d81f1a87614fa5c87399de91</a>)
+to test the behaviour of resultType=hits with filters, and already existing WFS tests pass.</li>
 </ul>
 </div>
 <div class="section" id="documentation">
