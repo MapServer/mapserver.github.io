@@ -186,7 +186,7 @@ customized services.</li>
 <div class="section" id="wxs-functions">
 <h2>WxS Functions<a class="headerlink" href="#wxs-functions" title="Permalink to this headline">¶</a></h2>
 <p>Add the following methods on the mapObj in mapscript/swiginc/map.i.</p>
-<div class="highlight-python"><div class="highlight"><pre>int OWSDispatch( OWSRequest *req );
+<div class="highlight-python"><div class="highlight"><pre><span></span>int OWSDispatch( OWSRequest *req );
 </pre></div>
 </div>
 <p>We can&#8217;t call the lower level functions, like msWMSGetCapabilities()
@@ -206,14 +206,14 @@ the results.</li>
 but it seems to lack a means of setting it from cgi arguments or directly
 by parsing a provided url.  I propose to add the following method on the
 OWSRequest:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">loadParams</span><span class="p">();</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">loadParams</span><span class="p">();</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li>Loads the parameters from the normal sources (QUERY_STRING env. variable
 for instance).</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre>loadParams( const char * url );
+<div class="highlight-python"><div class="highlight"><pre><span></span>loadParams( const char * url );
 </pre></div>
 </div>
 <ul class="simple">
@@ -247,39 +247,39 @@ we want to be able to capture output all the time for MapScript, we will
 actually always need the msIO layer.  So USE_MAPIO will always have to
 be defined.</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">msIO_resetHandlers</span><span class="p">();</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">msIO_resetHandlers</span><span class="p">();</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li>Resets msIO handlers to defaults (using stdin, stdout, stderr).</li>
 <li>Clears buffer data if buffered handlers were installed.</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">msIO_installStdoutToBuffer</span><span class="p">();</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">msIO_installStdoutToBuffer</span><span class="p">();</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li>Install handler to send stdout to a buffer, clear buffer.</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">msIO_installStdinFromBuffer</span><span class="p">();</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">msIO_installStdinFromBuffer</span><span class="p">();</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li>Install handler to get stdin from a buffer, clear buffer.</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre>msIO_setStdinBuffer( unsigned char *data, int length );
+<div class="highlight-python"><div class="highlight"><pre><span></span>msIO_setStdinBuffer( unsigned char *data, int length );
 </pre></div>
 </div>
 <ul class="simple">
 <li>Set data for stdin buffer.</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre>gdBuffer msIO_getStdoutBufferBytes();
+<div class="highlight-python"><div class="highlight"><pre><span></span>gdBuffer msIO_getStdoutBufferBytes();
 </pre></div>
 </div>
 <ul class="simple">
 <li>Fetch stdout buffer pointer and length.</li>
 <li>gdBuffer already provides language specific bindings to get byte data.</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre>const char *msIO_getStdoutBufferString();
+<div class="highlight-python"><div class="highlight"><pre><span></span>const char *msIO_getStdoutBufferString();
 </pre></div>
 </div>
 <ul class="simple">
@@ -290,7 +290,7 @@ instance.</li>
 of current read/write position.</p>
 <p>My objective is that folks should be able to do something like this in
 Python MapScript.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mapscript</span><span class="o">.</span><span class="n">msIO_installStdoutToBuffer</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">mapscript</span><span class="o">.</span><span class="n">msIO_installStdoutToBuffer</span><span class="p">()</span>
 <span class="k">if</span> <span class="nb">map</span><span class="o">.</span><span class="n">OWSDispatch</span><span class="p">(</span> <span class="n">req</span> <span class="p">)</span> <span class="o">==</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">MS_SUCCESS</span><span class="p">:</span>
   <span class="n">result</span> <span class="o">=</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">msIO_getStdoutBufferString</span><span class="p">()</span>
   <span class="n">mapscript</span><span class="o">.</span><span class="n">msIO_resetHandlers</span><span class="p">()</span>
@@ -309,7 +309,7 @@ bindings already have a way of using this as a &#8220;array of raw bytes&#8221; 
 It is normally used for fetched gdImage buffers.  But because the msIO
 function returns a gdBuffer referring to an internally memory array not
 &#8220;owned&#8221; by the gdBuffer we need to add a owns_data flag.</p>
-<div class="highlight-python"><div class="highlight"><pre>typedef struct {
+<div class="highlight-python"><div class="highlight"><pre><span></span>typedef struct {
    unsigned char *data;
    int size;
    int owns_data;
@@ -319,14 +319,14 @@ function returns a gdBuffer referring to an internally memory array not
 <p>Likewise, each of the language bindings needs to be modified to only
 call gdFree() on data if owns_data is true.</p>
 <p>This:</p>
-<div class="highlight-python"><div class="highlight"><pre>%typemap(out) gdBuffer {
+<div class="highlight-python"><div class="highlight"><pre><span></span>%typemap(out) gdBuffer {
    $result = PyString_FromStringAndSize($1.data, $1.size);
    gdFree($1.data);
 }
 </pre></div>
 </div>
 <p>becomes this:</p>
-<div class="highlight-python"><div class="highlight"><pre>%typemap(out) gdBuffer {
+<div class="highlight-python"><div class="highlight"><pre><span></span>%typemap(out) gdBuffer {
    $result = PyString_FromStringAndSize($1.data, $1.size);
    if( $1.owns_data )
        gdFree($1.data);
@@ -337,7 +337,7 @@ call gdFree() on data if owns_data is true.</p>
 </div>
 <div class="section" id="files-and-objects-affected">
 <h2>Files and objects affected<a class="headerlink" href="#files-and-objects-affected" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mapio</span><span class="o">.</span><span class="n">c</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">mapio</span><span class="o">.</span><span class="n">c</span>
 <span class="n">mapio</span><span class="o">.</span><span class="n">h</span>
 <span class="n">mapscript</span><span class="o">/</span><span class="n">mapscript</span><span class="o">.</span><span class="n">i</span>
 <span class="n">mapscript</span><span class="o">/</span><span class="n">swiginc</span><span class="o">/</span><span class="n">owsrequest</span><span class="o">.</span><span class="n">i</span>
@@ -386,7 +386,7 @@ content type ahead of the regular content type so we can see the results.
 The script could easily have done extra manipulation on the URL parameters,
 and on the map object.</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="ch">#!/usr/bin/env python</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">mapscript</span>

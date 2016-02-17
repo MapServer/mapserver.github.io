@@ -198,7 +198,7 @@ In some cases the source layer doesn&#8217;t participate in the renderings and s
 <ol class="loweralpha simple">
 <li>Specify a reference relative to the map:</li>
 </ol>
-<div class="highlight-python"><div class="highlight"><pre>LAYER
+<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
   NAME &quot;roads&quot;
   CONNECTIONTYPE OGR
   CONNECTION &quot;roads.tab&quot;
@@ -215,7 +215,7 @@ END
 <ol class="loweralpha simple" start="2">
 <li>Specify a reference relative to the outer layer</li>
 </ol>
-<div class="highlight-python"><div class="highlight"><pre>LAYER
+<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
   NAME &quot;cache&quot;
   CONNECTIONTYPE CACHE
   CONNECTION &quot;roads&quot;
@@ -244,11 +244,11 @@ This provider will be implemented in a separate file (mapcache.c).</p>
 <div class="section" id="shape-retrieval-options">
 <h2>3.1.1 Shape retrieval options<a class="headerlink" href="#shape-retrieval-options" title="Permalink to this headline">¶</a></h2>
 <p>This provider will be capable to populate the cache with all of the shapes in the given extent or only with the shapes in the resultcache of the source layer. The first one is the default option and the latter can be selected by the following PROCESSING directive:</p>
-<div class="highlight-python"><div class="highlight"><pre>PROCESSING &quot;fetch_mode=selection&quot;
+<div class="highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;fetch_mode=selection&quot;
 </pre></div>
 </div>
 <p>The cache will be populated upon the WhichShapes call of the caching provider when the given rect falls outside of the previous one. We can also specify that the provider will retieve all the shapes of the current map extent regardless to the search area using the following setting:</p>
-<div class="highlight-python"><div class="highlight"><pre>PROCESSING &quot;spatial_selection_mode=mapextent&quot;
+<div class="highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;spatial_selection_mode=mapextent&quot;
 </pre></div>
 </div>
 </div>
@@ -271,7 +271,7 @@ This provider will be implemented in a separate file (mapcache.c).</p>
 <div class="section" id="id1">
 <h2>3.2.1 Items selection<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>This provider will serve the same subset of the items as the source layer provides. Therefore the InitIteminfo will copy the items and the numitems of the external layer to the source layer, like:</p>
-<div class="highlight-python"><div class="highlight"><pre>int msGeomTransLayerInitItemInfo( layerObj *layer )
+<div class="highlight-python"><div class="highlight"><pre><span></span>int msGeomTransLayerInitItemInfo( layerObj *layer )
 {
     /* copying the item array an call the subsequent InitItemInfo*/
     return msLayerSetItems(((GeomTransLayerInfo*)layer-&gt;layerinfo)-&gt;srclayer, layer-&gt;items, layer-&gt;numitems);
@@ -279,7 +279,7 @@ This provider will be implemented in a separate file (mapcache.c).</p>
 </pre></div>
 </div>
 <p>And upon the GetItems call these values will be copied back to the external layer, like:</p>
-<div class="highlight-python"><div class="highlight"><pre>int msGeomTransLayerGetItems(layerObj *layer)
+<div class="highlight-python"><div class="highlight"><pre><span></span>int msGeomTransLayerGetItems(layerObj *layer)
 {
     /* copying the item array back */
     int result;
@@ -295,15 +295,15 @@ This provider will be implemented in a separate file (mapcache.c).</p>
 <h2>3.2.2 Applying the transformations<a class="headerlink" href="#applying-the-transformations" title="Permalink to this headline">¶</a></h2>
 <p>The proposed implementation will support most of the GEOS transformations supported by mapserver (buffer, convexhull, boundary, union, intersection, difference, symdifference). The transformations will be applied right before retrieving a shape to the caller.
 The desired transformation can be selected using a PROCESSING option, like:</p>
-<div class="highlight-python"><div class="highlight"><pre>PROCESSING &quot;transformation=buffer&quot;
+<div class="highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;transformation=buffer&quot;
 </pre></div>
 </div>
 <p>Some of the transformations will accept further parameters:</p>
-<div class="highlight-python"><div class="highlight"><pre>PROCESSING &quot;buffer_width=0.2&quot;
+<div class="highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;buffer_width=0.2&quot;
 </pre></div>
 </div>
 <p>Some of these operations will use 2 shapes to create the transformed shape. The reference shape of these transformations can be set externally using the WKT representation of a processing option:</p>
-<div class="highlight-python"><div class="highlight"><pre>PROCESSING &quot;ref_shape=[WKT of the shape]&quot;
+<div class="highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;ref_shape=[WKT of the shape]&quot;
 </pre></div>
 </div>
 <p>I&#8217;m also planning to support retrieving this shape from the features collection of the layer and from an external layer as well.</p>
@@ -311,18 +311,18 @@ The desired transformation can be selected using a PROCESSING option, like:</p>
 <div class="section" id="layer-filter-provider">
 <h2>3.3 Layer filter provider<a class="headerlink" href="#layer-filter-provider" title="Permalink to this headline">¶</a></h2>
 <p>The layer filter provider (implemented in mapfilter.c) will provide the shape retrieved from the source layer and will not apply any transformation on that. However some of the shapes will be skipped in the NextShape operations depending on the spatial and the attribute selection options. This provider ensures transparent access to the source layer (just as the previous one) but uses a cache for storing the selection shapes. The selection shapes will be retrieved from another layer which can be specified in the following processing option:</p>
-<div class="highlight-python"><div class="highlight"><pre>PROCESSING &quot;selection_layer=[path to the layer]&quot;
+<div class="highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;selection_layer=[path to the layer]&quot;
 </pre></div>
 </div>
 <p>When populating the selection cache I&#8217;ll support to retrieve all of the shapes or only the shapes in the result cache as for the caching provider mentioned before:</p>
-<div class="highlight-python"><div class="highlight"><pre>PROCESSING &quot;fetch_mode=selection&quot;
+<div class="highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;fetch_mode=selection&quot;
 </pre></div>
 </div>
 </div>
 <div class="section" id="putting-the-things-together-example">
 <h2>4. Putting the things together (example)<a class="headerlink" href="#putting-the-things-together-example" title="Permalink to this headline">¶</a></h2>
 <p>In this chapter I&#8217;ll describe the solution of the scenario have been mentioned earlier. I&#8217;ll start with a simple map file definition with 2 layers the counties and the citypoints of the country:</p>
-<div class="highlight-python"><div class="highlight"><pre>MAP
+<div class="highlight-python"><div class="highlight"><pre><span></span>MAP
       NAME &quot;Hungary&quot;
       STATUS ON
       EXTENT 421543.362603 47885.103526 933973.563202 367180.479761
@@ -398,7 +398,7 @@ END
 <div class="section" id="adding-the-feature-cache-for-the-layers">
 <h2>4.1 Adding the feature cache for the layers<a class="headerlink" href="#adding-the-feature-cache-for-the-layers" title="Permalink to this headline">¶</a></h2>
 <p>Any of the layers might be cached by using the CACHE layer provider. The original provider might be nested inside the cache. The parameters related to the drawing should be specified for the outer layer, like:</p>
-<div class="highlight-python"><div class="highlight"><pre>LAYER
+<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
             PROJECTION
                     &quot;AUTO&quot;
             END
@@ -432,7 +432,7 @@ END
 </pre></div>
 </div>
 <p>The Hun_Counties_cache layer is queryable and all of the existing methods are available to populate the resultcache. In my example I&#8217;ll use the mapscript C# drawquery example (implemented in drawquery.cs) to execute an attribute query and use the drawquery afterwards. The following command will be used along with this sample:</p>
-<div class="highlight-python"><div class="highlight"><pre>drawquery sample.map &quot;(&#39;[Name]&#39;=&#39;Tolna&#39;)&quot; sample.png
+<div class="highlight-python"><div class="highlight"><pre><span></span>drawquery sample.map &quot;(&#39;[Name]&#39;=&#39;Tolna&#39;)&quot; sample.png
 </pre></div>
 </div>
 <p>Which passes the (&#8216;[Name]&#8217;=&#8217;Tolna&#8217;) query string to the queryByAttributes of the first layer.</p>
@@ -444,7 +444,7 @@ END
 <div class="section" id="applying-transformations-on-the-counties">
 <h2>4.2 Applying transformations on the counties<a class="headerlink" href="#applying-transformations-on-the-counties" title="Permalink to this headline">¶</a></h2>
 <p>In the next step I&#8217;ll apply a cascaded GEOS convexhull and buffer operations on the first layer. The results will be rendered in a separate layer using the following definition:</p>
-<div class="highlight-python"><div class="highlight"><pre>LAYER
+<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
              NAME &quot;selectionshape&quot;
              CONNECTIONTYPE GEOMTRANS
              CONNECTION &quot;simplify&quot;
@@ -474,7 +474,7 @@ END
 <p>The corresponding mapfile:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample2.map">http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample2.map</a></p>
 <p>Which is not the desired result since all of the polygons were transformed. So as to transform only the selected shape an additional cache should be specified by using the &#8220;fetch_mode=selection&#8221; processing option:</p>
-<div class="highlight-python"><div class="highlight"><pre>LAYER
+<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
             NAME &quot;selectionshape&quot;
             CONNECTIONTYPE GEOMTRANS
             CONNECTION &quot;simplify&quot;
@@ -514,7 +514,7 @@ END
 <div class="section" id="using-the-transformed-shape-as-the-selection-shape">
 <h2>4.3 Using the transformed shape as the selection shape<a class="headerlink" href="#using-the-transformed-shape-as-the-selection-shape" title="Permalink to this headline">¶</a></h2>
 <p>My final goal is to select the features of the point layer using the transformed shape as the selection shape. Therefore I&#8217;ll have to use the layer filter provider on the point layer and setting the selection_layer to the transformed layer:</p>
-<div class="highlight-python"><div class="highlight"><pre>LAYER
+<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
          TYPE POINT
          CONNECTIONTYPE LAYERFILTER
          CONNECTION &quot;Hun_CityPoints&quot;
@@ -548,7 +548,7 @@ END
 <p>The resulting image can be found here:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample4a.png">http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample4a.png</a></p>
 <p>Note2: If there&#8217;s no need to render the selection layer I can specify that configuration inline:</p>
-<div class="highlight-python"><div class="highlight"><pre>LAYER
+<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
         TYPE POINT
         CONNECTIONTYPE LAYERFILTER
         CONNECTION &quot;Hun_CityPoints&quot;
@@ -618,7 +618,7 @@ END
 <div class="section" id="hashtable-implementation">
 <h2>5.1 Hashtable implementation<a class="headerlink" href="#hashtable-implementation" title="Permalink to this headline">¶</a></h2>
 <p>The current hashtable implementation (in maphash.c) will be generalized to be capable to store objects as well as strings. Currently the hashtable can store only string values. In addition the we will provide support for specifying the hashsize upon the construction of the hashtable. The objects will be stored in the hashtable by reference and the destroy function of the objects can also be specified externally. The following functions will be added to maphash.c</p>
-<div class="highlight-python"><div class="highlight"><pre>int initHashTableEx( hashTableObj *table, int hashSize );
+<div class="highlight-python"><div class="highlight"><pre><span></span>int initHashTableEx( hashTableObj *table, int hashSize );
 void msClearHashItems( hashTableObj *table );
 struct hashObj *msInsertHashTablePtr(hashTableObj *table, const char *key, const char *value);
 struct hashObj *msFirstItemFromHashTable( hashTableObj *table);
@@ -635,7 +635,7 @@ msGetHashTableItemCount will retrieve the actual number of the hashtable items.<
 <div class="section" id="extending-the-layerobj-structure-to-support-nesting-the-layers-map-h">
 <h2>5.2 Extending the layerObj structure to support nesting the layers (map.h)<a class="headerlink" href="#extending-the-layerobj-structure-to-support-nesting-the-layers-map-h" title="Permalink to this headline">¶</a></h2>
 <p>The sublayers in the layerObj structure will be stored as an array of layers.</p>
-<div class="highlight-python"><div class="highlight"><pre>typedef struct layer_obj {
+<div class="highlight-python"><div class="highlight"><pre><span></span>typedef struct layer_obj {
   ...
   #ifndef SWIG
   struct layer_obj **layers;
@@ -646,7 +646,7 @@ msGetHashTableItemCount will retrieve the actual number of the hashtable items.<
 </pre></div>
 </div>
 <p>The parser will take care of loading the nested layers:</p>
-<div class="highlight-python"><div class="highlight"><pre>int loadLayer(layerObj *layer, mapObj *map)
+<div class="highlight-python"><div class="highlight"><pre><span></span>int loadLayer(layerObj *layer, mapObj *map)
 {
   ...
   case (LAYER):
@@ -671,7 +671,7 @@ msGetHashTableItemCount will retrieve the actual number of the hashtable items.<
 <div class="section" id="adding-a-new-built-in-data-connection-types-map-h">
 <h2>5.3 Adding a new built in data connection types (map.h)<a class="headerlink" href="#adding-a-new-built-in-data-connection-types-map-h" title="Permalink to this headline">¶</a></h2>
 <p>A new data connection type is established for the new providers.</p>
-<div class="highlight-python"><div class="highlight"><pre>enum MS_CONNECTION_TYPE {MS_INLINE, MS_SHAPEFILE, MS_TILED_SHAPEFILE, MS_SDE, MS_OGR, MS_UNUSED_1, MS_POSTGIS, MS_WMS,   MS_ORACLESPATIAL, MS_WFS, MS_GRATICULE, MS_MYGIS, MS_RASTER, MS_PLUGIN, MS_GEOMTRANS, MS_LAYERFILTER, MS_CACHE };
+<div class="highlight-python"><div class="highlight"><pre><span></span>enum MS_CONNECTION_TYPE {MS_INLINE, MS_SHAPEFILE, MS_TILED_SHAPEFILE, MS_SDE, MS_OGR, MS_UNUSED_1, MS_POSTGIS, MS_WMS,   MS_ORACLESPATIAL, MS_WFS, MS_GRATICULE, MS_MYGIS, MS_RASTER, MS_PLUGIN, MS_GEOMTRANS, MS_LAYERFILTER, MS_CACHE };
 </pre></div>
 </div>
 <p>The lexer will be modified to interpret the new connection types.</p>
@@ -679,13 +679,13 @@ msGetHashTableItemCount will retrieve the actual number of the hashtable items.<
 <div class="section" id="support-for-destroying-the-persistent-data-of-the-providers-map-h-maplayer-c">
 <h2>5.4 Support for destroying the persistent data of the providers (map.h, maplayer.c)<a class="headerlink" href="#support-for-destroying-the-persistent-data-of-the-providers-map-h-maplayer-c" title="Permalink to this headline">¶</a></h2>
 <p>The providers would keep persistent data between the various Connection/Close operations on that layer so we should establish a mechanism to destroy this provider specific data by adding a new method to the layervtable:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">void</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerDestroy</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerDestroy</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="vtable-initialization-for-the-new-data-providers-maplayer-c">
 <h2>5.5 Vtable initialization for the new data providers (maplayer.c)<a class="headerlink" href="#vtable-initialization-for-the-new-data-providers-maplayer-c" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre>int
+<div class="highlight-python"><div class="highlight"><pre><span></span>int
 msInitializeVirtualTable(layerObj *layer)
 {
   if (layer-&gt;baselayer)
@@ -712,7 +712,7 @@ msInitializeVirtualTable(layerObj *layer)
 <div class="section" id="files-affected">
 <h2>6. Files affected<a class="headerlink" href="#files-affected" title="Permalink to this headline">¶</a></h2>
 <p>The following files will be affected by this RFC:</p>
-<div class="highlight-python"><div class="highlight"><pre>maphash.c
+<div class="highlight-python"><div class="highlight"><pre><span></span>maphash.c
 maphash.h
 maplayer.c
 maplexer.l

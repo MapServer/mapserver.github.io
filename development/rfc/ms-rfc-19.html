@@ -152,14 +152,14 @@ easier to achieve.</p>
 <div class="section" id="c-structural-changes">
 <h2>C Structural Changes<a class="headerlink" href="#c-structural-changes" title="Permalink to this headline">¶</a></h2>
 <p>A new structure called attributeBindingObj would be added:</p>
-<div class="highlight-python"><div class="highlight"><pre>typedef struct {
+<div class="highlight-python"><div class="highlight"><pre><span></span>typedef struct {
   char *item;
   char index;
 } attributeBindingObj;
 </pre></div>
 </div>
 <p>Several new enumerations would then define what properties could be bound:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c1">#define MS_STYLE_BINDING_LENGTH ...</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#define MS_STYLE_BINDING_LENGTH ...</span>
 <span class="c1">#define MS_STYLE_BINDING_ENUM { MS_STYLE_BINDING_SIZE, MS_STYLE_BINDING_ANGLE, ... };</span>
 
 <span class="c1">#define MS_LABEL_BINDING_LENGTH ...</span>
@@ -169,7 +169,7 @@ easier to achieve.</p>
 <p>Several elements would be removed from layerObj and styleObj. For example,
 angleitem, angleitemindex and similar members would be removed.
 styleObj&#8217;s and labelObj&#8217;s would each take on 2 new members:</p>
-<div class="highlight-python"><div class="highlight"><pre>char hasBindings;
+<div class="highlight-python"><div class="highlight"><pre><span></span>char hasBindings;
 attributeBindingObj bindings[MS_STYLE_BINDING_LENGTH];
 </pre></div>
 </div>
@@ -178,7 +178,7 @@ attributeBindingObj bindings[MS_STYLE_BINDING_LENGTH];
 <h2>Mapfile/MapScript Changes<a class="headerlink" href="#mapfile-mapscript-changes" title="Permalink to this headline">¶</a></h2>
 <p>Options like SIZEITEM and ANGLEITEM would go away. Instead a more
 logical syntax such as:</p>
-<div class="highlight-python"><div class="highlight"><pre>STYLE
+<div class="highlight-python"><div class="highlight"><pre><span></span>STYLE
   SIZE [mySizeItem]
   ANGLE [myAngleItem]
   COLOR 255 0 0
@@ -192,7 +192,7 @@ bindings in this case.</p>
 <p>Similarly MapScript would loose the ability to set/get the xxxITEM
 properties. Instead the style and label objects would get setBinding
 and deleteBinding methods:</p>
-<div class="highlight-python"><div class="highlight"><pre>(in Perl)
+<div class="highlight-python"><div class="highlight"><pre><span></span>(in Perl)
 $style-&gt;setBinding($mapscript::MS_STYLE_BINDING_SIZE, &#39;mySizeItem&#39;);
 $style-&gt;deleteBinding($mapscript::MS_STYLE_BINDING_COLOR);
 </pre></div>
@@ -204,7 +204,7 @@ $style-&gt;deleteBinding($mapscript::MS_STYLE_BINDING_COLOR);
 <li>map.h =&gt; structure changes, enum and define additions</li>
 <li>maputil.c =&gt; add msStyleBindAttributes();</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre>void msStyleBindAttributes(shapeObj *shape, styleObj *style)
+<div class="highlight-python"><div class="highlight"><pre><span></span>void msStyleBindAttributes(shapeObj *shape, styleObj *style)
 {
   if(style-&gt;bindings[MS_STYLE_BINDING_SIZE].item)
     style-&gt;size = atoi(shape-&gt;values[style-&gt;bindings[MS_STYLE_BINDING_SIZE].index]);

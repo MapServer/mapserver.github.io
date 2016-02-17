@@ -160,7 +160,7 @@ and mapsymbol.c. This replacement will establish the option to redirect mapfile 
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this headline">¶</a></h2>
 <p>Assuming the replacement of fprintf is done, writing objects to strings could be implemented
 by adding a new function for each object type something like:</p>
-<div class="highlight-python"><div class="highlight"><pre>char* msWriteLayerToString(layerObj *layer)
+<div class="highlight-python"><div class="highlight"><pre><span></span>char* msWriteLayerToString(layerObj *layer)
 {
   msIOContext  context;
   msIOBuffer buffer;
@@ -186,7 +186,7 @@ by adding a new function for each object type something like:</p>
 </div>
 <p>The owneship of the returned buffer is passed to the caller, so we should hook this function
 in layer.i as follows:</p>
-<div class="highlight-python"><div class="highlight"><pre>%newobject convertToString;
+<div class="highlight-python"><div class="highlight"><pre><span></span>%newobject convertToString;
 char* convertToString()
 {
   return msWriteLayerToString(self);
@@ -196,7 +196,7 @@ char* convertToString()
 <p>In order to implement the writer for mapObj (msWriteMapToString) we will require to isolate
 the bulk of the writing code in a separate function writeMap from msSaveMap.
 In this regard msSaveMap will now look something like:</p>
-<div class="highlight-python"><div class="highlight"><pre>int msSaveMap(mapObj *map, char *filename)
+<div class="highlight-python"><div class="highlight"><pre><span></span>int msSaveMap(mapObj *map, char *filename)
 {
   FILE *stream;
   char szPath[MS_MAXPATHLEN];
@@ -225,7 +225,7 @@ In this regard msSaveMap will now look something like:</p>
 </pre></div>
 </div>
 <p>As the result of this implementation the following new functions will be exposed in mapserver.h</p>
-<div class="highlight-python"><div class="highlight"><pre>MS_DLL_EXPORT char *msWriteLayerToString(layerObj *layer);
+<div class="highlight-python"><div class="highlight"><pre><span></span>MS_DLL_EXPORT char *msWriteLayerToString(layerObj *layer);
 MS_DLL_EXPORT char *msWriteMapToString(layerObj *layer);
 MS_DLL_EXPORT char *msWriteClassToString(classObj *_class);
 MS_DLL_EXPORT char *msWriteStyleToString(styleObj *style);

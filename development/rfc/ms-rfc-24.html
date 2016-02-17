@@ -191,7 +191,7 @@ of mapserver-HEAD as of 31st December 2006.</p>
 <div class="section" id="object-equality-identity">
 <h3>Object equality/identity<a class="headerlink" href="#object-equality-identity" title="Permalink to this headline">¶</a></h3>
 <p>Consider the following Java MapScript code:</p>
-<div class="highlight-python"><div class="highlight"><pre>mapObj map=new mapObj(&quot;my.map&quot;);
+<div class="highlight-python"><div class="highlight"><pre><span></span>mapObj map=new mapObj(&quot;my.map&quot;);
 layerObj layer=new layerObj(null);
 // add layer to the map
 int index=map.insertLayer(layer, -1);
@@ -207,7 +207,7 @@ System.out.println(newLayer==layer);
 </pre></div>
 </div>
 <p>when executed will produce the following output:</p>
-<div class="highlight-python"><div class="highlight"><pre>null==Change me
+<div class="highlight-python"><div class="highlight"><pre><span></span>null==Change me
 false
 </pre></div>
 </div>
@@ -221,7 +221,7 @@ This currently happens for the most used insert methods (i.e. <em>insertClass</e
 <p>Objects created through MapScript can be garbage-collected &#8220;early&#8221;, when there
 are live objects still referencing them.
 See this example in Java:</p>
-<div class="highlight-python"><div class="highlight"><pre>mapObj map=new mapObj(&quot;data/emptymap.map&quot;);
+<div class="highlight-python"><div class="highlight"><pre><span></span>mapObj map=new mapObj(&quot;data/emptymap.map&quot;);
 
 layerObj layer=new layerObj(map);
 layer.setName(&quot;Layer 0&quot;);
@@ -241,7 +241,7 @@ clazz.getLayer().getMap().draw();
 </pre></div>
 </div>
 <p>and its Perl equivalent:</p>
-<div class="highlight-python"><div class="highlight"><pre>use mapscript;
+<div class="highlight-python"><div class="highlight"><pre><span></span>use mapscript;
 
 $map = new mapscript::mapObj(&quot;../../tests/test.map&quot;);
 $layer = new mapscript::layerObj($map);
@@ -301,7 +301,7 @@ called <em>refcount</em>.</p>
 for debugging</p>
 <p>The reference counter increment and decrement will be implemented by the
 following macros:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c1">#define MS_REF_INCR(obj) obj-&gt;refcount++</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#define MS_REF_INCR(obj) obj-&gt;refcount++</span>
 <span class="c1">#define MS_REF_DECR(obj) (--(obj-&gt;refcount))</span>
 </pre></div>
 </div>
@@ -338,7 +338,7 @@ extra if and ++</li>
 to build any MapScript (with the exception of php, maybe)</li>
 </ol>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre>/* CLASS OBJECT - basic symbolization and classification information */
+<div class="highlight-python"><div class="highlight"><pre><span></span>/* CLASS OBJECT - basic symbolization and classification information */
 typedef struct class_obj{
 #ifndef USE_MAPSCRIPT
         #ifdef SWIG
@@ -393,7 +393,7 @@ the new feature</li>
 <li>the macro will be modified to suit the implementation at previous item</li>
 </ol>
 <p>To implement item 1 we will use a perl pie like the following:</p>
-<div class="highlight-python"><div class="highlight"><pre>perl -pi -e &quot;s/([mM])ap-&gt;layers\[(.*?)\]\]\./GET_LAYER(\1ap, \2\])-&gt;/g&quot; *.c
+<div class="highlight-python"><div class="highlight"><pre><span></span>perl -pi -e &quot;s/([mM])ap-&gt;layers\[(.*?)\]\]\./GET_LAYER(\1ap, \2\])-&gt;/g&quot; *.c
 perl -pi -e &quot;s/([mM])ap-&gt;layers\[(.*?)\]\./GET_LAYER(\1ap, \2)-&gt;/g&quot; *.c
 perl -pi -e &quot;s/([mM])ap-&gt;layers\[(.*?)\]\]/GET_LAYER(\1ap, \2\])/g&quot; *.c
 perl -pi -e &quot;s/([mM])ap-&gt;layers\[(.*?)\]/GET_LAYER(\1ap, \2)/g&quot; *.c
@@ -404,7 +404,7 @@ perl -pi -e &quot;s/src-&gt;layers\[(.*?)\]/GET_LAYER(src, \1)/g&quot; *.c
 </pre></div>
 </div>
 <p>and this is the macro that will be used:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c1">#define GET_LAYER(map, pos) map-&gt;layers[pos]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#define GET_LAYER(map, pos) map-&gt;layers[pos]</span>
 </pre></div>
 </div>
 <p>This will leave only very few occurrences (about 4 or 5) out that must be
@@ -430,7 +430,7 @@ the insert operation (<em>layerobject.c</em>, line 52, function <em>msInsertClas
 <h3>Destructors obey the reference counter<a class="headerlink" href="#destructors-obey-the-reference-counter" title="Permalink to this headline">¶</a></h3>
 <p>The various free* methods must check the counter before freeing memory.
 This will be implemented in the native code as in the following example:</p>
-<div class="highlight-python"><div class="highlight"><pre>void msFreeMap(mapObj *map) {
+<div class="highlight-python"><div class="highlight"><pre><span></span>void msFreeMap(mapObj *map) {
         if(!map) return;
         if ( MS_REF_DECR(obj) &gt; 0) return;
         // go on destroying the object as usual
@@ -456,7 +456,7 @@ because SWIG will acquire object ownership by default and is only a matter of
 removing all <em>%newobject</em> statements in the swig interface files.</p>
 <p>At the moment there are 58 <em>%newobject</em> statements.</p>
 <p>C# must also change the following three lines in <em>csmodule.i</em>:</p>
-<div class="highlight-python"><div class="highlight"><pre>csharp/csmodule.i:375:  if (map != null) this.swigCMemOwn = false;$excode
+<div class="highlight-python"><div class="highlight"><pre><span></span>csharp/csmodule.i:375:  if (map != null) this.swigCMemOwn = false;$excode
 csharp/csmodule.i:379:  if (layer != null) this.swigCMemOwn = false;$excode
 csharp/csmodule.i:383:  if (parent_class != null) this.swigCMemOwn = false;$excode
 </pre></div>
@@ -468,7 +468,7 @@ csharp/csmodule.i:383:  if (parent_class != null) this.swigCMemOwn = false;$exco
 <p>Tamas has proposed a more object oriented approach to this problem, which can
 be adopted for those languages that support OOrientation.</p>
 <p>Code example for layerObj (<em>javamodule.i</em>):</p>
-<div class="highlight-python"><div class="highlight"><pre>/*
+<div class="highlight-python"><div class="highlight"><pre><span></span>/*
    Modified constructor according to:
    - cache population and sync, item 3.2
 */
@@ -505,7 +505,7 @@ be adopted for those languages that support OOrientation.</p>
 <div class="section" id="perl-mapscript-code-example-for-layerobj">
 <h3>PERL: MapScript code example for layerObj<a class="headerlink" href="#perl-mapscript-code-example-for-layerobj" title="Permalink to this headline">¶</a></h3>
 <p>Code example for layerObj (<em>plmodule.i</em>):</p>
-<div class="highlight-python"><div class="highlight"><pre>%feature(&quot;shadow&quot;) layerObj(mapObj *map)
+<div class="highlight-python"><div class="highlight"><pre><span></span>%feature(&quot;shadow&quot;) layerObj(mapObj *map)
 %{
 sub new {
         my $pkg = shift;

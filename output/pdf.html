@@ -242,7 +242,7 @@ pdflib directory</li>
 <p><strong>Windows platform</strong></p>
 <p>Edit the makefile.vc and uncomment the following lines (make sure that the paths
 are adapted to your installation):</p>
-<div class="highlight-python"><div class="highlight"><pre>PDF_LIB=../pdflib-4.0.3/pdflib/pdflib.lib
+<div class="highlight-python"><div class="highlight"><pre><span></span>PDF_LIB=../pdflib-4.0.3/pdflib/pdflib.lib
 
 PDF_INC=-I../pdflib-4.0.3/pdflib
 
@@ -258,7 +258,7 @@ PDF=-DUSE_PDF
 <h3>Mapfile definition<a class="headerlink" href="#mapfile-definition" title="Permalink to this headline">¶</a></h3>
 <p>The IMAGETYPE parameter in the <a class="reference internal" href="../mapfile/index.html#mapfile"><span>Mapfile</span></a> should be set to pdf in order to output
 to PDF:</p>
-<div class="highlight-python"><div class="highlight"><pre>NAME pdf-test
+<div class="highlight-python"><div class="highlight"><pre><span></span>NAME pdf-test
 STATUS ON
 ...
 IMAGETYPE pdf
@@ -277,7 +277,7 @@ END
 </div>
 <p>You can also specify the output using the <a class="reference internal" href="../mapfile/outputformat.html#outputformat"><span>OUTPUTFORMAT</span></a> tag (this tag was introduced
 in mapserver 3.7) :</p>
-<div class="highlight-python"><div class="highlight"><pre>OUTPUTFORMAT
+<div class="highlight-python"><div class="highlight"><pre><span></span>OUTPUTFORMAT
   NAME pdf
   MIMETYPE &quot;application/x-pdf&quot;
   DRIVER pdf
@@ -297,13 +297,13 @@ in the <a class="reference internal" href="../mapfile/index.html#mapfile"><span>
 <a class="reference external" href="http://fwtools.maptools.org/">FWTools</a>.</p>
 <p>You simply pass a mapfile to the executable and a name for the output pdf,
 and a pdf file is generated:</p>
-<div class="highlight-python"><div class="highlight"><pre>shp2img -m gmap_pdf.map -o test.pdf
+<div class="highlight-python"><div class="highlight"><pre><span></span>shp2img -m gmap_pdf.map -o test.pdf
 </pre></div>
 </div>
 </div>
 <div class="section" id="possible-errors">
 <h3>Possible Errors<a class="headerlink" href="#possible-errors" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre>PDFlib I/O error: Resource configuration file &#39;pdflib.upr&#39; not found
+<div class="highlight-python"><div class="highlight"><pre><span></span>PDFlib I/O error: Resource configuration file &#39;pdflib.upr&#39; not found
 </pre></div>
 </div>
 <p>This is related to fonts.  If you remove the LABEL object from your mapfile
@@ -337,7 +337,7 @@ necessary.</p>
 <h3>Create the PDF document<a class="headerlink" href="#create-the-pdf-document" title="Permalink to this headline">¶</a></h3>
 <p>Here is an example similar to the one given on the <a class="reference external" href="http://www.php.net/manual/en/ref.pdf.php">PHP website</a> to create a new
 PDF document:</p>
-<div class="highlight-python"><div class="highlight"><pre>$my_pdf = pdf_new();
+<div class="highlight-python"><div class="highlight"><pre><span></span>$my_pdf = pdf_new();
 ...
 </pre></div>
 </div>
@@ -348,20 +348,20 @@ PDF document:</p>
 <p>Work back from the assumption that you will need no more than 300 dpi on your
 page for your map to look presentable. For an A4 map, I am using 150 dpi for an
 8&#8217; x 8&#8217; main map, which is 1200 x 1200 pixels.</p>
-<div class="highlight-python"><div class="highlight"><pre>$map-&gt;set(width,1200);
+<div class="highlight-python"><div class="highlight"><pre><span></span>$map-&gt;set(width,1200);
 $map-&gt;set(height,1200);
 </pre></div>
 </div>
 <p>Of course, our map will not be very useful unless it is zoomed in to the extent
 our user requested, and the layers they selected are switched on. Maintain arrays
 in your application that record:</p>
-<div class="highlight-python"><div class="highlight"><pre>- The current extent (say $ext[])
+<div class="highlight-python"><div class="highlight"><pre><span></span>- The current extent (say $ext[])
 - Layer status (say $layer[])
 </pre></div>
 </div>
 <p>Open your map file and pass these back through to set the map file into the state
 the user is expecting, something like:</p>
-<div class="highlight-python"><div class="highlight"><pre>$map-&gt;setextent($ext[0], $ext[1], $ext[2], $ext[3]);
+<div class="highlight-python"><div class="highlight"><pre><span></span>$map-&gt;setextent($ext[0], $ext[1], $ext[2], $ext[3]);
 
 while($layer[]) {
     $layer=$map-&gt;getLayer($n);
@@ -374,7 +374,7 @@ while($layer[]) {
 </pre></div>
 </div>
 <p>Now you will need to save a rendered view to a PNG file.</p>
-<div class="highlight-python"><div class="highlight"><pre>$img = $map-&gt;draw();
+<div class="highlight-python"><div class="highlight"><pre><span></span>$img = $map-&gt;draw();
 $url = $img-&gt;saveWebImage(MS_PNG, 0, 0, 0);
 </pre></div>
 </div>
@@ -385,7 +385,7 @@ drawScaleBar?() and drawLegend().</p>
 <h3>Insert the PNG elements into your PDF document<a class="headerlink" href="#insert-the-png-elements-into-your-pdf-document" title="Permalink to this headline">¶</a></h3>
 <p>This is really easy, use the pdf_open_image_file() function to import the map
 elements into your PDF document:</p>
-<div class="highlight-python"><div class="highlight"><pre>$element = pdf_open_image_file($my_pdf, &quot;png&quot;, &quot;$webroot/$url&quot;);
+<div class="highlight-python"><div class="highlight"><pre><span></span>$element = pdf_open_image_file($my_pdf, &quot;png&quot;, &quot;$webroot/$url&quot;);
 pdf_place_image($my_pdf, $element, $xpos, $ypos);
 pdf_close_image($my_pdf, $element);
 </pre></div>
@@ -396,7 +396,7 @@ pdf_close_image($my_pdf, $element);
 <h3>Buffer the PDF and send it to the user<a class="headerlink" href="#buffer-the-pdf-and-send-it-to-the-user" title="Permalink to this headline">¶</a></h3>
 <p>Assuming we have been creating the document $my_pdf, when we are done, we merely
 buffer it and send it to the user using echo():</p>
-<div class="highlight-python"><div class="highlight"><pre>&lt;?php
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;?php
 
 ....
 pdf_close($my_pdf);

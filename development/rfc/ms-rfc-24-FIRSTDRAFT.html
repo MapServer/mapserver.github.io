@@ -160,7 +160,7 @@ They can be reproduced against the latest CVS code of mapserver-HEAD as of 31st 
 <div class="section" id="object-equality-identity">
 <h3>2.1 Object equality/identity<a class="headerlink" href="#object-equality-identity" title="Permalink to this headline">¶</a></h3>
 <p>Consider the following Java mapscript code:</p>
-<div class="highlight-python"><div class="highlight"><pre>mapObj map=new mapObj(&quot;my.map&quot;);
+<div class="highlight-python"><div class="highlight"><pre><span></span>mapObj map=new mapObj(&quot;my.map&quot;);
 layerObj layer=new layerObj(null);
 // add layer to the map
 int index=map.insertLayer(layer, -1);
@@ -176,7 +176,7 @@ System.out.println(newLayer==layer);
 </pre></div>
 </div>
 <p>when executed will produce the following output:</p>
-<div class="highlight-python"><div class="highlight"><pre>null==Change me
+<div class="highlight-python"><div class="highlight"><pre><span></span>null==Change me
 false
 </pre></div>
 </div>
@@ -189,7 +189,7 @@ This currently happens for the most used insert methods (i.e. <em>insertClass</e
 <h3>2.2 Early garbage collection<a class="headerlink" href="#early-garbage-collection" title="Permalink to this headline">¶</a></h3>
 <p>Objects created through mapscript can be garbage-collected &#8220;early&#8221;, when there are live objects still referencing them.
 See this example in Java:</p>
-<div class="highlight-python"><div class="highlight"><pre>mapObj map=new mapObj(&quot;data/emptymap.map&quot;);
+<div class="highlight-python"><div class="highlight"><pre><span></span>mapObj map=new mapObj(&quot;data/emptymap.map&quot;);
 
 layerObj layer=new layerObj(map);
 layer.setName(&quot;Layer 0&quot;);
@@ -209,7 +209,7 @@ clazz.getLayer().getMap().draw();
 </pre></div>
 </div>
 <p>and its perl equivalent:</p>
-<div class="highlight-python"><div class="highlight"><pre>use mapscript;
+<div class="highlight-python"><div class="highlight"><pre><span></span>use mapscript;
 
 $map = new mapscript::mapObj(&quot;../../tests/test.map&quot;);
 $layer = new mapscript::layerObj($map);
@@ -283,7 +283,7 @@ into a map and ported to all mapscript languages.</p>
 <div class="section" id="java-mapscript-code-example-for-layerobj">
 <h3>3.4 JAVA: mapscript code example for layerObj<a class="headerlink" href="#java-mapscript-code-example-for-layerobj" title="Permalink to this headline">¶</a></h3>
 <p>Code example for layerObj (<em>javamodule.i</em>):</p>
-<div class="highlight-python"><div class="highlight"><pre>/*
+<div class="highlight-python"><div class="highlight"><pre><span></span>/*
    Modified constructor according to:
    - bug#1743, item 3.3
    - cache population and sync, item 3.2
@@ -337,7 +337,7 @@ into a map and ported to all mapscript languages.</p>
 <div class="section" id="perl-mapscript-code-example-for-layerobj">
 <h3>3.5 PERL: mapscript code example for layerObj<a class="headerlink" href="#perl-mapscript-code-example-for-layerobj" title="Permalink to this headline">¶</a></h3>
 <p>Code example for layerObj (<em>plmodule.i</em>):</p>
-<div class="highlight-python"><div class="highlight"><pre>%feature(&quot;shadow&quot;) ~mapObj() %{
+<div class="highlight-python"><div class="highlight"><pre><span></span>%feature(&quot;shadow&quot;) ~mapObj() %{
 sub DESTROY {
         return unless $_[0]-&gt;isa(&#39;HASH&#39;);
         my $self = tied(%{$_[0]});
@@ -481,7 +481,7 @@ If we had circular references this <em>island</em> of objects would normally nev
 <p>2) to wrap the <em>layerObj-&gt;{map}</em> invocation we must edit the <em>mapscript.pm</em> file manually.
 To overcome this limitation and automate find/replace we will use perl <em>pies</em> in the Makefile
 like the following two:</p>
-<div class="highlight-python"><div class="highlight"><pre>perl -pi -e &quot;s/\*swig_map_get = \*mapscriptc::layerObj_map_get/\*swig_map_get = \*mapscript::map_get/&quot; mapscript.pm
+<div class="highlight-python"><div class="highlight"><pre><span></span>perl -pi -e &quot;s/\*swig_map_get = \*mapscriptc::layerObj_map_get/\*swig_map_get = \*mapscript::map_get/&quot; mapscript.pm
 perl -pi -e &quot;s/\*getMap = \*mapscriptc::layerObj_getMap/\*swig_map_get = \*mapscript::map_get/&quot; mapscript.pm
 </pre></div>
 </div>
