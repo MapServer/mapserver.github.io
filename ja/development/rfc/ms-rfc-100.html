@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MS RFC 100: Support for tile index with mixed SRS in raster layers &mdash; MapServer 7.0.0 documentation</title>
+    <title>MS RFC 100: Support for tile index with mixed SRS in raster layers &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="このドキュメントについて" href="../../about.html" />
     <link rel="copyright" title="著作権" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 101: Add Support for Content Dependent Legend Responses" href="ms-rfc-101.html" />
     <link rel="prev" title="MS RFC 99: Remove support for GD renderer" href="ms-rfc-99.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="ms-rfc-101.html" title="MS RFC 101: Add Support for Content Dependent Legend Responses"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="ms-rfc-99.html" title="MS RFC 99: Remove support for GD renderer"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -162,7 +179,7 @@ But until now, the rasters in the same tile index should have identical SRS.</p>
 <p>For the sake of simplicity of the administration of MapServer mapfiles,
 and/or to avoid unnecessary reprojections of rasters into a common SRS
 (which might be different from the requested SRS of a WMS or WCS request),
-it is desirable to have support for tile index with rasters of heterogenous SRS.</p>
+it is desirable to have support for tile index with rasters of heterogeneous SRS.</p>
 </div>
 <div class="section" id="proposed-solution">
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -173,7 +190,7 @@ SRS expressed as WKT, PROJ.4 string, or EPSG:xxxx code (actually any string that
 is parsed by OSRSetFromUserInput()). If, for a tile, the field is empty, an
 attempt will be made to fetch the SRS from the tile raster directly with
 GDALGetProjectionRef().</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
     <span class="k">NAME</span> <span class="s">&quot;tile_index_mixed_srs_26711&quot;</span>
     <span class="k">TYPE</span> <span class="nb">RASTER</span>
     <span class="k">STATUS</span> <span class="nb">ON</span>
@@ -192,7 +209,7 @@ LAYER block), so that spatial queries in the tileindex can work.</p>
 <p>Such tileindex files that have tiles with mixed SRS can be generated with an
 updated version of the GDAL gdaltindex utility, by using the -t_srs and
 -src_srs_name options.</p>
-<div class="highlight-python"><div class="highlight"><pre>gdaltindex -t_srs EPSG:4326 -src_srs_name src_srs mytileindex.shp *.tif
+<div class="highlight-python"><div class="highlight"><pre><span></span>gdaltindex -t_srs EPSG:4326 -src_srs_name src_srs mytileindex.shp *.tif
 </pre></div>
 </div>
 <p>Those tile index can be used for example in WMS or WCS layers. For WCS layers,
@@ -224,8 +241,8 @@ msRasterQueryByRect() from maprasterquery.c.</p>
 add capability to get projection info from .prj file when PROJECTION = AUTO</li>
 </ul>
 </div>
-<div class="section" id="backwards-compatibilty-issues">
-<h3>3.2 Backwards Compatibilty Issues<a class="headerlink" href="#backwards-compatibilty-issues" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="backwards-compatibility-issues">
+<h3>3.2 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>None expected, new functionality.</p>
 </div>
 <div class="section" id="mapscript-changes">
@@ -241,8 +258,8 @@ where a tile index with tiles in SRS=srs1 is requested with SRS=srs2.</p>
 </div>
 <div class="section" id="related-bug-fixes">
 <h3>3.5 Related bug fixes<a class="headerlink" href="#related-bug-fixes" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>The following syntax did not work properly in layers that refered to a TILEINDEX.</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">PROJECTION</span>
+<p>The following syntax did not work properly in layers that referred to a TILEINDEX.</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">PROJECTION</span>
     <span class="nb">AUTO</span>
 <span class="k">END</span>
 </pre></div>
@@ -252,7 +269,7 @@ available.</p>
 <p>Another related fix/enhancement is to be able to guess the SRS of a shapefile,
 from its associated .prj file, when PROJECTION AUTO is specified in its LAYER
 definition.</p>
-<p>Note: This brings a similar functionnality for (raster) tile index layer and
+<p>Note: This brings a similar functionality for (raster) tile index layer and
 shapefile layers, to what was proposed in <a class="reference internal" href="ms-rfc-37.html#rfc37"><span>MS RFC 37: MapServer Spatial Reference Improvements and Additions</span></a>, but with a different
 implementation. The implementation for that PROJECTION AUTO mechanism follows
 what already works for raster layers with a single raster, and just tries to
@@ -302,11 +319,11 @@ match with the value of the TILESRS keyword. It will also support created
 tileindex in all supported OGR formats with the -f option (up to now only
 shapefile were supported).</p>
 <p>Example for a shapefile tileindex :</p>
-<div class="highlight-python"><div class="highlight"><pre>gdaltindex -t_srs EPSG:26711 -src_srs_name src_srs tile_index_mixed_srs_26711.shp *.tif
+<div class="highlight-python"><div class="highlight"><pre><span></span>gdaltindex -t_srs EPSG:26711 -src_srs_name src_srs tile_index_mixed_srs_26711.shp *.tif
 </pre></div>
 </div>
 <p>Example for a PostGIS layer tileindex :</p>
-<div class="highlight-python"><div class="highlight"><pre>gdaltindex -f &quot;PostgreSQL&quot; -t_srs EPSG:26711 -src_srs_name src_srs -lyr_name index_26711 pg:dbname=autotest *.tif
+<div class="highlight-python"><div class="highlight"><pre><span></span>gdaltindex -f &quot;PostgreSQL&quot; -t_srs EPSG:26711 -src_srs_name src_srs -lyr_name index_26711 pg:dbname=autotest *.tif
 </pre></div>
 </div>
 </div>
@@ -315,10 +332,10 @@ shapefile were supported).</p>
 <p>A sample script, wcs_virtds_params.py, will be added to generate the WCS
 layer definition from a tileindex with mixed SRS.</p>
 <p>Example for a shapefile tileindex :</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python swig/python/samples/wcs_virtds_params.py tile_index_mixed_srs_26711.shp -src_srs_name src_srs
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ python swig/python/samples/wcs_virtds_params.py tile_index_mixed_srs_26711.shp -src_srs_name src_srs
 </pre></div>
 </div>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
     <span class="k">NAME</span> <span class="s">&quot;tile_index_mixed_srs_26711&quot;</span>
     <span class="k">TYPE</span> <span class="nb">RASTER</span>
     <span class="k">STATUS</span> <span class="nb">ON</span>
@@ -340,10 +357,10 @@ layer definition from a tileindex with mixed SRS.</p>
 </pre></div>
 </div>
 <p>Example for a PostGIS layer tileindex :</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python swig/python/samples/wcs_virtds_params.py pg:dbname=autotest -lyr_name index_26711 -src_srs_name src_srs
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ python swig/python/samples/wcs_virtds_params.py pg:dbname=autotest -lyr_name index_26711 -src_srs_name src_srs
 </pre></div>
 </div>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
     <span class="k">NAME</span> <span class="s">&quot;index_26711_tileindex&quot;</span>
     <span class="k">TYPE</span> <span class="nb">POLYGON</span>
     <span class="k">STATUS</span> <span class="nb">OFF</span>
@@ -406,7 +423,7 @@ DanielM, JeffM and SteveL</p>
 <li><a class="reference internal" href="#proposed-solution">2. Proposed solution</a></li>
 <li><a class="reference internal" href="#implementation-details">3. Implementation Details</a><ul>
 <li><a class="reference internal" href="#files-affected">3.1 Files affected</a></li>
-<li><a class="reference internal" href="#backwards-compatibilty-issues">3.2 Backwards Compatibilty Issues</a></li>
+<li><a class="reference internal" href="#backwards-compatibility-issues">3.2 Backwards Compatibility Issues</a></li>
 <li><a class="reference internal" href="#mapscript-changes">3.3 MapScript changes</a></li>
 <li><a class="reference internal" href="#performance-implications">3.4 Performance implications</a></li>
 <li><a class="reference internal" href="#related-bug-fixes">3.5 Related bug fixes</a></li>
@@ -443,11 +460,11 @@ DanielM, JeffM and SteveL</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

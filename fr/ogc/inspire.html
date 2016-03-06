@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Service de vue INSPIRE &mdash; MapServer 7.0.0 documentation</title>
+    <title>Service de vue INSPIRE &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../index.html" />
     <link rel="up" title="Gestion et configuration des standards OGC" href="index.html" />
     <link rel="next" title="Client WMS" href="wms_client.html" />
     <link rel="prev" title="Serveur WMS" href="wms_server.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="wms_client.html" title="Client WMS"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="wms_server.html" title="Serveur WMS"
+             accesskey="P">précédent</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.1</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Gestion et configuration des standards OGC</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -193,7 +210,7 @@ prefix instead of <code class="docutils literal"><span class="pre">wms_</span></
 <p>La métadonnée spécifique INSPIRE peut soit être référencée dans un document de métadonnées de service INSPIRE externe (scénario 1) ou soit être directement encapsulée dans le document des &#8220;capabilities&#8221; (scénario 2). MapServer supporte les deux scénarios.</p>
 <p>L&#8217;activation du scénario correspondant pour le support INSPIRE se passe dans la section <code class="docutils literal"><span class="pre">WEB.METADATA</span></code> du mapfile via <code class="docutils literal"><span class="pre">wms_inspire_capabilities</span></code>. S&#8217;il est activé, l&#8217;espace de nom INSPIRE correspondant aussi bien que les avertissements de validation appropriés sont générés dans le document des &#8220;capabilities&#8221;.</p>
 <p>Scénario 1 - activation du support INSPIRE en utilisant une référence à une métadonnée de service externe:</p>
-<div class="highlight-python"><div class="highlight"><pre>WEB
+<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
  METADATA
   &quot;wms_inspire_capabilities&quot; &quot;url&quot;
   ...
@@ -202,7 +219,7 @@ END
 </pre></div>
 </div>
 <p>Scénario 2 - activation du support INSPIRE en utilisant une métadonnée de service encapsulée:</p>
-<div class="highlight-python"><div class="highlight"><pre>WEB
+<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
  METADATA
   &quot;wms_inspire_capabilities&quot; &quot;embed&quot;
   ...
@@ -213,7 +230,10 @@ END
 </div>
 <div class="section" id="multi-language-support-for-certain-capabilities-fields">
 <span id="inspire-multi-language-support"></span><h2><a class="toc-backref" href="#table-of-contents">Support multi-langues pour certains champs des &#8220;capabilities&#8221;</a><a class="headerlink" href="#multi-language-support-for-certain-capabilities-fields" title="Lien permanent vers ce titre">¶</a></h2>
-<p>INSPIRE requiert le support multi-langues et demande une liste de toutes les langues supportés aussi bien que la langue par défaut dans le document des &#8220;capabilities&#8221;. En fonction du paramètre language dans la requête GetCapabilites, certaines valeurs de métadonnées spécifiques, à savoir</p>
+<p>INSPIRE requires multi-language support and requests a list of all supported
+languages as well as the default language in the capabilities document. Based
+on the language parameter in the GetCapabilities request, certain specific
+metadata values, namely</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">wms_title</span></code></li>
 <li><code class="docutils literal"><span class="pre">wms_abstract</span></code></li>
@@ -230,8 +250,11 @@ END
 <li><code class="docutils literal"><span class="pre">CONNECTION</span> <span class="pre">&quot;db_ger&quot;</span></code></li>
 </ul>
 <p>nécessitent d&#8217;être fournit dans la langue demandée. Si la langue n&#8217;est pas supportée (ou qu&#8217;aucun paramètre de langue n&#8217;est présent), la langue par défaut doit être utilisée.</p>
-<p>Tous les langues supportées doivent être spécifiées comme une liste séparée par des virgules (la première langue est celle par défaut) via <code class="docutils literal"><span class="pre">wms_languages</span></code> dans la section <code class="docutils literal"><span class="pre">WEB.METADATA</span></code> du mapfile. Ce paramètre de langue est aussi ajouté à <code class="docutils literal"><span class="pre">OnlineResource</span></code> dans la sortie de GetCapabilites:</p>
-<div class="highlight-python"><div class="highlight"><pre>WEB
+<p>All supported languages have to be specified as comma separated list (first
+language is default) through <code class="docutils literal"><span class="pre">wms_languages</span></code> in the <code class="docutils literal"><span class="pre">WEB.METADATA</span></code>
+section of the mapfile. This language parameter is also added to the
+<code class="docutils literal"><span class="pre">OnlineResource</span></code> in the GetCapabilities output:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
  METADATA
   ...
   &quot;wms_languages&quot; &quot;eng,ger&quot;       #first default, values according ISO 639-2/B
@@ -241,7 +264,7 @@ END
 </pre></div>
 </div>
 <p>Pour les valeurs de métadonnées spécifiques à la langue, une méthode d&#8217;extension clé est appliquée:</p>
-<div class="highlight-python"><div class="highlight"><pre>WEB
+<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
  METADATA
   ...
   &quot;wms_title.eng&quot; &quot;myservicetitle&quot;
@@ -254,7 +277,7 @@ END
 </pre></div>
 </div>
 <p>Pour les données de référence dépendantes de la langue, une approche similaire à la fonctionnalité de <a class="reference internal" href="../cgi/runsub.html#runsub"><span>substitution à la volée</span></a> de MapServer a été suivie (seulement les valeurs <code class="docutils literal"><span class="pre">DATA</span></code> et <code class="docutils literal"><span class="pre">CONNECTION</span></code> avec %language% sont substituées):</p>
-<div class="highlight-python"><div class="highlight"><pre>...
+<div class="highlight-python"><div class="highlight"><pre><span></span>...
   LAYER
    NAME TN.RoadTransportNetwork.RoadLink
    DATA &quot;road_%language%&quot;
@@ -269,7 +292,7 @@ END
 <h2><a class="toc-backref" href="#table-of-contents">Mise à disposition de métadonnées spécifiques INSPIRE</a><a class="headerlink" href="#provision-of-inspire-specific-metadata" title="Lien permanent vers ce titre">¶</a></h2>
 <p>En fonction du scénario, une information de métadonnées supplémentaire est requise pour supporter la spécification. Les champs relatifs à INSPIRE sont fournis ci-dessous.</p>
 <p>Scénario 1 - champs liés à INSPIRE utilisant une référence à une métadonnée de service externe:</p>
-<div class="highlight-python"><div class="highlight"><pre>WEB
+<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
  METADATA
   &quot;wms_inspire_capabilities&quot; &quot;url&quot;
   &quot;wms_languages&quot; &quot;eng,ger&quot;               #first default, values according ISO 639-2/B
@@ -289,7 +312,7 @@ END
 </pre></div>
 </div>
 <p>Scénario 2 - champs liés à INSPIRE utilisant une métadonnée de service encapsulée:</p>
-<div class="highlight-python"><div class="highlight"><pre>WEB
+<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
  METADATA
   &quot;wms_inspire_capabilities&quot; &quot;embed&quot;
   &quot;wms_languages&quot; &quot;eng,ger&quot;               #first default, values according ISO 639-2/B
@@ -326,7 +349,7 @@ END
 <h2><a class="toc-backref" href="#table-of-contents">Couches de groupes nommées</a><a class="headerlink" href="#named-group-layers" title="Lien permanent vers ce titre">¶</a></h2>
 <p>INSPIRE exige l&#8217;usage de couches de groupes nommés. Ainsi, la fonctionnalité de <code class="docutils literal"><span class="pre">wms_layer_group</span></code> est étendue pour supporter les couches de groupes nommés. Si une couche avec le même nom qu&#8217;utilisée dans <code class="docutils literal"><span class="pre">wms_layer_group</span></code> est trouvée, elle est traitée comme un groupe nommé et si aucune couche avec le nom  n&#8217;est trouvée comme un groupe sans nom, comme avant.</p>
 <p>Fournit cette capacité, une hiérarchie de n&#8217;importe quel niveau peut être réalisée. Voir par exemple le groupement utilisé dans le mapfile <a class="reference external" href="https://svn.osgeo.org/mapserver/sandbox/inspire_soc2011/msautotest/wxs/wms_inspire.map">wms_inspire.map</a> mapfile dans msautotest:</p>
-<div class="highlight-python"><div class="highlight"><pre>TN
+<div class="highlight-python"><div class="highlight"><pre><span></span>TN
 +--- TN.CommonTransportElements
      +--- TN.CommonTransportElements.TransportArea
      +--- TN.CommonTransportElements.TransportLink
@@ -347,7 +370,7 @@ END
 <div class="section" id="style-section-for-root-layer-and-possibly-existing-group-layers">
 <h2><a class="toc-backref" href="#table-of-contents">Section de style pour la couche racine et éventuellement les groupes de couches existants</a><a class="headerlink" href="#style-section-for-root-layer-and-possibly-existing-group-layers" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Pour les couches régulières, le concept de GROUP et CLASSGROUP peut être utilisé pour définir le nom du style de la couche selon la valeur renseignée. De plus, les titres du style de couche peuvent être remplacés via <code class="docutils literal"><span class="pre">wms_style_&lt;stylename&gt;_title</span></code> et les legendURLs du style de couche via <code class="docutils literal"><span class="pre">wms_style_&lt;stylename&gt;_legendurl_*</span></code> (width, height, format, and href doivent être fournis):</p>
-<div class="highlight-python"><div class="highlight"><pre>...
+<div class="highlight-python"><div class="highlight"><pre><span></span>...
   LAYER
    NAME TN.RoadTransportNetwork.RoadLink
    DATA &quot;road&quot;
@@ -388,8 +411,8 @@ END
 </li>
 <li><p class="first">utilisez <code class="docutils literal"><span class="pre">wms_style_title</span></code> pour remplacer le titre du style (optionnel)</p>
 </li>
-<li><p class="first">utilisez <code class="docutils literal"><span class="pre">wms_style_legendurl_*</span></code> pour remplacer width, heigth, format et href de la legendURL (optionnel)</p>
-</li>
+<li>use <code class="docutils literal"><span class="pre">wms_style_legendurl_*</span></code> to override width, height, format and href of
+the legendURL (optional)</li>
 </ul>
 <p>et éventuellement des couches de groupes existantes :</p>
 <ul class="simple">
@@ -397,10 +420,10 @@ END
 </li>
 <li><p class="first">utilisez <code class="docutils literal"><span class="pre">wms_group_style_title</span></code> pour remplacer le titre du style (optionnel)</p>
 </li>
-<li><p class="first">utilisez <code class="docutils literal"><span class="pre">wms_group_style_legendurl_*</span></code> pour remplacer width, heigth, format et href de la legendURL (optionnel)</p>
-</li>
+<li>use <code class="docutils literal"><span class="pre">wms_group_style_legendurl_*</span></code> to override width, height, format and
+href of the legendURL (optional)</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre>...
+<div class="highlight-python"><div class="highlight"><pre><span></span>...
   WEB
    METADATA
     ...
@@ -440,7 +463,7 @@ END
 </pre></div>
 </div>
 <p>Fournit cette capacité, 3 niveaux de hiérarchies peuvent être utilisés comme dans les mapfiles exemples <a class="reference external" href="https://svn.osgeo.org/mapserver/sandbox/inspire_soc2011/msautotest/wxs/wms_inspire_scenario1.map">wms_inspire_scenario1.map</a> et <a class="reference external" href="https://svn.osgeo.org/mapserver/sandbox/inspire_soc2011/msautotest/wxs/wms_inspire_scenario2.map">wms_inspire_scenario2.map</a> dans msautotest:</p>
-<div class="highlight-python"><div class="highlight"><pre>TN.RoadTransportNetwork.RoadArea
+<div class="highlight-python"><div class="highlight"><pre><span></span>TN.RoadTransportNetwork.RoadArea
 +--- TN.RoadTransportNetwork.RoadLink
 +--- TN.CommonTransportElements.TransportLink
      +--- TN.RailTransportNetwork.RailwayLink
@@ -496,11 +519,11 @@ END
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

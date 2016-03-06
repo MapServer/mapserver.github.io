@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MS RFC 107: Support for the edge of pixel (OGC) extent model in MapServer &mdash; MapServer 7.0.0 documentation</title>
+    <title>MS RFC 107: Support for the edge of pixel (OGC) extent model in MapServer &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Sobre este documento" href="../../about.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 108: Dynamic Heatmap (Kernel Density Estimation) Layers" href="ms-rfc-108.html" />
     <link rel="prev" title="MS RFC 106: Support of Geomtransform JavaScript Plugin" href="ms-rfc-106.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Índice General"
+             accesskey="I">índice</a></li>
+        <li class="right" >
+          <a href="ms-rfc-108.html" title="MS RFC 108: Dynamic Heatmap (Kernel Density Estimation) Layers"
+             accesskey="N">siguiente</a> |</li>
+        <li class="right" >
+          <a href="ms-rfc-106.html" title="MS RFC 106: Support of Geomtransform JavaScript Plugin"
+             accesskey="P">anterior</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -175,7 +192,7 @@ to the dimensions of the outside edges of the image being requested. This
 appears to be a far more common means of expressing an area of interest.&#8221;</p>
 <p>As an attempt for handling the difference between the MapServer and OGC extent models
 an adjustment code has been applied in MapServer (ie. in mapwms.c, mapwmslayer.c):</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">maxx</span> <span class="o">-</span> <span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">minx</span><span class="p">)</span> <span class="o">/</span> <span class="n">map</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">;</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">maxx</span> <span class="o">-</span> <span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">minx</span><span class="p">)</span> <span class="o">/</span> <span class="n">map</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">;</span>
 <span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">minx</span> <span class="o">+=</span> <span class="n">dx</span><span class="o">*</span><span class="mf">0.5</span><span class="p">;</span>
 <span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">maxx</span> <span class="o">-=</span> <span class="n">dx</span><span class="o">*</span><span class="mf">0.5</span><span class="p">;</span>
 
@@ -203,7 +220,7 @@ the current model which can be selected by a new parameter added to the mapfile.
 <p>The key point of the implementation is to replace the &#8216;1&#8217; constant values in the
 extent/scale calculations with a new pixeladjustment parameter. This parameter can be
 defined in the mapfile as:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">MAP</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">MAP</span>
     <span class="c"># 0 for using the OGC extent model 2 for the current edge-of-pixel model</span>
     <span class="err">PIXELADJUSTMENT</span> <span class="mi">0</span>
 <span class="p">...</span>
@@ -222,11 +239,11 @@ in the formula instead of the constant 1 should not result in perceptible degrad
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>The core of this implementation will change the cellsize calculation macro by adding
 the new parameter (in mapfile.h) as follows:</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="cp">#define MS_CELLSIZE(min,max,d,a) ((max - min)/(d-a))</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="cp">#define MS_CELLSIZE(min,max,d,a) ((max - min)/(d-a))</span>
 </pre></div>
 </div>
 <p>and we modify msAdjustExtent (maputil.c):</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">double</span> <span class="nf">msAdjustExtent</span><span class="p">(</span><span class="n">rectObj</span> <span class="o">*</span><span class="n">rect</span><span class="p">,</span> <span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pixeladjustment</span><span class="p">)</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">double</span> <span class="nf">msAdjustExtent</span><span class="p">(</span><span class="n">rectObj</span> <span class="o">*</span><span class="n">rect</span><span class="p">,</span> <span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pixeladjustment</span><span class="p">)</span>
 <span class="p">{</span>
   <span class="kt">double</span> <span class="n">cellsize</span><span class="p">,</span> <span class="n">ox</span><span class="p">,</span> <span class="n">oy</span><span class="p">;</span>
 
@@ -251,7 +268,7 @@ the new parameter (in mapfile.h) as follows:</p>
 </pre></div>
 </div>
 <p>and msCalculateScale (mapscale.c):</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">int</span> <span class="nf">msCalculateScale</span><span class="p">(</span><span class="n">rectObj</span> <span class="n">extent</span><span class="p">,</span> <span class="kt">int</span> <span class="n">units</span><span class="p">,</span> <span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pixeladjustment</span><span class="p">,</span>  <span class="kt">double</span> <span class="n">resolution</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">scale</span><span class="p">)</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">msCalculateScale</span><span class="p">(</span><span class="n">rectObj</span> <span class="n">extent</span><span class="p">,</span> <span class="kt">int</span> <span class="n">units</span><span class="p">,</span> <span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pixeladjustment</span><span class="p">,</span>  <span class="kt">double</span> <span class="n">resolution</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">scale</span><span class="p">)</span>
 <span class="p">{</span>
   <span class="kt">double</span> <span class="n">md</span><span class="p">,</span> <span class="n">gd</span><span class="p">,</span> <span class="n">center_y</span><span class="p">;</span>
 
@@ -301,7 +318,7 @@ new value and initialize the default value of PIXELADJUSTMENT to 1.</p>
 <div class="section" id="modify-the-wms-half-of-pixel-adjustment-code">
 <h3>3.2 Modify the WMS half of pixel adjustment code<a class="headerlink" href="#modify-the-wms-half-of-pixel-adjustment-code" title="Enlazar permanentemente con este título">¶</a></h3>
 <p>The OGC adjustment code (mentioned above) should now be changed to:</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">maxx</span> <span class="o">-</span> <span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">minx</span><span class="p">)</span> <span class="o">/</span> <span class="n">map</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">;</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">maxx</span> <span class="o">-</span> <span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">minx</span><span class="p">)</span> <span class="o">/</span> <span class="n">map</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">;</span>
 <span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">minx</span> <span class="o">+=</span> <span class="n">dx</span><span class="o">*</span><span class="mf">0.5</span><span class="o">*</span><span class="n">map</span><span class="o">-&gt;</span><span class="n">pixeladjustment</span><span class="p">;</span>
 <span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">maxx</span> <span class="o">-=</span> <span class="n">dx</span><span class="o">*</span><span class="mf">0.5</span><span class="o">*</span><span class="n">map</span><span class="o">-&gt;</span><span class="n">pixeladjustment</span><span class="p">;</span>
 
@@ -321,7 +338,7 @@ For the list of all files affected in this change please refer to chapter 4.</p>
 <h3>3.4 Modify the calculation of the search rectangle<a class="headerlink" href="#modify-the-calculation-of-the-search-rectangle" title="Enlazar permanentemente con este título">¶</a></h3>
 <p>We should modify the code in some places when searching for the shapes
 to utilize the pixeladjustment parameters like:</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="cm">/* identify target shapes */</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="cm">/* identify target shapes */</span>
 <span class="k">if</span><span class="p">(</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">transform</span> <span class="o">==</span> <span class="n">MS_TRUE</span><span class="p">)</span>
   <span class="n">searchrect</span> <span class="o">=</span> <span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">;</span>
 <span class="k">else</span> <span class="p">{</span>
@@ -335,7 +352,7 @@ to utilize the pixeladjustment parameters like:</p>
 <div class="section" id="modify-msmapcomputegeotransform">
 <h3>3.5 Modify msMapComputeGeotransform<a class="headerlink" href="#modify-msmapcomputegeotransform" title="Enlazar permanentemente con este título">¶</a></h3>
 <p>The calclulation should be modified as (in mapobject.c):</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="n">map</span><span class="o">-&gt;</span><span class="n">gt</span><span class="p">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">map</span><span class="o">-&gt;</span><span class="n">gt</span><span class="p">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span>
   <span class="n">cos</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">)</span> <span class="o">*</span> <span class="n">geo_width</span> <span class="o">/</span> <span class="p">(</span><span class="n">map</span><span class="o">-&gt;</span><span class="n">width</span> <span class="o">-</span> <span class="n">map</span><span class="o">-&gt;</span><span class="n">pixeladjustment</span><span class="p">);</span>
 <span class="n">map</span><span class="o">-&gt;</span><span class="n">gt</span><span class="p">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span>
   <span class="n">sin</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">)</span> <span class="o">*</span> <span class="n">geo_height</span> <span class="o">/</span> <span class="p">(</span><span class="n">map</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">-</span> <span class="n">map</span><span class="o">-&gt;</span><span class="n">pixeladjustment</span><span class="p">);</span>
@@ -357,7 +374,7 @@ to utilize the pixeladjustment parameters like:</p>
 <p>We also have a couple of places in the mapscript code where the calls of
 msAdjustExtent and msCalculateScale should be updated (see chapter 4 for the details).
 We also have to modify the signature of the &#8216;fit&#8217; function for the rect object as follows:</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">double</span> <span class="nf">fit</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pixeladjustment</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">double</span> <span class="nf">fit</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pixeladjustment</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span>  <span class="n">msAdjustExtent</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">pixeladjustment</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
@@ -385,7 +402,7 @@ We also have to modify the signature of the &#8216;fit&#8217; function for the r
 <li>mapservutil.c: Modify the calls of msAdjustExtent, MS_CELLSOZE and msCalculateScale (see 3.3)</li>
 <li>maptemplate.c: Modify the calculations in setExtent (FROMIMGBOX, FROMIMGPNT, FROMREFPNT, FROMSCALE), change the call of msAdjustExtent in checkWebScale</li>
 <li>maptile.c: Modify the adjustment code in msTileSetExtent (see 3.2)</li>
-<li>maputil.c: Implment changes in msAdjustExtent (see chapter 3)</li>
+<li>maputil.c: Implement changes in msAdjustExtent (see chapter 3)</li>
 <li>mapuvraster.c: Modify the cellsize and the extent calculation in msUVRASTERLayerWhichShapes</li>
 <li>mapwcs.c: Modify msWCSGetCoverage to include pixeladjustment in the formula when recomputing the BBOX.</li>
 <li>mapwms.c: Modify the adjustment code (3.2) and msAdjustExtent and MS_CELLSIZE calls (3.3)</li>
@@ -468,11 +485,11 @@ function: &#8216;fit&#8217;.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

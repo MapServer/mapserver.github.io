@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MS RFC 90: Enable/Disable Layers in OGC Web Services by IP Lists &mdash; MapServer 7.0.0 documentation</title>
+    <title>MS RFC 90: Enable/Disable Layers in OGC Web Services by IP Lists &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Про ці документи" href="../../about.html" />
     <link rel="copyright" title="Авторські права" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 91: Layer Filter Normalization" href="ms-rfc-91.html" />
     <link rel="prev" title="MS RFC 89: Layer Geomtransforms" href="ms-rfc-89.html" />
@@ -129,6 +129,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навігація</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Загальний індекс"
+             accesskey="I">індекс</a></li>
+        <li class="right" >
+          <a href="ms-rfc-91.html" title="MS RFC 91: Layer Filter Normalization"
+             accesskey="N">наступний</a> |</li>
+        <li class="right" >
+          <a href="ms-rfc-89.html" title="MS RFC 89: Layer Geomtransforms"
+             accesskey="P">попередній</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -173,7 +190,7 @@ the METADATA section of every single layer.</p>
 <p>These parameters support both a list of addresses from a file, or the ability to provide the
 values directly in the mapfile, in the cases where there are only a couple of IPs or ranges to be specified.</p>
 <p>When setting the IP list inline, we can use spaces as separators, like:</p>
-<div class="highlight-python"><div class="highlight"><pre>LAYER
+<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
   METADATA
     &quot;ows_allowed_ip_list&quot; &quot;123.45.67.89 11.22.33.44&quot;
   END
@@ -182,7 +199,7 @@ END
 </div>
 <p>Or we can specify a file containing the list of the IP addresses (IPs and ranges in the file are separated
 by spaces or newlines)</p>
-<div class="highlight-python"><div class="highlight"><pre>LAYER
+<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
   METADATA
     &quot;ows_allowed_ip_list&quot; &quot;file:/path/to/list_of_ips.txt&quot;
   END
@@ -209,7 +226,7 @@ to specify all modes and a preceding exclamation sign &#8216;!&#8217; can be use
 are enabled and dispatched.</p>
 <p>When using OGC Web services, we don&#8217;t require to specify modes by the URL, so we can block all
 CGI modes by using the following setting:</p>
-<div class="highlight-python"><div class="highlight"><pre>WEB
+<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
   METADATA
         # Block all CGI modes by default for this mapfile
     &quot;ms_enable_modes&quot;  &quot;!*&quot;
@@ -220,7 +237,7 @@ END
 <p>This will dispatch only those requests where explicit mode is not set by URL. It is suggested for all
 existing users to include this setting in the mapfiles if they intend to provide just OGC web services.</p>
 <p>We&#8217;ll also be able to enable the modes selectively, as follows:</p>
-<div class="highlight-python"><div class="highlight"><pre>WEB
+<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
   METADATA
     # Enable Only MAP and LEGEND modes for this mapfile
     &quot;ms_enable_modes&quot; &quot;!* MAP LEGEND&quot;
@@ -229,7 +246,7 @@ END
 </pre></div>
 </div>
 <p>To enable all modes except MAP:</p>
-<div class="highlight-python"><div class="highlight"><pre>WEB
+<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
   METADATA
     # Enable all modes except MAP for this mapfile
     &quot;ms_enable_modes&quot; &quot;!MAP&quot;
@@ -245,14 +262,14 @@ END
 <div class="section" id="implementation-details">
 <h2>4. Implementation Details<a class="headerlink" href="#implementation-details" title="Постійне посилання на цей заголовок">¶</a></h2>
 <p>This change will utilize the mechanism established in <a class="reference internal" href="ms-rfc-67.html#rfc67"><span>MS RFC 67</span></a>, which makes the implementation
-fairly straightforward. Most of the functionality is provided by adding a new fuctions
+fairly straightforward. Most of the functionality is provided by adding a new functions
 (msOWSIpDisabled, msOWSIpInMetadata, msOWSIpInList, msOWSIpParse)
 to mapows.c, to check whether a particular IP is disabled or not.
 The msOWSIpDisabled function is invoked from msOWSRequestIsEnabled and msOWSRequestLayersEnabled
 to prevent from adding the disabled layer to the enabled_layers list.</p>
 <p>msOWSIpParse will parse the sting representation and the subnet into byte arrays. To test whether
 the IPs match, we make sure the following condition is true for each byte position</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">ip1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="p">(</span><span class="n">ip2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">ip1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="p">(</span><span class="n">ip2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>The length of the byte array can be 4 (ipv4) or 16 (ipv6).</p>
@@ -263,7 +280,7 @@ When parsing ipv6 we write each segment of the IPs and masks as unsigned shorts,
 endian and little endian memory representations.</p>
 <p>The setting <strong>ms_enable_modes</strong> will be implemented in msCGISetMode directly
 (in mapservutil.c). The implementation will explicitly call the current msOWSParseRequestMetadata function:</p>
-<div class="highlight-python"><div class="highlight"><pre>if (mapserv-&gt;Mode &gt;= 0)
+<div class="highlight-python"><div class="highlight"><pre><span></span>if (mapserv-&gt;Mode &gt;= 0)
 {
   int disabled = MS_FALSE;
   const char* enable_modes = msLookupHashTable(&amp;mapserv-&gt;map-&gt;web.metadata, &quot;ms_enable_modes&quot;);
@@ -374,11 +391,11 @@ Stephen Woodbridge +1</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

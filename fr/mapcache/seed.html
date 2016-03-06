@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Alimentation du cache &mdash; MapServer 7.0.0 documentation</title>
+    <title>Alimentation du cache &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../index.html" />
     <link rel="up" title="MapCache 1.4" href="index.html" />
     <link rel="next" title="Types de cache" href="caches.html" />
     <link rel="prev" title="Services de tuilage supportés" href="services.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="caches.html" title="Types de cache"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="services.html" title="Services de tuilage supportés"
+             accesskey="P">précédent</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.1</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapCache 1.4</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -154,14 +171,12 @@
 </tbody>
 </table>
 <dl class="docutils">
-<dt>Mod-mapcache fournit un outils de génération, dont les principales fonctionnalités sont :</dt>
+<dt>Mod-mapcache ships with an advanced seeding tool, whose main features are:</dt>
 <dd><ul class="first last simple">
-<li><p class="first">Nombre de process d&#8217;alimentation configurable, pour accélérer le rendu</p>
-</li>
+<li>configurable number of seeding threads, to speed up the rendering</li>
 <li><p class="first">capacité à régénérer certaines tuiles plus âgées qu&#8217;une date particulière</p>
 </li>
-<li><p class="first">capacité à générer les tuiles d&#8217;après une source de données shapefile/ogr</p>
-</li>
+<li>ability to seed tiles given a shapefile/OGR datasource</li>
 </ul>
 </dd>
 </dl>
@@ -169,55 +184,75 @@
 <h2>Usage<a class="headerlink" href="#usage" title="Lien permanent vers ce titre">¶</a></h2>
 <p>L&#8217;utilitaire de génération de tuile est nommé mapcache_seed et est situé sous le répertoire d&#8217;installation (/usr/local/bin par défaut).</p>
 <div class="section" id="commandline-options">
-<h3>Options de ligne de commande<a class="headerlink" href="#commandline-options" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Des options sont disponibles sous forme courtes ou longues (i.e. -c ou &#8211;config).</p>
+<h3>Commandline Options<a class="headerlink" href="#commandline-options" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Options are available in short and long versions (e.g. -c or &#8211;config).</p>
 <p><strong>-c | &#8211;config [file]</strong> : chemin vers le fichier de configuration mapcache.xml qui contient les tilesets qui nécessitent d&#8217;être générés.</p>
 <p><strong>-D | &#8211;dimension &#8220;DIMENSION=VALEUR&#8221;</strong>: utilisé pour définir quelle dimension utiliser si le tileset gère les dimensions. Peut être utilisé plusieurs fois pour définir plusieurs dimensions, e.g. -D &#8220;DIM1=VAL1&#8221; -D &#8220;DIM2=VAL2&#8221;.</p>
 <p><strong>-e | &#8211;extent minx,miny,maxx,maxy</strong>: boîte englobante de la surface à générer.</p>
-<p><strong>-f | &#8211;force</strong> : force la création des tuiles une deuxième fois si elle existe déjà.</p>
+<p><strong>-f | &#8211;force</strong>: force recreation of existing tiles.</p>
 <p><strong>-g | &#8211;grid [grid]</strong>: nom de la grille qui doit être remplie (le tileset sélectionné doit référencer la grille donnée).</p>
 <p><strong>-h | &#8211;help</strong>: affiche l&#8217;aide</p>
 <p><strong>-i | &#8211;iteration-mode</strong>: soit &#8220;<em>drill-down</em>&#8221; ou &#8220;<em>level-by-level</em>&#8221;. drill-down est la valeur par défaut pour les grilles g, WGS84 et GoogleMapsCompatible, et level-by-level pour les autres. Utilisez cette option pour imposer votre valeur.</p>
-<p><strong>-m | &#8211;mode</strong>: le mode à utiliser par le seedeur : seed, delete ou transfer. seed par défaut (<em>mode: seed</em>).</p>
-<p><strong>-M | &#8211;metasize</strong>: écrase la taille de metatile lors de la génération des tuiles eg. 8,8.</p>
-<p><strong>-n | &#8211;nthreads</strong>: nombre de threads parallèles qui doit être utilisé pour demander les tuiles au WMS source. La valeur par défaut est 1, mais peut être définie plus haute si le serveur WMS peut supporter des requêtes parallèles (une astuce est que cette valeur ne doit jamais dépasser le nombre de CPU sur le serveur WMS).</p>
+<p><strong>-m | &#8211;mode</strong>: the mode to use the seeder: &#8220;<em>seed</em>&#8221;, &#8220;<em>delete</em>&#8221; or &#8220;<em>transfer</em>&#8221;.
+Default is seed (<em>mode: seed</em>).</p>
+<p><strong>-M | &#8211;metasize</strong>: override metatile size while seeding, e.g. 8,8.</p>
+<p><strong>-n | &#8211;nthreads</strong>: number of parallel threads that should be used to request
+tiles from the WMS source. The default is 1, but can be set higher if the WMS
+server can withstand parallel requests. (As a rule of thumb, the value chosen
+here should never be much higher than the number of CPUs on the WMS server.)</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">cette option est incompatible avec l&#8217;option <strong>-p | &#8211;nprocesses</strong>.</p>
+<p class="last">This option is imcompatible with the <strong>-p | &#8211;nprocesses</strong> option.</p>
 </div>
-<p><strong>-o | &#8211;older [timestamp|now]</strong>: génère seulement les tuiles qui sont plus anciennes que la date donnée. La valeur peut être soit la chaîne &#8220;now&#8221;, ou une date formatée de cette manière : year/month/day hour:minute, eg : &#8220;2011/01/31 20:45&#8221;.</p>
+<p><strong>-o | &#8211;older [timestamp|now]</strong>: only seed tiles that are older than the given
+value. The value can either be the string &#8220;<em>now</em>&#8221;, or a date formatted like
+year/month/day hour:minute, e.g. &#8220;2011/01/31 20:45&#8221;.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">un timestamp doit être mis entre guillemet.</p>
+<p class="last">A full timestamp should be quoted.</p>
 </div>
-<p><strong>-p | &#8211;nprocesses</strong> : nombre de processus parallèles qui doit être utilisés pour demander les tuiles à partir du WMS source.</p>
+<p><strong>-p | &#8211;nprocesses</strong>: number of parallel processes that should be used to
+request tiles from the WMS source.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">cette option est incompatible avec l&#8217;option <strong>-n | &#8211;nthreads</strong>.</p>
+<p class="last">This option is imcompatible with the <strong>-n | &#8211;nthreads</strong> option.</p>
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Avertissement</p>
-<p class="last">Lorsqu&#8217;on travail avec plusieurs processus (option -p) et des backends de cache sqlite, des erreurs peuvent apparaître sous forte charge lors de l&#8217;écriture vers la base de données sqlite (erreur : erreur de logique SQL ou base de données manquante (1)). Mettre à jour sqlite &gt;=3.7.15 semble corriger le problème.</p>
+<p class="last">When working with multiple processes (-p switch) and SQLite cache
+backends, some errors may appear under high concurrency when writing to the
+SQLite database (error: SQL logic error or missing database (1)).
+Upgrading to SQLite &gt;= 3.7.15 seems to resolve this issue.</p>
 </div>
 <p><strong>-q | &#8211;quiet</strong> : n&#8217;affiche pas les messages de progression vers la sortie standard.</p>
 <p><strong>-t | &#8211;tileset [tileset]</strong>: nom du tileset qui doit rempli.</p>
 <p><strong>-v | &#8211;verbose</strong>: affiche des informations de débugage verbeux (si compilé).</p>
-<p><strong>-x | &#8211;transfer</strong> : le tileset à transférer lorsque la génération des tuiles est utilisé en mode transfert.</p>
+<p><strong>-x | &#8211;transfer</strong>: the tileset to transfer when seeder is run in transfer mode.</p>
 <p><strong>-z | &#8211;zoom minzoom,maxzoom</strong>: niveaux de zoom de départ et de fin qui doit être rempli.</p>
 </div>
 <div class="section" id="optional-commandline-options-when-using-ogr-geos">
-<h3>Options de ligne de commande quand on utilise OGR/GEOS<a class="headerlink" href="#optional-commandline-options-when-using-ogr-geos" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Si au moment de la compilation ogr et geos ont été trouvés sur le système, l&#8217;outil d&#8217;alimentation autorise des options complémentaires pour ne générer que les tuiles qui recouvrent une aire géographique quelconque. <em>Important:</em> Remarquez bien que pour le moment, les sources de données OGR devraient être dans la même projection que la grille utilisée, car il n&#8217;y a pas de reprojection automatique de la projection de la source de données vers celle de la grille.</p>
-<p><strong>-d | &#8211;ogr-datasource [ogr_datasource]</strong>: connection ogr à la source spatiale. Consultez la documentation d&#8217;OGR pour tout ce qui est gérés. Le cas le plus simples (e.g. un Shapefile), c&#8217;est simplement le nom du fichier complet du shapefile.</p>
-<p><strong>-l | &#8211;ogr-layer [ogr_layer]</strong>: pour les sources de données qui contiennent plusieurs couches (e.g. postgis, avec plusieurs tables), détermine quelle couche sera utilisée.</p>
-<p><strong>-s | &#8211;ogr-sql [ogr_sql]</strong>: expression sql d&#8217;OGR qui peut être appliquée (voir <a class="reference external" href="http://www.gdal.org/ogr/ogr_sql.html">OGR SQL</a>).</p>
-<p><strong>-w | &#8211;ogr-where [ogr_where]</strong>: expression sql &#8220;where&#8221; pour filtrer les valeurs retournées.  Cela serait typiquement utilisé pour sélectionner la géométrie d&#8217;un pays donné si la source de données contient toutes les frontières mondiales.</p>
+<h3>Optional Commandline Options When Using OGR/GEOS<a class="headerlink" href="#optional-commandline-options-when-using-ogr-geos" title="Lien permanent vers ce titre">¶</a></h3>
+<p>At compile time, if OGR and GEOS are found on the system, the seeder tool will
+support additional options to seed only the tiles that cover an arbitrary
+geographical area. <em>Important:</em> Note that, for the time being, the OGR
+datasource should be in the same projection as the grid you are seeding, as
+there is no automatic reprojection from the datasource projection to the grid
+projection.</p>
+<p><strong>-d | &#8211;ogr-datasource [ogr_datasource]</strong>: OGR connection to the spatial source.
+Consult the OGR documentation for all that is supported. In the simplest case
+(e.g. a Shapefile), this is just the full filename of the shapefile.</p>
+<p><strong>-l | &#8211;ogr-layer [ogr_layer]</strong>: for datasources that contain multiple layers
+(e.g. PostGIS, with multiple tables), determines which layer will be used.</p>
+<p><strong>-s | &#8211;ogr-sql [ogr_sql]</strong>: OGR SQL expression that can be applied (see <a class="reference external" href="http://www.gdal.org/ogr/ogr_sql.html">OGR SQL</a>).</p>
+<p><strong>-w | &#8211;ogr-where [ogr_where]</strong>: SQL &#8220;where&#8221; expression to filter out returned values.
+This would typically be used to select only the geometry of a given country if the
+datasource contains all the world contours.</p>
 </div>
 <div class="section" id="important-note">
 <h3>Note importante<a class="headerlink" href="#important-note" title="Lien permanent vers ce titre">¶</a></h3>
 <p>L&#8217;utilitaire d&#8217;alimentation doit être lancé avec le même compte utilisateur que celui qui fait tourner le serveur web. Cela est nécessaire pour que les permissions sur les tuiles et répertoires créés lors de la pré-génération soit ensuite accessible par le serveur web, et que réciproquement l&#8217;utilitaire d&#8217;alimentation puisse écrire dans les répertoires créés initialement par le serveur web.</p>
 <p>Un session de pré-génération peut ressembler à ceci</p>
-<div class="highlight-python"><div class="highlight"><pre>[user@host]$ sudo www-data
+<div class="highlight-python"><div class="highlight"><pre><span></span>[user@host]$ sudo www-data
 [www-data@host]$ /path/to/mapcache/src/mapcache_seed -c /path/to/www/conf/mapcache.xml [[options]]
 [www-data@host]$ logout
 [user@host]$
@@ -226,24 +261,29 @@
 </div>
 <div class="section" id="examples">
 <h3>Exemples<a class="headerlink" href="#examples" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Génère le jeu de tuiles &#8220;osm&#8221; en utilisant la grille &#8220;g&#8221; (google/web-mercator):</p>
-<div class="highlight-python"><div class="highlight"><pre>./src/mapcache_seed -c mapcache.xml -t osm -g g
+<p>Seed the &#8220;osm&#8221; tileset with the &#8220;g&#8221; (Google / Web Mercator) grid:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>./src/mapcache_seed -c mapcache.xml -t osm -g g
 </pre></div>
 </div>
 <p>Niveaux de pré-génération de 0 à 12:</p>
-<div class="highlight-python"><div class="highlight"><pre>./src/mapcache_seed -c mapcache.xml -t osm -g g -z 0,12
+<div class="highlight-python"><div class="highlight"><pre><span></span>./src/mapcache_seed -c mapcache.xml -t osm -g g -z 0,12
 </pre></div>
 </div>
-<p>A partir d&#8217;un shapefile contenant les frontières des pays, ne générer que les zones couvertes par la terre (donc éviter les océans). Utiliser pour cela 4 threads en parallèle:</p>
-<div class="highlight-python"><div class="highlight"><pre>./src/mapcache_seed -c mapcache.xml -t osm -g g -z 0,12 -n 4 -d /path/to/seed.shp
+<p>Given a shapefile that contains the world country countours, seed only the
+areas that are covered by land (i.e. skip the oceans). Also, use 4 request
+threads in parallel:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>./src/mapcache_seed -c mapcache.xml -t osm -g g -z 0,12 -n 4 -d /path/to/seed.shp
 </pre></div>
 </div>
-<p>Pareil que précédemment, mais générer uniquement les USA (remarquez l&#8217;utilisation des apostrophes, destinées à créer un sql valide avec un &#8216;US&#8217; en apostrophes simples:</p>
-<div class="highlight-python"><div class="highlight"><pre>./src/mapcache_seed -c mapcache.xml -t osm -g g -z 0,12 -n 4 -d /path/to/seed.shp -w &quot;FIPS_A2=&#39;US&#39;&quot;
+<p>Same as beforehand, but only seed the USA (notice the quote usage, required to
+create valid SQL with a single-quoted &#8216;US&#8217;:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>./src/mapcache_seed -c mapcache.xml -t osm -g g -z 0,12 -n 4 -d /path/to/seed.shp -w &quot;FIPS_A2=&#39;US&#39;&quot;
 </pre></div>
 </div>
-<p>Régénérer les niveaux 0 à 12 (cela pourrait aussi être fait en supprimant du cache les niveaux 0 à 12 puis en faisant une pré-génération classique, mais faire ainsi ne ralentit pas les accès faits par les clients web):</p>
-<div class="highlight-python"><div class="highlight"><pre>./src/mapcache_seed -c mapcache.xml -t osm -g g -z 0,12 -o now
+<p>Reseed levels 0 to 12 (this could also be done by deleting the cache for levels
+0 to 12 and doing a classic seed, but doing so this way does not slow down
+access from web clients):</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>./src/mapcache_seed -c mapcache.xml -t osm -g g -z 0,12 -o now
 </pre></div>
 </div>
 </div>
@@ -269,8 +309,8 @@
   <ul>
 <li><a class="reference internal" href="#">Alimentation du cache</a><ul>
 <li><a class="reference internal" href="#usage">Usage</a><ul>
-<li><a class="reference internal" href="#commandline-options">Options de ligne de commande</a></li>
-<li><a class="reference internal" href="#optional-commandline-options-when-using-ogr-geos">Options de ligne de commande quand on utilise OGR/GEOS</a></li>
+<li><a class="reference internal" href="#commandline-options">Commandline Options</a></li>
+<li><a class="reference internal" href="#optional-commandline-options-when-using-ogr-geos">Optional Commandline Options When Using OGR/GEOS</a></li>
 <li><a class="reference internal" href="#important-note">Note importante</a></li>
 <li><a class="reference internal" href="#examples">Exemples</a></li>
 </ul>
@@ -297,11 +337,11 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

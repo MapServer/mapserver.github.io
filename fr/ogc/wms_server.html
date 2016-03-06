@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Serveur WMS &mdash; MapServer 7.0.0 documentation</title>
+    <title>Serveur WMS &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../index.html" />
     <link rel="up" title="Gestion et configuration des standards OGC" href="index.html" />
     <link rel="next" title="Service de vue INSPIRE" href="inspire.html" />
     <link rel="prev" title="Support des spécifications OGC dans MapServer" href="ogc_support.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="inspire.html" title="Service de vue INSPIRE"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="ogc_support.html" title="Support des spécifications OGC dans MapServer"
+             accesskey="P">précédent</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.1</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Gestion et configuration des standards OGC</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -237,7 +254,7 @@
 <p>Les requêtes WMS sont gérées par le programme <a class="reference internal" href="../cgi/index.html#cgi"><span>CGI</span></a> <a class="reference internal" href="../cgi/mapserv.html#mapserv"><span>mapserv</span></a>. Toutes les versions du programme mapserv n&#8217;incluent pas le support WMS (c&#8217;est inclut par défaut quand vous compilez ensemble avec la librairie PROJ), c&#8217;est pourquoi la première étape est de vérifier que votre exécutable mapserv inclut le support WMS. Une manière de vérifier cela est d&#8217;utiliser l&#8217;option &#8220;-v&#8221; en ligne de commande et de regarder la présence de &#8220;SUPPORTS=WMS_SERVER&#8221;</p>
 <p>(Les utilisateurs Unix doivent se référer au document <a class="reference internal" href="../installation/unix.html#unix"><span>Compiler sous Unix</span></a> pour les instructions relatives à la compilation, et les utilisateurs Windows préfèreront peut être utiliser <a class="reference external" href="http://www.ms4w.com">MS4W</a>, qui inclue automatiquement le support WMS/WFS)</p>
 <p>Exemple 1. sous Unix</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ./mapserv -v
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ ./mapserv -v
 MapServer version 6.3-dev OUTPUT=GIF OUTPUT=PNG OUTPUT=JPEG OUTPUT=KML
 SUPPORTS=PROJ SUPPORTS=GD SUPPORTS=AGG SUPPORTS=FREETYPE SUPPORTS=CAIRO
 SUPPORTS=ICONV SUPPORTS=FRIBIDI SUPPORTS=WMS_SERVER SUPPORTS=WMS_CLIENT
@@ -247,7 +264,7 @@ INPUT=GDAL INPUT=SHAPEFILE
 </pre></div>
 </div>
 <p>Exemple 2. sous Windows</p>
-<div class="highlight-python"><div class="highlight"><pre>C:\apache\cgi-bin&gt; mapserv -v
+<div class="highlight-python"><div class="highlight"><pre><span></span>C:\apache\cgi-bin&gt; mapserv -v
 MapServer version 6.3-dev OUTPUT=GIF OUTPUT=PNG OUTPUT=JPEG OUTPUT=KML
 SUPPORTS=PROJ SUPPORTS=GD SUPPORTS=AGG SUPPORTS=FREETYPE SUPPORTS=CAIRO
 SUPPORTS=ICONV SUPPORTS=FRIBIDI SUPPORTS=WMS_SERVER SUPPORTS=WMS_CLIENT
@@ -259,7 +276,11 @@ INPUT=GDAL INPUT=SHAPEFILE
 </div>
 <div class="section" id="setup-a-mapfile-for-your-wms">
 <span id="index-2"></span><h3>Configurer un Mapfile pour votre WMS<a class="headerlink" href="#setup-a-mapfile-for-your-wms" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Chaque instance du serveur WMS que vous paramétrez nécessite son propre mapfile. C&#8217;est seulement un fichier mapfile Mapserver dans lequel quelques paramètres et quelques métadonnées en entrées sont obligatoires. La plupart des métadonnées sont requises dans le but de produire une sortie &#8220;GetCapabilities&#8221; valide.</p>
+<p>Each instance of WMS server that you setup needs to have its own
+mapfile. It is just a regular MapServer mapfile in which some
+parameters and some metadata entries are mandatory. Most of the
+metadata is required in order to produce a valid GetCapabilities
+output.</p>
 <p>Voici ici la liste des paramètres et métadonnées qui sont généralement optionnels avec MapServer, mais qui sont <strong>nécessaires (ou particulièrement recommandés) pour une configuration WMS:</strong></p>
 <p><strong>Au niveau du bloc MAP:</strong></p>
 <ul class="simple">
@@ -311,7 +332,7 @@ INPUT=GDAL INPUT=SHAPEFILE
 </li>
 <li><p class="first"><strong>PROJECTION de l&#8217;objet MAP et métadonnée wms_srs:</strong></p>
 <p>Les serveurs WMS doivent pouvoir renvoyer la projection dans laquelle ils sont capables de servir les données en utilisant les codes de projections EPSG (voir <a class="reference external" href="http://www.epsg.org/">The EPSG web page</a> pour plus d&#8217;informations sur les codes EPSG). Les versions récentes de la bibliothèque PROJ4 viennent avec une table d&#8217;initialisation de codes EPSG et permettent aux utilisateurs de définir une projection comme ceci:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">PROJECTION</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">PROJECTION</span>
    <span class="s">&quot;init=epsg:4269&quot;</span>
 <span class="k">END</span>
 </pre></div>
@@ -321,7 +342,7 @@ INPUT=GDAL INPUT=SHAPEFILE
 <p>Si un bloc <a class="reference internal" href="../mapfile/projection.html#projection"><span>PROJECTION</span></a> dans <a class="reference internal" href="../mapfile/map.html#map"><span>MAP</span></a> est fournit dans le format &#8220;init=epsg:xxxx&#8221; alors MapServer utilisera aussi cette information pour générer un tag &lt;BoundingBox&gt; pour la couche de niveau supérieure dans le document Capabilities du WMS.  BoundingBox est un élément obligatoire dans le retour Capabilities WMS pour le WMS 1.3.0 (pour le WMS 1.1.0, il est optionnel, mais c&#8217;est une bonne pratique de permettre à MapServer de l&#8217;inclure lorsque c&#8217;est possible).</p>
 <p>Ce qui précède suffit pour MapServer à reconnaître le code EPSG et à linclure dans les tags SRS dans la sortie &#8220;capabilities&#8221; (la métadonnée wms_srs n&#8217;est pas requise dans ce cas)? Cependant, il est souvent imposible de  trouver un code EPSG qui corresponde à la projection de votre donnée. Dans ces cas, la métadonnée &#8220;wms_srs&#8221; est utilisée pour lister un ou plusieurs codes EPSG dans lesquelles la donnée peut être servie et l&#8217;objet PROJECTION contient la vraie définition PROJ4 de la la projection de la donnée.</p>
 <p>Voici un exemple de serveur dont dont la donnée est en projection Lambert Conforme Conique (42304). Sa sortie &#8220;capabilities&#8221; indiquera les projections EPSG:4269 et EPSG:4326 (lat/lon) mais l&#8217;objet PROJECTION est définie à la véritable projection dans laquelle la donnée est:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">NAME</span> <span class="s">&quot;DEMO&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">NAME</span> <span class="s">&quot;DEMO&quot;</span>
 <span class="p">...</span>
 
 <span class="k">WEB</span>
@@ -351,11 +372,11 @@ INPUT=GDAL INPUT=SHAPEFILE
 <p>La métadonnée wms_onlineresource metadata est définie dans  l&#8217;objet METADATA de l&#8217;objet WEB dans le block MAP et spécifie l&#8217;URL qui devrait être utilisée pour accéder à votre serveur. Cela est requis pour la sortie &#8220;GetCapabilities&#8221;. Si wms_onlineresource n&#8217;est pas fourni alors MapServer essayera d&#8217;en fournir un par défaut en utilisant le nom du script et de l&#8217;hôte, mais vous ne devriez pas trop compter sur comportement. Il est fortement recommandé que vous fournissiez la métadonnée wms_onlineresource.</p>
 <p>Voir la section 6.2.2 de la <a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=1081&amp;version=1&amp;format=pdf">WMS 1.1.1 specification</a> pour avoir l&#8217;ensemble de l&#8217;histoire à propos de l&#8217;URL &#8220;Online Resource&#8221;. Basiquement, ce que vous avez besoin est une URL HTTP complète incluant le préfixe <a class="reference external" href="http://">http://</a> , le nom d&#8217;hôte, le nom du script, potentiellement un paramètre &#8220;map=&#8221;, et terminé par &#8221;?&#8221; ou &#8220;&amp;&#8221;.</p>
 <p>Voici ici une URL &#8220;Online Resource&#8221; valide:</p>
-<div class="highlight-python"><div class="highlight"><pre>http://my.host.com/cgi-bin/mapserv?map=mywms.map&amp;
+<div class="highlight-python"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mapserv?map=mywms.map&amp;
 </pre></div>
 </div>
 <p>En créant un script d&#8217;encapsulation, il est possible de cacher le paramètre &#8220;map=&#8221; depuis l&#8217;URL et ainsi, votre URL &#8220;Online Resource&#8221; pourra être du type suivant:</p>
-<div class="highlight-python"><div class="highlight"><pre>http://my.host.com/cgi-bin/mywms?
+<div class="highlight-python"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mywms?
 </pre></div>
 </div>
 <p>Ceci est couvert plus en détails dans la section &#8220;En savoir plus sur l&#8217;URL Online Resource&#8221; ci-dessous.</p>
@@ -376,7 +397,7 @@ INPUT=GDAL INPUT=SHAPEFILE
 <span id="wms-capabilities"></span><h4>Valider les métadonnées des &#8220;Capabilities&#8221;<a class="headerlink" href="#validate-the-capabilities-metadata" title="Lien permanent vers ce titre">¶</a></h4>
 <p>Ok, maintenant que nous avons un mapfile, nous devons vérifier les &#8220;capabilities &#8221; du XML retourné par notre serveur en nous assurant que rien ne manque.</p>
 <p>En utilisant un navigateur web, accédez à votre URL &#8220;Online Resource&#8221; auxquel vous vous ajouterez les paramètres &#8220;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetCapabilities&#8221; à la fin, c&#8217;est à dire.</p>
-<div class="highlight-python"><div class="highlight"><pre>http://my.host.com/cgi-bin/mapserv?map=mywms.map&amp;SERVICE=WMS&amp;VERSION=1.1.1
+<div class="highlight-python"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mapserv?map=mywms.map&amp;SERVICE=WMS&amp;VERSION=1.1.1
                                                 &amp;REQUEST=GetCapabilities
 </pre></div>
 </div>
@@ -407,7 +428,7 @@ INPUT=GDAL INPUT=SHAPEFILE
 <p class="last">Les serveurs WMS affichent les formats supportés qui sont présents dans les bibliothèques gd / gdal.</p>
 </div>
 <p>Un exemple valide serait donc:</p>
-<div class="highlight-python"><div class="highlight"><pre>http://my.host.com/cgi-bin/mapserv?map=mywms.map&amp;SERVICE=WMS&amp;VERSION=1.1.1
+<div class="highlight-python"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mapserv?map=mywms.map&amp;SERVICE=WMS&amp;VERSION=1.1.1
      &amp;REQUEST=GetMap&amp;LAYERS=prov_bound&amp;STYLES=&amp;SRS=EPSG:4326
      &amp;BBOX=-173.537,35.8775,-11.9603,83.8009&amp;WIDTH=400&amp;HEIGHT=300
      &amp;FORMAT=image/png
@@ -464,8 +485,11 @@ INPUT=GDAL INPUT=SHAPEFILE
 </li>
 <li><p class="first"><strong>HEIGHT</strong> - (Optionnelle) Hauteur de l&#8217;image de légende. Notez que le paramètre &#8220;Height&#8221; est seulement utilisé quand le paramètre &#8220;Rule&#8221; est aussi utilisé dans la requête.</p>
 </li>
-<li><p class="first"><strong>SLD</strong> - (Optionnel) L&#8217;URL vers le SLD. Applique le SLD sur la couche et la légende est dessinée après que le SLD soit appliqué (en utilisant les classes spécifiée par le SLD). Notez ici que vous devez mettre une &lt;Name&gt;class1&lt;/Name&gt; dans l&#8217;élement &#8220;Rule&#8221; afin que le nom de la classe soit créée depuis le SLD et par la même une image de légende correcte.</p>
-</li>
+<li><strong>SLD</strong> - (Optional) The URL to the SLD. Applies the SLD on the
+layer and the legend is drawn after the SLD is applied (using the
+classes specified by the SLD). Note here that you need to put a
+&lt;Name&gt;class1&lt;/Name&gt; inside the Rule element so that a class name
+is created from the SLD and therefore a correct legend image.</li>
 <li><p class="first"><strong>SLD_BODY</strong> - (Optionnel) Le contenu (code) d SLD, à la place de la spécification d&#8217;une URL (comme dans le paramètre &#8216;SLD&#8217;).</p>
 </li>
 <li><p class="first"><strong>SLD_VERSION</strong> - (Optionnel) La version du SLD.</p>
@@ -484,7 +508,7 @@ INPUT=GDAL INPUT=SHAPEFILE
 </div>
 <p>Le paramètre KEYIMAGE de l&#8217;objet <a class="reference internal" href="../mapfile/class.html#class"><span>CLASS</span></a> peut aussi être utilisé pour spécifier l&#8217;image de légende pour une CLASS. Voir <a class="reference internal" href="../mapfile/index.html#mapfile"><span>document de référence MapFile</span></a> si nécessaire. Requête exemple</p>
 <p>Un exemple de requête pourrait ressembler à ceci:</p>
-<div class="highlight-python"><div class="highlight"><pre>http://127.0.0.1/cgi-bin/mapserv.exe?SERVICE=WMS&amp;VERSION=1.1.1&amp;layer=park&amp;
+<div class="highlight-python"><div class="highlight"><pre><span></span>http://127.0.0.1/cgi-bin/mapserv.exe?SERVICE=WMS&amp;VERSION=1.1.1&amp;layer=park&amp;
 REQUEST=getlegendgraphic&amp;FORMAT=image/png
 </pre></div>
 </div>
@@ -494,7 +518,7 @@ REQUEST=getlegendgraphic&amp;FORMAT=image/png
 <div class="section" id="changing-the-online-resource-url">
 <span id="online-resource-wms"></span><span id="index-5"></span><h2><a class="toc-backref" href="#table-of-contents">Changer l&#8217;URL &#8220;Online Resource&#8221;</a><a class="headerlink" href="#changing-the-online-resource-url" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Comme mentionné dans la section &#8220;Configurer un Mapfile / métadonnée wms_onlineresource&#8221; ci-dessus, l&#8217;URL &#8220;Online Resource&#8221; suivante est parfaitement valide pour un WMS MapServer selon la section 6.2.2 ou la spécification WMS 1.1.1:</p>
-<div class="highlight-python"><div class="highlight"><pre>http://my.host.com/cgi-bin/mapserv?map=mywms.map&amp;
+<div class="highlight-python"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mapserv?map=mywms.map&amp;
 </pre></div>
 </div>
 <p>Cependant, certains personnes feront remarquer que l&#8217;URL ci-dessus contient des paramètres obligatoires spécifiques à MapServer et que c&#8217;est illégal. Premièrement, nous voulons pointer que &#8220;map=...&#8221; n&#8217;est pas considéré comme un paramètre spécifique à MapServer dans ce cas comme c&#8217;est une partie de l&#8217;URL &#8220;Online Resource&#8221; qui est définit comme une chaîne opaque terminée par &#8221;?&#8221; ou &#8220;&amp;&#8221; (Voir la <a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=1081&amp;version=1&amp;format=pdf">WMS 1.1.1 section 6.2.2</a>).</p>
@@ -503,11 +527,11 @@ REQUEST=getlegendgraphic&amp;FORMAT=image/png
 <span id="index-6"></span><h3>Règles de réécritures Apache (utilisant mod_rewrite Apache)<a class="headerlink" href="#apache-rewrite-rules-using-apache-mod-rewrite" title="Lien permanent vers ce titre">¶</a></h3>
 <p>L&#8217;un peut utiliser mod_rewrite de Apache pour éviter de spécifier la &#8220;map&#8221;, ou un autre paramètre par défaut dans l&#8217;URL de MapServer.  Cette tâche consiste en trois étapes, en spécifiant que le module mod_rewrite soit chargé, en activant le module mod_rewrite pour les répertoires sélectionnés et enfin en écrivant un fichier .htaccess pour effectuer la réécriture d&#8217;URL.</p>
 <p>Dans le fichier httpd.conf, le module mod_rewrite est par défaut désactivé.  Pour l&#8217;activer, enlevez le # du début dans la ligne</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#LoadModule rewrite_module modules/mod_rewrite.so</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#LoadModule rewrite_module modules/mod_rewrite.so</span>
 </pre></div>
 </div>
 <p>Pour être capable  d&#8217;utiliser le module, il doit être activé, en utilisant la directive AllowOverride. Cela peut fait par serveur ou par répertoire. Si vous avez juste un seul serveur, ajoutez une ligne &#8220;AllowOverride All&#8221; dans le fichier httpd.conf (voir la documentation Apache pour être sûr des implications de sécurité de cette manipulation).  Le fonctionnement par répertoire est la manière la plus facile de le faire fonctionner dans des hôtes virtuels.  A l&#8217;intérieur de la section &lt;virtualHost&gt; de httpd.conf, insérez:</p>
-<div class="highlight-python"><div class="highlight"><pre>&lt;Directory myhtdocsdir&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;Directory myhtdocsdir&gt;
   AllowOverride All
 &lt;/Directory&gt;
 </pre></div>
@@ -515,7 +539,7 @@ REQUEST=getlegendgraphic&amp;FORMAT=image/png
 <p>Où myhtdocsdir est le répertoire définit comme &#8220;documentroot&#8221; pour le serveur virtuel actuel.</p>
 <p>Quand les directives sont définies pour charger et permettre le fonctionnement du module mod_rewrite module, Apache doit être redémarré.</p>
 <p>Dans un répertoire accessible au web, créez un fichier .htaccess comme suivant:</p>
-<div class="highlight-python"><div class="highlight"><pre>RewriteEngine on
+<div class="highlight-python"><div class="highlight"><pre><span></span>RewriteEngine on
 RewriteRule wmsmap?(.*) /cgi-bin/mapserv?map=/home/www/mapserverstuff/mymapfile.map&amp;$1
 </pre></div>
 </div>
@@ -531,7 +555,7 @@ RewriteRule wmsmap?(.*) /cgi-bin/mapserv?map=/home/www/mapserverstuff/mymapfile.
 <div class="section" id="apache-environment-variables-ms-mapfile">
 <span id="index-7"></span><h3>Variables d&#8217;environnement Apache - MS_MAPFILE<a class="headerlink" href="#apache-environment-variables-ms-mapfile" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Un mapfile par défaut peut être spécifié en utilisant la variable d&#8217;environnement MS_MAPFILE:</p>
-<div class="highlight-python"><div class="highlight"><pre>Alias /mywms /usr/lib/cgi-bin/mapserver
+<div class="highlight-python"><div class="highlight"><pre><span></span>Alias /mywms /usr/lib/cgi-bin/mapserver
 &lt;Location /mywms&gt;
    SetHandler cgi-script
    Options ExecCGI
@@ -550,7 +574,7 @@ RewriteRule wmsmap?(.*) /cgi-bin/mapserv?map=/home/www/mapserverstuff/mymapfile.
 <li><p class="first">Dans httpd.conf, ajouter:</p>
 </li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre>SetEnvIf Request_URI &quot;/cgi-bin/mywms&quot; MS_MAPFILE=/path/to/mymap.map
+<div class="highlight-python"><div class="highlight"><pre><span></span>SetEnvIf Request_URI &quot;/cgi-bin/mywms&quot; MS_MAPFILE=/path/to/mymap.map
 </pre></div>
 </div>
 </div>
@@ -561,7 +585,7 @@ RewriteRule wmsmap?(.*) /cgi-bin/mapserv?map=/home/www/mapserverstuff/mymapfile.
 <p class="first admonition-title">Note</p>
 <p class="last">Le script ci-dessous, bien que fonctionnel, est seulement destiné à être un exemple d&#8217;usage d&#8217;ASP pour filtrer les requêtes MapServer. Utiliser ASP dans un serveur WMS de production devra sûrement requérir du code ASP supplémentaire en particulier dans la gestion des erreurs et la configuration des timeouts.*</p>
 </div>
-<div class="highlight-guess"><div class="highlight"><pre><span class="cp">&lt;%</span>
+<div class="highlight-guess"><div class="highlight"><pre><span></span><span class="cp">&lt;%</span>
   <span class="no">Server</span><span class="o">.</span><span class="n">ScriptTimeout</span> <span class="o">=</span> <span class="mi">360</span>
 
   <span class="no">Select</span> <span class="no">Case</span> <span class="no">Request</span><span class="o">.</span><span class="n">ServerVariables</span><span class="p">(</span><span class="s2">&quot;REQUEST_METHOD&quot;</span><span class="p">)</span>
@@ -588,13 +612,13 @@ RewriteRule wmsmap?(.*) /cgi-bin/mapserv?map=/home/www/mapserverstuff/mymapfile.
 <div class="section" id="mapscript-wrapper">
 <span id="index-10"></span><h3>Wrapper Mapscript<a class="headerlink" href="#mapscript-wrapper" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Quelques services OGC (WFS, SOS) supportent à la fois des requêtes GET et POST. Ici, vous pouvez utiliser un wrapper WxS MapScript minimal.  Voici un exemple Python:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 
 <span class="kn">import</span> <span class="nn">mapscript</span>
 
 <span class="n">req</span> <span class="o">=</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">OWSRequest</span><span class="p">()</span>
 <span class="n">req</span><span class="o">.</span><span class="n">loadParams</span><span class="p">()</span>
-<span class="nb">map</span> <span class="o">=</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">mapObj</span><span class="p">(</span><span class="s">&#39;/path/to/config.map&#39;</span><span class="p">)</span>
+<span class="nb">map</span> <span class="o">=</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">mapObj</span><span class="p">(</span><span class="s1">&#39;/path/to/config.map&#39;</span><span class="p">)</span>
 <span class="nb">map</span><span class="o">.</span><span class="n">OWSDispatch</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -602,7 +626,7 @@ RewriteRule wmsmap?(.*) /cgi-bin/mapserv?map=/home/www/mapserverstuff/mymapfile.
 <div class="section" id="wrapper-script-unix">
 <span id="index-11"></span><h3>Script wrapper (Unix)<a class="headerlink" href="#wrapper-script-unix" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Sur les serveur Unix, vous pouvez configurer un script wrapper shell qui définit la variable d&#8217;environnement MS_MAPFILE et ensuite qui passe le contrôle à l&#8217;exécutable mapserv... qui résulte en une URL &#8220;OnlineResource&#8221; plus propre:</p>
-<div class="highlight-python"><div class="highlight"><pre>#! /bin/sh
+<div class="highlight-python"><div class="highlight"><pre><span></span>#! /bin/sh
 MS_MAPFILE=/path/to/demo.map
 export MS_MAPFILE
 /path/to/mapserv
@@ -706,7 +730,7 @@ export MS_MAPFILE
 <li><p class="first"><em>Description:</em> (Optional) A list of IP addresses that will be
 allowed access to the service.</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre>METADATA
+<div class="highlight-python"><div class="highlight"><pre><span></span>METADATA
   &quot;ows_allowed_ip_list&quot; &quot;123.45.67.89 11.22.33.44&quot;
 END
 </pre></div>
@@ -718,7 +742,7 @@ END
 <li><p class="first"><em>Description:</em> (Optional) A list of IP addresses that will be denied
 access to the service.</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre>METADATA
+<div class="highlight-python"><div class="highlight"><pre><span></span>METADATA
   &quot;ows_denied_ip_list&quot; &quot;123.45.67.89 11.22.33.44&quot;
 END
 </pre></div>
@@ -862,11 +886,11 @@ wms_postcode, wms_country</strong></p>
 </li>
 <li><p class="first"><em>Exemples :</em></p>
 <p>Pour permettre d&#8217;utiliser seulement <cite>GetMap</cite> et <cite>GetFeatureInfo</cite>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;wms_enable_request&quot;</span> <span class="s">&quot;GetMap GetFeatureInfo&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;wms_enable_request&quot;</span> <span class="s2">&quot;GetMap GetFeatureInfo&quot;</span>
 </pre></div>
 </div>
 <p>Pour permettre toutes les requêtes sauf <cite>GetFeatureInfo</cite></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;wms_enable_request&quot;</span> <span class="s">&quot;* !GetFeatureInfo&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;wms_enable_request&quot;</span> <span class="s2">&quot;* !GetFeatureInfo&quot;</span>
 </pre></div>
 </div>
 </li>
@@ -1029,7 +1053,7 @@ onlineresource section of this document)</p>
 <p id="index-69"><strong>gml_exclude_items</strong></p>
 <ul>
 <li><p class="first"><em>Description:</em> (Optionnelle, s&#8217;applique seulement aux requête GML GetFeatureInfo) Une liste séparée par des virgules d&#8217;éléments à exclure. Depuis MapServer 4.6, vous pouvez contrôler combien d&#8217;attributs (champs) vous exposez pour votre couche de données, avec cette métadonnée. Le comportement antérieur était simplement d&#8217;exposer tous les attributs dans tous les cas. Un exemple excluant un champ spécifique pourrait être:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="s">&quot;gml_include_items&quot;</span> <span class="s">&quot;all&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="s">&quot;gml_include_items&quot;</span> <span class="s">&quot;all&quot;</span>
 <span class="s">&quot;gml_exclude_items&quot;</span> <span class="s">&quot;Phonenum&quot;</span>
 </pre></div>
 </div>
@@ -1048,7 +1072,7 @@ onlineresource section of this document)</p>
 <p id="index-72"><strong>gml_[nom_du_groupe]_group</strong></p>
 <ul>
 <li><p class="first"><em>Description:</em> (Optionnelle, s&#8217;applique seulement aux requête GML GetFeatureInfo) Une liste séparée par des virgules d&#8217;attributs dans le groupe.  Voici un exemple:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="s">&quot;gml_include_items&quot;</span> <span class="s">&quot;all&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="s">&quot;gml_include_items&quot;</span> <span class="s">&quot;all&quot;</span>
 <span class="s">&quot;gml_groups&quot;</span>        <span class="s">&quot;display&quot;</span>
 <span class="s">&quot;gml_display_group&quot;</span> <span class="s">&quot;Name_e,Name_f&quot;</span>
 </pre></div>
@@ -1058,11 +1082,11 @@ onlineresource section of this document)</p>
 <p id="index-73"><strong>gml_include_items</strong></p>
 <ul>
 <li><p class="first"><em>Description:</em> (Optionnelle, s&#8217;applique seulement aux requête GML GetFeatureInfo) Une liste séparée par des virgules d&#8217;éléments à inclure, ou le mot-clé &#8220;all&#8221;. Depuis MapServer 4.6, vous pouvez contrôler combien d&#8217;attributs (champs) vous exposez pour votre couche de données, avec cette métadonnée. Le comportement antérieur était simplement d&#8217;exposer tous les attributs dans tous les cas. Vous pouvez permettre une exposition complète des champs en utilisant le mot-clé &#8220;all&#8221;, comme ceci:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="s">&quot;gml_include_items&quot;</span> <span class="s">&quot;all&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="s">&quot;gml_include_items&quot;</span> <span class="s">&quot;all&quot;</span>
 </pre></div>
 </div>
 <p>Vous pouvez spécifier une liste d&#8217;attributs (champs) pour une exposition partielle, comme suivant :</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="s">&quot;gml_include_items&quot;</span> <span class="s">&quot;Name,ID&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="s">&quot;gml_include_items&quot;</span> <span class="s">&quot;Name,ID&quot;</span>
 </pre></div>
 </div>
 <p>Le nouveau comportement par défaut est ne pas exposer d&#8217;attributs du tout.</p>
@@ -1071,7 +1095,7 @@ onlineresource section of this document)</p>
 <p id="index-74"><strong>gml_[nom de l&#8217;élément]_alias</strong></p>
 <ul>
 <li><p class="first"><em>Description:</em> (Optionnelle, s&#8217;applique seulement aux requête GML GetFeatureInfo) Un alias pour un nom d&#8217;attributs. Le GML servi se réfèrera à cet attribut par son alias. Voici un example:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="s">&quot;gml_province_alias&quot;</span> <span class="s">&quot;prov&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="s">&quot;gml_province_alias&quot;</span> <span class="s">&quot;prov&quot;</span>
 </pre></div>
 </div>
 </li>
@@ -1080,8 +1104,9 @@ onlineresource section of this document)</p>
 <ul class="simple">
 <li><em>Description:</em> (Optional)
 Specifies the type of the attribute.  Valid values are the OGR data
-types: Integer|Real|Character|Date|Boolean.  Mapserver translates
-these to valid GML data types.</li>
+types: Integer|Long|Real|Character|Date|Boolean.  Mapserver translates
+these to valid GML data types.
+Note: Long is to be used for 64-bit integers, starting with MapServer 7.0.1.</li>
 </ul>
 <p id="index-76"><strong>gml_[nom_de_la_géométrie]_type</strong></p>
 <ul class="simple">
@@ -1194,11 +1219,11 @@ these to valid GML data types.</li>
 </li>
 <li><p class="first"><em>Exemples :</em></p>
 <p>Pour permettre d&#8217;utiliser seulement <cite>GetMap</cite> et <cite>GetFeatureInfo</cite>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;wms_enable_request&quot;</span> <span class="s">&quot;GetMap GetFeatureInfo&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;wms_enable_request&quot;</span> <span class="s2">&quot;GetMap GetFeatureInfo&quot;</span>
 </pre></div>
 </div>
 <p>Pour permettre toutes les requêtes sauf <cite>GetFeatureInfo</cite></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;wms_enable_request&quot;</span> <span class="s">&quot;* !GetFeatureInfo&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;wms_enable_request&quot;</span> <span class="s2">&quot;* !GetFeatureInfo&quot;</span>
 </pre></div>
 </div>
 </li>
@@ -1219,18 +1244,21 @@ these to valid GML data types.</li>
 </ul>
 <p id="index-95"><strong>wms_getfeatureinfo_formatlist</strong></p>
 <ul class="simple">
-<li><p class="first"><em>Description:</em> (Optionnelle) Liste séparée par des virgules de formats d&#8217;image qui doivent être valides pur une requête GetFeatureInfo.  Si elle est définie, seulement ces formats seront affichés dans le document des &#8220;Capabilities&#8221;.</p>
-</li>
+<li><em>Description:</em> (Optional) Comma-separted list of formats that should
+be valid for a GetFeatureInfo request.  If defined, only these
+formats are advertised through in the Capabilities document.</li>
 </ul>
 <p id="index-96"><strong>wms_getlegendgraphic_formatlist</strong></p>
 <ul class="simple">
-<li><p class="first"><em>Description:</em> (Optionnelle) Liste séparée par des virgules de formats d&#8217;image qui doivent être valides pur une requête GetLegendGraphic.  Si elle est définie, seulement ces formats seront affichés dans le document des &#8220;Capabilities&#8221;.</p>
-</li>
+<li><em>Description:</em> (Optional) Comma-separted list of image formats that
+should be valid for a GetLegendGraphic request.  If defined, only
+these formats are advertised through in the Capabilities document.</li>
 </ul>
 <p id="index-97"><strong>wms_getmap_formatlist</strong></p>
 <ul class="simple">
-<li><p class="first"><em>Description:</em> (Optionnelle) Liste séparée par des virgules de formats d&#8217;image qui doivent être valides pur une requête GetMap.  Si elle est définie, seulement ces formats seront affichés dans le document des &#8220;Capabilities&#8221;.</p>
-</li>
+<li><em>Description:</em> (Optional) Comma-separted list of image formats that
+should be valid for a GetMap request.  If defined, only these formats
+are advertised through in the Capabilities document.</li>
 </ul>
 <p id="index-98"><strong>wms_group_abstract</strong></p>
 <ul class="simple">
@@ -1278,7 +1306,7 @@ these to valid GML data types.</li>
 <p>WMS_LAYER_GROUP est différent du mot-clé GROUP par le fait qu&#8217;il ne publie pas forcément le nom du groupe dans le &#8220;capabilities&#8221; mais seulement le &#8220;title&#8221; est toujours publié. Si une couche avec le même nom que celui utilisé dans le WMS_LAYER_GROUP est trouvé, il est traité comme un groupe nommé et si aucune couche avec le même nom est trouvé en tant que groupe non nommé.</p>
 <p>Comme conséquence, les groupes définis avec le WMS_LAYER_GROUP ne peuvent pas toujours être interrogés avec une requête GetMap ou GetFeatureInfo (voir la section 7.1.4.5.2 de la spécification de l&#8217;implémentation WMS version 1.1.1. (OGC 01-068r2)). Une autre différence iest que ce GROUP ne supporte pas l&#8217;imbrication de groupes. Le but de la configuration de la métadonnée est de rendre un client WMS conscient du groupement de couches.</p>
 <p>Tous les noms de groupe doivent être précédés par un anti-slash (/). Il n&#8217;est pas autorisé d&#8217;utiliser à la fois la configuration WMS_LAYER_GROUP et un mot-clé GROUP pour une couche seule.</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="k">NAME</span> <span class="s">&quot;mylayer&quot;</span>
   <span class="k">DATA</span> <span class="s">&quot;mylayer&quot;</span>
   <span class="k">TYPE</span> <span class="nb">LINE</span>
@@ -1430,7 +1458,7 @@ these to valid GML data types.</li>
 <li><p class="first">La couche ne contient aucune classe avec une propriété NAME définie, c&#8217;est à dire:</p>
 </li>
 </ol>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">CLASS</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">CLASS</span>
   <span class="k">NAME</span> <span class="s">&quot;Parks&quot;</span>
   <span class="k">STYLE</span>
     <span class="k">COLOR</span> <span class="mi">0</span> <span class="mi">255</span> <span class="mi">0</span>
@@ -1525,7 +1553,7 @@ these to valid GML data types.</li>
 74
 75
 76
-77</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">MAP</span>
+77</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">MAP</span>
   <span class="k">NAME</span> <span class="s">&quot;WMS-test&quot;</span>
   <span class="k">STATUS</span> <span class="nb">ON</span>
   <span class="k">SIZE</span> <span class="mi">400</span> <span class="mi">300</span>
@@ -1653,7 +1681,7 @@ these to valid GML data types.</li>
 </li>
 </ul>
 <p>Quand une projection AUTO dans un GetCapabilities WM est utilisée, vous devez seulement inclure la chaîne &#8220;AUTO:42003&#8221; dans votre métadonnée wms_srs, vous ne devez pas inclure les paramètres de la projection. Ces paramètres sont ajoutés par l&#8217;application (cliente) à l&#8217;exécution en fonction de votre vue carte. Par exemple:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">NAME</span> <span class="s">&quot;DEMO&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">NAME</span> <span class="s">&quot;DEMO&quot;</span>
 <span class="p">...</span>
 
 <span class="k">WEB</span>
@@ -1763,11 +1791,11 @@ these to valid GML data types.</li>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

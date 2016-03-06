@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MS RFC 52: One-pass query processing &mdash; MapServer 7.0.0 documentation</title>
+    <title>MS RFC 52: One-pass query processing &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Sobre este documento" href="../../about.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 53: Guidelines for MapScript method return values" href="ms-rfc-53.html" />
     <link rel="prev" title="MS RFC 51: XML Mapfile Format" href="ms-rfc-51.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Índice General"
+             accesskey="I">índice</a></li>
+        <li class="right" >
+          <a href="ms-rfc-53.html" title="MS RFC 53: Guidelines for MapScript method return values"
+             accesskey="N">siguiente</a> |</li>
+        <li class="right" >
+          <a href="ms-rfc-51.html" title="MS RFC 51: XML Mapfile Format"
+             accesskey="P">anterior</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -189,7 +206,7 @@ pass through the features.</p>
 behaves. We prepose changing the behavior of that function to provide random
 access to a result set (as defined by msLayerWhichShapes()) rather than the
 entire data set. This removes most of the overhead currently incurred by
-referencing the results already returned by the data driver in the intial
+referencing the results already returned by the data driver in the initial
 query. For implementation purposes we would retain the current msLayerGetShape()
 implementations to support easy random access and create a new function
 called msLayerResultsGetShape().</p>
@@ -213,7 +230,7 @@ function (e.g. OGR or shapefiles)</li>
 <div><ul class="simple">
 <li>not close the layer when finished with a query (we assume that users will
 want to do something with the results)</li>
-<li>allow msLayerWhichItems() to retrieve ALL items so that the retreived
+<li>allow msLayerWhichItems() to retrieve ALL items so that the retrieved
 shapes are presentation-ready (draw, template, or ...)</li>
 </ul>
 </div></blockquote>
@@ -236,8 +253,8 @@ effect is that primary keys need not be used to retrieve features from the resul
 set. It is the drivers responsibility to provide data to uniquely identify a
 row in the result set.</p>
 </div>
-<div class="section" id="backwards-compatability-issues">
-<h2>Backwards Compatability Issues<a class="headerlink" href="#backwards-compatability-issues" title="Enlazar permanentemente con este título">¶</a></h2>
+<div class="section" id="backwards-compatibility-issues">
+<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>This solution will most likely require changes to MapScript applications that
 process query results depending on types of data being processed. Those hitting
 shapefiles for example will still function &#8220;as is&#8221; since there that driver will
@@ -258,7 +275,7 @@ It becomes necessary to instead recreate the result set but re-executing the
 query. Problem is, there&#8217;s no easy way to serialize query parameters.</p>
 <p>I propose creating a new object, a queryObj, to store the various parameters
 associated with MapServer queries. It might look something like:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">typedef</span> <span class="n">struct</span> <span class="p">{</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">typedef</span> <span class="n">struct</span> <span class="p">{</span>
    <span class="nb">int</span> <span class="nb">type</span><span class="p">;</span> <span class="o">/</span>\<span class="o">*</span> <span class="n">By</span> <span class="n">rect</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">etc</span><span class="o">...</span> <span class="n">Types</span> <span class="n">match</span> <span class="n">the</span> <span class="n">query</span> <span class="n">functions</span><span class="o">.</span> \<span class="o">*/</span>
    <span class="nb">int</span> <span class="n">qlayer</span><span class="p">;</span> <span class="o">/</span>\<span class="o">*</span> <span class="n">used</span> <span class="n">by</span> <span class="nb">all</span> <span class="n">functions</span> \<span class="o">*/</span>
 
@@ -290,7 +307,7 @@ remain &#8220;as is&#8221; although the internals would change.</p>
 code if necessary</li>
 <li>maptemplate.c: don&#8217;t open/close a layer when presenting results</li>
 <li>mapgml.c: don&#8217;t open/close a layer when presenting results</li>
-<li>mapdraw.c: don&#8217;t open/close a layer ect... IF if drawing a query map</li>
+<li>mapdraw.c: don&#8217;t open/close a layer etc... IF if drawing a query map</li>
 <li>maplayer.c: refactor msLayerWhichItems(), add msLayerResultsGetShape() to the
 layer plugin API</li>
 <li>mapquery.c: re-work msSaveQuery() and msLoadQuery(), change query functions
@@ -341,7 +358,7 @@ checking need be done.</p>
 <li><a class="reference internal" href="#">MS RFC 52: One-pass query processing</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#technical-solution">Technical Solution</a></li>
-<li><a class="reference internal" href="#backwards-compatability-issues">Backwards Compatability Issues</a></li>
+<li><a class="reference internal" href="#backwards-compatibility-issues">Backwards Compatibility Issues</a></li>
 <li><a class="reference internal" href="#query-file-support">Query File Support</a></li>
 <li><a class="reference internal" href="#files-impacted">Files Impacted</a></li>
 <li><a class="reference internal" href="#unknowns">Unknowns</a></li>
@@ -368,11 +385,11 @@ checking need be done.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

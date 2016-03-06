@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Exemple 1.1 &mdash; MapServer 7.0.0 documentation</title>
+    <title>Exemple 1.1 &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../index.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -127,6 +127,15 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -141,7 +150,7 @@
 <img alt="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-1.map&amp;layer=states&amp;mode=map" src="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-1.map&amp;layer=states&amp;mode=map" />
 <p>MapServer peut créer une image et la stocker dans un répertoire local ou l&#8217;envoyer directement vers le navigateur web qui en a fait la demande, comme dans cet exemple. Vous pouvez le voir sans avoir besoin d&#8217;une page html, tapez juste cette URL: <a class="reference external" href="http://localhost/cgi-bin/mapserv.exe?map=/ms4w/apps/tutorial/htdocs/example1-1.map&amp;layer=states&amp;mode=map">http://localhost/cgi-bin/mapserv.exe?map=/ms4w/apps/tutorial/htdocs/example1-1.map&amp;layer=states&amp;mode=map</a> .Cette URL fonctionnera sur un serveur web (si non, &#8220;localhost&#8221; doit être remplacé avec le nom de votre serveur web (c&#8217;est à dire &#8220;demo.mapserver.org&#8221;, ou son adresse IP (c&#8217;est à dire &#8220;140.211.15.84&#8221;).</p>
 <p>Cette URL peut être découpée en trois parties: la première, <a class="reference external" href="http://localhost/cgi-bin/mapserv">http://localhost/cgi-bin/mapserv</a>? appelle le programme CGI MapServer. Si vous l&#8217;appelez tel quel, vous aurez ce message familier:</p>
-<div class="highlight-python"><div class="highlight"><pre>No query information to decode. QUERY_STRING is set, but empty.
+<div class="highlight-python"><div class="highlight"><pre><span></span>No query information to decode. QUERY_STRING is set, but empty.
 </pre></div>
 </div>
 <p>Les trois parties suivantes sont ce qui font la chaîne d&#8217;interrogation. La chaîne d&#8217;interrogation contient les paramètres CGI (les variables et leurs valeurs), avec chaque paramètre séparé par une esperluette (&amp;amp;). Ainsi, en regardant la chaîne d&#8217;interrogation:</p>
@@ -157,10 +166,16 @@
 <div class="section" id="mapfile-structure">
 <h3>Structure d&#8217;un Mapfile<a class="headerlink" href="#mapfile-structure" title="Lien permanent vers ce titre">¶</a></h3>
 <p>C&#8217;est ce à quoi le mapfile ressemble: <a class="reference internal" href="example1-1-map.html#example1-1-map"><span>Example1-1.map</span></a>.</p>
-<p>le <a class="reference internal" href="../mapfile/index.html#mapfile"><span>MAPFILE</span></a> est un mécanisme de configuration basique de MapServer. Il est constitué d&#8216;&#8220;objets&#8221; et chaque objet peut contenir des mots-clés ou d&#8217;autres objets. Il a une structure hiérarchique où certains objets sont inclus dans d&#8217;autres... Au premier niveau de cette hiérarchie se trouve l&#8217;objet &#8216;MAP, tous les autres objets lui appartiennent. Cet exemple montre une hiérarchie d&#8217;objets très clair. Au fur et à mesure de chaque exemple, la complexité de la hiérachie de ces arbres va augmenter.</p>
+<p>The <a class="reference internal" href="../mapfile/index.html#mapfile"><span>MAPFILE</span></a> is MapServer&#8217;s basic configuration
+mechanism. It is made up of &#8220;objects&#8221; and each object can have
+keywords or other objects. It has a hierarchical structure such that
+some objects fall under other objects... on top of this hierarchy is
+the MAP object, all other objects belong to it. This example shows a
+very straightforward hierarchy of objects.  As you go through each
+example, the complexity of these hierarchical trees will increase.</p>
 <p>Quelques notes à propos des mapfiles: nous définissons chaque objet dans le mapfile avec le nom de l&#8217;objet et nous le fermons avec &#8220;END&#8221; et nous précédons les commentaires avec un signe (#).</p>
 <p>Commençons à décortiquer le fichier &#8220;example1-1.map&#8221; objet par objet. Sa structure devrait ressembler à:</p>
-<div class="highlight-python"><div class="highlight"><pre>MAP
+<div class="highlight-python"><div class="highlight"><pre><span></span>MAP
  |-LAYER
     |-CLASS
        |-STYLE
@@ -178,16 +193,16 @@
 </dd>
 <dt><strong>EXTENT</strong></dt>
 <dd><p class="first">Ce paramètre spécifie l&#8217;étendue de sortie de votre carte &#8211;le &#8220;rectangle encadrant&#8221; (bounding box en anglais) de notre carte initiale. Les valeurs de l&#8217;EXTENT sont données sous ce format:</p>
-<div class="highlight-python"><div class="highlight"><pre>&lt;Lower Left X&gt; &lt;Lower Left Y&gt; &lt;Upper Right X&gt; &lt;Upper Right Y&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;Lower Left X&gt; &lt;Lower Left Y&gt; &lt;Upper Right X&gt; &lt;Upper Right Y&gt;
 </pre></div>
 </div>
 <p>avec des espaces séparant chaque valeur. Il doit être renseigné dans la même unité que la donnée ou, si on a spécifier une projection en sortie différente, dans la même unité que la projection en sortie.</p>
 <p>Dans cet exemple votre donnée est dans une projection géographique ainsi les unités sont en degrés décimaux. Vous pouvez utiliser l&#8217;utilitaire <a class="reference external" href="http://gdal.osgeo.org/ogr_utilities.html">ogrinfo</a>, qui fait partie intégrante de la bibliothèque GDAL/OGR, pour obtenir l&#8217;étendue d&#8217;un shapefile particulier (ou d&#8217;autres formats vecteur supportés). Voici la commande que j&#8217;utilise pour obtenir l&#8217;étendue pour cet exemple:</p>
-<div class="highlight-python"><div class="highlight"><pre>ogrinfo -al -so states_ugl.shp
+<div class="highlight-python"><div class="highlight"><pre><span></span>ogrinfo -al -so states_ugl.shp
 </pre></div>
 </div>
 <p>Cela retourne la sortie suivante:</p>
-<div class="highlight-python"><div class="highlight"><pre>INFO: Open of `states_ugl.shp&#39; using driver `ESRI Shapefile&#39; successful.
+<div class="highlight-python"><div class="highlight"><pre><span></span>INFO: Open of `states_ugl.shp&#39; using driver `ESRI Shapefile&#39; successful.
 Layer name: states_ugl
 Geometry: Polygon
 Feature Count: 204
@@ -319,11 +334,11 @@ CLASS: String (5.0)
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

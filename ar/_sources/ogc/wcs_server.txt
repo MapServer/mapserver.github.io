@@ -1,0 +1,1650 @@
+.. index:: 
+   single: WCS Server
+
+.. _WCS_server:
+
+*****************************************************************************
+ WCS Server
+*****************************************************************************
+
+:Author:       Jeff McKenna
+:Contact:      jmckenna at gatewaygeomatics.com
+:Author:       Stephan Meissl
+:Contact:      stephan.meissl at eox.at
+:Author:       Fabian Schindler
+:Contact:      fabian.schindler at eox.at
+:Last Updated: 2012-08-30
+
+.. contents:: Table of Contents
+    :depth: 2
+    :backlinks: top
+
+
+Introduction
+============
+
+A WCS (or Web Coverage Service) allows for the publication of
+"coverages"- digital geospatial information representing space-varying
+phenomena. In the MapServer world it allows for unfiltered access to
+raster data. Conceptually it is easy think of WCS as a raster
+equivalent of WFS. The following documentation is based on the `Open
+Geospatial Consortium's (OGC) Web Coverage Service Interfaces
+Implementation Specification version 1.0.0`_.
+
+Links to WCS-Related Information
+--------------------------------
+
+- `OGC'c WCS Standard page`_
+- `WCS 1.0.0 specification`_
+- `WCS 1.1.1c1 specification`_
+- WCS 2.0
+
+  - `GML 3.2.1 Application Schema Coverages`_
+  - `WCS 2.0 Specification - Core`_
+  - `WCS 2.0 Specification - KVP Protocol Binding Extension`_
+  - `WCS 2.0 Specification - XML/POST Protocol Binding Extension`_
+
+- :ref:`WMS Server HowTo <wms_server>`
+
+Software Requirements
+---------------------
+
+In order to enable MapServer to serve WCS data, it MUST be compiled
+against certain libraries:
+
+- PROJ.4: The reprojection library. Version 4.4.3 or greater is required.
+- GDAL: raster support library.
+- MapServer: version >= 4.4 (tested with 5.0.2 while updating this document)
+
+For WCS 1.1.x (MapServer 5.2) and WCS 2.0 (MapServer 6.0) support
+there is an additional requirement:
+
+- libxml2: An xml parser and generation library. 
+
+Please see the :ref:`MapServer UNIX Compilation and Installation HowTo
+<unix>` for detailed instructions on compiling MapServer with support
+for these libraries and features.  For Windows users, `MapServer for
+Windows (MS4W)`_ comes with WCS Server support.
+
+.. index:: 
+   pair: WCS Server; Mapfile
+
+Configuring Your Mapfile to Serve WCS Layers
+============================================
+
+Much as in the WMS and WFS support, WCS publishing is enabled by
+adding certain magic METADATA keyword/value pairs to a .map file.
+
+MapServer will serve and include in its WCS capabilities only the
+layers that meet the following conditions:
+
+- Data source is a raster, which is processed using GDAL 
+  (e.g GeoTIFF, Erdas Imagine, ...)
+- LAYER NAME must be set
+- LAYER TYPE is set to RASTER
+- WEB metadata or LAYER metadata "wcs_enable_request" must be set
+- WEB metadata "wcs_label" must be set
+- LAYER metadata "wcs_label" must be set
+- LAYER metadata "wcs_rangeset_name" must be set
+- LAYER metadata "wcs_rangeset_label" must be set
+- LAYER is enabled to be served via WCS (see `MS RFC 67`_)
+
+- LAYER PROJECTION must be set, even if PROJECTION is set at the MAP
+  level (a bug?)
+
+Example WCS Server Mapfile
+--------------------------
+
+The following is an example of a simple WCS Server mapfile. Note the
+comments for the required parameters.
+
+.. code-block:: mapfile
+        
+      MAP
+        NAME WCS_server
+        STATUS ON
+        SIZE 400 300
+        SYMBOLSET "../etc/symbols.txt"
+        EXTENT -2200000 -712631 3072800 3840000
+        UNITS METERS
+        SHAPEPATH "../data"
+        IMAGECOLOR 255 255 255
+        FONTSET "../etc/fonts.txt"
+
+
+        #
+        # Start of web interface definition
+        #
+        WEB
+          IMAGEPATH "/ms4w/tmp/ms_tmp/" 
+          IMAGEURL "/ms_tmp/"
+          METADATA
+            "wcs_label"           "GMap WCS Demo Server" ### required  
+            "wcs_description"     "Some text description of the service"  
+            "wcs_onlineresource"  "http://127.0.0.1/cgi-bin/mapserv.exe?" ### recommended
+            "wcs_fees"            "none"
+            "wcs_accessconstraints"    "none"
+            "wcs_keywordlist"          "wcs,test"
+            "wcs_metadatalink_type"    "TC211" 
+            "wcs_metadatalink_format"  "text/plain" 
+            "wcs_metadatalink_href"    "http://someurl.com"
+            "wcs_address"              "124 Gilmour Street"
+            "wcs_city"                 "Ottawa"
+            "wcs_stateorprovince"      "ON"
+            "wcs_postcode"             "90210"
+            "wcs_country"              "Canada"
+            "wcs_contactelectronicmailaddress" "blah@blah"
+            "wcs_contactperson"            "me"
+            "wcs_contactorganization"      "unemployed"
+            "wcs_contactposition"          "manager"
+            "wcs_contactvoicetelephone"    "613-555-1234"
+            "wcs_contactfacimiletelephone" "613-555-1235"
+            "wcs_service_onlineresource"   "http://127.0.0.1/cgi-bin/mapserv.exe?"            
+            "wcs_enable_request"           "*"
+          END
+        END
+
+        PROJECTION
+          "init=epsg:42304"
+        END
+
+
+        LAYER
+          NAME bathymetry
+          METADATA
+            "wcs_label"           "Elevation/Bathymetry"  ### required
+            "wcs_rangeset_name"   "Range 1"  ### required to support DescribeCoverage request
+            "wcs_rangeset_label"  "My Label" ### required to support DescribeCoverage request 
+          END
+          TYPE RASTER ### required
+          STATUS ON
+          DATA bath_mapserver.tif
+          PROJECTION
+            "init=epsg:42304"
+          END
+        END
+      END # Map File
+
+.. index:: 
+   pair: WCS Server; Output formats
+
+Output Formats
+--------------
+
+The raster formats supported by MapServer WCS are determined by the
+wcs_formats metadata item on the LAYER.  This should contain a space
+separated list of OUTPUTFORMAT driver names separated by spaces.  If
+absent, all raster OUTPUTFORMATs are allowed.
+
+WCS is a "raw data" oriented format.  So it often most suitable to use
+it with format using the BYTE, INT16 and FLOAT32 IMAGEMODEs with GDAL
+related output formats rather than the built in "rendering oriented"
+output formats.  By default the only GDAL format driver defined is the
+GTiff driver.  The following are example output format declarations
+utilizing the raw image modes::
+
+  OUTPUTFORMAT
+    NAME GEOTIFF_16
+    DRIVER "GDAL/GTiff"
+    MIMETYPE "image/tiff"
+    IMAGEMODE FLOAT32
+    EXTENSION "tif"
+  END
+
+  OUTPUTFORMAT
+    NAME AAIGRID
+    DRIVER "GDAL/AAIGRID"
+    MIMETYPE "image/x-aaigrid"
+    IMAGEMODE INT16
+    EXTENSION "grd"
+    FORMATOPTION "FILENAME=result.grd"
+  END
+
+The FORMATOPTION FILENAME defines the preferred name of the result
+file when returned WCS GetCoverage results.
+  
+	
+Test Your WCS 1.0 Server
+========================
+
+Validate the Capabilities Metadata
+----------------------------------
+
+OK, now that we've got a mapfile, we have to check the XML
+capabilities returned by our server to make sure nothing is missing.
+
+Using a web browser, access your server's online resource URL to which
+you add the parameters
+"SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCapabilities" to the end, e.g.
+
+::
+
+  http://my.host.com/cgi-bin/mapserv?map=mywcs.map&SERVICE=WCS
+    &VERSION=1.0.0&REQUEST=GetCapabilities
+        
+
+If you get an error message in the XML output then take necessary
+actions. Common problems and solutions are listed in the FAQ at the
+end of this document.
+
+If everything went well, you should have a complete XML capabilities
+document.  Search it for the word "WARNING"... MapServer inserts XML
+comments starting with "<!--WARNING: " in the XML output if it detects
+missing mapfile parameters or metadata items.
+
+Note that when a request happens, it is passed through WMS, WFS, and
+WCS in MapServer (in that order) until one of the services respond to
+it.
+
+Here is a working example of a GetCapabilities request:
+
+`WCS GetCapabilities live example`_
+
+Test With a DescribeCoverage Request
+------------------------------------
+
+OK, now that we know that our server can produce a valid XML
+GetCapabilities response we should test the DescribeCoverage request.
+The DescribeCoverage request lists more information about specific
+coverage offerings.
+
+Using a web browser, access your server's online resource URL to which
+you add the parameters
+"SERVICE=WCS&VERSION=1.0.0&REQUEST=DescribeCoverage&COVERAGE=layername"
+to the end, e.g.
+
+::
+
+  http://my.host.com/cgi-bin/mapserv?map=mywcs.map&SERVICE=WCS
+    &VERSION=1.0.0&REQUEST=DescribeCoverage&COVERAGE=bathymetry
+  
+Here is a working example of a DescribeCoverage request:
+
+`WCS DescribeCoverage live example`_
+
+
+Test With a GetCoverage Request
+-------------------------------
+
+The GetCoverage request allows for the retrieval of coverages in a
+specified output format to the client.
+
+
+The following is a list of the required GetCoverage parameters
+according to the WCS spec:
+
+   **VERSION=version:** Request version
+
+   **REQUEST=GetCoverage:** Request name
+
+   **COVERAGE=coverage_name:** Name of an available coverage, as
+   stated in the GetCapabilities
+
+   **CRS=epsg_code:** Coordinate Reference System in which the request
+   is expressed.
+
+   **BBOX=minx,miny,maxx,maxy:** Bounding box corners (lower left,
+   upper right) in CRS units.  One of BBOX or TIME is required.
+   
+   **TIME=time1,time2:** Request a subset corresponding to a time. One
+   of BBOX or TIME is required..
+
+   **WIDTH=output_width:** Width in pixels of map picture.  One of
+   WIDTH/HEIGHT or RESX/Y is required.
+
+   **HEIGHT=output_height:** Height in pixels of map picture.  One of
+   WIDTH/HEIGHT or RESX/Y is required.
+   
+   **RESX=x:** When requesting a georectified grid coverage, this
+   requests a subset with a specific spatial resolution.  One of
+   WIDTH/HEIGHT or RESX/Y is required.
+
+   **RESY=y:** When requesting a georectified grid coverage, this
+   requests a subset with a specific spatial resolution.  One of
+   WIDTH/HEIGHT or RESX/Y is required.
+   
+   **FORMAT=output_format:** Output format of map, as stated in the
+   DescribeCoverage response.
+   
+The following are optional GetCoverage parameters according to the WCS
+spec:
+
+   **RESPONSE_CRS=epsg_code:** Coordinate Reference System in which to
+   express coverage responses.
+   
+So to follow our above examples, a valid DescribeCoverage request
+would look like:
+
+::
+
+  http://my.host.com/cgi-bin/mapserv?map=mywcs.map&SERVICE=WCS
+    &VERSION=1.0.0&REQUEST=GetCoverage&coverage=bathymetry
+    &CRS=EPSG:42304&BBOX=-2200000,-712631,3072800,3840000&WIDTH=3199
+    &HEIGHT=2833&FORMAT=GTiff
+
+Here is a working example of a GetCoverage request (note that a 350KB
+tif is being requested, so this may take a second):
+
+`WCS GetCoverage live example`_
+        
+.. index:: 
+   single: WCS 1.1.0
+
+WCS 1.1.0+ Issues
+=================
+
+WCS 1.1.0 and later versions of the WCS protocol are supported by
+MapServer 5.2.  For the most part the map file setup for WCS 1.1.0 is
+similar to WCS 1.0.0, but the actual protocol is substantially
+changed.
+
+GetCapabilities
+---------------
+
+The GetCapabilities request is the same as WCS 1.0 but with a
+different VERSION value::
+
+   SERVICE=WCS&VERSION=1.1.0&REQUEST=GetCapabilities
+
+The format of the returned capabilities document is substantially
+altered from WCS 1.0, and makes use of OWS Common for service
+descriptions.
+
+
+DescribeCoverage
+----------------
+
+The DescribeCoverage request is similar to WCS 1.0, but the IDENTIFIER
+keyword is used instead of COVERAGE to name the coverage being
+requested::
+
+  SERVICE=WCS&VERSION=1.1.0&REQUEST=DescribeCoverage&IDENTIFIER=spaceimaging
+
+
+GetCoverage
+-----------
+
+The format for GetCoverage is substantially changed from 1.0.  The
+following is a list of GetCoverage required parameters:
+
+   **VERSION=version:** Request version
+
+   **REQUEST=GetCoverage:** Request name
+
+   **IDENTIFIER=coverage_name:** Name of an available coverage, as
+   stated in the GetCapabilities
+
+   **BOUNDINGBOX=minx,miny,maxx,maxy,crs:** Bounding box corners
+   (lower left, upper right), and the CRS they are in.  The CRS is
+   described using a URN.
+   
+   **FORMAT=output_format:** Output format (mime type) of grid
+   product, as stated in the GetCapabilities.
+
+If an alternate spatial resolution is desired, then the following set
+of keywords must be used to specify the sample origin and step size of
+the output grid to be produced.  The produced grid will be of a number
+of pixels and lines as can be fit in the BOUNDINGBOX starting at
+GridOrigin, at GridOffsets resolution.
+
+   **GRIDBASECRS=crs:** The grid base CRS (URN). 
+
+   **GRIDCS=crs:** The grid CRS (URN).
+
+   **GridType=urn:ogc:def:method:WCS:1.1:2dGridIn2dCrs:** This is the
+   only supported value for MapServer.
+
+   **GridOrigin=x_origin,y_origin:** The sample point for the top left
+   pixel.
+
+   **GridOffsets=xstep,ystep:** The x and y step size for grid
+   sampling (resolution). Both are positive.
+
+As well, the following optional parameters are available.
+
+   **RangeSubset=selection:** Selects a range subset, and
+   interpolation method.  Currently only subsetting on bands are
+   allowed.  Depending on rangeset names, this might take the form
+   "BandsName[bands[1]]" to select band 1, or
+   "BandsName:bilinear[bands[1]]" to select band 1 with bilinear
+   interpolation.
+
+So a simple GetCoverage might look like::
+
+  SERVICE=WCS&VERSION=1.1.0&REQUEST=GetCoverage&IDENTIFIER=dem&FORMAT=image/tiff
+    &BOUNDINGBOX=43,33,44,34,urn:ogc:def:crs:EPSG::4326
+
+A more complex request might look like::
+
+  SERVICE=WCS&VERSION=1.1.0&REQUEST=GetCoverage&IDENTIFIER=dem&FORMAT=image/tiff
+    &BOUNDINGBOX=33,43,34,44,urn:ogc:def:crs:EPSG::4326
+    &GridBaseCRS=urn:ogc:def:crs:EPSG::4326&GridCS=urn:ogc:def:crs:EPSG::4326
+    &GridType=urn:ogc:def:method:WCS:1.1:2dGridIn2dCrs
+    &GridOrigin=33,44&GridOffsets=0.01,0.01
+    &RangeSubset=BandsName:bilinear[bands[1]]
+
+It should also be noted that return results from WCS 1.1 GetCoverage
+requests are in multi-part mime format.  Typically this consists of a
+first part with an xml document referencing the other parts of the
+message, and an image file part.  However, for output formats that
+return multiple files, each will be a separate part.  For instance,
+this means it is possible to return a jpeg file with a world file, the
+OUTPUTFORMAT is appropriately configured.
+
+URNs
+----
+
+In WCS 1.1 protocol coordinate systems are referenced by URN.  Some
+typical URNs are::
+
+  urn:ogc:def:crs:EPSG::4326
+  urn:ogc:def:crs:EPSG:27700
+  urn:ogc:def:crs:OGC::CRS84
+
+The first two are roughly equivalent to EPSG:4326, and EPSG:27700
+while the third is a CRS defined by OGC (essentially WGS84).  One
+critical thing to note is that WCS 1.1 follows EPSG defined axis/tuple
+ordering for geographic coordinate systems.  This means that
+coordinates reported, or provided in urn:ogc:def:EPSG::4326 (WGS84)
+are actually handled as lat, long, not long,lat.  So, for instance the
+BOUNDINGBOX for an area in California might look like::
+
+  BOUNDINGBOX=34,-117,35,-116,urn:ogc:def:crs:EPSG::4326
+
+And, likewise the bounds reported by GetCapabilities, and
+DescribeCoverage will be in this ordering as appropriate.
+
+
+.. index:: 
+   single: WCS 2.0
+
+WCS 2.0 
+=======
+
+Overview
+--------
+
+Version 6.0 introduces support for the new version 2.0 of the WCS
+specification. This section documents the usage of the new WCS
+version.
+
+Web Coverage Service (WCS) 2.0 Interface Standard
+`````````````````````````````````````````````````
+
+This specification adopts the new OGC Core and Extension model and at
+the moment the following documents are available from the `OGC'c WCS
+Standard page`_:
+
+* `GML 3.2.1 Application Schema Coverages`_
+* `WCS 2.0 Specification - Core`_
+* `WCS 2.0 Specification - KVP Protocol Binding Extension`_
+* `WCS 2.0 Specification - XML/POST Protocol Binding Extension`_
+* `WCS 2.0 Specification - Interpolation Extension`_
+* `WCS 2.0 Specification - Range Subsetting Extension`_
+* WCS 2.0 Specification - GeoTIFF Format Extension
+* `WCS 2.0 Specification - CRS Extension`_
+* `WCS 2.0 Specification - Scaling Extension`_
+
+Technical changes from WCS version 1.1.2 include entirely building on
+the `GML 3.2.1 Application Schema Coverages`_ and adoption of `OWS
+Common 2.0`_. Another major change is the introduction of trim and
+slice concepts which is explained in more detail below.
+
+There are `WCS 2.0 Schemas`_ defined against which all requests and
+responses should validate.
+
+WCS 2.0 KVP request parameters
+``````````````````````````````
+
+The following KVP request parameters are available in WCS 2.0:
+
+    **COVERAGEID=id**: This parameter is technically the same as the
+    **COVERAGE** parameter for WCS 1.0 or the **IDENTIFIER** parameter
+    **for WCS 1.1**. In DescribeCoverage requests, multiple IDs can be
+    requested by concatenating them with commas.
+
+    **SUBSET=axis[,crs](low,high):** This parameter subsets the
+    coverage on the given axis. This parameter can be given multiple
+    times, but only once for each axis. The optional sub-parameter **crs** can 
+    either be an EPSG definition (like EPSG:4326), an URN or an URI or
+    'imageCRS' (which is the default). All **crs** sub-parameters from all
+    **SUBSET** parameters must be equal. (e.g: you cannot subset one
+    axis in imageCRS and another in EPSG:4326).
+    
+    .. note::
+
+      The syntax of the **crs** sub-parameter is non-standard and deprecated.
+      Please use the *SUBSETTINGCRS* parameter instead.
+
+    .. note::
+
+      Recognized values for the axis sub-parameter are: "x", "xaxis",
+      "x-axis", "x_axis", "long", "long_axis", "long-axis", "lon",
+      "lon_axis", "lon-axis", "y", "yaxis", "y-axis", "y_axis", "lat",
+      "lat_axis" and "lat-axis".
+
+    **SUBSETTINGCRS=crs:** This parameter defines the crs subsetting all 
+    *SUBSETs* are expressed in, and also the output CRS if no *OUTPUTCRS* is 
+    specified. By default all subsets are interpreted to be relative to
+    the coverages CRS.
+    
+    **OUTPUTCRS=crs:** This parameter defines in which crs the output 
+    image should be expressed in. 
+
+    **MEDIATYPE=mediatype:** This parameter is relevant to GetCoverage
+    requests, when multipart XML/image output is desired. It should be
+    set to 'multipart/related' (which is currently the only possible
+    value for this parameter).
+
+    **SCALEFACTOR=factor:** With this parameter (a positive float) the size of
+    the output image can be adjusted. All axes are scaled equally.
+
+    **SCALEAXES=axis(value)[,axis(value)]:** With this parameter, an axis 
+    specific scaling can be applied. Any axis not mentioned
+
+    **SCALESIZE=axis(size)[,axis(size)]:** This is similar to the *SCALEAXES* 
+    parameter, but allows an axis specific setting of the absolute pixel size
+    of the returned coverage.
+
+    **SCALEEXTENT=axis(min:max)[,axis(min:max)]:** This parameter is treated
+    like a *SCALESIZE* parameter with "axis(max-min)".
+    
+    **INTERPOLATION=intperolation_method:** This defines the
+    interpolation method used, for rescaled images. Possible values
+    are "NEAREST", "BILINEAR" and "AVERAGE".
+
+    **RANGESUBSET=band1[,band2[,...]]:** With this parameter, a
+    selection of bands can be made. Also the bands can be
+    reordered.  The bands can be referred to either by name (which can
+    be retrieved using the DescribeCoverage request) or by index
+    (starting with '1' for the first band). Also a range of bands can be given:
+    *bandX:bandY*. This also includes the lower and upper bounds. As the name
+    implies, the lower bound must reference the band with the lower index. You 
+    can mix direct references to the bands with intervals. E.g: 
+    *RANGESUBSET=band1,band3:band:5,band7*
+
+
+The following parameters are part of the GeoTIFF extension and are only 
+available for the GeoTIFF outputformat:
+
+    **GEOTIFF:COMPRESSION=compression:** The compression method used for the 
+    returned image. Valid options are: None, PackBits, Deflate, Huffman, LZW 
+    and JPEG.
+
+    **GEOTIFF:JPEG_QUALITY=1-100:** When the compression method JPEG is chosen,
+    this value defines the quality of the algorithm.
+
+    **GEOTIFF:PREDICTOR=None|Horizontal|FloatingPoint:** The predictor value 
+    for the LZW and Deflate compression methods.
+
+    **GEOTIFF:INTERLEAVE=Band|Pixel:** Defines whether the image shall be band 
+    or pixel interleaved.
+
+    **GEOTIFF:TILING=true|false:** Defines if the output image shall be 
+    internally tiled.
+
+    **GEOTIFF:TILEWIDTH=tilewidth**, **GEOTIFF:TILEHEIGHT=tileheight**: Define
+    the size of the internal tiles. Must be positive integer divisible by 16.
+
+
+The following request parameters are not part of the WCS 2.0 Core or any 
+extension thereof, and are kept for backward compatibility. They originate from
+a time where the most vital standard extensions were not specified and the WCS 
+core was not quite useful without. They are deprecated.
+
+    **SIZE=axis(value):** This parameter sets the size of the desired
+    axis to the desired value (pixels).
+
+    **RESOLUTION=axis(value):** This parameter sets the resolution of
+    the desired axis to the desired value (pixels/unit).
+    
+    .. note::
+
+      The **SIZE** and **RESOLUTION** are mutually exclusive on one
+      axis, but can be mixed on different axes (e.g: SIZE on x-axis
+      and RESOLUTION on y-axis). Also axis names in **SUBSET**,
+      **SIZE** and **RESOLUTION** parameters cannot be mixed. E.g:
+      ...&SUBSET=x(0,100)&SIZE=lon(200)&... is not legal although the
+      axis names logically refer to the same axis.
+
+
+Unchanged KVP parameters
+''''''''''''''''''''''''
+
+The following parameters have not (or just slightly) changed since the 
+last version of the WCS standard.
+
+    **VERSION=version:** For WCS 2.0, this should be set to '2.0.1'. This 
+      parameter is deprecated for GetCapabilities related to OGC Web Services 
+      Common Standard 2.0.0.
+    
+    **SERVICE=service**
+    
+    **REQUEST=request**
+    
+    **ACCEPTVERSIONS=versions**
+    
+    **SECTIONS=sections**
+    
+    **UPDATESEQUENCE=updatesequence**
+    
+    **ACCEPTFORMATS=formats:** This parameter is currently ignored.
+    
+    **ACCEPTLANGUAGES=languages:** This parameter is currently ignored.
+    
+    **FORMAT=format:** The desired format can now also be set with the
+    name of the outputformat object defined in the mapfile. In
+    contrast to previous versions of WCS this parameter is optional
+    when the native format is either specified or can be determined
+    via GDAL.
+    
+    **MAP=mapfile**
+    
+KVP request examples
+''''''''''''''''''''
+
+The below sample request outline the new KVP request syntax::
+
+  # GetCapabilities
+  http://www.yourserver.com/wcs?SERVICE=WCS&ACCEPTVERSIONS=1.0.0,2.0.1
+    &REQUEST=GetCapabilities
+  http://www.yourserver.com/wcs?SERVICE=WCS&REQUEST=GetCapabilities
+  # DescribeCoverage 2.0
+  http://www.yourserver.com/wcs?SERVICE=WCS&VERSION=2.0.1
+    &REQUEST=DescribeCoverage&COVERAGEID=grey
+  # GetCoverage 2.0 image/tiff full
+  http://www.yourserver.com/wcs?SERVICE=WCS&VERSION=2.0.1
+    &REQUEST=GetCoverage&COVERAGEID=grey&FORMAT=image/tiff
+  # GetCoverage 2.0 multipart/related (GML header & image/tiff) full
+  http://www.yourserver.com/wcs?SERVICE=WCS&VERSION=2.0.1
+    &REQUEST=GetCoverage&COVERAGEID=grey&FORMAT=image/tiff
+    &MEDIATYPE=multipart/related
+  # GetCoverage 2.0 image/tiff trim x y both in imageCRS
+  http://www.yourserver.com/wcs?SERVICE=WCS&VERSION=2.0.1
+    &REQUEST=GetCoverage&COVERAGEID=grey&FORMAT=image/tiff
+    &SUBSET=x(10,200)&SUBSET=y(10,200)
+    &SUBSETTINGCRS=imageCRS
+  # GetCoverage 2.0 reproject to EPSG 4326
+  http://www.yourserver.com/wcs?SERVICE=WCS&VERSION=2.0.1
+    &REQUEST=GetCoverage&COVERAGEID=grey&FORMAT=image/tiff
+    &SUBSET=x(-121.488744,-121.485169)
+    &SUBSETTINGCRS=http://www.opengis.net/def/crs/EPSG/0/4326
+
+Please refer to the `WCS 2.0 tests in msautotest`_ for further sample 
+requests.
+
+Changes to previous versions
+----------------------------
+
+The layer name must be a valid NCName, i.e: must not start with a
+number and can only contain alphanumerical characters. This constraint
+derives of the gml:id property which has to be a NCName, that relates
+to the coverage ID which is itself taken from the layers name.
+
+Specifying coverage specific metadata
+-------------------------------------
+
+For WCS enabled layers in MapServer, there are different possibilities
+for declaring coverage metadata for WCS 2.0.  In the simplest case,
+all of the required metadata can be retrieved from the source image.
+
+For some reason this may not be desirable, maybe because the source
+image does not provide these metadata.  Not every input image format
+has geospatial metadata attached.  In this case, the layer metadata
+can be used to provide this information.
+
+The convention is that once (wcs|ows)_extent and one of (wcs|ows)_size
+and (wcs|ows)_resolution is set in the layer metadata, all the
+coverage specific metadata will be retrieved from there.  Otherwise
+the source image is queried via GDAL, if possible.
+
+The relevant layer metadata fields are (wcs|ows)_bandcount, (wcs|ows)_imagemode,
+(wcs|ows)_native_format, and all `New band related metadata entries`_.
+
+New band related metadata entries
+---------------------------------
+
+In this section new WCS 2.0 specific layer metadata entries are 
+discussed.
+
+The following layer metadata fields can be used to return a more
+detailed description for the range type of a "virtual dataset"
+coverage.  A coverage is considered as a "virtual dataset" if the
+(wcs|ows)_extent metadata entry and one of the (wcs|ows)_size or
+(wcs|ows)_resolution metadata entries are set.
+
+First of all, the used version of metadata has to be identified. To
+identify the bands of a coverage, one of the following fields must be
+present:
+
+* (wcs|ows)_band_names (corresponding to WCS 2.0)
+* (wcs|ows)_rangeset_axes (corresponding to WCS 1.1)
+
+The type of these fields is a space delimited list of names, whereas
+the count of the names has to match the "bandcount" metadata
+field. These names are then used as a prefix for other metadata fields
+only concerning this band. The possible metadata keys are the
+following:
+
+* WCS 2.0:
+
+  * {band_name}_band_interpretation
+  * {band_name}_band_uom
+  * {band_name}_band_definition
+  * {band_name}_band_description
+  * {band_name}_interval
+
+* WCS 1.1
+
+  * {band_name}_semantic
+  * {band_name}_values_types
+  * {band_name}_values_semantic
+  * {band_name}_description
+  * {band_name}_interval
+
+All values are interpreted as strings, only "interval" is interpreted 
+as 2 double precision float values separated with a space.
+
+Also default values can be configured for every key. These have the
+same suffix as the band specific keys but start with (wcs|ows) instead
+of the bands name:
+
+* WCS 2.0:
+
+  * (wcs|ows)_band_interpretation
+  * (wcs|ows)_band_uom
+  * (wcs|ows)_band_definition
+  * (wcs|ows)_band_description
+  * (wcs|ows)_interval
+
+* WCS 1.1
+
+  * (wcs|ows)_semantic
+  * (wcs|ows)_values_types
+  * (wcs|ows)_values_semantic
+  * (wcs|ows)_description
+  * (wcs|ows)_interval
+  
+If no specific or default value is given, the output is dependent on 
+the metadata key. The UOM, for example will be set to 'W.m-2.Sr-1', 
+interval and significant figures will be determined according to the 
+image type and definition, description, and interpretation will not be 
+visible in the output at all.
+
+This example demonstrates the use of the band-specific metadata fields 
+with their default values:
+
+.. code-block:: mapfile
+
+  METADATA
+    "ows_srs" "EPSG:4326"
+    "wcs_extent" "47.5070762077246 16.038578977182 49.0103258976982 17.2500586851354"
+    
+    "wcs_size" "1200 1100"
+    "wcs_imagemode" "BYTE"
+    
+    "wcs_bandcount" "3"
+    "wcs_band_names" "BandA BandB BandC"
+    
+    #default values
+    "wcs_band_interpretation"   "This is default interpretation"
+    "wcs_band_uom"              "DefaultUOM"
+    "wcs_band_definition"       "DefaultDefinition"
+    "wcs_band_description"      "This is default description"
+    "wcs_interval"              "0 125"
+    "wcs_significant_figures"   "3"
+    
+    #specific band values
+    "BandA_band_interpretation" "This is a specific interpretation"
+    "BandA_band_uom"            "SpecificUOM"
+    "BandA_band_definition"     "SpecificDefinition"
+    "BandA_band_description"    "This is a specific description"
+    "BandA_interval"            "0 255"
+  END
+
+The above example would result in having BandA a more specific 
+description, and BandB and BandC having the default description. It 
+would also be possible to only use some of the specific values for 
+BandA and others from the default.
+
+If no default and specific values are given for the interval or 
+significant figures metadata field, the a default is generated from the 
+"imagemode" field, which itself defaults to FLOAT32.
+
+The new metadata fields also contain the *(wcs|ows)_nilvalues* and 
+*(wcs|ows)_nilvalues_reasons*
+
+* (wcs|ows)_nilvalues
+
+With this field, specific nilvalues can be set. The values have to be 
+delimited by a space.
+
+* (wcs|ows)_nilvalues_reasons
+
+This field defines the reasons for the specific nilvalues. The reasons 
+are also space delimited and reference the nilvalue with the same 
+index. The values for the reasons should be URIs or URNs.
+
+The following example demonstrates the use of both metadata fields:
+
+.. code-block:: mapfile
+
+  METADATA
+    "ows_srs" "EPSG:4326"
+    "wcs_extent" "47.5070762077246 16.038578977182 49.0103258976982 17.2500586851354"
+
+    "wcs_size" "1200 1100"
+    "wcs_imagemode" "BYTE"
+    "wcs_bandcount" "3"
+
+    "wcs_nilvalues" "0 255"
+    "wcs_nilvalues_reasons"
+      "urn:ogc:def:nil:OGC::BelowDetectionLimit urn:ogc:def:nil:OGC::AboveDetectionLimit"
+  END
+
+HTTP-POST support
+=================
+
+Since version 6.0 MapServer also supports HTTP-POST XML requests. All 
+requests possible via HTTP GET can also be sent via POST. POST requests 
+are possible for WCS 1.1 or WCS 2.0 which adhere to the according 
+standard.
+
+This is an example GetCapabilities request:
+
+.. code-block:: xml
+
+  <?xml version="1.0" encoding="UTF-8"?>
+  <wcs:GetCapabilities
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation="http://www.opengis.net/wcs/2.0
+      http://schemas.opengis.net/wcs/2.0/wcsAll.xsd"
+    xmlns="http://www.opengis.net/wcs/2.0"
+    xmlns:wcs='http://www.opengis.net/wcs/2.0'
+    xmlns:ows="http://www.opengis.net/ows/2.0"
+    service="WCS"> 
+    <ows:AcceptVersions>
+      <ows:Version>2.0.1</ows:Version>
+    </ows:AcceptVersions>
+    <ows:Sections>
+      <ows:Section>OperationsMetadata</ows:Section>
+      <ows:Section>ServiceIdentification</ows:Section>
+    </ows:Sections>
+  </wcs:GetCapabilities>
+  
+This is an example DescribeCoverage request, which is only valid for 
+WCS 2.0:
+
+.. code-block:: xml
+
+  <?xml version="1.0" encoding="UTF-8"?>
+  <wcs:DescribeCoverage 
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation="http://www.opengis.net/wcs/2.0
+      http://schemas.opengis.net/wcs/2.0/wcsAll.xsd"
+    xmlns="http://www.opengis.net/wcs/2.0"
+    xmlns:wcs="http://www.opengis.net/wcs/2.0"
+    service="WCS"
+    version="2.0.1">
+    <wcs:CoverageId>SOME_ID</wcs:CoverageId>
+  </wcs:DescribeCoverage>
+
+This example demonstrates the usage of a WCS 2.0 POST-XML GetCoverage 
+request:
+
+.. code-block:: xml
+
+  <?xml version="1.0" encoding="UTF-8"?>
+  <wcs:GetCoverage 
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation="http://www.opengis.net/wcs/2.0
+      http://schemas.opengis.net/wcs/2.0/wcsAll.xsd"
+    xmlns="http://www.opengis.net/wcs/2.0"
+    xmlns:wcs="http://www.opengis.net/wcs/2.0"
+    xmlns:wcscrs="http://www.opengis.net/wcs/crs/1.0"
+    xmlns:scal="http://www.opengis.net/wcs/scaling/1.0"
+    xmlns:int="http://www.opengis.net/wcs/interpolation/1.0"
+    service="WCS"
+    version="2.0.1">
+    <wcs:CoverageId>SOME_ID</wcs:CoverageId>
+    <wcs:DimensionTrim>
+      <wcs:Dimension>x</wcs:Dimension>
+      <wcs:TrimLow>16.5</wcs:TrimLow>
+      <wcs:TrimHigh>17.25</wcs:TrimHigh>
+    </wcs:DimensionTrim>
+    <wcs:DimensionTrim>
+      <wcs:Dimension>y</wcs:Dimension>
+      <wcs:TrimLow>47.9</wcs:TrimLow>
+    </wcs:DimensionTrim>
+    <wcs:format>image/tiff</wcs:format>
+    <wcs:mediaType>multipart/related</wcs:mediaType>
+    <wcs:Extension>
+      <wcscrs:subsettingCrs>http://www.opengis.net/def/crs/EPSG/0/4326</wcscrs:subsettingCrs>
+      <wcscrs:outputCrs>http://www.opengis.net/def/crs/EPSG/0/32611</wcscrs:outputCrs>
+      <scal:ScaleToSize>
+        <scal:TargetAxisSize>
+          <scal:axis>x</scal:axis>
+          <scal:targetSize>50</scal:targetSize>
+        </scal:TargetAxisSize>
+        <scal:TargetAxisSize>
+          <scal:axis>y</scal:axis>
+          <scal:targetSize>50</scal:targetSize>
+        </scal:TargetAxisSize>
+      </scal:ScaleToSize>
+      <int:Interpolation>
+        <int:globalInterpolation>NEAREST</int:globalInterpolation>
+      </int:Interpolation>
+    </wcs:Extension>
+  </wcs:GetCoverage>
+
+
+These are some other scaling options:
+
+.. code-block:: xml
+
+  <wcs:GetCoverage 
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation="http://www.opengis.net/wcs/2.0
+      http://schemas.opengis.net/wcs/2.0/wcsAll.xsd"
+    xmlns="http://www.opengis.net/wcs/2.0"
+    xmlns:wcs="http://www.opengis.net/wcs/2.0"
+    xmlns:scal="http://www.opengis.net/wcs/scaling/1.0"
+    service="WCS"
+    version="2.0.1">
+  
+    <!-- ... -->
+    <wcs:Extension>
+      <scal:ScaleByFactor>
+        <scal:scaleFactor>1.5</scal:scaleFactor>
+      </scal:ScaleByFactor>
+
+      <!-- or -->
+
+      <scal:ScaleAxesByFactor>
+        <scal:ScaleAxis>
+          <scal:axis>x</scal:axis>
+          <scal:scaleFactor>1.5</scal:scaleFactor>
+        </scal:ScaleAxis>
+        <scal:ScaleAxis>
+          <scal:axis>y</scal:axis>
+          <scal:scaleFactor>2.0</scal:scaleFactor>
+        </scal:ScaleAxis>
+      </scal:ScaleAxesByFactor>
+
+      <!-- or -->
+
+      <scal:ScaleToExtent>
+        <scal:TargetAxisExtent>
+          <scal:axis>x</scal:axis>
+          <scal:low>10</scal:low>
+          <scal:high>20</scal:high>
+        </scal:TargetAxisExtent>
+        <scal:TargetAxisExtent>
+          <scal:axis>y</scal:axis>
+          <scal:low>20</scal:low>
+          <scal:high>30</scal:high>
+        </scal:TargetAxisExtent>
+      </scal:ScaleToExtent>
+    </wcs:Extension>
+  </wcs:GetCoverage>
+
+
+GeoTIFF parameters are used as follows:
+
+.. code-block:: xml
+
+ <wcs:GetCoverage 
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation="http://www.opengis.net/wcs/2.0
+      http://schemas.opengis.net/wcs/2.0/wcsAll.xsd"
+    xmlns="http://www.opengis.net/wcs/2.0"
+    xmlns:wcs="http://www.opengis.net/wcs/2.0"
+    xmlns:geotiff="http://www.opengis.net/gmlcov/geotiff/1.0"
+    service="WCS"
+    version="2.0.1">
+  
+    <!-- ... -->
+    <wcs:Extension>
+      <geotiff:parameters>
+        <geotiff:compression>LZW</geotiff:compression>
+        <geotiff:predictor>Horizontal</geotiff:predictor>
+        <geotiff:interleave>Band</geotiff:interleave>
+        <geotiff:tiling>yes</geotiff:tiling>
+        <geotiff:tilewidth>256</geotiff:tilewidth>
+        <geotiff:tileheight>256</geotiff:tileheight>
+      </geotiff:parameters>
+    </wcs:Extension>
+  </wcs:GetCoverage>
+
+Please refer to the `WCS 2.0 Specification - XML/POST Protocol Binding
+Extension`_ and the `WCS 2.0 Schemas`_ for further information on POST
+request in WCS 2.0.
+
+.. index:: 
+   pair: WCS; Metadata
+
+Reference Section
+=================
+
+To avoid confusion only "wcs_*" and "ows_*" prefixed metadata entries
+are evaluated in OGC WCS services. Previous versions used "wms_*"
+prefixed entries as fallback which is dropped in version 6.0 in favor of
+forcing explicit decisions. The module will look for the "wcs_*" and
+"ows_*" metadata prefixes in this order.
+
+The following metadata are available in the setup of the mapfile:
+
+.. index:: 
+   triple: WCS; WEB; METADATA
+
+Web Object Metadata
+-------------------
+
+.. index:: 
+   triple: WCS; METADATA; ows_allowed_ip_list
+
+.. index:: 
+   triple: WCS; METADATA; wcs_allowed_ip_list
+
+**ows_allowed_ip_list** (or wcs_allowed_ip_list)
+
+- *Description:* (Optional) A list of IP addresses that will be
+  allowed access to the service.
+
+  Example::
+
+    METADATA
+      "ows_allowed_ip_list" "123.45.67.89 11.22.33.44"
+    END
+
+.. index:: 
+   triple: WCS; METADATA; ows_denied_ip_list
+
+.. index:: 
+   triple: WCS; METADATA; wcs_denied_ip_list
+
+**ows_denied_ip_list** (or wcs_denied_ip_list)
+
+- *Description:* (Optional) A list of IP addresses that will be denied
+  access to the service.
+
+  Example::
+
+    METADATA
+      "ows_denied_ip_list" "123.45.67.89 11.22.33.44"
+    END
+
+.. index:: 
+   triple: WCS; METADATA; wcs_abstract
+
+**wcs_abstract**
+
+- *Description:* (Optional) A brief description of the service, maps
+  to ows:Abstract (WCS 1.1+ only).
+
+.. index:: 
+   triple: WCS; METADATA; wcs_accessconstraints
+
+**wcs_accessconstraints**
+
+- *Description:* (Optional) A list of codes describing any access
+  constraints imposed by the service provider. The keyword NONE is
+  reserved to mean no access constraints are imposed.
+
+.. index:: 
+   triple: WCS; METADATA; wcs_address
+
+.. index:: 
+   triple: WCS; METADATA; wcs_city
+
+.. index:: 
+   triple: WCS; METADATA; wcs_contactelectronicmailaddress
+
+.. index:: 
+   triple: WCS; METADATA; wcs_contactfacimiletelephone
+
+.. index:: 
+   triple: WCS; METADATA; wcs_contactorganization
+
+.. index:: 
+   triple: WCS; METADATA; wcs_contactperson
+
+.. index:: 
+   triple: WCS; METADATA; wcs_contactposition
+
+.. index:: 
+   triple: WCS; METADATA; wcs_contactvoicetelephone
+
+.. index:: 
+   triple: WCS; METADATA; wcs_country
+
+.. index:: 
+   triple: WCS; METADATA; wcs_postcode
+
+.. index:: 
+   triple: WCS; METADATA; wcs_stateorprovince
+
+**wcs_address, wcs_city, wcs_contactelectronicmailaddress,
+wcs_contactfacimiletelephone, wcs_contactorganization,
+wcs_contactperson, wcs_contactposition, wcs_contactvoicetelephone,
+wcs_country, wcs_postcode, wcs_stateorprovince**
+
+- *Description:* (Optional) Contact address information. If provided
+  then all twelve metadata items are required.  You can also use the
+  `responsibleparty` metadata instead.
+
+.. index:: 
+   triple: WCS; METADATA; wcs_description
+
+**wcs_description**
+
+- *Description:* (Optional) A description of the server. 
+
+.. index:: 
+   triple: WCS; METADATA; wcs_enable_request
+
+**wcs_enable_request** (or **ows_enable_request**)
+
+- *Description:* Space separated list of requests to enable.
+  The default is none.
+  The following requests can be enabled:
+  `GetCapabilities`, `GetCoverage` and `DescribeCoverage`.
+  A "!" in front of a request will disable the request.
+  "*" enables all requests.
+
+- *Examples:*
+
+  To enable only `GetCapabilities` and `GetCoverage`:
+
+  ::
+
+    "wcs_enable_request" "GetCapabilities GetCoverage"
+
+  To enable all requests except `GetCapabilities`
+
+  ::
+
+    "wcs_enable_request" "* !GetCapabilities"
+
+.. index:: 
+   triple: WCS; METADATA; wcs_fees
+
+**wcs_fees**
+
+- *Description:* (Optional) A text string indicating any fees imposed
+  by the service provider.
+
+.. index:: 
+   triple: WCS; METADATA; wcs_keywords
+
+**wcs_keywords**
+
+- *Description:* (Optional) Short words for catalog searching. 
+
+.. index:: 
+   triple: WCS; METADATA; wcs_label
+
+**wcs_label**
+
+- *Description:* (Required) A human-readable label for the server.  
+
+.. index:: 
+   triple: WCS; METADATA; wcs_metadatalink_format
+
+**wcs_metadatalink_format**
+
+- *Description:* (Optional) The file format MIME type of the metadata
+  record (e.g.  "text/plain"). The web metadata wcs_metadatalink_type
+  and wcs_metadatalink_href must also be specified.
+
+.. index:: 
+   triple: WCS; METADATA; wcs_metadatalink_href
+
+**wcs_metadatalink_href**
+
+- *Description:* (Optional) The URL to the server's metadata. The web
+  metadata wcs_metadatalink_format and wcs_metadatalink_type must also
+  be specified.
+
+.. index:: 
+   triple: WCS; METADATA; wcs_metadatalink_type
+
+**wcs_metadatalink_type**
+
+- *Description:* (Optional) The standard to which the metadata
+  complies. Currently only two types are valid: "TC211" which refers
+  to [ISO 19115], and "FGDC" which refers to [FGDC-STD-001-1988]. The
+  web metadata wcs_metadatalink_format and wcs_metadatalink_href must
+  also be specified.
+
+.. index:: 
+   triple: WCS; METADATA; wcs_name
+
+**wcs_name**
+
+- *Description:* (Optional) A name for the server. 
+
+.. index:: 
+   triple: WCS; METADATA; wcs_responsibleparty_address_administrativearea
+
+.. index:: 
+   triple: WCS; METADATA; wcs_responsibleparty_address_city
+
+.. index:: 
+   triple: WCS; METADATA; wcs_responsibleparty_address_country
+
+.. index:: 
+   triple: WCS; METADATA; wcs_responsibleparty_address_deliverypoint
+
+.. index:: 
+   triple: WCS; METADATA; wcs_responsibleparty_address_electronicmailaddress
+
+.. index:: 
+   triple: WCS; METADATA; wcs_responsibleparty_address_postalcode
+
+.. index:: 
+   triple: WCS; METADATA; wcs_responsibleparty_individualname
+
+.. index:: 
+   triple: WCS; METADATA; wcs_responsibleparty_onlineresource
+
+.. index:: 
+   triple: WCS; METADATA; wcs_responsibleparty_organizationname
+
+.. index:: 
+   triple: WCS; METADATA; wcs_responsibleparty_phone_facsimile
+
+.. index:: 
+   triple: WCS; METADATA; wcs_responsibleparty_phone_voice
+
+.. index:: 
+   triple: WCS; METADATA; wcs_responsibleparty_postionname
+
+**wcs_responsibleparty_address_administrativearea,
+wcs_responsibleparty_address_city,
+wcs_responsibleparty_address_country,
+wcs_responsibleparty_address_deliverypoint,
+wcs_responsibleparty_address_electronicmailaddress,
+wcs_responsibleparty_address_postalcode,
+wcs_responsibleparty_individualname,
+wcs_responsibleparty_onlineresource,
+wcs_responsibleparty_organizationname,
+wcs_responsibleparty_phone_facsimile,
+wcs_responsibleparty_phone_voice, wcs_responsibleparty_postionname**
+
+- *Description:* (Optional) Contact address information. If provided
+  then all twelve metadata items are required.  You can also use the
+  address* metadata instead.
+
+.. index:: 
+   triple: WCS; METADATA; wcs_service_onlineresource
+
+**wcs_service_onlineresource**
+
+- *Description:* (Optional) Top-level onlineresource URL. MapServer
+  uses the onlineresource metadata (if provided) in the following
+  order:
+         
+  1. wcs_service_onlineresource
+         
+  2. ows_service_onlineresource
+         
+  3. wcs_onlineresource (or automatically generated URL, see the
+     onlineresource section of this document)
+
+
+.. index:: 
+   triple: WCS; LAYER; METADATA
+
+Layer Object Metadata
+---------------------
+
+.. index:: 
+   triple: WCS; METADATA; ows_allowed_ip_list
+
+**ows_allowed_ip_list**
+  Same as ows_allowed_ip_list in the Web Object. 
+
+.. index:: 
+   triple: WCS; METADATA; ows_denied_ip_list
+
+**ows_denied_ip_list**
+  Same as ows_denied_ip_list in the Web Object. 
+
+.. index:: 
+   triple: WCS; METADATA; wcs_abstract
+
+**wcs_abstract**
+
+- *Description:* (Optional) A brief description of the service, maps
+  to ows:Abstract (WCS 1.1+ only).
+
+.. index:: 
+   triple: WCS; METADATA; wcs_description
+
+**wcs_description**
+
+- *Description:* (Optional) A description of the layer.
+
+.. index:: 
+   triple: WCS; METADATA; wcs_enable_request
+
+**wcs_enable_request** (or **ows_enable_request**)
+
+- *Description:* Space separated list of requests to enable.
+  The default is none.
+  The following requests can be enabled:
+  `GetCapabilities`, `GetCoverage` and `DescribeCoverage`.
+  A "!" in front of a request will disable the request.
+  "*" enables all requests.
+
+- *Examples:*
+
+  To enable only `GetCapabilities` and `GetCoverage`:
+
+  ::
+
+    "wcs_enable_request" "GetCapabilities GetCoverage"
+
+  To enable all requests except `GetCapabilities`
+
+  ::
+
+    "wcs_enable_request" "* !GetCapabilities"
+
+.. index:: 
+   triple: WCS; METADATA; wcs_extent
+
+**wcs_extent**
+
+- *Description:* (Optional) Bounding box of layer, which must be
+  provided for tiled data.  Comma-delimited, in the format of:
+  minx,miny,maxx,maxy
+
+.. index:: 
+   triple: WCS; METADATA; wcs_formats
+
+**wcs_formats**
+
+- *Description:* (Optional) The formats which may be requested for
+  this layer, separated by a space. (e.g. "GTiff MrSID")
+
+.. index:: 
+   triple: WCS; METADATA; wcs_keywords
+
+**wcs_keywords**
+
+- *Description:* (Optional) Short words for catalog searching. 
+
+.. index:: 
+   triple: WCS; METADATA; wcs_label
+
+**wcs_label**
+
+- *Description:* (Required) A human-readable label for the layer.  
+
+.. index:: 
+   triple: WCS; METADATA; wcs_metadatalink_format
+
+**wcs_metadatalink_format**
+
+- *Description:* (Optional) The file format MIME type of the metadata
+  record (e.g.  "text/plain"). The web metadata wcs_metadatalink_type
+  and wcs_metadatalink_href must also be specified.
+
+.. index:: 
+   triple: WCS; METADATA; wcs_metadatalink_href
+
+**wcs_metadatalink_href**
+
+- *Description:* (Optional) The URL to the layer's metadata. The web
+  metadata wcs_metadatalink_format and wcs_metadatalink_type must also
+  be specified.
+
+.. index:: 
+   triple: WCS; METADATA; wcs_metadatalink_type
+
+**wcs_metadatalink_type**
+
+- *Description:* (Optional) The standard to which the metadata
+  complies. Currently only two types are valid: "TC211" which refers
+  to [ISO 19115], and "FGDC" which refers to [FGDC-STD-001-1988]. The
+  web metadata wcs_metadatalink_format and wcs_metadatalink_href must
+  also be specified.
+  
+.. index:: 
+   triple: WCS; METADATA; wcs_name
+
+**wcs_name**
+
+- *Description:* (Optional) A name for the layer. 
+
+.. index:: 
+   triple: WCS; METADATA; wcs_nativeformat
+
+**wcs_nativeformat**
+
+- *Description:* (Optional) The current format of the served raster
+   layer. (e.g. "GTiff") (used for WCS 1.0)
+
+.. index:: 
+   triple: WCS; METADATA; wcs_native_format
+
+**wcs_native_format**
+
+- *Description:* (Optional) The mime-type of the current format of the
+   served raster layer (e.g. "image/tiff").  This field is used when
+   coverage metadata is provided by the layer metadata only (when
+   wcs_extent and wcs_size/wcs_resolution are set).  When set, WCS 2.0
+   GetCoverage requests will use this format when no other format is
+   specified (the format parameter is optional then).
+
+*Axes Descriptions*
+
+MapServer allows you define a number of these for a layer. Individual
+axis are identified by name when defining specific metadata
+(e.g. description). All defined axes must be listed in the
+rangeset_axes metadata tag so MapServer knows in advance what to
+expect. A special rangeset for multiband date is automatically
+generated by adding the name "bands" to the rangeset_axes list.  If
+found MapServer will automatically generate metadata for the image
+bands.  You may of course extend that basic support using the naming
+conventions below.
+
+.. index:: 
+   triple: WCS; METADATA; wcs_rangeset_axes
+
+**wcs_rangeset_axes**
+
+- *Description:* (Optional) Delimited list of defined range sets.  If
+  defined, you can also use the following nine metadata items, where
+  *rangeset axis* matches the axis name provided in this
+  *wcs_rangeset_axes* metadata:
+
+    **{rangeset axis}_semantic**
+
+    **{rangeset axis}_refsys**
+
+    **{rangeset axis}_refsyslabel**
+
+    **{rangeset axis}_description**
+
+    **{rangeset axis}_label**
+
+    **{rangeset axis}_values**
+
+    **{rangeset axis}_values_semantic**
+
+    **{rangeset axis}_values_type**
+
+    **{rangeset axis}_interval**
+
+.. index:: 
+   triple: WCS; METADATA; wcs_rangeset_label
+
+**wcs_rangeset_label**
+
+- *Description:* (Required for DescribeCoverage request)
+
+.. index:: 
+   triple: WCS; METADATA; wcs_rangeset_name
+
+**wcs_rangeset_name**
+
+- *Description:* (Required for DescribeCoverage request)
+
+.. index:: 
+   triple: WCS; METADATA; wcs_srs
+
+**wcs_srs**
+
+- *Description:* (Optional) Spatial reference system of the layer, in
+  the form of: EPSG:code (e.g. EPSG:42304)
+
+.. index:: 
+   triple: WCS; METADATA; wcs_timeitem
+
+**wcs_timeitem**
+
+- *Description:* (Optional) The attribute in the spatio/temporal index
+  that contains time values.
+
+.. index:: 
+   triple: WCS; METADATA; wcs_timeposition
+
+**wcs_timeposition**
+
+- *Description:* (Optional) A list of the start and end time of a
+  given coverage (i.e. "2000-11-11T11:11:11Z,2001-11-11T11:11:11Z"),
+  used when advertising GetCapabilities.
+
+
+Rules for handling SRS in a MapServer WCS
+=========================================
+
+TODO!
+
+Spatio/Temporal Indexes
+=======================
+
+MapServer has long supported a method of breaking a dataset into smaller, more
+manageable pieces or tiles. In this case a shapefile is used to store the
+boundary of each tile, and an attribute holds the location of the actual data.
+Within a MapServer mapfile the layer keywords TILEINDEX and TILEITEM are used
+to activate tiling.
+
+Consider the example where an organization wants to serve hundreds or even
+thousands of MODIS scenes. Five images cover the spatial extent and each group
+of five varies by date of acquisition. This turns out to be a fairly common
+scenario for organizations interested in WCS, one that the existing tiling
+support does not adequately address. In previous versions of MapServer a
+developer would have to create one tile index and one layer definition for
+each group of five images. This could result in configuration files that are
+prohibitively long and difficult to manage.
+
+In order to more efficiently support the WCS specification a new tiling scheme
+has been implemented within MapServer. One that supports spatial sub-setting,
+but also ad hoc sub-setting based on any attributes found within tile index.
+In many cases a temporal attribute could be used, but sub-setting is not
+limited to that case. The new scheme introduces the concept of tile index
+layers, that is, a separate layer definition is used to describe the tile
+index dataset. With this we get all the benefits of any MapServer layer, most
+importantly we can apply MapServer filters to the data. Filters can be defined
+at runtime using MapServer CGI, MapScript or via the WCS server interface. The
+syntax for the layer using the index remains unchanged except that the value
+for :ref:`TILEINDEX` refers to the index layer instead of an external shapefile.
+
+So, looking at the example above again we can reduce our MapServer
+configuration to two layer definitions, one for the tile index and one for the
+imagery itself. Extracting a single dates worth of imagery is now a matter of
+setting the appropriate filter within the tile index layer.
+
+Building Spatio-Temporal Tile Indexes
+-------------------------------------
+
+Developing these tile indexes is more difficult than basic indexes simply
+because there are no ready-made tools to do so. Fortunately we can leverage
+existing tool available within MapServer or supporting libraries such as GDAL
+by post processing their output.
+
+Taking the above example, building an index is relatively simple task if you
+are willing to roll up your sleeves and write a bit of code. First, the basic
+spatial index needs to be built. The GDAL utility gdaltindex already does
+this. Simply point gdaltindex at the directory containing the collection of
+MODIS images and it will build a shapefile index suitable for use with
+MapServer. The next step would be to add the temporal information. The pseudo
+code would look something like:
+
+- open the index .dbf file for reading
+
+- create a new column to hold the image acquisition date
+
+- for each image; 1) extract the image acquisition date and 2) insert it into 
+  the new column
+  
+- close the index .dbf file
+
+This general approach could be used for many cases. A scripting language such
+as Perl, PHP or Python works well since they all have readily available
+modules for manipulating .dbf files. A worst case would involve hand editing
+the resulting .dbf file using a desktop tool such as Mircosoft Access or ESRI
+Arcview.
+
+WCS 2.0 Application Profile - Earth Observation (EO-WCS)
+========================================================
+
+OGC is currently discussing the adoption of an Earth Observation 
+(EO) Application Profile for WCS 2.0 (EO-WCS) (see `public RFC on EO-WCS`_). 
+For an implementation please refer to the Open Source project `EOxServer`_ 
+which already implements this proposed EO-WCS based on MapServer.
+
+.. _wcs_to-do:
+
+To-do Items and Known Limitations
+=================================
+
+- MapServer does not derive all of the metadata it could from a given dataset. 
+  For example, you must explicitly list time periods covered by a layer. This 
+  should get better with time.
+
+- Only spatial, simple temporal and radiometric band subsetting is possible 
+  with the current implementation. Furture enhancements should allow for arbitrary
+  subsets based on pixel values or tile/image attributes.
+
+- The available set of WCS 2.0 specification documents is not yet 
+  complete. Thus, for some implementation details, the content of some 
+  forthcoming extensions had to be anticipated based on the approaches 
+  taken for WCS 1.1 and 1.0. The implementation will be adjusted as 
+  soon as new specification documents become available.
+
+- If you want to use libxml2 or its derived tools (like xmllint) for 
+  validation be aware that there is a currently bug in libxml2 that 
+  breaks the validation of GML 3.2.1.
+
+
+.. #### rST Link Section ####
+
+.. _`Open Geospatial Consortium's (OGC) Web Coverage Service Interfaces Implementation Specification version 1.0.0`: https://portal.opengeospatial.org/files/?artifact_id=3837
+.. _`WCS 1.0.0 specification`: https://portal.opengeospatial.org/files/?artifact_id=3837
+.. _`WCS 1.1.1c1 specification`: http://portal.opengeospatial.org/files/?artifact_id=22560
+.. _`OGC'c WCS Standard page`: http://www.opengeospatial.org/standards/wcs
+.. _`GML 3.2.1 Application Schema Coverages`: http://portal.opengeospatial.org/files/?artifact_id=48553
+.. _`WCS 2.0 Specification - Core`: http://portal.opengeospatial.org/files/?artifact_id=48428
+.. _`WCS 2.0 Specification - KVP Protocol Binding Extension`: http://portal.opengeospatial.org/files/?artifact_id=41439
+.. _`WCS 2.0 Specification - XML/POST Protocol Binding Extension`: http://portal.opengeospatial.org/files/?artifact_id=41440
+.. _`WCS 2.0 Specification - Interpolation Extension`: https://portal.opengeospatial.org/files/?artifact_id=54502
+.. _`WCS 2.0 Specification - Range Subsetting Extension`: https://portal.opengeospatial.org/files/?artifact_id=54503
+.. _`WCS 2.0 Specification - GeoTIFF Format Extension`: (link not yet available)
+.. _`WCS 2.0 Specification - CRS Extension`: https://portal.opengeospatial.org/files/?artifact_id=54209
+.. _`WCS 2.0 Specification - Scaling Extension`: https://portal.opengeospatial.org/files/?artifact_id=54504
+.. _`WCS 2.0 Schemas`: http://schemas.opengis.net/wcs/2.0/
+.. _`OWS Common 2.0`: http://portal.opengeospatial.org/files/?artifact_id=38867
+.. _`Open Geospatial Consortium (OGC)`: http://www.opengeospatial.org/
+.. _`MapServer for Windows (MS4W)`: http://www.ms4w.com
+.. _`WCS 2.0 tests in msautotest`: https://github.com/mapserver/msautotest/blob/master/wxs/wcs_simple.map
+.. _`MS RFC 67`: http://mapserver.org/development/rfc/ms-rfc-67.html
+.. _`public RFC on EO-WCS`: http://www.opengeospatial.org/standards/requests/81
+.. _`EOxServer`: http://eoxserver.org
+.. _`WCS DescribeCoverage live example`: http://demo.mapserver.org/cgi-bin/wcs?SERVICE=WCS&VERSION=1.0.0&REQUEST=DescribeCoverage&COVERAGE=modis
+.. _`WCS GetCapabilities live example`: http://demo.mapserver.org/cgi-bin/wcs?SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCapabilities
+.. _`WCS GetCoverage live example`:  http://demo.mapserver.org/cgi-bin/wcs?SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCoverage&COVERAGE=modis-001&CRS=EPSG:26915&BBOX=159707,4597395,1400707,5501395&WIDTH=400&HEIGHT=300&FORMAT=GEOTIFF_RGB

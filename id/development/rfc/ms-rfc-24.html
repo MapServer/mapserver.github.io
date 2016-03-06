@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MS RFC 24: Mapscript memory management &mdash; MapServer 7.0.0 documentation</title>
+    <title>MS RFC 24: Mapscript memory management &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Tentang dokumen ini" href="../../about.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../../index.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -127,6 +127,15 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigasi</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Indeks Umum"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -211,7 +220,7 @@ of mapserver-HEAD as of 31st December 2006.</p>
 <div class="section" id="object-equality-identity">
 <h3>Object equality/identity<a class="headerlink" href="#object-equality-identity" title="Link permanen untuk headline ini">¶</a></h3>
 <p>Consider the following Java MapScript code:</p>
-<div class="highlight-python"><div class="highlight"><pre>mapObj map=new mapObj(&quot;my.map&quot;);
+<div class="highlight-python"><div class="highlight"><pre><span></span>mapObj map=new mapObj(&quot;my.map&quot;);
 layerObj layer=new layerObj(null);
 // add layer to the map
 int index=map.insertLayer(layer, -1);
@@ -227,7 +236,7 @@ System.out.println(newLayer==layer);
 </pre></div>
 </div>
 <p>when executed will produce the following output:</p>
-<div class="highlight-python"><div class="highlight"><pre>null==Change me
+<div class="highlight-python"><div class="highlight"><pre><span></span>null==Change me
 false
 </pre></div>
 </div>
@@ -241,7 +250,7 @@ This currently happens for the most used insert methods (i.e. <em>insertClass</e
 <p>Objects created through MapScript can be garbage-collected &#8220;early&#8221;, when there
 are live objects still referencing them.
 See this example in Java:</p>
-<div class="highlight-python"><div class="highlight"><pre>mapObj map=new mapObj(&quot;data/emptymap.map&quot;);
+<div class="highlight-python"><div class="highlight"><pre><span></span>mapObj map=new mapObj(&quot;data/emptymap.map&quot;);
 
 layerObj layer=new layerObj(map);
 layer.setName(&quot;Layer 0&quot;);
@@ -261,7 +270,7 @@ clazz.getLayer().getMap().draw();
 </pre></div>
 </div>
 <p>and its Perl equivalent:</p>
-<div class="highlight-python"><div class="highlight"><pre>use mapscript;
+<div class="highlight-python"><div class="highlight"><pre><span></span>use mapscript;
 
 $map = new mapscript::mapObj(&quot;../../tests/test.map&quot;);
 $layer = new mapscript::layerObj($map);
@@ -321,8 +330,8 @@ called <em>refcount</em>.</p>
 for debugging</p>
 <p>The reference counter increment and decrement will be implemented by the
 following macros:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#define MS_REF_INCR(obj) obj-&gt;refcount++</span>
-<span class="c">#define MS_REF_DECR(obj) (--(obj-&gt;refcount))</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#define MS_REF_INCR(obj) obj-&gt;refcount++</span>
+<span class="c1">#define MS_REF_DECR(obj) (--(obj-&gt;refcount))</span>
 </pre></div>
 </div>
 <p>An alternative could be to keep the reference counting in a global hashmap,
@@ -347,7 +356,7 @@ experience a tini tiny (if any at all) performance drop because of the
 extra if and ++</li>
 <li>we can always opt to introduce USE_MAPSCRIPT later</li>
 <li>it simplifies the build process maintaining exactly like it&#8217;s been until now</li>
-<li>it simplifies the developer&#8217;s life because of one less define to mantain</li>
+<li>it simplifies the developer&#8217;s life because of one less define to maintain</li>
 </ol>
 <p>The following is the text (now obsolete) documenting USE_MAPSCRIPT.</p>
 <p>Since this member will not be used by the CGI this RFC proposes that:</p>
@@ -358,7 +367,7 @@ extra if and ++</li>
 to build any MapScript (with the exception of php, maybe)</li>
 </ol>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre>/* CLASS OBJECT - basic symbolization and classification information */
+<div class="highlight-python"><div class="highlight"><pre><span></span>/* CLASS OBJECT - basic symbolization and classification information */
 typedef struct class_obj{
 #ifndef USE_MAPSCRIPT
         #ifdef SWIG
@@ -400,7 +409,7 @@ the layer operations that use the parent map reference.</p>
 </div>
 <div class="section" id="change-arrays-of-structures-in-arrays-of-pointers">
 <h3>Change arrays of structures in arrays of pointers<a class="headerlink" href="#change-arrays-of-structures-in-arrays-of-pointers" title="Link permanen untuk headline ini">¶</a></h3>
-<p>This change will occurr at the C-level and is quite an undertaking. Initially
+<p>This change will occur at the C-level and is quite an undertaking. Initially
 and for the purpose of this RFC the size of the arrays will still be fixed as
 it is now. The modification of the code will be made a way that future RFC
 addressing dynamically-sized arrays can build upon.</p>
@@ -413,7 +422,7 @@ the new feature</li>
 <li>the macro will be modified to suit the implementation at previous item</li>
 </ol>
 <p>To implement item 1 we will use a perl pie like the following:</p>
-<div class="highlight-python"><div class="highlight"><pre>perl -pi -e &quot;s/([mM])ap-&gt;layers\[(.*?)\]\]\./GET_LAYER(\1ap, \2\])-&gt;/g&quot; *.c
+<div class="highlight-python"><div class="highlight"><pre><span></span>perl -pi -e &quot;s/([mM])ap-&gt;layers\[(.*?)\]\]\./GET_LAYER(\1ap, \2\])-&gt;/g&quot; *.c
 perl -pi -e &quot;s/([mM])ap-&gt;layers\[(.*?)\]\./GET_LAYER(\1ap, \2)-&gt;/g&quot; *.c
 perl -pi -e &quot;s/([mM])ap-&gt;layers\[(.*?)\]\]/GET_LAYER(\1ap, \2\])/g&quot; *.c
 perl -pi -e &quot;s/([mM])ap-&gt;layers\[(.*?)\]/GET_LAYER(\1ap, \2)/g&quot; *.c
@@ -424,7 +433,7 @@ perl -pi -e &quot;s/src-&gt;layers\[(.*?)\]/GET_LAYER(src, \1)/g&quot; *.c
 </pre></div>
 </div>
 <p>and this is the macro that will be used:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#define GET_LAYER(map, pos) map-&gt;layers[pos]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#define GET_LAYER(map, pos) map-&gt;layers[pos]</span>
 </pre></div>
 </div>
 <p>This will leave only very few occurrences (about 4 or 5) out that must be
@@ -450,7 +459,7 @@ the insert operation (<em>layerobject.c</em>, line 52, function <em>msInsertClas
 <h3>Destructors obey the reference counter<a class="headerlink" href="#destructors-obey-the-reference-counter" title="Link permanen untuk headline ini">¶</a></h3>
 <p>The various free* methods must check the counter before freeing memory.
 This will be implemented in the native code as in the following example:</p>
-<div class="highlight-python"><div class="highlight"><pre>void msFreeMap(mapObj *map) {
+<div class="highlight-python"><div class="highlight"><pre><span></span>void msFreeMap(mapObj *map) {
         if(!map) return;
         if ( MS_REF_DECR(obj) &gt; 0) return;
         // go on destroying the object as usual
@@ -476,19 +485,19 @@ because SWIG will acquire object ownership by default and is only a matter of
 removing all <em>%newobject</em> statements in the swig interface files.</p>
 <p>At the moment there are 58 <em>%newobject</em> statements.</p>
 <p>C# must also change the following three lines in <em>csmodule.i</em>:</p>
-<div class="highlight-python"><div class="highlight"><pre>csharp/csmodule.i:375:  if (map != null) this.swigCMemOwn = false;$excode
+<div class="highlight-python"><div class="highlight"><pre><span></span>csharp/csmodule.i:375:  if (map != null) this.swigCMemOwn = false;$excode
 csharp/csmodule.i:379:  if (layer != null) this.swigCMemOwn = false;$excode
 csharp/csmodule.i:383:  if (parent_class != null) this.swigCMemOwn = false;$excode
 </pre></div>
 </div>
-<p>or drop the contructor customization altogether.</p>
+<p>or drop the constructor customization altogether.</p>
 </div>
 <div class="section" id="java-mapscript-code-example-for-layerobj">
 <h3>JAVA: MapScript code example for layerObj<a class="headerlink" href="#java-mapscript-code-example-for-layerobj" title="Link permanen untuk headline ini">¶</a></h3>
 <p>Tamas has proposed a more object oriented approach to this problem, which can
 be adopted for those languages that support OOrientation.</p>
 <p>Code example for layerObj (<em>javamodule.i</em>):</p>
-<div class="highlight-python"><div class="highlight"><pre>/*
+<div class="highlight-python"><div class="highlight"><pre><span></span>/*
    Modified constructor according to:
    - cache population and sync, item 3.2
 */
@@ -525,7 +534,7 @@ be adopted for those languages that support OOrientation.</p>
 <div class="section" id="perl-mapscript-code-example-for-layerobj">
 <h3>PERL: MapScript code example for layerObj<a class="headerlink" href="#perl-mapscript-code-example-for-layerobj" title="Link permanen untuk headline ini">¶</a></h3>
 <p>Code example for layerObj (<em>plmodule.i</em>):</p>
-<div class="highlight-python"><div class="highlight"><pre>%feature(&quot;shadow&quot;) layerObj(mapObj *map)
+<div class="highlight-python"><div class="highlight"><pre><span></span>%feature(&quot;shadow&quot;) layerObj(mapObj *map)
 %{
 sub new {
         my $pkg = shift;
@@ -585,8 +594,8 @@ For ruby we&#8217;ll probably have to go a different route and implement the
 <p>The two following section describe in detail the required SWIG-MapScript
 features (injection of code and constructor customization).
 Each language gets then a specific section to deal with its own characteristics</p>
-<div class="section" id="checking-swig-mapscript-capabilites-javacode">
-<h3>Checking SWIG-Mapscript capabilites: %javacode<a class="headerlink" href="#checking-swig-mapscript-capabilites-javacode" title="Link permanen untuk headline ini">¶</a></h3>
+<div class="section" id="checking-swig-mapscript-capabilities-javacode">
+<h3>Checking SWIG-Mapscript capabilities: %javacode<a class="headerlink" href="#checking-swig-mapscript-capabilities-javacode" title="Link permanen untuk headline ini">¶</a></h3>
 <p>Swig provides the equivalent of <em>%javacode</em> for the following languages:</p>
 <ol class="arabic simple">
 <li>perl through %perlcode</li>
@@ -634,7 +643,7 @@ exactly as described.</p>
 </div>
 <div class="section" id="ruby">
 <h3>Ruby<a class="headerlink" href="#ruby" title="Link permanen untuk headline ini">¶</a></h3>
-<p>Needs investigation, probably we&#8217;ll have to use rb_gc_* funtions to mark objects
+<p>Needs investigation, probably we&#8217;ll have to use rb_gc_* functions to mark objects
 and prevent their garbage collection or use <em>%trackobjects</em>.
 Ruby will not implement this RFC as of item 3.2.</p>
 </div>
@@ -647,7 +656,7 @@ as of item 3.2.</p>
 <div class="section" id="php">
 <h3>PHP<a class="headerlink" href="#php" title="Link permanen untuk headline ini">¶</a></h3>
 <p>PHP MapScript does not rely on SWIG, but since most of the code is native it should be
-possibile to adopt this RFC.</p>
+possible to adopt this RFC.</p>
 </div>
 </div>
 <div class="section" id="implementation-checklist">
@@ -690,7 +699,7 @@ with one of the following marks:</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>mapObj (contructor)</td>
+<tr class="row-even"><td>mapObj (constructor)</td>
 <td>+</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
@@ -2209,7 +2218,7 @@ and be described under this section.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#implementation-plan">Implementation plan</a><ul>
-<li><a class="reference internal" href="#checking-swig-mapscript-capabilites-javacode">Checking SWIG-Mapscript capabilites: %javacode</a></li>
+<li><a class="reference internal" href="#checking-swig-mapscript-capabilities-javacode">Checking SWIG-Mapscript capabilities: %javacode</a></li>
 <li><a class="reference internal" href="#checking-swig-mapscript-capabilities-constructor-customization">Checking SWIG-MapScript capabilities: constructor customization</a></li>
 <li><a class="reference internal" href="#java-and-c-sharp">Java and C-Sharp</a></li>
 <li><a class="reference internal" href="#perl">Perl</a></li>
@@ -2265,11 +2274,11 @@ and be described under this section.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

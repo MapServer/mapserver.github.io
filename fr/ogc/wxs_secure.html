@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Comment configurer MapServer comme client pour accéder à un service via https &mdash; MapServer 7.0.0 documentation</title>
+    <title>Comment configurer MapServer comme client pour accéder à un service via https &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../index.html" />
     <link rel="up" title="Gestion et configuration des standards OGC" href="index.html" />
     <link rel="next" title="Wrappers MapScript pour les Services WxS" href="mapscript.html" />
     <link rel="prev" title="Serveur SOS" href="sos_server.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="mapscript.html" title="Wrappers MapScript pour les Services WxS"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="sos_server.html" title="Serveur SOS"
+             accesskey="P">précédent</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.1</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Gestion et configuration des standards OGC</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -174,11 +191,11 @@
 <h2><a class="toc-backref" href="#table-of-contents">Installation par défaut (avec apt-get install, rpm, manuelle, etc)</a><a class="headerlink" href="#default-installation-with-apt-get-install-rpm-manual-etc" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Le fichier &#8220;CA bundle&#8221; de CURL devrait être situé dans le répertoire par défaut.</p>
 <p>Vérifiez votre connection avec CURL en ligne de commande:</p>
-<div class="highlight-python"><div class="highlight"><pre>curl https://targethostname:port/gmap-demo/gmap75.phtml
+<div class="highlight-python"><div class="highlight"><pre><span></span>curl https://targethostname:port/gmap-demo/gmap75.phtml
 </pre></div>
 </div>
 <p>Editez votre fichier map et ajoutez l&#8217;URL de connection WMS.  Par exemple:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">CONNECTION</span> <span class="s">&quot;https://domainname:port/cgi-bin/mapserv?map=/path/to/wms.map&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">CONNECTION</span> <span class="s">&quot;https://domainname:port/cgi-bin/mapserv?map=/path/to/wms.map&quot;</span>
 <span class="k">CONNECTIONTYPE</span> <span class="nb">WMS</span>
 </pre></div>
 </div>
@@ -187,17 +204,19 @@
 <div class="section" id="non-standard-installation-common-with-ms4w-and-fgs">
 <h2><a class="toc-backref" href="#table-of-contents">Installation non courante (commune avec ms4w et fgs</a><a class="headerlink" href="#non-standard-installation-common-with-ms4w-and-fgs" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Si vous avez l&#8217;erreur suivante, cela veut dire que votre fichier &#8220;CA bundle&#8221; n&#8217;est pas trouvé.</p>
-<div class="highlight-python"><div class="highlight"><pre>curl https://localhost:port/gmap-demo/gmap75.phtml
+<div class="highlight-python"><div class="highlight"><pre><span></span>curl https://localhost:port/gmap-demo/gmap75.phtml
 curl: (77) error setting certificate verify locations:
   CAfile: /home/nsavard/fgsfull/share/curl/cacert.pem
   CApath: none
 </pre></div>
 </div>
-<p>Cela est peut être causé par la variable d&#8217;environnement CURL_CA_BUNDLE qui pointe vers un mauvais emplacement ou le fichier &#8220;CA bundle&#8221; qui n&#8217;est pas présent. Suivez les étapes ci-dessous pour corriger ces cas.</p>
+<p>It may be caused by the CURL_CA_BUNDLE environment variable pointing
+to the wrong location or the CA bundle file not being present.
+Follow the steps below to correct either case.</p>
 <p>Définir la variable d&#8217;environnement CURL_CA_BUNDLE qui pointe vers le fichier &#8220;bundle&#8221; (c&#8217;est à dire avec export CURL_CA_BUNDLE=/chemin/vers/mon-bundle-ca.ext où mon-bundle-ca.ext peut être cacert.pem ou ca-bundle.crt).</p>
 <p>Téléchargez le fichier &#8220;CA bundle&#8221; &#8220;cacert.pem&#8221; trouvable sur <a class="reference external" href="http://curl.haxx.se/docs/caextract.html">http://curl.haxx.se/docs/caextract.html</a> ou si vous avez les sources de CURL, vous pouvez créer le fichier &#8220;CA bundle&#8221; en exécutant &#8220;make ca-bundle&#8221; ou &#8220;make ca-firefox&#8221; (si vous avez Firefox et l&#8217;utilitaire certutil installé).  Si vous faites le second choix, le fichier &#8220;bundle&#8221; sera nommé ca-bundle.crt et pourra être trouvé dans le répertoire lib  dans le répertoire racine de CURL.  Voir <a class="reference external" href="http://curl.haxx.se/docs/caextract.html">http://curl.haxx.se/docs/caextract.html</a> pour plus de détails.  Stockez ce fichier dans l&#8217;emplacement vers lequel pointe la variable d&#8217;environnement URL_CA_BUNDLE.</p>
 <p>Vérifiez votre connection en utilisant CURL en ligne de commande</p>
-<div class="highlight-python"><div class="highlight"><pre>curl https://targethostname:port/gmap-demo/gmap75.phtml
+<div class="highlight-python"><div class="highlight"><pre><span></span>curl https://targethostname:port/gmap-demo/gmap75.phtml
 </pre></div>
 </div>
 <div class="admonition note">
@@ -208,7 +227,7 @@ curl: (77) error setting certificate verify locations:
 <div class="section" id="remote-server-with-a-self-signed-ssl-certificate">
 <h2><a class="toc-backref" href="#table-of-contents">Serveur distant avec un certificat SSL auto-signé</a><a class="headerlink" href="#remote-server-with-a-self-signed-ssl-certificate" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Si vous avez l&#8217;erreur suivante, cela veut dire que votre serveur distant utilise probablement un certificat SSL auto-signé et que le certificat du serveur n&#8217;est pas inclut dans votre fichier .ca_bundle (fichier d&#8217;une autorité certifiée)</p>
-<div class="highlight-python"><div class="highlight"><pre>curl: (60) SSL certificate problem, verify that the CA cert is OK. Details:
+<div class="highlight-python"><div class="highlight"><pre><span></span>curl: (60) SSL certificate problem, verify that the CA cert is OK. Details:
 error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed
 More details here: http://curl.haxx.se/docs/sslcerts.html
 
@@ -225,23 +244,23 @@ the -k (or --insecure) option.
 </pre></div>
 </div>
 <p>Pour obtenir le certificat du serveur distant, vous devez exécuter cette commande:</p>
-<div class="highlight-python"><div class="highlight"><pre>openssl s_client -connect domainname:port
+<div class="highlight-python"><div class="highlight"><pre><span></span>openssl s_client -connect domainname:port
 </pre></div>
 </div>
 <p>Copiez tout depuis le tag &#8220;&#8212;&#8211;BEGIN CERTIFICATE&#8212;&#8211;&#8221; jusqu&#8217;au tag &#8220;&#8212;&#8211;END CERTIFICATE&#8212;&#8211;&#8221;.  Copiez ce contenu à la fin de votre fichier mon-bundle-ca.ext.</p>
 <p>Vérifiez votre connection avec CURL en ligne de commande:</p>
-<div class="highlight-python"><div class="highlight"><pre>curl https://targethostname:port/gmap-demo/gmap75.phtml
+<div class="highlight-python"><div class="highlight"><pre><span></span>curl https://targethostname:port/gmap-demo/gmap75.phtml
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>Si vous avez l&#8217;erreur suivante, cela veut dire que le nom du domaine dans la requête vers URL ne correspond pas à celui qui a été déclaré quand vous avez créé le certificat du serveur distant.</p>
-<div class="last highlight-python"><div class="highlight"><pre>curl: (51) SSL: certificate subject name &#39;domainname&#39; does not match target host name &#39;domainname&#39;
+<div class="last highlight-python"><div class="highlight"><pre><span></span>curl: (51) SSL: certificate subject name &#39;domainname&#39; does not match target host name &#39;domainname&#39;
 </pre></div>
 </div>
 </div>
 <p>Vous devez utiliser exactement le même nom de domaine que celui qui apparaît dans l&#8217;invite de commande &#8220;Common Name&#8221; utilisée quand vous générez le certificat du serveur distant. Vous ne pouvez pas utiliser l&#8217;IP du serveur distant par exemple. Cela veut dire que l&#8217;URL suivante n&#8217;est pas acceptable.</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">CONNECTION</span> <span class="s">&quot;https://xxx.xxx.xxx.xxx:port/cgi-bin/mapserv?map=/path/to/wms.map&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">CONNECTION</span> <span class="s">&quot;https://xxx.xxx.xxx.xxx:port/cgi-bin/mapserv?map=/path/to/wms.map&quot;</span>
 <span class="k">CONNECTIONTYPE</span> <span class="nb">WMS</span>
 </pre></div>
 </div>
@@ -293,11 +312,11 @@ the -k (or --insecure) option.
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

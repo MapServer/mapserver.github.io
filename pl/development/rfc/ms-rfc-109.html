@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MS RFC 109: Optimizing Runtime Substitutions &mdash; MapServer 7.0.0 documentation</title>
+    <title>MS RFC 109: Optimizing Runtime Substitutions &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="O tych dokumentach" href="../../about.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 110: MapCache REST Cache Backends" href="ms-rfc-110.html" />
     <link rel="prev" title="MS RFC 108: Dynamic Heatmap (Kernel Density Estimation) Layers" href="ms-rfc-108.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Nawigacja</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Indeks ogólny"
+             accesskey="I">indeks</a></li>
+        <li class="right" >
+          <a href="ms-rfc-110.html" title="MS RFC 110: MapCache REST Cache Backends"
+             accesskey="N">dalej</a> |</li>
+        <li class="right" >
+          <a href="ms-rfc-108.html" title="MS RFC 108: Dynamic Heatmap (Kernel Density Estimation) Layers"
+             accesskey="P">wstecz</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -153,7 +170,7 @@
 </tr>
 <tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 7.0</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Ammended:</th><td class="field-body">2015/02</td>
+<tr class="field-even field"><th class="field-name">Amended:</th><td class="field-body">2015/02</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2014/03/07</td>
 </tr>
@@ -179,7 +196,7 @@ put a far too noticeable hit on performance.</li>
 <p>In pseudo-code, the current algorithm is: (KVP stands for key-value-pair, and
 is one of the parameters passed in the URL to mapserver, e.g.
 ...&amp;map=path/to/mapfile.map&amp;...)</p>
-<div class="highlight-python"><div class="highlight"><pre>foreach KVP:
+<div class="highlight-python"><div class="highlight"><pre><span></span>foreach KVP:
   foreach outputformat:
     if KVP appears in &quot;FILENAME&quot; formatoption:
       if KVP validates against MAP_&gt;WEB-&gt;VALIDATION:
@@ -204,10 +221,10 @@ is one of the parameters passed in the URL to mapserver, e.g.
 <p>For a typical request where the number of KVPs is relatively high (e.g. all OWS
 requests) and where the number of layers/classes is also relatively high, this
 results in a very large number of strcasestr calls being made for the &#8220;if KVP
-appears in XXX keyword&#8221; parts. These happen wether or not actual runtime
+appears in XXX keyword&#8221; parts. These happen whether or not actual runtime
 substitutions are going to be used or not.</p>
 <p>With this RFC, we will be switching to this pseudo-code:</p>
-<div class="highlight-python"><div class="highlight"><pre>foreach layer:
+<div class="highlight-python"><div class="highlight"><pre><span></span>foreach layer:
   foreach class:
     foreach class-&gt;validation:
       if validation_key in kvp:
@@ -335,11 +352,11 @@ whereas this would not have been the case beforehand.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

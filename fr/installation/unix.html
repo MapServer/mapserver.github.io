@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Compiler sous Unix &mdash; MapServer 7.0.0 documentation</title>
+    <title>Compiler sous Unix &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../index.html" />
     <link rel="up" title="Installation" href="index.html" />
     <link rel="next" title="Compiler sous Win32" href="win32.html" />
     <link rel="prev" title="Installation" href="index.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="win32.html" title="Compiler sous Win32"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Installation"
+             accesskey="P">précédent</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.1</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Installation</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -163,15 +180,14 @@
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title first">Table des matières</p>
 <ul class="simple">
-<li><a class="reference internal" href="#compiling-on-unix" id="id6">Compiler sous Unix</a><ul>
-<li><a class="reference internal" href="#introduction" id="id7">Introduction</a></li>
-<li><a class="reference internal" href="#obtaining-the-necessary-software" id="id8">Obtenir le logiciel nécessaire</a></li>
-<li><a class="reference internal" href="#libgd" id="id9">libgd</a></li>
-<li><a class="reference internal" href="#anti-grain-geometry-support" id="id10">Support de Anti-Grain Geometry (AGG)</a></li>
-<li><a class="reference internal" href="#ogc-support" id="id11">Support OGC</a></li>
-<li><a class="reference internal" href="#spatial-warehousing" id="id12">Entrepôts de données spatiales</a></li>
-<li><a class="reference internal" href="#compiling" id="id13">Compiler</a></li>
-<li><a class="reference internal" href="#installation" id="id14">Installation</a></li>
+<li><a class="reference internal" href="#compiling-on-unix" id="id5">Compiler sous Unix</a><ul>
+<li><a class="reference internal" href="#introduction" id="id6">Introduction</a></li>
+<li><a class="reference internal" href="#obtaining-the-necessary-software" id="id7">Obtenir le logiciel nécessaire</a></li>
+<li><a class="reference internal" href="#anti-grain-geometry-support" id="id8">Support de Anti-Grain Geometry (AGG)</a></li>
+<li><a class="reference internal" href="#ogc-support" id="id9">Support OGC</a></li>
+<li><a class="reference internal" href="#spatial-warehousing" id="id10">Entrepôts de données spatiales</a></li>
+<li><a class="reference internal" href="#compiling" id="id11">Compiler</a></li>
+<li><a class="reference internal" href="#installation" id="id12">Installation</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +195,10 @@
 <div class="section" id="introduction">
 <h2><a class="toc-backref" href="#table-of-contents">Introduction</a><a class="headerlink" href="#introduction" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Mapserver de l&#8217;Université du Minnesota est un moteur de rendu cartographique pour le web, open-source et librement disponible. Par sa nature open-source, il peut être compilé sur sur une large variété de plateformes et de systèmes d&#8217;exploitation. Nous allons nous concentrer sur comment obtenir, compiler et installer MapServer sur des plateformes de type UNIX.</p>
-<p>Les options détaillées de configuration sont maintenu dans le fichier <a class="reference external" href="https://github.com/mapserver/mapserver/blob/master/INSTALL.CMAKE">INSTALL.CMAKE</a> packagé à la racine du répertoire source.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Les options détaillées de configuration sont maintenu dans le fichier <a class="reference external" href="https://github.com/mapserver/mapserver/blob/master/INSTALL.CMAKE">INSTALL.CMAKE</a> packagé à la racine du répertoire source.</p>
+</div>
 <p>Vous devriez peut-être vérifier la page de wiki <a href="#id1"><span class="problematic" id="id2">``</span></a>MapServerCompilation`_  pour des informations supplémentaires.</p>
 </div>
 <div class="section" id="obtaining-the-necessary-software">
@@ -189,51 +208,42 @@
 <div class="section" id="required-external-libraries">
 <h3>Bibliothèques externes requises<a class="headerlink" href="#required-external-libraries" title="Lien permanent vers ce titre">¶</a></h3>
 <ul>
-<li><p class="first"><a class="reference external" href="http://www.libpng.org/pub/png/libpng.html">libpng</a> : libpng devrait être sur votre système par défaut.  1.2.12 est la version courante avec les patches de sécurité, bien que les versions antérieures jusqu&#8217;à 1.2.7 devrait fonctionner.</p>
+<li><p class="first"><a class="reference external" href="http://www.libpng.org/pub/png/libpng.html">libpng</a>: libpng should be on your system by default.  Versions
+back to 1.2.7 should work.</p>
 </li>
 <li><p class="first"><a class="reference external" href="http://www.freetype.org/">freetype</a> : la version 2.x ou supérieure est requise.</p>
 </li>
-<li><p class="first"><a class="reference external" href="http://www.ijg.org/">libjpeg</a> : libjpeg permet à MapServer de générer les images en format JPEG. Une version suffisante devrait être installée par défaut sur votre système. La version 6b est la version courante et remonte à 1998.</p>
+<li><p class="first"><a class="reference external" href="http://www.ijg.org/">libjpeg</a>: libjpeg allows MapServer to render
+images in JPEG format.  A sufficient version should be installed by
+default on your system (probably version 6b from 1998).</p>
 <div class="admonition warning">
 <p class="first admonition-title">Avertissement</p>
-<p class="last">La gestion direct du JPEG est dépréciée dans MapServer 5.8 et vous devez maintenant dépendre de GDAL pour la JPEG est cependant encore nécessaire pour produire (i.e. écrire) ce type d&#8217;images.</p>
+<p class="last">Direct JPEG support was deprecated in MapServer 5.8+, and you
+should now depend on GDAL for raster read support in
+MapServer. JPEG support is however still required for
+producing (i.e. writing) images.</p>
 </div>
 </li>
-<li><p class="first"><a class="reference external" href="http://www.gzip.org/zlib">zlib</a> : Zlib devrait être par défaut sur votre système. La 1.2.1 est la version courante avec les patches de sécurité. Bien que pas utilisée directement par Mapserver, c&#8217;est une dépendance obligatoire pour libpng</p>
+<li><p class="first"><a class="reference external" href="http://www.gzip.org/zlib">zlib</a>: Zlib should be on your system by default.  Though not used
+directly by mapserver, it&#8217;s a mandatory dependency of libpng.</p>
 </li>
 </ul>
 </div>
 <div class="section" id="highly-recommended-libraries">
 <h3>Bibliothèques fortement recommandées<a class="headerlink" href="#highly-recommended-libraries" title="Lien permanent vers ce titre">¶</a></h3>
-<ul>
+<ul class="simple">
 <li><p class="first"><a class="reference external" href="http://trac.osgeo.org/proj/">libproj</a> : libproj fournit le support des projections pour MapServer. La version 4.4.6 ou supérieure est requise.</p>
 </li>
-<li><p class="first"><a class="reference external" href="http://curl.haxx.se/libcurl/">libcurl</a> : libcurl est la base pour le support du client et du serveur OGC (WFS/WMS/WCS). La version 7.10 ou supérieure est requise. Installation de libcurl:</p>
-<div class="highlight-python"><div class="highlight"><pre>apt-get install -y libcurl4-gnutls-dev
-</pre></div>
-</div>
-</li>
-<li><p class="first"><a class="reference external" href="http://www.gdal.org/ogr/">OGR</a> : OGR fournit l&#8217;accès à au moins 18 formats vecteur différents.</p>
-</li>
-<li><p class="first"><a class="reference external" href="http://www.gdal.org/">GDAL</a>: GDAL forunit l&#8217;accès à au moins 42 formats raster différents.</p>
-</li>
+<li><a class="reference external" href="http://curl.haxx.se/libcurl/">libcurl</a>: libcurl is the foundation of OGC (WFS/WMS/WCS) client
+and server support.  Version 7.10 or greater is required.</li>
+<li><a class="reference external" href="http://www.gdal.org/">OGR</a>: OGR provides access to a lot of vector formats.</li>
+<li><a class="reference external" href="http://www.gdal.org/">GDAL</a>: GDAL provides access to a lot of
+raster formats.</li>
 </ul>
 </div>
 <div class="section" id="optional-external-libraries">
 <h3>Bibliothèques externes optionnelles<a class="headerlink" href="#optional-external-libraries" title="Lien permanent vers ce titre">¶</a></h3>
 <ul>
-<li><p class="first"><a class="reference external" href="http://www.libtiff.org/">libtiff</a> : libtiff fournit la gestion de lecture du TIFF (Tagged Image File Format) pour MapServer.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Avertissement</p>
-<p class="last">La gestion directe de libtiff est déprécié dans MapServer 5.8+ et vous devez maintenant dépendre de GDAL pour la gestion de la lecture de ces raster dans MapServer.</p>
-</div>
-</li>
-<li><p class="first"><a class="reference external" href="http://trac.osgeo.org/geotiff/">libgeotiff</a> libgeotiff fournit la gestion pour lire les fichiers GeoTIFF (des fichiers TIFF avec une référence géographique).</p>
-<div class="admonition warning">
-<p class="first admonition-title">Avertissement</p>
-<p class="last">La gestion directe de geotiff est déprécié dans MapServer 5.8+ et vous devez maintenant dépendre de GDAL pour la gestion de la lecture de ces raster dans MapServer.</p>
-</div>
-</li>
 <li><p class="first"><a class="reference external" href="http://trac.osgeo.org/geos/">GEOS</a> : GEOS permet à MapServer de faire des prédicats spatiaux et des opérations algébriques (A l&#8217;intérieur, touches, etc &amp; union, différence, intersection).</p>
 <div class="versionadded">
 <p><span class="versionmodified">Nouveau dans la version 4.10.</span></p>
@@ -244,103 +254,57 @@
 <p><span class="versionmodified">Nouveau dans la version 4.10.</span></p>
 </div>
 </li>
-<li><p class="first"><a class="reference external" href="http://www.esri.com/software/arcgis/arcsde/index.html">SDE Client Library</a> : Les bibliothèques clientes pour votre plateforme devraient faire partie du kit media ArcSDE. Elles <em>ne</em> sont pas disponibles publiquement au téléchargement.</p>
-</li>
 <li><p class="first"><a class="reference external" href="http://www.oracle.com/technology/products/spatial/index.html">Oracle Spatial OCI</a> : Les bibliothèques clientes pour votre plateforme sont disponibles au téléchargement depuis le site de Oracle. Idéalement, votre bibliothèque cliente correspond à la version de la base de données que vous interrogez, mais ce n&#8217;est pas une exigence contraignante.</p>
 </li>
 <li><p class="first"><a class="reference external" href="http://www.postgresql.org/">libpq</a> : libpq est requis pour gérer l&#8217;usage des géométries PostGIS dans la base de données PostgreSQL. Idéalement, votre bibliothèque cliente correspond à la version de la base de données que vous interrogez.</p>
 </li>
-<li><p class="first"><a class="reference external" href="https://launchpad.net/ubuntu/precise/+package/libgif-dev">libgif-dev</a> : giflib est utilisé pour la lecture des fichiers GIF utilisés comme symboles PIXMAP.</p>
+<li><p class="first"><a class="reference external" href="http://giflib.sourceforge.net/">giflib</a>: libgif / <a class="reference external" href="https://launchpad.net/ubuntu/precise/+package/libgif-dev">libgif</a> is is used for reading GIF files used
+as PIXMAP symbols.</p>
 </li>
 <li><p class="first"><a class="reference external" href="http://www.fastcgi.com">FastCGI</a> : FastCGI est un protocole populaire pour interfacer MapServer avec plusieurs serveurs web. Vous devrez installer le paquet de développement. Plus de détails sur la manière d&#8217;utiliser cette fonctionnalité dans MapServer se trouve ici  <a class="reference internal" href="../optimization/fastcgi.html#fastcgi"><span>FastCGI</span></a>. Sous Ubuntu, ce pourrait être :</p>
-<div class="highlight-python"><div class="highlight"><pre>$ apt-get -y install libfcgi-dev
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ apt-get -y install libfcgi-dev
 </pre></div>
 </div>
 </li>
-<li><p class="first"><a class="reference external" href="http://cairographics.org/">cairo (svg, pdf) support</a> : cette bibliothèque est nécessaire pour produire des fichiers PDF et SVG. Si vous êtes sur une machine Ubuntu, elle peut être installée avec &#8220;apt-get install -y libcairo2-dev&#8221;.</p>
+<li><p class="first"><a class="reference external" href="http://cairographics.org/">Cairo (SVG, PDF) support</a>: This library is required to produce PDF
+and SVG outputs.  If you&#8217;re on an ubuntu system, it can be installed
+with &#8220;apt-get install -y libcairo2-dev&#8221;</p>
 </li>
-<li><p class="first"><a class="reference external" href="http://mapserver.org/output/kml_output.html">kml support</a> : ce moteur de rendu n&#8217;a pas de dépendance externe.</p>
+<li><p class="first"><a class="reference external" href="http://mapserver.org/output/kml_output.html">KML support</a>: This renderer is has no external dependency.</p>
 </li>
-<li><p class="first"><a class="reference external" href="http://www.libgd.org/">GD</a> : libgd est utilisé par MapServer pour générer les images. La version 2.0.28 ou supérieure est requise. La version 2.0.29 ou supérieure est requise pour l&#8217;utilisation des étiquettes courbes (comme suivant), et la version 2.0.34 est requise pour l&#8217;anticrênelage (1 pixel de large pour les lignes/contours).</p>
+</ul>
+<span class="target" id="index-1"></span><ul id="index-2">
+<li><p class="first"><a class="reference external" href="http://freedesktop.org/wiki/Software/HarfBuzz">HarfBuff</a>: Support complex script shaping (to simplify: the tool
+that will insert ligatures between characters).  Harfbuzz algorithms
+will be applied on text strings that have been determined to not be
+latin (i.e. the slowdown induced by harfbuzz is limited to those
+languages that actually require shaping).  Requires <a class="reference external" href="http://fribidi.org/">FriBidi</a>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">Voir aussi</p>
+<p class="last"><a class="reference internal" href="../development/rfc/ms-rfc-98.html#rfc98"><span>MS RFC 98: Label/Text Rendering Overhaul</span></a></p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">Nouveau dans la version 7.0.</span></p>
+</div>
+</li>
+<li><p class="first">MySQL: Support joining with MySQL (the WITH_MYSQL option).</p>
 </li>
 </ul>
 </div>
 <div class="section" id="optional-features">
 <h3>Fonctionnalités optionnelles<a class="headerlink" href="#optional-features" title="Lien permanent vers ce titre">¶</a></h3>
 <ul class="simple">
-<li><p class="first"><a class="reference external" href="http://mapserver.org/development/rfc/ms-rfc-73.html">cairo svg parser support</a> : l&#8217;option &#8220;WITH_SVGCAIRO&#8221; fait partie d&#8217;une proposition d&#8217;amélioration de la gestion du SVG. Utiliser cette fonctionnalité nécessite l&#8217;installation de la bibliothèque libsvg-cairo disponible ici : <a class="reference external" href="http://cairographics.org/snapshots/">http://cairographics.org/snapshots/</a> . Vous devez compiler et installer cairo, libsvg et libsvg-cairo.</p>
-</li>
-<li><p class="first">La gestion du SVG peut être activé soit via le couple non maintenu libsvg / libsvg-cairo soit via librsvg avec la contrainte de dépendances supplémentaires. Utilisez librsvg si votre distribution fournie un package pour celui-ci, ou repartez de libsvgcairo si le coût de compilation les dépendances de librsvg est trop important.</p>
-</li>
+<li><a class="reference external" href="http://mapserver.org/development/rfc/ms-rfc-73.html">Cairo SVG parser support</a>: The WITH_SVGCAIRO option is part of a
+proposal to improve SVG support.  Using this feature requires
+installing the libsvg-cairo library available here:
+<a class="reference external" href="http://cairographics.org/snapshots/">http://cairographics.org/snapshots/</a> .  You will need to compile and
+install cairo, libsvg, and libsvg-cairo.</li>
+<li>SVG support can be enabled either through the unmaintained libsvg /
+libsvg-cairo combo, or through librsvg (the WITH_RSVG option) at the
+cost of more dependencies. Use librsvg if your distro provides a
+package for it, or fall back to libsvgcairo if the cost of compiling
+the librsvg dependencies is too important.</li>
 </ul>
-</div>
-</div>
-<div class="section" id="libgd">
-<h2><a class="toc-backref" href="#table-of-contents">libgd</a><a class="headerlink" href="#libgd" title="Lien permanent vers ce titre">¶</a></h2>
-<div class="admonition warning">
-<p class="first admonition-title">Avertissement</p>
-<p class="last">Il n&#8217;est pas recommandé d&#8217;activer le moteur de rendu GD sauf si vous savez ce que vous faîtes. Celui-ci souffre de limitations majeures de rendu et sera complètement supprimé dans la version 7.0.</p>
-</div>
-<p>Il y a un certain nombre de problèmes dont vous devriez être conscients quand vous utiliser GD en combinaison avec MapServer.</p>
-<div class="section" id="minimum-libgd-versions">
-<h3>Versions de libgd minimum<a class="headerlink" href="#minimum-libgd-versions" title="Lien permanent vers ce titre">¶</a></h3>
-<p>MapServer prend aggressivement avantages des nouvelles fonctionnalités et des corrections de bugs dans les dernières versions de libgd. La version minimale requise pour lancer MapServer est la 2.0.29. La mise à jour vers au moins la version 2.0.34 est conseillée comme elle inclut une correction de bug importante pour l&#8217;anticrênelage des lignes. L&#8217;instruction configure devrait détecter quelle version de libgd vous avez d&#8217;installé, mais vous pouvez rapidement vérifier par vous-même en exécutant la commande suivante:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ gdlib-config --version
-</pre></div>
-</div>
-</div>
-<div class="section" id="libiconv">
-<h3>libiconv<a class="headerlink" href="#libiconv" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Si vous prévoyez d&#8217;utiliser des jeux de caractères internationaux, votre version de libgd <em>doit</em> être compilée avec les bibliothèques iconv GNU. Si vous utilisez une version pré-packagé, il est fort probable que ce soit le cas. Pour vérifier vous-même, exécuter la commande suivante et regardez pour avoir &#8216;-liconv&#8217; dans la sortie:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ gdlib-config --libs
-</pre></div>
-</div>
-</div>
-<div class="section" id="pre-packaged-system-libraries">
-<h3>Bibliothèques précompilées/système<a class="headerlink" href="#pre-packaged-system-libraries" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Si vous prévoyez d&#8217;utiliser votre version système de libgd, assurez-vous d&#8217;avoir les paquets de développement installés aussi afin que MapServer puisse trouver les en-têtes appropriés.</p>
-</div>
-<div class="section" id="macosx">
-<h3>MacOSX<a class="headerlink" href="#macosx" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Une FAQ utile pour libgd sur OSX est disponible sur <a class="reference external" href="http://www.libgd.org/DOC_INSTALL_OSX">GD on OSX</a>.</p>
-</div>
-<div class="section" id="freetype-support">
-<h3>Support FreeType<a class="headerlink" href="#freetype-support" title="Lien permanent vers ce titre">¶</a></h3>
-<p>La bibliothèque GD avec laquelle vous compilez MapServer DOIT être compilé avec la bibliothèque FreeType pour pouvoir utiliser les polices de type TrueType. MapServer n&#8217;utilise pas une interface propre pour FreeType mais utilise FreeType via GD à la place.</p>
-<p>Quand vous lancez votre script &#8220;configure&#8221;, regardez la sortie suivante:</p>
-<div class="highlight-python"><div class="highlight"><pre>using GD ( -DUSE_GD_GIF -DUSE_GD_PNG -DUSE_GD_JPEG
-           -DUSE_GD_WBMP -DUSE_GD_TTF -DGD_HAS_GDIMAGEGIFPTR)
-           from system libs.
-</pre></div>
-</div>
-<p>Si votre bibliothèque GD est compilé avec le support de FreeType, vous verrez une partie &#8220;-DUSE_GD_TTF&#8221; (Ou &#8220;-DUSE_GD_FT&#8221; pour Freetype 2.x). Si elle est manquante, vous aurez besoin de recompiler votre GD pour vous assurez d&#8217;inclure le support de FreeType. Voir la documentation de GD pour plus d&#8217;informations.</p>
-<p>Notez aussi que le script configure regarde également la présence de la bibliothèque FreeType séparément, en générant une sortie ressemblant à ceci:</p>
-<div class="highlight-python"><div class="highlight"><pre>checking where FreeType is installed...
-checking for FT_Init_FreeType in -lfreetype... yes
-using libfreetype -lfreetype from system libs.
-</pre></div>
-</div>
-<p>Même si vous avez FreeType installé sur votre système <em>et</em> que le script configure le trouve, cela ne veut <em>PAS</em> dire que vous aurez le support des polices TrueType. GD <em>DOIT</em> être compilé d&#8217;une manière ou d&#8217;une autre avec le support FreeType.</p>
-</div>
-<div class="section" id="px-anti-aliasing-and-segfaults">
-<h3>Anticrênelage 1 pixel et erreurs de segmentation<a class="headerlink" href="#px-anti-aliasing-and-segfaults" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Les versions de libgd plus anciennes que la version 2.0.34 contiennent un bug significatif et causeront <em>toujours</em> une erreur de segmentation si vous tentez de faire un anticrênelage ave un pixel de large. Vous pouvez patcher manuellement ces anciennes versions ou mieux encore faire une mise à jour vers un GD au moins en version 2.0.34.</p>
-<p>Dans gd.c, le changement de la fonction gdImageSetAAPixelColor():</p>
-<div class="highlight-python"><div class="highlight"><pre>int dr,dg,db,p,r,g,b;
-p = gdImageGetPixel(im,x,y);
-</pre></div>
-</div>
-<p>vers</p>
-<div class="highlight-python"><div class="highlight"><pre>int dr,dg,db,p,r,g,b;
-if (!gdImageBoundsSafeMacro (im, x, y)) return;
-p = gdImageGetPixel(im,x,y);
-</pre></div>
-</div>
-<p>Plus de détails sur ce patch (si vous en avez besoin) est décrit par Steve Lime dans une <a class="reference external" href="posttomapserver-users">billet de la liste mapserver-users</a>.</p>
-</div>
-<div class="section" id="curved-label-support">
-<h3>Support des étiquettes incurvées<a class="headerlink" href="#curved-label-support" title="Lien permanent vers ce titre">¶</a></h3>
-<p>ANGLE FOLLOW, une nouvelle fonctionnalité qui permet à MapServer de dessiner des étiquettes courbes le long d&#8217;un objet linéaire comme une route, requiert libgd 2.0.29 et le support des polices TrueType. Configure devrait auto-détecter si vous avez une version suffisante de libgd et le support de TrueType activé pour être capable d&#8217;utiliser cette fonctionnalité.</p>
 </div>
 </div>
 <div class="section" id="anti-grain-geometry-support">
@@ -356,7 +320,7 @@ p = gdImageGetPixel(im,x,y);
 <h4>Serveur WMS<a class="headerlink" href="#wms-server" title="Lien permanent vers ce titre">¶</a></h4>
 <p>La gestion du <cite>WMS server</cite> est automatiquement activée.</p>
 <p>Vous pouvez vérifier ceci par vous-même en cherchant ce genre de votre sortie &#8220;configure&#8221;:</p>
-<div class="highlight-python"><div class="highlight"><pre>--   * WMS SERVER: ENABLED
+<div class="highlight-python"><div class="highlight"><pre><span></span>--   * WMS SERVER: ENABLED
 </pre></div>
 </div>
 <p>Si, pour une raison quelconque vous ne voulez pas du support WMS, vous pouvez forcez sa désactivation en utilisant &#8220;-DWITH_WMS=OFF&#8221;.</p>
@@ -367,7 +331,7 @@ p = gdImageGetPixel(im,x,y);
 <p>Le fonctionnement en cascade est aussi supporté. Il permet à Mapserver de récupérer de manière transparente des couches distantes via le WMS, en jouant basiquement le rôle d&#8217;un client, et en les combinant avec d&#8217;autres couches pour générer la carte finale.</p>
 <p>Afin d&#8217;activer cette fonctionnalité, vous aurez besoin de passer l&#8217;option WITH_CLIENT_WMS  au script configure. MapServer essayera automatiquement de chercher libcurl, qui est aussi requis.</p>
 <p>Pour vérifier que cette fonctionnalité est activée, vérifiez que la sortie de configure contient:</p>
-<div class="highlight-python"><div class="highlight"><pre>--   * WMS CLIENT: ENABLED
+<div class="highlight-python"><div class="highlight"><pre><span></span>--   * WMS CLIENT: ENABLED
 </pre></div>
 </div>
 <div class="admonition note">
@@ -383,7 +347,7 @@ p = gdImageGetPixel(im,x,y);
 <h4>Serveur WFS<a class="headerlink" href="#wfs-server" title="Lien permanent vers ce titre">¶</a></h4>
 <p>Le support pour le <cite>WFS server</cite> est activé par défaut. Le support de OGR et PROJ.4 est requis.</p>
 <p>Pour vérifier que cette fonctionnalité est activée, vérifiez que la sortie de configure contient:</p>
-<div class="highlight-python"><div class="highlight"><pre>--   * WFS SERVER: ENABLED
+<div class="highlight-python"><div class="highlight"><pre><span></span>--   * WFS SERVER: ENABLED
 </pre></div>
 </div>
 <p>Si, pour une raison quelconque vous ne voulez pas du support WFS, vous pouvez forcez sa désactivation en utilisant &#8220;-DWITH_WFS=OFF&#8221;.</p>
@@ -394,7 +358,7 @@ p = gdImageGetPixel(im,x,y);
 <p>MapServer peut aussi fonctionner comme un client WFS.  Cela veut dire effectivement que MapServer lit des données depuis la sortie d&#8217;un serveur WFS distant et génère depuis celle-ci une carte, comme il le ferait en lisant la donnée depuis un fichier shapefile.</p>
 <p>Afin d&#8217;activer cette fonctionnalité, vous aurez besoin de vous assurer d&#8217;avoir le support de OGR (avec Xerces activé) et de PROJ.4 et de passer l&#8217;option WITH_CLIENT_WFS  à votre script configure. MapServer essayera automatiquement de chercher libcurl, qui est aussi requis.</p>
 <p>Pour vérifier que cette fonctionnalité est activée, vérifiez que la sortie de configure contient:</p>
-<div class="highlight-python"><div class="highlight"><pre>--   * WFS CLIENT: ENABLED
+<div class="highlight-python"><div class="highlight"><pre><span></span>--   * WFS CLIENT: ENABLED
 </pre></div>
 </div>
 <div class="admonition note">
@@ -407,7 +371,7 @@ p = gdImageGetPixel(im,x,y);
 <h4>Serveur WCS<a class="headerlink" href="#wcs-server" title="Lien permanent vers ce titre">¶</a></h4>
 <p>Le support pour le <cite>WCS server</cite> est activé par défaut. WCS doit être compilé avec certaines bibliothèques. Plus d&#8217;information sur ce service est disponible dans <a class="reference internal" href="../ogc/wcs_server.html#wcs-server"><span>Serveur WCS</span></a>.</p>
 <p>Pour vérifier que cette fonctionnalité est activée, vérifiez que la sortie de configure contient:</p>
-<div class="highlight-python"><div class="highlight"><pre>--   * WCS SERVER: ENABLED
+<div class="highlight-python"><div class="highlight"><pre><span></span>--   * WCS SERVER: ENABLED
 </pre></div>
 </div>
 <p>Si, pour une raison quelconque vous ne voulez pas du support WCS, vous pouvez forcez sa désactivation en utilisant &#8220;-DWITH_WCS=OFF&#8221;.</p>
@@ -416,7 +380,7 @@ p = gdImageGetPixel(im,x,y);
 <h4>Serveur SOS<a class="headerlink" href="#sos-server" title="Lien permanent vers ce titre">¶</a></h4>
 <p>Le support de SOS est activé en utilisant l&#8217;option WITH_SOS. Plus d&#8217;information sur ce service est disponible dans <a class="reference internal" href="../ogc/sos_server.html#sos-server"><span>Serveur SOS</span></a>.</p>
 <p>Pour vérifier que cette fonctionnalité est activée, vérifiez que la sortie de configure contient:</p>
-<div class="highlight-python"><div class="highlight"><pre>--   * SOS SERVER: ENABLED
+<div class="highlight-python"><div class="highlight"><pre><span></span>--   * SOS SERVER: ENABLED
 </pre></div>
 </div>
 <div class="admonition note">
@@ -432,28 +396,19 @@ p = gdImageGetPixel(im,x,y);
 <p>Ici, vous trouverez comment activer Mapserver pour qu&#8217;il se connecte sur l&#8217;un de ces produits. Merci de vous référer à la référence MapFile pour plus de détails comment les utiliser. Cette section détaille seulement comment compiler Mapserver pour leur utilisation.</p>
 <div class="section" id="postgis">
 <h3>PostGIS<a class="headerlink" href="#postgis" title="Lien permanent vers ce titre">¶</a></h3>
-<p><a href="#id3"><span class="problematic" id="id4">`PostGIS`__</span></a> ajoute le support des objets géographiques dans la base de données realtionnelle <a href="#id3"><span class="problematic" id="id5">`PostgreSQL`__</span></a> . En fait,PostGIS &#8220;rend spatial&#8221; le serveur PostgreSQL, lui permettant d&#8217;être utilisé comme un base données spatial &#8220;backend&#8221; pour les systèmes d&#8217;information géographique (SIG), à la manière de SDE de ESRI&#8217;ou de l&#8217;extension spatiale de Oracle. PostGIS est inclus dans de nombreuses distributions, mais vous pouvez aussi faire tourner votre propre version si c&#8217;est nécessaire.</p>
+<p><a href="#id2"><span class="problematic" id="id3">`PostGIS`__</span></a> ajoute le support des objets géographiques dans la base de données realtionnelle <a href="#id2"><span class="problematic" id="id4">`PostgreSQL`__</span></a> . En fait,PostGIS &#8220;rend spatial&#8221; le serveur PostgreSQL, lui permettant d&#8217;être utilisé comme un base données spatial &#8220;backend&#8221; pour les systèmes d&#8217;information géographique (SIG), à la manière de SDE de ESRI&#8217;ou de l&#8217;extension spatiale de Oracle. PostGIS est inclus dans de nombreuses distributions, mais vous pouvez aussi faire tourner votre propre version si c&#8217;est nécessaire.</p>
 <p>MapServer peut utiliser PostGIS comme source de données. Le support de PostGIS est activé par défaut.</p>
 <p>Pour vérifier que cette fonctionnalité est activée, vérifiez que la sortie de configure contient:</p>
-<div class="highlight-python"><div class="highlight"><pre>--   * POSTGIS: /usr/local/pgsql/lib/libpq.so
+<div class="highlight-python"><div class="highlight"><pre><span></span>--   * POSTGIS: /usr/local/pgsql/lib/libpq.so
 </pre></div>
 </div>
 <p>Si, pour une raison quelconque vous ne voulez pas du support PostGIS, vous pouvez forcez sa désactivation en utilisant &#8220;-DWITH_POSTGIS=OFF&#8221;. Pour aider cmake à trouver votre installation de PostGIS, vous pouvez utiliser l&#8217;option CMAKE_PREFIX_PATH  (par exemple &#8220;-DCMAKE_PREFIX_PATH=/usr/local/pgsql&#8221;).</p>
-</div>
-<div class="section" id="arcsde">
-<h3>ArcSDE<a class="headerlink" href="#arcsde" title="Lien permanent vers ce titre">¶</a></h3>
-<p>MapServer vous permet d&#8217;utiliser SDE comme source de données à la fois pour la géométrie et les attributs. Pour réaliser ceci, vous devez obligatoirement avoir les bibliothèques clientes SDE à votre disposition, et les avoir installées sur la machine qui fait tourner MapServer.</p>
-<p>Pour activer SDE dans MapServer, vous devez utiliser les options suivantes : WITH_SDE (&#8220;-dWITH_SDE=ON&#8221;) et SDE_VERSION (par exemple &#8220;-DSDE_VERSION=91&#8221;).</p>
-<p>Pour vérifier que cette fonctionnalité est activée, vérifiez que la sortie de configure contient:</p>
-<div class="highlight-python"><div class="highlight"><pre>--   * SDE: /opt/arcsde/lib/libsde90.so
-</pre></div>
-</div>
 </div>
 <div class="section" id="oracle-spatial">
 <h3>Oracle Spatial<a class="headerlink" href="#oracle-spatial" title="Lien permanent vers ce titre">¶</a></h3>
 <p>La cartouche spatiale de Oracle est aussi gérée par MapServer. Pour vous connecter dessus, vous devez compiler MapServer avec les bibliothèques Oracle en définissant l&#8217;option WITH_ORACLESPATIAL. Vous aurez probablement besoin que la variable d&#8217;environnement ORACLE_HOME soit définie pour avoir une configuration des choses correcte.</p>
 <p>Pour vérifier que cette fonctionnalité est activée, vérifiez que la sortie de configure contient:</p>
-<div class="highlight-python"><div class="highlight"><pre>--   * Oracle Spatial: &lt;path to oracle spatial shared library&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>--   * Oracle Spatial: &lt;path to oracle spatial shared library&gt;
 </pre></div>
 </div>
 </div>
@@ -462,8 +417,6 @@ p = gdImageGetPixel(im,x,y);
 <h2><a class="toc-backref" href="#table-of-contents">Compiler</a><a class="headerlink" href="#compiling" title="Lien permanent vers ce titre">¶</a></h2>
 <p>En premier, préparez le terrain en vous assurant que toutes les bibliothèques requises et/ou recommandées sont installées avant de tenter de compiler MapServer. Cela vous rendra la vie beaucoup moins compliquée ;). Voici l&#8217;ordre que j&#8217;utilise habituellement:</p>
 <ol class="arabic">
-<li><p class="first">Compilez GD. Cela signife souvent que vous devez obtenir libjpeg, libpng, zlib, et freetype ava,t de compiler la bibliothèque. Vous ne devriez pas avoir trop de problèmes à trouver les binaires nécessaires à GD, et souvent, ils seront déjà installés sur votre système. Sur unix, j&#8217;ai eu très peu de chance pour trouver des binaires pré-compilés de la bibliothèque GD. Voir la section <a class="reference internal" href="#libgd">libgd</a> pour des notes sur comment patcher libgd si vous prévoyez d&#8217;utiliser l&#8217;anticrênelage.</p>
-</li>
 <li><p class="first">Compilez GDAL/OGR. Décrire comment compiler GDAL/OGR est au delà du cadre de ce document. Si vous avez des besoins pour de nombreux formats, assurez-vous d&#8217;installer ces bibliothèques en premier. Je trouve souvent que compiler GDAL/OGR  prend autant de tant que MapServer lui-même!</p>
 </li>
 <li><p class="first">Compilez Proj.4.  Proj.4 est une bibliothèque qui s&#8217;installe avec une suite directe de configure/make/make install.</p>
@@ -474,58 +427,66 @@ p = gdImageGetPixel(im,x,y);
 <p class="last">Si vous voulez configurer MapServer pour utiliser SSL lors de l&#8217;accès au serveur WMS/WFS libcurl doit être configuré / compilé avec l&#8217;option &#8220;&#8211;with-ssl&#8221;. Les détails sur la manière de réaliser cela sont indiqués sur <a class="reference internal" href="../ogc/wxs_secure.html#wxs-secure"><span>Comment configurer MapServer comme client pour accéder à un service via https</span></a>.</p>
 </div>
 </li>
-<li><p class="first">Compilez/installez les bibliothèques optionnelles. cela peut inclure SDE, PostGIS, Oracle Spatial, AGG, Ming, PDFlib, ou MyGIS.  Mixez et faites les correspondre à vos besoins.</p>
+<li><p class="first">Compile/install optional libraries.  These might include PostGIS,
+Oracle Spatial, AGG, Ming, PDFlib, or MyGIS.  Mix and match as you need
+them.</p>
 </li>
 <li><p class="first">Décompressez le tarball MapServer et allez dans le répertoire mapserver:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ tar -zxvf mapserver-X.Y.Z.tar.gz
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ tar -zxvf mapserver-X.Y.Z.tar.gz
 </pre></div>
 </div>
 </li>
 <li><p class="first">Créez le répertoire build et configurez votre environnement.</p>
 <p>Créez le répertoire de compilation:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ cd mapserver-X.Y.Z
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ cd mapserver-X.Y.Z
 $ mkdir build
 $ cd build
 </pre></div>
 </div>
 <p>Configurez votre environnement avec &#8220;cmake&#8221; (c&#8217;est un exemple):</p>
-<div class="highlight-python"><div class="highlight"><pre>$ cmake -DCMAKE_INSTALL_PREFIX=/opt \
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ cmake -DCMAKE_INSTALL_PREFIX=/opt \
         -DCMAKE_PREFIX_PATH=/usr/local/pgsql/91:/usr/local:/opt \
         -DWITH_CLIENT_WFS=ON \
         -DWITH_CLIENT_WMS=ON \
         -DWITH_CURL=ON \
         -DWITH_SOS=ON \
         -DWITH_PHP=ON \
+        -DWITH_PERL=ON \
+        -DWITH_RUBY=ON \
+        -DWITH_JAVA=ON \
+        -DWITH_CSHARP=ON \
         -DWITH_PYTHON=ON \
         -DWITH_SVGCAIRO=ON \
         -DWITH_ORACLESPATIAL=ON \
         -DWITH_MSSQL2008=ON \
-        -DWITH_SDE=ON \
-        -DSDE_VERSION=91 .. &gt;../configure.out.txt
+        ../ &gt;../configure.out.txt
 </pre></div>
 </div>
-<p>Les options suivantes sont activées par défaut (version 6.4): WITH_CAIRO, WITH_FCGI, WITH_FRIBIDI, WITH_GDAL, WITH_GEOS, WITH_GIF, WITH_ICONV, WITH_LIBXML2, WITH_OGR, WITH_POSTGIS, WITH_PROJ, WITH_WCS, WITH_WFS, WITH_WMS.</p>
+<p>The following options are enabled by default (version 7.0:
+WITH_PROJ, WITH_WMS, WITH_FRIBIDI, WITH_HARFBUFF, WITH_ICONV,
+WITH_CAIRO, WITH_FCGI, WITH_GEOS, WITH_POSTGIS, WITH_GDAL,
+WITH_OGR, WITH_WFS, WITH_WCS, WITH_LIBXML2, WITH_GIF.</p>
 <p>Si vous voulez aussi générer une version statique de la librairie, les options BUILD_STATIC et LINK_STATIC_LIBMAPSERVER peut être utilisées,</p>
 <p>Il y a de nombreuses autres options disponibles. Pour une liste à jour des options disponibles pour cmake, veuillez vous référer au fichier CMakeLists.txt.</p>
 <p>Cela peut être une bonne idée de mettre les commandes de configuration dans un fichier et de le rendre exécutable (+x). Cela permet d&#8217;éviter de les saisir à nouveau et aussi de pouvoir retrouver comment MapServer a été configuré.</p>
 </li>
 <li><p class="first">Maintenant que vous avez configuré vos options de compilation et sélectionné les librairies que vous voulez que MapServer puisse utiliser, vous êtes prêt à compiler le code source.</p>
 <p>C&#8217;est actuellement plutôt simple, exécutez seulement &#8220;make&#8221;:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ make
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ make
 </pre></div>
 </div>
 </li>
 <li><p class="first">Installer les bibliothèques MapServer:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># make install</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># make install</span>
 </pre></div>
 </div>
 <p>Pour s&#8217;assurer que tout a bien fonctionné, regardez le fichier appelé <em>mapserv</em></p>
-<div class="highlight-python"><div class="highlight"><pre>$ ls -al mapserv
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ ls -al mapserv
 -rwxr-xr-x  1 user user 13745 mars  11 17:45 mapserv
 </pre></div>
 </div>
 <p>Un test simple pour l&#8217;essayer et le lancer</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ./mapserv
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ ./mapserv
 This script can only be used to decode form results and
 should be initiated as a CGI process via a httpd server.
 </pre></div>
@@ -541,7 +502,7 @@ should be initiated as a CGI process via a httpd server.
 <p>Le programme MapServer lui-même consiste en un seul fichier, le binaire exécutable &#8220;mapserv&#8221;. C&#8217;est un exécutable CGI, destiné à être appelé et lancé par votre serveur web.</p>
 <p>Dans cette section, nous assumerons que vous faites tourner Apache sous son répertoire par défaut dans /usr/local/apache2. Vous aurez peut-être besoin de privilèges pour éditer votre httpd.conf (le fichier principal de configuration de apache), ou quelqu&#8217;un (comme votre webmaster) pour vous aider avec les détails de configuration.</p>
 <p>Si vous n&#8217;avez pas Apache installé et que vous le voulez ainsi que php, fastcgi, etc cela sera fait avec quelques choses comme cela :</p>
-<div class="highlight-python"><div class="highlight"><pre>$ apt-get install -y apache2 apache2-mpm-worker libapache2-mod-fastcgi
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ apt-get install -y apache2 apache2-mpm-worker libapache2-mod-fastcgi
 $ a2enmod actions fastcgi alias
 $ apt-get install libapache2-mod-php5 php5-common php5-cli php5-fpm php5
 </pre></div>
@@ -549,20 +510,20 @@ $ apt-get install libapache2-mod-php5 php5-common php5-cli php5-fpm php5
 <p>Le but principal est d&#8217;obtenir le binaire &#8220;mapserv&#8221; installé dans dans un répertoire accessible publiquement qui soit configuré pour lancer des scripts et des programmes CGI.</p>
 <ol class="arabic">
 <li><p class="first">Localiser votre répertoire cgi-bin. Avec une configuration par défaut, le répertoire CGI est &#8220;/usr/local/apache2/cgi-bin&#8221; (Les utilisateurs RedHat utiliseront &#8220;/home/httpd/cgi-bin&#8221;, ceux de Debian : &#8220;/usr/lib/cgi-bin&#8221;). Si vous utilisez Apache, il devrait y avoir une directive ScriptAlias dans votre http.conf, ou dans le site par défaut quelque chose comme cela :</p>
-<div class="highlight-python"><div class="highlight"><pre>$ cat /etc/apache2/sites-available/default | grep &#39;cgi-bin&#39;
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ cat /etc/apache2/sites-available/default | grep &#39;cgi-bin&#39;
 ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
 </pre></div>
 </div>
 </li>
 <li><p class="first">Localisez le chemin d&#8217;installation de votre exécutable fraîchement installé. Cela est affiché quand vous lancez &#8220;make install&#8221;, quelque chose comme cela :</p>
-<div class="highlight-python"><div class="highlight"><pre>-- Installing: /usr/local/bin/mapserv
+<div class="highlight-python"><div class="highlight"><pre><span></span>-- Installing: /usr/local/bin/mapserv
 -- Set runtime path of &quot;/usr/local/bin/mapserv&quot; to
       &quot;/usr/local/lib:/usr/local/pgsql/91/lib&quot;
 </pre></div>
 </div>
 </li>
 <li><p class="first">Vous voudrez mettre en place un lien symbolique vers l&#8217;exécutable de votre répertoire cgi-bin:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># ln -s /usr/local/bin/mapserv /usr/lib/cgi-bin/mapserv</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># ln -s /usr/local/bin/mapserv /usr/lib/cgi-bin/mapserv</span>
 </pre></div>
 </div>
 <div class="admonition warning">
@@ -585,7 +546,7 @@ ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
 <li><p class="first">Vous n&#8217;avez pas les droits d&#8217;écriture sur le répertoire CGI de votre serveur web. Demandez à votre webmaster d&#8217;installer le fichier pour vous.</p>
 </li>
 <li><p class="first">Le serveur web vous renvoie une erreur &#8220;403 Permission denied&#8221;. Assurez-vous que l&#8217;utilisateur qui fait fonctionner le serveur web (habituellement &#8220;nobody&#8221;) a les droits d&#8217;exécution sur le binaire exécutable. Rendre le fichier exécutable par tous est très bien et sûr:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ chmod o+x mapserv
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ chmod o+x mapserv
 </pre></div>
 </div>
 </li>
@@ -640,16 +601,6 @@ ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
 <li><a class="reference internal" href="#optional-features">Fonctionnalités optionnelles</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#libgd">libgd</a><ul>
-<li><a class="reference internal" href="#minimum-libgd-versions">Versions de libgd minimum</a></li>
-<li><a class="reference internal" href="#libiconv">libiconv</a></li>
-<li><a class="reference internal" href="#pre-packaged-system-libraries">Bibliothèques précompilées/système</a></li>
-<li><a class="reference internal" href="#macosx">MacOSX</a></li>
-<li><a class="reference internal" href="#freetype-support">Support FreeType</a></li>
-<li><a class="reference internal" href="#px-anti-aliasing-and-segfaults">Anticrênelage 1 pixel et erreurs de segmentation</a></li>
-<li><a class="reference internal" href="#curved-label-support">Support des étiquettes incurvées</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#anti-grain-geometry-support">Support de Anti-Grain Geometry (AGG)</a></li>
 <li><a class="reference internal" href="#ogc-support">Support OGC</a><ul>
 <li><a class="reference internal" href="#wms-support">Support WMS</a><ul>
@@ -668,7 +619,6 @@ ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
 </li>
 <li><a class="reference internal" href="#spatial-warehousing">Entrepôts de données spatiales</a><ul>
 <li><a class="reference internal" href="#postgis">PostGIS</a></li>
-<li><a class="reference internal" href="#arcsde">ArcSDE</a></li>
 <li><a class="reference internal" href="#oracle-spatial">Oracle Spatial</a></li>
 </ul>
 </li>
@@ -708,11 +658,11 @@ ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

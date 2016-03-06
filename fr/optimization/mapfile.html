@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Mapfile &mdash; MapServer 7.0.0 documentation</title>
+    <title>Mapfile &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../index.html" />
     <link rel="up" title="Optimisation" href="index.html" />
     <link rel="next" title="Raster" href="raster.html" />
     <link rel="prev" title="FastCGI" href="fastcgi.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="raster.html" title="Raster"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="fastcgi.html" title="FastCGI"
+             accesskey="P">précédent</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.1</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Optimisation</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -167,22 +184,12 @@
 </div>
 <div class="section" id="introduction">
 <h2><a class="toc-backref" href="#table-of-contents">Introduction</a><a class="headerlink" href="#introduction" title="Lien permanent vers ce titre">¶</a></h2>
-<p>The contents of a Map File are used by MapServer for configuration, data
-access, projection, and more. Because the Map File is parsed every time a map
-image is requested, it is important to think about what you include in the
-file in order to optimize performance. The optimal Map File is one that
-doesn&#8217;t include or reference anything that isn&#8217;t needed.</p>
+<p>Le contenu d&#8217;un fichier Map est utilisé par MapServer pour la configuration, l&#8217;accès aux données, la projection et beaucoup d&#8217;autres choses. Parce que le fichier Map est lu à chaque fois une image de carte est demandée, il est important de réfléchir ce que vous incluez dans le fichier afin d&#8217;optimiser les performances. Le fichier Map optimal est celui qui n&#8217;inclus rien d&#8217;autres que ce qui est nécessaire.</p>
 <div class="section" id="projections">
 <span id="index-1"></span><h3>1. Projections<a class="headerlink" href="#projections" title="Lien permanent vers ce titre">¶</a></h3>
-<p>There are two ways to define projections in a Map File. You can either use
-inline projection parameters or specify an EPSG code for that projection. If
-you use the <a class="reference internal" href="../glossary.html#term-epsg"><span class="xref std std-term">EPSG</span></a> code method, <a class="reference internal" href="../glossary.html#term-proj-4"><span class="xref std std-term">Proj.4</span></a> looks up the projection
-parameters in the Proj4 database using the EPSG code as an ID. This database
-lookup takes significantly more resources than when the projection parameters
-are defined inline. This lookup takes place for each projection definition
-using EPSG codes in a Map File.</p>
+<p>Il existe deux façons de définir des projections dans un fichier de la carte . Vous pouvez soit utiliser les paramètres de projection inline ou spécifier un code EPSG pour cette projection. Si vous utilisez le : terme: <cite>Méthode code EPSG</cite> , : terme: ` Proj.4` regarde les paramètres de projection dans la base de données Proj4 utilisant le code EPSG comme ID . Cette recherche de base de données prend beaucoup plus de ressources que lorsque les paramètres de projection sont définies inline . Cette recherche a lieu pour chaque définition de projection utilisant des codes EPSG dans un fichier de la carte .</p>
 <p><strong>Projection définie en utilisant des paramètres de projection &#8220;en ligne&#8221;</strong></p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">PROJECTION</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">PROJECTION</span>
   <span class="s">&quot;proj=utm&quot;</span>
   <span class="s">&quot;ellps=GRS80&quot;</span>
   <span class="s">&quot;datum=NAD83&quot;</span>
@@ -194,7 +201,7 @@ using EPSG codes in a Map File.</p>
 </pre></div>
 </div>
 <p><strong>Projection définie en utilisant un code EPSG</strong></p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">PROJECTION</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">PROJECTION</span>
    <span class="s">&quot;init=epsg:26915&quot;</span>
 <span class="k">END</span>
 </pre></div>
@@ -214,32 +221,18 @@ using EPSG codes in a Map File.</p>
 <ul class="simple">
 <li><p class="first">Construire des mapfiles les plus minimaux, inclure seulement des couches que vous avez prévu d&#8217;utiliser.</p>
 </li>
-<li>Turn off unnecessary layers; the more layers MapServer is displaying, the
-more time it takes. Have your opening map view show only the minimum
-necessary to orient the user, and allow them to turn on additional layers as
-needed. This is particularly true of remote WMS or very large rasters.</li>
-<li>Related to turning off layers, is turning them on but using MINSCALEDENOM
-and MAXSCALEDENOM to determine at what zoomlevels the layer is available. If
-a map&#8217;s display is outside of the layer&#8217;s MINSCALEDENOM and MAXSCALEDENOM
-range, then MapServer can skip processing that layer. It also makes for a
-really cool effect, that the national boundaries magically change to state
-boundaries.</li>
+<li><p class="first">Éteignez les couches inutiles ; Plus Les couches affiche par MapServer , plus le temps qu&#8217;il faut. Ayez votre carte ouverture vue c&#8217;est le minimum nécessaire pour orienter l&#8217;utilisateur , et leur permettre de tourner sur des couches supplémentaires au besoin. Cela est particulièrement vrai de WMS distants ou de très grandes trames .</p>
+</li>
+<li><p class="first">Liée à la désactivation des couches , est de les activer , mais en utilisant MINSCALEDENOM et MAXSCALEDENOM de déterminer à quel zoomlevels la couche est disponible . Si l&#8217;affichage de la carte est en dehors de MINSCALEDENOM de la couche et la gamme de MAXSCALEDENOM , MapServer peut ignorer le traitement de cette couche. Il rend également pour un effet vraiment cool , que les frontières nationales changent magiquement au frontières de l&#8217;Etat .</p>
+</li>
 <li><p class="first">Si vous avez une application complexe, considérez l&#8217;usage de plusieurs mapfiles simples et spécifiques plutôt qu&#8217;un seul gros fichier mapfile &#8216;tout en un&#8217;.</p>
 </li>
-<li>In a similar vein, each class also supports MINSCALEDENOM and MAXSCALEDENOM.
-If your dataset has data that are relevant at different zoomlevels, then you
-may find this a very handy trick. For example, give a MINSCALEDENOM of
-1:1000000, county roads a MINSCALEDENOM of 1:100000, and streets a
-MAXSCALEDENOM of 1:50000. You get the cool effect of new data magically
-appearing, but you don&#8217;t have MapServer trying to draw the nation&#8217;s roads
-when the entire nation is in view!</li>
-<li>Classes are processed in order, and a feature is assigned to the first class
-that matches. So try placing the most commonly-used classes at the top of
-the class list, so MapServer doesn&#8217;t have to try as many classes before
-finding a match. For example, if you wanted to highlight the single state of
-Wyoming, you would probably do this:</li>
+<li><p class="first">Dans la même veine , chaque classe prend également en charge MINSCALEDENOM et MAXSCALEDENOM . Si votre ensemble de données contient des données qui sont pertinentes à différents zoomlevels , alors vous pouvez trouver ça comme une astuce très pratique . Par exemple , donner un MINSCALEDENOM de 1: 1000000 , routes départementales un de MINSCALEDENOM de 1: 100000 , et les rues un MAXSCALEDENOM de 1: 50000 . Vous obtenez l&#8217;effet fraîcheur de nouvelles données qui apparaissent comme par magie , mais vous n&#8217;avez pas MapServer essayant pour attirant les routes du pays où toute la nation est en vue !</p>
+</li>
+<li><p class="first">Les classes sont traitées dans l&#8217;ordre , et une fonctionnalité est affectée à la première classe qui correspond . Donc, essayez de placer les classes les plus couramment utilisés dans le haut de la liste de classe , alors MapServer n&#8217;a pas avoir à essayer autant de classes avant de trouver un match . Par exemple , si vous voulez mettre en évidence l&#8217;état unique de Wyoming, vous auriez probablement le faire.</p>
+</li>
 </ul>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">CLASS</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">CLASS</span>
    <span class="k">EXPRESSION</span> <span class="p">(</span><span class="s">&#39;[NAME]&#39;</span> <span class="ow">eq</span> <span class="s">&#39;WY&#39;</span><span class="p">])</span>
    <span class="k">STYLE</span>
      <span class="k">COLOR</span> <span class="mi">255</span> <span class="mi">0</span> <span class="mi">0</span>
@@ -253,7 +246,7 @@ Wyoming, you would probably do this:</li>
 </pre></div>
 </div>
 <p>Mais cela sera beaucoup plus efficace de faire ceci, comme 98% des cas seront vérifiés au premier essai :</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">CLASS</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">CLASS</span>
   <span class="k">EXPRESSION</span> <span class="p">(</span><span class="s">&#39;[NAME]&#39;</span> <span class="ow">ne</span> <span class="s">&#39;WY&#39;</span><span class="p">])</span>
   <span class="k">STYLE</span>
     <span class="k">COLOR</span> <span class="mi">128</span> <span class="mi">128</span> <span class="mi">128</span>
@@ -339,11 +332,11 @@ Wyoming, you would probably do this:</li>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

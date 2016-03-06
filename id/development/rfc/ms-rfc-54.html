@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MS RFC 54: Rendering Interface API &mdash; MapServer 7.0.0 documentation</title>
+    <title>MS RFC 54: Rendering Interface API &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Tentang dokumen ini" href="../../about.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 55: Improve control of output resolution" href="ms-rfc-55.html" />
     <link rel="prev" title="MS RFC 53: Guidelines for MapScript method return values" href="ms-rfc-53.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigasi</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Indeks Umum"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ms-rfc-55.html" title="MS RFC 55: Improve control of output resolution"
+             accesskey="N">berikut</a> |</li>
+        <li class="right" >
+          <a href="ms-rfc-53.html" title="MS RFC 53: Guidelines for MapScript method return values"
+             accesskey="P">sebelum</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -163,8 +180,8 @@ an approach similar to the vtable architecture used by the input drivers.</p>
 is responsible both for low-level drawing functionality (eg. strokes, fills,
 symbology) and for higher level interpretation of the combination of mapfile
 keywords (eg. scale-dependant size adjustments, line-folowing orientation for
-symbols ...). This leads to alot of code duplication and difficult
-maintainance.</p>
+symbols ...). This leads to a lot of code duplication and difficult
+maintenance.</p>
 <p>In a first phase, a cairo (<a class="reference external" href="http://cairograhpics.org">http://cairograhpics.org</a>) renderer will be added
 following this architecture,, and will support traditional raster formats (png,
 jpeg) as well as vector formats (pdf, svg).  Support for openGL and KML
@@ -198,7 +215,7 @@ capabilities and configuration options, not all functions need be implemented)</
 <li>creating and registering a new outputformat driver, by making the
 renderObj function pointers point to the low-level functions</li>
 </ul>
-<div class="highlight-c"><div class="highlight"><pre><span class="k">struct</span> <span class="n">renderer</span><span class="p">{</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">renderer</span><span class="p">{</span>
     <span class="c1">// configuration parameters</span>
 
     <span class="c1">// image creation functions</span>
@@ -232,9 +249,9 @@ when appropriate in the rest of this document.</p>
 <h3>Image Creation Functions<a class="headerlink" href="#image-creation-functions" title="Link permanen untuk headline ini">¶</a></h3>
 <p>Each renderer must provide a function to create a new image. MapServer&#8217;s
 imageObj structure will have an additional void* member that will be used by
-the renderer to store a structure containing any usefull information it may
+the renderer to store a structure containing any useful information it may
 need.</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="n">imageObj</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="n">createImage</span><span class="p">)(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="n">outputFormatObj</span> <span class="o">*</span><span class="n">format</span><span class="p">,</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">imageObj</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="n">createImage</span><span class="p">)(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="n">outputFormatObj</span> <span class="o">*</span><span class="n">format</span><span class="p">,</span>
             <span class="n">colorObj</span><span class="o">*</span> <span class="n">bg</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -247,14 +264,14 @@ layout options).</p>
 </div>
 <div class="section" id="raster-handling-functions">
 <h3>Raster Handling Functions<a class="headerlink" href="#raster-handling-functions" title="Link permanen untuk headline ini">¶</a></h3>
-<p>Raster handling will follow different code paths depending on wether the
+<p>Raster handling will follow different code paths depending on whether the
 underlying renderer is already natively a raster renderer (eg. PNG, JPEG) , or if
 it is a vector one (eg. PDF, SVG).</p>
 <div class="section" id="raster-buffer-structure">
 <h4>Raster Buffer Structure<a class="headerlink" href="#raster-buffer-structure" title="Link permanen untuk headline ini">¶</a></h4>
 <p>A new structure defining a raster object in memory is defined, and is used to
 replace the current code that uses a gdImage as a common format.</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
 
     <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">width</span><span class="p">,</span><span class="n">height</span><span class="p">;</span>
 
@@ -269,7 +286,7 @@ replace the current code that uses a gdImage as a common format.</p>
 
     <span class="c1">// pointer to the actual pixels (should not be used by the high-level</span>
     <span class="c1">// code)</span>
-    <span class="c1">// TODO: as this memeber is actually private, it should probably be</span>
+    <span class="c1">// TODO: as this member is actually private, it should probably be</span>
     <span class="c1">// a void* so that any internal representation can be used</span>
     <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pixelbuffer</span><span class="p">;</span>
 
@@ -279,7 +296,7 @@ replace the current code that uses a gdImage as a common format.</p>
 <p>A renderer must provide a function to initialize a rasterBuffer where the pixel
 alignment and the order of the bands best fits its internal representation of a
 raster array.</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">initializeRasterBuffer</span><span class="p">)(</span><span class="n">rasterBufferObj</span> <span class="o">*</span><span class="n">buffer</span><span class="p">,</span> <span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">);</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">initializeRasterBuffer</span><span class="p">)(</span><span class="n">rasterBufferObj</span> <span class="o">*</span><span class="n">buffer</span><span class="p">,</span> <span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -293,14 +310,14 @@ given a handle to the memory buffer used by the renderer, and direclty
 sets individual pixels where needed. Such a renderer will thus implement
 a function to export a rasterBufferObj pointing to its internal pixel
 buffer:</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">getRasterBuffer</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span><span class="n">rasterBufferObj</span> <span class="o">*</span><span class="n">rb</span><span class="p">);</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">getRasterBuffer</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span><span class="n">rasterBufferObj</span> <span class="o">*</span><span class="n">rb</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">if the renderer does not use an internal representation that can be
 directly filled by the raster layer code, it must provide two functions
 that will allow the higher level code to merge the created raster:</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">mergeRasterBuffer</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">dest</span><span class="p">,</span> <span class="n">rasterBufferObj</span> <span class="o">*</span><span class="n">overlay</span><span class="p">,</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">mergeRasterBuffer</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">dest</span><span class="p">,</span> <span class="n">rasterBufferObj</span> <span class="o">*</span><span class="n">overlay</span><span class="p">,</span>
             <span class="kt">double</span> <span class="n">opacity</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dstX</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dstY</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -312,7 +329,7 @@ that will allow the higher level code to merge the created raster:</p>
 <h3>Image Saving Functions<a class="headerlink" href="#image-saving-functions" title="Link permanen untuk headline ini">¶</a></h3>
 <p>Similarly to raster layers, there are two code paths for saving a created image
 to a stream or to a buffer, depending also on the <em>supports_pixel_buffer</em>
-configuration paramter:</p>
+configuration parameter:</p>
 <ul>
 <li><p class="first">if the renderer supports a pixel buffer, the exported rasterBufferObj
 will be treated by some new image writing code (relying on
@@ -322,7 +339,7 @@ in a single place.</p>
 </li>
 <li><p class="first">if the renderer does not support exproting to a rasterBuffer, it should
 provide a function for writing itself to a given stream:</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">saveImage</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">outputFormatObj</span> <span class="o">*</span><span class="n">format</span><span class="p">);</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">saveImage</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">outputFormatObj</span> <span class="o">*</span><span class="n">format</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
@@ -340,7 +357,7 @@ transparent space around the actual marker inside the tile allows to tweak
 the spacing between markers insde the polygon)</li>
 <li>hatch fill: TBD - probably by drawing individual lines at a higher level</li>
 </ul>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderPolygon</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="n">shapeObj</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="n">colorObj</span> <span class="o">*</span><span class="n">color</span><span class="p">);</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderPolygon</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="n">shapeObj</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="n">colorObj</span> <span class="o">*</span><span class="n">color</span><span class="p">);</span>
 <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderPolygonTiled</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="n">shapeObj</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">tile</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -351,14 +368,14 @@ the spacing between markers insde the polygon)</li>
 <li>simple stroke: is passed a pattern (dashes) and line style (caps, joins)</li>
 <li>pattern fill: is passed a tile</li>
 </ul>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderLine</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="n">shapeObj</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="n">strokeStyleObj</span> <span class="o">*</span><span class="n">style</span><span class="p">);</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderLine</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="n">shapeObj</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="n">strokeStyleObj</span> <span class="o">*</span><span class="n">style</span><span class="p">);</span>
 <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderLineTiled</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="n">shapeObj</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">tile</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="markers">
 <h4>Markers<a class="headerlink" href="#markers" title="Link permanen untuk headline ini">¶</a></h4>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderVectorSymbol</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderVectorSymbol</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span>
             <span class="n">symbolObj</span> <span class="o">*</span><span class="n">symbol</span><span class="p">,</span> <span class="n">symbolStyleObj</span> <span class="o">*</span><span class="n">style</span><span class="p">);</span>
 
 <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderPixmapSymbol</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span>
@@ -371,7 +388,7 @@ the spacing between markers insde the polygon)</li>
         <span class="n">symbolObj</span> <span class="o">*</span><span class="n">symbol</span><span class="p">,</span> <span class="n">symbolStyleObj</span> <span class="o">*</span><span class="n">style</span><span class="p">);</span>
 </pre></div>
 </div>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderTile</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">tile</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span> <span class="kt">double</span> <span class="n">angle</span><span class="p">);</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderTile</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">tile</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span> <span class="kt">double</span> <span class="n">angle</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -380,13 +397,13 @@ the spacing between markers insde the polygon)</li>
 <ul>
 <li><p class="first">label size calculation: If passed an &#8220;advances pointer&#8221;, also calculates individual
 advances for each glyphs (for anlge foloow text)</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">getTruetypeTextBBox</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span><span class="kt">char</span> <span class="o">*</span><span class="n">font</span><span class="p">,</span> <span class="kt">double</span> <span class="n">size</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">string</span><span class="p">,</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">getTruetypeTextBBox</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span><span class="kt">char</span> <span class="o">*</span><span class="n">font</span><span class="p">,</span> <span class="kt">double</span> <span class="n">size</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">string</span><span class="p">,</span>
             <span class="n">rectObj</span> <span class="o">*</span><span class="n">rect</span><span class="p">,</span> <span class="kt">double</span> <span class="o">**</span><span class="n">advances</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">glyph rendering: no real change</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderGlyphs</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span> <span class="n">labelStyleObj</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderGlyphs</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span> <span class="n">labelStyleObj</span>
         <span class="o">*</span><span class="n">style</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">text</span><span class="p">);</span>
 
 <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderGlyphsLine</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span><span class="n">labelPathObj</span> <span class="o">*</span><span class="n">labelpath</span><span class="p">,</span>
@@ -407,20 +424,20 @@ a simple imageObj created by normally by the renderer suffice ? Second solution 
 simpler as we&#8217;d use the same functions for rendering a symbol than for rendering a tile.
 First solution is more flexible, as the renderer can cache anything.</p>
 </div>
-<div class="section" id="miscelaneous-functions">
-<h4>Miscelaneous functions<a class="headerlink" href="#miscelaneous-functions" title="Link permanen untuk headline ini">¶</a></h4>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">transformShape</span><span class="p">)(</span><span class="n">shapeObj</span> <span class="o">*</span><span class="n">shape</span><span class="p">,</span> <span class="n">rectObj</span> <span class="n">extend</span><span class="p">,</span> <span class="kt">double</span> <span class="n">cellsize</span><span class="p">);</span>
+<div class="section" id="miscellaneous-functions">
+<h4>Miscellaneous functions<a class="headerlink" href="#miscellaneous-functions" title="Link permanen untuk headline ini">¶</a></h4>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">transformShape</span><span class="p">)(</span><span class="n">shapeObj</span> <span class="o">*</span><span class="n">shape</span><span class="p">,</span> <span class="n">rectObj</span> <span class="n">extend</span><span class="p">,</span> <span class="kt">double</span> <span class="n">cellsize</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>These functions might be needed by some renderers. TBD</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">startNewLayer</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="kt">double</span> <span class="n">opacity</span><span class="p">);</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">startNewLayer</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="kt">double</span> <span class="n">opacity</span><span class="p">);</span>
 <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">closeNewLayer</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="kt">double</span> <span class="n">opacity</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="cleanup-functions">
 <h4>Cleanup functions<a class="headerlink" href="#cleanup-functions" title="Link permanen untuk headline ini">¶</a></h4>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">freeImage</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">image</span><span class="p">);</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">freeImage</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">image</span><span class="p">);</span>
 <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">freeSymbol</span><span class="p">)(</span><span class="n">symbolObj</span> <span class="o">*</span><span class="n">symbol</span><span class="p">);</span>
 <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">freeShape</span><span class="p">)(</span><span class="n">shapeObj</span> <span class="o">*</span><span class="n">shape</span><span class="p">);</span>
 </pre></div>
@@ -457,7 +474,7 @@ rasterBufferObj and not only to a gdImage.</p>
 <p class="first admonition-title">Catatan</p>
 <p class="last">TODO (FrankW) add some detail here about the changes induced here</p>
 </div>
-<div class="highlight-c"><div class="highlight"><pre><span class="k">if</span><span class="p">(</span><span class="n">renderer</span><span class="o">-&gt;</span><span class="n">supports_pixel_buffer</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">if</span><span class="p">(</span><span class="n">renderer</span><span class="o">-&gt;</span><span class="n">supports_pixel_buffer</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">rasterBufferObj</span> <span class="n">buffer</span><span class="p">;</span>
     <span class="n">renderer</span><span class="o">-&gt;</span><span class="n">getRasterBuffer</span><span class="p">(</span><span class="n">img</span><span class="p">,</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">);</span>
     <span class="n">msDrawRasterLayer</span><span class="p">(</span><span class="n">map</span><span class="p">,</span><span class="n">layer</span><span class="p">,</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">);</span>
@@ -489,7 +506,7 @@ this)</p>
 <p>The use of an image cache would be configurable by each renderer via the
 supports_imagecache configuration option, as its use isn&#8217;t necessarily useful
 depending on the format.</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="k">if</span><span class="p">(</span><span class="n">renderer</span><span class="o">-&gt;</span><span class="n">supports_imagecache</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">if</span><span class="p">(</span><span class="n">renderer</span><span class="o">-&gt;</span><span class="n">supports_imagecache</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// this function looks in the global image cache if it finds a tile</span>
     <span class="c1">// corresponding to the current symbol and styling and returns it. If</span>
     <span class="c1">// it wasn&#39;t found, it calls the renderer functions to create a new</span>
@@ -606,8 +623,8 @@ in a second phase as it is lower priority, and does not induce a major architect
 change.</p>
 </div>
 </div>
-<div class="section" id="miscelaneous">
-<h2>Miscelaneous<a class="headerlink" href="#miscelaneous" title="Link permanen untuk headline ini">¶</a></h2>
+<div class="section" id="miscellaneous">
+<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Link permanen untuk headline ini">¶</a></h2>
 <div class="section" id="drawing-some-layers-as-rasters-in-vector-renderers">
 <h3>Drawing some layers as rasters in vector renderers<a class="headerlink" href="#drawing-some-layers-as-rasters-in-vector-renderers" title="Link permanen untuk headline ini">¶</a></h3>
 <p>The current pdf (and SVG?) renderers have the option of switching over to GD for
@@ -723,7 +740,7 @@ width of the line.</li>
 <li><a class="reference internal" href="#markers">Markers</a></li>
 <li><a class="reference internal" href="#labels-and-text">Labels and Text</a></li>
 <li><a class="reference internal" href="#tiles-and-caches">Tiles and Caches</a></li>
-<li><a class="reference internal" href="#miscelaneous-functions">Miscelaneous functions</a></li>
+<li><a class="reference internal" href="#miscellaneous-functions">Miscellaneous functions</a></li>
 <li><a class="reference internal" href="#cleanup-functions">Cleanup functions</a></li>
 </ul>
 </li>
@@ -740,7 +757,7 @@ width of the line.</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#image-i-o">Image I/O</a></li>
-<li><a class="reference internal" href="#miscelaneous">Miscelaneous</a><ul>
+<li><a class="reference internal" href="#miscellaneous">Miscellaneous</a><ul>
 <li><a class="reference internal" href="#drawing-some-layers-as-rasters-in-vector-renderers">Drawing some layers as rasters in vector renderers</a></li>
 <li><a class="reference internal" href="#legend">Legend</a></li>
 <li><a class="reference internal" href="#scalebar">Scalebar</a></li>
@@ -775,11 +792,11 @@ width of the line.</li>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>FastCGI &mdash; MapServer 7.0.0 documentation</title>
+    <title>FastCGI &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="Over deze documenten" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../index.html" />
     <link rel="up" title="Optimization" href="index.html" />
     <link rel="next" title="Mapfile" href="mapfile.html" />
     <link rel="prev" title="Debugging MapServer" href="debugging.html" />
@@ -129,6 +129,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigatie</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Algemene index"
+             accesskey="I">Index</a></li>
+        <li class="right" >
+          <a href="mapfile.html" title="Mapfile"
+             accesskey="N">volgende</a> |</li>
+        <li class="right" >
+          <a href="debugging.html" title="Debugging MapServer"
+             accesskey="P">vorige</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.1 Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Optimization</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -205,12 +222,12 @@ This is pretty straightforward, and all you need to do is tell
 <em>configure</em> where the FastCGI library is installed.  If you changed
 the prefix variable as described above, this would be:</li>
 </ol>
-<div class="highlight-python"><div class="highlight"><pre>./configure [other options] --with-fastcgi=/usr/local
+<div class="highlight-python"><div class="highlight"><pre><span></span>./configure [other options] --with-fastcgi=/usr/local
 </pre></div>
 </div>
 <p>With those pieces in place, the MapServer CGI (mapserv) should now be
 FastCGI-enabled.  You can verify this by testing it on with the command line:</p>
-<div class="highlight-python"><div class="highlight"><pre>[hobu@kenyon mapserver-6.2.0]# ./mapserv -v
+<div class="highlight-python"><div class="highlight"><pre><span></span>[hobu@kenyon mapserver-6.2.0]# ./mapserv -v
 MapServer version 6.2.0 OUTPUT=GIF OUTPUT=PNG OUTPUT=JPEG OUTPUT=WBMP
 SUPPORTS=PROJ SUPPORTS=FREETYPE SUPPORTS=WMS_SERVER SUPPORTS=WMS_CLIENT
 SUPPORTS=WFS_SERVER SUPPORTS=WFS_CLIENT SUPPORTS=FASTCGI INPUT=EPPL7
@@ -224,19 +241,19 @@ INPUT=SHAPEFILE DEBUG=MSDEBUG
 <ol class="arabic simple">
 <li>Modify http.conf to load the FastCGI module.</li>
 </ol>
-<div class="highlight-apache"><div class="highlight"><pre><span class="nb">LoadModule</span> fcgid_module modules/mod_fcgid.so
+<div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nb">LoadModule</span> fcgid_module modules/mod_fcgid.so
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
 <li>Add an Apache handler for FastCGI applications.</li>
 </ol>
-<div class="highlight-apache"><div class="highlight"><pre><span class="nb">AddHandler</span> fcgid-script fcgi
+<div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nb">AddHandler</span> fcgid-script fcgi
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
 <li>Set FastCGI processing information</li>
 </ol>
-<div class="highlight-apache"><div class="highlight"><pre><span class="nt">&lt;IfModule</span> <span class="s">mod_fcgid.c</span><span class="nt">&gt;</span>
+<div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span> <span class="s">mod_fcgid.c</span><span class="nt">&gt;</span>
    <span class="nb">FcgidMaxProcessesPerClass</span> <span class="m">30</span>
    <span class="nb">FcgidInitialEnv</span> PROJ_LIB <span class="sx">/usr/local/share/proj</span>
    <span class="nb">FcgidInitialEnv</span> LD_LIBRARY_PATH <span class="s2">&quot;/usr/local/lib:/usr/local/pgsql/lib:/usr3/pkg3/oracle9/lib&quot;</span>
@@ -250,17 +267,17 @@ INPUT=SHAPEFILE DEBUG=MSDEBUG
 under apache is to use mod_fcgid, as detailed above.</p>
 <ol class="arabic">
 <li><p class="first">Modify http.conf to load the FastCGI module.</p>
-<div class="highlight-python"><div class="highlight"><pre>LoadModule fastcgi_module /usr/lib/apache/1.3/mod_fastcgi.so
+<div class="highlight-python"><div class="highlight"><pre><span></span>LoadModule fastcgi_module /usr/lib/apache/1.3/mod_fastcgi.so
 </pre></div>
 </div>
 </li>
 <li><p class="first">Add an Apache handler for FastCGI applications.</p>
-<div class="highlight-python"><div class="highlight"><pre>AddHandler fastcgi-script fcgi
+<div class="highlight-python"><div class="highlight"><pre><span></span>AddHandler fastcgi-script fcgi
 </pre></div>
 </div>
 </li>
 <li><p class="first">Set FastCGI processing information</p>
-<div class="highlight-python"><div class="highlight"><pre>FastCgiConfig -initial-env PROJ_LIB=/usr/local/share/proj
+<div class="highlight-python"><div class="highlight"><pre><span></span>FastCgiConfig -initial-env PROJ_LIB=/usr/local/share/proj
 -initial-env LD_LIBRARY_PATH=/usr/local/lib:/usr/local/pgsql/lib:/usr3/pkg3/oracle9/lib
 -appConnTimeout 60 -idle-timeout 60 -init-start-delay 1
 -minProcesses 2 -maxClassProcesses 20 -startDelay 5
@@ -278,27 +295,27 @@ or <strong>mapserv.exe</strong>) into the cgi-bin directory with the extension
 want to utilize fastcgi support.</p>
 <p>For some platforms, the MapServer  link would then have to changed
 from:</p>
-<div class="highlight-python"><div class="highlight"><pre>http://your.domain.name/cgi-bin/mapserv?MAP=/path/to/mapfile.map
+<div class="highlight-python"><div class="highlight"><pre><span></span>http://your.domain.name/cgi-bin/mapserv?MAP=/path/to/mapfile.map
 </pre></div>
 </div>
 <p>To:</p>
-<div class="highlight-python"><div class="highlight"><pre>http://your.domain.name/cgi-bin/mapserv.fcgi?MAP=/path/to/mapfile.map
+<div class="highlight-python"><div class="highlight"><pre><span></span>http://your.domain.name/cgi-bin/mapserv.fcgi?MAP=/path/to/mapfile.map
 </pre></div>
 </div>
 <p>For other platforms, the MapServer  link would then have to changed
 from:</p>
-<div class="highlight-python"><div class="highlight"><pre>http://your.domain.name/cgi-bin/mapserv.exe?MAP=/path/to/mapfile.map
+<div class="highlight-python"><div class="highlight"><pre><span></span>http://your.domain.name/cgi-bin/mapserv.exe?MAP=/path/to/mapfile.map
 </pre></div>
 </div>
 <p>To:</p>
-<div class="highlight-python"><div class="highlight"><pre>http://your.domain.name/cgi-bin/mapserv.fcgi?MAP=/path/to/mapfile.map
+<div class="highlight-python"><div class="highlight"><pre><span></span>http://your.domain.name/cgi-bin/mapserv.fcgi?MAP=/path/to/mapfile.map
 </pre></div>
 </div>
 </li>
 <li><p class="first">In your mapfile, set a PROCESSING directive to tell FastCGI to cache
 the connections and layer information on all layers for which connection
 caching is desired - ie. all slow layers.</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">PROCESSING</span> <span class="s">&quot;CLOSE_CONNECTION=DEFER&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">PROCESSING</span> <span class="s">&quot;CLOSE_CONNECTION=DEFER&quot;</span>
 </pre></div>
 </div>
 </li>
@@ -334,7 +351,7 @@ are written to it. To accomplish this for stdio handled through the FastCGI
 library, I had to do the following hack to libfcgi/fcgi_stdio.c within the
 fcgi-2.4.0 distribution.</p>
 <p>In FCGI_Accept() made he following change</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="k">if</span><span class="p">(</span><span class="n">isCGI</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">if</span><span class="p">(</span><span class="n">isCGI</span><span class="p">)</span> <span class="p">{</span>
   <span class="n">FCGI_stdin</span><span class="o">-&gt;</span><span class="n">stdio_stream</span> <span class="o">=</span> <span class="n">stdin</span><span class="p">;</span>
   <span class="n">FCGI_stdin</span><span class="o">-&gt;</span><span class="n">fcgx_stream</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
   <span class="n">FCGI_stdout</span><span class="o">-&gt;</span><span class="n">stdio_stream</span> <span class="o">=</span> <span class="n">stdout</span><span class="p">;</span>
@@ -353,9 +370,9 @@ fcgi-2.4.0 distribution.</p>
 </pre></div>
 </div>
 <p>Also, add the following just before the FCGI_Accept() function</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="cp">#ifdef _WIN32</span>
-<span class="cp">#include &lt;fcntl.h&gt;</span>
-<span class="cp">#include &lt;io.h&gt;</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="cp">#ifdef _WIN32</span>
+<span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;io.h&gt;</span><span class="cp"></span>
 <span class="cp">#endif</span>
 </pre></div>
 </div>
@@ -366,7 +383,7 @@ let me know!</p>
 <h3>Building libfcgi<a class="headerlink" href="#building-libfcgi" title="Permalink naar deze titel">¶</a></h3>
 <p>The makefile.nt should be fine. Just ensure you have run VCVARS32.BAT (as is
 needed for building MapServer) and then issue the command:</p>
-<div class="highlight-python"><div class="highlight"><pre>nmake /f makefile.nt
+<div class="highlight-python"><div class="highlight"><pre><span></span>nmake /f makefile.nt
 </pre></div>
 </div>
 <p>Then the .lib and .dll will be in libfcgi/Debug?. Make sure you copy the DLL
@@ -445,11 +462,11 @@ MSVCRT.DLL (or all using MSVCRTD.DLL) using the MS SDK Dependency Walker.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

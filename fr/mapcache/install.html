@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Compilation &amp; Installation &mdash; MapServer 7.0.0 documentation</title>
+    <title>Compilation &amp; Installation &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../index.html" />
     <link rel="up" title="MapCache 1.4" href="index.html" />
     <link rel="next" title="Fichier de configuration" href="config.html" />
     <link rel="prev" title="MapCache 1.4" href="index.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="config.html" title="Fichier de configuration"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="MapCache 1.4"
+             accesskey="P">précédent</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.1</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapCache 1.4</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -168,16 +185,16 @@
 <li><a class="reference internal" href="#getting-the-source" id="id2">Obtenir les sources</a></li>
 <li><a class="reference internal" href="#linux-instructions" id="id3">Instructions Linux</a><ul>
 <li><a class="reference internal" href="#apache-module-specific-instructions" id="id4">Instructions spécifiques au module Apache</a></li>
-<li><a class="reference internal" href="#nginx-specific-instructions" id="id5">Instructions spécifiques Nginx</a></li>
+<li><a class="reference internal" href="#nginx-specific-instructions" id="id5">nginx Specific Instructions</a></li>
 <li><a class="reference internal" href="#cgi-fastcgi-specific-instructions" id="id6">Instructions spécifiques CGI/FastCGI</a></li>
-<li><a class="reference internal" href="#customizing-the-build-or-if-something-went-wrong" id="id7">Personnaliser la compilation, ou s&#8217;il y a eu un problème</a></li>
+<li><a class="reference internal" href="#customizing-the-build-or-if-something-went-wrong" id="id7">Customizing the Build, Or If Something Went Wrong</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#windows-instructions" id="id8">Instructions Windows</a><ul>
 <li><a class="reference internal" href="#dependencies" id="id9">Dépendances</a></li>
 <li><a class="reference internal" href="#configure-your-makefile" id="id10">Configurer votre Makefile</a></li>
 <li><a class="reference internal" href="#compilation" id="id11">Compilation</a></li>
-<li><a class="reference internal" href="#move-the-module-into-apache-directory" id="id12">Déplacer le module dans le répertoire Apache</a></li>
+<li><a class="reference internal" href="#move-the-module-into-the-apache-directory" id="id12">Move the Module Into the Apache Directory</a></li>
 <li><a class="reference internal" href="#configure-your-installed-apache" id="id13">Configurer votre Apache installé</a></li>
 <li><a class="reference internal" href="#test-your-mapcache-module" id="id14">Tester votre module MapCache</a></li>
 </ul>
@@ -189,41 +206,46 @@
 <div class="section" id="getting-the-source">
 <h2><a class="toc-backref" href="#table-of-contents">Obtenir les sources</a><a class="headerlink" href="#getting-the-source" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Le projet MapCache est situé sur <a class="reference external" href="https://github.com/mapserver/mapcache">https://github.com/mapserver/mapcache</a>, et peut être récupéré avec soit:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="c"># readonly</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="c1"># readonly</span>
 git clone git://github.com/mapserver/mapcache.git
-<span class="c"># ssh authenticated</span>
+<span class="c1"># ssh authenticated</span>
 git clone git@github.com:mapserver/mapcache.git
-<span class="c"># tarball</span>
+<span class="c1"># tarball</span>
 wget https://github.com/mapserver/mapcache/zipball/master
 </pre></div>
 </div>
 </div>
 <div class="section" id="linux-instructions">
 <h2><a class="toc-backref" href="#table-of-contents">Instructions Linux</a><a class="headerlink" href="#linux-instructions" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Ces instructions ciblent un mise en place sous debian/ubuntu, mais devraient s&#8217;appliquer avec quelques modifications à n&#8217;importe quelle installation Linux.</p>
+<p>These instructions target a Debian/Ubuntu setup, but should apply with few
+modifications to any Linux installation.</p>
 <p>MapCache nécessite un certain nombre d&#8217;en-têtes de bibliothèques pour pouvoir être compilé correctement:</p>
 <ul class="simple">
-<li><p class="first"><strong>apache / apr / apr-util / apx2</strong>: ceux-ci sont inclus dans les paquets <em>apache2-prefork-dev</em> ou <em>apache2-threaded-dev</em>, en fonction du mpm (Multi-Processing Module) apache que vous faites tourner. Ce paquet récupérera les en-têtes apr nécessaires, que vous auriez normalement installé manuellement si vous n&#8217;aviez pas compilé un module apache (<em>libaprutil1-dev</em> et <em>libapr1-dev</em>)</p>
-</li>
+<li><strong>apache / apr / apr-util / apx2</strong>: these are included in the <em>apache2-prefork-dev</em> or
+<em>apache2-threaded-dev</em> packages, depending on which Apache MPM you are running.
+This package will pull in the necessary APR headers that you would have to
+manually install if you are not buidling an Apache module (<em>libaprutil1-dev</em>
+and <em>libapr1-dev</em>)</li>
 <li><strong>png</strong>: <em>libpng12-dev</em></li>
 <li><strong>jpeg</strong>: <em>libjpeg62-dev</em></li>
 <li><strong>curl</strong>: <em>libcurl4-gnutls-dev</em></li>
 </ul>
 <p>Les bibliothèques suivantes ne sont pas requises mais sont néanmoins recommandées:</p>
 <ul class="simple">
-<li><p class="first"><strong>pcre</strong>: <em>libpcre3-dev</em>. Ceci vous offrira une syntaxe d&#8217;expression régulière plus puissante lors de la création de motifs de validation pour les dimensions</p>
-</li>
-<li><p class="first"><strong>pixman</strong>: <em>libpixman-1-dev</em>. La bibliothèque de manipulation de pixel est utilisée pour la mise à l&#8217;échelle et la composition alpha des images. MapCache intègre des portions de code pour réaliser ces tâches, mais pixman est généralement plus rapide car il possède un code optimisé pour les microprocesseurs modernes (sse2, mmx etc.)</p>
-</li>
+<li><strong>pcre</strong>: <em>libpcre3-dev</em>. This will give you more powerful regular expression
+syntax when creating validation expressions for dimensions</li>
+<li><strong>pixman</strong>: <em>libpixman-1-dev</em>. The pixel manipulation library is used for
+scaling and alpha-compositing images. MapCache ships with some code to
+perform these tasks, but Pixman is generally faster as it includes
+code optimized for modern CPUs (SSE2, MMX, etc...)</li>
 </ul>
 <p>Les librairies suivantes ne sont pas indispensables, mais nécessaires pour activer des fonctionnalités additionnelles:</p>
 <ul class="simple">
-<li><p class="first"><strong>fcgi</strong>: <em>libfcgi-dev</em>. Utilisé pour compiler une version fastcgi si vous ne voulez pas utiliser MapCache en module Apache.</p>
-</li>
+<li><strong>fcgi</strong>: <em>libfcgi-dev</em>. Needed to build a FastCGI program if you don&#8217;t want to
+run MapCache as an Apache module</li>
 <li><p class="first"><strong>gdal / geos</strong>: <em>libgdal1-dev</em> <em>libgeos-dev</em>. Nécessaires pour activer les options avancées de génération de cache (pour ne générer que les tuiles qui intersecte un objet géographique donné)</p>
 </li>
-<li><p class="first"><strong>sqlite</strong>: <em>libsqlite3-dev</em>. Pour permettre l&#8217;utilisation de SQLite pour le stockage des tuiles.</p>
-</li>
+<li><strong>sqlite</strong>: <em>libsqlite3-dev</em>. For enabling the SQLite backend storages</li>
 <li><p class="first"><strong>tiff</strong>: <em>libtiff4-dev</em>. Pour permettre l&#8217;utilisation de fichiers TIFF pour le stockage des tuiles.</p>
 </li>
 <li><p class="first"><strong>berkeley db</strong> <em>libdb4.8-dev</em> : Pour permettre l&#8217;utilisation de Berkeley DB pour le stockage des tuiles.</p>
@@ -231,32 +253,39 @@ wget https://github.com/mapserver/mapcache/zipball/master
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">MapCache se compile désormais avec cmake.</p>
+<p class="last">MapCache now builds with CMake.</p>
 </div>
-<p>Pour les utilisateurs UNIX dont tous les paquetages sont dans les emplacements par défaut, la compilation devrait se résumer à:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd </span>mapcache
-<span class="nv">$ </span>mkdir build
-<span class="nv">$ </span><span class="nb">cd </span>build
-<span class="nv">$ </span>cmake ..
-<span class="nv">$ </span><span class="c"># follow instructions below if missing a dependency</span>
-<span class="nv">$ </span>make
-<span class="nv">$ </span>sudo make install
+<p>For Unix users installing all packages to the default locations, the compilation
+process should continue with:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> mapcache
+$ mkdir build
+$ <span class="nb">cd</span> build
+$ cmake ..
+$ <span class="c1"># follow instructions below if missing a dependency</span>
+$ make
+$ sudo make install
 </pre></div>
 </div>
 <div class="section" id="apache-module-specific-instructions">
 <h3><a class="toc-backref" href="#table-of-contents">Instructions spécifiques au module Apache</a><a class="headerlink" href="#apache-module-specific-instructions" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Le make install ci-dessus installe le module Apache, mais si vous devez spécifiquement n&#8217;installer que le module Apache, vous pouvez faire ce qui suit</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo make install-module
-<span class="nv">$ </span>sudo ldconfig
+<p>The make install above installs the Apache module, but if you
+specifically need to install only the Apache module you can do the following:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ sudo make install-module
+$ sudo ldconfig
 </pre></div>
 </div>
-<p>Le script d&#8217;installation fait en sorte de déposer le module compilé dans le répertoire apache des modules. Les modalités d&#8217;activation des modules sont généralement spécifiques aux distributions utilisées, mais peut se résumer à l&#8217;extrait suivant qui devrait être présent dans la configuration Apache ( e.g. /usr/local/httpd/conf/httpd.conf or /etc/apache2/sites-available/default ):</p>
-<div class="highlight-apache"><div class="highlight"><pre><span class="nb">LoadModule</span> mapcache_module    modules/mod_mapcache.so
+<p>The installation script takes care of putting the built module in the Apache
+module directory.  The process for activating a module is usually distro
+specific, but can be resumed by the following snippet that should be present in
+the Apache configuration file ( e.g. /usr/local/httpd/conf/httpd.conf or
+/etc/apache2/sites-available/default ):</p>
+<div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nb">LoadModule</span> mapcache_module    modules/mod_mapcache.so
 </pre></div>
 </div>
-<p>Ensuite, une configuration mapcache est associée à l&#8217;URL du serveur par l&#8217;extrait suivant</p>
-<p>Pour apache &lt; 2.4:</p>
-<div class="highlight-apache"><div class="highlight"><pre><span class="nt">&lt;IfModule</span> <span class="s">mapcache_module</span><span class="nt">&gt;</span>
+<p>Next, a MapCache configuration is mapped to the server URL with the following
+snippet:</p>
+<p>For Apache &lt; 2.4:</p>
+<div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span> <span class="s">mapcache_module</span><span class="nt">&gt;</span>
    <span class="nt">&lt;Directory</span> <span class="s">/path/to/directory</span><span class="nt">&gt;</span>
       <span class="nb">Order</span> Allow,Deny
       <span class="nb">Allow</span> from <span class="k">all</span>
@@ -265,8 +294,8 @@ wget https://github.com/mapserver/mapcache/zipball/master
 <span class="nt">&lt;/IfModule&gt;</span>
 </pre></div>
 </div>
-<p>Pour apache &gt;= 2.4:</p>
-<div class="highlight-apache"><div class="highlight"><pre><span class="nt">&lt;IfModule</span> <span class="s">mapcache_module</span><span class="nt">&gt;</span>
+<p>For Apache &gt;= 2.4:</p>
+<div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span> <span class="s">mapcache_module</span><span class="nt">&gt;</span>
    <span class="nt">&lt;Directory</span> <span class="s">/path/to/directory</span><span class="nt">&gt;</span>
       <span class="nb">Require</span> <span class="k">all</span> granted
    <span class="nt">&lt;/Directory&gt;</span>
@@ -274,51 +303,74 @@ wget https://github.com/mapserver/mapcache/zipball/master
 <span class="nt">&lt;/IfModule&gt;</span>
 </pre></div>
 </div>
-<p>Avant de redémarrer, copiez le fichier d&#8217;exemple mapcache.xml à l&#8217;emplacement de votre choix:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cp mapcache.xml /path/to/directory/mapcache.xml
+<p>Before you restart, copy the example mapcache.xml file to the location specified in your Apache configuration:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ cp mapcache.xml /path/to/directory/mapcache.xml
 </pre></div>
 </div>
-<p>Enfin, redémarrer Apache pour activer la nouvelle configuration</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apachectl restart
+<p>Finally, restart Apache to take the modified configuration into account</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ sudo apachectl restart
 </pre></div>
 </div>
 <p>Si vous n&#8217;avez pas désactivé le service de démonstration, vous devriez pouvoir y accéder à l&#8217;adresse <a class="reference external" href="http://myserver/mapcache/demo">http://myserver/mapcache/demo</a></p>
 </div>
 <div class="section" id="nginx-specific-instructions">
-<h3><a class="toc-backref" href="#table-of-contents">Instructions spécifiques Nginx</a><a class="headerlink" href="#nginx-specific-instructions" title="Lien permanent vers ce titre">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents">nginx Specific Instructions</a><a class="headerlink" href="#nginx-specific-instructions" title="Lien permanent vers ce titre">¶</a></h3>
 <div class="admonition warning">
 <p class="first admonition-title">Avertissement</p>
 <p class="last">Travailler avec nginx est toujours en quelque sorte expérimental. Le processus suivant  a uniquement été testé sur la version de développement, soit nginx-1.1.x</p>
 </div>
-<p>Pour le support nginx vous devez compiler mapcache avec les sources de nginx. Télécharger le code source de nginx:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> /usr/local/src
-<span class="nv">$ </span>mkdir nginx
-<span class="nv">$ </span><span class="nb">cd </span>nginx
-<span class="nv">$ </span>wget http://nginx.org/download/nginx-1.1.19.tar.gz
-<span class="nv">$ </span>tar -xzvf nginx-1.1.19.tar.gz
-<span class="nv">$ </span><span class="nb">cd </span>nginx-1.1.19/
+<p>For nginx support you need to build MapCache&#8217;s nginx module against the
+nginx source. Download the nginx source code:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> /usr/local/src
+$ mkdir nginx
+$ <span class="nb">cd</span> nginx
+$ wget http://nginx.org/download/nginx-1.1.19.tar.gz
+$ tar -xzvf nginx-1.1.19.tar.gz
+$ <span class="nb">cd</span> nginx-1.1.19/
 </pre></div>
 </div>
-<p>Lancez la commande de configure avec l&#8217;option <code class="docutils literal"><span class="pre">--add-module</span></code>. Cette option doit pointer vers le répertoire nginx de mapcache. En partant du principe que les sources de MapServer on été clonées ou décompressées dans <code class="docutils literal"><span class="pre">/usr/local/src</span></code>, un exemple d&#8217;instruction configure pour nginx ressemblerait à ceci:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>./configure --add-module<span class="o">=</span>/usr/local/src/mapcache/nginx
+<p>Run the configure command with the flag  <code class="docutils literal"><span class="pre">--add-module</span></code>. This flag
+must point to MapCache&#8217;s nginx child directory. Assuming that
+MapServer source was cloned or un tarred into to <code class="docutils literal"><span class="pre">/usr/local/src</span></code>,
+an example configure command for nginx would look like this:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./configure --add-module<span class="o">=</span>/usr/local/src/mapcache/nginx
 </pre></div>
 </div>
 <p>Ensuite compiler nginx:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>make
-<span class="nv">$ </span>sudo make install
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ make
+$ sudo make install
 </pre></div>
 </div>
-<p>Du fait de l&#8217;architecture non-bloquante de Nginx, le module nginx de MapCache ne réalise aucune opération qui pourrait déboucher sur un blocage du process en cours par un calcul trop long (i.e : requêter une (meta)tuile absente du cache, proxyfier une requête vers un serveur WMS distant ou attendre qu&#8217;une tuile soit rendue par un autre process). Il génère alors une erreur 404. Ce comportement est essentiel pour que tous les process nginx ne soient occupés et ne l&#8217;empêchent de répondre à d&#8217;autres requêtes. Alors que cela ne pose pas de problème pour les jeux de tuiles complètement générés, ceci implique que ce genre de requêtes doivent être proxyfiées vers une autre instance de MapCache ne souffrant pas de ces problèmes d&#8217;alimentation (i.e. soit un MapCache cgi, soit un serveur apache proxyfié). Dans ce scénario, les deux instances nginx et apache/fastcgi de MapCache doivent partager le même fichier de configuration <code class="docutils literal"><span class="pre">mapcache.xml</span></code>.</p>
-<p>MapCache fournit un ficheir <code class="docutils literal"><span class="pre">nginx.conf</span></code> dans son sous-répertoire nginx. Ce fichier contient un exemple de configuration pour charger MapCache. La partie la plus importante de la configuration est la directive location qui associe l&#8217;URI <code class="docutils literal"><span class="pre">^/mapcache</span></code> au chemin vers <code class="docutils literal"><span class="pre">mapcache.xml</span></code>. Vous devrez adapter cette directive afin qu&#8217;elle désigne votre propre fichier <code class="docutils literal"><span class="pre">mapcache.xml</span></code></p>
+<p>Due to nginx&#8217;s non-blocking architecture, the MapCache nginx module does not
+perform any operations that may lead to a worker process being blocked by a
+long computation (i.e.: requesting a (meta)tile to be rendered if not in the
+cache, proxying a request to an upstream WMS server, or waiting for a tile to
+be rendered by another worker): It will instead issue a 404 error. This
+behavior is essential so as not to occupy all nginx worker threads, thereby
+preventing it from responding to all other incoming requests. While this isn&#8217;t
+an issue for completely seeded tilesets, it implies that these kinds of
+requests need to be proxied to another MapCache instance that does not suffer
+from these starvation issues (i.e. either a FastCGI MapCache, or an internal
+proxied Apache server). In this scenario, both the nginx MapCache instance and
+the Apache/FastCGI MapCache instance should be running with the same
+<code class="docutils literal"><span class="pre">mapcache.xml</span></code> configuration file.</p>
+<p>MapCache supplies an <code class="docutils literal"><span class="pre">nginx.conf</span></code> in its nginx child directory. The conf
+contains an example configuration to load MapCache. The most relevant part of
+the configuration is the location directive that points the  <code class="docutils literal"><span class="pre">^/mapcache</span></code> URI
+to the <code class="docutils literal"><span class="pre">mapcache.xml</span></code> path. You will need to change this path to point to
+your own <code class="docutils literal"><span class="pre">mapcache.xml</span></code> in the MapCache source.</p>
 <p>La configuration de base sans aucun mandataire (qui renverra des erreurs 404 sur les tuiles inexistantes) est :</p>
-<div class="highlight-nginx"><div class="highlight"><pre><span class="k">location</span> <span class="p">~</span> <span class="sr">^/mapcache(?&lt;path_info&gt;/.*|$)</span> <span class="p">{</span>
+<div class="highlight-nginx"><div class="highlight"><pre><span></span><span class="k">location</span> <span class="p">~</span> <span class="sr">^/mapcache(?&lt;path_info&gt;/.*|$)</span> <span class="p">{</span>
    <span class="kn">set</span> <span class="nv">$url_prefix</span> <span class="s">&quot;/mapcache&quot;</span><span class="p">;</span>
    <span class="kn">mapcache</span> <span class="s">/usr/local/src/mapcache/mapcache.xml</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Lors de la proxyfication des requêtes sur les tuiles inexistantes vers une instance de MapCache tournant sur un serveur Apache, nous renverrons toutes les erreurs 404 de MapCache vers un serveur <code class="docutils literal"><span class="pre">mapcache.apache.tld</span></code> associé au port 8080, configuré pour répondre aux requêtes sur l&#8217;emplacement <code class="docutils literal"><span class="pre">/mapcache</span></code>.</p>
-<div class="highlight-nginx"><div class="highlight"><pre><span class="k">location</span> <span class="p">~</span> <span class="sr">^/mapcache(?&lt;path_info&gt;/.*|$)</span> <span class="p">{</span>
+<p>If proxying unseeded tile requests to a MapCache instance running on an Apache
+server, we will proxy all 404 MapCache errors to a <code class="docutils literal"><span class="pre">mapcache.apache.tld</span></code>
+server listening on port 8080, configured to respond to MapCache requests on
+the <code class="docutils literal"><span class="pre">/mapcache</span></code> location.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span></span><span class="k">location</span> <span class="p">~</span> <span class="sr">^/mapcache(?&lt;path_info&gt;/.*|$)</span> <span class="p">{</span>
    <span class="kn">set</span> <span class="nv">$url_prefix</span> <span class="s">&quot;/mapcache&quot;</span><span class="p">;</span>
    <span class="kn">mapcache</span> <span class="s">/usr/local/src/mapcache/mapcache.xml</span><span class="p">;</span>
    <span class="kn">error_page</span> <span class="mi">404</span> <span class="p">=</span> <span class="s">@apache_mapcache</span><span class="p">;</span>
@@ -329,8 +381,10 @@ wget https://github.com/mapserver/mapcache/zipball/master
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Si vous utilisez des instances fastCGI de MapCache, générées par par exemple spawn-fcgi ou supervisord sur le port 9001 (prenez soin d&#8217;activer le support fastcgi lors de la compilation de MapCache et de régler la variable d&#8217;environnement  MAPCACHE_CONFIG_FILE avant la génération) :</p>
-<div class="highlight-nginx"><div class="highlight"><pre><span class="k">location</span> <span class="p">~</span> <span class="sr">^/mapcache(?&lt;path_info&gt;/.*|$)</span> <span class="p">{</span>
+<p>If using FastCGI instances of MapCache, spawned with e.g. spawn-fcgi or
+supervisord on port 9001 (make sure to enable FastCGI when building MapCache,
+and to set the MAPCACHE_CONFIG_FILE environment variable before spawning):</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span></span><span class="k">location</span> <span class="p">~</span> <span class="sr">^/mapcache(?&lt;path_info&gt;/.*|$)</span> <span class="p">{</span>
    <span class="kn">set</span> <span class="nv">$url_prefix</span> <span class="s">&quot;/mapcache&quot;</span><span class="p">;</span>
    <span class="kn">mapcache</span> <span class="s">/usr/local/src/mapcache/mapcache.xml</span><span class="p">;</span>
    <span class="kn">error_page</span> <span class="mi">404</span> <span class="p">=</span> <span class="s">@fastcgi_mapcache</span><span class="p">;</span>
@@ -349,27 +403,38 @@ wget https://github.com/mapserver/mapcache/zipball/master
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Copier les sections correspondants de <code class="docutils literal"><span class="pre">nginx.conf</span></code> du répertoire <code class="docutils literal"><span class="pre">nginx</span></code> de MapCache dans le fichier de configuration de Nginx (dans notre cas <code class="docutils literal"><span class="pre">/usr/local/nginx/conf/nginx.conf</span></code>). Vous devriez alors avoir accès à la demo à l&#8217;URL <a class="reference external" href="http://myserver/mapcache/demo">http://myserver/mapcache/demo</a></p>
+<p>Copy the relevant sections of <code class="docutils literal"><span class="pre">nginx.conf</span></code> from MapCache&#8217;s <code class="docutils literal"><span class="pre">nginx</span></code>
+directory into nginx&#8217;s conf file (in this case
+<code class="docutils literal"><span class="pre">/usr/local/nginx/conf/nginx.conf</span></code>). You should now have access to the demo
+at <a class="reference external" href="http://myserver/mapcache/demo">http://myserver/mapcache/demo</a></p>
 </div>
 <div class="section" id="cgi-fastcgi-specific-instructions">
 <h3><a class="toc-backref" href="#table-of-contents">Instructions spécifiques CGI/FastCGI</a><a class="headerlink" href="#cgi-fastcgi-specific-instructions" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Un binaire cgi/FastCGI est situé dans le sous-répertoire MapCache, et est nommé &#8220;mapcache&#8221;. L&#8217;activation du FastCGI pour le programme MapCache sur votre serveur web ne fait pas partie de ces instructions. Plus de détails peuvent être trouvés à la page :ref:<a href="#id1"><span class="problematic" id="id2">`</span></a>FastCGI &lt;fastcgi&gt;`ou dans ces pages web plus générale sur Internet.</p>
-<p>La programme MapCache FastCGI recherche son fichier de configuration dans la variable d&#8217;environnement MAPCACHE_CONFIG_FILE, qui doit donc être paramétrée par le serveur web avant qu&#8217;il ne génère des process MapCache.</p>
+<p>A binary CGI/FastCGI is located in the mapcache/ subfolder, and is named &#8220;mapcache&#8221;.
+Activating FastCGI for the MapCache program on your web server is not part of
+these instructions; more details may be found on the <a class="reference internal" href="../optimization/fastcgi.html#fastcgi"><span>FastCGI</span></a>
+page or on more general pages across the web.</p>
+<p>The MapCache FastCGI program looks for its configuration file in the environment
+variable called MAPCACHE_CONFIG_FILE, which must be set by the web server before
+spawning the MapCache processes.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">Voir aussi</p>
 <p class="last"><a class="reference internal" href="config.html#mapcache-config"><span>Fichier de configuration</span></a></p>
 </div>
-<p>Pour apache avec mod_cgi:</p>
-<div class="highlight-apache"><div class="highlight"><pre><span class="nb">SetEnv</span> <span class="s2">&quot;MAPCACHE_CONFIG_FILE&quot;</span> <span class="s2">&quot;/path/to/mapcache/mapcache.xml&quot;</span>
+<p>For Apache with mod_cgi:</p>
+<div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nb">SetEnv</span> <span class="s2">&quot;MAPCACHE_CONFIG_FILE&quot;</span> <span class="s2">&quot;/path/to/mapcache/mapcache.xml&quot;</span>
 </pre></div>
 </div>
-<p>Pour apache avec mod_fcgid:</p>
-<div class="highlight-apache"><div class="highlight"><pre>FcgidInitialEnv &quot;MAPCACHE_CONFIG_FILE&quot; &quot;/path/to/mapcache/mapcache.xml
+<p>For Apache with mod_fcgid:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>FcgidInitialEnv &quot;MAPCACHE_CONFIG_FILE&quot; &quot;/path/to/mapcache/mapcache.xml
 </pre></div>
 </div>
-<p>Si vous n&#8217;avez pas désactivé le service de démonstration, vous devriez maintenant pouvoir y accéder à l&#8217;URL <a class="reference external" href="http://myserver/fcgi-bin/mapcache/demo">http://myserver/fcgi-bin/mapcache/demo</a> pour peu que vos process fcgi soient accessibles par l&#8217;alias fcgi-bin.</p>
-<p>Avec une instance Apache fonctionnant avec mod_fcgid, la partie à ajouter à httpd.conf pour activer mapcache pourrait être :</p>
-<div class="highlight-apache"><div class="highlight"><pre><span class="nt">&lt;IfModule</span> <span class="s">mod_fcgid.c</span><span class="nt">&gt;</span>
+<p>If you have not disabled the demo service, you should now have access to it on
+<a class="reference external" href="http://myserver/fcgi-bin/mapcache/demo">http://myserver/fcgi-bin/mapcache/demo</a>, assuming your fcgi processes are accessed
+under the fcgi-bin alias.</p>
+<p>With a working mod_fcgid Apache instance, the full httpd.conf snippet to activate
+MapCache could be:</p>
+<div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span> <span class="s">mod_fcgid.c</span><span class="nt">&gt;</span>
    <span class="nb">IPCCommTimeout</span> <span class="m">120</span>
    <span class="nb">MaxProcessCount</span> <span class="m">10</span>
    <span class="nb">FcgidInitialEnv</span> <span class="s2">&quot;MAPCACHE_CONFIG_FILE&quot;</span> <span class="s2">&quot;/path/to/mapcache/mapcache.xml&quot;</span>
@@ -382,92 +447,130 @@ wget https://github.com/mapserver/mapcache/zipball/master
 <span class="nt">&lt;/IfModule&gt;</span>
 </pre></div>
 </div>
-<p>Le service MapCache sera alors accessible à l&#8217;URL <a class="reference external" href="http://myserver/map.fcgi[/demo">http://myserver/map.fcgi[/demo</a>]</p>
+<p>The MapCache service would then be accessible at <a class="reference external" href="http://myserver/map.fcgi[/demo">http://myserver/map.fcgi[/demo</a>]</p>
 </div>
 <div class="section" id="customizing-the-build-or-if-something-went-wrong">
-<h3><a class="toc-backref" href="#table-of-contents">Personnaliser la compilation, ou s&#8217;il y a eu un problème</a><a class="headerlink" href="#customizing-the-build-or-if-something-went-wrong" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Selon les paquetages disponibles dans les emplacement par défaut de votre système, l&#8217;étape &#8220;cmake ..&#8221; se sera probablement interrompue avec des messages indiquant des dépendances manquantes (par défaut, MapCache en a plusieurs). Le message d&#8217;erreur indiqué par MapCache devrait vous donner de bons indices quant à ce qu&#8217;il vous reste à faire, selon que la dépendance manquante vous est nécessaire ou pas.</p>
-<p>mod_mapcache nécessite les en-têtes de développement apache, libcurl, libjpeg et libpng. Le script cmake tentera de les localiser dans les emplacements par défaut du système, qui peut être outrepassé avec des commutateurs -D. Par exemple, si vous avez un message tel que &#8216;Could not find APR&#8217;, vous pouvez utiliser une commande telle que (en supposant que apr est dans /usr/local/apr):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cmake -DCMAKE_PREFIX_PATH<span class="o">=</span><span class="s2">&quot;/usr/local/apr;&quot;</span> ..
+<h3><a class="toc-backref" href="#table-of-contents">Customizing the Build, Or If Something Went Wrong</a><a class="headerlink" href="#customizing-the-build-or-if-something-went-wrong" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Depending on which packages are available in the default locations of your system,
+the &#8220;cmake ..&#8221; step will most probably have failed with messages indicating
+missing dependencies (by default, MapCache has <em>some</em> of those). The error message
+that CMake prints out should give you a rather good idea of what steps you should take
+next, depending on whether the failed dependency is a feature you require in your build.</p>
+<p>mod_mapcache requires Apache, libcurl, libjpeg and libpng development headers.
+The CMake script will try to locate them in default system locations, but these locations can be
+overridden or specified with -D switches. For example, if you get a message such as
+&#8216;Could NOT find APR &#8216;, you can use a command such as
+(assuming that APR is at /usr/local/apr) :</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ cmake -DCMAKE_PREFIX_PATH<span class="o">=</span><span class="s2">&quot;/usr/local/apr;&quot;</span> ..
 </pre></div>
 </div>
-<p>De même si vous ne voulez pas de fCGI, vous pouvez désactiver la dépendance en relançant le cmake avec -DWITH_DEPENDENCY=0, e.g.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cmake .. -DWITH_FCGI<span class="o">=</span>0
+<p>If you don&#8217;t want e.g. fcgi, you can disable the dependency by re-running CMake with -DWITH_DEPENDENCY=0, e.g.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ cmake .. -DWITH_FCGI<span class="o">=</span>0
 </pre></div>
 </div>
 <div class="section" id="options-supported-by-the-mapcache-cmake-builder">
-<h4>Options supportées par le compilateur cmake MapCache<a class="headerlink" href="#options-supported-by-the-mapcache-cmake-builder" title="Lien permanent vers ce titre">¶</a></h4>
+<h4>Options Supported By the MapCache CMake Builder<a class="headerlink" href="#options-supported-by-the-mapcache-cmake-builder" title="Lien permanent vers ce titre">¶</a></h4>
 <p>Voici une liste des options supportées qui peuvent être activées/désactivées à la compilation.</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre>option(WITH_PIXMAN &quot;Use pixman for SSE optimized image manipulations&quot; ON)
-option(WITH_SQLITE &quot;Use sqlite as a cache backend&quot; ON)
+<div><div class="highlight-python"><div class="highlight"><pre><span></span>option(WITH_PIXMAN &quot;Use Pixman for SSE optimized image manipulations&quot; ON)
+option(WITH_SQLITE &quot;Use SQLite as a cache backend&quot; ON)
 option(WITH_BERKELEY_DB &quot;Use Berkeley DB as a cache backend&quot; OFF)
 option(WITH_MEMCACHE &quot;Use memcache as a cache backend (requires recent apr-util)&quot; OFF)
 option(WITH_TIFF &quot;Use TIFFs as a cache backend&quot; OFF)
 option(WITH_TIFF_WRITE_SUPPORT &quot;Enable (experimental) support for writable TIFF cache backends&quot; OFF)
 option(WITH_GEOTIFF &quot;Allow GeoTIFF metadata creation for TIFF cache backends&quot; OFF)
 option(WITH_PCRE &quot;Use PCRE for regex tests&quot; OFF)
-option(WITH_MAPSERVER &quot;Enable (experimental) support for the mapserver library&quot; OFF)
-option(WITH_GEOS &quot;Choose if GEOS geometry operations support should be built in&quot; ON)
-option(WITH_OGR &quot;Choose if OGR/GDAL input vector support should be built in&quot; ON)
-option(WITH_CGI &quot;Choose if CGI executable should be built&quot; ON)
-option(WITH_FCGI &quot;Choose if CGI executable should support FastCGI&quot; ON)
+option(WITH_MAPSERVER &quot;Enable (experimental) support for the MapServer library&quot; OFF)
+option(WITH_GEOS &quot;Choose whether GEOS geometry operations support should be built in&quot; ON)
+option(WITH_OGR &quot;Choose whether OGR/GDAL input vector support should be built in&quot; ON)
+option(WITH_CGI &quot;Choose whether CGI executable should be built&quot; ON)
+option(WITH_FCGI &quot;Choose whether CGI executable should support FastCGI&quot; ON)
 option(WITH_VERSION_STRING &quot;Show MapCache in server version string&quot; ON)
 option(WITH_APACHE &quot;Build Apache Module&quot; ON)
 </pre></div>
 </div>
 <ul>
 <li><p class="first"><strong>Pixman</strong> (<em>recommandé</em>, à partir de la version 0.5)</p>
-<div class="highlight-bash"><div class="highlight"><pre>-DWITH_PIXMAN<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>-DWITH_PIXMAN<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
 </pre></div>
 </div>
-<p>Pixman est une bibliothèque de manipulation de pixel utilisée pour assembler les tuiles lors des réponses à des requêtes WMS non tuilées. Le recours à Pixman est recommandé dans la mesure où il est parfaitement optimisé et tirera parti des récentes extensions des microprocesseurs (mmx, sse...) pour accélérer les opérations de remplissage et de ré-échantillonnage. Si la bibliothèque Pixman n&#8217;est pas toruvée, MapCache utilisera son mécanisme interne qui est plus lent.</p>
+<p>Pixman is a pixel manipulation library used to assemble image tiles when
+responding to non-tiled WMS requests. Pixman support is recommended as it is
+highly optimized and will take advantage of recent processor extensions (MMX,
+SSE2, etc.) to speed up blending and resampling operations. If the Pixman
+library is not found, MapCache will fall back to internal pixel operations
+that are slower.</p>
 </li>
-<li><p class="first"><strong>Sqlite</strong> (<em>optionnel</em>, à partir de la version 0.5)</p>
-<div class="highlight-bash"><div class="highlight"><pre>-DWITH_SQLITE<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
+<li><p class="first"><strong>SQLite</strong> (<em>optional</em>, from 0.5 onwards)</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>-DWITH_SQLITE<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
 </pre></div>
 </div>
-<p>Sqlite est utilisé pour permettre d&#8217;avoir les caches backend de type sqlite et mbtiles. La version 3.5.0 ou plus récente est requise.</p>
+<p>SQLite is used to enable the SQLite and MBTiles cache backend. Version 3.5.0
+or newer is required.</p>
 </li>
 <li><p class="first"><strong>GDAL</strong> (<em>optionnel</em>, à partir de la version 0.4, nécessite aussi la bibliothèque geos)</p>
-<div class="highlight-bash"><div class="highlight"><pre>-DWITH_OGR<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>-DWITH_OGR<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
 </pre></div>
 </div>
-<p>GDAL (ou plutôt OGR) est utilisé par le pré-générateur de cache pour permettre la génération de tuiles intersectant un polygone  donnée, pour par exemple pré-générer les tuiles sur un pays particulier.</p>
+<p>GDAL (actually OGR) is used by the seeding utility to allow the seeding of
+tiles only intersecting a given polygon, e.g. to preseed all the tiles of a
+given country.</p>
 </li>
 <li><p class="first"><strong>GEOS</strong> (<em>optionnel</em>, à partir de la version 0.5)</p>
-<div class="highlight-bash"><div class="highlight"><pre>-DWITH_GEOS<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>-DWITH_GEOS<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
 </pre></div>
 </div>
-<p>Parallèlement à GDAL/OGR, GEOS est requis par le pré-générateur pour tester les intersection des tuiles avec des entités géographiques. Une version suffisamment récente de geos (avec la prise en charge des géométries préparées) est nécessaire (mais pas vérifié par le script de configuration, vous pouvez donc avoir des erreurs à la compilation avec une version trop ancienne de geos)</p>
+<p>Along with GDAL/OGR, GEOS is needed by the seeder to test for the intersection
+of tiles with geographical features. A sufficiently recent version of GEOS (with
+support for prepared geometries) is required (but not enforced by the configure
+script, so you&#8217;ll end up with compilation errors if a too old GEOS version is
+used).</p>
 </li>
 <li><p class="first"><strong>PCRE</strong> (<em>optionnel</em>)</p>
-<div class="highlight-bash"><div class="highlight"><pre>-DWITH_PCRE<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>-DWITH_PCRE<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
 </pre></div>
 </div>
-<p>Les Pcre (perl compatible regular expressions)  peuvent être utilisées en remplacement des expressions régulières posix pour valider les dimensions WMS. Elles sont plus puissantes que les expressions régulières posix (et meuvent être plus lentes). Vous n&#8217;avez pas besoin de ce composant si vous n&#8217;avez pas l&#8217;intention d&#8217;utiliser les dimensions WMS avec un validateur d&#8217;expression régulière, ou si vos besoins sont couverts par posix.</p>
+<p>PCRE (Perl Compatible Regular Expressions) can be used instead of POSIX regular
+expressions for validating WMS dimensions. They are more powerful than POSIX
+REs (and might be slower). You don&#8217;t need this if you aren&#8217;t planning on using
+WMS dimension support with regex validation, or if your validation needs are
+covered by posix REs.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">Voir aussi</p>
 <p class="last"><a class="reference internal" href="dimensions.html#mapcache-dimensions"><span>Dimensions du jeu de données</span></a></p>
 </div>
 </li>
 <li><p class="first"><strong>Support FastCGI</strong> (<em>optionnel</em>)</p>
-<div class="highlight-bash"><div class="highlight"><pre>-DWITH_FCGI<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>-DWITH_FCGI<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
 </pre></div>
 </div>
-<p>MapCache peut fonctionner comme un exécutable FastCGI. Notez bien que la charge induite par fastcgi n&#8217;est pas négligeable comparativement aux résultats que vous pourriez obtenir avec un module apache natif. La version FastCGI est moins testée et peut être à la traîne de la version module apache sur quelques détails mineurs.</p>
+<p>MapCache can run as a FastCGI executable. Note that the overhead of FastCGI
+is non-negligible with respect to the throughput you may obtain with a native
+Apache module. The FastCGI build is less tested, and may lag behind
+the Apache module version on some minor details. YMMV.</p>
 </li>
 <li><p class="first"><a href="#id1"><span class="problematic" id="id2">**</span></a>Support du cache TIFF en lecture/écriture ** (<em>optionnel</em>)</p>
 <p>Utiliser des fichiers TIFFs comme système de stockage du cache (LECTURE SEULE)</p>
-<div class="highlight-bash"><div class="highlight"><pre>-DWITH_TIFF<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>-DWITH_TIFF<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
 </pre></div>
 </div>
-<p>Le support du TIFF en écriture (pour créer de nouveaux fichiers TIFF et ajouter des tuiles à des fichiers TIFF existants) est toujours expérimental et désactivé par défaut. Il y a un risque à obtenir des fichiers TIFF corrompus s&#8217;ils ne sont pas placés sur un système de fichiers qui ne permet pas le verrouillage de fichier, car dans ce cas de multiples processus pourraient venir écrire dans le même fichier. Le blocage de fichier entre des processus concurrents est également problématique, bien que MapCache essaie de détecter cette situation en amont et de l&#8217;éviter. Pour rester prudent, le mode écriture ne devrait être activé que sur des systèmes de fichiers locaux, avec un apache prefork ou une installation de MapCache en fastCGI.</p>
-<div class="highlight-bash"><div class="highlight"><pre>-DWITH_TIFF_WRITE_SUPPORT<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
+<p>TIFF write support (for creating new TIFF files and adding tiles to existing
+TIFF files) is still experimental and disabled by default. There is a risk of
+ending up with corrupt TIFF files if they are placed on a filesystem that does
+not honor file locking, as in that case multiple processes might end up writing
+to the same file. File locking across concurrent threads is also problematic,
+although MapCache tries to detect this situation and apply sufficient locking
+workarounds. To stay on the safe side, write support should for now only be
+enabled on local filesystems, with a prefork MPM or FastCGI MapCache install.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>-DWITH_TIFF_WRITE_SUPPORT<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
 </pre></div>
 </div>
-<p>Lors de l&#8217;écriture de fichiers TIFF, MapCache peut également ajouter des informations de géoréférencement s&#8217;il a été compulé avec le support libtiff. L&#8217;écriture de GeoTIFF ne génère pas les informations nécessaires au référencement de la projection de la grille, mais seulement l&#8217;échelle du pixel et les points de calage (comme on le retrouve dans les fichiers .tfw)</p>
-<div class="highlight-bash"><div class="highlight"><pre>-DWITH_GEOTIFF<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
+<p>When writing TIFF files, MapCache can also optionally add georeferencing
+information if compiled with libtiff support. GeoTiff writing does not
+produce the full tags needed for defining which preojection the grid is
+in, but will only produce those defining the pixel scale and the tiepoints
+(i.e. the equivalent information found in the accompanying .tfw files).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>-DWITH_GEOTIFF<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
 </pre></div>
 </div>
 <div class="admonition seealso">
@@ -476,7 +579,7 @@ option(WITH_APACHE &quot;Build Apache Module&quot; ON)
 </div>
 </li>
 <li><p class="first"><a href="#id1"><span class="problematic" id="id2">**</span></a>Support du cache de type Memcached ** (<em>optionnel</em>)</p>
-<div class="highlight-bash"><div class="highlight"><pre>-DWITH_MEMCACHE<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>-DWITH_MEMCACHE<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
 </pre></div>
 </div>
 <p>Le système de cache memcached est désactivé par défaut. Vous pouvez optionnellement l&#8217;activer car il ne dépend pas de bibliothèques extérieures (c&#8217;est apr-util qui le fournit).</p>
@@ -486,26 +589,36 @@ option(WITH_APACHE &quot;Build Apache Module&quot; ON)
 </div>
 </li>
 <li><p class="first"><strong>Options de module Apache</strong></p>
-<p>Vous pouvez désactiver la compilation du module apache si vous prévoyez uniquement d&#8217;utiliser l&#8217;exécutable fastCGI ou le pré-générateur.</p>
-<div class="highlight-bash"><div class="highlight"><pre>-DWITH_APACHE<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
+<p>You can disable the Apache module building if you only plan on using the
+FastCGI executable or the seeder.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>-DWITH_APACHE<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
 </pre></div>
 </div>
-<p>MapCache se rajoute à l&#8217;information de version rapportée par le serveur apache. Ceci peut être désactivé avec</p>
-<div class="highlight-bash"><div class="highlight"><pre>-DWITH_VERSION_STRING<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
+<p>MapCache adds itself to the version string reported by the Apache server. This
+can be disabled with:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>-DWITH_VERSION_STRING<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first"><strong>Mode MapServer natif</strong> (<em>options expérimentales</em>)</p>
-<p>Pas défaut MapCache n&#8217;est pas lié à MapServer en aucune sorte, et communique uniquement via le protocole WMS. Pour des raisons de performances, il y a la possibilité d&#8217;utiliser directement la bibliothèque C de MapServer et éviter ainsi une requête HTTP et une compression/décompression d&#8217;image. Cette intégration est néanmoins expérimentale et doit être utilisée avec précaution.</p>
-<div class="highlight-bash"><div class="highlight"><pre>-DWITH_MAPSERVER<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
+<p>MapCache is by default not linked to MapServer in any way, and communicates
+through the WMS protocol only. For improved performance, it is possible
+to directly use the MapServer C library and avoid an HTTP request and an image
+compression/decompression. This integration is still experimental and should
+be used cautiously.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>-DWITH_MAPSERVER<span class="o">=[</span>0<span class="p">|</span>1<span class="o">]</span>
 </pre></div>
 </div>
-<p>Ceci utilisera le libmapserver.so du répertoire d&#8217;installation de MapServer. MapServer lui-même devra avoir été compilé avec l&#8217;option thread_safety activée, à moins que vous n&#8217;utilisiez qu&#8217;apache en mode prefork ou fastcgi, <strong>et</strong> que vous n&#8217;envisagiez pas l&#8217;utilisation du pré-générateur. Pour le thread-safety côté MapServer, voyez les tickets  #4041 et #4044.</p>
+<p>This will use the libmapserver.so from MapServer&#8217;s install directory. MapServer
+itself should be compiled with thread-safety enabled, unless you plan to use the
+prefork MPM or FastCGI, <strong>and</strong> you do not plan to use the seeder. For thread
+safety on the MapServer side, you might want to have a look at tickets #4041
+and #4044.</p>
 </li>
 <li><p class="first"><strong>Mode Debug</strong> (<em>travail en cours</em>)</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Depuis la migration vers cmake, cela doit être fait.</p>
+<p class="last">Since the CMake migration, this has to be done.</p>
 </div>
 <p>Ceci active quelques tests complémentaires dans le code et génère beaucoup plus de messages de debug dans le log serveur. Vous ne devriez probablement pas l&#8217;activer à moins de vouloir traquer un problème au sein de MapCache.</p>
 </li>
@@ -518,17 +631,18 @@ option(WITH_APACHE &quot;Build Apache Module&quot; ON)
 <h2><a class="toc-backref" href="#table-of-contents">Instructions Windows</a><a class="headerlink" href="#windows-instructions" title="Lien permanent vers ce titre">¶</a></h2>
 <div class="admonition warning">
 <p class="first admonition-title">Avertissement</p>
-<p class="last">Les instructions suivantes sont périmées, les compilations Windows sont maintenant traitées de manière identique à celle sous Unix avec cmake.</p>
+<p class="last">The following instructions are outdated. Windows builds are now handled
+identically to the Unix ones with CMake.</p>
 </div>
 <p>Ces instructions s&#8217;adressent à une configuration Windows 7 avec un Apache httpd compilé à partir des sources. Le module Apache MapCache a été compilé avec succès avec Microsoft Visual Studio C++ versions 2003, 2008 and 2010.</p>
 <div class="section" id="dependencies">
 <h3><a class="toc-backref" href="#table-of-contents">Dépendances</a><a class="headerlink" href="#dependencies" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Requis:</p>
 <ul class="simple">
-<li><p class="first"><strong>Apache / APR / APR-UTIL</strong>: inclus avec l&#8217;installation httpd apache</p>
-</li>
+<li><strong>Apache / APR / APR-UTIL</strong>: included with Apache httpd installation</li>
 </ul>
-<p>Ceux-ci peuvent être installés manuellement, ou en utilisant le SDK Windows approprié à partir de : <a class="reference external" href="http://www.gisinternals.com/sdk/">http://www.gisinternals.com/sdk/</a></p>
+<p>These can be installed manually, or using the appropriate Windows SDK
+from: <a class="reference external" href="http://www.gisinternals.com/sdk/">http://www.gisinternals.com/sdk/</a></p>
 <ul class="simple">
 <li><strong>PNG</strong></li>
 <li><strong>JPEG</strong></li>
@@ -540,12 +654,11 @@ option(WITH_APACHE &quot;Build Apache Module&quot; ON)
 </ul>
 <p>Optionnel:</p>
 <ul class="simple">
-<li><p class="first"><strong>FCGI</strong>: Nécessaire à la compilation du programme FastCGI si vous ne voulez par faire tourner MapCache en tant que module apache.</p>
-</li>
+<li><strong>FCGI</strong>: Needed to build a FastCGI program if you don&#8217;t want to run
+MapCache as an Apache module</li>
 <li><p class="first"><strong>GDAL / GEOS</strong>:: nécessaires à l&#8217;activation des options avancées du pré-générateur (pour ne générer que les tuiles intersectant une entité géographique quelconque)</p>
 </li>
-<li><p class="first"><strong>SQLITE</strong>: Pour activer le stockage dans SQLite</p>
-</li>
+<li><strong>SQLITE</strong>: For enabling the SQLite backend storages</li>
 <li><p class="first"><strong>TIFF</strong>: Pour activer le stockage dans des fichiers TIFF</p>
 </li>
 </ul>
@@ -556,7 +669,7 @@ option(WITH_APACHE &quot;Build Apache Module&quot; ON)
 </div>
 <div class="section" id="compilation">
 <h3><a class="toc-backref" href="#table-of-contents">Compilation</a><a class="headerlink" href="#compilation" title="Lien permanent vers ce titre">¶</a></h3>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>nmake /f Makefile.vc
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ nmake /f Makefile.vc
 </pre></div>
 </div>
 <p>En cas de succès, les biliothèques et exécutables auront été générés dans leurs répertoires respectifs:</p>
@@ -572,8 +685,8 @@ option(WITH_APACHE &quot;Build Apache Module&quot; ON)
 </dd>
 </dl>
 </div>
-<div class="section" id="move-the-module-into-apache-directory">
-<h3><a class="toc-backref" href="#table-of-contents">Déplacer le module dans le répertoire Apache</a><a class="headerlink" href="#move-the-module-into-apache-directory" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="move-the-module-into-the-apache-directory">
+<h3><a class="toc-backref" href="#table-of-contents">Move the Module Into the Apache Directory</a><a class="headerlink" href="#move-the-module-into-the-apache-directory" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Copiez le fichier <em>mod_mapcache.dll</em> dans un de vos sous-répertoires Apache.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -584,12 +697,13 @@ option(WITH_APACHE &quot;Build Apache Module&quot; ON)
 <h3><a class="toc-backref" href="#table-of-contents">Configurer votre Apache installé</a><a class="headerlink" href="#configure-your-installed-apache" title="Lien permanent vers ce titre">¶</a></h3>
 <ul>
 <li><p class="first">Modifier votre fichier <em>httpd.conf</em> pour charger le module:</p>
-<div class="highlight-apache"><div class="highlight"><pre><span class="nb">LoadModule</span> mapcache_module <span class="s2">&quot;D:/ms4w/Apache/cgi-bin/mod_mapcache.dll&quot;</span>
+<div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nb">LoadModule</span> mapcache_module <span class="s2">&quot;D:/ms4w/Apache/cgi-bin/mod_mapcache.dll&quot;</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Ensuite, configurez votre répertoire mapcache avec le contenu suivant</p>
-<div class="highlight-apache"><div class="highlight"><pre><span class="nt">&lt;IfModule</span> <span class="s">mapcache_module</span><span class="nt">&gt;</span>
+<li><p class="first">Next, configure your MapCache directory with the following
+snippet:</p>
+<div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span> <span class="s">mapcache_module</span><span class="nt">&gt;</span>
    <span class="nt">&lt;Directory</span> <span class="s">&quot;D:/ms4w/apps/mapcache/&quot;</span><span class="nt">&gt;</span>
       <span class="nb">Order</span> Allow,Deny
       <span class="nb">Allow</span> from <span class="k">all</span>
@@ -599,13 +713,15 @@ option(WITH_APACHE &quot;Build Apache Module&quot; ON)
 </pre></div>
 </div>
 </li>
-<li><p class="first">Configurez votre fichier <em>mapcache.xml</em> (voir la section <a class="reference internal" href="config.html#mapcache-config"><span>Configuration</span></a>)</p>
+<li><p class="first">Configure your <em>mapcache.xml</em> file (see the <a class="reference internal" href="config.html#mapcache-config"><span>Configuration</span></a> section
+for help).</p>
 </li>
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Avertissement</p>
-<p>Si vous obtenez une erreur telle que &#8220;cache disk: host system does not support file symbolic linking&#8221;, vous devriez commenter la ligne &#8220;&lt;symlink_blank/&gt;&#8221; dans votre fichier mapcache.xml, ainsi :</p>
-<div class="last highlight-bash"><div class="highlight"><pre>&lt;cache <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;disk&quot;</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;disk&quot;</span>&gt;
+<p>If you receive an error such as &#8220;cache disk: host system does not support file symbolic linking&#8221;
+you should comment out the line &#8220;&lt;symlink_blank/&gt;&#8221; in your mapcache.xml file, like so:</p>
+<div class="last highlight-bash"><div class="highlight"><pre><span></span>&lt;cache <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;disk&quot;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&quot;disk&quot;</span>&gt;
   &lt;base&gt;D:/ms4w/tmp/ms_tmp/cache&lt;/base&gt;
   &lt;!--&lt;symlink_blank/&gt;--&gt;
 &lt;/cache&gt;
@@ -613,8 +729,9 @@ option(WITH_APACHE &quot;Build Apache Module&quot; ON)
 </div>
 </div>
 <ul>
-<li><p class="first">Enfin, redémarrer votre Apache. Vous devriez voir un message dans l&#8217;error.log d&#8217;Apache similaire à:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="o">[</span>notice<span class="o">]</span> Apache/2.2.21 <span class="o">(</span>Win32<span class="o">)</span> mod-mapcache/0.5-dev configured -- resuming normal operations
+<li><p class="first">Finally, restart your Apache. You should see a message in Apache&#8217;s error.log with a message
+similar to:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="o">[</span>notice<span class="o">]</span> Apache/2.2.21 <span class="o">(</span>Win32<span class="o">)</span> mod-mapcache/0.5-dev configured -- resuming normal operations
 </pre></div>
 </div>
 </li>
@@ -623,8 +740,9 @@ option(WITH_APACHE &quot;Build Apache Module&quot; ON)
 <div class="section" id="test-your-mapcache-module">
 <h3><a class="toc-backref" href="#table-of-contents">Tester votre module MapCache</a><a class="headerlink" href="#test-your-mapcache-module" title="Lien permanent vers ce titre">¶</a></h3>
 <ul>
-<li><p class="first">Dans votre navigateur web, allez à la page locale de démonstration MapCache <a class="reference external" href="http://127.0.0.1/mapcache/demo/">http://127.0.0.1/mapcache/demo/</a>. Vous devriez vois apparaître une liste cliquable de lien de démonstration:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">tms</span>
+<li><p class="first">In your web browser, visit the local MapCache demo page: <a class="reference external" href="http://127.0.0.1/mapcache/demo/">http://127.0.0.1/mapcache/demo/</a>. You should see
+a clickable list of demo links:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tms</span>
 <span class="n">wmts</span>
 <span class="n">gmaps</span>
 <span class="n">kml</span>
@@ -633,10 +751,12 @@ option(WITH_APACHE &quot;Build Apache Module&quot; ON)
 </pre></div>
 </div>
 </li>
-<li><p class="first">Cliquez sur l&#8217;une des démonstration (<a class="reference external" href="http://127.0.0.1/mapcache/demo/wmts">http://127.0.0.1/mapcache/demo/wmts</a> par exemple), un visualiseur cartographique devrait apparaître, similaire à l&#8217;image ci-dessous:</p>
+<li><p class="first">Click on one of the demos (such as <a class="reference external" href="http://127.0.0.1/mapcache/demo/wmts">http://127.0.0.1/mapcache/demo/wmts</a>). A map viewer should load, similar
+to the image below.</p>
 <a class="reference internal image-reference" href="../_images/mapcache-demo.jpg"><img alt="../_images/mapcache-demo.jpg" src="../_images/mapcache-demo.jpg" style="width: 900px; height: 600px;" /></a>
 </li>
-<li><p class="first">Zoomez quelques fois, et votre emplacement de cache devrait générer des tuiles (dans notre cas dans :/ms4w/tmp/ms_tmp/cache/).</p>
+<li><p class="first">Zoom in a few times. Your configured cache location should be generating tiles (in this case inside
+D:/ms4w/tmp/ms_tmp/cache/).</p>
 <img alt="../_images/mapcache-disk.jpg" src="../_images/mapcache-disk.jpg" />
 </li>
 </ul>
@@ -665,10 +785,10 @@ option(WITH_APACHE &quot;Build Apache Module&quot; ON)
 <li><a class="reference internal" href="#getting-the-source">Obtenir les sources</a></li>
 <li><a class="reference internal" href="#linux-instructions">Instructions Linux</a><ul>
 <li><a class="reference internal" href="#apache-module-specific-instructions">Instructions spécifiques au module Apache</a></li>
-<li><a class="reference internal" href="#nginx-specific-instructions">Instructions spécifiques Nginx</a></li>
+<li><a class="reference internal" href="#nginx-specific-instructions">nginx Specific Instructions</a></li>
 <li><a class="reference internal" href="#cgi-fastcgi-specific-instructions">Instructions spécifiques CGI/FastCGI</a></li>
-<li><a class="reference internal" href="#customizing-the-build-or-if-something-went-wrong">Personnaliser la compilation, ou s&#8217;il y a eu un problème</a><ul>
-<li><a class="reference internal" href="#options-supported-by-the-mapcache-cmake-builder">Options supportées par le compilateur cmake MapCache</a></li>
+<li><a class="reference internal" href="#customizing-the-build-or-if-something-went-wrong">Customizing the Build, Or If Something Went Wrong</a><ul>
+<li><a class="reference internal" href="#options-supported-by-the-mapcache-cmake-builder">Options Supported By the MapCache CMake Builder</a></li>
 </ul>
 </li>
 </ul>
@@ -677,7 +797,7 @@ option(WITH_APACHE &quot;Build Apache Module&quot; ON)
 <li><a class="reference internal" href="#dependencies">Dépendances</a></li>
 <li><a class="reference internal" href="#configure-your-makefile">Configurer votre Makefile</a></li>
 <li><a class="reference internal" href="#compilation">Compilation</a></li>
-<li><a class="reference internal" href="#move-the-module-into-apache-directory">Déplacer le module dans le répertoire Apache</a></li>
+<li><a class="reference internal" href="#move-the-module-into-the-apache-directory">Move the Module Into the Apache Directory</a></li>
 <li><a class="reference internal" href="#configure-your-installed-apache">Configurer votre Apache installé</a></li>
 <li><a class="reference internal" href="#test-your-mapcache-module">Tester votre module MapCache</a></li>
 </ul>
@@ -704,11 +824,11 @@ option(WITH_APACHE &quot;Build Apache Module&quot; ON)
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

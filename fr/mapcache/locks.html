@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Locking Mechanisms &mdash; MapServer 7.0.0 documentation</title>
+    <title>Locking Mechanisms &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../index.html" />
     <link rel="up" title="MapCache 1.4" href="index.html" />
     <link rel="next" title="Data Input" href="../input/index.html" />
     <link rel="prev" title="Assemblage de tuiles" href="tile_assembling.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../input/index.html" title="Data Input"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="tile_assembling.html" title="Assemblage de tuiles"
+             accesskey="P">précédent</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.1</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapCache 1.4</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -149,50 +166,50 @@
 </tr>
 </tbody>
 </table>
-<p>Mapcache sometimes needs exclusive access to a given ressource, and provides
-some mechanisms to ensure that no more than one mapcache instance may be
-operating on that given ressource. This may happen when:</p>
+<p>MapCache sometimes needs exclusive access to a given resource, and provides
+some mechanisms to ensure that no more than one MapCache instance can
+operate on that resource. This may happen when:</p>
 <ul class="simple">
 <li>Sending a request to a source WMS server for a given metatile. Only a single
-mapcache instance should be sending that request, other mapcache instances
+MapCache instance should be sending that request; other MapCache instances
 processing a tile from that same metatile should wait for that request to
 finish rather than sending the same exact request again (in order not to
-overload the WMS server)</li>
+overload the WMS server).</li>
 <li>Writing a tile inside a TIFF cache. The TIFF library does not handle concurrent
-writes, MapCache must thus ensure that only a single instance is accessing a
-given TIFF file for writing</li>
+writes, so MapCache must ensure that only a single instance is accessing a
+given TIFF file for writing.</li>
 </ul>
 <p>A locker is configured with:</p>
-<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;locker</span> <span class="na">type=</span><span class="s">&quot;...&quot;</span><span class="nt">&gt;</span>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;locker</span> <span class="na">type=</span><span class="s">&quot;...&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;timeout&gt;</span>60<span class="nt">&lt;/timeout&gt;</span>
   <span class="nt">&lt;retry&gt;</span>0.1<span class="nt">&lt;/retry&gt;</span>
   ...
 <span class="nt">&lt;/locker&gt;</span>
 </pre></div>
 </div>
-<p>When a MapCache instance cannot aquire a lock because it has already been aquired
+<p>When a MapCache instance cannot acquire a lock because it has already been acquired
 by another instance, it will:</p>
 <ul class="simple">
 <li>Check back every <cite>&lt;retry&gt;</cite> seconds to see if the lock has been released by the
 other instance.</li>
 <li>Consider that after <cite>&lt;timeout&gt;</cite> seconds the other instance has failed, and delete
-the lock before aquiring it itself.</li>
+the lock before acquiring it itself.</li>
 </ul>
 <div class="section" id="disk-locks">
 <h2>Disk Locks<a class="headerlink" href="#disk-locks" title="Lien permanent vers ce titre">¶</a></h2>
-<p>This locking mechanism places a file somewhere on the filesystem. The filesystem
-can be a network share in order to synchronize multiple mapcache instances.</p>
-<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;locker</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="nt">&gt;</span>
+<p>This locking mechanism places a file somewhere in the filesystem. The filesystem
+can be a network share in order to synchronize multiple MapCache instances.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;locker</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;directory&gt;</span>/path/to/lockdir<span class="nt">&lt;/directory&gt;</span>
 <span class="nt">&lt;/locker&gt;</span>
 </pre></div>
 </div>
-<p>The configured directory should be read/write accessible by the mapcache instance.</p>
+<p>The configured directory should be read/write accessible by the MapCache instance.</p>
 </div>
 <div class="section" id="memcache-locks">
 <h2>Memcache Locks<a class="headerlink" href="#memcache-locks" title="Lien permanent vers ce titre">¶</a></h2>
-<p>This locking mechanism uses a third party memcache instance to keep track of the locks</p>
-<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;locker</span> <span class="na">type=</span><span class="s">&quot;memcache&quot;</span><span class="nt">&gt;</span>
+<p>This locking mechanism uses a third-party memcache instance to keep track of the locks.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;locker</span> <span class="na">type=</span><span class="s">&quot;memcache&quot;</span><span class="nt">&gt;</span>
    <span class="nt">&lt;server&gt;</span>
      <span class="nt">&lt;host&gt;</span>localhost<span class="nt">&lt;/host&gt;</span>
      <span class="nt">&lt;port&gt;</span>11211<span class="nt">&lt;/port&gt;</span>
@@ -207,10 +224,10 @@ can be a network share in order to synchronize multiple mapcache instances.</p>
 </div>
 <div class="section" id="fallback-locks">
 <h2>Fallback Locks<a class="headerlink" href="#fallback-locks" title="Lien permanent vers ce titre">¶</a></h2>
-<p>This &#8220;meta&#8221; locker will fall back to its seconf configured locker if the first
-one failed (typically used with a memcache instance if the memcache instance
-went down)</p>
-<div class="highlight-xml"><div class="highlight"><pre>&lt;locker type=&quot;fallback&quot;
+<p>This &#8220;meta&#8221; locker will fall back to its second configured locker if the first
+one fails (typically used with a memcache instance if the memcache instance
+goes down).</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;locker type=&quot;fallback&quot;
   &lt;locker type=&quot;memcache&quot;&gt;
      &lt;server&gt;
        &lt;host&gt;localhost&lt;/host&gt;
@@ -273,11 +290,11 @@ went down)</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

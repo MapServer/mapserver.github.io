@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Vecteur &mdash; MapServer 7.0.0 documentation</title>
+    <title>Vecteur &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../index.html" />
     <link rel="up" title="Optimisation" href="index.html" />
     <link rel="next" title="Utilitaires" href="../utilities/index.html" />
     <link rel="prev" title="Index de tuiles" href="tileindex.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../utilities/index.html" title="Utilitaires"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="tileindex.html" title="Index de tuiles"
+             accesskey="P">précédent</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.1</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Optimisation</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -180,12 +197,12 @@
 <div class="section" id="postgis">
 <span id="index-2"></span><h2><a class="toc-backref" href="#table-of-contents">PostGIS</a><a class="headerlink" href="#postgis" title="Lien permanent vers ce titre">¶</a></h2>
 <p>La plus grosse augmentation de performance se fait via l&#8217;indexation.  Assurez-vous qu&#8217;il y a un index GIST sur la colonne géométrie, et que chaque enregistrement a aussi une clé primaire indexée. Si vous utilisez shp2pgsql, alors ces instructions devrait créer les index nécessaires :</p>
-<div class="highlight-sql"><div class="highlight"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="k">table</span> <span class="k">ADD</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">gid</span><span class="p">);</span>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="k">table</span> <span class="k">ADD</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">gid</span><span class="p">);</span>
 <span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">table_the_geom</span> <span class="k">ON</span> <span class="k">table</span> <span class="p">(</span><span class="n">the_geom</span><span class="p">)</span> <span class="k">USING</span> <span class="n">GIST</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>PostgreSQL supporte aussi la réorganisation des données dans une table, de manière à ce qu&#8217;elle soit physiquement triée par index. Cea permet à PostgreSQL d&#8217;être plus efficace dans la lecture des  données indexées. Utiliser la commande CLUSTER, c&#8217;est à dire.</p>
-<div class="highlight-sql"><div class="highlight"><pre><span class="k">CLUSTER</span> <span class="n">the_geom</span> <span class="k">ON</span> <span class="k">table</span><span class="p">;</span>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">CLUSTER</span> <span class="n">the_geom</span> <span class="k">ON</span> <span class="k">table</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>Ensuite, il y a de nombreuses optimisations que vous pouvez effectuer sur le serveur de base de données lui-même, indépendamment de sa  cartouche spatiale. La manière la plus simple est d&#8217;augmenter la valeur de <em>max_buffers</em> dans le fichier <em>postgresql.conf</em>, qui permet à PostgreSQL d&#8217;utiliser plus de mémoire pour le cache. Plus d&#8217;informations peuvent être trouvées sur le <a class="reference external" href="http://www.postgresql.org">site web de PostgreSQL</a>.</p>
@@ -194,7 +211,7 @@
 <span id="index-3"></span><h2><a class="toc-backref" href="#table-of-contents">Bases de données en général (PostGIS, Oracle, MySQL)</a><a class="headerlink" href="#databases-in-general-postgis-oracle-mysql" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Par défaut, MapServer ouvre et ferme une nouvelle connexion à la base de données pour chacune des couches dans le mapfile ayant pour source une base. Si vous lisez plusieurs couches à partir d&#8217;une même base de données, ce comportement n&#8217;a aucun sens. Et avec certaines bases de données (Oracle), établir des connections prend sufffisamment de temps pour que ce soit significatif.</p>
 <p>Essayer d&#8217;ajouter cette ligne dans vos couches de base de données :</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">PROCESSING</span> <span class="s">&quot;CLOSE_CONNECTION=DEFER&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">PROCESSING</span> <span class="s">&quot;CLOSE_CONNECTION=DEFER&quot;</span>
 </pre></div>
 </div>
 <p>Cela indique à MapServer de na pas fermer la connexion à la base de données pour chaque couche après qu&#8217;il ait fini de parcourir le mapfile et cela pourra parfois vous faire gagner quelques secondes sur les temps de générations de cartes.</p>
@@ -245,11 +262,11 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

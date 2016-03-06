@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>COMPOSITE &mdash; MapServer 7.0.0 documentation</title>
+    <title>COMPOSITE &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,10 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="Про ці документи" href="../about.html" />
     <link rel="copyright" title="Авторські права" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../index.html" />
     <link rel="up" title="Mapfile" href="index.html" />
-    <link rel="next" title="MapScript" href="../mapscript/index.html" />
-    <link rel="prev" title="XML Mapfile support" href="xml_mapfile.html" />
+    <link rel="next" title="Display of International Characters in MapServer" href="labelencoding.html" />
+    <link rel="prev" title="CLUSTER" href="cluster.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -129,6 +129,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навігація</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Загальний індекс"
+             accesskey="I">індекс</a></li>
+        <li class="right" >
+          <a href="labelencoding.html" title="Display of International Characters in MapServer"
+             accesskey="N">наступний</a> |</li>
+        <li class="right" >
+          <a href="cluster.html" title="CLUSTER"
+             accesskey="P">попередній</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.1 Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Mapfile</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -138,6 +155,24 @@
             
   <div class="section" id="composite">
 <span id="index-0"></span><span id="id1"></span><h1>COMPOSITE<a class="headerlink" href="#composite" title="Постійне посилання на цей заголовок">¶</a></h1>
+<div class="section" id="background">
+<h2>Background<a class="headerlink" href="#background" title="Постійне посилання на цей заголовок">¶</a></h2>
+<p>The <cite>COMPOSITE</cite> block is used to achieve blending effects with
+MapServer.</p>
+<p>Some cartographic renderings benefit from the addition of advanced
+blending modes, as explained in detail in <a class="reference external" href="http://en.wikipedia.org/wiki/Blend_modes">Blend Modes</a>.  This
+functionality is essential for more pleasant renderings of raster
+hillshadings over vector surfaces.  It is also useful for simulating
+different kinds of overprinting effects.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">Дивись також</p>
+<p class="last"><a class="reference internal" href="../development/rfc/ms-rfc-113.html#rfc113"><span>MS RFC 113: Layer Compositing Pipeline</span></a></p>
+</div>
+<p>Performance is affected by advanced blending (all modes except
+<cite>src-over</cite>).</p>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Постійне посилання на цей заголовок">¶</a></h2>
 <p id="opacity"><span id="index-1"></span>OPACITY [integer]</p>
 <blockquote>
 <div>Sets the opacity level (or the inability to see through the layer) of all
@@ -184,6 +219,32 @@ backends <em>and</em> when pixman support is not enabled, and will fall back to
 &#8220;src-over&#8221; when this is not the case.</p>
 </div></blockquote>
 </div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Постійне посилання на цей заголовок">¶</a></h2>
+<p>Simple transparency / opacity is achieved by only specifying the
+<cite>OPACITY</cite> parameter (this achieves the same effect as the legacy
+<cite>LAYER</cite> <cite>OPACITY</cite> parameter):</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="k">COMPOSITE</span>
+    <span class="k">OPACITY</span> <span class="mi">70</span>
+  <span class="k">END</span> <span class="c"># COMPOSITE</span>
+<span class="p">...</span>
+<span class="k">END</span> <span class="c"># LAYER</span>
+</pre></div>
+</div>
+<p>The darkening effect is achieved by adding the <cite>COMPOP</cite> parameter with
+the value <cite>darken</cite>:</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="k">COMPOSITE</span>
+    <span class="k">OPACITY</span> <span class="mi">100</span>
+    <span class="k">COMPOP</span> <span class="s">&quot;darken&quot;</span>
+  <span class="k">END</span> <span class="c"># COMPOSITE</span>
+<span class="p">...</span>
+<span class="k">END</span> <span class="c"># LAYER</span>
+</pre></div>
+</div>
+</div>
+</div>
 
 
           </div>
@@ -200,6 +261,16 @@ backends <em>and</em> when pixman support is not enabled, and will fall back to
 <a href="../documentation.html" title="Documentation">Documentation</a><br>
 <a href="../faq.html" title="FAQ">FAQ</a>
 </p>
+  <h3>Current Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">COMPOSITE</a><ul>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#parameters">Parameters</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+
 <div id="searchbox" style="display: none" role="search">
   <h3>Швидкий пошук</h3>
     <form class="search" action="../search.html" method="get">
@@ -218,11 +289,11 @@ backends <em>and</em> when pixman support is not enabled, and will fall back to
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

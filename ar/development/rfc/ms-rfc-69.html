@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MS RFC 69: Support for clustering of features in point layers &mdash; MapServer 7.0.0 documentation</title>
+    <title>MS RFC 69: Support for clustering of features in point layers &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 70: Integration of TinyOWS in MapServer project" href="ms-rfc-70.html" />
     <link rel="prev" title="MS RFC 68: Support for combining features from multiple layers" href="ms-rfc-68.html" />
@@ -129,6 +129,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ms-rfc-70.html" title="MS RFC 70: Integration of TinyOWS in MapServer project"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ms-rfc-68.html" title="MS RFC 68: Support for combining features from multiple layers"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -172,7 +189,7 @@ the number of the features forming the clusters are displayed in the labels for 
 <p>This functionality will be implemented as a separate layer data provider (implemented in mapcluster.c)
 This provider will be used internally (being invoked in msLayerOpen).
 The clustering parameters can be specified for each layer type as follows:</p>
-<div class="highlight-python"><div class="highlight"><pre>LAYER
+<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
   TYPE POINT
   CONNECTIONTYPE OGR
   NAME cluster
@@ -188,7 +205,7 @@ END
 </div>
 <p>We can also use multiple classes to display the clustered shapes. The referred example above use the
 following layer definition:</p>
-<div class="highlight-python"><div class="highlight"><pre>LAYER
+<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
     CLUSTER
         MAXDISTANCE 50
         REGION &quot;rectangle&quot;
@@ -248,7 +265,7 @@ following layer definition:</p>
 <p>In the proposed solution msLayerOpen will call the vtable method of the cluster layer provider
 instead of the original vtable method depending on the existence of the
 clustering options, something like:</p>
-<div class="highlight-python"><div class="highlight"><pre>if (layer-&gt;cluster.region)
+<div class="highlight-python"><div class="highlight"><pre><span></span>if (layer-&gt;cluster.region)
   return msClusterLayerOpen(layer);
 </pre></div>
 </div>
@@ -269,7 +286,7 @@ within the specified distance (CLUSTERMAXDISTANCE) and search shape (CLUSTERREGI
 In the related clusters we update the feature count (n) average positions (avg) and the variance (var)
 for each intersecting clusters by using the following recursive formula:</li>
 </ol>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
 <span class="n">avg</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">=</span> <span class="n">avg</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span> <span class="o">+</span> <span class="n">x</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
 <span class="n">var</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">=</span> <span class="n">var</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span> <span class="o">+</span> <span class="n">pow2</span><span class="p">(</span><span class="n">x</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">avg</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
@@ -329,7 +346,7 @@ and make msLayerWhichItems aware of the group and filter expressions</li>
 <div class="section" id="files-affected">
 <h2>4.1 Files affected<a class="headerlink" href="#files-affected" title="Permalink to this headline">¶</a></h2>
 <p>The following files will be modified/created by this RFC:</p>
-<div class="highlight-python"><div class="highlight"><pre>Makefile.vc
+<div class="highlight-python"><div class="highlight"><pre><span></span>Makefile.vc
 Makefile.in
 maplayer.c (msLayerOpen and msLayerWhichItems)
 mapfile.c, mapfile.h(for handling clusterObj)
@@ -344,8 +361,8 @@ mapserver.h
 <h2>4.2 MapScript Issues<a class="headerlink" href="#mapscript-issues" title="Permalink to this headline">¶</a></h2>
 <p>The new object (clusterObj) will be exposed to the mapscript interface.</p>
 </div>
-<div class="section" id="backwards-compatibilty-issues">
-<h2>4.3 Backwards Compatibilty Issues<a class="headerlink" href="#backwards-compatibilty-issues" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="backwards-compatibility-issues">
+<h2>4.3 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this headline">¶</a></h2>
 <p>This change provides a new functionality with no backwards compatibility issues being considered.</p>
 </div>
 <div class="section" id="bug-id">
@@ -386,7 +403,7 @@ mapserver.h
 <li><a class="reference internal" href="#implementation-details">4. Implementation Details</a></li>
 <li><a class="reference internal" href="#files-affected">4.1 Files affected</a></li>
 <li><a class="reference internal" href="#mapscript-issues">4.2 MapScript Issues</a></li>
-<li><a class="reference internal" href="#backwards-compatibilty-issues">4.3 Backwards Compatibilty Issues</a></li>
+<li><a class="reference internal" href="#backwards-compatibility-issues">4.3 Backwards Compatibility Issues</a></li>
 <li><a class="reference internal" href="#bug-id">5. Bug ID</a></li>
 <li><a class="reference internal" href="#voting-history">6. Voting history</a></li>
 </ul>
@@ -411,11 +428,11 @@ mapserver.h
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

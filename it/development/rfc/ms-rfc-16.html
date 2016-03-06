@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MS RFC 16: MapScript WxS Services &mdash; MapServer 7.0.0 documentation</title>
+    <title>MS RFC 16: MapScript WxS Services &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="A proposito di questi documenti" href="../../about.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 17: Dynamic Allocation of layers, styles, classes and symbols" href="ms-rfc-17.html" />
     <link rel="prev" title="MS RFC 15: Support for thread neutral operation of MapServer/MapScript" href="ms-rfc-15.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigazione</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Indice generale"
+             accesskey="I">indice</a></li>
+        <li class="right" >
+          <a href="ms-rfc-17.html" title="MS RFC 17: Dynamic Allocation of layers, styles, classes and symbols"
+             accesskey="N">successivo</a> |</li>
+        <li class="right" >
+          <a href="ms-rfc-15.html" title="MS RFC 15: Support for thread neutral operation of MapServer/MapScript"
+             accesskey="P">precedente</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -184,7 +201,7 @@ from MapScript and results capturable for processing.</li>
 <li>GetCapabilities, DescribeFeatureType and GetFeature calls for WFS callable
 from MapScript and results capturable for processing.</li>
 <li>Any other OWS services dispatched through OWSDispatch (such as SOS) would
-also be accessable from MapScript.</li>
+also be accessible from MapScript.</li>
 <li>IO hooking to capture various output from MapServer services will be
 accomplished via mapio.c services, the same as is used to capture output
 for FastCGI services.</li>
@@ -198,7 +215,7 @@ customized services.</li>
 <div class="section" id="wxs-functions">
 <h2>WxS Functions<a class="headerlink" href="#wxs-functions" title="Link a questa intestazione">¶</a></h2>
 <p>Add the following methods on the mapObj in mapscript/swiginc/map.i.</p>
-<div class="highlight-python"><div class="highlight"><pre>int OWSDispatch( OWSRequest *req );
+<div class="highlight-python"><div class="highlight"><pre><span></span>int OWSDispatch( OWSRequest *req );
 </pre></div>
 </div>
 <p>We can&#8217;t call the lower level functions, like msWMSGetCapabilities()
@@ -218,14 +235,14 @@ the results.</li>
 but it seems to lack a means of setting it from cgi arguments or directly
 by parsing a provided url.  I propose to add the following method on the
 OWSRequest:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">loadParams</span><span class="p">();</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">loadParams</span><span class="p">();</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li>Loads the parameters from the normal sources (QUERY_STRING env. variable
 for instance).</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre>loadParams( const char * url );
+<div class="highlight-python"><div class="highlight"><pre><span></span>loadParams( const char * url );
 </pre></div>
 </div>
 <ul class="simple">
@@ -259,39 +276,39 @@ we want to be able to capture output all the time for MapScript, we will
 actually always need the msIO layer.  So USE_MAPIO will always have to
 be defined.</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">msIO_resetHandlers</span><span class="p">();</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">msIO_resetHandlers</span><span class="p">();</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li>Resets msIO handlers to defaults (using stdin, stdout, stderr).</li>
 <li>Clears buffer data if buffered handlers were installed.</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">msIO_installStdoutToBuffer</span><span class="p">();</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">msIO_installStdoutToBuffer</span><span class="p">();</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li>Install handler to send stdout to a buffer, clear buffer.</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">msIO_installStdinFromBuffer</span><span class="p">();</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">msIO_installStdinFromBuffer</span><span class="p">();</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li>Install handler to get stdin from a buffer, clear buffer.</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre>msIO_setStdinBuffer( unsigned char *data, int length );
+<div class="highlight-python"><div class="highlight"><pre><span></span>msIO_setStdinBuffer( unsigned char *data, int length );
 </pre></div>
 </div>
 <ul class="simple">
 <li>Set data for stdin buffer.</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre>gdBuffer msIO_getStdoutBufferBytes();
+<div class="highlight-python"><div class="highlight"><pre><span></span>gdBuffer msIO_getStdoutBufferBytes();
 </pre></div>
 </div>
 <ul class="simple">
 <li>Fetch stdout buffer pointer and length.</li>
 <li>gdBuffer already provides language specific bindings to get byte data.</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre>const char *msIO_getStdoutBufferString();
+<div class="highlight-python"><div class="highlight"><pre><span></span>const char *msIO_getStdoutBufferString();
 </pre></div>
 </div>
 <ul class="simple">
@@ -302,7 +319,7 @@ instance.</li>
 of current read/write position.</p>
 <p>My objective is that folks should be able to do something like this in
 Python MapScript.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mapscript</span><span class="o">.</span><span class="n">msIO_installStdoutToBuffer</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">mapscript</span><span class="o">.</span><span class="n">msIO_installStdoutToBuffer</span><span class="p">()</span>
 <span class="k">if</span> <span class="nb">map</span><span class="o">.</span><span class="n">OWSDispatch</span><span class="p">(</span> <span class="n">req</span> <span class="p">)</span> <span class="o">==</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">MS_SUCCESS</span><span class="p">:</span>
   <span class="n">result</span> <span class="o">=</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">msIO_getStdoutBufferString</span><span class="p">()</span>
   <span class="n">mapscript</span><span class="o">.</span><span class="n">msIO_resetHandlers</span><span class="p">()</span>
@@ -321,7 +338,7 @@ bindings already have a way of using this as a &#8220;array of raw bytes&#8221; 
 It is normally used for fetched gdImage buffers.  But because the msIO
 function returns a gdBuffer referring to an internally memory array not
 &#8220;owned&#8221; by the gdBuffer we need to add a owns_data flag.</p>
-<div class="highlight-python"><div class="highlight"><pre>typedef struct {
+<div class="highlight-python"><div class="highlight"><pre><span></span>typedef struct {
    unsigned char *data;
    int size;
    int owns_data;
@@ -331,14 +348,14 @@ function returns a gdBuffer referring to an internally memory array not
 <p>Likewise, each of the language bindings needs to be modified to only
 call gdFree() on data if owns_data is true.</p>
 <p>This:</p>
-<div class="highlight-python"><div class="highlight"><pre>%typemap(out) gdBuffer {
+<div class="highlight-python"><div class="highlight"><pre><span></span>%typemap(out) gdBuffer {
    $result = PyString_FromStringAndSize($1.data, $1.size);
    gdFree($1.data);
 }
 </pre></div>
 </div>
 <p>becomes this:</p>
-<div class="highlight-python"><div class="highlight"><pre>%typemap(out) gdBuffer {
+<div class="highlight-python"><div class="highlight"><pre><span></span>%typemap(out) gdBuffer {
    $result = PyString_FromStringAndSize($1.data, $1.size);
    if( $1.owns_data )
        gdFree($1.data);
@@ -349,7 +366,7 @@ call gdFree() on data if owns_data is true.</p>
 </div>
 <div class="section" id="files-and-objects-affected">
 <h2>Files and objects affected<a class="headerlink" href="#files-and-objects-affected" title="Link a questa intestazione">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mapio</span><span class="o">.</span><span class="n">c</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">mapio</span><span class="o">.</span><span class="n">c</span>
 <span class="n">mapio</span><span class="o">.</span><span class="n">h</span>
 <span class="n">mapscript</span><span class="o">/</span><span class="n">mapscript</span><span class="o">.</span><span class="n">i</span>
 <span class="n">mapscript</span><span class="o">/</span><span class="n">swiginc</span><span class="o">/</span><span class="n">owsrequest</span><span class="o">.</span><span class="n">i</span>
@@ -387,7 +404,7 @@ anyways.</li>
 <p>The msautotest/mspython and python unit tests will be extended with at
 least rudimentary testing of a few of these services.</p>
 <p>As we have no automated tests for other MapScript languages, no automated
-tests will be added, but I will endevour to prepare simple scripts to test
+tests will be added, but I will endeavour to prepare simple scripts to test
 things.  Currently this has been done for Python and Perl MapScript.</p>
 </div>
 <div class="section" id="example">
@@ -398,7 +415,7 @@ content type ahead of the regular content type so we can see the results.
 The script could easily have done extra manipulation on the URL parameters,
 and on the map object.</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">mapscript</span>
@@ -410,7 +427,7 @@ and on the map object.</p>
 
 <span class="nb">map</span><span class="o">.</span><span class="n">OWSDispatch</span><span class="p">(</span> <span class="n">req</span> <span class="p">)</span>
 
-<span class="k">print</span> <span class="s">&#39;Content-type: text/plain&#39;</span>
+<span class="k">print</span> <span class="s1">&#39;Content-type: text/plain&#39;</span>
 <span class="k">print</span>
 <span class="k">print</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">msIO_getStdoutBufferString</span><span class="p">()</span>
 </pre></div>
@@ -484,11 +501,11 @@ and on the map object.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

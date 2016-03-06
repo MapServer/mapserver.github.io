@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Proxying Unsupported Requests &mdash; MapServer 7.0.0 documentation</title>
+    <title>Proxying Unsupported Requests &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="Про ці документи" href="../about.html" />
     <link rel="copyright" title="Авторські права" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../index.html" />
     <link rel="up" title="MapCache 1.4" href="index.html" />
     <link rel="next" title="Data Sources" href="sources.html" />
     <link rel="prev" title="FeatureInfo Requests" href="featureinfo.html" />
@@ -129,6 +129,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навігація</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Загальний індекс"
+             accesskey="I">індекс</a></li>
+        <li class="right" >
+          <a href="sources.html" title="Data Sources"
+             accesskey="N">наступний</a> |</li>
+        <li class="right" >
+          <a href="featureinfo.html" title="FeatureInfo Requests"
+             accesskey="P">попередній</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.1 Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapCache 1.4</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -150,12 +167,12 @@
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Примітка</p>
-<p class="last">This page is a work in progress</p>
+<p class="last">This page is a work in progress.</p>
 </div>
 <p>MapCache has the ability to forward any incoming request that it cannot
-natively respond to (either by returning a tile directly, by <a class="reference internal" href="tile_assembling.html#mapcache-tile-assembling"><span>merging</span></a> multiple tiles, etc...).</p>
-<p>This setup allows mapcache to be placed transparently in front of an existing
-OGC-service supplying server to accelerate tiled or getmap requests for a
+natively respond to (either by returning a tile directly, by <a class="reference internal" href="tile_assembling.html#mapcache-tile-assembling"><span>merging</span></a> multiple tiles, etc.).</p>
+<p>This setup allows MapCache to be placed transparently in front of an existing
+OGC-service supplying server to accelerate tiled or GetMap requests for a
 selected number of <a class="reference internal" href="config.html#mapcache-grids"><span>grids</span></a>, while maintaining service
 compatibility for, e.g., unsupported grids, WFS requests, ...</p>
 <div class="admonition note">
@@ -168,7 +185,7 @@ inside the &lt;forwarding_rule&gt; element of the wms &lt;service&gt;. Rules are
 for in the order in which they appear in the mapcache.xml configuration file,
 and the first one that matches is used. If no rules are defined, or if no
 rule matches the incoming request, an error is returned to the user.</p>
-<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
    <span class="nt">&lt;forwarding_rule</span> <span class="na">name=</span><span class="s">&quot;first rule&quot;</span><span class="nt">&gt;</span>
       <span class="c">&lt;!-- rule tests --&gt;</span>
       <span class="c">&lt;!-- proxy destination --&gt;</span>
@@ -184,31 +201,31 @@ rule matches the incoming request, an error is returned to the user.</p>
 defining where the request should be forwarded to.</p>
 <div class="section" id="parameter-filtering">
 <h2>Parameter Filtering<a class="headerlink" href="#parameter-filtering" title="Постійне посилання на цей заголовок">¶</a></h2>
-<p>The rules apply to the KVP parameters that were passed in the incoming request,
+<p>The rules apply to the key-value pair parameters received in the incoming request,
 and are added with the &lt;param&gt; keyword:</p>
-<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;forwarding_rule</span> <span class="na">name=</span><span class="s">&quot;first rule&quot;</span><span class="nt">&gt;</span>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;forwarding_rule</span> <span class="na">name=</span><span class="s">&quot;first rule&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;SERVICE&quot;</span> <span class="na">type=</span><span class="s">&quot;values&quot;</span><span class="nt">&gt;</span>WFS,WCS<span class="nt">&lt;/param&gt;</span>
   <span class="c">&lt;!-- ... !&gt;</span>
 <span class="c">&lt;forwarding_rule&gt;</span>
 </pre></div>
 </div>
-<p>The &#8220;type&#8221; attribute is the same that what is allowed for <a class="reference internal" href="dimensions.html#mapcache-dimensions"><span>dimensions</span></a>, i.e. allowed values are &#8220;values&#8221;, &#8220;regex&#8221;, and
+<p>The &#8220;type&#8221; attribute is the same as what is allowed for <a class="reference internal" href="dimensions.html#mapcache-dimensions"><span>dimensions</span></a>, i.e. allowed values are &#8220;values&#8221;, &#8220;regex&#8221;, and
 &#8220;intervals&#8221;. In the previous example, the rule would match any incoming
 request having ...&amp;SERVICE=WFS&amp;... or ...&amp;SERVICE=WCS&amp;... in its request
 parameters.</p>
-<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;forwarding_rule</span> <span class="na">name=</span><span class="s">&quot;first rule&quot;</span><span class="nt">&gt;</span>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;forwarding_rule</span> <span class="na">name=</span><span class="s">&quot;first rule&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;SERVICE&quot;</span> <span class="na">type=</span><span class="s">&quot;values&quot;</span><span class="nt">&gt;</span>WFS,WCS<span class="nt">&lt;/param&gt;</span>
   <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;LAYERS&quot;</span> <span class="na">type=</span><span class="s">&quot;values&quot;</span><span class="nt">&gt;</span>somelayername<span class="nt">&lt;/param&gt;</span>
   <span class="c">&lt;!-- ... !&gt;</span>
 <span class="c">&lt;forwarding_rule&gt;</span>
 </pre></div>
 </div>
-<p>Multiple rules can be used if the filtering has to be done on mutiple
+<p>Multiple rules can be used if the filtering has to be done on multiple
 parameters. In the previous example, the rule would match a WFS or WCS
 request that concerns the &#8220;somelayername&#8221; layer only.</p>
 <p>A &lt;forwarding_rule&gt; that has no &lt;param&gt; child will match any incoming
 request that could not be serviced by MapCache directly from its cache,
-and can be used to forward all unsupported request to a full OGC
+and can be used to forward all unsupported request to a full OGC-
 compliant server so that an un-cached response can be returned to the
 client.</p>
 <div class="admonition seealso">
@@ -220,7 +237,7 @@ client.</p>
 <h2>Proxy Destination<a class="headerlink" href="#proxy-destination" title="Постійне посилання на цей заголовок">¶</a></h2>
 <p>Once a &lt;forwarding_rule&gt; matches, its &lt;http&gt; child will be used to proxy the
 request to another server.</p>
-<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;forwarding_rule</span> <span class="na">name=</span><span class="s">&quot;first rule&quot;</span><span class="nt">&gt;</span>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;forwarding_rule</span> <span class="na">name=</span><span class="s">&quot;first rule&quot;</span><span class="nt">&gt;</span>
   <span class="c">&lt;!-- ... !&gt;</span>
 <span class="c">  &lt;http&gt;</span>
 <span class="c">     &lt;url&gt;http://wmsserver/ogc.cgi?&lt;/url&gt;</span>
@@ -277,11 +294,11 @@ request to another server.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

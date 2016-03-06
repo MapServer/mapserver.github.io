@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>OGR Output &mdash; MapServer 7.0.0 documentation</title>
+    <title>OGR Output &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../index.html" />
     <link rel="up" title="Output Generation" href="index.html" />
     <link rel="next" title="PDF Output" href="pdf.html" />
     <link rel="prev" title="Kernel Density Estimation (Dynamic Heatmap)" href="kerneldensity.html" />
@@ -129,6 +129,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="pdf.html" title="PDF Output"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="kerneldensity.html" title="Kernel Density Estimation (Dynamic Heatmap)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.1 Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Output Generation</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -183,7 +200,7 @@ creation options specific to that driver, and more general instructions to
 MapServer on how to package multi-file results and whether to try and
 build the result on disk or in memory.</p>
 <p>Examples:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">OUTPUTFORMAT</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">OUTPUTFORMAT</span>
   <span class="k">NAME</span> <span class="s">&quot;CSV&quot;</span>
   <span class="k">DRIVER</span> <span class="s">&quot;OGR/CSV&quot;</span>
   <span class="k">MIMETYPE</span> <span class="s">&quot;text/csv&quot;</span>
@@ -258,6 +275,12 @@ file or multipart form, or &#8220;result.zip&#8221; for zip form.
 In the case of zip form, the filename can be of the format basename.ext.zip where
 basename.ext will be used as the actual OGR datasource name (i.e. generally
 the filename that will be put inside the zip file).</dd>
+<dt><strong>USE_FEATUREID=true/false</strong></dt>
+<dd>Starting from MapServer v7.0.2. Defaults to false. Include feature ids in the generated output,
+if the ows_featureid metadata key is set at the layer level. The featureid
+column to use <strong>should</strong> be an integer column. Usefull if you need to include
+an &#8220;id&#8221; attribute to your geojson output. Use with caution as some OGR output
+drivers may behave strangely when fed with <em>random</em> FIDs.</dd>
 </dl>
 </div>
 <div class="section" id="layer-metadata">
@@ -269,7 +292,7 @@ primarily intended to support WFS.</p>
 <dt><strong>wfs_getfeature_formatlist</strong></dt>
 <dd><p class="first">(Optional) A comma delimited list of formats supported for WFS GetFeature
 responses.  The OUTPUTFORMAT NAME values should be listed.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="s">&quot;wfs_getfeature_formatlist&quot;</span> <span class="s">&quot;OGRGML,SHAPEZIP,CSV&quot;</span>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;wfs_getfeature_formatlist&quot;</span> <span class="s2">&quot;OGRGML,SHAPEZIP,CSV&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -284,18 +307,18 @@ Relative filenames will be evaluated against the mapfile directory, and the
 SHAPEPATH value if defined.
 Filenames can also be URLs (starting with <a class="reference external" href="http://">http://</a> or <a class="reference external" href="https://">https://</a>). For that latter
 capability, note that this requires OGR to be compiled with Curl support.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="s">&quot;wfs_additional_files_in_output&quot;</span> <span class="s">&quot;license.pdf,my_layer_metadata.xml&quot;</span>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;wfs_additional_files_in_output&quot;</span> <span class="s2">&quot;license.pdf,my_layer_metadata.xml&quot;</span>
 </pre></div>
 </div>
 </dd>
 <dt><strong>gml_include_items</strong></dt>
 <dd><p class="first">(Optional) A comma delimited list of items to include, or keyword
 &#8220;all&#8221;.  You can enable full exposure by using the keyword &#8220;all&#8221;.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;gml_include_items&quot;</span> <span class="s">&quot;all&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;gml_include_items&quot;</span> <span class="s2">&quot;all&quot;</span>
 </pre></div>
 </div>
 <p>You can specify a list of attributes (fields) for partial exposure, such as:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;gml_include_items&quot;</span> <span class="s">&quot;Name,ID&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;gml_include_items&quot;</span> <span class="s2">&quot;Name,ID&quot;</span>
 </pre></div>
 </div>
 <p class="last">The new default behaviour is to expose no attributes at all.</p>
@@ -303,13 +326,17 @@ capability, note that this requires OGR to be compiled with Curl support.</p>
 <dt><strong>gml_[item name]_alias</strong></dt>
 <dd><p class="first">(Optional) An alias for an attribute&#8217;s name.  The resulting file will refer
 to this attribute by the alias.  Here is an example:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="s">&quot;gml_province_alias&quot;</span> <span class="s">&quot;prov&quot;</span>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;gml_province_alias&quot;</span> <span class="s2">&quot;prov&quot;</span>
 </pre></div>
 </div>
 </dd>
 <dt><strong>gml_[item name]_type</strong></dt>
 <dd>(Optional) Specifies the type of the attribute.  Valid values
-are Integer|Real|Character|Date|Boolean.</dd>
+are Integer|Long|Real|Character|Date|Boolean.
+Note: Long is to be used for 64-bit integers, starting with MapServer 7.0.1.
+If MapServer is built against GDAL 2.0 or later, Long will be translated as a
+OGR 64-bit integer. For earlier versions, it will be translated as a OGR
+double-precision floating point value.</dd>
 <dt><strong>gml_[item name]_width</strong></dt>
 <dd>(Optional) Specifies the width of the indicated field for formats where
 this is significant, such as Shapefiles.</dd>
@@ -321,7 +348,7 @@ places, and is only needed for &#8220;Real&#8221; fields.</dd>
 <dd><p class="first">(Optional) If this field is &#8220;auto&#8221; then some input feature drivers (ie.
 OGR, and native shapefiles) will automatically populate the type, width and
 precision metadata for the layer based on the source file.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="s">&quot;gml_types&quot;</span>   <span class="s">&quot;auto&quot;</span>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;gml_types&quot;</span>   <span class="s2">&quot;auto&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -336,7 +363,7 @@ geometry.  Note that layers which are a mix of polygon and multipolygon
 would normally have to be described as &#8220;Geometry&#8221;.  To produce 2.5D output
 append &#8220;25D&#8221; to the geometry type (ie. &#8220;Polygon25D&#8221;).   Note that Z values
 are only carried by MapServer if built with USE_POINT_Z_M support.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="s">&quot;ows_geomtype&quot;</span>  <span class="s">&quot;Polygon&quot;</span>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;ows_geomtype&quot;</span>  <span class="s2">&quot;Polygon&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -349,7 +376,7 @@ are only carried by MapServer if built with USE_POINT_Z_M support.</p>
 <dd><p class="first">In order for WMS GetFeatureInfo to allow selection of OGR output formats,
 the mime type associated with the OUTPUTFORMAT must be listed in this metadata
 item.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="s">&quot;wms_feature_info_mime_type&quot;</span> <span class="s">&quot;text/csv&quot;</span>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;wms_feature_info_mime_type&quot;</span> <span class="s2">&quot;text/csv&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -364,7 +391,7 @@ Relative filenames will be evaluated against the mapfile directory, and the
 SHAPEPATH value if defined.
 Filenames can also be URLs (starting with <a class="reference external" href="http://">http://</a> or <a class="reference external" href="https://">https://</a>). For that latter
 capability, note that this requires OGR to be compiled with Curl support.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="s">&quot;wfs_additional_files_in_output&quot;</span> <span class="s">&quot;license.pdf&quot;</span>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;wfs_additional_files_in_output&quot;</span> <span class="s2">&quot;license.pdf&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -387,12 +414,12 @@ be used depending on the TYPE of the LAYER.   In cases of mixed geometry
 types (ie. polygons and multipolygons) the geometry type should be set to
 &#8220;Geometry&#8221; which means any geometry type.</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;ows_geomtype&quot;</span> <span class="s">&quot;Geometry&quot;</span>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;ows_geomtype&quot;</span> <span class="s2">&quot;Geometry&quot;</span>
 </pre></div>
 </div>
 </div></blockquote>
 <p>In order 2.5D support (geometries with Z coordinates) to be enabled, the &#8220;25D&#8221;
-suffix must be addd to the value of the &#8220;ows_geomtype&#8221; metadata item
+suffix must be add to the value of the &#8220;ows_geomtype&#8221; metadata item
 (i.e. &#8220;Polygon25D&#8221;), and MapServer must be built with USE_POINT_Z_M support.</p>
 </div>
 <div class="section" id="attribute-field-definitions">
@@ -403,7 +430,7 @@ feature definition.</p>
 <p>It is possible to set the gml_[item]_type, gml_[item]_width and
 gml_[item]_precision metadata on the layer to provide detailed field
 definitions:</p>
-<div class="highlight-python"><div class="highlight"><pre>METADATA
+<div class="highlight-python"><div class="highlight"><pre><span></span>METADATA
   &quot;gml_ID_type&quot;        &quot;Integer&quot;
   &quot;gml_ID_width&quot;       &quot;8&quot;
   &quot;gml_AREA_type&quot;      &quot;Real&quot;
@@ -418,7 +445,7 @@ definitions:</p>
 some feature sources (at least OGR, Shapefiles, POSTGIS and ORACLESPATIAL)
 support a mechanism to automatically populate this information from the
 source datastore.  To accomplish this specify:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;gml_types&quot;</span>            <span class="s">&quot;auto&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;gml_types&quot;</span>            <span class="s2">&quot;auto&quot;</span>
 </pre></div>
 </div>
 <p>If no effort is made to set type, width and precision information for
@@ -516,11 +543,11 @@ msautotest/wxs directory.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

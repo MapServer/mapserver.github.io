@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MS RFC 75: INSPIRE view service support &mdash; MapServer 7.0.0 documentation</title>
+    <title>MS RFC 75: INSPIRE view service support &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="A proposito di questi documenti" href="../../about.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 76: Adding License Metadata to Output Images" href="ms-rfc-76.html" />
     <link rel="prev" title="MS RFC 74: Includes from non-file connections (eg Databases)" href="ms-rfc-74.html" />
@@ -130,6 +130,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigazione</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Indice generale"
+             accesskey="I">indice</a></li>
+        <li class="right" >
+          <a href="ms-rfc-76.html" title="MS RFC 76: Adding License Metadata to Output Images"
+             accesskey="N">successivo</a> |</li>
+        <li class="right" >
+          <a href="ms-rfc-74.html" title="MS RFC 74: Includes from non-file connections (eg Databases)"
+             accesskey="P">precedente</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -183,7 +200,7 @@ as well as appropriate validation warnings are generated in the capabilities
 document.</p>
 <p>Scenario 1 - activate INSPIRE support using a reference to external service
 metadata</p>
-<div class="highlight-python"><div class="highlight"><pre>WEB
+<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
  METADATA
   &quot;wms_inspire_capabilities&quot; &quot;url&quot;
   ...
@@ -192,7 +209,7 @@ END
 </pre></div>
 </div>
 <p>Scenario 2 - activate INSPIRE support using embedded service metadata</p>
-<div class="highlight-python"><div class="highlight"><pre>WEB
+<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
  METADATA
   &quot;wms_inspire_capabilities&quot; &quot;embed&quot;
   ...
@@ -205,7 +222,7 @@ END
 <h2>3. Multi-language support for certain capabilities fields<a class="headerlink" href="#multi-language-support-for-certain-capabilities-fields" title="Link a questa intestazione">¶</a></h2>
 <p>INSPIRE requires multi-language support and requests a list of all supported
 languages as well as the default language in the capabilities document. Based
-on the language parameter in the GetCapabilites request, certain specific
+on the language parameter in the GetCapabilities request, certain specific
 metadata values, namely</p>
 <blockquote>
 <div><ul class="simple">
@@ -232,8 +249,8 @@ metadata values, namely</p>
 <p>As suggested in Ticket <a class="reference external" href="https://github.com/mapserver/mapserver/issues/3608">3608</a>, all supported languages are specified as comma
 separated list (first language is default) through &#8220;wms_languages&#8221; in
 the WEB.METADATA section of the mapfile. This language parameter is also added
-to the onlineresource in the GetCapabilites output.</p>
-<div class="highlight-python"><div class="highlight"><pre>WEB
+to the onlineresource in the GetCapabilities output.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
  METADATA
   ...
   &quot;wms_languages&quot; &quot;eng,ger&quot;       #first default, values according ISO 639-2/B
@@ -245,7 +262,7 @@ END
 <p>To address the second issue, different <a class="reference external" href="http://trac.osgeo.org/mapserver/wiki/gsoc2011/work#multilanguagesupport">options</a> regarding implementation were
 evaluated.</p>
 <p>For language specific metadata values, a key extension method is applied.</p>
-<div class="highlight-python"><div class="highlight"><pre>WEB
+<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
  METADATA
   ...
   &quot;wms_title.eng&quot; &quot;myservicetitle&quot;
@@ -260,7 +277,7 @@ END
 <p>For language dependent reference data, a similar approach like the
 <a class="reference external" href="http://mapserver.org/cgi/runsub.html">runtime-substitution</a> feature of MapServer has been followed (only DATA and
 CONNECTION values with %language% are substituted).</p>
-<div class="highlight-python"><div class="highlight"><pre>...
+<div class="highlight-python"><div class="highlight"><pre><span></span>...
        LAYER
         NAME TN.RoadTransportNetwork.RoadLink
         DATA &quot;road_%language%&quot;
@@ -277,7 +294,7 @@ default language is substituted.</p>
 <p>Depending on the scenario, additional metadata information is required to
 support the specification. The INSPIRE related fields are provided below:</p>
 <p>Scenario 1 - INSPIRE related fields using referenced external service metadata</p>
-<div class="highlight-python"><div class="highlight"><pre>WEB
+<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
  METADATA
   &quot;wms_inspire_capabilities&quot; &quot;url&quot;
   &quot;wms_languages&quot; &quot;eng,ger&quot;               #first default, values according ISO 639-2/B
@@ -297,7 +314,7 @@ END
 </pre></div>
 </div>
 <p>Scenario 2 - INSPIRE related fields using embedded service metadata</p>
-<div class="highlight-python"><div class="highlight"><pre>WEB
+<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
  METADATA
   &quot;wms_inspire_capabilities&quot; &quot;embed&quot;
   &quot;wms_languages&quot; &quot;eng,ger&quot;               #first default, values according ISO 639-2/B
@@ -347,7 +364,7 @@ introduced in methods <cite>msWMSPrepareNestedGroups()</cite> and
 responses e.g. <cite>msWMSGetCapabilities()</cite>.</p>
 <p>Provided that ability, a hierarchy of any level can be achieved. See the
 &#8220;wms_inspire.map&#8221; mapfile in msautotest for an example.</p>
-<div class="highlight-python"><div class="highlight"><pre>TN
+<div class="highlight-python"><div class="highlight"><pre><span></span>TN
 +--- TN.CommonTransportElements
      +--- TN.CommonTransportElements.TransportArea
      +--- TN.CommonTransportElements.TransportLink
@@ -373,7 +390,7 @@ Ticket <a class="reference external" href="https://github.com/mapserver/mapserve
 wms_style_&lt;stylename&gt;_title and the layer style legendURLs through
 wms_style_&lt;stylename&gt;_legendurl_* (width, height, format and href need to be
 provided).</p>
-<div class="highlight-python"><div class="highlight"><pre>...
+<div class="highlight-python"><div class="highlight"><pre><span></span>...
        LAYER
         NAME TN.RoadTransportNetwork.RoadLink
         DATA &quot;road&quot;
@@ -414,7 +431,7 @@ the root layer</p>
 <li>use wms_style_name in the WEB.METADATA section to add a style section to the
 root layer</li>
 <li>use wms_style_title to override the style title (optional)</li>
-<li>use wms_style_legendurl_* to override width, heigth, format and href of the
+<li>use wms_style_legendurl_* to override width, height, format and href of the
 legendURL (optional)</li>
 </ul>
 <p>and possibly existing group layers</p>
@@ -422,10 +439,10 @@ legendURL (optional)</li>
 <li>use wms_group_style_name in the first corresponding LAYER.METADATA section to
 add a style section to the group layer</li>
 <li>use wms_group_style_title to override the style title (optional)</li>
-<li>use wms_group_style_legendurl_* to override width, heigth, format and href of
+<li>use wms_group_style_legendurl_* to override width, height, format and href of
 the legendURL (optional)</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre>...
+<div class="highlight-python"><div class="highlight"><pre><span></span>...
        WEB
         METADATA
          ...
@@ -467,7 +484,7 @@ the legendURL (optional)</li>
 <p>Provided that ability, 3 levels of hierarchy can be achieved as done in the
 example mapfiles &#8220;wms_inspire_scneario1.map&#8221; and &#8220;wms_inspire_scneario2.map&#8221; in
 msautotest.</p>
-<div class="highlight-python"><div class="highlight"><pre>TN.RoadTransportNetwork.RoadArea
+<div class="highlight-python"><div class="highlight"><pre><span></span>TN.RoadTransportNetwork.RoadArea
 +--- TN.RoadTransportNetwork.RoadLink
 +--- TN.CommonTransportElements.TransportLink
      +--- TN.RailTransportNetwork.RailwayLink
@@ -498,7 +515,7 @@ deriving metadata from the mapobject, use fallback with no extension
 <div class="section" id="files-affected">
 <h2>7.1 Files affected<a class="headerlink" href="#files-affected" title="Link a questa intestazione">¶</a></h2>
 <p>The following files are affected by this RFC:</p>
-<div class="highlight-python"><div class="highlight"><pre>mapows.c/mapows.h
+<div class="highlight-python"><div class="highlight"><pre><span></span>mapows.c/mapows.h
 
 [N] MS_DLL_EXPORT const char *msOWSLookupMetadataWithLanguage(.., const char *validated_language)
 [N] MS_DLL_EXPORT char *msOWSGetOnlineResource2(.., const char *validated_language)
@@ -586,7 +603,7 @@ override autogenerated legendurl href</li>
 </ul>
 </dd>
 </dl>
-<p>The GetCapabilites responses with these mapfiles validate against the
+<p>The GetCapabilities responses with these mapfiles validate against the
 <a class="reference external" href="http://inspire.ec.europa.eu/schemas/inspire_vs/1.0/inspire_vs.xsd">INSPIRE schemas</a> as well as the <a class="reference external" href="http://inspire_tester.neogeo-online.net/">WMS INSPIRE tester</a> without any critical
 warnings or errors.</p>
 </div>
@@ -650,11 +667,11 @@ SteveW.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 

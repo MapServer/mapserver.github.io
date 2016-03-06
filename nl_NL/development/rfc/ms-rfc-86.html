@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MS RFC 86: Scale-dependant String Substitutions &mdash; MapServer 7.0.0 documentation</title>
+    <title>MS RFC 86: Scale-dependant String Substitutions &mdash; MapServer 7.0.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Over deze documenten" href="../../about.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.0.0 documentation" href="../../index.html" />
+    <link rel="top" title="MapServer 7.0.1 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 87: Bitmap pattern support" href="ms-rfc-87.html" />
     <link rel="prev" title="MS RFC 85: Vector Contour Rendering (CONNECTIONTYPE CONTOUR)" href="ms-rfc-85.html" />
@@ -129,6 +129,23 @@
 </table>
 
 
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigatie</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Algemene index"
+             accesskey="I">Index</a></li>
+        <li class="right" >
+          <a href="ms-rfc-87.html" title="MS RFC 87: Bitmap pattern support"
+             accesskey="N">volgende</a> |</li>
+        <li class="right" >
+          <a href="ms-rfc-85.html" title="MS RFC 85: Vector Contour Rendering (CONNECTIONTYPE CONTOUR)"
+             accesskey="P">vorige</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &raquo;</li> 
+      </ul>
+    </div>
   
 
     <div class="document">
@@ -158,7 +175,7 @@
 <h2>1. Overview<a class="headerlink" href="#overview" title="Permalink naar deze titel">¶</a></h2>
 <p>MapServer has the ability to use multiple layers with MINSCALE/MAXSCALE filtering GROUP&#8217;d
 together when the need for scale-dependant datasources arises, e.g. like:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="k">NAME</span> <span class="s">&quot;roads_far&quot;</span>
   <span class="k">GROUP</span> <span class="s">&quot;roads&quot;</span>
   <span class="k">TYPE</span> <span class="nb">LINE</span>
@@ -191,7 +208,7 @@ symbology throughout multiple layers, and may require some tweaking in order to 
 multiple layers in capabilities documents.</p>
 <p>The current RFC proposes to mimic our current <a class="reference external" href="http://mapserver.org/cgi/runsub.html">runtime-substitution</a> mechanism to replace tokens
 inside a layer&#8217;s DATA statement. Instead of using an url parameter to accomplish the
-replacements, the token is replaced by a value that is dependant on the current map scale.</p>
+replacements, the token is replaced by a value that is dependent on the current map scale.</p>
 </div>
 <div class="section" id="proposed-solution">
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Permalink naar deze titel">¶</a></h2>
@@ -199,7 +216,7 @@ replacements, the token is replaced by a value that is dependant on the current 
 </div>
 <div class="section" id="example-1">
 <h2>2.1. Example 1<a class="headerlink" href="#example-1" title="Permalink naar deze titel">¶</a></h2>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="p">..</span>
   <span class="k">SCALETOKEN</span>
     <span class="k">NAME</span> <span class="s">&quot;%priority%&quot;</span>
@@ -222,7 +239,7 @@ replacements, the token is replaced by a value that is dependant on the current 
 <p>In the previous example, %priority% would be replaced by:</p>
 <ul>
 <li><p class="first">&#8220;1&#8221; for scales under 1,000 , giving:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">DATA</span> <span class="s">&quot;the_geom from mytable_1&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">DATA</span> <span class="s">&quot;the_geom from mytable_1&quot;</span>
 <span class="k">DATA</span> <span class="s">&quot;/path/to/roads_1.shp&quot;</span>
 <span class="k">DATA</span> <span class="s">&quot;the_geom_1 from roads&quot;</span>
 <span class="k">DATA</span> <span class="s">&quot;the_geom_1 from (select * from roads where priority &gt; 1) as foo&quot;</span>
@@ -230,7 +247,7 @@ replacements, the token is replaced by a value that is dependant on the current 
 </div>
 </li>
 <li><p class="first">&#8220;2&#8221; for scales between 1,000 and 10,000</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">DATA</span> <span class="s">&quot;the_geom from mytable_2&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">DATA</span> <span class="s">&quot;the_geom from mytable_2&quot;</span>
 <span class="k">DATA</span> <span class="s">&quot;/path/to/roads_2.shp&quot;</span>
 <span class="k">DATA</span> <span class="s">&quot;the_geom_2 from roads&quot;</span>
 <span class="k">DATA</span> <span class="s">&quot;the_geom_2 from (select * from roads where priority &gt; 2) as foo&quot;</span>
@@ -238,7 +255,7 @@ replacements, the token is replaced by a value that is dependant on the current 
 </div>
 </li>
 <li><p class="first">&#8220;3&#8221; for scales over 10,000</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">DATA</span> <span class="s">&quot;the_geom from mytable_3&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">DATA</span> <span class="s">&quot;the_geom from mytable_3&quot;</span>
 <span class="k">DATA</span> <span class="s">&quot;/path/to/roads_3.shp&quot;</span>
 <span class="k">DATA</span> <span class="s">&quot;the_geom_3 from roads&quot;</span>
 <span class="k">DATA</span> <span class="s">&quot;the_geom_3 from (select * from roads where priority &gt; 3) as foo&quot;</span>
@@ -249,7 +266,7 @@ replacements, the token is replaced by a value that is dependant on the current 
 </div>
 <div class="section" id="example-2">
 <h2>2.2 Example 2<a class="headerlink" href="#example-2" title="Permalink naar deze titel">¶</a></h2>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="p">..</span>
   <span class="k">SCALETOKEN</span>
     <span class="k">NAME</span> <span class="s">&quot;%table%&quot;</span>
@@ -270,19 +287,19 @@ replacements, the token is replaced by a value that is dependant on the current 
 <p>In the previous example, %table% would be replaced by:</p>
 <ul>
 <li><p class="first">&#8220;roads&#8221; for scales under 1,000 , giving:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">DATA</span> <span class="s">&quot;the_geom from roads&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">DATA</span> <span class="s">&quot;the_geom from roads&quot;</span>
 <span class="k">DATA</span> <span class="s">&quot;/path/to/roads.shp&quot;</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">&#8220;roads_gen_1&#8221; for scales between 1,000 and 10,000</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">DATA</span> <span class="s">&quot;the_geom from roads_gen_1&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">DATA</span> <span class="s">&quot;the_geom from roads_gen_1&quot;</span>
 <span class="k">DATA</span> <span class="s">&quot;/path/to/roads_gen_1.shp&quot;</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">&#8220;roads_gen_0&#8221; for scales over 10,000</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">DATA</span> <span class="s">&quot;the_geom from roads_gen_0&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">DATA</span> <span class="s">&quot;the_geom from roads_gen_0&quot;</span>
 <span class="k">DATA</span> <span class="s">&quot;/path/to/roads_gen_0.shp&quot;</span>
 </pre></div>
 </div>
@@ -291,7 +308,7 @@ replacements, the token is replaced by a value that is dependant on the current 
 </div>
 <div class="section" id="example-3">
 <h2>2.3 Example 3<a class="headerlink" href="#example-3" title="Permalink naar deze titel">¶</a></h2>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">LAYER</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="p">..</span>
   <span class="k">SCALETOKEN</span>
     <span class="k">NAME</span> <span class="s">&quot;</span><span class="si">%f</span><span class="s">ilter%&quot;</span>
@@ -311,17 +328,17 @@ replacements, the token is replaced by a value that is dependant on the current 
 <p>In the previous example, %filter% would be replaced by:</p>
 <ul>
 <li><p class="first">nothing for scales under 1,000 , giving:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">DATA</span> <span class="s">&quot;the_geom from (select * from roads) as foo&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">DATA</span> <span class="s">&quot;the_geom from (select * from roads) as foo&quot;</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">&#8220;where type in (&#8216;motorway&#8217;,&#8217;trunk&#8217;,&#8217;primary&#8217;)&#8221; for scales between 1,000 and 10,000</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">DATA</span> <span class="s">&quot;the_geom from (select * from roads where type in (&#39;motorway&#39;,&#39;trunk&#39;,&#39;primary&#39;)) as foo&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">DATA</span> <span class="s">&quot;the_geom from (select * from roads where type in (&#39;motorway&#39;,&#39;trunk&#39;,&#39;primary&#39;)) as foo&quot;</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">&#8220;where type=&#8217;motorway&#8217;&#8221; for scales over 10,000</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span class="k">DATA</span> <span class="s">&quot;the_geom from (select * from roads where type=&#39;motorway&#39;) as foo&quot;</span>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">DATA</span> <span class="s">&quot;the_geom from (select * from roads where type=&#39;motorway&#39;) as foo&quot;</span>
 </pre></div>
 </div>
 </li>
@@ -339,7 +356,7 @@ existing url runtime substitutions. The &#8220;%...%&#8221; notation is not enfo
 code does a simple string replacement. (i.e. &#8220;priority&#8221; or &#8220;#table#&#8221; are
 valid VALUES, provided the &#8220;priority&#8221; or &#8220;#table#&#8221; substrings appear in the
 DATA statements.</li>
-<li>Scale dependant substitutions would apply to the layer&#8217;s DATA, TILEINDEX,
+<li>Scale dependent substitutions would apply to the layer&#8217;s DATA, TILEINDEX,
 TILEITEM, FILTERITEM and FILTER. Applying it to other elements might make
 sense, but is more involved in terms of impact to the code. Scale-dependant
 substitutions on FILTER may be incompatible with filters set through
@@ -359,11 +376,11 @@ implementation.</li>
 <div class="section" id="id1">
 <h2>3.1 Overview<a class="headerlink" href="#id1" title="Permalink naar deze titel">¶</a></h2>
 <ul class="simple">
-<li>layerObj gets a new member containing the scale dependant tokens
+<li>layerObj gets a new member containing the scale dependent tokens
 applicable.</li>
 <li>the actual struct to use to represent a given token:</li>
 </ul>
-<div class="highlight-c"><div class="highlight"><pre><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
   <span class="kt">double</span> <span class="n">minscale</span><span class="p">;</span>
   <span class="kt">double</span> <span class="n">maxscale</span><span class="p">;</span>
   <span class="kt">char</span><span class="o">*</span> <span class="n">value</span><span class="p">;</span>
@@ -414,8 +431,8 @@ current scale..</li>
 <h2>3.3 MapScript<a class="headerlink" href="#mapscript" title="Permalink naar deze titel">¶</a></h2>
 <p>add getters/setters on layer scaletokens</p>
 </div>
-<div class="section" id="backwards-compatibilty-issues">
-<h2>3.4 Backwards Compatibilty Issues<a class="headerlink" href="#backwards-compatibilty-issues" title="Permalink naar deze titel">¶</a></h2>
+<div class="section" id="backwards-compatibility-issues">
+<h2>3.4 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink naar deze titel">¶</a></h2>
 <p>This change provides a new functionality with no backwards compatibility issues
 being considered.</p>
 </div>
@@ -468,7 +485,7 @@ should be negligeable as this happens only once per rendered layer.</p>
 <li><a class="reference internal" href="#id1">3.1 Overview</a></li>
 <li><a class="reference internal" href="#files-affected">3.2 Files affected</a></li>
 <li><a class="reference internal" href="#mapscript">3.3 MapScript</a></li>
-<li><a class="reference internal" href="#backwards-compatibilty-issues">3.4 Backwards Compatibilty Issues</a></li>
+<li><a class="reference internal" href="#backwards-compatibility-issues">3.4 Backwards Compatibility Issues</a></li>
 <li><a class="reference internal" href="#security-implications">4. Security implications</a></li>
 <li><a class="reference internal" href="#performance-implications">4. Performance implications</a></li>
 <li><a class="reference internal" href="#bug-id">5. Bug ID</a></li>
@@ -495,11 +512,11 @@ should be negligeable as this happens only once per rendered layer.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Regents of the University of Minnesota.
+      &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
 
