@@ -128,7 +128,7 @@
 <span id="id1"></span><h1>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="where-is-the-mapserver-log-file">
 <h2>Where is the MapServer log file?<a class="headerlink" href="#where-is-the-mapserver-log-file" title="Permalink to this headline">¶</a></h2>
-<p>See <a class="reference internal" href="development/rfc/ms-rfc-28.html#rfc28"><span>MS RFC 28: Redesign of LOG/DEBUG output mechanisms</span></a></p>
+<p>See <a class="reference internal" href="optimization/debugging.html#debugging"><span>Debugging MapServer</span></a></p>
 </div>
 <div class="section" id="what-books-are-available-about-mapserver">
 <h2>What books are available about MapServer?<a class="headerlink" href="#what-books-are-available-about-mapserver" title="Permalink to this headline">¶</a></h2>
@@ -143,7 +143,8 @@ etc.</p>
 <div class="section" id="how-do-i-compile-mapserver-for-windows">
 <h2>How do I compile MapServer for Windows?<a class="headerlink" href="#how-do-i-compile-mapserver-for-windows" title="Permalink to this headline">¶</a></h2>
 <p>See <a class="reference internal" href="installation/win32.html#win32"><span>Compiling on Win32</span></a>. Also, you can use the development libraries in <a class="reference internal" href="download.html#windows"><span>OSGeo4W</span></a> as a starting point instead of building all of the dependent
-libraries yourself.</p>
+libraries yourself.  Windows users wanting a full installer (including Apache,
+MapServer, mapscripts, GDAL) please see <a class="reference external" href="http://ms4w.com">MS4W</a></p>
 </div>
 <div class="section" id="what-do-mapserver-version-numbers-mean">
 <h2>What do MapServer version numbers mean?<a class="headerlink" href="#what-do-mapserver-version-numbers-mean" title="Permalink to this headline">¶</a></h2>
@@ -322,8 +323,8 @@ width you want. A &#8216;circle&#8217; symbol can be defined as</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="why-do-my-jpeg-input-images-look-crappy-via-mapserver">
-<h2>Why do my JPEG input images look crappy via MapServer?<a class="headerlink" href="#why-do-my-jpeg-input-images-look-crappy-via-mapserver" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="why-do-my-jpeg-input-images-look-different-via-mapserver">
+<h2>Why do my JPEG input images look different via MapServer?<a class="headerlink" href="#why-do-my-jpeg-input-images-look-different-via-mapserver" title="Permalink to this headline">¶</a></h2>
 <p>You must be using an old version of MapServer  (where GD was the
 default library for rendering).</p>
 <p>Newer versions of MapServer  use AGG for rendering, and the default
@@ -708,15 +709,13 @@ mapfile:</p>
 <h2>Where do I find my EPSG code?<a class="headerlink" href="#where-do-i-find-my-epsg-code" title="Permalink to this headline">¶</a></h2>
 <p>There is a text file &#8220;epsg&#8221; in your PROJ4 installation (e.g.
 &#8220;/usr/local/share/proj/epsg&#8221;) which contain the EPSG information used by
-PROJ4. In Windows, this is often located in C:\proj\nad or is found with an
-environment variable called PROJ_LIB.</p>
-<p><a class="reference external" href="http://spatialreference.org">http://spatialreference.org</a> allows you to search for EPSG codes.</p>
-<p>You can also have a look at:
-<a class="reference external" href="http://ocean.csl.co.uk">http://ocean.csl.co.uk</a></p>
-<p>More information to EPSG:
+PROJ4. In Windows, <a class="reference external" href="http://ms4w.com">MS4W</a> users  can find the epsg file at C:\ms4w\proj\nad,
+or it can be generally found with an environment variable called PROJ_LIB.</p>
+<p><a class="reference external" href="http://spatialreference.org">http://spatialreference.org</a> allows you to search for EPSG codes, as well as the site <a class="reference external" href="http://epsg.io/">http://epsg.io/</a></p>
+<p>More information on EPSG:
 <a class="reference external" href="http://www.epsg.org">http://www.epsg.org</a></p>
-<p>More information to PROJ4:
-<a class="reference external" href="http://trac.osgeo.org/proj">http://trac.osgeo.org/proj</a></p>
+<p>More information on PROJ4:
+<a class="reference external" href="https://github.com/OSGeo/proj.4/wiki">https://github.com/OSGeo/proj.4/wiki</a></p>
 </div>
 <div class="section" id="how-can-i-reproject-my-data-using-ogr2ogr">
 <h2>How can I reproject my data using ogr2ogr?<a class="headerlink" href="#how-can-i-reproject-my-data-using-ogr2ogr" title="Permalink to this headline">¶</a></h2>
@@ -738,9 +737,8 @@ Rhode Island (32130) and performs the feet to meters conversion.</p>
 <p>Let&#8217;s examine what is going on here:</p>
 <p>The -s_srs parameter explicitly defines a projection for the data. The
 parameters used here were taken out of the EPSG definition (in this case,
-32130) in the epsg file(see the <a class="reference external" href="epsg_codes">projection FAQ</a> for more
-details on locating EPSG definitions). The entry for RI in the epsg file is as
-follows:</p>
+32130) in the epsg file (see the previous FAQ for more details on locating
+EPSG definitions). The entry for RI in the epsg file is as follows:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span># NAD83 / Rhode Island
 &lt;32130&gt; +proj=tmerc +lat_0=41.08333333333334 +lon_0=-71.5 +k=0.999994 +x_0=100000 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs  no_defs &lt;&gt;
 </pre></div>
@@ -809,7 +807,7 @@ was the <a class="reference external" href="http://lists.osgeo.org/pipermail/map
 <li><a class="reference internal" href="#does-mapserver-support-reverse-geocoding">Does MapServer support reverse geocoding?</a></li>
 <li><a class="reference internal" href="#does-mapserver-support-geocoding">Does MapServer support geocoding?</a></li>
 <li><a class="reference internal" href="#how-do-i-set-line-width-in-my-maps">How do I set line width in my maps?</a></li>
-<li><a class="reference internal" href="#why-do-my-jpeg-input-images-look-crappy-via-mapserver">Why do my JPEG input images look crappy via MapServer?</a></li>
+<li><a class="reference internal" href="#why-do-my-jpeg-input-images-look-different-via-mapserver">Why do my JPEG input images look different via MapServer?</a></li>
 <li><a class="reference internal" href="#which-image-format-should-i-use">Which image format should I use?</a></li>
 <li><a class="reference internal" href="#why-doesn-t-pil-python-imaging-library-open-my-pngs">Why doesn&#8217;t PIL (Python Imaging Library) open my PNGs?</a></li>
 <li><a class="reference internal" href="#why-do-my-symbols-look-poor-in-jpeg-output">Why do my symbols look poor in JPEG output?</a></li>
