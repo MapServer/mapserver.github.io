@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -151,7 +151,7 @@
 <h2>1. Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>While profiling the WMS shootout queries, a noticeable amount of time was
-spent in the <a class="reference internal" href="../../cgi/runsub.html#runsub"><span>Run-time Substitution</span></a> code, even though the functionality was not being
+spent in the <a class="reference internal" href="../../cgi/runsub.html#runsub"><span class="std std-ref">Run-time Substitution</span></a> code, even though the functionality was not being
 used at all. As runtime substitutions apply to <strong>all</strong> mapserv requests, an
 optimization in this part of the code is beneficial for all mapserv
 operations.</li>
@@ -167,26 +167,26 @@ put a far too noticeable hit on performance.</li>
 <p>In pseudo-code, the current algorithm is: (KVP stands for key-value-pair, and
 is one of the parameters passed in the URL to mapserver, e.g.
 ...&amp;map=path/to/mapfile.map&amp;...)</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>foreach KVP:
-  foreach outputformat:
-    if KVP appears in &quot;FILENAME&quot; formatoption:
-      if KVP validates against MAP_&gt;WEB-&gt;VALIDATION:
-        apply substitution
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">foreach</span> <span class="n">KVP</span><span class="p">:</span>
+  <span class="n">foreach</span> <span class="n">outputformat</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">KVP</span> <span class="n">appears</span> <span class="ow">in</span> <span class="s2">&quot;FILENAME&quot;</span> <span class="n">formatoption</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">KVP</span> <span class="n">validates</span> <span class="n">against</span> <span class="n">MAP_</span><span class="o">&gt;</span><span class="n">WEB</span><span class="o">-&gt;</span><span class="n">VALIDATION</span><span class="p">:</span>
+        <span class="n">apply</span> <span class="n">substitution</span>
 
-  foreach layer:
-    foreach class:
-      if KVP appears in a substitutable CLASS keyword (EXPRESSION, TEXT, TITLE):
-        if KVP validates against CLASS-&gt;VALIDATION:
-          apply substitution
-        else if KVP validates against LAYER-&gt;VALIDATION:
-          apply substitution
-        else if KVP validates against MAP-&gt;WEB-&gt;VALIDATION:
-          apply substitution
-      if KVP appears in a substitutable LAYER keyword (DATA, CONNECTION, FILTER, TILEINDEX):
-        else if KVP validates against LAYER-&gt;VALIDATION:
-          apply substitution
-        else if KVP validates against MAP-&gt;WEB-&gt;VALIDATION:
-          apply substitution
+  <span class="n">foreach</span> <span class="n">layer</span><span class="p">:</span>
+    <span class="n">foreach</span> <span class="n">class</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">KVP</span> <span class="n">appears</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">substitutable</span> <span class="n">CLASS</span> <span class="n">keyword</span> <span class="p">(</span><span class="n">EXPRESSION</span><span class="p">,</span> <span class="n">TEXT</span><span class="p">,</span> <span class="n">TITLE</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">KVP</span> <span class="n">validates</span> <span class="n">against</span> <span class="n">CLASS</span><span class="o">-&gt;</span><span class="n">VALIDATION</span><span class="p">:</span>
+          <span class="n">apply</span> <span class="n">substitution</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="n">KVP</span> <span class="n">validates</span> <span class="n">against</span> <span class="n">LAYER</span><span class="o">-&gt;</span><span class="n">VALIDATION</span><span class="p">:</span>
+          <span class="n">apply</span> <span class="n">substitution</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="n">KVP</span> <span class="n">validates</span> <span class="n">against</span> <span class="n">MAP</span><span class="o">-&gt;</span><span class="n">WEB</span><span class="o">-&gt;</span><span class="n">VALIDATION</span><span class="p">:</span>
+          <span class="n">apply</span> <span class="n">substitution</span>
+      <span class="k">if</span> <span class="n">KVP</span> <span class="n">appears</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">substitutable</span> <span class="n">LAYER</span> <span class="n">keyword</span> <span class="p">(</span><span class="n">DATA</span><span class="p">,</span> <span class="n">CONNECTION</span><span class="p">,</span> <span class="n">FILTER</span><span class="p">,</span> <span class="n">TILEINDEX</span><span class="p">):</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="n">KVP</span> <span class="n">validates</span> <span class="n">against</span> <span class="n">LAYER</span><span class="o">-&gt;</span><span class="n">VALIDATION</span><span class="p">:</span>
+          <span class="n">apply</span> <span class="n">substitution</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="n">KVP</span> <span class="n">validates</span> <span class="n">against</span> <span class="n">MAP</span><span class="o">-&gt;</span><span class="n">WEB</span><span class="o">-&gt;</span><span class="n">VALIDATION</span><span class="p">:</span>
+          <span class="n">apply</span> <span class="n">substitution</span>
 </pre></div>
 </div>
 <p>For a typical request where the number of KVPs is relatively high (e.g. all OWS
@@ -195,26 +195,26 @@ results in a very large number of strcasestr calls being made for the &#8220;if 
 appears in XXX keyword&#8221; parts. These happen whether or not actual runtime
 substitutions are going to be used or not.</p>
 <p>With this RFC, we will be switching to this pseudo-code:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>foreach layer:
-  foreach class:
-    foreach class-&gt;validation:
-      if validation_key in kvp:
-        if kvp validates:
-          apply class substitutions
-  foreach layer-&gt;validation:
-    if validation_key in kvp:
-      if kvp validates:
-        apply layer substitutions
-        foreach class:
-          apply class substitutions
-foreach map-&gt;web-&gt;validation:
-  if validation_key in kvp:
-    if kvp validates:
-      apply outputformat validations
-      foreach layer:
-        apply layer substitutions
-        foreach class:
-          apply class substitutions
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">foreach</span> <span class="n">layer</span><span class="p">:</span>
+  <span class="n">foreach</span> <span class="n">class</span><span class="p">:</span>
+    <span class="n">foreach</span> <span class="n">class</span><span class="o">-&gt;</span><span class="n">validation</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">validation_key</span> <span class="ow">in</span> <span class="n">kvp</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">kvp</span> <span class="n">validates</span><span class="p">:</span>
+          <span class="n">apply</span> <span class="k">class</span> <span class="nc">substitutions</span>
+  <span class="n">foreach</span> <span class="n">layer</span><span class="o">-&gt;</span><span class="n">validation</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">validation_key</span> <span class="ow">in</span> <span class="n">kvp</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">kvp</span> <span class="n">validates</span><span class="p">:</span>
+        <span class="n">apply</span> <span class="n">layer</span> <span class="n">substitutions</span>
+        <span class="n">foreach</span> <span class="n">class</span><span class="p">:</span>
+          <span class="n">apply</span> <span class="k">class</span> <span class="nc">substitutions</span>
+<span class="n">foreach</span> <span class="nb">map</span><span class="o">-&gt;</span><span class="n">web</span><span class="o">-&gt;</span><span class="n">validation</span><span class="p">:</span>
+  <span class="k">if</span> <span class="n">validation_key</span> <span class="ow">in</span> <span class="n">kvp</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">kvp</span> <span class="n">validates</span><span class="p">:</span>
+      <span class="n">apply</span> <span class="n">outputformat</span> <span class="n">validations</span>
+      <span class="n">foreach</span> <span class="n">layer</span><span class="p">:</span>
+        <span class="n">apply</span> <span class="n">layer</span> <span class="n">substitutions</span>
+        <span class="n">foreach</span> <span class="n">class</span><span class="p">:</span>
+          <span class="n">apply</span> <span class="k">class</span> <span class="nc">substitutions</span>
 </pre></div>
 </div>
 <p>This has the advantage of requiring very little overhead if no substitutions
@@ -313,9 +313,6 @@ whereas this would not have been the case beforehand.</p>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -326,7 +323,7 @@ whereas this would not have been the case beforehand.</p>
       &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>

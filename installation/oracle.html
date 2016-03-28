@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -152,7 +152,7 @@
 <div class="section" id="preface">
 <h2><a class="toc-backref" href="#table-of-contents">Preface</a><a class="headerlink" href="#preface" title="Permalink to this headline">¶</a></h2>
 <p>This document explains the whole configuration needed to get the connect
-between MapServer <a class="reference internal" href="../cgi/index.html#cgi"><span>CGI</span></a> and an Oracle database server on a linux (Ubuntu)
+between MapServer <a class="reference internal" href="../cgi/index.html#cgi"><span class="std std-ref">CGI</span></a> and an Oracle database server on a linux (Ubuntu)
 box. The aim of this document is just to put a lot of googled knowledge in ONE
 place. Hopefully it will preserve many of people spending analog amount of
 time than I did!</p>
@@ -160,7 +160,7 @@ time than I did!</p>
 my UMN having access to an oracle database. I&#8217;m NOT an oracle expert, so the
 aim of this document is just to put a lot of googled knowledge in ONE place.
 Hopefully it will preserve many of people spending analog amount of time than
-I did! (Or: If you have the choice: Try <a class="reference internal" href="../input/vector/postgis.html#input-postgis"><span>PostGIS</span></a> ;-))</p>
+I did! (Or: If you have the choice: Try <a class="reference internal" href="../input/vector/postgis.html#input-postgis"><span class="std std-ref">PostGIS</span></a> ;-))</p>
 <p>Before we start, some basic knowledge, I didn&#8217;t know before:</p>
 <ul class="simple">
 <li>MapServer can access oracle spatial as well as geodata from any oracle
@@ -183,18 +183,18 @@ reader:</p>
 </ul>
 <p>We also assume that you have installed <strong>apache2</strong> (our version was 2.0.49)
 and you are used to work with Linux/UNIX systems. We also think you are able
-to handle the editor <a class="reference internal" href="../development/editing/vim.html#vim"><span>vi/vim</span></a>.</p>
+to handle the editor <a class="reference internal" href="../development/editing/vim.html#vim"><span class="std std-ref">vi/vim</span></a>.</p>
 <p>We ensure that the Oracle user who later accesses the database has
 write-access to the oracle_home directory.</p>
 <p>We also assume, that you already have setup the tnsnames.ora file. It should
 look like that:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>MY_ORACLE =
-    (DESCRIPTION =
-        (ADDRESS = (PROTOCOL = TCP)(HOST = host)(PORT = 1521))
-        (CONNECT_DATA =
-            (SERVICE_NAME = your_name)
-        )
-    )
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">MY_ORACLE</span> <span class="o">=</span>
+    <span class="p">(</span><span class="n">DESCRIPTION</span> <span class="o">=</span>
+        <span class="p">(</span><span class="n">ADDRESS</span> <span class="o">=</span> <span class="p">(</span><span class="n">PROTOCOL</span> <span class="o">=</span> <span class="n">TCP</span><span class="p">)(</span><span class="n">HOST</span> <span class="o">=</span> <span class="n">host</span><span class="p">)(</span><span class="n">PORT</span> <span class="o">=</span> <span class="mi">1521</span><span class="p">))</span>
+        <span class="p">(</span><span class="n">CONNECT_DATA</span> <span class="o">=</span>
+            <span class="p">(</span><span class="n">SERVICE_NAME</span> <span class="o">=</span> <span class="n">your_name</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 </pre></div>
 </div>
 <p>It is important that you know the NAME of the datasource, in this example this
@@ -205,15 +205,15 @@ But first we have to do some more stuff.</p>
 <div class="section" id="compile-mapserver">
 <h2><a class="toc-backref" href="#table-of-contents">Compile MapServer</a><a class="headerlink" href="#compile-mapserver" title="Permalink to this headline">¶</a></h2>
 <p>Compile as normal compilation and set this flag:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>--with-oraclespatial=/path/to/oracle/home/&lt;/p&gt;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">--</span><span class="k">with</span><span class="o">-</span><span class="n">oraclespatial</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">oracle</span><span class="o">/</span><span class="n">home</span><span class="o">/&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>If MapServer configure and make runs well, try</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>./mapserv -v
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">mapserv</span> <span class="o">-</span><span class="n">v</span>
 </pre></div>
 </div>
 <p>This should at least give this output:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">INPUT</span><span class="o">=</span><span class="n">ORACLESPATIAL</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">INPUT</span><span class="o">=</span><span class="n">ORACLESPATIAL</span>
 </pre></div>
 </div>
 <p>If you got that, you&#8217;re fine from the MapServer point of view.</p>
@@ -231,7 +231,7 @@ user-specific environment variables by editing the users &#8221;.profile&#8221; 
 their home directory, but usually the oracle database users are not users of
 the system with their own home)</p>
 <p>Set the following variables:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ cd /etc
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ cd /etc
 
 
 $ echo export ORACLE_HOME=/path/to/oracle/home &gt;&gt; /etc/profile
@@ -259,28 +259,28 @@ apache2.conf-files. In the folder &#8220;/etc/apache2/sites_available&#8221; you
 sites-file. If you did not do sth. Special e.g. installing virtual hosts, the
 file is named &#8220;default&#8221;. In this file, the apache cgi-directory is defined.
 Our file looks like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>ScriptAlias /cgi-bin/ /var/www/cgi-bin/
-&lt;Directory &quot;/var/www/cgi-bin&quot;&gt;
-       AllowOverride None
-       Options ExecCGI -MultiViews +SymLinksIfOwnerMatch
-       Order allow,deny
-       Allow from all
-&lt;/Directory&gt;&lt;/p&gt;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ScriptAlias</span> <span class="o">/</span><span class="n">cgi</span><span class="o">-</span><span class="nb">bin</span><span class="o">/</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">cgi</span><span class="o">-</span><span class="nb">bin</span><span class="o">/</span>
+<span class="o">&lt;</span><span class="n">Directory</span> <span class="s2">&quot;/var/www/cgi-bin&quot;</span><span class="o">&gt;</span>
+       <span class="n">AllowOverride</span> <span class="kc">None</span>
+       <span class="n">Options</span> <span class="n">ExecCGI</span> <span class="o">-</span><span class="n">MultiViews</span> <span class="o">+</span><span class="n">SymLinksIfOwnerMatch</span>
+       <span class="n">Order</span> <span class="n">allow</span><span class="p">,</span><span class="n">deny</span>
+       <span class="n">Allow</span> <span class="kn">from</span> <span class="nn">all</span>
+<span class="o">&lt;/</span><span class="n">Directory</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>In this file, the local apache
 environment variables must be set. We did it within a location-block
 like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;Location &quot;/cgi-bin/&quot;&gt;
-    SetEnv ORACLE_HOME &quot;/path/to/oracle/home&quot;
-&lt;/Location&gt;&lt;/p&gt;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">Location</span> <span class="s2">&quot;/cgi-bin/&quot;</span><span class="o">&gt;</span>
+    <span class="n">SetEnv</span> <span class="n">ORACLE_HOME</span> <span class="s2">&quot;/path/to/oracle/home&quot;</span>
+<span class="o">&lt;/</span><span class="n">Location</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>Where /cgi-bin/ in the opening location block refers to the script alias
 /cgi-bin/ and the TNS_ADMIN directory point to the location of the
 tnsnames.ora file.</p>
 <p>Then restart apache:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ /etc/init.d/apache2 force-reload
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ /etc/init.d/apache2 force-reload
 </pre></div>
 </div>
 </div>
@@ -309,33 +309,33 @@ from the proj-<a class="reference internal" href="../glossary.html#term-epsg"><s
 everything goes well: Great, if not, possibly this ugly error-emssage occurs
 (this one cmae by querying MapServer through the WMS interface as a
 GetMap-request):</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;ServiceExceptionReport version=&quot;1.0.1&quot;&gt;
-    &lt;ServiceException&gt;
-        msDrawMap(): Image handling error. Failed to draw layer named &#39;test1&#39;.
-        msOracleSpatialLayerOpen(): OracleSpatial error. Cannot create OCI Handlers.
-        Connection failure. Check the connection string. Error: .
-    &lt;/ServiceException&gt;
-&lt;/ServiceExceptionReport&gt;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">ServiceExceptionReport</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.0.1&quot;</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">ServiceException</span><span class="o">&gt;</span>
+        <span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Image</span> <span class="n">handling</span> <span class="n">error</span><span class="o">.</span> <span class="n">Failed</span> <span class="n">to</span> <span class="n">draw</span> <span class="n">layer</span> <span class="n">named</span> <span class="s1">&#39;test1&#39;</span><span class="o">.</span>
+        <span class="n">msOracleSpatialLayerOpen</span><span class="p">():</span> <span class="n">OracleSpatial</span> <span class="n">error</span><span class="o">.</span> <span class="n">Cannot</span> <span class="n">create</span> <span class="n">OCI</span> <span class="n">Handlers</span><span class="o">.</span>
+        <span class="n">Connection</span> <span class="n">failure</span><span class="o">.</span> <span class="n">Check</span> <span class="n">the</span> <span class="n">connection</span> <span class="n">string</span><span class="o">.</span> <span class="n">Error</span><span class="p">:</span> <span class="o">.</span>
+    <span class="o">&lt;/</span><span class="n">ServiceException</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">ServiceExceptionReport</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>This points us towards, that there might be a problem with the connection to
 the database. First of all, let&#8217;s check, if the mapfile is all right.
-Therefore we use the MapServer utility program <a class="reference internal" href="../utilities/shp2img.html#shp2img"><span>shp2img</span></a>.</p>
+Therefore we use the MapServer utility program <a class="reference internal" href="../utilities/shp2img.html#shp2img"><span class="std std-ref">shp2img</span></a>.</p>
 <p>Let&#8217;s assume you are in the directory, where you compiled MapServer and run
 shp2img:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ cd /var/src/mapserver_version/
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ cd /var/src/mapserver_version/
 
 $ shp2img -m /path/to/mapfile/mapfile.map -i png -o /path/to/output/output.png
 </pre></div>
 </div>
 <p>The output of the command should look like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>[Fri Feb  2 14:32:17 2007].522395 msDrawMap(): Layer 0 (test1), 0.074s
-[Fri Feb  2 14:32:17 2007].522578 msDrawMap(): Drawing Label Cache, 0.000s
-[Fri Feb  2 14:32:17 2007].522635 msDrawMap() total time: 0.075s
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Fri</span> <span class="n">Feb</span>  <span class="mi">2</span> <span class="mi">14</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mi">17</span> <span class="mi">2007</span><span class="p">]</span><span class="o">.</span><span class="mi">522395</span> <span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">0</span> <span class="p">(</span><span class="n">test1</span><span class="p">),</span> <span class="mf">0.074</span><span class="n">s</span>
+<span class="p">[</span><span class="n">Fri</span> <span class="n">Feb</span>  <span class="mi">2</span> <span class="mi">14</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mi">17</span> <span class="mi">2007</span><span class="p">]</span><span class="o">.</span><span class="mi">522578</span> <span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Drawing</span> <span class="n">Label</span> <span class="n">Cache</span><span class="p">,</span> <span class="mf">0.000</span><span class="n">s</span>
+<span class="p">[</span><span class="n">Fri</span> <span class="n">Feb</span>  <span class="mi">2</span> <span class="mi">14</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mi">17</span> <span class="mi">2007</span><span class="p">]</span><span class="o">.</span><span class="mi">522635</span> <span class="n">msDrawMap</span><span class="p">()</span> <span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.075</span><span class="n">s</span>
 </pre></div>
 </div>
 <p>If not, this possibly points you towards any error in your mapfile or in the
-way to access the data directly. In this case, take a look at <a class="reference internal" href="../input/vector/oracle.html#oci"><span>Oracle Spatial</span></a>. If
+way to access the data directly. In this case, take a look at <a class="reference internal" href="../input/vector/oracle.html#oci"><span class="std std-ref">Oracle Spatial</span></a>. If
 there is a problem with your oracle connect, the same message as above
 (MsDrawMap() ...) occurs. Check your mapfile syntax and/or the environment
 settings for Oracle.</p>
@@ -390,9 +390,6 @@ Ubuntu, which should be the same as Debian.</p>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -403,7 +400,7 @@ Ubuntu, which should be the same as Debian.</p>
       &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
