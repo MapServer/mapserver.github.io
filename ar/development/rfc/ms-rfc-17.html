@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ar">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -46,8 +46,9 @@
       <a href="../../index.html" title="Home">Home</a> |
       <a href="../../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
       <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
-      <a href="../../faq.html" title="FAQ">FAQ</a> |
-      <a href="../../download.html" title="Download">Download </a>
+      <a href="../../community/service_providers.html" title="Professional Service Providers">Service Providers</a> |      
+      <a href="../../faq.html" title="Frequently Asked Questions">FAQ</a> |
+      <a href="../../download.html" title="Download Source or Binaries">Download </a>
     </td>
   </tr>
   <tr>
@@ -118,11 +119,6 @@
             <a href="../../../tr/development/rfc/ms-rfc-17.html"><img src="../../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
           
         
-        
-          
-            <a href="../../../uk/development/rfc/ms-rfc-17.html"><img src="../../_static/flagicons/uk.png" alt="uk" title="uk" border="0" /></a>
-          
-        
 
     </td>
   </tr>
@@ -182,14 +178,14 @@ MS_MAXSTYLES, MS_MAXLAYERS and MS_MAXSYMBOLS.</p>
 <div class="section" id="ms-maxsymbols">
 <h2>MS_MAXSYMBOLS<a class="headerlink" href="#ms-maxsymbols" title="Permalink to this headline">¶</a></h2>
 <p>Change symbolSetObj so that this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>int numsymbols;
-symbolObj symbol[MS_MAXSYMBOLS];
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">numsymbols</span><span class="p">;</span>
+<span class="n">symbolObj</span> <span class="n">symbol</span><span class="p">[</span><span class="n">MS_MAXSYMBOLS</span><span class="p">];</span>
 </pre></div>
 </div>
 <p>becomes:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>int numsymbols;
-int maxsymbols;
-symbolObj **symbol;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">numsymbols</span><span class="p">;</span>
+<span class="nb">int</span> <span class="n">maxsymbols</span><span class="p">;</span>
+<span class="n">symbolObj</span> <span class="o">**</span><span class="n">symbol</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>Add the following function to ensure there is at least one free entry in
@@ -198,7 +194,7 @@ allocated array of pointers if needed (if maxsymbols == numsymbols) and
 will then allocate a new symbolObj if symbol[numsymbols] == NULL.  The new
 entries in the array will be set to NULL and the new symbolObj[numsymbols]
 will be all set to zero bytes.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>symbolObj *msGrowSymbolSet( symbolSetObj * );
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">symbolObj</span> <span class="o">*</span><span class="n">msGrowSymbolSet</span><span class="p">(</span> <span class="n">symbolSetObj</span> <span class="o">*</span> <span class="p">);</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -217,7 +213,7 @@ msAppendSymbol().</li>
 <div class="section" id="ms-maxlayers">
 <h2>MS_MAXLAYERS<a class="headerlink" href="#ms-maxlayers" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>map.h: Since <a class="reference internal" href="ms-rfc-24.html#rfc24"><span>MS RFC 24: Mapscript memory management</span></a> already converted the array of layers in a mapObj to
+<li>map.h: Since <a class="reference internal" href="ms-rfc-24.html#rfc24"><span class="std std-ref">MS RFC 24: Mapscript memory management</span></a> already converted the array of layers in a mapObj to
 an array of pointers, we only need to add &#8220;int maxlayers;&#8221; to mapObj to
 indicate the current allocation size of layers array.  Note that this
 also determines the size of the mapObj layerorder array.</li>
@@ -271,18 +267,18 @@ style constructor.</li>
 </div>
 <div class="section" id="files-and-objects-affected">
 <h2>Files and objects affected<a class="headerlink" href="#files-and-objects-affected" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span>map.h
-mapfile.c
-mapsymbol.c
-mapdraw.c
-mapobject.c
-mappluginlayer.c
-layerobject.c
-mapogcsld.c
-classobject.c
-mapscript/swiginc/layer.i
-mapscript/swiginc/class.i
-mapscript/swiginc/style.i
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">map</span><span class="o">.</span><span class="n">h</span>
+<span class="n">mapfile</span><span class="o">.</span><span class="n">c</span>
+<span class="n">mapsymbol</span><span class="o">.</span><span class="n">c</span>
+<span class="n">mapdraw</span><span class="o">.</span><span class="n">c</span>
+<span class="n">mapobject</span><span class="o">.</span><span class="n">c</span>
+<span class="n">mappluginlayer</span><span class="o">.</span><span class="n">c</span>
+<span class="n">layerobject</span><span class="o">.</span><span class="n">c</span>
+<span class="n">mapogcsld</span><span class="o">.</span><span class="n">c</span>
+<span class="n">classobject</span><span class="o">.</span><span class="n">c</span>
+<span class="n">mapscript</span><span class="o">/</span><span class="n">swiginc</span><span class="o">/</span><span class="n">layer</span><span class="o">.</span><span class="n">i</span>
+<span class="n">mapscript</span><span class="o">/</span><span class="n">swiginc</span><span class="o">/</span><span class="n">class</span><span class="o">.</span><span class="n">i</span>
+<span class="n">mapscript</span><span class="o">/</span><span class="n">swiginc</span><span class="o">/</span><span class="n">style</span><span class="o">.</span><span class="n">i</span>
 </pre></div>
 </div>
 </div>
@@ -315,7 +311,7 @@ already allocates less than MS_MAX_LAYERS in initMap()? Did RFC-24
 make it a formal requirement to use the proper insert/add methods to
 add layers, styles and classes?</li>
 </ul>
-<p>Answer: the implementation adopted with <a class="reference internal" href="ms-rfc-24.html#rfc24"><span>MS RFC 24: Mapscript memory management</span></a> tries to save memory by
+<p>Answer: the implementation adopted with <a class="reference internal" href="ms-rfc-24.html#rfc24"><span class="std std-ref">MS RFC 24: Mapscript memory management</span></a> tries to save memory by
 only allocating the number of layers that are effectively needed. A map with
 5 layers will allocate exactly 5 layers, a map with 50 layers will allocate
 50, and so on up to the hard-coded limit of MS_MAX_LAYERS. This is also true
@@ -325,12 +321,12 @@ MS_MAX_LAYERS size, but memory usage is reduced anyway because arrays of
 pointers are much smaller that arrays of structs. This represents a
 substantial change from before, when MS_MAX_LAYERS blank layers where always
 allocated causing a sure waste of memory in small maps.</p>
-<p><a class="reference internal" href="#rfc17"><span>MS RFC 17: Dynamic Allocation of layers, styles, classes and symbols</span></a> should then invoke the various msGrow*() methods to grow the
+<p><a class="reference internal" href="#rfc17"><span class="std std-ref">MS RFC 17: Dynamic Allocation of layers, styles, classes and symbols</span></a> should then invoke the various msGrow*() methods to grow the
 arrays when numlayers == maxlayers-1. I&#8217;d suggest to grow the array to a
 sensible size (like half of the current size) as the impact on memory
 allocation is going to be mitigated by the dynamic allocation approach
-introduced by <a class="reference internal" href="ms-rfc-24.html#rfc24"><span>MS RFC 24: Mapscript memory management</span></a></p>
-<p><a class="reference internal" href="ms-rfc-24.html#rfc24"><span>MS RFC 24: Mapscript memory management</span></a> did not make a formal requirement to use the proper insert
+introduced by <a class="reference internal" href="ms-rfc-24.html#rfc24"><span class="std std-ref">MS RFC 24: Mapscript memory management</span></a></p>
+<p><a class="reference internal" href="ms-rfc-24.html#rfc24"><span class="std std-ref">MS RFC 24: Mapscript memory management</span></a> did not make a formal requirement to use the proper insert
 methods as those and the object constructors are the <em>only</em> way to add a
 layer, class or style to a map. I do not know if this is also true for symbols.</p>
 <ul class="simple">
@@ -394,14 +390,11 @@ layers.</li>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -412,7 +405,7 @@ layers.</li>
       &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>

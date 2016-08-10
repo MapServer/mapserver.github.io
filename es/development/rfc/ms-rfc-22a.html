@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -47,8 +47,9 @@
       <a href="../../index.html" title="Home">Home</a> |
       <a href="../../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
       <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
-      <a href="../../faq.html" title="FAQ">FAQ</a> |
-      <a href="../../download.html" title="Download">Download </a>
+      <a href="../../community/service_providers.html" title="Professional Service Providers">Service Providers</a> |      
+      <a href="../../faq.html" title="Frequently Asked Questions">FAQ</a> |
+      <a href="../../download.html" title="Download Source or Binaries">Download </a>
     </td>
   </tr>
   <tr>
@@ -117,11 +118,6 @@
         
           
             <a href="../../../tr/development/rfc/ms-rfc-22a.html"><img src="../../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
-          
-        
-        
-          
-            <a href="../../../uk/development/rfc/ms-rfc-22a.html"><img src="../../_static/flagicons/uk.png" alt="uk" title="uk" border="0" /></a>
           
         
 
@@ -227,35 +223,35 @@ In some cases the source layer doesn&#8217;t participate in the renderings and s
 <ol class="loweralpha simple">
 <li>Specify a reference relative to the map:</li>
 </ol>
-<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
-  NAME &quot;roads&quot;
-  CONNECTIONTYPE OGR
-  CONNECTION &quot;roads.tab&quot;
-  ...
-END
-LAYER
-  NAME &quot;cache&quot;
-  CONNECTIONTYPE CACHE
-  CONNECTION &quot;/roads&quot;
-  ...
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
+  <span class="n">NAME</span> <span class="s2">&quot;roads&quot;</span>
+  <span class="n">CONNECTIONTYPE</span> <span class="n">OGR</span>
+  <span class="n">CONNECTION</span> <span class="s2">&quot;roads.tab&quot;</span>
+  <span class="o">...</span>
+<span class="n">END</span>
+<span class="n">LAYER</span>
+  <span class="n">NAME</span> <span class="s2">&quot;cache&quot;</span>
+  <span class="n">CONNECTIONTYPE</span> <span class="n">CACHE</span>
+  <span class="n">CONNECTION</span> <span class="s2">&quot;/roads&quot;</span>
+  <span class="o">...</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <ol class="loweralpha simple" start="2">
 <li>Specify a reference relative to the outer layer</li>
 </ol>
-<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
-  NAME &quot;cache&quot;
-  CONNECTIONTYPE CACHE
-  CONNECTION &quot;roads&quot;
-  ...
-  LAYER
-    NAME &quot;roads&quot;
-    CONNECTIONTYPE OGR
-    CONNECTION &quot;roads.tab&quot;
-    ...
-  END
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
+  <span class="n">NAME</span> <span class="s2">&quot;cache&quot;</span>
+  <span class="n">CONNECTIONTYPE</span> <span class="n">CACHE</span>
+  <span class="n">CONNECTION</span> <span class="s2">&quot;roads&quot;</span>
+  <span class="o">...</span>
+  <span class="n">LAYER</span>
+    <span class="n">NAME</span> <span class="s2">&quot;roads&quot;</span>
+    <span class="n">CONNECTIONTYPE</span> <span class="n">OGR</span>
+    <span class="n">CONNECTION</span> <span class="s2">&quot;roads.tab&quot;</span>
+    <span class="o">...</span>
+  <span class="n">END</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>The main difference between these 2 options is that in the first case the referred layer is contained by the layers collection of the map, so the layer will participate in the drawings. In the second case the referred layer is internal to the outer layer.
@@ -273,11 +269,11 @@ This provider will be implemented in a separate file (mapcache.c).</p>
 <div class="section" id="shape-retrieval-options">
 <h2>3.1.1 Shape retrieval options<a class="headerlink" href="#shape-retrieval-options" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>This provider will be capable to populate the cache with all of the shapes in the given extent or only with the shapes in the resultcache of the source layer. The first one is the default option and the latter can be selected by the following PROCESSING directive:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;fetch_mode=selection&quot;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;fetch_mode=selection&quot;</span>
 </pre></div>
 </div>
 <p>The cache will be populated upon the WhichShapes call of the caching provider when the given rect falls outside of the previous one. We can also specify that the provider will retieve all the shapes of the current map extent regardless to the search area using the following setting:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;spatial_selection_mode=mapextent&quot;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;spatial_selection_mode=mapextent&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -300,23 +296,23 @@ This provider will be implemented in a separate file (mapcache.c).</p>
 <div class="section" id="id1">
 <h2>3.2.1 Items selection<a class="headerlink" href="#id1" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>This provider will serve the same subset of the items as the source layer provides. Therefore the InitIteminfo will copy the items and the numitems of the external layer to the source layer, like:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>int msGeomTransLayerInitItemInfo( layerObj *layer )
-{
-    /* copying the item array an call the subsequent InitItemInfo*/
-    return msLayerSetItems(((GeomTransLayerInfo*)layer-&gt;layerinfo)-&gt;srclayer, layer-&gt;items, layer-&gt;numitems);
-}
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">msGeomTransLayerInitItemInfo</span><span class="p">(</span> <span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="o">/*</span> <span class="n">copying</span> <span class="n">the</span> <span class="n">item</span> <span class="n">array</span> <span class="n">an</span> <span class="n">call</span> <span class="n">the</span> <span class="n">subsequent</span> <span class="n">InitItemInfo</span><span class="o">*/</span>
+    <span class="k">return</span> <span class="n">msLayerSetItems</span><span class="p">(((</span><span class="n">GeomTransLayerInfo</span><span class="o">*</span><span class="p">)</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">layerinfo</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">srclayer</span><span class="p">,</span> <span class="n">layer</span><span class="o">-&gt;</span><span class="n">items</span><span class="p">,</span> <span class="n">layer</span><span class="o">-&gt;</span><span class="n">numitems</span><span class="p">);</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>And upon the GetItems call these values will be copied back to the external layer, like:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>int msGeomTransLayerGetItems(layerObj *layer)
-{
-    /* copying the item array back */
-    int result;
-    GeomTransLayerInfo* layerinfo = (GeomTransLayerInfo*)layer-&gt;layerinfo;
-    result = msLayerGetItems(layerinfo-&gt;srclayer);
-    msLayerSetItems(layer, layerinfo-&gt;srclayer-&gt;items, layerinfo-&gt;srclayer-&gt;numitems);
-    return result;
-}
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">msGeomTransLayerGetItems</span><span class="p">(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="o">/*</span> <span class="n">copying</span> <span class="n">the</span> <span class="n">item</span> <span class="n">array</span> <span class="n">back</span> <span class="o">*/</span>
+    <span class="nb">int</span> <span class="n">result</span><span class="p">;</span>
+    <span class="n">GeomTransLayerInfo</span><span class="o">*</span> <span class="n">layerinfo</span> <span class="o">=</span> <span class="p">(</span><span class="n">GeomTransLayerInfo</span><span class="o">*</span><span class="p">)</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">layerinfo</span><span class="p">;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">msLayerGetItems</span><span class="p">(</span><span class="n">layerinfo</span><span class="o">-&gt;</span><span class="n">srclayer</span><span class="p">);</span>
+    <span class="n">msLayerSetItems</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">layerinfo</span><span class="o">-&gt;</span><span class="n">srclayer</span><span class="o">-&gt;</span><span class="n">items</span><span class="p">,</span> <span class="n">layerinfo</span><span class="o">-&gt;</span><span class="n">srclayer</span><span class="o">-&gt;</span><span class="n">numitems</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -324,15 +320,15 @@ This provider will be implemented in a separate file (mapcache.c).</p>
 <h2>3.2.2 Applying the transformations<a class="headerlink" href="#applying-the-transformations" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>The proposed implementation will support most of the GEOS transformations supported by mapserver (buffer, convexhull, boundary, union, intersection, difference, symdifference). The transformations will be applied right before retrieving a shape to the caller.
 The desired transformation can be selected using a PROCESSING option, like:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;transformation=buffer&quot;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;transformation=buffer&quot;</span>
 </pre></div>
 </div>
 <p>Some of the transformations will accept further parameters:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;buffer_width=0.2&quot;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;buffer_width=0.2&quot;</span>
 </pre></div>
 </div>
 <p>Some of these operations will use 2 shapes to create the transformed shape. The reference shape of these transformations can be set externally using the WKT representation of a processing option:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;ref_shape=[WKT of the shape]&quot;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;ref_shape=[WKT of the shape]&quot;</span>
 </pre></div>
 </div>
 <p>I&#8217;m also planning to support retrieving this shape from the features collection of the layer and from an external layer as well.</p>
@@ -340,85 +336,85 @@ The desired transformation can be selected using a PROCESSING option, like:</p>
 <div class="section" id="layer-filter-provider">
 <h2>3.3 Layer filter provider<a class="headerlink" href="#layer-filter-provider" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>The layer filter provider (implemented in mapfilter.c) will provide the shape retrieved from the source layer and will not apply any transformation on that. However some of the shapes will be skipped in the NextShape operations depending on the spatial and the attribute selection options. This provider ensures transparent access to the source layer (just as the previous one) but uses a cache for storing the selection shapes. The selection shapes will be retrieved from another layer which can be specified in the following processing option:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;selection_layer=[path to the layer]&quot;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;selection_layer=[path to the layer]&quot;</span>
 </pre></div>
 </div>
 <p>When populating the selection cache I&#8217;ll support to retrieve all of the shapes or only the shapes in the result cache as for the caching provider mentioned before:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;fetch_mode=selection&quot;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;fetch_mode=selection&quot;</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="putting-the-things-together-example">
 <h2>4. Putting the things together (example)<a class="headerlink" href="#putting-the-things-together-example" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>In this chapter I&#8217;ll describe the solution of the scenario have been mentioned earlier. I&#8217;ll start with a simple map file definition with 2 layers the counties and the citypoints of the country:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>MAP
-      NAME &quot;Hungary&quot;
-      STATUS ON
-      EXTENT 421543.362603 47885.103526 933973.563202 367180.479761
-      SIZE 800 600
-      IMAGETYPE PNG
-      IMAGECOLOR 255 255 255
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">MAP</span>
+      <span class="n">NAME</span> <span class="s2">&quot;Hungary&quot;</span>
+      <span class="n">STATUS</span> <span class="n">ON</span>
+      <span class="n">EXTENT</span> <span class="mf">421543.362603</span> <span class="mf">47885.103526</span> <span class="mf">933973.563202</span> <span class="mf">367180.479761</span>
+      <span class="n">SIZE</span> <span class="mi">800</span> <span class="mi">600</span>
+      <span class="n">IMAGETYPE</span> <span class="n">PNG</span>
+      <span class="n">IMAGECOLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
 
-      PROJECTION
-              &quot;proj=somerc&quot;
-              &quot;lat_0=47.14439372222222&quot;
-              &quot;lon_0=19.04857177777778&quot;
-              &quot;x_0=650000&quot;
-              &quot;y_0=200000&quot;
-              &quot;ellps=GRS67&quot;
-              &quot;units=m&quot;
-              &quot;no_defs&quot;
-      END
+      <span class="n">PROJECTION</span>
+              <span class="s2">&quot;proj=somerc&quot;</span>
+              <span class="s2">&quot;lat_0=47.14439372222222&quot;</span>
+              <span class="s2">&quot;lon_0=19.04857177777778&quot;</span>
+              <span class="s2">&quot;x_0=650000&quot;</span>
+              <span class="s2">&quot;y_0=200000&quot;</span>
+              <span class="s2">&quot;ellps=GRS67&quot;</span>
+              <span class="s2">&quot;units=m&quot;</span>
+              <span class="s2">&quot;no_defs&quot;</span>
+      <span class="n">END</span>
 
-      SYMBOL
-          Name &#39;point&#39;
-          Type ELLIPSE
-          POINTS
-              1 1
-          END
-          FILLED TRUE
-      END
+      <span class="n">SYMBOL</span>
+          <span class="n">Name</span> <span class="s1">&#39;point&#39;</span>
+          <span class="n">Type</span> <span class="n">ELLIPSE</span>
+          <span class="n">POINTS</span>
+              <span class="mi">1</span> <span class="mi">1</span>
+          <span class="n">END</span>
+          <span class="n">FILLED</span> <span class="n">TRUE</span>
+      <span class="n">END</span>
 
-      LAYER
-              PROJECTION
-                      &quot;AUTO&quot;
-              END
-              NAME &quot;Hun_Counties&quot;
-              CONNECTIONTYPE OGR
-              CONNECTION &quot;Hun_Megye.TAB&quot;
-              STATUS default
-              TYPE POLYGON
-              LABELITEM &quot;name&quot;
-              CLASS
-                      TEMPLATE &quot;query.html&quot;
-                      LABEL
-                              SIZE medium
-                              COLOR 64 128 64
-                      END
-                      STYLE
-                              COLOR 208 255 208
-                              OUTLINECOLOR 64 64 64
-                      END
-              END
-      END
-      LAYER
-              PROJECTION
-                      &quot;AUTO&quot;
-              END
-              NAME &quot;Hun_CityPoints&quot;
-              CONNECTIONTYPE OGR
-              CONNECTION &quot;Hun_CityPoints.TAB&quot;
-              STATUS default
-              TYPE POINT
-              CLASS
-                      STYLE
-                              COLOR 255 0 0
-                              SYMBOL &quot;point&quot;
-                              SIZE 2
-                      END
-              END
-      END
-END
+      <span class="n">LAYER</span>
+              <span class="n">PROJECTION</span>
+                      <span class="s2">&quot;AUTO&quot;</span>
+              <span class="n">END</span>
+              <span class="n">NAME</span> <span class="s2">&quot;Hun_Counties&quot;</span>
+              <span class="n">CONNECTIONTYPE</span> <span class="n">OGR</span>
+              <span class="n">CONNECTION</span> <span class="s2">&quot;Hun_Megye.TAB&quot;</span>
+              <span class="n">STATUS</span> <span class="n">default</span>
+              <span class="n">TYPE</span> <span class="n">POLYGON</span>
+              <span class="n">LABELITEM</span> <span class="s2">&quot;name&quot;</span>
+              <span class="n">CLASS</span>
+                      <span class="n">TEMPLATE</span> <span class="s2">&quot;query.html&quot;</span>
+                      <span class="n">LABEL</span>
+                              <span class="n">SIZE</span> <span class="n">medium</span>
+                              <span class="n">COLOR</span> <span class="mi">64</span> <span class="mi">128</span> <span class="mi">64</span>
+                      <span class="n">END</span>
+                      <span class="n">STYLE</span>
+                              <span class="n">COLOR</span> <span class="mi">208</span> <span class="mi">255</span> <span class="mi">208</span>
+                              <span class="n">OUTLINECOLOR</span> <span class="mi">64</span> <span class="mi">64</span> <span class="mi">64</span>
+                      <span class="n">END</span>
+              <span class="n">END</span>
+      <span class="n">END</span>
+      <span class="n">LAYER</span>
+              <span class="n">PROJECTION</span>
+                      <span class="s2">&quot;AUTO&quot;</span>
+              <span class="n">END</span>
+              <span class="n">NAME</span> <span class="s2">&quot;Hun_CityPoints&quot;</span>
+              <span class="n">CONNECTIONTYPE</span> <span class="n">OGR</span>
+              <span class="n">CONNECTION</span> <span class="s2">&quot;Hun_CityPoints.TAB&quot;</span>
+              <span class="n">STATUS</span> <span class="n">default</span>
+              <span class="n">TYPE</span> <span class="n">POINT</span>
+              <span class="n">CLASS</span>
+                      <span class="n">STYLE</span>
+                              <span class="n">COLOR</span> <span class="mi">255</span> <span class="mi">0</span> <span class="mi">0</span>
+                              <span class="n">SYMBOL</span> <span class="s2">&quot;point&quot;</span>
+                              <span class="n">SIZE</span> <span class="mi">2</span>
+                      <span class="n">END</span>
+              <span class="n">END</span>
+      <span class="n">END</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>This map will look like this:</p>
@@ -427,41 +423,41 @@ END
 <div class="section" id="adding-the-feature-cache-for-the-layers">
 <h2>4.1 Adding the feature cache for the layers<a class="headerlink" href="#adding-the-feature-cache-for-the-layers" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Any of the layers might be cached by using the CACHE layer provider. The original provider might be nested inside the cache. The parameters related to the drawing should be specified for the outer layer, like:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
-            PROJECTION
-                    &quot;AUTO&quot;
-            END
-            NAME &quot;Hun_Counties_cache&quot;
-            CONNECTIONTYPE CACHE
-            CONNECTION &quot;Hun_Counties&quot;
-            STATUS default
-            TYPE POLYGON
-            LABELITEM &quot;name&quot;
-            CLASS
-                    TEMPLATE &quot;query.html&quot;
-                    LABEL
-                            SIZE medium
-                            COLOR 64 128 64
-                    END
-                    STYLE
-                            COLOR 208 255 208
-                            OUTLINECOLOR 64 64 64
-                    END
-            END
-            LAYER
-                PROJECTION
-                        &quot;AUTO&quot;
-                END
-                NAME &quot;Hun_Counties&quot;
-                CONNECTIONTYPE OGR
-                CONNECTION &quot;Hun_Megye.TAB&quot;
-                TYPE POLYGON
-            END
-    END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
+            <span class="n">PROJECTION</span>
+                    <span class="s2">&quot;AUTO&quot;</span>
+            <span class="n">END</span>
+            <span class="n">NAME</span> <span class="s2">&quot;Hun_Counties_cache&quot;</span>
+            <span class="n">CONNECTIONTYPE</span> <span class="n">CACHE</span>
+            <span class="n">CONNECTION</span> <span class="s2">&quot;Hun_Counties&quot;</span>
+            <span class="n">STATUS</span> <span class="n">default</span>
+            <span class="n">TYPE</span> <span class="n">POLYGON</span>
+            <span class="n">LABELITEM</span> <span class="s2">&quot;name&quot;</span>
+            <span class="n">CLASS</span>
+                    <span class="n">TEMPLATE</span> <span class="s2">&quot;query.html&quot;</span>
+                    <span class="n">LABEL</span>
+                            <span class="n">SIZE</span> <span class="n">medium</span>
+                            <span class="n">COLOR</span> <span class="mi">64</span> <span class="mi">128</span> <span class="mi">64</span>
+                    <span class="n">END</span>
+                    <span class="n">STYLE</span>
+                            <span class="n">COLOR</span> <span class="mi">208</span> <span class="mi">255</span> <span class="mi">208</span>
+                            <span class="n">OUTLINECOLOR</span> <span class="mi">64</span> <span class="mi">64</span> <span class="mi">64</span>
+                    <span class="n">END</span>
+            <span class="n">END</span>
+            <span class="n">LAYER</span>
+                <span class="n">PROJECTION</span>
+                        <span class="s2">&quot;AUTO&quot;</span>
+                <span class="n">END</span>
+                <span class="n">NAME</span> <span class="s2">&quot;Hun_Counties&quot;</span>
+                <span class="n">CONNECTIONTYPE</span> <span class="n">OGR</span>
+                <span class="n">CONNECTION</span> <span class="s2">&quot;Hun_Megye.TAB&quot;</span>
+                <span class="n">TYPE</span> <span class="n">POLYGON</span>
+            <span class="n">END</span>
+    <span class="n">END</span>
 </pre></div>
 </div>
 <p>The Hun_Counties_cache layer is queryable and all of the existing methods are available to populate the resultcache. In my example I&#8217;ll use the mapscript C# drawquery example (implemented in drawquery.cs) to execute an attribute query and use the drawquery afterwards. The following command will be used along with this sample:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>drawquery sample.map &quot;(&#39;[Name]&#39;=&#39;Tolna&#39;)&quot; sample.png
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">drawquery</span> <span class="n">sample</span><span class="o">.</span><span class="n">map</span> <span class="s2">&quot;(&#39;[Name]&#39;=&#39;Tolna&#39;)&quot;</span> <span class="n">sample</span><span class="o">.</span><span class="n">png</span>
 </pre></div>
 </div>
 <p>Which passes the (&#8216;[Name]&#8217;=&#8217;Tolna&#8217;) query string to the queryByAttributes of the first layer.</p>
@@ -473,29 +469,29 @@ END
 <div class="section" id="applying-transformations-on-the-counties">
 <h2>4.2 Applying transformations on the counties<a class="headerlink" href="#applying-transformations-on-the-counties" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>In the next step I&#8217;ll apply a cascaded GEOS convexhull and buffer operations on the first layer. The results will be rendered in a separate layer using the following definition:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
-             NAME &quot;selectionshape&quot;
-             CONNECTIONTYPE GEOMTRANS
-             CONNECTION &quot;simplify&quot;
-             STATUS default
-             TYPE POLYGON
-             TRANSPARENCY 50
-             CLASS
-                     STYLE
-                             COLOR 64 255 64
-                             OUTLINECOLOR 64 64 64
-                     END
-             END
-             PROCESSING &quot;transformation=buffer&quot;
-             PROCESSING &quot;buffer_width=0.2&quot;
-             LAYER
-                NAME &quot;simplify&quot;
-                TYPE POLYGON
-                CONNECTIONTYPE GEOMTRANS
-                CONNECTION &quot;/Hun_Counties_cache&quot;
-                PROCESSING &quot;transformation=convexhull&quot;
-             END
-     END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
+             <span class="n">NAME</span> <span class="s2">&quot;selectionshape&quot;</span>
+             <span class="n">CONNECTIONTYPE</span> <span class="n">GEOMTRANS</span>
+             <span class="n">CONNECTION</span> <span class="s2">&quot;simplify&quot;</span>
+             <span class="n">STATUS</span> <span class="n">default</span>
+             <span class="n">TYPE</span> <span class="n">POLYGON</span>
+             <span class="n">TRANSPARENCY</span> <span class="mi">50</span>
+             <span class="n">CLASS</span>
+                     <span class="n">STYLE</span>
+                             <span class="n">COLOR</span> <span class="mi">64</span> <span class="mi">255</span> <span class="mi">64</span>
+                             <span class="n">OUTLINECOLOR</span> <span class="mi">64</span> <span class="mi">64</span> <span class="mi">64</span>
+                     <span class="n">END</span>
+             <span class="n">END</span>
+             <span class="n">PROCESSING</span> <span class="s2">&quot;transformation=buffer&quot;</span>
+             <span class="n">PROCESSING</span> <span class="s2">&quot;buffer_width=0.2&quot;</span>
+             <span class="n">LAYER</span>
+                <span class="n">NAME</span> <span class="s2">&quot;simplify&quot;</span>
+                <span class="n">TYPE</span> <span class="n">POLYGON</span>
+                <span class="n">CONNECTIONTYPE</span> <span class="n">GEOMTRANS</span>
+                <span class="n">CONNECTION</span> <span class="s2">&quot;/Hun_Counties_cache&quot;</span>
+                <span class="n">PROCESSING</span> <span class="s2">&quot;transformation=convexhull&quot;</span>
+             <span class="n">END</span>
+     <span class="n">END</span>
 </pre></div>
 </div>
 <p>The result of the rendering will look like:</p>
@@ -503,36 +499,36 @@ END
 <p>The corresponding mapfile:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample2.map">http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample2.map</a></p>
 <p>Which is not the desired result since all of the polygons were transformed. So as to transform only the selected shape an additional cache should be specified by using the &#8220;fetch_mode=selection&#8221; processing option:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
-            NAME &quot;selectionshape&quot;
-            CONNECTIONTYPE GEOMTRANS
-            CONNECTION &quot;simplify&quot;
-            STATUS default
-            TYPE POLYGON
-            TRANSPARENCY 50
-            CLASS
-                    STYLE
-                            COLOR 64 255 64
-                            OUTLINECOLOR 64 64 64
-                    END
-            END
-            PROCESSING &quot;transformation=buffer&quot;
-            PROCESSING &quot;buffer_width=0.2&quot;
-            LAYER
-               NAME &quot;simplify&quot;
-               TYPE POLYGON
-               CONNECTIONTYPE GEOMTRANS
-               CONNECTION &quot;selectioncache&quot;
-               PROCESSING &quot;transformation=convexhull&quot;
-               LAYER
-                   NAME &quot;selectioncache&quot;
-                   TYPE POLYGON
-                   CONNECTIONTYPE CACHE
-                   CONNECTION &quot;/Hun_Counties_cache&quot;
-                   PROCESSING &quot;fetch_mode=selection&quot;
-               END
-            END
-    END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
+            <span class="n">NAME</span> <span class="s2">&quot;selectionshape&quot;</span>
+            <span class="n">CONNECTIONTYPE</span> <span class="n">GEOMTRANS</span>
+            <span class="n">CONNECTION</span> <span class="s2">&quot;simplify&quot;</span>
+            <span class="n">STATUS</span> <span class="n">default</span>
+            <span class="n">TYPE</span> <span class="n">POLYGON</span>
+            <span class="n">TRANSPARENCY</span> <span class="mi">50</span>
+            <span class="n">CLASS</span>
+                    <span class="n">STYLE</span>
+                            <span class="n">COLOR</span> <span class="mi">64</span> <span class="mi">255</span> <span class="mi">64</span>
+                            <span class="n">OUTLINECOLOR</span> <span class="mi">64</span> <span class="mi">64</span> <span class="mi">64</span>
+                    <span class="n">END</span>
+            <span class="n">END</span>
+            <span class="n">PROCESSING</span> <span class="s2">&quot;transformation=buffer&quot;</span>
+            <span class="n">PROCESSING</span> <span class="s2">&quot;buffer_width=0.2&quot;</span>
+            <span class="n">LAYER</span>
+               <span class="n">NAME</span> <span class="s2">&quot;simplify&quot;</span>
+               <span class="n">TYPE</span> <span class="n">POLYGON</span>
+               <span class="n">CONNECTIONTYPE</span> <span class="n">GEOMTRANS</span>
+               <span class="n">CONNECTION</span> <span class="s2">&quot;selectioncache&quot;</span>
+               <span class="n">PROCESSING</span> <span class="s2">&quot;transformation=convexhull&quot;</span>
+               <span class="n">LAYER</span>
+                   <span class="n">NAME</span> <span class="s2">&quot;selectioncache&quot;</span>
+                   <span class="n">TYPE</span> <span class="n">POLYGON</span>
+                   <span class="n">CONNECTIONTYPE</span> <span class="n">CACHE</span>
+                   <span class="n">CONNECTION</span> <span class="s2">&quot;/Hun_Counties_cache&quot;</span>
+                   <span class="n">PROCESSING</span> <span class="s2">&quot;fetch_mode=selection&quot;</span>
+               <span class="n">END</span>
+            <span class="n">END</span>
+    <span class="n">END</span>
 </pre></div>
 </div>
 <p>And here is the result of the drawing:</p>
@@ -543,30 +539,30 @@ END
 <div class="section" id="using-the-transformed-shape-as-the-selection-shape">
 <h2>4.3 Using the transformed shape as the selection shape<a class="headerlink" href="#using-the-transformed-shape-as-the-selection-shape" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>My final goal is to select the features of the point layer using the transformed shape as the selection shape. Therefore I&#8217;ll have to use the layer filter provider on the point layer and setting the selection_layer to the transformed layer:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
-         TYPE POINT
-         CONNECTIONTYPE LAYERFILTER
-         CONNECTION &quot;Hun_CityPoints&quot;
-         NAME &quot;selectedpoints&quot;
-         STATUS default
-         PROCESSING &quot;selection_layer=/selectionshape&quot;
-         CLASS
-             STYLE
-                     COLOR 255 0 0
-                     SYMBOL &quot;point&quot;
-                     SIZE 2
-             END
-         END
-         LAYER
-                 PROJECTION
-                         &quot;AUTO&quot;
-                 END
-                 NAME &quot;Hun_CityPoints&quot;
-                 CONNECTIONTYPE OGR
-                 CONNECTION &quot;Hun_CityPoints.TAB&quot;
-                 TYPE POINT
-         END
-     END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
+         <span class="n">TYPE</span> <span class="n">POINT</span>
+         <span class="n">CONNECTIONTYPE</span> <span class="n">LAYERFILTER</span>
+         <span class="n">CONNECTION</span> <span class="s2">&quot;Hun_CityPoints&quot;</span>
+         <span class="n">NAME</span> <span class="s2">&quot;selectedpoints&quot;</span>
+         <span class="n">STATUS</span> <span class="n">default</span>
+         <span class="n">PROCESSING</span> <span class="s2">&quot;selection_layer=/selectionshape&quot;</span>
+         <span class="n">CLASS</span>
+             <span class="n">STYLE</span>
+                     <span class="n">COLOR</span> <span class="mi">255</span> <span class="mi">0</span> <span class="mi">0</span>
+                     <span class="n">SYMBOL</span> <span class="s2">&quot;point&quot;</span>
+                     <span class="n">SIZE</span> <span class="mi">2</span>
+             <span class="n">END</span>
+         <span class="n">END</span>
+         <span class="n">LAYER</span>
+                 <span class="n">PROJECTION</span>
+                         <span class="s2">&quot;AUTO&quot;</span>
+                 <span class="n">END</span>
+                 <span class="n">NAME</span> <span class="s2">&quot;Hun_CityPoints&quot;</span>
+                 <span class="n">CONNECTIONTYPE</span> <span class="n">OGR</span>
+                 <span class="n">CONNECTION</span> <span class="s2">&quot;Hun_CityPoints.TAB&quot;</span>
+                 <span class="n">TYPE</span> <span class="n">POINT</span>
+         <span class="n">END</span>
+     <span class="n">END</span>
 </pre></div>
 </div>
 <p>Here is the result:</p>
@@ -577,60 +573,60 @@ END
 <p>The resulting image can be found here:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample4a.png">http://trac.osgeo.org/mapserver/attachment/ticket/2128/sample4a.png</a></p>
 <p>Note2: If there&#8217;s no need to render the selection layer I can specify that configuration inline:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
-        TYPE POINT
-        CONNECTIONTYPE LAYERFILTER
-        CONNECTION &quot;Hun_CityPoints&quot;
-        NAME &quot;selectedpoints&quot;
-        STATUS default
-        PROCESSING &quot;selection_layer=selectionshape&quot;
-        CLASS
-            STYLE
-                    COLOR 255 0 0
-                    SYMBOL &quot;point&quot;
-                    SIZE 2
-            END
-        END
-        LAYER
-                PROJECTION
-                        &quot;AUTO&quot;
-                END
-                NAME &quot;Hun_CityPoints&quot;
-                CONNECTIONTYPE OGR
-                CONNECTION &quot;Hun_CityPoints.TAB&quot;
-                TYPE POINT
-        END
-        LAYER
-                NAME &quot;selectionshape&quot;
-                CONNECTIONTYPE GEOMTRANS
-                CONNECTION &quot;simplify&quot;
-                STATUS default
-                TYPE POLYGON
-                TRANSPARENCY 50
-                CLASS
-                        STYLE
-                                COLOR 64 255 64
-                                OUTLINECOLOR 64 64 64
-                        END
-                END
-                PROCESSING &quot;transformation=buffer&quot;
-                PROCESSING &quot;buffer_width=0.2&quot;
-                LAYER
-                    NAME &quot;simplify&quot;
-                    TYPE POLYGON
-                    CONNECTIONTYPE GEOMTRANS
-                    CONNECTION &quot;selectioncache&quot;
-                    PROCESSING &quot;transformation=convexhull&quot;
-                    LAYER
-                        NAME &quot;selectioncache&quot;
-                        TYPE POLYGON
-                        CONNECTIONTYPE CACHE
-                        CONNECTION &quot;/Hun_Counties_cache&quot;
-                        PROCESSING &quot;fetch_mode=selection&quot;
-                    END
-                END
-        END
-    END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
+        <span class="n">TYPE</span> <span class="n">POINT</span>
+        <span class="n">CONNECTIONTYPE</span> <span class="n">LAYERFILTER</span>
+        <span class="n">CONNECTION</span> <span class="s2">&quot;Hun_CityPoints&quot;</span>
+        <span class="n">NAME</span> <span class="s2">&quot;selectedpoints&quot;</span>
+        <span class="n">STATUS</span> <span class="n">default</span>
+        <span class="n">PROCESSING</span> <span class="s2">&quot;selection_layer=selectionshape&quot;</span>
+        <span class="n">CLASS</span>
+            <span class="n">STYLE</span>
+                    <span class="n">COLOR</span> <span class="mi">255</span> <span class="mi">0</span> <span class="mi">0</span>
+                    <span class="n">SYMBOL</span> <span class="s2">&quot;point&quot;</span>
+                    <span class="n">SIZE</span> <span class="mi">2</span>
+            <span class="n">END</span>
+        <span class="n">END</span>
+        <span class="n">LAYER</span>
+                <span class="n">PROJECTION</span>
+                        <span class="s2">&quot;AUTO&quot;</span>
+                <span class="n">END</span>
+                <span class="n">NAME</span> <span class="s2">&quot;Hun_CityPoints&quot;</span>
+                <span class="n">CONNECTIONTYPE</span> <span class="n">OGR</span>
+                <span class="n">CONNECTION</span> <span class="s2">&quot;Hun_CityPoints.TAB&quot;</span>
+                <span class="n">TYPE</span> <span class="n">POINT</span>
+        <span class="n">END</span>
+        <span class="n">LAYER</span>
+                <span class="n">NAME</span> <span class="s2">&quot;selectionshape&quot;</span>
+                <span class="n">CONNECTIONTYPE</span> <span class="n">GEOMTRANS</span>
+                <span class="n">CONNECTION</span> <span class="s2">&quot;simplify&quot;</span>
+                <span class="n">STATUS</span> <span class="n">default</span>
+                <span class="n">TYPE</span> <span class="n">POLYGON</span>
+                <span class="n">TRANSPARENCY</span> <span class="mi">50</span>
+                <span class="n">CLASS</span>
+                        <span class="n">STYLE</span>
+                                <span class="n">COLOR</span> <span class="mi">64</span> <span class="mi">255</span> <span class="mi">64</span>
+                                <span class="n">OUTLINECOLOR</span> <span class="mi">64</span> <span class="mi">64</span> <span class="mi">64</span>
+                        <span class="n">END</span>
+                <span class="n">END</span>
+                <span class="n">PROCESSING</span> <span class="s2">&quot;transformation=buffer&quot;</span>
+                <span class="n">PROCESSING</span> <span class="s2">&quot;buffer_width=0.2&quot;</span>
+                <span class="n">LAYER</span>
+                    <span class="n">NAME</span> <span class="s2">&quot;simplify&quot;</span>
+                    <span class="n">TYPE</span> <span class="n">POLYGON</span>
+                    <span class="n">CONNECTIONTYPE</span> <span class="n">GEOMTRANS</span>
+                    <span class="n">CONNECTION</span> <span class="s2">&quot;selectioncache&quot;</span>
+                    <span class="n">PROCESSING</span> <span class="s2">&quot;transformation=convexhull&quot;</span>
+                    <span class="n">LAYER</span>
+                        <span class="n">NAME</span> <span class="s2">&quot;selectioncache&quot;</span>
+                        <span class="n">TYPE</span> <span class="n">POLYGON</span>
+                        <span class="n">CONNECTIONTYPE</span> <span class="n">CACHE</span>
+                        <span class="n">CONNECTION</span> <span class="s2">&quot;/Hun_Counties_cache&quot;</span>
+                        <span class="n">PROCESSING</span> <span class="s2">&quot;fetch_mode=selection&quot;</span>
+                    <span class="n">END</span>
+                <span class="n">END</span>
+        <span class="n">END</span>
+    <span class="n">END</span>
 </pre></div>
 </div>
 <p>Here is the result:</p>
@@ -647,12 +643,12 @@ END
 <div class="section" id="hashtable-implementation">
 <h2>5.1 Hashtable implementation<a class="headerlink" href="#hashtable-implementation" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>The current hashtable implementation (in maphash.c) will be generalized to be capable to store objects as well as strings. Currently the hashtable can store only string values. In addition the we will provide support for specifying the hashsize upon the construction of the hashtable. The objects will be stored in the hashtable by reference and the destroy function of the objects can also be specified externally. The following functions will be added to maphash.c</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>int initHashTableEx( hashTableObj *table, int hashSize );
-void msClearHashItems( hashTableObj *table );
-struct hashObj *msInsertHashTablePtr(hashTableObj *table, const char *key, const char *value);
-struct hashObj *msFirstItemFromHashTable( hashTableObj *table);
-struct hashObj *msNextItemFromHashTable( hashTableObj *table, struct hashObj *lastItem );
-int msGetHashTableItemCount(hashTableObj *table);
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">initHashTableEx</span><span class="p">(</span> <span class="n">hashTableObj</span> <span class="o">*</span><span class="n">table</span><span class="p">,</span> <span class="nb">int</span> <span class="n">hashSize</span> <span class="p">);</span>
+<span class="n">void</span> <span class="n">msClearHashItems</span><span class="p">(</span> <span class="n">hashTableObj</span> <span class="o">*</span><span class="n">table</span> <span class="p">);</span>
+<span class="n">struct</span> <span class="n">hashObj</span> <span class="o">*</span><span class="n">msInsertHashTablePtr</span><span class="p">(</span><span class="n">hashTableObj</span> <span class="o">*</span><span class="n">table</span><span class="p">,</span> <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">key</span><span class="p">,</span> <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">value</span><span class="p">);</span>
+<span class="n">struct</span> <span class="n">hashObj</span> <span class="o">*</span><span class="n">msFirstItemFromHashTable</span><span class="p">(</span> <span class="n">hashTableObj</span> <span class="o">*</span><span class="n">table</span><span class="p">);</span>
+<span class="n">struct</span> <span class="n">hashObj</span> <span class="o">*</span><span class="n">msNextItemFromHashTable</span><span class="p">(</span> <span class="n">hashTableObj</span> <span class="o">*</span><span class="n">table</span><span class="p">,</span> <span class="n">struct</span> <span class="n">hashObj</span> <span class="o">*</span><span class="n">lastItem</span> <span class="p">);</span>
+<span class="nb">int</span> <span class="n">msGetHashTableItemCount</span><span class="p">(</span><span class="n">hashTableObj</span> <span class="o">*</span><span class="n">table</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>initHashTableEx can be called to specify the hash size externally. Actually the original initHashTable will be implemented as calling initHashTableEx with MS_HASHSIZE.
@@ -664,43 +660,43 @@ msGetHashTableItemCount will retrieve the actual number of the hashtable items.<
 <div class="section" id="extending-the-layerobj-structure-to-support-nesting-the-layers-map-h">
 <h2>5.2 Extending the layerObj structure to support nesting the layers (map.h)<a class="headerlink" href="#extending-the-layerobj-structure-to-support-nesting-the-layers-map-h" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>The sublayers in the layerObj structure will be stored as an array of layers.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>typedef struct layer_obj {
-  ...
-  #ifndef SWIG
-  struct layer_obj **layers;
-  int numlayers; /* number of sublayers in layer */
-  #endif /* SWIG */
-  ...
-} layerObj;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">typedef</span> <span class="n">struct</span> <span class="n">layer_obj</span> <span class="p">{</span>
+  <span class="o">...</span>
+  <span class="c1">#ifndef SWIG</span>
+  <span class="n">struct</span> <span class="n">layer_obj</span> <span class="o">**</span><span class="n">layers</span><span class="p">;</span>
+  <span class="nb">int</span> <span class="n">numlayers</span><span class="p">;</span> <span class="o">/*</span> <span class="n">number</span> <span class="n">of</span> <span class="n">sublayers</span> <span class="ow">in</span> <span class="n">layer</span> <span class="o">*/</span>
+  <span class="c1">#endif /* SWIG */</span>
+  <span class="o">...</span>
+<span class="p">}</span> <span class="n">layerObj</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>The parser will take care of loading the nested layers:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>int loadLayer(layerObj *layer, mapObj *map)
-{
-  ...
-  case (LAYER):
-    if(layer-&gt;numlayers == 0)
-        layer-&gt;layers = (layerObj**) malloc(sizeof(layerObj*));
-    else
-        layer-&gt;layers = (layerObj**) realloc(layer-&gt;layers, sizeof(layerObj*) * (layer-&gt;numlayers));
-    layer-&gt;layers[layer-&gt;numlayers]=(layerObj*)malloc(sizeof(layerObj));
-    if (layer-&gt;layers[layer-&gt;numlayers] == NULL) {
-         msSetError(MS_MEMERR, &quot;Malloc of a new layer failed.&quot;, &quot;loadLayer()&quot;);
-             return MS_FAILURE;
-    }
-    if(loadLayer(layer-&gt;layers[layer-&gt;numlayers], map) == -1) return MS_FAILURE;
-    layer-&gt;layers[layer-&gt;numlayers]-&gt;index = layer-&gt;numlayers; /* save the index */
-    ++layer-&gt;numlayers;
-    break;
-  ...
-}
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">loadLayer</span><span class="p">(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">,</span> <span class="n">mapObj</span> <span class="o">*</span><span class="nb">map</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="o">...</span>
+  <span class="n">case</span> <span class="p">(</span><span class="n">LAYER</span><span class="p">):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">numlayers</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">layer</span><span class="o">-&gt;</span><span class="n">layers</span> <span class="o">=</span> <span class="p">(</span><span class="n">layerObj</span><span class="o">**</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">sizeof</span><span class="p">(</span><span class="n">layerObj</span><span class="o">*</span><span class="p">));</span>
+    <span class="k">else</span>
+        <span class="n">layer</span><span class="o">-&gt;</span><span class="n">layers</span> <span class="o">=</span> <span class="p">(</span><span class="n">layerObj</span><span class="o">**</span><span class="p">)</span> <span class="n">realloc</span><span class="p">(</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">layers</span><span class="p">,</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">layerObj</span><span class="o">*</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">numlayers</span><span class="p">));</span>
+    <span class="n">layer</span><span class="o">-&gt;</span><span class="n">layers</span><span class="p">[</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">numlayers</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">layerObj</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">sizeof</span><span class="p">(</span><span class="n">layerObj</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">layers</span><span class="p">[</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">numlayers</span><span class="p">]</span> <span class="o">==</span> <span class="n">NULL</span><span class="p">)</span> <span class="p">{</span>
+         <span class="n">msSetError</span><span class="p">(</span><span class="n">MS_MEMERR</span><span class="p">,</span> <span class="s2">&quot;Malloc of a new layer failed.&quot;</span><span class="p">,</span> <span class="s2">&quot;loadLayer()&quot;</span><span class="p">);</span>
+             <span class="k">return</span> <span class="n">MS_FAILURE</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">loadLayer</span><span class="p">(</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">layers</span><span class="p">[</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">numlayers</span><span class="p">],</span> <span class="nb">map</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="n">MS_FAILURE</span><span class="p">;</span>
+    <span class="n">layer</span><span class="o">-&gt;</span><span class="n">layers</span><span class="p">[</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">numlayers</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">index</span> <span class="o">=</span> <span class="n">layer</span><span class="o">-&gt;</span><span class="n">numlayers</span><span class="p">;</span> <span class="o">/*</span> <span class="n">save</span> <span class="n">the</span> <span class="n">index</span> <span class="o">*/</span>
+    <span class="o">++</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">numlayers</span><span class="p">;</span>
+    <span class="k">break</span><span class="p">;</span>
+  <span class="o">...</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="adding-a-new-built-in-data-connection-types-map-h">
 <h2>5.3 Adding a new built in data connection types (map.h)<a class="headerlink" href="#adding-a-new-built-in-data-connection-types-map-h" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>A new data connection type is established for the new providers.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>enum MS_CONNECTION_TYPE {MS_INLINE, MS_SHAPEFILE, MS_TILED_SHAPEFILE, MS_SDE, MS_OGR, MS_UNUSED_1, MS_POSTGIS, MS_WMS,   MS_ORACLESPATIAL, MS_WFS, MS_GRATICULE, MS_MYGIS, MS_RASTER, MS_PLUGIN, MS_GEOMTRANS, MS_LAYERFILTER, MS_CACHE };
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">enum</span> <span class="n">MS_CONNECTION_TYPE</span> <span class="p">{</span><span class="n">MS_INLINE</span><span class="p">,</span> <span class="n">MS_SHAPEFILE</span><span class="p">,</span> <span class="n">MS_TILED_SHAPEFILE</span><span class="p">,</span> <span class="n">MS_SDE</span><span class="p">,</span> <span class="n">MS_OGR</span><span class="p">,</span> <span class="n">MS_UNUSED_1</span><span class="p">,</span> <span class="n">MS_POSTGIS</span><span class="p">,</span> <span class="n">MS_WMS</span><span class="p">,</span>   <span class="n">MS_ORACLESPATIAL</span><span class="p">,</span> <span class="n">MS_WFS</span><span class="p">,</span> <span class="n">MS_GRATICULE</span><span class="p">,</span> <span class="n">MS_MYGIS</span><span class="p">,</span> <span class="n">MS_RASTER</span><span class="p">,</span> <span class="n">MS_PLUGIN</span><span class="p">,</span> <span class="n">MS_GEOMTRANS</span><span class="p">,</span> <span class="n">MS_LAYERFILTER</span><span class="p">,</span> <span class="n">MS_CACHE</span> <span class="p">};</span>
 </pre></div>
 </div>
 <p>The lexer will be modified to interpret the new connection types.</p>
@@ -708,50 +704,50 @@ msGetHashTableItemCount will retrieve the actual number of the hashtable items.<
 <div class="section" id="support-for-destroying-the-persistent-data-of-the-providers-map-h-maplayer-c">
 <h2>5.4 Support for destroying the persistent data of the providers (map.h, maplayer.c)<a class="headerlink" href="#support-for-destroying-the-persistent-data-of-the-providers-map-h-maplayer-c" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>The providers would keep persistent data between the various Connection/Close operations on that layer so we should establish a mechanism to destroy this provider specific data by adding a new method to the layervtable:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerDestroy</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerDestroy</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="vtable-initialization-for-the-new-data-providers-maplayer-c">
 <h2>5.5 Vtable initialization for the new data providers (maplayer.c)<a class="headerlink" href="#vtable-initialization-for-the-new-data-providers-maplayer-c" title="Enlazar permanentemente con este título">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span>int
-msInitializeVirtualTable(layerObj *layer)
-{
-  if (layer-&gt;baselayer)
-      msInitializeVirtualTable(layer-&gt;baselayer);
-  ...
-  switch(layer-&gt;connectiontype) {
-  ...
-  case(MS_GEOMTRANS):
-          return(msGeomTransLayerInitializeVirtualTable(layer));
-          break;
-      case(MS_LAYERFILTER):
-          return(msFilterLayerInitializeVirtualTable(layer));
-          break;
-      case(MS_CACHE):
-          return(msCacheLayerInitializeVirtualTable(layer));
-          break;
-  ...
-  }
-  ..
-}
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span>
+<span class="n">msInitializeVirtualTable</span><span class="p">(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">baselayer</span><span class="p">)</span>
+      <span class="n">msInitializeVirtualTable</span><span class="p">(</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">baselayer</span><span class="p">);</span>
+  <span class="o">...</span>
+  <span class="n">switch</span><span class="p">(</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">connectiontype</span><span class="p">)</span> <span class="p">{</span>
+  <span class="o">...</span>
+  <span class="n">case</span><span class="p">(</span><span class="n">MS_GEOMTRANS</span><span class="p">):</span>
+          <span class="k">return</span><span class="p">(</span><span class="n">msGeomTransLayerInitializeVirtualTable</span><span class="p">(</span><span class="n">layer</span><span class="p">));</span>
+          <span class="k">break</span><span class="p">;</span>
+      <span class="n">case</span><span class="p">(</span><span class="n">MS_LAYERFILTER</span><span class="p">):</span>
+          <span class="k">return</span><span class="p">(</span><span class="n">msFilterLayerInitializeVirtualTable</span><span class="p">(</span><span class="n">layer</span><span class="p">));</span>
+          <span class="k">break</span><span class="p">;</span>
+      <span class="n">case</span><span class="p">(</span><span class="n">MS_CACHE</span><span class="p">):</span>
+          <span class="k">return</span><span class="p">(</span><span class="n">msCacheLayerInitializeVirtualTable</span><span class="p">(</span><span class="n">layer</span><span class="p">));</span>
+          <span class="k">break</span><span class="p">;</span>
+  <span class="o">...</span>
+  <span class="p">}</span>
+  <span class="o">..</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="files-affected">
 <h2>6. Files affected<a class="headerlink" href="#files-affected" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>The following files will be affected by this RFC:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>maphash.c
-maphash.h
-maplayer.c
-maplexer.l
-mapfile.c
-map.h
-Makefile.vc
-Makefile.in
-mapcache.c  (new)
-mapgeomtrans.c  (new)
-mapfilter.c  (new)
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">maphash</span><span class="o">.</span><span class="n">c</span>
+<span class="n">maphash</span><span class="o">.</span><span class="n">h</span>
+<span class="n">maplayer</span><span class="o">.</span><span class="n">c</span>
+<span class="n">maplexer</span><span class="o">.</span><span class="n">l</span>
+<span class="n">mapfile</span><span class="o">.</span><span class="n">c</span>
+<span class="nb">map</span><span class="o">.</span><span class="n">h</span>
+<span class="n">Makefile</span><span class="o">.</span><span class="n">vc</span>
+<span class="n">Makefile</span><span class="o">.</span><span class="ow">in</span>
+<span class="n">mapcache</span><span class="o">.</span><span class="n">c</span>  <span class="p">(</span><span class="n">new</span><span class="p">)</span>
+<span class="n">mapgeomtrans</span><span class="o">.</span><span class="n">c</span>  <span class="p">(</span><span class="n">new</span><span class="p">)</span>
+<span class="n">mapfilter</span><span class="o">.</span><span class="n">c</span>  <span class="p">(</span><span class="n">new</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -821,14 +817,11 @@ mapfilter.c  (new)
 <div id="searchbox" style="display: none" role="search">
   <h3>Búsqueda rápida</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Ir a" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Ir a" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Introduzca los términos de búsqueda o un nombre de módulo, clase o función.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -839,7 +832,7 @@ mapfilter.c  (new)
       &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>

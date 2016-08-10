@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -47,8 +47,9 @@
       <a href="../index.html" title="Home">Home</a> |
       <a href="../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
       <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
-      <a href="../faq.html" title="FAQ">FAQ</a> |
-      <a href="../download.html" title="Download">Download </a>
+      <a href="../community/service_providers.html" title="Professional Service Providers">Service Providers</a> |      
+      <a href="../faq.html" title="Frequently Asked Questions">FAQ</a> |
+      <a href="../download.html" title="Download Source or Binaries">Download </a>
     </td>
   </tr>
   <tr>
@@ -119,11 +120,6 @@
             <a href="../../tr/ogc/inspire_dl.html"><img src="../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
           
         
-        
-          
-            <a href="../../uk/ogc/inspire_dl.html"><img src="../_static/flagicons/uk.png" alt="uk" title="uk" border="0" /></a>
-          
-        
 
     </td>
   </tr>
@@ -190,7 +186,7 @@
 for spatial information in Europe to support Community environmental policies,
 and policies or activities which may have an impact on the environment.</p>
 <p>The INSPIRE Download Service is an implementation of the <a class="reference external" href="http://inspire.jrc.ec.europa.eu/documents/Network_Services/Technical_Guidance_Download_Services_v3.1.pdf">INSPIRE Technical
-Guidance Download Services v3.1</a> on top of the <a class="reference internal" href="wfs_server.html#wfs-server"><span>WFS Server</span></a>, version 2.0,
+Guidance Download Services v3.1</a> on top of the <a class="reference internal" href="wfs_server.html#wfs-server"><span class="std std-ref">WFS Server</span></a>, version 2.0,
 implementation explained in the previous chapter.
 The <a class="reference external" href="http://inspire.ec.europa.eu/schemas/inspire_dls/1.0/inspire_dls.xsd">INSPIRE schemas</a> contain extensions to OGC WFS schemas.</p>
 <p>In order to achieve INSPIRE Download Service compliance, the following enhancements
@@ -201,7 +197,7 @@ have been implemented in MapServer:</p>
 <li>Provision of INSPIRE specific metadata</li>
 </ul>
 <p>Support for INSPIRE Download Service in MapServer uses a syntax identical to
-the one used for <a class="reference internal" href="inspire.html#inspire-view-service"><span>INSPIRE View Service</span></a>. Consequently, it is possible to
+the one used for <a class="reference internal" href="inspire.html#inspire-view-service"><span class="std std-ref">INSPIRE View Service</span></a>. Consequently, it is possible to
 define shared metadata items between Download and View services by using the <code class="docutils literal"><span class="pre">ows_</span></code>
 prefix instead of <code class="docutils literal"><span class="pre">wfs_</span></code>.</p>
 </div>
@@ -217,21 +213,21 @@ namespace as well as appropriate validation warnings are generated in the
 capabilities document.</p>
 <p>Scenario 1 - activate INSPIRE support using a reference to external service
 metadata:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
- METADATA
-  &quot;wfs_inspire_capabilities&quot; &quot;url&quot;
-  ...
- END
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">WEB</span>
+ <span class="n">METADATA</span>
+  <span class="s2">&quot;wfs_inspire_capabilities&quot;</span> <span class="s2">&quot;url&quot;</span>
+  <span class="o">...</span>
+ <span class="n">END</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>Scenario 2 - activate INSPIRE support using embedded service metadata:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
- METADATA
-  &quot;wfs_inspire_capabilities&quot; &quot;embed&quot;
-  ...
- END
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">WEB</span>
+ <span class="n">METADATA</span>
+  <span class="s2">&quot;wfs_inspire_capabilities&quot;</span> <span class="s2">&quot;embed&quot;</span>
+  <span class="o">...</span>
+ <span class="n">END</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 </div>
@@ -258,49 +254,49 @@ guidance, MapServer supports language dependent reference data like</p>
 language is default) through <code class="docutils literal"><span class="pre">wfs_languages</span></code> in the <code class="docutils literal"><span class="pre">WEB.METADATA</span></code>
 section of the mapfile. This language parameter is also added to the
 <code class="docutils literal"><span class="pre">OnlineResource</span></code> in the GetCapabilities output:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
- METADATA
-  ...
-  &quot;wfs_languages&quot; &quot;eng,ger&quot;       #first default, values according ISO 639-2/B
-  ...
- END
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">WEB</span>
+ <span class="n">METADATA</span>
+  <span class="o">...</span>
+  <span class="s2">&quot;wfs_languages&quot;</span> <span class="s2">&quot;eng,ger&quot;</span>       <span class="c1">#first default, values according ISO 639-2/B</span>
+  <span class="o">...</span>
+ <span class="n">END</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>For language specific metadata values, a key extension method is applied:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
- METADATA
-  ...
-  &quot;wfs_title.eng&quot; &quot;myservicetitle&quot;
-  &quot;wfs_title.ger&quot; &quot;myservicetitleger&quot;
-  &quot;wfs_abstract&quot; &quot;mylayerabstract&quot;        #fallback
-  &quot;wfs_abstract.ger&quot; &quot;mylayerabstractger&quot;
-  ...
- END
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">WEB</span>
+ <span class="n">METADATA</span>
+  <span class="o">...</span>
+  <span class="s2">&quot;wfs_title.eng&quot;</span> <span class="s2">&quot;myservicetitle&quot;</span>
+  <span class="s2">&quot;wfs_title.ger&quot;</span> <span class="s2">&quot;myservicetitleger&quot;</span>
+  <span class="s2">&quot;wfs_abstract&quot;</span> <span class="s2">&quot;mylayerabstract&quot;</span>        <span class="c1">#fallback</span>
+  <span class="s2">&quot;wfs_abstract.ger&quot;</span> <span class="s2">&quot;mylayerabstractger&quot;</span>
+  <span class="o">...</span>
+ <span class="n">END</span>
+<span class="n">END</span>
 
-LAYER
-  METADATA
-    &quot;wfs_title&quot;         &quot;title: province&quot;
-    &quot;wfs_title.fre&quot;     &quot;titre: province&quot;
-    &quot;wfs_abstract&quot;      &quot;abstract: province&quot;
-    &quot;wfs_abstract.fre&quot;  &quot;resume: province&quot;
-    ...
-   END
-   ...
-END
+<span class="n">LAYER</span>
+  <span class="n">METADATA</span>
+    <span class="s2">&quot;wfs_title&quot;</span>         <span class="s2">&quot;title: province&quot;</span>
+    <span class="s2">&quot;wfs_title.fre&quot;</span>     <span class="s2">&quot;titre: province&quot;</span>
+    <span class="s2">&quot;wfs_abstract&quot;</span>      <span class="s2">&quot;abstract: province&quot;</span>
+    <span class="s2">&quot;wfs_abstract.fre&quot;</span>  <span class="s2">&quot;resume: province&quot;</span>
+    <span class="o">...</span>
+   <span class="n">END</span>
+   <span class="o">...</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>For language dependent reference data, a similar approach like the
-<a class="reference internal" href="../cgi/runsub.html#runsub"><span>run-time substitution</span></a> feature of MapServer has been followed
+<a class="reference internal" href="../cgi/runsub.html#runsub"><span class="std std-ref">run-time substitution</span></a> feature of MapServer has been followed
 (only <code class="docutils literal"><span class="pre">DATA</span></code> and <code class="docutils literal"><span class="pre">CONNECTION</span></code> values with %language% are substituted):</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>...
-  LAYER
-   NAME TN.RoadTransportNetwork.RoadLink
-   DATA &quot;road_%language%&quot;
-   ...
-  END
-...
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">...</span>
+  <span class="n">LAYER</span>
+   <span class="n">NAME</span> <span class="n">TN</span><span class="o">.</span><span class="n">RoadTransportNetwork</span><span class="o">.</span><span class="n">RoadLink</span>
+   <span class="n">DATA</span> <span class="s2">&quot;road_%language%&quot;</span>
+   <span class="o">...</span>
+  <span class="n">END</span>
+<span class="o">...</span>
 </pre></div>
 </div>
 <p>If the language is not supported (or no language parameter is present), the
@@ -311,52 +307,52 @@ default language is substituted.</p>
 <p>Depending on the scenario, additional metadata information is required to
 support the specification. The INSPIRE related fields are provided below.</p>
 <p>Scenario 1 - INSPIRE related fields using referenced external service metadata:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
- METADATA
-  &quot;wfs_inspire_capabilities&quot; &quot;url&quot;
-  &quot;wfs_languages&quot; &quot;eng,ger&quot;               #first default, values according ISO 639-2/B
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">WEB</span>
+ <span class="n">METADATA</span>
+  <span class="s2">&quot;wfs_inspire_capabilities&quot;</span> <span class="s2">&quot;url&quot;</span>
+  <span class="s2">&quot;wfs_languages&quot;</span> <span class="s2">&quot;eng,ger&quot;</span>               <span class="c1">#first default, values according ISO 639-2/B</span>
 
-  &quot;wfs_inspire_metadataurl_href&quot; &quot;http://INSPIRE.service/metadata&quot;
-  &quot;wfs_inspire_metadataurl_format&quot; &quot;application/vnd.ogc.csw.capabilities.response_xml&quot;
-  &quot;wfs_inspire_dsid_code&quot; &quot;mycode&quot;
+  <span class="s2">&quot;wfs_inspire_metadataurl_href&quot;</span> <span class="s2">&quot;http://INSPIRE.service/metadata&quot;</span>
+  <span class="s2">&quot;wfs_inspire_metadataurl_format&quot;</span> <span class="s2">&quot;application/vnd.ogc.csw.capabilities.response_xml&quot;</span>
+  <span class="s2">&quot;wfs_inspire_dsid_code&quot;</span> <span class="s2">&quot;mycode&quot;</span>
 
-  &quot;wfs_keywordlist&quot; &quot;ogc,wfs,gml&quot;
-  &quot;wfs_title&quot; &quot;myservicetitle&quot;
-  &quot;wfs_abstract&quot; &quot;myabstract&quot;
-  &quot;wfs_fees&quot; &quot;conditions unknown&quot;         #value either &quot;no conditions apply&quot;|default &quot;conditions unknown&quot;|&lt;specific conditions&gt;
-  &quot;wfs_accessconstraints&quot; &quot;None&quot;          #value according ISO 19115 (MD_RestrictionCode codelist) or default &quot;None&quot;
-  &quot;wfs_contactorganization&quot; &quot;MapServer&quot;   #responsible organization
-  &quot;wfs_contactposition&quot; &quot;owner&quot;           #responsible organization, value according &quot;INSPIRE Metadata Regulation&quot; (part D6)
-  ...
- END
-END
+  <span class="s2">&quot;wfs_keywordlist&quot;</span> <span class="s2">&quot;ogc,wfs,gml&quot;</span>
+  <span class="s2">&quot;wfs_title&quot;</span> <span class="s2">&quot;myservicetitle&quot;</span>
+  <span class="s2">&quot;wfs_abstract&quot;</span> <span class="s2">&quot;myabstract&quot;</span>
+  <span class="s2">&quot;wfs_fees&quot;</span> <span class="s2">&quot;conditions unknown&quot;</span>         <span class="c1">#value either &quot;no conditions apply&quot;|default &quot;conditions unknown&quot;|&lt;specific conditions&gt;</span>
+  <span class="s2">&quot;wfs_accessconstraints&quot;</span> <span class="s2">&quot;None&quot;</span>          <span class="c1">#value according ISO 19115 (MD_RestrictionCode codelist) or default &quot;None&quot;</span>
+  <span class="s2">&quot;wfs_contactorganization&quot;</span> <span class="s2">&quot;MapServer&quot;</span>   <span class="c1">#responsible organization</span>
+  <span class="s2">&quot;wfs_contactposition&quot;</span> <span class="s2">&quot;owner&quot;</span>           <span class="c1">#responsible organization, value according &quot;INSPIRE Metadata Regulation&quot; (part D6)</span>
+  <span class="o">...</span>
+ <span class="n">END</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>Scenario 2 - INSPIRE related fields using embedded service metadata:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
- METADATA
-  &quot;wfs_inspire_capabilities&quot; &quot;embed&quot;
-  &quot;wfs_languages&quot; &quot;eng,ger&quot;               #first default, values according ISO 639-2/B
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">WEB</span>
+ <span class="n">METADATA</span>
+  <span class="s2">&quot;wfs_inspire_capabilities&quot;</span> <span class="s2">&quot;embed&quot;</span>
+  <span class="s2">&quot;wfs_languages&quot;</span> <span class="s2">&quot;eng,ger&quot;</span>               <span class="c1">#first default, values according ISO 639-2/B</span>
 
-  &quot;wfs_inspire_temporal_reference&quot; &quot;2011-09-19&quot;                                 #date of last revision, value according YYYY-MM-DD
-  &quot;wfs_inspire_mpoc_name&quot; &quot;mympocname&quot;                                          #point of contact
-  &quot;wfs_inspire_mpoc_email&quot; &quot;mympoc@e.mail&quot;                                      #point of contact
-  &quot;wfs_inspire_metadatadate&quot; &quot;2011-09-19&quot;
-  &quot;wfs_inspire_resourcelocator&quot; &quot;http://myinspireresource&quot;                      #URL for ResourceLocator
-  &quot;wfs_inspire_keyword&quot; &quot;infoMapAccessService&quot;                                  #value according &quot;classification of spatial data services&quot;
-  &quot;wfs_inspire_dsid_code&quot; &quot;mycode&quot;
-  &quot;wfs_inspire_dsid_ns&quot; &quot;http://mycode&quot;
+  <span class="s2">&quot;wfs_inspire_temporal_reference&quot;</span> <span class="s2">&quot;2011-09-19&quot;</span>                                 <span class="c1">#date of last revision, value according YYYY-MM-DD</span>
+  <span class="s2">&quot;wfs_inspire_mpoc_name&quot;</span> <span class="s2">&quot;mympocname&quot;</span>                                          <span class="c1">#point of contact</span>
+  <span class="s2">&quot;wfs_inspire_mpoc_email&quot;</span> <span class="s2">&quot;mympoc@e.mail&quot;</span>                                      <span class="c1">#point of contact</span>
+  <span class="s2">&quot;wfs_inspire_metadatadate&quot;</span> <span class="s2">&quot;2011-09-19&quot;</span>
+  <span class="s2">&quot;wfs_inspire_resourcelocator&quot;</span> <span class="s2">&quot;http://myinspireresource&quot;</span>                      <span class="c1">#URL for ResourceLocator</span>
+  <span class="s2">&quot;wfs_inspire_keyword&quot;</span> <span class="s2">&quot;infoMapAccessService&quot;</span>                                  <span class="c1">#value according &quot;classification of spatial data services&quot;</span>
+  <span class="s2">&quot;wfs_inspire_dsid_code&quot;</span> <span class="s2">&quot;mycode&quot;</span>
+  <span class="s2">&quot;wfs_inspire_dsid_ns&quot;</span> <span class="s2">&quot;http://mycode&quot;</span>
 
-  &quot;wfs_keywordlist&quot; &quot;ogc,wfs,gml&quot;
-  &quot;wfs_title&quot; &quot;myservicetitle&quot;
-  &quot;wfs_abstract&quot; &quot;myabstract&quot;
-  &quot;wfs_fees&quot; &quot;conditions unknown&quot;         #value either &quot;no conditions apply&quot;|default &quot;conditions unknown&quot;|&lt;specific conditions&gt;
-  &quot;wfs_accessconstraints&quot; &quot;None&quot;          #value according ISO 19115 (MD_RestrictionCode codelist) or default &quot;None&quot;
-  &quot;wfs_contactorganization&quot; &quot;MapServer&quot;   #responsible organization
-  &quot;wfs_contactposition&quot; &quot;owner&quot;           #responsible organization, value according &quot;INSPIRE Metadata Regulation&quot; (part D6)
-  ...
- END
-END
+  <span class="s2">&quot;wfs_keywordlist&quot;</span> <span class="s2">&quot;ogc,wfs,gml&quot;</span>
+  <span class="s2">&quot;wfs_title&quot;</span> <span class="s2">&quot;myservicetitle&quot;</span>
+  <span class="s2">&quot;wfs_abstract&quot;</span> <span class="s2">&quot;myabstract&quot;</span>
+  <span class="s2">&quot;wfs_fees&quot;</span> <span class="s2">&quot;conditions unknown&quot;</span>         <span class="c1">#value either &quot;no conditions apply&quot;|default &quot;conditions unknown&quot;|&lt;specific conditions&gt;</span>
+  <span class="s2">&quot;wfs_accessconstraints&quot;</span> <span class="s2">&quot;None&quot;</span>          <span class="c1">#value according ISO 19115 (MD_RestrictionCode codelist) or default &quot;None&quot;</span>
+  <span class="s2">&quot;wfs_contactorganization&quot;</span> <span class="s2">&quot;MapServer&quot;</span>   <span class="c1">#responsible organization</span>
+  <span class="s2">&quot;wfs_contactposition&quot;</span> <span class="s2">&quot;owner&quot;</span>           <span class="c1">#responsible organization, value according &quot;INSPIRE Metadata Regulation&quot; (part D6)</span>
+  <span class="o">...</span>
+ <span class="n">END</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>Notes:</p>
@@ -404,14 +400,11 @@ degree conformant/not conformant, which is currently not implemented</li>
 <div id="searchbox" style="display: none" role="search">
   <h3>クイック検索</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="検索" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="検索" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    モジュール、クラス、または関数名を入力してください
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -422,7 +415,7 @@ degree conformant/not conformant, which is currently not implemented</li>
       &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>

@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -47,8 +47,9 @@
       <a href="../../index.html" title="Home">Home</a> |
       <a href="../../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
       <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
-      <a href="../../faq.html" title="FAQ">FAQ</a> |
-      <a href="../../download.html" title="Download">Download </a>
+      <a href="../../community/service_providers.html" title="Professional Service Providers">Service Providers</a> |      
+      <a href="../../faq.html" title="Frequently Asked Questions">FAQ</a> |
+      <a href="../../download.html" title="Download Source or Binaries">Download </a>
     </td>
   </tr>
   <tr>
@@ -119,11 +120,6 @@
             <a href="../../../tr/development/rfc/ms-rfc-90.html"><img src="../../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
           
         
-        
-          
-            <a href="../../../uk/development/rfc/ms-rfc-90.html"><img src="../../_static/flagicons/uk.png" alt="uk" title="uk" border="0" /></a>
-          
-        
 
     </td>
   </tr>
@@ -191,25 +187,25 @@ the METADATA section of every single layer.</p>
 <p>These parameters support both a list of addresses from a file, or the ability to provide the
 values directly in the mapfile, in the cases where there are only a couple of IPs or ranges to be specified.</p>
 <p>When setting the IP list inline, we can use spaces as separators, like:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
-  METADATA
-    &quot;ows_allowed_ip_list&quot; &quot;123.45.67.89 11.22.33.44&quot;
-  END
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
+  <span class="n">METADATA</span>
+    <span class="s2">&quot;ows_allowed_ip_list&quot;</span> <span class="s2">&quot;123.45.67.89 11.22.33.44&quot;</span>
+  <span class="n">END</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>Or we can specify a file containing the list of the IP addresses (IPs and ranges in the file are separated
 by spaces or newlines)</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
-  METADATA
-    &quot;ows_allowed_ip_list&quot; &quot;file:/path/to/list_of_ips.txt&quot;
-  END
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
+  <span class="n">METADATA</span>
+    <span class="s2">&quot;ows_allowed_ip_list&quot;</span> <span class="s2">&quot;file:/path/to/list_of_ips.txt&quot;</span>
+  <span class="n">END</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>We can also specify IP ranges using the <a class="reference external" href="http://en.wikipedia.org/wiki/CIDR_notation">CIDR notation</a> , like: &#8220;192.168.1.0/24&#8221;</p>
 <p>Setting ows_allowed_ip_list will deny all other IPs not specified in the list, and setting ows_denied_ip_list will allow all other IPs not specified in the list. When we both allow and deny a given IP the denial will take precedence.</p>
-<p>The setting of <strong>ows_enable_request</strong> (added in <a class="reference internal" href="ms-rfc-67.html#rfc67"><span>MS RFC 67</span></a>) will also be taken into account.
+<p>The setting of <strong>ows_enable_request</strong> (added in <a class="reference internal" href="ms-rfc-67.html#rfc67"><span class="std std-ref">MS RFC 67</span></a>) will also be taken into account.
 Disabled requests cannot be re-enabled by IP lists, however we can restrict the access to a subset of layes
 by IP lists within the enabled OGC web services.</p>
 <p>We will also be able to use the corresponding service specific settings (like <strong>wms_allowed_ip_list</strong>
@@ -227,32 +223,32 @@ to specify all modes and a preceding exclamation sign &#8216;!&#8217; can be use
 are enabled and dispatched.</p>
 <p>When using OGC Web services, we don&#8217;t require to specify modes by the URL, so we can block all
 CGI modes by using the following setting:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
-  METADATA
-        # Block all CGI modes by default for this mapfile
-    &quot;ms_enable_modes&quot;  &quot;!*&quot;
-  END
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">WEB</span>
+  <span class="n">METADATA</span>
+        <span class="c1"># Block all CGI modes by default for this mapfile</span>
+    <span class="s2">&quot;ms_enable_modes&quot;</span>  <span class="s2">&quot;!*&quot;</span>
+  <span class="n">END</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>This will dispatch only those requests where explicit mode is not set by URL. It is suggested for all
 existing users to include this setting in the mapfiles if they intend to provide just OGC web services.</p>
 <p>We&#8217;ll also be able to enable the modes selectively, as follows:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
-  METADATA
-    # Enable Only MAP and LEGEND modes for this mapfile
-    &quot;ms_enable_modes&quot; &quot;!* MAP LEGEND&quot;
-      END
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">WEB</span>
+  <span class="n">METADATA</span>
+    <span class="c1"># Enable Only MAP and LEGEND modes for this mapfile</span>
+    <span class="s2">&quot;ms_enable_modes&quot;</span> <span class="s2">&quot;!* MAP LEGEND&quot;</span>
+      <span class="n">END</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>To enable all modes except MAP:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>WEB
-  METADATA
-    # Enable all modes except MAP for this mapfile
-    &quot;ms_enable_modes&quot; &quot;!MAP&quot;
-      END
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">WEB</span>
+  <span class="n">METADATA</span>
+    <span class="c1"># Enable all modes except MAP for this mapfile</span>
+    <span class="s2">&quot;ms_enable_modes&quot;</span> <span class="s2">&quot;!MAP&quot;</span>
+      <span class="n">END</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>Given the mode specified by URL is disabled, MapServer will provide the following error message:</p>
@@ -262,7 +258,7 @@ END
 </div>
 <div class="section" id="implementation-details">
 <h2>4. Implementation Details<a class="headerlink" href="#implementation-details" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>This change will utilize the mechanism established in <a class="reference internal" href="ms-rfc-67.html#rfc67"><span>MS RFC 67</span></a>, which makes the implementation
+<p>This change will utilize the mechanism established in <a class="reference internal" href="ms-rfc-67.html#rfc67"><span class="std std-ref">MS RFC 67</span></a>, which makes the implementation
 fairly straightforward. Most of the functionality is provided by adding a new functions
 (msOWSIpDisabled, msOWSIpInMetadata, msOWSIpInList, msOWSIpParse)
 to mapows.c, to check whether a particular IP is disabled or not.
@@ -270,7 +266,7 @@ The msOWSIpDisabled function is invoked from msOWSRequestIsEnabled and msOWSRequ
 to prevent from adding the disabled layer to the enabled_layers list.</p>
 <p>msOWSIpParse will parse the sting representation and the subnet into byte arrays. To test whether
 the IPs match, we make sure the following condition is true for each byte position</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">ip1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="p">(</span><span class="n">ip2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">ip1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="p">(</span><span class="n">ip2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>The length of the byte array can be 4 (ipv4) or 16 (ipv6).</p>
@@ -281,7 +277,7 @@ When parsing ipv6 we write each segment of the IPs and masks as unsigned shorts,
 endian and little endian memory representations.</p>
 <p>The setting <strong>ms_enable_modes</strong> will be implemented in msCGISetMode directly
 (in mapservutil.c). The implementation will explicitly call the current msOWSParseRequestMetadata function:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>if (mapserv-&gt;Mode &gt;= 0)
+<div class="highlight-default"><div class="highlight"><pre><span></span>if (mapserv-&gt;Mode &gt;= 0)
 {
   int disabled = MS_FALSE;
   const char* enable_modes = msLookupHashTable(&amp;mapserv-&gt;map-&gt;web.metadata, &quot;ms_enable_modes&quot;);
@@ -377,14 +373,11 @@ Stephen Woodbridge +1</p>
 <div id="searchbox" style="display: none" role="search">
   <h3>クイック検索</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="検索" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="検索" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    モジュール、クラス、または関数名を入力してください
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -395,7 +388,7 @@ Stephen Woodbridge +1</p>
       &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>

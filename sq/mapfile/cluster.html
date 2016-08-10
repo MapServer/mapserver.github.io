@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="sq">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -46,8 +46,9 @@
       <a href="../index.html" title="Home">Home</a> |
       <a href="../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
       <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
-      <a href="../faq.html" title="FAQ">FAQ</a> |
-      <a href="../download.html" title="Download">Download </a>
+      <a href="../community/service_providers.html" title="Professional Service Providers">Service Providers</a> |      
+      <a href="../faq.html" title="Frequently Asked Questions">FAQ</a> |
+      <a href="../download.html" title="Download Source or Binaries">Download </a>
     </td>
   </tr>
   <tr>
@@ -118,11 +119,6 @@
             <a href="../../tr/mapfile/cluster.html"><img src="../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
           
         
-        
-          
-            <a href="../../uk/mapfile/cluster.html"><img src="../_static/flagicons/uk.png" alt="uk" title="uk" border="0" /></a>
-          
-        
 
     </td>
   </tr>
@@ -165,8 +161,9 @@
 <li><a class="reference internal" href="#supported-processing-options" id="id6">Supported Processing Options</a></li>
 <li><a class="reference internal" href="#mapfile-snippet" id="id7">Mapfile Snippet</a></li>
 <li><a class="reference internal" href="#feature-attributes" id="id8">Feature attributes</a></li>
-<li><a class="reference internal" href="#php-mapscript-usage" id="id9">PHP MapScript Usage</a></li>
-<li><a class="reference internal" href="#example-clustering-railway-stations" id="id10">Example: Clustering Railway Stations</a></li>
+<li><a class="reference internal" href="#handling-getfeatureinfo" id="id9">Handling GetFeatureInfo</a></li>
+<li><a class="reference internal" href="#php-mapscript-usage" id="id10">PHP MapScript Usage</a></li>
+<li><a class="reference internal" href="#example-clustering-railway-stations" id="id11">Example: Clustering Railway Stations</a></li>
 </ul>
 </li>
 </ul>
@@ -177,7 +174,7 @@
 features from a point layer into single (aggregated) features based on
 their relative positions.
 Only <em>POINT</em> layers are supported.
-This feature was added through <a class="reference internal" href="../development/rfc/ms-rfc-69.html#rfc69"><span>MS RFC 69: Support for clustering of features in point layers</span></a>.</p>
+This feature was added through <a class="reference internal" href="../development/rfc/ms-rfc-69.html#rfc69"><span class="std std-ref">MS RFC 69: Support for clustering of features in point layers</span></a>.</p>
 </div>
 <div class="section" id="supported-layer-types">
 <h2><a class="toc-backref" href="#table-of-contents">Supported Layer Types</a><a class="headerlink" href="#supported-layer-types" title="Permalink to this headline">¶</a></h2>
@@ -203,14 +200,14 @@ Using a buffer allows that the neighbouring shapes around the map
 are also considered during the cluster creation.</dd>
 </dl>
 <dl class="docutils" id="index-5">
-<dt><a class="reference internal" href="expressions.html#expressions"><span>GROUP</span></a> [string]</dt>
+<dt><a class="reference internal" href="expressions.html#expressions"><span class="std std-ref">GROUP</span></a> [string]</dt>
 <dd>This expression evaluates to a string and only the features that
 have the same group value are negotiated. This parameter can be
 omitted. The evaluated group value is available in the
 &#8216;Cluster_Group&#8217; feature attribute.</dd>
 </dl>
 <dl class="docutils" id="index-6">
-<dt><a class="reference internal" href="expressions.html#expressions"><span>FILTER</span></a> [string]</dt>
+<dt><a class="reference internal" href="expressions.html#expressions"><span class="std std-ref">FILTER</span></a> [string]</dt>
 <dd>We can define the FILTER expression filter some of the features
 from the final output.  This expression evaluates to a boolean
 value and if this value is false the corresponding shape is
@@ -225,9 +222,27 @@ region.</dd>
 <h2><a class="toc-backref" href="#table-of-contents">Supported Processing Options</a><a class="headerlink" href="#supported-processing-options" title="Permalink to this headline">¶</a></h2>
 <p>The following processing options can be used with the cluster layers:</p>
 <dl class="docutils" id="index-7">
-<dt>CLUSTER_GET_ALL_SHAPES</dt>
+<dt>CLUSTER_GET_ALL_SHAPES=ON</dt>
 <dd>Return all shapes contained by a cluster instead of a single shape.
-This setting affects both the drawing and the query processing.</dd>
+This setting affects both the drawing and the query processing (especially
+useful for GetFeatureInfo requests).  Example
+usage: <cite>PROCESSING &#8220;CLUSTER_GET_ALL_SHAPES=ON&#8221;</cite></dd>
+</dl>
+<dl class="docutils" id="index-8">
+<dt>CLUSTER_KEEP_LOCATIONS=ON</dt>
+<dd>Set whether the location of the cluster shape should be preserved (setting
+this will show all points in the cluster). Example
+usage: <cite>PROCESSING &#8220;CLUSTER_KEEP_LOCATIONS=ON&#8221;</cite></dd>
+</dl>
+<dl class="docutils" id="index-9">
+<dt>CLUSTER_USE_MAP_UNITS=ON</dt>
+<dd>Provide scale independent clustering (maxdistance and the buffer parameters are
+specified in map units). Example usage: <cite>PROCESSING &#8220;CLUSTER_USE_MAP_UNITS=ON&#8221;</cite></dd>
+</dl>
+<dl class="docutils" id="index-10">
+<dt>ITEMS</dt>
+<dd>Specify the feature attributes in the cluster to expose during a query, separated
+by a comma. Example usage: <cite>PROCESSING &#8220;ITEMS=attribute_x,attribute_y,attribute_z&#8221;</cite></dd>
 </dl>
 </div>
 <div class="section" id="mapfile-snippet">
@@ -255,20 +270,28 @@ This setting affects both the drawing and the query processing.</dd>
 </div>
 </div>
 <div class="section" id="feature-attributes">
-<span id="index-8"></span><h2><a class="toc-backref" href="#table-of-contents">Feature attributes</a><a class="headerlink" href="#feature-attributes" title="Permalink to this headline">¶</a></h2>
+<span id="index-11"></span><h2><a class="toc-backref" href="#table-of-contents">Feature attributes</a><a class="headerlink" href="#feature-attributes" title="Permalink to this headline">¶</a></h2>
 <p>The clustered layer itself provides the following aggregated attributes:</p>
-<span class="target" id="index-9"></span><ol class="arabic simple" id="index-10">
+<span class="target" id="index-12"></span><ol class="arabic simple" id="index-13">
 <li>Cluster_FeatureCount - count of the features in the clustered shape</li>
 <li>Cluster_Group - The group value of the cluster (to which the group
 expression is evaluated)</li>
 </ol>
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are using MapServer version 6.x these attributes contain a &#8221;:&#8221;
+in their names instead, such as <code class="docutils literal"><span class="pre">Cluster:FeatureCount</span></code> &amp; <code class="docutils literal"><span class="pre">Cluster:Group</span></code>.
+The &#8220;_&#8221; was changed in MapServer 7.</p>
+</div>
+</div></blockquote>
 <p>These attributes (in addition to the attributes provided by the
 original data source) can be used to configure the labels of the
 features and can also be used in expressions.  The ITEMS processing
 option can be used to specify a subset of the attributes from the
 original layer in the query operations according to the user&#8217;s
 preference.</p>
-<p id="index-11">We can use simple aggregate functions (Min, Max, Sum, Count) to
+<p id="index-14">We can use simple aggregate functions (Min, Max, Sum, Count) to
 specify how the clustered attribute should be calculated from the
 original attributes. The aggregate function should be specified as a
 prefix separated by &#8216;:&#8217; in the attribute definition, like:
@@ -278,9 +301,44 @@ be non-deterministic if the cluster contains multiple shapes with
 different values. The Count aggregate function in fact provides the
 same value as Cluster_FeatureCount.</p>
 </div>
+<div class="section" id="handling-getfeatureinfo">
+<h2><a class="toc-backref" href="#table-of-contents">Handling GetFeatureInfo</a><a class="headerlink" href="#handling-getfeatureinfo" title="Permalink to this headline">¶</a></h2>
+<p>If you want to allow WMS GetFeatureInfo on all features inside a cluster,
+you must 1) set the &#8220;wms_include_items&#8221; metadata as usual, and 2) set the following
+PROCESSING parameters in the layer:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;CLUSTER_GET_ALL_SHAPES=ON&quot;</span>
+<span class="n">PROCESSING</span> <span class="s2">&quot;ITEMS=attribute_x,attribute_y,attribute_z&quot;</span>
+</pre></div>
+</div>
+<p>So your layer might look like the following:</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;my-cluster&quot;</span>
+  <span class="k">TYPE</span> <span class="nb">POINT</span>
+  <span class="k">METADATA</span>
+    <span class="s">&quot;wms_title&quot;</span>    <span class="s">&quot;myttitle&quot;</span>
+    <span class="s">&quot;wms_include_items&quot;</span> <span class="s">&quot;all&quot;</span>
+  <span class="k">END</span>
+  <span class="p">...</span>
+  <span class="k">CLUSTER</span>
+     <span class="p">...</span>
+  <span class="k">END</span>
+  <span class="k">LABELITEM</span> <span class="s">&quot;Cluster_FeatureCount&quot;</span>
+  <span class="k">CLASS</span>
+    <span class="p">...</span>
+    <span class="k">LABEL</span>
+     <span class="p">...</span>
+    <span class="k">END</span>
+  <span class="k">END</span>
+  <span class="p">...</span>
+  <span class="k">PROCESSING</span> <span class="s">&quot;CLUSTER_GET_ALL_SHAPES=ON&quot;</span>
+  <span class="k">PROCESSING</span> <span class="s">&quot;ITEMS=name,description&quot;</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="php-mapscript-usage">
 <h2><a class="toc-backref" href="#table-of-contents">PHP MapScript Usage</a><a class="headerlink" href="#php-mapscript-usage" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference internal" href="../mapscript/php/phpmapscript.html#phpclusterobj"><span>CLUSTER object</span></a> is exposed through PHP
+<p>The <a class="reference internal" href="../mapscript/php/phpmapscript.html#phpclusterobj"><span class="std std-ref">CLUSTER object</span></a> is exposed through PHP
 MapScript.  An example follows:</p>
 <div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">$map = ms_newMapobj(&quot;/var/www/vhosts/mysite/httpdocs/test.map&quot;);</span>
 <span class="x">$layer1=$map-&gt;getLayerByName(&quot;test1&quot;);</span>
@@ -414,6 +472,7 @@ we use the <em>TEXT</em> parameter to label the station.</p>
 <li><a class="reference internal" href="#supported-processing-options">Supported Processing Options</a></li>
 <li><a class="reference internal" href="#mapfile-snippet">Mapfile Snippet</a></li>
 <li><a class="reference internal" href="#feature-attributes">Feature attributes</a></li>
+<li><a class="reference internal" href="#handling-getfeatureinfo">Handling GetFeatureInfo</a></li>
 <li><a class="reference internal" href="#php-mapscript-usage">PHP MapScript Usage</a></li>
 <li><a class="reference internal" href="#example-clustering-railway-stations">Example: Clustering Railway Stations</a><ul>
 <li><a class="reference internal" href="#mapfile-layer">Mapfile Layer</a></li>
@@ -427,14 +486,11 @@ we use the <em>TEXT</em> parameter to label the station.</p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -445,7 +501,7 @@ we use the <em>TEXT</em> parameter to label the station.</p>
       &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>

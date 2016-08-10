@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -47,8 +47,9 @@
       <a href="../../index.html" title="Home">Home</a> |
       <a href="../../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
       <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
-      <a href="../../faq.html" title="FAQ">FAQ</a> |
-      <a href="../../download.html" title="Download">Download </a>
+      <a href="../../community/service_providers.html" title="Professional Service Providers">Service Providers</a> |      
+      <a href="../../faq.html" title="Frequently Asked Questions">FAQ</a> |
+      <a href="../../download.html" title="Download Source or Binaries">Download </a>
     </td>
   </tr>
   <tr>
@@ -117,11 +118,6 @@
         
           
             <a href="../../../tr/development/rfc/ms-rfc-64.html"><img src="../../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
-          
-        
-        
-          
-            <a href="../../../uk/development/rfc/ms-rfc-64.html"><img src="../../_static/flagicons/uk.png" alt="uk" title="uk" border="0" /></a>
           
         
 
@@ -217,31 +213,31 @@ works through tokens (via a custom version of yylex() defined in mapparser.y) as
 substitution and tokenize steps currently necessary and opens up possibilities for supporting more complex objects in expressions.
 Basically we&#8217;d hang a list of tokens off an expressionObj, populate it in msLayerWhichItems() and leverage the tokens as needed
 in the parser. The following new structs and enums are added to mapserver.h:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>enum MS_TOKEN_LOGICAL_ENUM { MS_TOKEN_LOGICAL_AND=100, MS_TOKEN_LOGICAL_OR, MS_TOKEN_LOGICAL_NOT };
-enum MS_TOKEN_LITERAL_ENUM { MS_TOKEN_LITERAL_NUMBER=110, MS_TOKEN_LITERAL_STRING, MS_TOKEN_LITERAL_TIME, MS_TOKEN_LITERAL_SHAPE };
-enum MS_TOKEN_COMPARISON_ENUM {
-  MS_TOKEN_COMPARISON_EQ=120, MS_TOKEN_COMPARISON_NE, MS_TOKEN_COMPARISON_GT, MS_TOKEN_COMPARISON_LT, MS_TOKEN_COMPARISON_LE, MS_TOKEN_COMPARISON_GE, MS_TOKEN_COMPARISON_IEQ,
-  MS_TOKEN_COMPARISON_RE, MS_TOKEN_COMPARISON_IRE,
-  MS_TOKEN_COMPARISON_IN, MS_TOKEN_COMPARISON_LIKE,
-  MS_TOKEN_COMPARISON_INTERSECTS, MS_TOKEN_COMPARISON_DISJOINT, MS_TOKEN_COMPARISON_TOUCHES, MS_TOKEN_COMPARISON_OVERLAPS, MS_TOKEN_COMPARISON_CROSSES, MS_TOKEN_COMPARISON_WITHIN, MS_TOKEN_COMPARISON_CONTAINS,
-  MS_TOKEN_COMPARISON_BEYOND, MS_TOKEN_COMPARISON_DWITHIN
-};
-enum MS_TOKEN_FUNCTION_ENUM { MS_TOKEN_FUNCTION_LENGTH=140, MS_TOKEN_FUNCTION_TOSTRING, MS_TOKEN_FUNCTION_COMMIFY, MS_TOKEN_FUNCTION_AREA, MS_TOKEN_FUNCTION_ROUND, MS_TOKEN_FUNCTION_FROMTEXT };
-enum MS_TOKEN_BINDING_ENUM { MS_TOKEN_BINDING_DOUBLE=150, MS_TOKEN_BINDING_INTEGER, MS_TOKEN_BINDING_STRING, MS_TOKEN_BINDING_TIME, MS_TOKEN_BINDING_SHAPE };
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">enum</span> <span class="n">MS_TOKEN_LOGICAL_ENUM</span> <span class="p">{</span> <span class="n">MS_TOKEN_LOGICAL_AND</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">MS_TOKEN_LOGICAL_OR</span><span class="p">,</span> <span class="n">MS_TOKEN_LOGICAL_NOT</span> <span class="p">};</span>
+<span class="n">enum</span> <span class="n">MS_TOKEN_LITERAL_ENUM</span> <span class="p">{</span> <span class="n">MS_TOKEN_LITERAL_NUMBER</span><span class="o">=</span><span class="mi">110</span><span class="p">,</span> <span class="n">MS_TOKEN_LITERAL_STRING</span><span class="p">,</span> <span class="n">MS_TOKEN_LITERAL_TIME</span><span class="p">,</span> <span class="n">MS_TOKEN_LITERAL_SHAPE</span> <span class="p">};</span>
+<span class="n">enum</span> <span class="n">MS_TOKEN_COMPARISON_ENUM</span> <span class="p">{</span>
+  <span class="n">MS_TOKEN_COMPARISON_EQ</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_NE</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_GT</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_LT</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_LE</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_GE</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_IEQ</span><span class="p">,</span>
+  <span class="n">MS_TOKEN_COMPARISON_RE</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_IRE</span><span class="p">,</span>
+  <span class="n">MS_TOKEN_COMPARISON_IN</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_LIKE</span><span class="p">,</span>
+  <span class="n">MS_TOKEN_COMPARISON_INTERSECTS</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_DISJOINT</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_TOUCHES</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_OVERLAPS</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_CROSSES</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_WITHIN</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_CONTAINS</span><span class="p">,</span>
+  <span class="n">MS_TOKEN_COMPARISON_BEYOND</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_DWITHIN</span>
+<span class="p">};</span>
+<span class="n">enum</span> <span class="n">MS_TOKEN_FUNCTION_ENUM</span> <span class="p">{</span> <span class="n">MS_TOKEN_FUNCTION_LENGTH</span><span class="o">=</span><span class="mi">140</span><span class="p">,</span> <span class="n">MS_TOKEN_FUNCTION_TOSTRING</span><span class="p">,</span> <span class="n">MS_TOKEN_FUNCTION_COMMIFY</span><span class="p">,</span> <span class="n">MS_TOKEN_FUNCTION_AREA</span><span class="p">,</span> <span class="n">MS_TOKEN_FUNCTION_ROUND</span><span class="p">,</span> <span class="n">MS_TOKEN_FUNCTION_FROMTEXT</span> <span class="p">};</span>
+<span class="n">enum</span> <span class="n">MS_TOKEN_BINDING_ENUM</span> <span class="p">{</span> <span class="n">MS_TOKEN_BINDING_DOUBLE</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">MS_TOKEN_BINDING_INTEGER</span><span class="p">,</span> <span class="n">MS_TOKEN_BINDING_STRING</span><span class="p">,</span> <span class="n">MS_TOKEN_BINDING_TIME</span><span class="p">,</span> <span class="n">MS_TOKEN_BINDING_SHAPE</span> <span class="p">};</span>
 
-typedef union {
-  double dblval;
-  int intval;
-  char *strval;
-  struct tm tmval;
-  shapeObj *shpval;
-  attributeBindingObj bindval;
-} tokenValueObj;
+<span class="n">typedef</span> <span class="n">union</span> <span class="p">{</span>
+  <span class="n">double</span> <span class="n">dblval</span><span class="p">;</span>
+  <span class="nb">int</span> <span class="n">intval</span><span class="p">;</span>
+  <span class="n">char</span> <span class="o">*</span><span class="n">strval</span><span class="p">;</span>
+  <span class="n">struct</span> <span class="n">tm</span> <span class="n">tmval</span><span class="p">;</span>
+  <span class="n">shapeObj</span> <span class="o">*</span><span class="n">shpval</span><span class="p">;</span>
+  <span class="n">attributeBindingObj</span> <span class="n">bindval</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">tokenValueObj</span><span class="p">;</span>
 
-typedef struct {
-  int token;
-  tokenValueObj tokenval;
-} tokenObj;
+<span class="n">typedef</span> <span class="n">struct</span> <span class="p">{</span>
+  <span class="nb">int</span> <span class="n">token</span><span class="p">;</span>
+  <span class="n">tokenValueObj</span> <span class="n">tokenval</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">tokenObj</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>Some of these definitions hint at other features that will be detailed later. When we convert an expression string into a series of tokens
@@ -255,11 +251,11 @@ to rely on the flex-generated lexer so, in theory, it should be easier to implem
 <p>The mapserver.h definitions above allow for using shapeObj&#8217;s within the Yacc grammar (we also define a shapeObj as a new base token type
 within mapparser.y). There are two types of shape-related tokens: 1) a shape binding, that is, a reference to the geometry being evaluated and
 2) shape literals, shapes described as WKT within the expression string. For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>In the expression:
-  EXPRESSION (fromText(&#39;POINT(500000 5000000)&#39;) Intersects [shape])
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="n">the</span> <span class="n">expression</span><span class="p">:</span>
+  <span class="n">EXPRESSION</span> <span class="p">(</span><span class="n">fromText</span><span class="p">(</span><span class="s1">&#39;POINT(500000 5000000)&#39;</span><span class="p">)</span> <span class="n">Intersects</span> <span class="p">[</span><span class="n">shape</span><span class="p">])</span>
 
-  1) fromText(&#39;POINT(500000 5000000)&#39;) defines a shape literal (the WKT to shapeObj conversion is done only once)
-  2) [shape] is a shape binding
+  <span class="mi">1</span><span class="p">)</span> <span class="n">fromText</span><span class="p">(</span><span class="s1">&#39;POINT(500000 5000000)&#39;</span><span class="p">)</span> <span class="n">defines</span> <span class="n">a</span> <span class="n">shape</span> <span class="n">literal</span> <span class="p">(</span><span class="n">the</span> <span class="n">WKT</span> <span class="n">to</span> <span class="n">shapeObj</span> <span class="n">conversion</span> <span class="ow">is</span> <span class="n">done</span> <span class="n">only</span> <span class="n">once</span><span class="p">)</span>
+  <span class="mi">2</span><span class="p">)</span> <span class="p">[</span><span class="n">shape</span><span class="p">]</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">shape</span> <span class="n">binding</span>
 </pre></div>
 </div>
 <p>We can use these tokens in the grammar to implement all of the MapServer supported (via GEOS) logical operators. Note that in the above
@@ -267,7 +263,7 @@ example fromText() appears as a function operating on a string. This is handled 
 want to do this once. So we create a shape literal based on the enclosed WKT string at this time.</p>
 <p><strong>Extending the grammar to support spatial functions</strong></p>
 <p>By supporting the use of more complex objects we can support functions on those objects. We could write:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">EXPRESSION</span> <span class="p">(</span><span class="n">area</span><span class="p">([</span><span class="n">shape</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">EXPRESSION</span> <span class="p">(</span><span class="n">area</span><span class="p">([</span><span class="n">shape</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>or rely on even more of the GEOS operators. (Note: only the area function is present in the sandbox.) To do this we need to somehow store
@@ -280,28 +276,28 @@ parser to produce a true or false result, but certainly aren&#8217;t limited to 
 Two places are working in the sandbox and are detailed below.</p>
 <p>Class <strong>TEXT</strong> Parameter</p>
 <p>Currently you can write:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>CLASS
-  ...
-  TEXT ([area] acres)
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CLASS</span>
+  <span class="o">...</span>
+  <span class="n">TEXT</span> <span class="p">([</span><span class="n">area</span><span class="p">]</span> <span class="n">acres</span><span class="p">)</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>It looks as if the TEXT value is an expression (and it is stored as such) but it&#8217;s not evaluated as one. It would be very useful to treat this as
 a true expression. This would open up a world of formatting options for drivers that don&#8217;t support it otherwise (e.g. shapefiles). Ticket
 <cite>2950 &lt;https://github.com/mapserver/mapserver/issues/2950&gt;</cite> is an example where this would come in handy. Within the sandbox I&#8217;ve added
 toString, round and commify functions so that you can write:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">TEXT</span> <span class="p">(</span><span class="n">commify</span><span class="p">(</span><span class="n">toString</span><span class="p">([</span><span class="n">area</span><span class="p">]</span><span class="o">*</span><span class="mf">0.000247105381</span><span class="p">,</span><span class="s2">&quot;</span><span class="si">%.2f</span><span class="s2">&quot;</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39; ac&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">TEXT</span> <span class="p">(</span><span class="n">commify</span><span class="p">(</span><span class="n">toString</span><span class="p">([</span><span class="n">area</span><span class="p">]</span><span class="o">*</span><span class="mf">0.000247105381</span><span class="p">,</span><span class="s2">&quot;</span><span class="si">%.2f</span><span class="s2">&quot;</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39; ac&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Which converts area from sq. meters to acres, truncates the result to two decimal places adds commas (213234.123455 =&gt; 213,234.12) for
 crowd pleasing display. To add this support, in addition to grammar changes, we add these declarations to mapserver.h:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>enum MS_PARSE_RESULT_TYPE_ENUM { MS_PARSE_RESULT_BOOLEAN, MS_PARSE_RESULT_STRING, MS_PARSE_RESULT_SHAPE };
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">enum</span> <span class="n">MS_PARSE_RESULT_TYPE_ENUM</span> <span class="p">{</span> <span class="n">MS_PARSE_RESULT_BOOLEAN</span><span class="p">,</span> <span class="n">MS_PARSE_RESULT_STRING</span><span class="p">,</span> <span class="n">MS_PARSE_RESULT_SHAPE</span> <span class="p">};</span>
 
-typedef union {
-  int intval;
-  char *strval;
-  shapeObj *shpval;
-} parseResultObj;
+<span class="n">typedef</span> <span class="n">union</span> <span class="p">{</span>
+  <span class="nb">int</span> <span class="n">intval</span><span class="p">;</span>
+  <span class="n">char</span> <span class="o">*</span><span class="n">strval</span><span class="p">;</span>
+  <span class="n">shapeObj</span> <span class="o">*</span><span class="n">shpval</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">parseResultObj</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>Then in the grammar we set a parse result type and set the result accordingly. One side effect is that we have to define a standard way to convert
@@ -309,10 +305,10 @@ numbers to strings when in the string context and simply using &#8220;%g&#8221; 
 <p>Style <strong>GEOMTRANSFORM</strong></p>
 <p>Within the sandbox I&#8217;ve implemented GEOMTRANSFORMs as expressions as opposed to the original implementation. The parser has also been
 extended to support the GEOS buffer operator. So you can write:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>STYLE
-  GEOMTRANSFORM (buffer([shape], -3))
-  ...
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">STYLE</span>
+  <span class="n">GEOMTRANSFORM</span> <span class="p">(</span><span class="n">buffer</span><span class="p">([</span><span class="n">shape</span><span class="p">],</span> <span class="o">-</span><span class="mi">3</span><span class="p">))</span>
+  <span class="o">...</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>This does executes a buffer on the geometry before rendering (see test.buffer.png attachment). Because the GEOMTRANSFORM processing occurs
@@ -429,14 +425,11 @@ developing a comprehensive set of test cases.</p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Recherche rapide</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Saisissez un mot clef ou un nom de module, classe ou fonction.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -447,7 +440,7 @@ developing a comprehensive set of test cases.</p>
       &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>

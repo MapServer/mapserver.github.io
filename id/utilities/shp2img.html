@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="id">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -47,8 +47,9 @@
       <a href="../index.html" title="Home">Home</a> |
       <a href="../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
       <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
-      <a href="../faq.html" title="FAQ">FAQ</a> |
-      <a href="../download.html" title="Download">Download </a>
+      <a href="../community/service_providers.html" title="Professional Service Providers">Service Providers</a> |      
+      <a href="../faq.html" title="Frequently Asked Questions">FAQ</a> |
+      <a href="../download.html" title="Download Source or Binaries">Download </a>
     </td>
   </tr>
   <tr>
@@ -119,11 +120,6 @@
             <a href="../../tr/utilities/shp2img.html"><img src="../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
           
         
-        
-          
-            <a href="../../uk/utilities/shp2img.html"><img src="../_static/flagicons/uk.png" alt="uk" title="uk" border="0" /></a>
-          
-        
 
     </td>
   </tr>
@@ -155,39 +151,68 @@
           <div class="body" role="main">
             
   <div class="section" id="shp2img">
-<span id="index-0"></span><span id="id1"></span><h1>shp2img<a class="headerlink" href="#shp2img" title="Link permanen untuk headline ini">¶</a></h1>
+<span id="index-0"></span><span id="id1"></span><h1><a class="toc-backref" href="#table-of-contents">shp2img</a><a class="headerlink" href="#shp2img" title="Link permanen untuk headline ini">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Jeff McKenna</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">jmckenna at gatewaygeomatics.com</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2016-03-11</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#shp2img" id="id2">shp2img</a><ul>
+<li><a class="reference internal" href="#purpose" id="id3">Purpose</a></li>
+<li><a class="reference internal" href="#syntax" id="id4">Syntax</a><ul>
+<li><a class="reference internal" href="#example-1-generate-a-map-image" id="id5">Example #1 Generate a Map Image</a></li>
+<li><a class="reference internal" href="#example-2-generate-a-map-image-with-draw-speeds" id="id6">Example #2 Generate a Map Image with Draw Speeds</a></li>
+<li><a class="reference internal" href="#example-3-generate-a-map-image-with-debug-information-for-all-layers" id="id7">Example #3 Generate a Map Image with Debug Information for all Layers</a></li>
+<li><a class="reference internal" href="#example-4-generate-a-map-image-for-a-specific-layer" id="id8">Example #4 Generate a Map Image for a Specific Layer</a></li>
+<li><a class="reference internal" href="#example-5-generate-a-map-image-for-specific-multiple-layers" id="id9">Example #5 Generate a Map Image for Specific (Multiple) Layers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
 <div class="section" id="purpose">
-<h2>Purpose<a class="headerlink" href="#purpose" title="Link permanen untuk headline ini">¶</a></h2>
-<p>Creates a map image from a mapfile. Output is either PNG or GIF depending
-on what version of the GD library is used.  This is a useful utility to test your
+<h2><a class="toc-backref" href="#table-of-contents">Purpose</a><a class="headerlink" href="#purpose" title="Link permanen untuk headline ini">¶</a></h2>
+<p>Creates a map image from a mapfile. Output is by default PNG, but you can specify
+other output formats defined in the mapfile.  This is a very useful utility to test your
 mapfile. You can simply provide the path to your mapfile and the name of an output
 image, and an image should be returned. If an image cannot be created an error will
-be displayed at the command line that should refer to a line number in the mapfile.</p>
+be displayed at the commandline that should refer to a line number in the mapfile.</p>
 </div>
 <div class="section" id="syntax">
-<h2>Syntax<a class="headerlink" href="#syntax" title="Link permanen untuk headline ini">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span>shp2img -m mapfile [-o image] [-e minx miny maxx maxy] [-s sizex sizey]
-       [-l &quot;layer1 [layers2...]&quot;] [-i format]
-       [-all_debug n] [-map_debug n] [-layer_debug n] [-p n] [-c n] [-d
-      layername datavalue]
--m mapfile: Map file to operate on - required
--i format: Override the IMAGETYPE value to pick output format
--o image: output filename (stdout if not provided)
--e minx miny maxx maxy: extents to render
--s sizex sizey: output image size
--l layers: layers to enable - make sure they are quoted and space separated
-   if more than one listed
--all_debug n: Set debug level for map and all layers
--map_debug n: Set map debug level
--layer_debug layer_name n: Set layer debug level
--c n: draw map n number of times
--p n: pause for n seconds after reading the map
--d layername datavalue: change DATA value for layer
+<h2><a class="toc-backref" href="#table-of-contents">Syntax</a><a class="headerlink" href="#syntax" title="Link permanen untuk headline ini">¶</a></h2>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">shp2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">mapfile</span> <span class="p">[</span><span class="o">-</span><span class="n">o</span> <span class="n">image</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">e</span> <span class="n">minx</span> <span class="n">miny</span> <span class="n">maxx</span> <span class="n">maxy</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">s</span> <span class="n">sizex</span> <span class="n">sizey</span><span class="p">]</span>
+       <span class="p">[</span><span class="o">-</span><span class="n">l</span> <span class="s2">&quot;layer1 [layers2...]&quot;</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="nb">format</span><span class="p">]</span>
+       <span class="p">[</span><span class="o">-</span><span class="n">all_debug</span> <span class="n">n</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">map_debug</span> <span class="n">n</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">layer_debug</span> <span class="n">n</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span> <span class="n">n</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span> <span class="n">n</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span>
+      <span class="n">layername</span> <span class="n">datavalue</span><span class="p">]</span>
+<span class="o">-</span><span class="n">m</span> <span class="n">mapfile</span><span class="p">:</span> <span class="n">Map</span> <span class="n">file</span> <span class="n">to</span> <span class="n">operate</span> <span class="n">on</span> <span class="o">-</span> <span class="n">required</span>
+<span class="o">-</span><span class="n">i</span> <span class="nb">format</span><span class="p">:</span> <span class="n">Override</span> <span class="n">the</span> <span class="n">IMAGETYPE</span> <span class="n">value</span> <span class="n">to</span> <span class="n">pick</span> <span class="n">output</span> <span class="nb">format</span>
+<span class="o">-</span><span class="n">o</span> <span class="n">image</span><span class="p">:</span> <span class="n">output</span> <span class="n">filename</span> <span class="p">(</span><span class="n">stdout</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">provided</span><span class="p">)</span>
+<span class="o">-</span><span class="n">e</span> <span class="n">minx</span> <span class="n">miny</span> <span class="n">maxx</span> <span class="n">maxy</span><span class="p">:</span> <span class="n">extents</span> <span class="n">to</span> <span class="n">render</span>
+<span class="o">-</span><span class="n">s</span> <span class="n">sizex</span> <span class="n">sizey</span><span class="p">:</span> <span class="n">output</span> <span class="n">image</span> <span class="n">size</span>
+<span class="o">-</span><span class="n">l</span> <span class="n">layers</span><span class="p">:</span> <span class="n">layers</span> <span class="n">to</span> <span class="n">enable</span> <span class="o">-</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">they</span> <span class="n">are</span> <span class="n">quoted</span> <span class="ow">and</span> <span class="n">space</span> <span class="n">separated</span>
+   <span class="k">if</span> <span class="n">more</span> <span class="n">than</span> <span class="n">one</span> <span class="n">listed</span>
+<span class="o">-</span><span class="n">all_debug</span> <span class="n">n</span><span class="p">:</span> <span class="n">Set</span> <span class="n">debug</span> <span class="n">level</span> <span class="k">for</span> <span class="nb">map</span> <span class="ow">and</span> <span class="nb">all</span> <span class="n">layers</span>
+<span class="o">-</span><span class="n">map_debug</span> <span class="n">n</span><span class="p">:</span> <span class="n">Set</span> <span class="nb">map</span> <span class="n">debug</span> <span class="n">level</span>
+<span class="o">-</span><span class="n">layer_debug</span> <span class="n">layer_name</span> <span class="n">n</span><span class="p">:</span> <span class="n">Set</span> <span class="n">layer</span> <span class="n">debug</span> <span class="n">level</span>
+<span class="o">-</span><span class="n">c</span> <span class="n">n</span><span class="p">:</span> <span class="n">draw</span> <span class="nb">map</span> <span class="n">n</span> <span class="n">number</span> <span class="n">of</span> <span class="n">times</span>
+<span class="o">-</span><span class="n">p</span> <span class="n">n</span><span class="p">:</span> <span class="n">pause</span> <span class="k">for</span> <span class="n">n</span> <span class="n">seconds</span> <span class="n">after</span> <span class="n">reading</span> <span class="n">the</span> <span class="nb">map</span>
+<span class="o">-</span><span class="n">d</span> <span class="n">layername</span> <span class="n">datavalue</span><span class="p">:</span> <span class="n">change</span> <span class="n">DATA</span> <span class="n">value</span> <span class="k">for</span> <span class="n">layer</span>
 </pre></div>
 </div>
-<div class="section" id="example-1">
-<h3>Example #1<a class="headerlink" href="#example-1" title="Link permanen untuk headline ini">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span></span>shp2img -m vector_blank.map -o test.png
+<div class="section" id="example-1-generate-a-map-image">
+<h3><a class="toc-backref" href="#table-of-contents">Example #1 Generate a Map Image</a><a class="headerlink" href="#example-1-generate-a-map-image" title="Link permanen untuk headline ini">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">shp2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">vector_blank</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">test</span><span class="o">.</span><span class="n">png</span>
 </pre></div>
 </div>
 <dl class="docutils">
@@ -195,31 +220,34 @@ be displayed at the command line that should refer to a line number in the mapfi
 <dd>A file named &#8216;test.png&#8217; is created, that you can drag into your browser to view.</dd>
 </dl>
 </div>
-<div class="section" id="example-2">
-<h3>Example #2<a class="headerlink" href="#example-2" title="Link permanen untuk headline ini">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span></span>shp2img -m gmap75.map -o test2.png -map_debug 3
+<div class="section" id="example-2-generate-a-map-image-with-draw-speeds">
+<h3><a class="toc-backref" href="#table-of-contents">Example #2 Generate a Map Image with Draw Speeds</a><a class="headerlink" href="#example-2-generate-a-map-image-with-draw-speeds" title="Link permanen untuk headline ini">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">shp2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">gmap75</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">test2</span><span class="o">.</span><span class="n">png</span> <span class="o">-</span><span class="n">map_debug</span> <span class="mi">3</span>
 </pre></div>
 </div>
 <dl class="docutils">
 <dt>Result</dt>
 <dd>A file named &#8216;test2.png&#8217; is created, and layer draw speeds are returned such as:</dd>
 </dl>
-<div class="highlight-python"><div class="highlight"><pre><span></span>msDrawRasterLayerLow(bathymetry): entering
-msDrawMap(): Layer 0 (bathymetry), 0.601s
-msDrawMap(): Layer 3 (drain_fn), 0.200s
-msDrawMap(): Layer 4 (drainage), 0.300s
-msDrawMap(): Layer 5 (prov_bound), 0.191s
-msDrawMap(): Layer 6 (fedlimit), 0.030s
-msDrawMap(): Layer 9 (popplace), 0.080s
-msDrawMap(): Drawing Label Cache, 0.300s
-msDrawMap() total time: 1.702s
-msSaveImage() total time: 0.040s
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">msDrawMap</span><span class="p">():</span> <span class="n">rendering</span> <span class="n">using</span> <span class="n">outputformat</span> <span class="n">named</span> <span class="n">png</span> <span class="p">(</span><span class="n">AGG</span><span class="o">/</span><span class="n">PNG</span><span class="p">)</span><span class="o">.</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">WMS</span><span class="o">/</span><span class="n">WFS</span> <span class="nb">set</span><span class="o">-</span><span class="n">up</span> <span class="ow">and</span> <span class="n">query</span><span class="p">,</span> <span class="mf">0.000</span><span class="n">s</span>
+<span class="n">msDrawRasterLayerLow</span><span class="p">(</span><span class="n">bathymetry</span><span class="p">):</span> <span class="n">entering</span><span class="o">.</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">0</span> <span class="p">(</span><span class="n">bathymetry</span><span class="p">),</span> <span class="mf">0.011</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">1</span> <span class="p">(</span><span class="n">land_fn</span><span class="p">),</span> <span class="mf">0.016</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">3</span> <span class="p">(</span><span class="n">drain_fn</span><span class="p">),</span> <span class="mf">0.006</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">4</span> <span class="p">(</span><span class="n">drainage</span><span class="p">),</span> <span class="mf">0.041</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">5</span> <span class="p">(</span><span class="n">prov_bound</span><span class="p">),</span> <span class="mf">0.025</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">6</span> <span class="p">(</span><span class="n">fedlimit</span><span class="p">),</span> <span class="mf">0.001</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">9</span> <span class="p">(</span><span class="n">popplace</span><span class="p">),</span> <span class="mf">0.007</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Drawing</span> <span class="n">Label</span> <span class="n">Cache</span><span class="p">,</span> <span class="mf">0.004</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">()</span> <span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.119</span><span class="n">s</span>
+<span class="n">msSaveImage</span><span class="p">(</span><span class="n">test2</span><span class="o">.</span><span class="n">png</span><span class="p">)</span> <span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.034</span><span class="n">s</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="example-3">
-<h3>Example #3<a class="headerlink" href="#example-3" title="Link permanen untuk headline ini">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span></span>shp2img -m gmap75.map -o test3.png -all_debug 3
+<div class="section" id="example-3-generate-a-map-image-with-debug-information-for-all-layers">
+<h3><a class="toc-backref" href="#table-of-contents">Example #3 Generate a Map Image with Debug Information for all Layers</a><a class="headerlink" href="#example-3-generate-a-map-image-with-debug-information-for-all-layers" title="Link permanen untuk headline ini">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">shp2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">gmap75</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">test3</span><span class="o">.</span><span class="n">png</span> <span class="o">-</span><span class="n">all_debug</span> <span class="mi">3</span>
 </pre></div>
 </div>
 <dl class="docutils">
@@ -227,29 +255,82 @@ msSaveImage() total time: 0.040s
 <dd>A file named &#8216;test3.png&#8217; is created, layer draw speeds are returned,
 and some warnings that index qix files are not found, such as:</dd>
 </dl>
-<div class="highlight-python"><div class="highlight"><pre><span></span>msLoadMap(): 0.671s
-msDrawRasterLayerLow(bathymetry): entering.
-msDrawGDAL(): src=72,417,3077,2308, dst=0,0,400,300
-msDrawGDAL(): red,green,blue,alpha bands = 1,0,0,0
-msDrawMap(): Layer 0 (bathymetry), 0.090s
-msSearchDiskTree(): Search returned no results. Unable to open spatial index
-for D:\ms4w\apps\gmap\htdocs/.\../data/drain_fn.qix. In most cases you can
-safely ignore this message, otherwise check file names and permissions.
-msDrawMap(): Layer 3 (drain_fn), 0.010s
-msDrawMap(): Layer 4 (drainage), 0.050s
-msSearchDiskTree(): Search returned no results. Unable to open spatial index
-for D:\ms4w\apps\gmap\htdocs/.\../data/province.qix. In most cases you can
-safely ignore this message, otherwise check file names and permissions.
-msDrawMap(): Layer 5 (prov_bound), 0.030s
-msSearchDiskTree(): Search returned no results. Unable to open spatial index
-for D:\ms4w\apps\gmap\htdocs/.\../data/fedlimit.qix. In most cases you can
-safely ignore this message, otherwise check file names and permissions.
-msDrawMap(): Layer 6 (fedlimit), 0.010s
-msDrawMap(): Layer 9 (popplace), 0.010s
-msDrawMap(): Drawing Label Cache, 0.201s
-msDrawMap() total time: 0.401s
-msSaveImage() total time: 0.010s
-shp2img total time: 1.082s
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">msLoadMap</span><span class="p">():</span> <span class="mf">0.002</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">rendering</span> <span class="n">using</span> <span class="n">outputformat</span> <span class="n">named</span> <span class="n">png</span> <span class="p">(</span><span class="n">AGG</span><span class="o">/</span><span class="n">PNG</span><span class="p">)</span><span class="o">.</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">WMS</span><span class="o">/</span><span class="n">WFS</span> <span class="nb">set</span><span class="o">-</span><span class="n">up</span> <span class="ow">and</span> <span class="n">query</span><span class="p">,</span> <span class="mf">0.000</span><span class="n">s</span>
+<span class="n">msDrawRasterLayerLow</span><span class="p">(</span><span class="n">bathymetry</span><span class="p">):</span> <span class="n">entering</span><span class="o">.</span>
+<span class="n">msDrawRasterLayerGDAL</span><span class="p">():</span> <span class="n">Entering</span> <span class="n">transform</span><span class="o">.</span>
+<span class="n">msDrawRasterLayerGDAL</span><span class="p">():</span> <span class="n">src</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span><span class="mi">418</span><span class="p">,</span><span class="mi">3077</span><span class="p">,</span><span class="mi">2308</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">400</span><span class="p">,</span><span class="mi">300</span>
+<span class="n">msDrawRasterLayerGDAL</span><span class="p">():</span> <span class="n">source</span> <span class="n">raster</span> <span class="n">PL</span> <span class="p">(</span><span class="mf">72.095</span><span class="p">,</span><span class="mf">417.533</span><span class="p">)</span> <span class="k">for</span> <span class="n">dst</span> <span class="n">PL</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span>
+<span class="n">msDrawRasterLayerGDAL</span><span class="p">():</span> <span class="n">red</span><span class="p">,</span><span class="n">green</span><span class="p">,</span><span class="n">blue</span><span class="p">,</span><span class="n">alpha</span> <span class="n">bands</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">0</span> <span class="p">(</span><span class="n">bathymetry</span><span class="p">),</span> <span class="mf">0.017</span><span class="n">s</span>
+<span class="n">msSearchDiskTree</span><span class="p">():</span> <span class="n">Search</span> <span class="n">returned</span> <span class="n">no</span> <span class="n">results</span><span class="o">.</span> <span class="n">Unable</span> <span class="n">to</span> <span class="nb">open</span> <span class="n">spatial</span> <span class="n">index</span> <span class="k">for</span> <span class="n">D</span><span class="p">:</span>\<span class="n">ms4w</span>\<span class="n">a</span>
+<span class="n">pps</span>\<span class="n">gmap</span>\<span class="n">htdocs</span><span class="o">/.</span>\<span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">land_fn</span><span class="o">.</span><span class="n">qix</span><span class="o">.</span> <span class="n">In</span> <span class="n">most</span> <span class="n">cases</span> <span class="n">you</span> <span class="n">can</span> <span class="n">safely</span> <span class="n">ignore</span> <span class="n">this</span> <span class="n">message</span><span class="p">,</span> <span class="n">o</span>
+<span class="n">therwise</span> <span class="n">check</span> <span class="n">file</span> <span class="n">names</span> <span class="ow">and</span> <span class="n">permissions</span><span class="o">.</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">1</span> <span class="p">(</span><span class="n">land_fn</span><span class="p">),</span> <span class="mf">0.020</span><span class="n">s</span>
+<span class="n">msSearchDiskTree</span><span class="p">():</span> <span class="n">Search</span> <span class="n">returned</span> <span class="n">no</span> <span class="n">results</span><span class="o">.</span> <span class="n">Unable</span> <span class="n">to</span> <span class="nb">open</span> <span class="n">spatial</span> <span class="n">index</span> <span class="k">for</span> <span class="n">D</span><span class="p">:</span>\<span class="n">ms4w</span>\<span class="n">a</span>
+<span class="n">pps</span>\<span class="n">gmap</span>\<span class="n">htdocs</span><span class="o">/.</span>\<span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">drain_fn</span><span class="o">.</span><span class="n">qix</span><span class="o">.</span> <span class="n">In</span> <span class="n">most</span> <span class="n">cases</span> <span class="n">you</span> <span class="n">can</span> <span class="n">safely</span> <span class="n">ignore</span> <span class="n">this</span> <span class="n">message</span><span class="p">,</span>
+<span class="n">otherwise</span> <span class="n">check</span> <span class="n">file</span> <span class="n">names</span> <span class="ow">and</span> <span class="n">permissions</span><span class="o">.</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">3</span> <span class="p">(</span><span class="n">drain_fn</span><span class="p">),</span> <span class="mf">0.009</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">4</span> <span class="p">(</span><span class="n">drainage</span><span class="p">),</span> <span class="mf">0.040</span><span class="n">s</span>
+<span class="n">msSearchDiskTree</span><span class="p">():</span> <span class="n">Search</span> <span class="n">returned</span> <span class="n">no</span> <span class="n">results</span><span class="o">.</span> <span class="n">Unable</span> <span class="n">to</span> <span class="nb">open</span> <span class="n">spatial</span> <span class="n">index</span> <span class="k">for</span> <span class="n">D</span><span class="p">:</span>\<span class="n">ms4w</span>\<span class="n">a</span>
+<span class="n">pps</span>\<span class="n">gmap</span>\<span class="n">htdocs</span><span class="o">/.</span>\<span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">province</span><span class="o">.</span><span class="n">qix</span><span class="o">.</span> <span class="n">In</span> <span class="n">most</span> <span class="n">cases</span> <span class="n">you</span> <span class="n">can</span> <span class="n">safely</span> <span class="n">ignore</span> <span class="n">this</span> <span class="n">message</span><span class="p">,</span>
+<span class="n">otherwise</span> <span class="n">check</span> <span class="n">file</span> <span class="n">names</span> <span class="ow">and</span> <span class="n">permissions</span><span class="o">.</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">5</span> <span class="p">(</span><span class="n">prov_bound</span><span class="p">),</span> <span class="mf">0.029</span><span class="n">s</span>
+<span class="n">msSearchDiskTree</span><span class="p">():</span> <span class="n">Search</span> <span class="n">returned</span> <span class="n">no</span> <span class="n">results</span><span class="o">.</span> <span class="n">Unable</span> <span class="n">to</span> <span class="nb">open</span> <span class="n">spatial</span> <span class="n">index</span> <span class="k">for</span> <span class="n">D</span><span class="p">:</span>\<span class="n">ms4w</span>\<span class="n">a</span>
+<span class="n">pps</span>\<span class="n">gmap</span>\<span class="n">htdocs</span><span class="o">/.</span>\<span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">fedlimit</span><span class="o">.</span><span class="n">qix</span><span class="o">.</span> <span class="n">In</span> <span class="n">most</span> <span class="n">cases</span> <span class="n">you</span> <span class="n">can</span> <span class="n">safely</span> <span class="n">ignore</span> <span class="n">this</span> <span class="n">message</span><span class="p">,</span>
+<span class="n">otherwise</span> <span class="n">check</span> <span class="n">file</span> <span class="n">names</span> <span class="ow">and</span> <span class="n">permissions</span><span class="o">.</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">6</span> <span class="p">(</span><span class="n">fedlimit</span><span class="p">),</span> <span class="mf">0.005</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">9</span> <span class="p">(</span><span class="n">popplace</span><span class="p">),</span> <span class="mf">0.007</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Drawing</span> <span class="n">Label</span> <span class="n">Cache</span><span class="p">,</span> <span class="mf">0.005</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">()</span> <span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.142</span><span class="n">s</span>
+<span class="n">msSaveImage</span><span class="p">(</span><span class="n">test3</span><span class="o">.</span><span class="n">png</span><span class="p">)</span> <span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.063</span><span class="n">s</span>
+<span class="n">shp2img</span> <span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.209</span><span class="n">s</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-4-generate-a-map-image-for-a-specific-layer">
+<h3><a class="toc-backref" href="#table-of-contents">Example #4 Generate a Map Image for a Specific Layer</a><a class="headerlink" href="#example-4-generate-a-map-image-for-a-specific-layer" title="Link permanen untuk headline ini">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">shp2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">gmap75</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">test4</span><span class="o">.</span><span class="n">png</span> <span class="o">-</span><span class="n">l</span> <span class="s2">&quot;bathymetry&quot;</span> <span class="o">-</span><span class="n">map_debug</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Result</dt>
+<dd>A file named &#8216;test4.png&#8217; is created, and layer draw speeds are returned for
+1 layer only, such as:</dd>
+</dl>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">msDrawMap</span><span class="p">():</span> <span class="n">rendering</span> <span class="n">using</span> <span class="n">outputformat</span> <span class="n">named</span> <span class="n">png</span> <span class="p">(</span><span class="n">AGG</span><span class="o">/</span><span class="n">PNG</span><span class="p">)</span><span class="o">.</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">WMS</span><span class="o">/</span><span class="n">WFS</span> <span class="nb">set</span><span class="o">-</span><span class="n">up</span> <span class="ow">and</span> <span class="n">query</span><span class="p">,</span> <span class="mf">0.000</span><span class="n">s</span>
+<span class="n">msDrawRasterLayerLow</span><span class="p">(</span><span class="n">bathymetry</span><span class="p">):</span> <span class="n">entering</span><span class="o">.</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">0</span> <span class="p">(</span><span class="n">bathymetry</span><span class="p">),</span> <span class="mf">0.013</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Drawing</span> <span class="n">Label</span> <span class="n">Cache</span><span class="p">,</span> <span class="mf">0.000</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">()</span> <span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.018</span><span class="n">s</span>
+<span class="n">msSaveImage</span><span class="p">(</span><span class="n">test4</span><span class="o">.</span><span class="n">png</span><span class="p">)</span> <span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.026</span><span class="n">s</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-5-generate-a-map-image-for-specific-multiple-layers">
+<h3><a class="toc-backref" href="#table-of-contents">Example #5 Generate a Map Image for Specific (Multiple) Layers</a><a class="headerlink" href="#example-5-generate-a-map-image-for-specific-multiple-layers" title="Link permanen untuk headline ini">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Catatan</p>
+<p class="last">The syntax for specifying multiple layers is: -l &#8220;layer1 layer2 layer3 layer4&#8221;</p>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">shp2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">gmap75</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">test5</span><span class="o">.</span><span class="n">png</span> <span class="o">-</span><span class="n">l</span> <span class="s2">&quot;bathymetry drain_fn&quot;</span> <span class="o">-</span><span class="n">map_debug</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Result</dt>
+<dd>A file named &#8216;test5.png&#8217; is created, and layer draw speeds are returned for
+only the 2 specified layers, such as:</dd>
+</dl>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">msDrawMap</span><span class="p">():</span> <span class="n">rendering</span> <span class="n">using</span> <span class="n">outputformat</span> <span class="n">named</span> <span class="n">png</span> <span class="p">(</span><span class="n">AGG</span><span class="o">/</span><span class="n">PNG</span><span class="p">)</span><span class="o">.</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">WMS</span><span class="o">/</span><span class="n">WFS</span> <span class="nb">set</span><span class="o">-</span><span class="n">up</span> <span class="ow">and</span> <span class="n">query</span><span class="p">,</span> <span class="mf">0.000</span><span class="n">s</span>
+<span class="n">msDrawRasterLayerLow</span><span class="p">(</span><span class="n">bathymetry</span><span class="p">):</span> <span class="n">entering</span><span class="o">.</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">0</span> <span class="p">(</span><span class="n">bathymetry</span><span class="p">),</span> <span class="mf">0.179</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">3</span> <span class="p">(</span><span class="n">drain_fn</span><span class="p">),</span> <span class="mf">0.041</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Drawing</span> <span class="n">Label</span> <span class="n">Cache</span><span class="p">,</span> <span class="mf">0.000</span><span class="n">s</span>
+<span class="n">msDrawMap</span><span class="p">()</span> <span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.226</span><span class="n">s</span>
+<span class="n">msSaveImage</span><span class="p">(</span><span class="n">test4</span><span class="o">.</span><span class="n">png</span><span class="p">)</span> <span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.027</span><span class="n">s</span>
 </pre></div>
 </div>
 </div>
@@ -276,9 +357,11 @@ shp2img total time: 1.082s
 <li><a class="reference internal" href="#">shp2img</a><ul>
 <li><a class="reference internal" href="#purpose">Purpose</a></li>
 <li><a class="reference internal" href="#syntax">Syntax</a><ul>
-<li><a class="reference internal" href="#example-1">Example #1</a></li>
-<li><a class="reference internal" href="#example-2">Example #2</a></li>
-<li><a class="reference internal" href="#example-3">Example #3</a></li>
+<li><a class="reference internal" href="#example-1-generate-a-map-image">Example #1 Generate a Map Image</a></li>
+<li><a class="reference internal" href="#example-2-generate-a-map-image-with-draw-speeds">Example #2 Generate a Map Image with Draw Speeds</a></li>
+<li><a class="reference internal" href="#example-3-generate-a-map-image-with-debug-information-for-all-layers">Example #3 Generate a Map Image with Debug Information for all Layers</a></li>
+<li><a class="reference internal" href="#example-4-generate-a-map-image-for-a-specific-layer">Example #4 Generate a Map Image for a Specific Layer</a></li>
+<li><a class="reference internal" href="#example-5-generate-a-map-image-for-specific-multiple-layers">Example #5 Generate a Map Image for Specific (Multiple) Layers</a></li>
 </ul>
 </li>
 </ul>
@@ -288,14 +371,11 @@ shp2img total time: 1.082s
 <div id="searchbox" style="display: none" role="search">
   <h3>Pencarian cepat</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Masukkan term pencarian atau nama modul, class atau fungsi.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -306,7 +386,7 @@ shp2img total time: 1.082s
       &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>

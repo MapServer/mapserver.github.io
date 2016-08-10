@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="id">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -29,7 +29,7 @@
     <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="MapServer 7.0.1 documentation" href="../index.html" />
     <link rel="up" title="Data Input" href="index.html" />
-    <link rel="next" title="Output Generation" href="../output/index.html" />
+    <link rel="next" title="Virtual File System" href="virtual-file.html" />
     <link rel="prev" title="WFS" href="vector/wfs.html" />
    
   
@@ -47,8 +47,9 @@
       <a href="../index.html" title="Home">Home</a> |
       <a href="../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
       <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
-      <a href="../faq.html" title="FAQ">FAQ</a> |
-      <a href="../download.html" title="Download">Download </a>
+      <a href="../community/service_providers.html" title="Professional Service Providers">Service Providers</a> |      
+      <a href="../faq.html" title="Frequently Asked Questions">FAQ</a> |
+      <a href="../download.html" title="Download Source or Binaries">Download </a>
     </td>
   </tr>
   <tr>
@@ -119,11 +120,6 @@
             <a href="../../tr/input/raster.html"><img src="../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
           
         
-        
-          
-            <a href="../../uk/input/raster.html"><img src="../_static/flagicons/uk.png" alt="uk" title="uk" border="0" /></a>
-          
-        
 
     </td>
   </tr>
@@ -137,7 +133,7 @@
           <a href="../genindex.html" title="Indeks Umum"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../output/index.html" title="Output Generation"
+          <a href="virtual-file.html" title="Virtual File System"
              accesskey="N">berikut</a> |</li>
         <li class="right" >
           <a href="vector/wfs.html" title="WFS"
@@ -163,10 +159,6 @@
 <tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Frank Warmerdam</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">warmerdam at pobox.com</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Revision:</th><td class="field-body">$Revision$</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">$Date$</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2013/07/04</td>
 </tr>
@@ -197,18 +189,18 @@
 following describes some of the supported formats, and what capabilities are
 supported with what formats.</p>
 <p>This document assumes that you are already familiar with setting up MapServer
-<a class="reference internal" href="../mapfile/index.html#mapfile"><span>Mapfile</span></a>, but does explain the raster specific aspects of mapfiles.</p>
+<a class="reference internal" href="../mapfile/index.html#mapfile"><span class="std std-ref">Mapfile</span></a>, but does explain the raster specific aspects of mapfiles.</p>
 </div>
 <div class="section" id="how-are-rasters-added-to-a-map-file">
 <h2><a class="toc-backref" href="#table-of-contents">How are rasters added to a Map file?</a><a class="headerlink" href="#how-are-rasters-added-to-a-map-file" title="Link permanen untuk headline ini">¶</a></h2>
 <p>A simple raster layer declaration looks like this. The <cite>DATA</cite> file is
 interpreted relative to the <cite>SHAPEPATH</cite>, much like shapefiles.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
-  NAME &quot;JacksonvilleNC_CIB&quot;
-  DATA &quot;Jacksonville.tif&quot;
-  TYPE RASTER
-  STATUS ON
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
+  <span class="n">NAME</span> <span class="s2">&quot;JacksonvilleNC_CIB&quot;</span>
+  <span class="n">DATA</span> <span class="s2">&quot;Jacksonville.tif&quot;</span>
+  <span class="n">TYPE</span> <span class="n">RASTER</span>
+  <span class="n">STATUS</span> <span class="n">ON</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>Though not shown rasters can have <cite>PROJECTION</cite>, <cite>METADATA</cite>,
@@ -223,42 +215,42 @@ exceptions.</p>
 with that pixel value (&#8220;[red]&#8221;, &#8220;[green]&#8221; and &#8220;[blue]&#8221;) are available for use
 in classifications. When used in an evaluated expression the pixel, red, green
 and blue keywords must be in lower case.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
-  NAME &quot;JacksonvilleNC_CIB&quot;
-  DATA &quot;Jacksonville.tif&quot;
-  TYPE RASTER
-  STATUS ON
-  CLASSITEM &quot;[pixel]&quot;
-  # class using simple string comparison, equivalent to ([pixel] = 0)
-  CLASS
-    EXPRESSION &quot;0&quot;
-    STYLE
-      COLOR 0 0 0
-    END
-  END
-  # class using an EXPRESSION using only [pixel].
-  CLASS
-    EXPRESSION ([pixel] &gt;= 64 AND [pixel] &lt; 128)
-    STYLE
-      COLOR 255 0 0
-    END
-  END
-  # class using the red/green/blue values from the palette
-  CLASS
-    NAME &quot;near white&quot;
-    EXPRESSION ([red] &gt; 200 AND [green] &gt; 200 AND [blue] &gt; 200)
-    STYLE
-      COLOR 0 255 0
-    END
-  END
-  # Class using a regular expression to capture only pixel values ending in 1
-  CLASS
-    EXPRESSION /*1/
-    STYLE
-      COLOR 0 0 255
-    END
-  END
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
+  <span class="n">NAME</span> <span class="s2">&quot;JacksonvilleNC_CIB&quot;</span>
+  <span class="n">DATA</span> <span class="s2">&quot;Jacksonville.tif&quot;</span>
+  <span class="n">TYPE</span> <span class="n">RASTER</span>
+  <span class="n">STATUS</span> <span class="n">ON</span>
+  <span class="n">CLASSITEM</span> <span class="s2">&quot;[pixel]&quot;</span>
+  <span class="c1"># class using simple string comparison, equivalent to ([pixel] = 0)</span>
+  <span class="n">CLASS</span>
+    <span class="n">EXPRESSION</span> <span class="s2">&quot;0&quot;</span>
+    <span class="n">STYLE</span>
+      <span class="n">COLOR</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+    <span class="n">END</span>
+  <span class="n">END</span>
+  <span class="c1"># class using an EXPRESSION using only [pixel].</span>
+  <span class="n">CLASS</span>
+    <span class="n">EXPRESSION</span> <span class="p">([</span><span class="n">pixel</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">64</span> <span class="n">AND</span> <span class="p">[</span><span class="n">pixel</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">128</span><span class="p">)</span>
+    <span class="n">STYLE</span>
+      <span class="n">COLOR</span> <span class="mi">255</span> <span class="mi">0</span> <span class="mi">0</span>
+    <span class="n">END</span>
+  <span class="n">END</span>
+  <span class="c1"># class using the red/green/blue values from the palette</span>
+  <span class="n">CLASS</span>
+    <span class="n">NAME</span> <span class="s2">&quot;near white&quot;</span>
+    <span class="n">EXPRESSION</span> <span class="p">([</span><span class="n">red</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">200</span> <span class="n">AND</span> <span class="p">[</span><span class="n">green</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">200</span> <span class="n">AND</span> <span class="p">[</span><span class="n">blue</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">200</span><span class="p">)</span>
+    <span class="n">STYLE</span>
+      <span class="n">COLOR</span> <span class="mi">0</span> <span class="mi">255</span> <span class="mi">0</span>
+    <span class="n">END</span>
+  <span class="n">END</span>
+  <span class="c1"># Class using a regular expression to capture only pixel values ending in 1</span>
+  <span class="n">CLASS</span>
+    <span class="n">EXPRESSION</span> <span class="o">/*</span><span class="mi">1</span><span class="o">/</span>
+    <span class="n">STYLE</span>
+      <span class="n">COLOR</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">255</span>
+    <span class="n">END</span>
+  <span class="n">END</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>As usual, <cite>CLASS</cite> definitions are evaluated in order from first to
@@ -300,35 +292,35 @@ range -10 to 10 are classified. In particular, the values classified would be
 -7.5, -2.5, 2.5, and 7.5 (the middle of each &#8220;quarter&#8221; of the range). So those
 four value are classified, and one of the classification results is selected
 based on which value is closest to the pixel value being classified.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
-  NAME grid1
-  TYPE raster
-  STATUS default
-  DATA data/float.tif
-  PROCESSING &quot;SCALE=-10,10&quot;
-  PROCESSING &quot;SCALE_BUCKETS=4&quot;
-  CLASS
-    NAME &quot;red&quot;
-    EXPRESSION ([pixel] &lt; -3)
-    STYLE
-      COLOR 255 0 0
-    END
-  END
-  CLASS
-    NAME &quot;green&quot;
-    EXPRESSION ([pixel] &gt;= -3 and [pixel] &lt; 3)
-    STYLE
-      COLOR 0 255 0
-    END
-  END
-  CLASS
-    NAME &quot;blue&quot;
-    EXPRESSION ([pixel] &gt;= 3)
-    STYLE
-      COLOR 0 0 255
-    END
-  END
-END
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
+  <span class="n">NAME</span> <span class="n">grid1</span>
+  <span class="n">TYPE</span> <span class="n">raster</span>
+  <span class="n">STATUS</span> <span class="n">default</span>
+  <span class="n">DATA</span> <span class="n">data</span><span class="o">/</span><span class="nb">float</span><span class="o">.</span><span class="n">tif</span>
+  <span class="n">PROCESSING</span> <span class="s2">&quot;SCALE=-10,10&quot;</span>
+  <span class="n">PROCESSING</span> <span class="s2">&quot;SCALE_BUCKETS=4&quot;</span>
+  <span class="n">CLASS</span>
+    <span class="n">NAME</span> <span class="s2">&quot;red&quot;</span>
+    <span class="n">EXPRESSION</span> <span class="p">([</span><span class="n">pixel</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">STYLE</span>
+      <span class="n">COLOR</span> <span class="mi">255</span> <span class="mi">0</span> <span class="mi">0</span>
+    <span class="n">END</span>
+  <span class="n">END</span>
+  <span class="n">CLASS</span>
+    <span class="n">NAME</span> <span class="s2">&quot;green&quot;</span>
+    <span class="n">EXPRESSION</span> <span class="p">([</span><span class="n">pixel</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">3</span> <span class="ow">and</span> <span class="p">[</span><span class="n">pixel</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">STYLE</span>
+      <span class="n">COLOR</span> <span class="mi">0</span> <span class="mi">255</span> <span class="mi">0</span>
+    <span class="n">END</span>
+  <span class="n">END</span>
+  <span class="n">CLASS</span>
+    <span class="n">NAME</span> <span class="s2">&quot;blue&quot;</span>
+    <span class="n">EXPRESSION</span> <span class="p">([</span><span class="n">pixel</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">STYLE</span>
+      <span class="n">COLOR</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">255</span>
+    <span class="n">END</span>
+  <span class="n">END</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 </div>
@@ -336,7 +328,7 @@ END
 </div>
 <div class="section" id="supported-formats">
 <span id="index-6"></span><h2><a class="toc-backref" href="#table-of-contents">Supported Formats</a><a class="headerlink" href="#supported-formats" title="Link permanen untuk headline ini">¶</a></h2>
-<p>Since version 6.2, Mapserver raster input support is through the GDAL
+<p>Since version 6.2, MapServer raster input support is through the GDAL
 raster library only.</p>
 <p>More information on GDAL can be found at <a class="reference external" href="http://www.gdal.org">http://www.gdal.org</a>, including the
 <a class="reference external" href="http://www.gdal.org/formats_list.html">supported formats list</a>. Some of the advanced MapServer raster features,
@@ -348,24 +340,24 @@ MapServer using the <em>&#8211;with-gdal</em> configuration switch.</p>
 executable, use the -v flag to discover what build options are
 enabled.  To find out what GDAL formats are available, the &#8220;gdalinfo
 &#8211;formats&#8221; command may be used. For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>warmerda@gdal2200[124]% mapserv -v
-MapServer version 6.2.0 OUTPUT=GIF OUTPUT=PNG OUTPUT=JPEG
-SUPPORTS=PROJ SUPPORTS=GD SUPPORTS=AGG SUPPORTS=FREETYPE
-SUPPORTS=CAIRO SUPPORTS=OPENGL SUPPORTS=ICONV SUPPORTS=WMS_SERVER
-SUPPORTS=WMS_CLIENT SUPPORTS=WFS_SERVER SUPPORTS=WFS_CLIENT
-SUPPORTS=WCS_SERVER SUPPORTS=SOS_SERVER SUPPORTS=FASTCGI
-SUPPORTS=THREADS SUPPORTS=GEOS INPUT=JPEG INPUT=POSTGIS INPUT=OGR
-INPUT=GDAL INPUT=SHAPEFILE
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">warmerda</span><span class="nd">@gdal2200</span><span class="p">[</span><span class="mi">124</span><span class="p">]</span><span class="o">%</span> <span class="n">mapserv</span> <span class="o">-</span><span class="n">v</span>
+<span class="n">MapServer</span> <span class="n">version</span> <span class="mf">6.2</span><span class="o">.</span><span class="mi">0</span> <span class="n">OUTPUT</span><span class="o">=</span><span class="n">GIF</span> <span class="n">OUTPUT</span><span class="o">=</span><span class="n">PNG</span> <span class="n">OUTPUT</span><span class="o">=</span><span class="n">JPEG</span>
+<span class="n">SUPPORTS</span><span class="o">=</span><span class="n">PROJ</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">GD</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">AGG</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">FREETYPE</span>
+<span class="n">SUPPORTS</span><span class="o">=</span><span class="n">CAIRO</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">OPENGL</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">ICONV</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">WMS_SERVER</span>
+<span class="n">SUPPORTS</span><span class="o">=</span><span class="n">WMS_CLIENT</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">WFS_SERVER</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">WFS_CLIENT</span>
+<span class="n">SUPPORTS</span><span class="o">=</span><span class="n">WCS_SERVER</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">SOS_SERVER</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">FASTCGI</span>
+<span class="n">SUPPORTS</span><span class="o">=</span><span class="n">THREADS</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">GEOS</span> <span class="n">INPUT</span><span class="o">=</span><span class="n">JPEG</span> <span class="n">INPUT</span><span class="o">=</span><span class="n">POSTGIS</span> <span class="n">INPUT</span><span class="o">=</span><span class="n">OGR</span>
+<span class="n">INPUT</span><span class="o">=</span><span class="n">GDAL</span> <span class="n">INPUT</span><span class="o">=</span><span class="n">SHAPEFILE</span>
 
 
-warmerda@gdal2200[18]% gdalinfo --formats
-Supported Formats:
-  VRT (rw+v): Virtual Raster
-  GTiff (rw+vs): GeoTIFF
-  NITF (rw+vs): National Imagery Transmission Format
-  RPFTOC (rovs): Raster Product Format TOC format
-  ECRGTOC (rovs): ECRG TOC format
-  ...
+<span class="n">warmerda</span><span class="nd">@gdal2200</span><span class="p">[</span><span class="mi">18</span><span class="p">]</span><span class="o">%</span> <span class="n">gdalinfo</span> <span class="o">--</span><span class="n">formats</span>
+<span class="n">Supported</span> <span class="n">Formats</span><span class="p">:</span>
+  <span class="n">VRT</span> <span class="p">(</span><span class="n">rw</span><span class="o">+</span><span class="n">v</span><span class="p">):</span> <span class="n">Virtual</span> <span class="n">Raster</span>
+  <span class="n">GTiff</span> <span class="p">(</span><span class="n">rw</span><span class="o">+</span><span class="n">vs</span><span class="p">):</span> <span class="n">GeoTIFF</span>
+  <span class="n">NITF</span> <span class="p">(</span><span class="n">rw</span><span class="o">+</span><span class="n">vs</span><span class="p">):</span> <span class="n">National</span> <span class="n">Imagery</span> <span class="n">Transmission</span> <span class="n">Format</span>
+  <span class="n">RPFTOC</span> <span class="p">(</span><span class="n">rovs</span><span class="p">):</span> <span class="n">Raster</span> <span class="n">Product</span> <span class="n">Format</span> <span class="n">TOC</span> <span class="nb">format</span>
+  <span class="n">ECRGTOC</span> <span class="p">(</span><span class="n">rovs</span><span class="p">):</span> <span class="n">ECRG</span> <span class="n">TOC</span> <span class="nb">format</span>
+  <span class="o">...</span>
 </pre></div>
 </div>
 </div>
@@ -388,15 +380,15 @@ hp2.shp should be rectangles representing the footprint of the corresponding
 file. Note that the files do not have to be all the same size, the formats can
 vary and they can even overlap (later files will be drawn over earlier ones).</p>
 <p>Starting with MapServer 6.4, the files can have different coordinate
-system (projection). This requires specifying the <a class="reference internal" href="../mapfile/layer.html#tilesrs"><span>TILESRS</span></a> keyword and generating the tileindex with a few additional
-options. See <a class="reference internal" href="../optimization/tileindex.html#tileindex-mixed-srs"><span>Tileindexes with tiles in different projections</span></a>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>LAYER
-  NAME &quot;hpool&quot;
-  STATUS ON
-  TILEINDEX &quot;hp2.shp&quot;
-  TILEITEM &quot;Location&quot;
-  TYPE RASTER
-END
+system (projection). This requires specifying the <a class="reference internal" href="../mapfile/layer.html#tilesrs"><span class="std std-ref">TILESRS</span></a> keyword and generating the tileindex with a few additional
+options. See <a class="reference internal" href="../optimization/tileindex.html#tileindex-mixed-srs"><span class="std std-ref">Tileindexes with tiles in different projections</span></a>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
+  <span class="n">NAME</span> <span class="s2">&quot;hpool&quot;</span>
+  <span class="n">STATUS</span> <span class="n">ON</span>
+  <span class="n">TILEINDEX</span> <span class="s2">&quot;hp2.shp&quot;</span>
+  <span class="n">TILEITEM</span> <span class="s2">&quot;Location&quot;</span>
+  <span class="n">TYPE</span> <span class="n">RASTER</span>
+<span class="n">END</span>
 </pre></div>
 </div>
 <p>The filenames in the tileindex are searched for relative to the <cite>SHAPEPATH</cite> or
@@ -411,10 +403,10 @@ command, one option is the <a class="reference external" href="http://www.gdal.o
 suite. The gdaltindex program will automatically generate a tile index
 shapefile from a list of GDAL supported raster files passed on the command
 line.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Usage: gdaltindex [-tileindex field_name] index_file [gdal_file]*
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">gdaltindex</span> <span class="p">[</span><span class="o">-</span><span class="n">tileindex</span> <span class="n">field_name</span><span class="p">]</span> <span class="n">index_file</span> <span class="p">[</span><span class="n">gdal_file</span><span class="p">]</span><span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>% gdaltindex doq_index.shp doq/*.tif
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">%</span> <span class="n">gdaltindex</span> <span class="n">doq_index</span><span class="o">.</span><span class="n">shp</span> <span class="n">doq</span><span class="o">/*.</span><span class="n">tif</span>
 </pre></div>
 </div>
 <div class="section" id="tile-index-notes">
@@ -426,7 +418,7 @@ line.</p>
 coordinate system as the raster layer. If the files in the tileindex are
 not in the same projection as the raster layer, or are in heterogeneous
 projections, the TILESRS keyword must be specified in the LAYER definition.
-See <a class="reference internal" href="../optimization/tileindex.html#tileindex-mixed-srs"><span>Tileindexes with tiles in different projections</span></a></li>
+See <a class="reference internal" href="../optimization/tileindex.html#tileindex-mixed-srs"><span class="std std-ref">Tileindexes with tiles in different projections</span></a></li>
 <li>Raster filenames will be put in the file exactly as they are specified
 on the commandline.</li>
 <li>Many problems with tile indexes relate to how relative paths in the tile
@@ -439,7 +431,7 @@ including the gdaltindex program can be downloaded as part of the <a class="refe
 <a class="reference external" href="http://fwtools.maptools.org/">FWTools</a> and <a class="reference external" href="http://www.ms4w.com">MS4W</a> distributions.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">lihat juga</p>
-<p class="last"><a class="reference internal" href="../optimization/tileindex.html#tileindex"><span>Tile Indexes</span></a></p>
+<p class="last"><a class="reference internal" href="../optimization/tileindex.html#tileindex"><span class="std std-ref">Tile Indexes</span></a></p>
 </div>
 </div>
 </div>
@@ -497,8 +489,8 @@ alpha/transparency) for supported formats.</p>
 </div>
 <div class="section" id="special-processing-directives">
 <span id="index-10"></span><h2><a class="toc-backref" href="#table-of-contents">Special Processing Directives</a><a class="headerlink" href="#special-processing-directives" title="Link permanen untuk headline ini">¶</a></h2>
-<p>As of MapServer 4.0, the PROCESSING parameter was added to the <a class="reference internal" href="../mapfile/layer.html#layer"><span>LAYER</span></a> of
-the <a class="reference internal" href="../mapfile/index.html#mapfile"><span>Mapfile</span></a>. It is primarily used to pass specialized raster processing
+<p>As of MapServer 4.0, the PROCESSING parameter was added to the <a class="reference internal" href="../mapfile/layer.html#layer"><span class="std std-ref">LAYER</span></a> of
+the <a class="reference internal" href="../mapfile/index.html#mapfile"><span class="std std-ref">Mapfile</span></a>. It is primarily used to pass specialized raster processing
 options to the GDAL based raster renderer. The following processing options
 are supported in MapServer 4.0 and newer.</p>
 <dl class="docutils" id="index-11">
@@ -508,7 +500,7 @@ raster file. If one band is selected, it is treated as greyscale. If 3 are
 selected, they are treated as red, green and blue. If 4 are selected they
 are treated as red, green, blue and alpha (opacity).</p>
 <p>Example:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;BANDS=4,2,1&quot;
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;BANDS=4,2,1&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -527,7 +519,7 @@ available, this can be a good way to avoid &#8220;stealing&#8221; your whole col
 for a raster layer. Normally values in the range 2-6 will give good
 results.</p>
 <p>Example:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;COLOR_MATCH_THRESHOLD=3&quot;
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;COLOR_MATCH_THRESHOLD=3&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -537,7 +529,7 @@ results.</p>
 <dd><p class="first">This turns on error diffusion mode, used to convert 24bit images to 8bit
 with error diffusion to get better color results.</p>
 <p>Example:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;DITHER=YES&quot;
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;DITHER=YES&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -546,7 +538,7 @@ with error diffusion to get better color results.</p>
 <dt><strong>EXTENT_PRIORITY=WORLD</strong></dt>
 <dd><p class="first">Override GDAL with a world file.</p>
 <p>Example:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;EXTENT_PRIORITY=WORLD&quot;
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;EXTENT_PRIORITY=WORLD&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -578,7 +570,7 @@ fly color correction. If LUT is used, the LUT is applied to all color
 bands. If LUT_n is used it is applied to one color band (n is 1 for red, 2
 for green, 3 for blue, 4 for alpha).</p>
 <p>The LUT can be specified inline in the form:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;lut_spec&gt; = &lt;in_value&gt;:&lt;out_value&gt;[,&lt;in_value&gt;:&lt;out_value&gt;]*
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">lut_spec</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">in_value</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">out_value</span><span class="o">&gt;</span><span class="p">[,</span><span class="o">&lt;</span><span class="n">in_value</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">out_value</span><span class="o">&gt;</span><span class="p">]</span><span class="o">*</span>
 </pre></div>
 </div>
 <p>This essentially establish particular input values which are mapped to
@@ -589,11 +581,11 @@ must be in increasing order.   The LUT specification may also be in a
 text file with the &lt;lut_spec&gt; being the filename.  The file contents should
 be in the same syntax, and the file is searched relative to the mapfile.</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;LUT_1=red.lut&quot;
-PROCESSING &quot;LUT_2=green.lut&quot;
-PROCESSING &quot;LUT_3=blue.lut&quot;
-  or
-PROCESSING &quot;LUT=100:30,160:128,210:200&quot;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;LUT_1=red.lut&quot;</span>
+<span class="n">PROCESSING</span> <span class="s2">&quot;LUT_2=green.lut&quot;</span>
+<span class="n">PROCESSING</span> <span class="s2">&quot;LUT_3=blue.lut&quot;</span>
+  <span class="ow">or</span>
+<span class="n">PROCESSING</span> <span class="s2">&quot;LUT=100:30,160:128,210:200&quot;</span>
 </pre></div>
 </div>
 <p>As a special case there is also support for GIMP format curve files.  That
@@ -608,7 +600,7 @@ be similar.  Also note that GIMP color curve files include an overall
 and the appropriate color curve will be composed internally to produce
 the final LUT.</p>
 <p>Example:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;LUT=munich.crv&quot;
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;LUT=munich.crv&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -618,7 +610,7 @@ the final LUT.</p>
 <dd><p class="first">Default is 2.5.  Rendering time will increase with increasing
 OVERSAMPLE_RATIO.</p>
 <p>Example:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;OVERSAMPLE_RATIO=1.0&quot;
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;OVERSAMPLE_RATIO=1.0&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -631,7 +623,7 @@ compute the average pixel value of all pixels in the region of the disk
 file being mapped to the output pixel (or possibly just a sampling of
 them). BILINEAR will compute a linear interpolation of the four pixels
 around the target location. This topic is discussed in more detail in
-<a class="reference internal" href="../development/rfc/ms-rfc-4.html#rfc4"><span>MS RFC 4: MapServer Raster Resampling</span></a>.</p>
+<a class="reference internal" href="../development/rfc/ms-rfc-4.html#rfc4"><span class="std std-ref">MS RFC 4: MapServer Raster Resampling</span></a>.</p>
 <p>Resampling options other than NEAREST result in use of the generalized
 warper and can dramatically slow down raster processing. Generally AVERAGE
 can be desirable for reducing noise in dramatically downsampled data, and
@@ -639,9 +631,9 @@ can give something approximating antialiasing for black and white
 linework. BILINEAR can be helpful when oversampling data to give a smooth
 appearance.</p>
 <p>Example (chose one):</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;RESAMPLE=NEAREST&quot;
-PROCESSING &quot;RESAMPLE=AVERAGE&quot;
-PROCESSING &quot;RESAMPLE=BILINEAR&quot;
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;RESAMPLE=NEAREST&quot;</span>
+<span class="n">PROCESSING</span> <span class="s2">&quot;RESAMPLE=AVERAGE&quot;</span>
+<span class="n">PROCESSING</span> <span class="s2">&quot;RESAMPLE=BILINEAR&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -658,11 +650,11 @@ scaling of individual input bands, use the SCALE_1, SCALE_2 and SCALE_3
 keywords (for red, green and blue) instead of SCALE which applies to all
 bands.</p>
 <p>Example:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;SCALE=AUTO&quot;
- or
-PROCESSING &quot;SCALE_1=409,1203&quot;
-PROCESSING &quot;SCALE_2=203,296&quot;
-PROCESSING &quot;SCALE_3=339,1004&quot;
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;SCALE=AUTO&quot;</span>
+ <span class="ow">or</span>
+<span class="n">PROCESSING</span> <span class="s2">&quot;SCALE_1=409,1203&quot;</span>
+<span class="n">PROCESSING</span> <span class="s2">&quot;SCALE_2=203,296&quot;</span>
+<span class="n">PROCESSING</span> <span class="s2">&quot;SCALE_3=339,1004&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -673,11 +665,11 @@ PROCESSING &quot;SCALE_3=339,1004&quot;
 path only is specified, the base name of the dataset will be
 appended.  The suffix (<cite>.wld</cite> / <cite>.tfw</cite> / ...) can be omitted.</p>
 <p>Example:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>PROCESSING &quot;WORLDFILE=/path/&quot;
- or
-PROCESSING &quot;WORLDFILE=/path/file.wld&quot;
- or
-PROCESSING &quot;WORLDFILE=/path/file&quot;
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">PROCESSING</span> <span class="s2">&quot;WORLDFILE=/path/&quot;</span>
+ <span class="ow">or</span>
+<span class="n">PROCESSING</span> <span class="s2">&quot;WORLDFILE=/path/file.wld&quot;</span>
+ <span class="ow">or</span>
+<span class="n">PROCESSING</span> <span class="s2">&quot;WORLDFILE=/path/file&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -806,17 +798,17 @@ Python MapScript and fetching back the results:</p>
 <span class="n">layer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>This following is a simple example query <a class="reference internal" href="../mapfile/template.html#template"><span>TEMPLATE</span></a>
+<p>This following is a simple example query <a class="reference internal" href="../mapfile/template.html#template"><span class="std std-ref">TEMPLATE</span></a>
 file. The raster pixel attributes will be substituted in before the
 query result is returned to the user as HTML.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Pixel:&lt;br&gt;
-  values=[value_list]&lt;br&gt;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Pixel</span><span class="p">:</span><span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
+  <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="n">value_list</span><span class="p">]</span><span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
 
-  value_0=[value_0]&lt;br&gt;
-  value_1=[value_1]&lt;br&gt;
-  value_2=[value_2]&lt;br&gt;
-  RGB = [red],[green],[blue]&lt;p&gt;
-  Class = [class]&lt;br&gt;
+  <span class="n">value_0</span><span class="o">=</span><span class="p">[</span><span class="n">value_0</span><span class="p">]</span><span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
+  <span class="n">value_1</span><span class="o">=</span><span class="p">[</span><span class="n">value_1</span><span class="p">]</span><span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
+  <span class="n">value_2</span><span class="o">=</span><span class="p">[</span><span class="n">value_2</span><span class="p">]</span><span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
+  <span class="n">RGB</span> <span class="o">=</span> <span class="p">[</span><span class="n">red</span><span class="p">],[</span><span class="n">green</span><span class="p">],[</span><span class="n">blue</span><span class="p">]</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+  <span class="n">Class</span> <span class="o">=</span> <span class="p">[</span><span class="n">class</span><span class="p">]</span><span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>Internally raster query results are essentially treated as a set of
@@ -871,13 +863,13 @@ files, and will generally give better display speed for local map
 requests from large images.  To produce a GeoTIFF file in internally
 tiled format using the TILED=YES creation option with the
 <a class="reference external" href="http://www.gdal.org/gdal_utilities.html">gdal_translate</a> utility:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>gdal_translate -co TILED=YES original.tif tiled.tif
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gdal_translate</span> <span class="o">-</span><span class="n">co</span> <span class="n">TILED</span><span class="o">=</span><span class="n">YES</span> <span class="n">original</span><span class="o">.</span><span class="n">tif</span> <span class="n">tiled</span><span class="o">.</span><span class="n">tif</span>
 </pre></div>
 </div>
 <p>Erdas Imagine (HFA) files are always tiled, and can be larger than 4GB
 (the GeoTIFF limit).  Use a command like the following to translate a
 raster to Imagine format:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>gdal_translate -of HFA original.tif tiled.img
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gdal_translate</span> <span class="o">-</span><span class="n">of</span> <span class="n">HFA</span> <span class="n">original</span><span class="o">.</span><span class="n">tif</span> <span class="n">tiled</span><span class="o">.</span><span class="n">img</span>
 </pre></div>
 </div>
 </div>
@@ -891,13 +883,13 @@ the resulting map.  The color reduction can be done on the fly by
 MapServer but this requires even more processing.  A faster approach
 is to pre-reduce the colors of 24bit imagery to 8bit.  This can be
 accomplished with the GDAL rgb2pct.py script like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>rgb2pct.py original.tif 8bit.tif
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">rgb2pct</span><span class="o">.</span><span class="n">py</span> <span class="n">original</span><span class="o">.</span><span class="n">tif</span> <span class="mi">8</span><span class="n">bit</span><span class="o">.</span><span class="n">tif</span>
 </pre></div>
 </div>
 <p>By default images will be reduced to 256 colors but this can mean
 there are not enough colors to render other colors in the map.  So it
 may be desired to reduce to even less colors:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>rgb2pct.py -n 200 original.tif 8bit.tif
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">rgb2pct</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">n</span> <span class="mi">200</span> <span class="n">original</span><span class="o">.</span><span class="n">tif</span> <span class="mi">8</span><span class="n">bit</span><span class="o">.</span><span class="n">tif</span>
 </pre></div>
 </div>
 <p>Downsampling to 8bit should be done before internal tiling and
@@ -915,7 +907,7 @@ MrSID, and ECW already contain implicit overviews in the format
 themselves and will not generally benefit from external overviews.
 For other formats (such as GeoTIFF, and Erdas Imagine format) use a
 command like the following to build overviews:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>gdaladdo tile.tif 2 4 8 16 32 64 128
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gdaladdo</span> <span class="n">tile</span><span class="o">.</span><span class="n">tif</span> <span class="mi">2</span> <span class="mi">4</span> <span class="mi">8</span> <span class="mi">16</span> <span class="mi">32</span> <span class="mi">64</span> <span class="mi">128</span>
 </pre></div>
 </div>
 <p>The above would build overviews at x2 through x128 decimation levels.
@@ -923,7 +915,7 @@ By default it uses &#8220;nearest neighbour&#8221; downsampling.  That is one of
 the pixels in the input downsampled area is selected for each output
 pixel.  For some kinds of data averaging can give much smoother
 overview results, as might be generated with this command:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>gdaladdo -r average tiled.tif 2 4 8 16 32 64 128
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gdaladdo</span> <span class="o">-</span><span class="n">r</span> <span class="n">average</span> <span class="n">tiled</span><span class="o">.</span><span class="n">tif</span> <span class="mi">2</span> <span class="mi">4</span> <span class="mi">8</span> <span class="mi">16</span> <span class="mi">32</span> <span class="mi">64</span> <span class="mi">128</span>
 </pre></div>
 </div>
 <p>Note that overview building should be done after translating to a
@@ -942,20 +934,20 @@ somewhat complex process.  One approach is to use the gdal_merge.py
 script to downsample and mosaic all the images.  For instance if we
 want to produce an overview of many 1meter ortho photos with 250 meter
 pixels we might do something like:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>gdal_merge.py -o overview.tif -ps 250 250 ortho_*.tif
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gdal_merge</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">o</span> <span class="n">overview</span><span class="o">.</span><span class="n">tif</span> <span class="o">-</span><span class="n">ps</span> <span class="mi">250</span> <span class="mi">250</span> <span class="n">ortho_</span><span class="o">*.</span><span class="n">tif</span>
 </pre></div>
 </div>
 <p>The gdal_merge.py utility suffers from a variety of issues, including
 no support for different resampling kernels.  With GDAL 1.3.2 or later
 it should be able to accomplish something similar with the more
 flexible gdalwarp utility:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>gdalwarp -rc -tr 250 250 ortho_*.tif overview.tif
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gdalwarp</span> <span class="o">-</span><span class="n">rc</span> <span class="o">-</span><span class="n">tr</span> <span class="mi">250</span> <span class="mi">250</span> <span class="n">ortho_</span><span class="o">*.</span><span class="n">tif</span> <span class="n">overview</span><span class="o">.</span><span class="n">tif</span>
 </pre></div>
 </div>
 <p>In some cases the easiest way of generating an overview is to let
 MapServer do it using the shp2img utility.  For instance if the
 tileindex layer is called &#8216;&#8217;orthos&#8217;&#8217; we could do something like:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>shp2img -m ortho.map -l orthos -o overview.png
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">shp2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">ortho</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">l</span> <span class="n">orthos</span> <span class="o">-</span><span class="n">o</span> <span class="n">overview</span><span class="o">.</span><span class="n">png</span>
 </pre></div>
 </div>
 <p>Note that the overview will be generated with the extents and size in
@@ -981,7 +973,7 @@ from the top left origin. The final two values are the X and Y
 location of the center of the top left pixel. This example is for an
 image with a 2m x 2m pixel size, and a top left origin at (356800E,
 5767999N):</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">2</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">2</span>
 <span class="mf">0.0000000000</span>
 <span class="mf">0.0000000000</span>
 <span class="o">-</span><span class="mi">2</span>
@@ -1047,14 +1039,11 @@ MapServer the extension .wld is always OK for world files.</p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Pencarian cepat</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Masukkan term pencarian atau nama modul, class atau fungsi.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -1065,7 +1054,7 @@ MapServer the extension .wld is always OK for world files.</p>
       &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>

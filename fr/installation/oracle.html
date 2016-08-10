@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -47,8 +47,9 @@
       <a href="../index.html" title="Home">Home</a> |
       <a href="../products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
       <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
-      <a href="../faq.html" title="FAQ">FAQ</a> |
-      <a href="../download.html" title="Download">Download </a>
+      <a href="../community/service_providers.html" title="Professional Service Providers">Service Providers</a> |      
+      <a href="../faq.html" title="Frequently Asked Questions">FAQ</a> |
+      <a href="../download.html" title="Download Source or Binaries">Download </a>
     </td>
   </tr>
   <tr>
@@ -119,11 +120,6 @@
             <a href="../../tr/installation/oracle.html"><img src="../_static/flagicons/tr.png" alt="tr" title="tr" border="0" /></a>
           
         
-        
-          
-            <a href="../../uk/installation/oracle.html"><img src="../_static/flagicons/uk.png" alt="uk" title="uk" border="0" /></a>
-          
-        
 
     </td>
   </tr>
@@ -180,8 +176,8 @@
 </div>
 <div class="section" id="preface">
 <h2><a class="toc-backref" href="#table-of-contents">Préface</a><a class="headerlink" href="#preface" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Ce document explique la configuration complète nécessaire pour avoir la connexion entre le <a class="reference internal" href="../cgi/index.html#cgi"><span>CGI</span></a> MapServer et un serveur de base de données Oracle sous une machine linux (Ubuntu). Le but de ce document est juste de compiler une connaissance &#8220;google&#8221; à UN seul endroit. En espérant qu&#8217;il permettra à de nombreuses personnes de passer autant de tant que nous pour cela.</p>
-<p>Ce manuel a été écrit, parce que j&#8217;ai perdu plusieurs jours sur Google pour permettre à mon Mapserver d&#8217;accéder à une base de données Oracle. Je ne suis PAS un expert Oracle, donc le but du document est juste de concentrer à UN seul endroit cette connaissance éparpillée. En espérant, que cela évitera à d&#8217;autres utilisateurs de perdre autant de temps sur ce problème que moi! (Ou si vous avez le choix, essayez <a class="reference internal" href="../input/vector/postgis.html#input-postgis"><span>PostGIS</span></a> ;-))</p>
+<p>Ce document explique la configuration complète nécessaire pour avoir la connexion entre le <a class="reference internal" href="../cgi/index.html#cgi"><span class="std std-ref">CGI</span></a> MapServer et un serveur de base de données Oracle sous une machine linux (Ubuntu). Le but de ce document est juste de compiler une connaissance &#8220;google&#8221; à UN seul endroit. En espérant qu&#8217;il permettra à de nombreuses personnes de passer autant de tant que nous pour cela.</p>
+<p>Ce manuel a été écrit, parce que j&#8217;ai perdu plusieurs jours sur Google pour permettre à mon Mapserver d&#8217;accéder à une base de données Oracle. Je ne suis PAS un expert Oracle, donc le but du document est juste de concentrer à UN seul endroit cette connaissance éparpillée. En espérant, que cela évitera à d&#8217;autres utilisateurs de perdre autant de temps sur ce problème que moi! (Ou si vous avez le choix, essayez <a class="reference internal" href="../input/vector/postgis.html#input-postgis"><span class="std std-ref">PostGIS</span></a> ;-))</p>
 <p>Avant que nous commencions, quelques connaissances basiques que nous ignorions avant:</p>
 <ul class="simple">
 <li><p class="first">MapServer peut accéder à de la donnée dans n&#8217;importe quelle installation de Oracle Spatial ou de Oracle Locator! Oracle locator est fournit avec chaque instance de Oracle, il n&#8217;y a pas de licence supplémentaire pour cela.</p>
@@ -199,16 +195,16 @@
 <li>ORACLE_BASE</li>
 <li>LD_LIBRARY_PATH</li>
 </ul>
-<p>Nous supposons aussi que vous avez installé <strong>apache2</strong> (notre version était la 2.0.49) et vous êtes habitués à travailler avec des systèmes Linux/UNIX. Nous présupposons égelement que vous êtes capables d&#8217;utiliser l&#8217;éditeur <a class="reference internal" href="../development/editing/vim.html#vim"><span>vi/vim</span></a>.</p>
+<p>Nous supposons aussi que vous avez installé <strong>apache2</strong> (notre version était la 2.0.49) et vous êtes habitués à travailler avec des systèmes Linux/UNIX. Nous présupposons égelement que vous êtes capables d&#8217;utiliser l&#8217;éditeur <a class="reference internal" href="../development/editing/vim.html#vim"><span class="std std-ref">vi/vim</span></a>.</p>
 <p>Nous nous assurons que l&#8217;utilisateur Oracle qui a accédé plus tôt à la base de données a les droits d&#8217;écriture au répertoire oracle_home.</p>
 <p>Bous assumon aussi que vous avez déjà configuré le fichier tnsnames.ora. Il devrait ressembler à ceci:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>MY_ORACLE =
-    (DESCRIPTION =
-        (ADDRESS = (PROTOCOL = TCP)(HOST = host)(PORT = 1521))
-        (CONNECT_DATA =
-            (SERVICE_NAME = your_name)
-        )
-    )
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">MY_ORACLE</span> <span class="o">=</span>
+    <span class="p">(</span><span class="n">DESCRIPTION</span> <span class="o">=</span>
+        <span class="p">(</span><span class="n">ADDRESS</span> <span class="o">=</span> <span class="p">(</span><span class="n">PROTOCOL</span> <span class="o">=</span> <span class="n">TCP</span><span class="p">)(</span><span class="n">HOST</span> <span class="o">=</span> <span class="n">host</span><span class="p">)(</span><span class="n">PORT</span> <span class="o">=</span> <span class="mi">1521</span><span class="p">))</span>
+        <span class="p">(</span><span class="n">CONNECT_DATA</span> <span class="o">=</span>
+            <span class="p">(</span><span class="n">SERVICE_NAME</span> <span class="o">=</span> <span class="n">your_name</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 </pre></div>
 </div>
 <p>Il est important que vous connaissiez le NOM de votre source de données, dans cet exemple, c&#8217;est &#8220;MY_ORACLE&#8221; et ile sera utilisé plus loin. Après avoir fait cela, vous pouvez définir <code class="docutils literal"><span class="pre">User/Password&#64;MY_ORACLE</span></code> dans votre mapfile pour vous connecter à la base de données Oracle. Mai avant, nous avons encore des choses à faire.</p>
@@ -216,15 +212,15 @@
 <div class="section" id="compile-mapserver">
 <h2><a class="toc-backref" href="#table-of-contents">Compiler Mapserver</a><a class="headerlink" href="#compile-mapserver" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Compiler comme une compilation normale et définir ce drapeau:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>--with-oraclespatial=/path/to/oracle/home/&lt;/p&gt;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">--</span><span class="k">with</span><span class="o">-</span><span class="n">oraclespatial</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">oracle</span><span class="o">/</span><span class="n">home</span><span class="o">/&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>Si le &#8220;configure&#8221; et le make de MapServer se passent bien, essayez</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>./mapserv -v
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">mapserv</span> <span class="o">-</span><span class="n">v</span>
 </pre></div>
 </div>
 <p>Cela devrait au minimum vous renvoyer cette sortie:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">INPUT</span><span class="o">=</span><span class="n">ORACLESPATIAL</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">INPUT</span><span class="o">=</span><span class="n">ORACLESPATIAL</span>
 </pre></div>
 </div>
 <p>Si vous avez ça, vous êtes bons du point de vue de Mapserver</p>
@@ -236,7 +232,7 @@
 <h3>Variables système<a class="headerlink" href="#system-variables" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Sur Ubuntu (et de nombreux autres systèmes), il y a un fichier &#8220;/etc/profile&#8221; qui définit les variables d&#8217;environnement pour tous les utilisateurs du système (vous voudrez peut être des variables d&#8217;environnement spécifiques en éditant le fichier des utilisateurs &#8221;.profile&#8221; dans leur répertoire home, mais habituellement les utilisateurs de la base de données Oracle ne sont pas des utilisateurs du système avec leur propre home)</p>
 <p>Définir les variables suivantes</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ cd /etc
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ cd /etc
 
 
 $ echo export ORACLE_HOME=/path/to/oracle/home &gt;&gt; /etc/profile
@@ -263,24 +259,24 @@ apache2.conf-files. In the folder &#8220;/etc/apache2/sites_available&#8221; you
 sites-file. If you did not do sth. Special e.g. installing virtual hosts, the
 file is named &#8220;default&#8221;. In this file, the apache cgi-directory is defined.
 Our file looks like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>ScriptAlias /cgi-bin/ /var/www/cgi-bin/
-&lt;Directory &quot;/var/www/cgi-bin&quot;&gt;
-       AllowOverride None
-       Options ExecCGI -MultiViews +SymLinksIfOwnerMatch
-       Order allow,deny
-       Allow from all
-&lt;/Directory&gt;&lt;/p&gt;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ScriptAlias</span> <span class="o">/</span><span class="n">cgi</span><span class="o">-</span><span class="nb">bin</span><span class="o">/</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">cgi</span><span class="o">-</span><span class="nb">bin</span><span class="o">/</span>
+<span class="o">&lt;</span><span class="n">Directory</span> <span class="s2">&quot;/var/www/cgi-bin&quot;</span><span class="o">&gt;</span>
+       <span class="n">AllowOverride</span> <span class="kc">None</span>
+       <span class="n">Options</span> <span class="n">ExecCGI</span> <span class="o">-</span><span class="n">MultiViews</span> <span class="o">+</span><span class="n">SymLinksIfOwnerMatch</span>
+       <span class="n">Order</span> <span class="n">allow</span><span class="p">,</span><span class="n">deny</span>
+       <span class="n">Allow</span> <span class="kn">from</span> <span class="nn">all</span>
+<span class="o">&lt;/</span><span class="n">Directory</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>Dans ce fichier, les variables d&#8217;environnement locales doivent être définies. Nous avons fait cela dans un bloc &#8220;location&#8221; ressemblant à ceci:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;Location &quot;/cgi-bin/&quot;&gt;
-    SetEnv ORACLE_HOME &quot;/path/to/oracle/home&quot;
-&lt;/Location&gt;&lt;/p&gt;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">Location</span> <span class="s2">&quot;/cgi-bin/&quot;</span><span class="o">&gt;</span>
+    <span class="n">SetEnv</span> <span class="n">ORACLE_HOME</span> <span class="s2">&quot;/path/to/oracle/home&quot;</span>
+<span class="o">&lt;/</span><span class="n">Location</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>Où /cgi-bin/ dans le bloc &#8220;location block&#8221; se réfère au script alias /cgi-bin/ et le répertoire TNS_ADMIN pointe vers l&#8217;emplacement du fichier tnsnames.ora.</p>
 <p>Ensuite, redémarrer apache:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ /etc/init.d/apache2 force-reload
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ /etc/init.d/apache2 force-reload
 </pre></div>
 </div>
 </div>
@@ -307,29 +303,29 @@ Our file looks like this:</p>
 <div class="section" id="testing-error-handling">
 <h3>Tests et gestion dees erreurs<a class="headerlink" href="#testing-error-handling" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Donc, c&#8217;est bien maintenant. Charger le mapfile dans votre application et l&#8217;essayer. Si tout se passe bien, Super; sinon, un message d&#8217;erreur peut avoir lieu (celui-ci vient d&#8217;une requête GetMap interrogeant Mapserver via l&#8217;interface WMS):</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;ServiceExceptionReport version=&quot;1.0.1&quot;&gt;
-    &lt;ServiceException&gt;
-        msDrawMap(): Image handling error. Failed to draw layer named &#39;test1&#39;.
-        msOracleSpatialLayerOpen(): OracleSpatial error. Cannot create OCI Handlers.
-        Connection failure. Check the connection string. Error: .
-    &lt;/ServiceException&gt;
-&lt;/ServiceExceptionReport&gt;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">ServiceExceptionReport</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.0.1&quot;</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">ServiceException</span><span class="o">&gt;</span>
+        <span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Image</span> <span class="n">handling</span> <span class="n">error</span><span class="o">.</span> <span class="n">Failed</span> <span class="n">to</span> <span class="n">draw</span> <span class="n">layer</span> <span class="n">named</span> <span class="s1">&#39;test1&#39;</span><span class="o">.</span>
+        <span class="n">msOracleSpatialLayerOpen</span><span class="p">():</span> <span class="n">OracleSpatial</span> <span class="n">error</span><span class="o">.</span> <span class="n">Cannot</span> <span class="n">create</span> <span class="n">OCI</span> <span class="n">Handlers</span><span class="o">.</span>
+        <span class="n">Connection</span> <span class="n">failure</span><span class="o">.</span> <span class="n">Check</span> <span class="n">the</span> <span class="n">connection</span> <span class="n">string</span><span class="o">.</span> <span class="n">Error</span><span class="p">:</span> <span class="o">.</span>
+    <span class="o">&lt;/</span><span class="n">ServiceException</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">ServiceExceptionReport</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>Cela nous renvoie qu&#8217;il y a peut être un problème avec la connexion à la base de données. Avant tout, vérifions si le mapfile est bon. Poir cela, nous utilisons le programme utilitaire Mapserver <a class="reference internal" href="../utilities/shp2img.html#shp2img"><span>shp2img</span></a>.</p>
+<p>Cela nous renvoie qu&#8217;il y a peut être un problème avec la connexion à la base de données. Avant tout, vérifions si le mapfile est bon. Poir cela, nous utilisons le programme utilitaire Mapserver <a class="reference internal" href="../utilities/shp2img.html#shp2img"><span class="std std-ref">shp2img</span></a>.</p>
 <p>Assumons que vous êtes dans le répertoire où vous avez compilé Mapserver et lancez shp2img :</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ cd /var/src/mapserver_version/
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ cd /var/src/mapserver_version/
 
 $ shp2img -m /path/to/mapfile/mapfile.map -i png -o /path/to/output/output.png
 </pre></div>
 </div>
 <p>La sortie de la commande devrait ressembler à cela</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>[Fri Feb  2 14:32:17 2007].522395 msDrawMap(): Layer 0 (test1), 0.074s
-[Fri Feb  2 14:32:17 2007].522578 msDrawMap(): Drawing Label Cache, 0.000s
-[Fri Feb  2 14:32:17 2007].522635 msDrawMap() total time: 0.075s
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Fri</span> <span class="n">Feb</span>  <span class="mi">2</span> <span class="mi">14</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mi">17</span> <span class="mi">2007</span><span class="p">]</span><span class="o">.</span><span class="mi">522395</span> <span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">0</span> <span class="p">(</span><span class="n">test1</span><span class="p">),</span> <span class="mf">0.074</span><span class="n">s</span>
+<span class="p">[</span><span class="n">Fri</span> <span class="n">Feb</span>  <span class="mi">2</span> <span class="mi">14</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mi">17</span> <span class="mi">2007</span><span class="p">]</span><span class="o">.</span><span class="mi">522578</span> <span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Drawing</span> <span class="n">Label</span> <span class="n">Cache</span><span class="p">,</span> <span class="mf">0.000</span><span class="n">s</span>
+<span class="p">[</span><span class="n">Fri</span> <span class="n">Feb</span>  <span class="mi">2</span> <span class="mi">14</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mi">17</span> <span class="mi">2007</span><span class="p">]</span><span class="o">.</span><span class="mi">522635</span> <span class="n">msDrawMap</span><span class="p">()</span> <span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.075</span><span class="n">s</span>
 </pre></div>
 </div>
-<p>Si ce n&#8217;est pas le cas, cela vous guidera vers n&#8217;importe quelle erreur de votre mapfile ou une manière d&#8217;accéder à la donnée directement. Dans ce cas, regardez <a class="reference internal" href="../input/vector/oracle.html#oci"><span>Oracle Spatial</span></a>. S&#8217;il y a un problème avec votre connexion à Oracle, le même message que ci-dessus (MsDrawMap() ...) devrait être renvoyé. Vérifiez la syntaxe de votre mapfile et/ou la configuration de l&#8217;environnement pour Oracle.</p>
+<p>Si ce n&#8217;est pas le cas, cela vous guidera vers n&#8217;importe quelle erreur de votre mapfile ou une manière d&#8217;accéder à la donnée directement. Dans ce cas, regardez <a class="reference internal" href="../input/vector/oracle.html#oci"><span class="std std-ref">Oracle Spatial</span></a>. S&#8217;il y a un problème avec votre connexion à Oracle, le même message que ci-dessus (MsDrawMap() ...) devrait être renvoyé. Vérifiez la syntaxe de votre mapfile et/ou la configuration de l&#8217;environnement pour Oracle.</p>
 <p>Pour Debian/Ubuntu, ça vaut aussi le coup de vérifier le fichier &#8220;/etc/environment&#8221; et de tester judicieusement l&#8217;ajout de variables système comparables à <a class="reference internal" href="#system-variables">System Variables</a></p>
 <p>Si votre sortie est OK, vous devriez regarder aussi l&#8217;image générée (output.png). Ensuite, votre problème se réduit aux accès de apache au répertoire home de oracle. Vérifiez avec attention votre configuration apache. Merci de noter que le fichier de configuration de apache diffère selon les distributions linux. Pour ce document, nous parlons de Ubuntu, qui devrait être similaire à celui de Debian.</p>
 </div>
@@ -371,14 +367,11 @@ $ shp2img -m /path/to/mapfile/mapfile.map -i png -o /path/to/output/output.png
 <div id="searchbox" style="display: none" role="search">
   <h3>Recherche rapide</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Saisissez un mot clef ou un nom de module, classe ou fonction.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -389,7 +382,7 @@ $ shp2img -m /path/to/mapfile/mapfile.map -i png -o /path/to/output/output.png
       &copy;2016, Open Source Geospatial Foundation.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
       
     </div>
