@@ -153,7 +153,7 @@ spatial reference of its data &#8211; EPSG/ESRI codes in the form:</p>
 <span class="n">END</span>
 </pre></div>
 </div>
-<p>And proj4-formated definitions in the form:</p>
+<p>And PROJ.4-formated definitions in the form:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PROJECTION</span>
     <span class="s2">&quot;proj=cea&quot;</span>
     <span class="s2">&quot;lon_0=0&quot;</span>
@@ -181,29 +181,29 @@ not widely advertised or regularized:</p>
 <h3>Performance Observations<a class="headerlink" href="#performance-observations" title="Permalink to this headline">¶</a></h3>
 <p>MapServer&#8217;s current spatial reference story is focussed on two things &#8211;
 simple description and ensuring that unnecessary data reprojection doesn&#8217;t
-happen.  MapServer currently uses proj4 directly to do its data reprojection,
-and this is the impetus for defining coordinate systems in proj4 format.  For
+happen.  MapServer currently uses PROJ.4 directly to do its data reprojection,
+and this is the impetus for defining coordinate systems in PROJ.4 format.  For
 people wanting the best performance but still requiring data reprojection,
-defining your spatial references in proj4 format is a must.</p>
+defining your spatial references in PROJ.4 format is a must.</p>
 <p>Alternatively, the EPSG/ESRI code definition of MapServer&#8217;s spatial references
-allows MapServer to offload the lookup of proj4 descriptions to proj4 itself,
+allows MapServer to offload the lookup of PROJ.4 descriptions to PROJ.4 itself,
 with a simple file-based lookup table.  This mechanism is currently a
 bottleneck, however, as each lookup requires trolling through a file to
-match the given identifier and returning the proj4 definition.</p>
+match the given identifier and returning the PROJ.4 definition.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This penalty was lessened in early 2009 by the addition of a caching
-mechanism in proj4 that allows subsequent lookups to be fast.</p>
+mechanism in PROJ.4 that allows subsequent lookups to be fast.</p>
 </div>
 </div>
 <div class="section" id="usability">
 <h3>Usability<a class="headerlink" href="#usability" title="Permalink to this headline">¶</a></h3>
 <p>The usability of these two mechanism can be a nightmare for users.  First,
 most of the spatial reference descriptions that people work with are of the
-WKT variety &#8211; not proj4.  While it is straightforward to set the PROJECTION
+WKT variety &#8211; not PROJ.4.  While it is straightforward to set the PROJECTION
 information for data with a known EPSG value, custom projections or those
 not generally available in the EPSG database require the user to somehow
-translate their WKT into proj4 format and paste it into their mapfile.</p>
+translate their WKT into PROJ.4 format and paste it into their mapfile.</p>
 <p>Additionally, <a class="reference external" href="http://spatialreference.org">http://spatialreference.org</a> exists to help
 ease this pain, but it is ultimately a stopgap, and not a permanent
 solution to the problem.  It is not practical to be downloading the
@@ -232,13 +232,13 @@ so:</p>
 <p>It is important that MapServer&#8217;s previous spatial reference definition
 behavior be preserved.  First, drastically changing the PROJECTION definitions
 would mean a lot of unnecessary mapfile churn.  Second, continuing to define
-spatial references in proj4 format as before will be the most performant.</p>
+spatial references in PROJ.4 format as before will be the most performant.</p>
 <p>Implementation of this RFC will encompass two items:</p>
 <ol class="arabic simple">
 <li>Addition of a method to the LAYER virtual table .</li>
 <li>Additional methods will be added for drivers to be able to convert
-from their native projection description type (ESRI WKT, OGC WKT, proj.4, etc)
-into proj.4 for setting on the projectionObj.</li>
+from their native projection description type (ESRI WKT, OGC WKT, PROJ.4, etc)
+into PROJ.4 for setting on the projectionObj.</li>
 <li>PROJECTION will support an explicit AUTO keyword</li>
 </ol>
 <div class="section" id="virtual-table-method">
