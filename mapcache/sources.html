@@ -158,6 +158,18 @@ by MapCache itself at runtime.</p>
 <span id="mapcache-source-mapfile"></span><h2>MapFile Sources<a class="headerlink" href="#mapfile-sources" title="Permalink to this headline">¶</a></h2>
 <p>Experimental</p>
 </div>
+<div class="section" id="wmts-sources">
+<h2>WMTS Sources<a class="headerlink" href="#wmts-sources" title="Permalink to this headline">¶</a></h2>
+<p>MapCache WMTS source uses GDAL WMTS driver under the hood. Note that GDAL version must be &gt; 2.1 to be able to enable the driver correctly. GDAL WMTS driver documentation can be found on: <a class="reference external" href="http://www.gdal.org/frmt_wmts.html">http://www.gdal.org/frmt_wmts.html</a></p>
+<p>GDAL WMTS xml file is needed, example command to construct such a file directly from wmts source equipped with basic auth &amp; user/pass is:
+gdal_translate &#8220;WMTS:https://&lt;url to capabilities&gt;,layer=&lt;layer id&gt;&#8221; gdal_wmts.xml -of WMTS &#8211;config GDAL_HTTP_AUTH BASIC &#8211;config GDAL_HTTP_USERPWD &lt;user:pass&gt;</p>
+<p>After GDAL WMTS xml file is constructed, it&#8217;s validity can be checked with command &#8220;gdalinfo &lt;name of xml file&gt;&#8221;.</p>
+<p>last step is to enable the new WMTS source with following configuration in mapcache.xml.
+&lt;source type=&#8221;gdal&#8221; name=&#8221;foo&#8221;&gt;</p>
+<blockquote>
+<div>&lt;data&gt;/path/to/gdal/file (gdal_wmts.xml)&lt;/data&gt;</div></blockquote>
+<p>&lt;/source&gt;</p>
+</div>
 </div>
 
 
@@ -191,6 +203,7 @@ by MapCache itself at runtime.</p>
 <li><a class="reference internal" href="#">Data Sources</a><ul>
 <li><a class="reference internal" href="#wms-sources">WMS Sources</a></li>
 <li><a class="reference internal" href="#mapfile-sources">MapFile Sources</a></li>
+<li><a class="reference internal" href="#wmts-sources">WMTS Sources</a></li>
 </ul>
 </li>
 </ul>
