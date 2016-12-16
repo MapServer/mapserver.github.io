@@ -196,11 +196,11 @@ likely it would match the <a class="reference external" href="http://php.net/sup
 </div>
 <div class="section" id="limitations">
 <h2>2.4 Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h2>
-<p>During compile, PHP&#8217;s reserved keywords for the functions &#8220;empty()&#8221; and &#8220;clone()&#8221;
+<ol class="arabic">
+<li><p class="first">During compile, PHP&#8217;s reserved keywords for the functions &#8220;empty()&#8221; and &#8220;clone()&#8221;
 will be automatically renamed by SWIG to &#8220;c_empty()&#8221; and &#8220;c_clone()&#8221;
 for several MapServer objects, as follows:</p>
-<blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">..</span>\<span class="o">..</span>\<span class="n">mapserver</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="mi">920</span><span class="p">)</span> <span class="p">:</span> <span class="ne">Warning</span> <span class="mi">314</span><span class="p">:</span> <span class="s1">&#39;empty&#39;</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">PHP</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">renaming</span> <span class="n">to</span> <span class="s1">&#39;c_empty&#39;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">..</span>\<span class="o">..</span>\<span class="n">mapserver</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="mi">920</span><span class="p">)</span> <span class="p">:</span> <span class="ne">Warning</span> <span class="mi">314</span><span class="p">:</span> <span class="s1">&#39;empty&#39;</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">PHP</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">renaming</span> <span class="n">to</span> <span class="s1">&#39;c_empty&#39;</span>
 <span class="o">..</span>\<span class="n">swiginc</span>\<span class="nb">map</span><span class="o">.</span><span class="n">i</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span> <span class="p">:</span> <span class="ne">Warning</span> <span class="mi">314</span><span class="p">:</span> <span class="s1">&#39;clone&#39;</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">PHP</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">renaming</span> <span class="n">to</span> <span class="s1">&#39;c_clone&#39;</span>
 <span class="o">..</span>\<span class="n">swiginc</span>\<span class="n">layer</span><span class="o">.</span><span class="n">i</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span> <span class="p">:</span> <span class="ne">Warning</span> <span class="mi">314</span><span class="p">:</span> <span class="s1">&#39;clone&#39;</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">PHP</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">renaming</span> <span class="n">to</span> <span class="s1">&#39;c_clone&#39;</span>
 <span class="o">..</span>\<span class="n">swiginc</span>\<span class="n">class</span><span class="o">.</span><span class="n">i</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span> <span class="p">:</span> <span class="ne">Warning</span> <span class="mi">314</span><span class="p">:</span> <span class="s1">&#39;clone&#39;</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">PHP</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">renaming</span> <span class="n">to</span> <span class="s1">&#39;c_clone&#39;</span>
@@ -208,9 +208,32 @@ for several MapServer objects, as follows:</p>
 <span class="o">..</span>\<span class="n">swiginc</span>\<span class="n">shape</span><span class="o">.</span><span class="n">i</span><span class="p">(</span><span class="mi">110</span><span class="p">)</span> <span class="p">:</span> <span class="ne">Warning</span> <span class="mi">314</span><span class="p">:</span> <span class="s1">&#39;clone&#39;</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">PHP</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">renaming</span> <span class="n">to</span> <span class="s1">&#39;c_clone&#39;</span>
 </pre></div>
 </div>
-</div></blockquote>
 <p>This needs discussion, on how to handle that (document these changes in the SWIG API for PHP,
 or change the underlying function names in the MapServer source).</p>
+</li>
+<li><p class="first">In downstream PHP scripts, users must include the SWIG-generated file <cite>mapscript.php</cite> before
+calling any MapScript objects, as this file contains various constants and classes.</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+
+  <span class="k">include</span><span class="p">(</span><span class="s2">&quot;mapscript.php&quot;</span><span class="p">);</span>
+
+  <span class="nv">$mapfile</span> <span class="o">=</span> <span class="s2">&quot;C:/ms4w/apps/gmap/map/swig.map&quot;</span><span class="p">;</span>
+  <span class="nv">$oMap</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mapObj</span><span class="p">(</span><span class="nv">$mapfile</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">In downstream PHP scripts, users will have to modify their syntax for declaring new objects,
+such as:</p>
+<p>from:</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">$oMap = ms_newMapObj(MAPFILE);</span>
+</pre></div>
+</div>
+<p>to:</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">$oMap = new mapObj(MAPFILE);</span>
+</pre></div>
+</div>
+</li>
+</ol>
 </div>
 <div class="section" id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this headline">¶</a></h2>
