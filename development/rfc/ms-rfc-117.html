@@ -131,7 +131,7 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:jmckenna&#37;&#52;&#48;gatewaygeomatics&#46;com">jmckenna<span>&#64;</span>gatewaygeomatics<span>&#46;</span>com</a></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2016-12-17</td>
+<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2016-12-20</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">MapServer 7.2</td>
 </tr>
@@ -213,6 +213,17 @@ SWIG to &#8220;c_empty()&#8221; and &#8220;c_clone()&#8221; for several MapServe
 </div>
 <p><strong>This needs discussion, on how to handle that (document these changes in the SWIG API for PHP,
 or change the underlying function names in the MapServer source)</strong></p>
+<p>Update: regarding the &#8216;clone()&#8217; keyword, Java MapScript also faced this issue and solved it by redefining
+the functions, such as <cite>cloneMap()</cite> or <cite>cloneLayer()</cite>:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="cp">#ifdef SWIGJAVA</span>
+  <span class="o">%</span><span class="n">newobject</span> <span class="n">cloneMap</span><span class="p">;</span>
+  <span class="n">mapObj</span> <span class="o">*</span><span class="nf">cloneMap</span><span class="p">()</span>
+<span class="cp">#else</span>
+  <span class="o">%</span><span class="n">newobject</span> <span class="n">clone</span><span class="p">;</span>
+  <span class="n">mapObj</span> <span class="o">*</span><span class="n">clone</span><span class="p">()</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
 </li>
 <li><p class="first">In downstream PHP scripts, users must include the SWIG-generated file <cite>mapscript.php</cite> before
 calling any MapScript objects, as this file contains various constants and classes:</p>
@@ -375,7 +386,7 @@ document would contain a note mentioning deprecated for version &gt;=7.2</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2016, Open Source Geospatial Foundation.
-      Last updated on 2016-12-19.
+      Last updated on 2016-12-20.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>
