@@ -350,19 +350,19 @@ for example myfileYYYYMMDDHH.tif</p>
 33
 34
 35</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="c1">#!/usr/bin/perl</span>
-  <span class="k">use</span> <span class="n">XBase</span><span class="p">;</span>
+  <span class="k">use</span> <span class="nn">XBase</span><span class="p">;</span>
   <span class="nb">opendir</span><span class="p">(</span><span class="n">DIR</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">);</span> <span class="c1"># open the current directory</span>
   <span class="k">foreach</span> <span class="nv">$file</span> <span class="p">(</span><span class="nb">readdir</span><span class="p">(</span><span class="n">DIR</span><span class="p">))</span> <span class="p">{</span>
     <span class="k">next</span> <span class="k">if</span> <span class="o">!</span><span class="p">(</span><span class="nv">$file</span> <span class="o">=~</span><span class="sr"> /\.dbf$/</span><span class="p">);</span> <span class="c1"># read the dbf file in this directory created by gdaltindex</span>
     <span class="k">print</span> <span class="s">&quot;Working on $file...\n&quot;</span><span class="p">;</span>
     <span class="nv">$tfile</span> <span class="o">=</span> <span class="s">&#39;temporary.dbf&#39;</span><span class="p">;</span>
     <span class="nb">system</span><span class="p">(</span><span class="s">&quot;mv $file $tfile&quot;</span><span class="p">);</span>
-    <span class="nv">$oldtable</span> <span class="o">=</span> <span class="k">new</span> <span class="n">XBase</span> <span class="nv">$tfile</span> <span class="ow">or</span> <span class="nb">die</span> <span class="n">XBase</span><span class="o">-&gt;</span><span class="n">errstr</span><span class="p">;</span>
+    <span class="nv">$oldtable</span> <span class="o">=</span> <span class="k">new</span> <span class="n">XBase</span> <span class="nv">$tfile</span> <span class="ow">or</span> <span class="nb">die</span> <span class="nn">XBase</span><span class="o">-&gt;</span><span class="n">errstr</span><span class="p">;</span>
     <span class="k">print</span> <span class="nb">join</span><span class="p">(</span><span class="s">&quot;\t&quot;</span><span class="p">,</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_names</span><span class="p">)</span> <span class="o">.</span><span class="s">&quot;\n&quot;</span><span class="p">;</span>
     <span class="k">print</span> <span class="nb">join</span><span class="p">(</span><span class="s">&quot;\t&quot;</span><span class="p">,</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_types</span><span class="p">)</span> <span class="o">.</span><span class="s">&quot;\n&quot;</span><span class="p">;</span>
     <span class="k">print</span> <span class="nb">join</span><span class="p">(</span><span class="s">&quot;\t&quot;</span><span class="p">,</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_lengths</span><span class="p">)</span> <span class="o">.</span><span class="s">&quot;\n&quot;</span><span class="p">;</span>
     <span class="k">print</span> <span class="nb">join</span><span class="p">(</span><span class="s">&quot;\t&quot;</span><span class="p">,</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_decimals</span><span class="p">)</span> <span class="o">.</span><span class="s">&quot;\n&quot;</span><span class="p">;</span>
-    <span class="nv">$newtable</span> <span class="o">=</span> <span class="n">XBase</span><span class="o">-&gt;</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="nv">$file</span><span class="p">,</span>
+    <span class="nv">$newtable</span> <span class="o">=</span> <span class="nn">XBase</span><span class="o">-&gt;</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="nv">$file</span><span class="p">,</span>
                   <span class="s">&quot;field_names&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_names</span><span class="p">,</span> <span class="s">&quot;IMGDATE&quot;</span><span class="p">],</span>  <span class="c1"># this is the FILTERITEM in the corresponding tile index layer within your mapfile</span>
                   <span class="s">&quot;field_types&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_types</span><span class="p">,</span> <span class="s">&quot;C&quot;</span><span class="p">],</span>  <span class="c1"># character column type</span>
                   <span class="s">&quot;field_lengths&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_lengths</span><span class="p">,</span> <span class="mi">13</span><span class="p">],</span> <span class="c1"># length of the date string</span>
@@ -528,7 +528,7 @@ unless you set the IMAGEMODE to PC256 instead of BYTE.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2017, Open Source Geospatial Foundation.
-      Last updated on 2017-01-18.
+      Last updated on 2017-01-30.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>
