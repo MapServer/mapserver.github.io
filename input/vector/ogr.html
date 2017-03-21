@@ -132,7 +132,7 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">jmckenna at gatewaygeomatics.com</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2016-06-23</td>
+<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2017-03-21</td>
 </tr>
 </tbody>
 </table>
@@ -877,7 +877,7 @@ precedence over the apparition order of the OGR tools.</p>
 <p>OGR STYLEITEMAUTO label styles can be accessed through MapScript, such
 as PHP/MapScript&#8217;s getshape() or getvalue() methods, by setting the
 LAYER&#8217;s PROCESSING parameter to &#8220;GETSHAPE_STYLE_ITEMS=all&#8221;.
-Therefore, the LAYER may contain:</p>
+Therefore, the LAYER must contain:</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="p">...</span>
   <span class="k">PROCESSING</span> <span class="s">&quot;GETSHAPE_STYLE_ITEMS=all&quot;</span>
@@ -997,6 +997,32 @@ factor percent. (gdal &gt;= 1.4.0)</td>
 </table>
 <p>Please see the <a class="reference external" href="http://www.gdal.org/ogr_feature_style.html">OGR Feature Style Specification</a> document for more details
 on those specific styles.</p>
+<p>Sample PHP MapScript code to access the &#8220;OGR:LabelText&#8221; label style follows:</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+
+<span class="c1">// define variables</span>
+<span class="nb">define</span><span class="p">(</span> <span class="s2">&quot;MAPFILE&quot;</span><span class="p">,</span> <span class="s2">&quot;D:/ms4w/apps/ogr-demos/nfld_demo/test.map&quot;</span> <span class="p">);</span>
+
+<span class="c1">// open map</span>
+<span class="nv">$oMap</span> <span class="o">=</span> <span class="nx">ms_newMapObj</span><span class="p">(</span> <span class="nx">MAPFILE</span> <span class="p">);</span>
+
+<span class="c1">//get layer</span>
+<span class="nv">$oLayer</span> <span class="o">=</span> <span class="nv">$oMap</span><span class="o">-&gt;</span><span class="na">getLayerByName</span><span class="p">(</span><span class="s2">&quot;Map_Labels&quot;</span><span class="p">);</span>
+
+<span class="c1">//get styles</span>
+<span class="nv">$status</span> <span class="o">=</span> <span class="nv">$oLayer</span><span class="o">-&gt;</span><span class="na">open</span><span class="p">();</span>
+<span class="nv">$status</span> <span class="o">=</span> <span class="nv">$oLayer</span><span class="o">-&gt;</span><span class="na">whichShapes</span><span class="p">(</span><span class="nv">$oMap</span><span class="o">-&gt;</span><span class="na">extent</span><span class="p">);</span>
+<span class="k">while</span> <span class="p">(</span><span class="nv">$oShape</span> <span class="o">=</span> <span class="nv">$oLayer</span><span class="o">-&gt;</span><span class="na">nextShape</span><span class="p">())</span>
+<span class="p">{</span>
+  <span class="c1">//echo $oShape-&gt;index .&quot;&lt;br&gt;\n&quot;;</span>
+  <span class="k">echo</span> <span class="nv">$oShape</span><span class="o">-&gt;</span><span class="na">getValue</span><span class="p">(</span><span class="nv">$oLayer</span><span class="p">,</span><span class="s2">&quot;OGR:LabelText&quot;</span><span class="p">);</span>
+  <span class="k">echo</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">$oLayer</span><span class="o">-&gt;</span><span class="na">close</span><span class="p">();</span>
+
+<span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="sample-sites-using-ogr-mapserver">
@@ -1156,7 +1182,7 @@ SISTEMA INFORMATIVO TERRITORIALE ED AMBIENTALE ( <a class="reference external" h
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2017, Open Source Geospatial Foundation.
-      Last updated on 2017-03-16.
+      Last updated on 2017-03-21.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>
