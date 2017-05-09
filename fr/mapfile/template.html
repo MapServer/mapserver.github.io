@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Templating &#8212; MapServer 7.0.4 documentation</title>
+    <title>Templating &#8212; MapServer 7.0.5 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.4',
+        VERSION:     '7.0.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Recherche" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.4 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.5 documentation" href="../index.html" />
     <link rel="up" title="Mapfile" href="index.html" />
     <link rel="next" title="Couche union" href="union.html" />
     <link rel="prev" title="Exemples de symbologie" href="symbology/examples.html" /> 
@@ -137,7 +137,7 @@
           <a href="symbology/examples.html" title="Exemples de symbologie"
              accesskey="P">précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.4</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.5</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Mapfile</a> &#187;</li> 
       </ul>
     </div>
@@ -162,7 +162,7 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">jmckenna at gatewaygeomatics.com</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2016-02-02</td>
+<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2017-03-03</td>
 </tr>
 </tbody>
 </table>
@@ -191,6 +191,20 @@
 <h3>Remarques<a class="headerlink" href="#notes" title="Lien permanent vers ce titre">¶</a></h3>
 <ul>
 <li><p class="first">Les modèles <em>doivent</em> contenir la chaîne magique &#8216;mapserver template&#8217; dans la première ligne du modèle. Souvent, cela prend la forme d&#8217;un commentaire HTML, javascript ou XML. Cette ligne <em>n&#8217;est</em> pas écrite dans le client. La chaîne magique n&#8217;est pas sensible à la casse.</p>
+</li>
+<li><p class="first">MapServer will only accept certain file extensions for templates;
+valid file extensions are:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">gml</span>
+<span class="o">.</span><span class="n">html</span>
+<span class="o">.</span><span class="n">htm</span>
+<span class="o">.</span><span class="n">js</span>
+<span class="o">.</span><span class="n">kml</span>
+<span class="o">.</span><span class="n">svg</span>
+<span class="o">.</span><span class="n">tmpl</span>
+<span class="o">.</span><span class="n">wml</span>
+<span class="o">.</span><span class="n">xml</span>
+</pre></div>
+</div>
 </li>
 <li><p class="first">Tous les <a class="reference internal" href="../cgi/index.html#cgi"><span class="std std-ref">paramètres CGI</span></a> peuvent être référencés  dans des substitutions de modèles, les paramètres spéciques de MapServer aussi bien que ceux définis par l&#8217;utilisateur. En principe, les paramètres sont gérés par le MapServer 1:1. Cette fonctionnalité est essentielle pour implémenter les applications MapServer.</p>
 <p>La référence ci-dessous liste seulement les chaînes de substitutions de modèle spécial qui sont nécessaires pour obtenir une information modifiée par MapServer, c&#8217;est à dire une nouvelle échelle, des résultats d&#8217;interrogation, etc.</p>
@@ -769,6 +783,14 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </ul>
 <p>Comme un exemple simple :</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">shpxy</span> <span class="n">xh</span><span class="o">=</span><span class="s2">&quot;(&quot;</span> <span class="n">yf</span><span class="o">=</span><span class="s2">&quot;)&quot;</span><span class="p">]</span> <span class="n">will</span> <span class="n">result</span> <span class="ow">in</span><span class="p">:</span> <span class="p">(</span><span class="n">x1</span> <span class="n">y1</span><span class="p">),(</span><span class="n">x2</span> <span class="n">y2</span><span class="p">),(</span><span class="n">x3</span> <span class="n">y3</span><span class="p">)</span>
+
+<span class="ow">or</span>
+
+<span class="p">[</span><span class="n">shpxy</span> <span class="n">precision</span><span class="o">=</span><span class="s2">&quot;2&quot;</span> <span class="n">xh</span><span class="o">=</span><span class="s2">&quot;(&quot;</span> <span class="n">yf</span><span class="o">=</span><span class="s2">&quot;)&quot;</span><span class="p">]</span> <span class="n">will</span> <span class="n">result</span> <span class="ow">in</span><span class="p">:</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span><span class="p">)</span> <span class="p">(</span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">)</span> <span class="p">(</span><span class="n">x3</span><span class="p">,</span><span class="n">y3</span><span class="p">)</span>
+
+<span class="ow">or</span>
+
+<span class="p">[</span><span class="n">shpxy</span> <span class="n">precision</span><span class="o">=</span><span class="s2">&quot;2&quot;</span> <span class="n">xf</span><span class="o">=</span><span class="s2">&quot; &quot;</span> <span class="n">xh</span><span class="o">=</span><span class="s2">&quot;(&quot;</span> <span class="n">yf</span><span class="o">=</span><span class="s2">&quot;)&quot;</span><span class="p">]</span> <span class="n">will</span> <span class="n">result</span> <span class="ow">in</span><span class="p">:</span> <span class="p">(</span><span class="n">x1</span> <span class="n">y1</span><span class="p">)</span> <span class="p">(</span><span class="n">x2</span> <span class="n">y2</span><span class="p">)</span> <span class="p">(</span><span class="n">x3</span> <span class="n">y3</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>et un exemple plus comliqué de sortie KML pour les multipolygones qui peuvent potentiellement avoir des trous (notez que les paramètres doivent tous être sur une seule ligne) :</p>
@@ -1104,13 +1126,13 @@ to the user.</p>
           <a href="symbology/examples.html" title="Exemples de symbologie"
              >précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.4</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.5</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Mapfile</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2017, Open Source Geospatial Foundation.
-      Mis à jour le 2017-02-08.
+      Mis à jour le 2017-05-09.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>
