@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Serveur WMS &#8212; MapServer 7.0.5 documentation</title>
+    <title>Serveur WMS &#8212; MapServer 7.0.6 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.5',
+        VERSION:     '7.0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Recherche" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.5 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.6 documentation" href="../index.html" />
     <link rel="up" title="Gestion et configuration des standards OGC" href="index.html" />
     <link rel="next" title="Service de vue INSPIRE" href="inspire.html" />
     <link rel="prev" title="Support des spécifications OGC dans MapServer" href="ogc_support.html" /> 
@@ -137,7 +137,7 @@
           <a href="ogc_support.html" title="Support des spécifications OGC dans MapServer"
              accesskey="P">précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.5</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.6</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Gestion et configuration des standards OGC</a> &#187;</li> 
       </ul>
     </div>
@@ -158,7 +158,7 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">jmckenna at gatewaygeomatics.com</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2016-08-12</td>
+<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2017-05-24</td>
 </tr>
 </tbody>
 </table>
@@ -453,7 +453,8 @@ support. (recommended)</li>
 <p>Cette requête retourne une image de légende (icône) pour la couche spécifiée. La requête dessinera une icône et une étiquette pour toutes les classes définies sur la couche. Si le nom de la couche demandée est un NAME de GROUP, toutes les couches incluses seront retournées dans l&#8217;icône de légende.</p>
 <div class="section" id="requirements">
 <h4>Prérequis<a class="headerlink" href="#requirements" title="Lien permanent vers ce titre">¶</a></h4>
-<p>Ce qui suit est obligatoire dans le mapfile du serveur WMS pour permettre cette requête:</p>
+<p>The following are required in the WMS server mapfile to enable this
+GetLegendGraphic request:</p>
 <ul class="simple">
 <li><p class="first">un objet LEGEND.</p>
 </li>
@@ -467,7 +468,7 @@ support. (recommended)</li>
 </div>
 <div class="section" id="parameters">
 <h4>Paramètres<a class="headerlink" href="#parameters" title="Lien permanent vers ce titre">¶</a></h4>
-<p>Les élements suivants sont des paramètres valides pour cette requête:</p>
+<p>The following are valid parameters for this GetLegendGraphic request:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p class="first"><strong>LAYER</strong> - (Requis) Nom de la couche WMS à retourner à l&#8217;image de  légende.  Notez que c&#8217;est le paramètre &lt;Name&gt; de &lt;Layer&gt; dans le &#8220;GetCapabilities&#8221;.</p>
@@ -506,10 +507,18 @@ REQUEST=getlegendgraphic&amp;FORMAT=image/png
 </pre></div>
 </div>
 </div>
+<div class="section" id="content-dependent-legends">
+<span id="online-resource-wms"></span><span id="index-5"></span><h4>Content Dependent Legends<a class="headerlink" href="#content-dependent-legends" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Support for content dependent legends is supported (since the <cite>MapServer 6.4</cite> release)
+for WMS GetLegendGraphic calls on POINT, LINE and POLYGON layers, when the client
+includes the (non-standard) BBOX, SRS/CRS and WIDTH/HEIGHT parameters in the request URL
+(such as a GetMap request). If these parameters are not present, the
+normal legend rendering will occur.  For more information, please see <a class="reference internal" href="../development/rfc/ms-rfc-101.html#rfc101"><span class="std std-ref">MS RFC 101: Add Support for Content Dependent Legend Responses</span></a>.</p>
+</div>
 </div>
 </div>
 <div class="section" id="changing-the-online-resource-url">
-<span id="online-resource-wms"></span><span id="index-5"></span><h2><a class="toc-backref" href="#table-of-contents">Changer l&#8217;URL &#8220;Online Resource&#8221;</a><a class="headerlink" href="#changing-the-online-resource-url" title="Lien permanent vers ce titre">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents">Changer l&#8217;URL &#8220;Online Resource&#8221;</a><a class="headerlink" href="#changing-the-online-resource-url" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Comme mentionné dans la section &#8220;Configurer un Mapfile / métadonnée wms_onlineresource&#8221; ci-dessus, l&#8217;URL &#8220;Online Resource&#8221; suivante est parfaitement valide pour un WMS MapServer selon la section 6.2.2 ou la spécification WMS 1.1.1:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mapserv?map=mywms.map&amp;
 </pre></div>
@@ -1740,6 +1749,7 @@ are advertised through in the Capabilities document.</li>
 <li><a class="reference internal" href="#getlegendgraphic-request">Requête GetLegendGraphic</a><ul>
 <li><a class="reference internal" href="#requirements">Prérequis</a></li>
 <li><a class="reference internal" href="#parameters">Paramètres</a></li>
+<li><a class="reference internal" href="#content-dependent-legends">Content Dependent Legends</a></li>
 </ul>
 </li>
 </ul>
@@ -1792,13 +1802,13 @@ are advertised through in the Capabilities document.</li>
           <a href="ogc_support.html" title="Support des spécifications OGC dans MapServer"
              >précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.5</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.6</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Gestion et configuration des standards OGC</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2017, Open Source Geospatial Foundation.
-      Mis à jour le 2017-05-23.
+      Mis à jour le 2017-06-21.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

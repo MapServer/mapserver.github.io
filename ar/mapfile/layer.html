@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>LAYER &#8212; MapServer 7.0.5 documentation</title>
+    <title>LAYER &#8212; MapServer 7.0.6 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.5',
+        VERSION:     '7.0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.5 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.6 documentation" href="../index.html" />
     <link rel="up" title="Mapfile" href="index.html" />
     <link rel="next" title="LEADER" href="leader.html" />
     <link rel="prev" title="LABEL" href="label.html" /> 
@@ -136,7 +136,7 @@
           <a href="label.html" title="LABEL"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.5 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.6 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Mapfile</a> &#187;</li> 
       </ul>
     </div>
@@ -658,9 +658,9 @@ anything you put in here will be accessible via template tags.</p>
 </div>
 </dd>
 </dl>
-<p id="index-51">MINGEOWIDTH [double]</p>
-<blockquote>
-<div><p>Minimum width, in the map&#8217;s geographic units, at which this LAYER
+<dl class="docutils" id="index-51">
+<dt>MINGEOWIDTH [double]</dt>
+<dd><p class="first">Minimum width, in the map&#8217;s geographic units, at which this LAYER
 is drawn.  If MINSCALEDENOM is also specified then MINSCALEDENOM
 will be used instead.</p>
 <p>The width of a map in geographic units can be found by calculating the
@@ -668,10 +668,11 @@ following from the extents:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">maxx</span><span class="p">]</span> <span class="o">-</span> <span class="p">[</span><span class="n">minx</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="versionadded">
+<div class="last versionadded">
 <p><span class="versionmodified">New in version 5.4.0.</span></p>
 </div>
-</div></blockquote>
+</dd>
+</dl>
 <dl class="docutils" id="index-52">
 <dt>MINSCALEDENOM [double]</dt>
 <dd><p class="first">Maximum scale at which this LAYER is drawn.  Scale is given as the
@@ -1012,13 +1013,74 @@ to: &#8220;UNION_SRCLAYER_CLOSE_CONNECTION=ALWAYS&#8221;</p>
 <dt>REQUIRES [expression]</dt>
 <dd>Sets context for displaying this layer (see <a class="reference internal" href="#labelrequires">LABELREQUIRES</a>).</dd>
 </dl>
-<span class="target" id="index-92"></span><span class="target" id="index-93"></span><span class="target" id="index-94"></span><span class="target" id="index-95"></span><span class="target" id="index-96"></span><span class="target" id="index-97"></span><span class="target" id="index-98"></span><dl class="docutils" id="index-99">
+<dl class="docutils" id="index-92">
+<dt>SCALETOKEN</dt>
+<dd><p class="first">Signals the start of a <cite>SCALETOKEN</cite> object.
+Allows scale dependent string substitutions.
+See <a class="reference internal" href="../development/rfc/ms-rfc-86.html#rfc86"><span class="std std-ref">MS RFC 86: Scale-dependant String Substitutions</span></a>.</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">SCALETOKEN</span>
+    <span class="k">NAME</span> <span class="s">&quot;%pri%&quot;</span>
+    <span class="k">VALUES</span>
+      <span class="s">&quot;0&quot;</span> <span class="s">&quot;1&quot;</span>
+      <span class="s">&quot;1000&quot;</span> <span class="s">&quot;2&quot;</span>
+      <span class="s">&quot;10000&quot;</span> <span class="s">&quot;3&quot;</span>
+    <span class="k">END</span> <span class="c"># VALUES</span>
+  <span class="k">END</span> <span class="c"># SCALETOKEN</span>
+  <span class="c"># data from a specific table:</span>
+  <span class="k">DATA</span> <span class="s">&quot;geom from mytable_%pri%&quot;</span>
+  <span class="c"># data from a specific Shapefile format dataset:</span>
+  <span class="k">DATA</span> <span class="s">&quot;/path/to/roads_%pri%.shp&quot;</span>
+  <span class="c"># data from a specific column in the table:</span>
+  <span class="k">DATA</span> <span class="s">&quot;geom_%pri</span><span class="si">% f</span><span class="s">rom roads&quot;</span>
+  <span class="c"># filtering:</span>
+  <span class="k">DATA</span> <span class="s">&quot;geom_%pri</span><span class="si">% f</span><span class="s">rom (select * from roads where pri &gt; %pri%) as foo&quot;</span>
+  <span class="k">CLASS</span>
+    <span class="p">...</span>
+  <span class="k">END</span> <span class="c"># CLASS</span>
+<span class="k">END</span> <span class="c"># LAYER</span>
+</pre></div>
+</div>
+<p>In the previous example, %pri% would be replaced by:</p>
+<ul>
+<li><p class="first">&#8220;1&#8221; for scale denominators smaller than 1,000, giving:</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">DATA</span> <span class="s">&quot;geom from mytable_1&quot;</span>
+<span class="k">DATA</span> <span class="s">&quot;/path/to/roads_1.shp&quot;</span>
+<span class="k">DATA</span> <span class="s">&quot;geom_1 from roads&quot;</span>
+<span class="k">DATA</span> <span class="s">&quot;geom_1 from (select * from roads where pri &gt; 1) as foo&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">&#8220;2&#8221; for scale denominators between 1,000 and 10,000:</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">DATA</span> <span class="s">&quot;geom from mytable_2&quot;</span>
+<span class="k">DATA</span> <span class="s">&quot;/path/to/roads_2.shp&quot;</span>
+<span class="k">DATA</span> <span class="s">&quot;geom_2 from roads&quot;</span>
+<span class="k">DATA</span> <span class="s">&quot;geom_2 from (select * from roads where pri &gt; 2) as foo&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">&#8220;3&#8221; for scale denominators larger than 10,000:</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">DATA</span> <span class="s">&quot;geom from mytable_3&quot;</span>
+<span class="k">DATA</span> <span class="s">&quot;/path/to/roads_3.shp&quot;</span>
+<span class="k">DATA</span> <span class="s">&quot;geom_3 from roads&quot;</span>
+<span class="k">DATA</span> <span class="s">&quot;geom_3 from (select * from roads where pri &gt; 3) as foo&quot;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 6.4.</span></p>
+</div>
+</dd>
+</dl>
+<span class="target" id="index-93"></span><span class="target" id="index-94"></span><span class="target" id="index-95"></span><span class="target" id="index-96"></span><span class="target" id="index-97"></span><span class="target" id="index-98"></span><span class="target" id="index-99"></span><dl class="docutils" id="index-100">
 <dt>SIZEUNITS [feet|inches|kilometers|meters|miles|nauticalmiles|pixels]</dt>
 <dd>Sets the unit of <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> object SIZE values (default is
 pixels).  Useful for simulating buffering. <cite>nauticalmiles</cite> was
 added in MapServer 5.6.</dd>
 </dl>
-<span id="index-100"></span><dl class="docutils" id="status">
+<span id="index-101"></span><dl class="docutils" id="status">
 <dt>STATUS [on|off|default]</dt>
 <dd><p class="first">Sets the current status of the layer. Often modified by MapServer itself.
 Default turns the layer on permanently.</p>
@@ -1042,10 +1104,10 @@ request - all the layers of the group will be returned.</p>
 </div>
 </dd>
 </dl>
-<dl class="docutils" id="index-101">
+<dl class="docutils" id="index-102">
 <dt>STYLEITEM [&lt;attribute&gt;|auto|&lt;javascript file&gt;]</dt>
 <dd><p class="first">Styling based on attributes or generated with Javascript</p>
-<ul id="index-102">
+<ul id="index-103">
 <li><p class="first"><em>&lt;attribute&gt;</em>: Item to use for feature specific styling. The
 style information may be represented by a separate attribute
 (style string) attached to the feature.  MapServer supports the
@@ -1078,7 +1140,7 @@ as follows:</p>
 </ul>
 </li>
 </ul>
-<ul class="simple" id="index-103">
+<ul class="simple" id="index-104">
 <li><em>AUTO</em>: The value: <cite>AUTO</cite> can be used for automatic styling.<ul>
 <li>Automatic styling can be provided by the driver. Currently,
 only the OGR driver supports automatic styling.</li>
@@ -1087,7 +1149,7 @@ layers will be used.</li>
 </ul>
 </li>
 </ul>
-<ul class="last" id="index-104">
+<ul class="last" id="index-105">
 <li><p class="first"><em>&lt;Javascript file&gt;</em>: A Javascript file that returns a new string
 containing either a <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> definition or a <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a>
 definition with one or multiple styles.  See <a class="reference internal" href="styleitem.html#styleitemjs"><span class="std std-ref">STYLEITEM Javascript</span></a>.</p>
@@ -1119,7 +1181,7 @@ definition with one or multiple styles.  See <a class="reference internal" href=
 </ul>
 </dd>
 </dl>
-<span id="index-105"></span><dl class="docutils" id="symbolscaledenom">
+<span id="index-106"></span><dl class="docutils" id="symbolscaledenom">
 <dt>SYMBOLSCALEDENOM [double]</dt>
 <dd><p class="first">The scale at which symbols and/or text appear full size. This
 allows for dynamic scaling of objects based on the scale of the
@@ -1135,12 +1197,12 @@ deprecated SYMBOLSCALE parameter.</p>
 </div>
 </dd>
 </dl>
-<dl class="docutils" id="index-106">
+<dl class="docutils" id="index-107">
 <dt><a class="reference internal" href="template.html#template"><span class="std std-ref">TEMPLATE</span></a> [file|url]</dt>
 <dd>Used as a global alternative to <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> <cite>TEMPLATE</cite>.
 See <a class="reference internal" href="template.html#template"><span class="std std-ref">Templating</span></a> for more info.</dd>
 </dl>
-<span id="index-107"></span><dl class="docutils" id="tileindex-keyword">
+<span id="index-108"></span><dl class="docutils" id="tileindex-keyword">
 <dt><a class="reference internal" href="../optimization/tileindex.html#tileindex"><span class="std std-ref">TILEINDEX</span></a> [filename|layername]</dt>
 <dd><p class="first">Name of the tileindex file or layer.  A tileindex is similar to
 an ArcInfo library index.  The tileindex contains polygon features for
@@ -1167,12 +1229,12 @@ with tiles of different projections. For that, the
 </div>
 </dd>
 </dl>
-<span id="index-108"></span><dl class="docutils" id="tileitem">
+<span id="index-109"></span><dl class="docutils" id="tileitem">
 <dt>TILEITEM [attribute]</dt>
 <dd>Item that contains the location of an individual tile, default is
 &#8220;location&#8221;.</dd>
 </dl>
-<span id="index-109"></span><dl class="docutils" id="tilesrs">
+<span id="index-110"></span><dl class="docutils" id="tilesrs">
 <dt>TILESRS [attribute]</dt>
 <dd><p class="first">Name of the attribute that contains the SRS of an individual tile.
 That SRS can be expressed in WKT format, as an EPSG:XXXX code or as a
@@ -1187,7 +1249,7 @@ gdaltindex (GDAL &gt;= 2.0), the value of TILESRS is the value of the
 </div>
 </dd>
 </dl>
-<span id="index-110"></span><dl class="docutils" id="tolerance">
+<span id="index-111"></span><dl class="docutils" id="tolerance">
 <dt>TOLERANCE [double]</dt>
 <dd>Sensitivity for point based queries (i.e. via mouse and/or map
 coordinates). Given in TOLERANCEUNITS. If the layer is a POINT or a LINE,
@@ -1196,7 +1258,7 @@ restrict polygon searches so that the point must occur in the polygon
 set the tolerance to zero. This setting does not apply to WFS GetFeature
 operations.</dd>
 </dl>
-<dl class="docutils" id="index-111">
+<dl class="docutils" id="index-112">
 <dt>TOLERANCEUNITS [pixels|feet|inches|kilometers|meters|miles|nauticalmiles|dd]</dt>
 <dd>Units of the TOLERANCE value. Default is pixels.
 <cite>Nauticalmiles</cite> was added in MapServer 5.6.</dd>
@@ -1210,8 +1272,8 @@ operations.</dd>
 <p><span class="versionmodified">Deprecated since version 7.0: </span>Use <a class="reference internal" href="composite.html#composite"><span class="std std-ref">COMPOSITE</span></a> instead.</p>
 </div>
 </div></blockquote>
-<dl class="docutils" id="index-112">
-<dt>TRANSFORM [true|false ul|uc|ur|cl|cc|cr|ll|lc|lr]</dt>
+<dl class="docutils" id="index-113">
+<dt>TRANSFORM [true|false] | [ul|uc|ur|cl|cc|cr|ll|lc|lr]</dt>
 <dd><p class="first">Tells MapServer whether or not a particular layer needs to be transformed
 from some coordinate system to image coordinates. Default is true. This
 allows you to create shapefiles in image/graphics coordinates and
@@ -1227,7 +1289,7 @@ to anchor something like a copyright statement to another portion of the
 image in a way that is independent of image size.</p>
 </dd>
 </dl>
-<span class="target" id="index-113"></span><span class="target" id="index-114"></span><span class="target" id="index-115"></span><span class="target" id="index-116"></span><span class="target" id="index-117"></span><span class="target" id="index-118"></span><span class="target" id="index-119"></span><span class="target" id="index-120"></span><dl class="docutils" id="index-121">
+<span class="target" id="index-114"></span><span class="target" id="index-115"></span><span class="target" id="index-116"></span><span class="target" id="index-117"></span><span class="target" id="index-118"></span><span class="target" id="index-119"></span><span class="target" id="index-120"></span><span class="target" id="index-121"></span><dl class="docutils" id="index-122">
 <dt>TYPE [chart|circle|line|point|polygon|raster|query]</dt>
 <dd><p class="first">Specifies how the data should be drawn. Need not be the same as the
 shapefile type. For example, a polygon shapefile may be drawn as a point
@@ -1275,13 +1337,13 @@ layers of <cite>TYPE</cite> <cite>annotation</cite>.</p>
 </div>
 </dd>
 </dl>
-<span class="target" id="index-122"></span><span class="target" id="index-123"></span><span class="target" id="index-124"></span><span class="target" id="index-125"></span><span class="target" id="index-126"></span><span class="target" id="index-127"></span><span class="target" id="index-128"></span><span class="target" id="index-129"></span><span class="target" id="index-130"></span><dl class="docutils" id="index-131">
+<span class="target" id="index-123"></span><span class="target" id="index-124"></span><span class="target" id="index-125"></span><span class="target" id="index-126"></span><span class="target" id="index-127"></span><span class="target" id="index-128"></span><span class="target" id="index-129"></span><span class="target" id="index-130"></span><span class="target" id="index-131"></span><dl class="docutils" id="index-132">
 <dt>UNITS [dd|feet|inches|kilometers|meters|miles|nauticalmiles|percentages|pixels]</dt>
 <dd>Units of the layer.  <cite>percentages</cite> (in this case a value between 0
 and 1) was added in MapServer 4.10 and is mostly geared for inline
 features.  <cite>nauticalmiles</cite> was added in MapServer 5.6.</dd>
 </dl>
-<dl class="docutils" id="index-132">
+<dl class="docutils" id="index-133">
 <dt>UTFDATA [string]</dt>
 <dd><p class="first">A UTFGrid JSON template.  MapServer expression syntax
 (expressionObj).  If no <cite>UTFDATA</cite> is provided, no data beyond the
@@ -1296,7 +1358,7 @@ See <a class="reference internal" href="../development/rfc/ms-rfc-93.html#rfc93"
 </div>
 </dd>
 </dl>
-<dl class="docutils" id="index-133">
+<dl class="docutils" id="index-134">
 <dt>UTFITEM [string]</dt>
 <dd><p class="first">The attribute to use as the ID for the UTFGrid.  If a <cite>UTFITEM</cite> is
 not set, the sequential id (based on rendering order) is being
@@ -1311,7 +1373,7 @@ keys and data can be connected.  See <a class="reference internal" href="../deve
 </div>
 </dd>
 </dl>
-<dl class="docutils" id="index-134">
+<dl class="docutils" id="index-135">
 <dt>VALIDATION</dt>
 <dd><p class="first">Signals the start of a <cite>VALIDATION</cite> block.</p>
 <p class="last">As of MapServer 5.4.0, <cite>VALIDATION</cite> blocks are the preferred
@@ -1364,13 +1426,13 @@ substitutions.  See <a class="reference internal" href="../cgi/runsub.html#runsu
           <a href="label.html" title="LABEL"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.5 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.6 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Mapfile</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2017, Open Source Geospatial Foundation.
-      Last updated on 2017-05-23.
+      Last updated on 2017-06-21.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>
