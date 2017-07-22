@@ -47,6 +47,7 @@
       <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
       <a href="../community/service_providers.html" title="Professional Service Providers">Service Providers</a> |      
       <a href="../faq.html" title="Frequently Asked Questions">FAQ</a> |
+      <a href="https://twitter.com/mapserver_osgeo" title="Twitter">Twitter</a> |
       <a href="../download.html" title="Download Source or Binaries">Download </a>
     </td>
   </tr>
@@ -149,174 +150,257 @@
           <div class="body" role="main">
             
   <div class="section" id="iis-setup-for-mapserver">
-<span id="iis"></span><h1><a class="toc-backref" href="#table-of-contents">Paramétrage de IIS pour MapServer</a><a class="headerlink" href="#iis-setup-for-mapserver" title="Lien permanent vers ce titre">¶</a></h1>
+<span id="iis"></span><h1>Paramétrage de IIS pour MapServer<a class="headerlink" href="#iis-setup-for-mapserver" title="Lien permanent vers ce titre">¶</a></h1>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Debbie Paqurek</td>
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Seth Girvin</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Last Updated:</th><td class="field-body">2005/12/12</td>
+<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">sgirvin at compass.ie</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2017-06-26</td>
 </tr>
 </tbody>
 </table>
-<div class="contents topic" id="table-of-contents">
-<p class="topic-title first">Table des matières</p>
+<div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#iis-setup-for-mapserver" id="id1">Paramétrage de IIS pour MapServer</a><ul>
-<li><a class="reference internal" href="#base-configuration" id="id2">Configuration de base</a></li>
-<li><a class="reference internal" href="#php-ini-file" id="id3">Fichier php.ini</a></li>
-<li><a class="reference internal" href="#internet-services-manager" id="id4">Gestionnaire de service Internet</a></li>
-<li><a class="reference internal" href="#under-the-tree-for-your-new-website-add-virtual-directories-for" id="id5">Sous l&#8217;arborescence pour votre nouveau site web - ajouter des répertoires virtuels pour</a></li>
-<li><a class="reference internal" href="#test-php" id="id6">Test de PHP</a></li>
-<li><a class="reference internal" href="#mapfiles-for-iis" id="id7">Les mapfiles pour IIS</a></li>
-<li><a class="reference internal" href="#configuration-files" id="id8">Fichiers de configuration</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#mapserver-setup" id="id2">MapServer Setup</a></li>
+<li><a class="reference internal" href="#configuring-with-iis" id="id3">Configuring with IIS</a></li>
+<li><a class="reference internal" href="#setting-up-applications" id="id4">Setting up Applications</a></li>
+<li><a class="reference internal" href="#setting-up-logging" id="id5">Setting up Logging</a></li>
+<li><a class="reference internal" href="#troubleshooting" id="id6">Troubleshooting</a></li>
 </ul>
 </div>
-<p id="index-0">Un peu d&#8217;aide sur comment configurer MapServer/Chameleon/PhpPgAdmin sur Microsoft IIS (v5.0). Elle contient des notes sur les changements dans le fichier php.ini et dans ceux nécessaires dans les mapfiles MapServer. Merci de contribuer ou de faire les changements requis.</p>
-<div class="section" id="base-configuration">
-<h2><a class="toc-backref" href="#table-of-contents">Configuration de base</a><a class="headerlink" href="#base-configuration" title="Lien permanent vers ce titre">¶</a></h2>
-<ul class="simple">
-<li>Windows 2000</li>
-<li>IIS 5.0</li>
-<li><a class="reference external" href="http://www.ms4w.com">MS4W</a> 1.2.1</li>
-<li>Chameleon 2.2</li>
-<li>PHP 4.3.11</li>
-<li><p class="first">Mapserver 4.7</p>
-</li>
-<li><p class="first">PhpPgAdmin 3.5.4 (si vous utilisez  postgresql/postgis)</p>
-</li>
-<li><p class="first">Postgres 8.0.3 (si vous utilisez postgresql/postgis)</p>
-</li>
-<li><p class="first">Postgis 1.0.3 (si vous utilisez postgresql/postgis)</p>
-</li>
-</ul>
-<p>This setup assumes that <a class="reference external" href="http://www.ms4w.com">MS4W</a> was unzipped to form c:\ms4w\ directory.&lt;br&gt;</p>
-</div>
-<div class="section" id="php-ini-file">
-<h2><a class="toc-backref" href="#table-of-contents">Fichier php.ini</a><a class="headerlink" href="#php-ini-file" title="Lien permanent vers ce titre">¶</a></h2>
-<ul class="simple">
-<li><p class="first">session.save_path (chemin absolu de votre répertoire tmp)</p>
-</li>
-<li><p class="first">extension_dir (chemin relatif à votre répertoire d&#8217;extensions php)</p>
-</li>
-<li>cgi.force_redirect = 0&lt;/li&gt;</li>
-<li><p class="first">activez l&#8217;extension pg_sql (php_pgsql.dll) (pour Postgresql)</p>
-</li>
-</ul>
-</div>
-<div class="section" id="internet-services-manager">
-<h2><a class="toc-backref" href="#table-of-contents">Gestionnaire de service Internet</a><a class="headerlink" href="#internet-services-manager" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Sous votre arborescence de site web, créer un nouveau site web (nommé msprojects). Voir les propriétés pour le nouveau site web.</p>
-<dl class="docutils">
-<dt>Onglet Site Web</dt>
-<dd><ul class="first last simple">
-<li><p class="first">configurer l&#8217;adresse IP et sous l&#8217;onglet Avancé, met le nom d&#8217;entête de l&#8217;hôte complet (c&#8217;est à dire msprojects.gc.ca).</p>
-</li>
-</ul>
-</dd>
-<dt>Onglet Répertoire de base</dt>
-<dd><ul class="first last simple">
-<li><p class="first">le contenu devrait venir: d&#8217;un répertoire situé sur cet ordinateur.</p>
-</li>
-<li><p class="first">Chemin Local : c:\ms4w\Apache\htdocs</p>
-</li>
-<li><p class="first">Accès en lecture + et autres éléments dont vous avez besoin</p>
-</li>
-<li><p class="first">Permissions d&#8217;exécution : seulement les scripts</p>
-</li>
-<li><p class="first">Bouton Configuration - routing des applications (Ajoutez les extensions .php et .phtml, l&#8217;exécutable est c:\ms4w\Apache\cgi-bin\php.exe, sélectionnez Tous les verbes, Moteur de script, et vérifiez que ce fichier existe&lt;br&gt;</p>
-</li>
-</ul>
-</dd>
-<dt>Onglet documents</dt>
-<dd><ul class="first last simple">
-<li><p class="first">Ajoutez index.phtml et index.html</p>
-</li>
-<li><dl class="first docutils">
-<dt>Onglet Sécurité de répertoire</dt>
-<dd><ul class="first last">
-<li><p class="first">Accès anonyme et contrôle de l&#8217;authentification</p>
-</li>
-<li><p class="first">Sélectionner Accès anonyme et le bouton d&#8217;édition doit indiquer le IUSR_account</p>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-<dt>Onglet Extensions serveur</dt>
-<dd><ul class="first last simple">
-<li><p class="first">Activation de la création est sélectionnée et script client affiche JavaScript</p>
-</li>
-</ul>
-</dd>
-</dl>
-</div>
-<div class="section" id="under-the-tree-for-your-new-website-add-virtual-directories-for">
-<h2><a class="toc-backref" href="#table-of-contents">Sous l&#8217;arborescence pour votre nouveau site web - ajouter des répertoires virtuels pour</a><a class="headerlink" href="#under-the-tree-for-your-new-website-add-virtual-directories-for" title="Lien permanent vers ce titre">¶</a></h2>
-<dl class="docutils">
-<dt>cgi-bin</dt>
-<dd><p class="first last">Sous Propriétés, onglet répertoire virtuel Local Path doit pointer vers c:\ms4w\apache\cgi-bin. Sélectionner Read, Les permissions d&#8217;exécution doit indiquer &#8220;scripts et éxecutables&#8221;.</p>
-</dd>
-<dt>ms_tmp</dt>
-<dd><p class="first last">Sous Propriétés, onglet répertoire virtuel, Chemin Local doit pointer sur  c:\ms4w\tmp\ms_tmp.  Sélectionner Lecture, Écriture. Permissions d&#8217;exécution doit indiquer &#8220;scripts seulement&#8221;.  C&#8217;est le répertoire dans lequel les images temporaires sont écrites donc dans l&#8217;onglet Sécurité du système de fichiers (utilisez l&#8217;explorateur windows), le répertoire  c:\ms4w\tmp\ms_tmp doit avoir les permissions définies pour le compte Internet Guest (Lecture et exécution, Lecture, Écriture, Lister les contenus du répertoire).</p>
-</dd>
-<dt>tmp</dt>
-<dd><p class="first last">Sous Propriétés, onglet répertoire virtuel, Chemin Local doit pointer sur  c:\ms4w\tmp.  Sélectionner Lecture, Écriture. Permissions d&#8217;exécution doit indiquer &#8220;scripts seulement&#8221;.  C&#8217;est le répertoire dans lequel chameleon écrit les sessions donc dans l&#8217;onglet Sécurité du système de fichiers (utilisez l&#8217;explorateur windows), le répertoire  c:\ms4w\tmp doit avoir les permissions définies pour le compte Internet Guest (Lecture et exécution, Lecture, Écriture, Lister les contenus du répertoire).</p>
-</dd>
-<dt>chameleon</dt>
-<dd><p class="first last">Sous Propriétés, onglet répertoire virtuel, Chemin Local doit pointer sur  C:\ms4w\apps\chameleon\htdocs.  Sélectionner Lecture, Écriture. Permissions d&#8217;exécution doit indiquer &#8220;scripts seulement&#8221;.  Sous l&#8217;arborescence Chameleon, vous pouvez ajouter des répertoires virtuels pour l&#8217;administration (c:\ms4w\apps\chameleon\admin\htdocs), exemples (c:\ms4w\apps\chameleon\samples\htdocs), cwc2 (c:\ms4w\apps\chameleon\cwc2\htdocs).</p>
-</dd>
-<dt>phppgadmin</dt>
-<dd><p class="first last">Si vous utilisez PostgreSQL/PostGIS, sous Propriétés, onglet répertoire virtuel Chemin Local doit indiquer C:\ms4w\Apache\htdocs\phpPgAdmin. Sélectionner Lire, Écrire. Les permissions d&#8217;exécution doivent indiquer  &#8220;scripts et exécutables&#8221;. Sous Documents - ajoutez index.php.</p>
-</dd>
-</dl>
+<p id="index-0">This document details how to configure a pre-built version of MapServer to run on IIS (Microsoft&#8217;s web server - Internet Information Services).
+These steps have a minimum requirement of IIS 7 and Windows 7, and should work for all release since up to IIS 10 and Windows 10.</p>
+<p>MapServer can also be run on Windows using <a class="reference external" href="http://www.ms4w.com">MS4W</a> (MapServer for Windows) - which installs its
+own preconfigured Apache web server, and other related tools such as PHP, TinyOWS, and MapCache (which doesn&#8217;t currently run under IIS).
+Running MapServer under IIS may be necessary when deploying to servers where the installation of an additional web server is restricted, or where
+system administrators have more experience maintaining IIS.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Nous devons dézipper le paquet phppgadmin dans ce répertoire afin d&#8217;obtenir la page d&#8217;identification de phppgadmin sur  <a class="reference external" href="http://yourserver/phppgadmin/index.php">http://yourserver/phppgadmin/index.php</a>. Vous pourriez vouloir une sécurité supplémentaire sur ce répertoire.</p>
+<p class="last">The MapServer executables from <a class="reference external" href="http://www.ms4w.com">MS4W</a> can also be used under IIS as well; for more
+information see the section in MS4W&#8217;s <a class="reference external" href="http://ms4w.com/README_INSTALL.html#o-installing-the-ms4w-mapserver-binaries-in-other-environments">README</a>,
+or ask the MS4W community for assistance (<a class="reference external" href="https://lists.ms4w.com/mailman/listinfo/ms4w-users">subscribe</a>).</p>
 </div>
-<dl class="docutils">
-<dt>gmap</dt>
-<dd><p class="first last">Utile pour des phases de tests. Souvenez vous de changer vos mapfiles comme discuter dans Mapfiles pour IIS ci-dessous. Sous Propriétés, onglet répertoire virtuel Chemin Local doit indiquer C:\ms4w\apps\gmap\htdocs. Sélectionnez Lecture. Les permissions d&#8217;exécution doivent indiquer &#8220;script seulement&#8221;.</p>
-</dd>
-</dl>
+<div class="section" id="mapserver-setup">
+<h2><a class="toc-backref" href="#id2">MapServer Setup</a><a class="headerlink" href="#mapserver-setup" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Precompiled versions of MapServer and GDAL (a required dependency) can be downloaded from <a class="reference external" href="http://www.gisinternals.com/release.php">http://www.gisinternals.com/release.php</a>.
+These downloads are built and maintained by Tamas Szekeres a long term contributor to MapServer, and Project Steering
+Committee (PSC) member.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Which version should I download?</p>
+<ul class="last simple">
+<li>Unless you are using deprecated features in your Mapfiles you should download the latest stable release.</li>
+<li>Nearly all servers will now have a x64 (64-bit) architecture, so unless you are restricted to a win32 (32-bit) server
+download a x64 release.</li>
+<li>Unless you have a good reason you should use the latest compiler version. MSVC 2013 means the binaries were compiled with
+using Visual C++ 2013. If you rely on Python2 Mapscript you will need to use the MSVC 2008 version so that it matches the version Python2 was compiled with.</li>
+<li>This installation guide uses the <em>&#8220;Compiled binaries in a single .zip package&#8221;</em> download (release-1800-x64-gdal-2-1-3-mapserver-7-0-4). There is
+also a <em>&#8220;MapServer installer with IIS registration support&#8221;</em> option but at the time of writing this did not install successfully.</li>
+</ul>
 </div>
-<div class="section" id="test-php">
-<h2><a class="toc-backref" href="#table-of-contents">Test de PHP</a><a class="headerlink" href="#test-php" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Dans une fenêtre de ligne de commande, allez dans c:\ms4w\apache\cgi-bin et lancez php -i. Cela devrait vous retourner la sortie que la fonction phpinfo() retourne. J&#8217;obtiens une erreur comme quoi php ne peut pas trouver ntwdblib.dll. Je l&#8217;ai trouvé dans c:\ms4w\apache\php\dlls et je l&#8217;ai copié dans le répertoire cgi-bin.</p>
+<p>Once you have downloaded the zip file follow the steps below.</p>
+<ol class="arabic">
+<li><p class="first">Unzip the folder to your machine. In this example we will assume it has been unzipped to <code class="docutils literal"><span class="pre">C:\MapServer</span></code>.
+Make sure that have &#8220;unblocked&#8221; the zip, to avoid and security related issues later. Right-click on the zip file,
+select properties and click the &#8220;Unblock&#8221; button on the General tab.</p>
+<img alt="../_images/unblock_zip.png" src="../_images/unblock_zip.png" />
+</li>
+<li><p class="first">Test that MapServer is working by double clicking <code class="docutils literal"><span class="pre">C:\MapServer\SDKShell.bat</span></code> to start a new Windows command
+session configured with MapServer environment settings, and then type:</p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span>mapserv -v
+</pre></div>
 </div>
-<div class="section" id="mapfiles-for-iis">
-<h2><a class="toc-backref" href="#table-of-contents">Les mapfiles pour IIS</a><a class="headerlink" href="#mapfiles-for-iis" title="Lien permanent vers ce titre">¶</a></h2>
-<ul class="simple">
-<li><p class="first">Ajouter une ligne de configuration au niveau MAP du mapfile</p>
+<p>The MapServer version and supported format types should be displayed in the command window.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="configuring-with-iis">
+<h2><a class="toc-backref" href="#id3">Configuring with IIS</a><a class="headerlink" href="#configuring-with-iis" title="Lien permanent vers ce titre">¶</a></h2>
+<p>These steps assume IIS 7 or higher is installed on the development machine, and MapServer will use the default website
+location at <code class="docutils literal"><span class="pre">C:\Inetpub\wwwroot</span></code>. All command line steps should be &#8220;Run as Administrator&#8221; (to select this option this right-click on the Windows command line icon).
+Make sure IIS is on the machine - if you have a folder named <code class="docutils literal"><span class="pre">C:\Inetpub</span></code> then it is likely IIS is already installed.</p>
+<ol class="arabic">
+<li><p class="first">First copy the required .exes into the same folder as the MapServer DLLs. This can be done using the command below:</p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span>xcopy C:\MapServer\bin\ms\apps\* C:\MapServer\bin
+</pre></div>
+</div>
+</li>
+<li><p class="first">Create a new folder <code class="docutils literal"><span class="pre">C:\Inetpub\wwwroot\mapserver</span></code></p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span><span class="k">md</span> C:\Inetpub\wwwroot\mapserver
+</pre></div>
+</div>
+</li>
+<li><p class="first">Create a new, empty <code class="docutils literal"><span class="pre">C:\Inetpub\wwwroot\mapserver\web.config</span></code> file:</p>
+</li>
+<li><p class="first">Paste in the following configuration:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+    <span class="nt">&lt;system.webServer&gt;</span>
+        <span class="nt">&lt;handlers&gt;</span>
+            <span class="nt">&lt;add</span> <span class="na">name=</span><span class="s">&quot;MapServerFastCgi&quot;</span> <span class="na">path=</span><span class="s">&quot;*&quot;</span> <span class="na">verb=</span><span class="s">&quot;*&quot;</span> <span class="na">type=</span><span class="s">&quot;&quot;</span> <span class="na">modules=</span><span class="s">&quot;FastCgiModule&quot;</span> <span class="na">scriptProcessor=</span><span class="s">&quot;C:\Mapserver\bin\mapserv.exe&quot;</span> <span class="na">resourceType=</span><span class="s">&quot;Unspecified&quot;</span> <span class="na">requireAccess=</span><span class="s">&quot;Script&quot;</span> <span class="na">allowPathInfo=</span><span class="s">&quot;false&quot;</span> <span class="na">preCondition=</span><span class="s">&quot;&quot;</span>  <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/handlers&gt;</span>
+        <span class="nt">&lt;caching</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span> <span class="na">enableKernelCache=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/system.webServer&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Next set up the web application in IIS:</p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span><span class="s2">&quot;</span><span class="nv">%systemroot%</span><span class="s2">\system32\inetsrv\appcmd&quot;</span> add app /site.name:<span class="s2">&quot;Default Web Site&quot;</span> /path:/mapserver /physicalPath:<span class="s2">&quot;C:\Inetpub\wwwroot\mapserver&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Next make sure the required ISAPI and CGI modules are installed in IIS with the following command:</p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span><span class="k">start</span> /w pkgmgr /iu:IIS-CGI;IIS-ISAPIExtensions;IIS-ISAPIFilter;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>You can enable IIS modules through the useer interface as follows:</p>
+<ol class="arabic simple">
+<li>Click &#8220;Start button&#8221;</li>
+<li>In the Search box, enter &#8220;Turn windows features on or off&#8221;</li>
+<li>In the Features window, Click: &#8220;Internet Information Services&#8221;</li>
+<li>Click: &#8220;World Wide Web Services&#8221;</li>
+<li>Click: &#8220;Application Development Features&#8221;</li>
+<li>Check (enable) the features.</li>
+<li>IIS may then need to be restarted</li>
+</ol>
+<img alt="../_images/windows_features.jpg" class="last" src="../_images/windows_features.jpg" />
+</div>
+</li>
+<li><p class="first">Next we set the mapserver.exe to be a FastCGI application and allow it to run in IIS:</p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span><span class="s2">&quot;</span><span class="nv">%systemroot%</span><span class="s2">\system32\inetsrv\appcmd&quot;</span> set config -section:system.webServer/fastCgi /+<span class="s2">&quot;[fullPath=&#39;C:\Mapserver\bin\mapserv.exe&#39;]&quot;</span> /commit:apphost
+<span class="s2">&quot;</span><span class="nv">%systemroot%</span><span class="s2">\system32\inetsrv\appcmd&quot;</span> set config /section:isapiCgiRestriction /+<span class="s2">&quot;[path=&#39;C:\MapServer\bin\mapserv.exe&#39;,description=&#39;MapServer&#39;,allowed=&#39;True&#39;]&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Test the setup was successful by entering the following URL in a browser: <a class="reference external" href="http://localhost/mapserver/">http://localhost/mapserver/</a>. If the following text is displayed then MapServer has
+been successfully configured as a FastCGI application in IIS.</p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span>No query information to decode. QUERY_STRING is set, but empty.
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="setting-up-applications">
+<h2><a class="toc-backref" href="#id4">Setting up Applications</a><a class="headerlink" href="#setting-up-applications" title="Lien permanent vers ce titre">¶</a></h2>
+<p>MapServer applications consist of a Mapfile, and additional optional files for data, symbols, logs, and images. The same instance of MapServer
+can be used to serve many applications. In this example we will create a new <code class="docutils literal"><span class="pre">test</span></code> subfolder for a test application in a <code class="docutils literal"><span class="pre">C:\MapServer\apps</span></code> folder.</p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span><span class="k">md</span> C:\MapServer\apps\test
+</pre></div>
+</div>
+<p>Now create a new <code class="docutils literal"><span class="pre">test.map</span></code> file in this folder and paste in the test Mapfile below.</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">MAP</span>
+    <span class="k">EXTENT</span> <span class="p">-</span><span class="mi">180</span> <span class="p">-</span><span class="mi">90</span> <span class="mi">180</span> <span class="mi">90</span>
+    <span class="c"># Set the path to where the map projections are stored</span>
+    <span class="k">CONFIG</span> <span class="s">&quot;PROJ_LIB&quot;</span> <span class="s">&quot;C:\MapServer</span><span class="se">\b</span><span class="s">in\proj\SHARE&quot;</span>
+    <span class="k">NAME</span> <span class="s">&quot;TestMap&quot;</span>
+    <span class="k">WEB</span>
+      <span class="k">METADATA</span>
+        <span class="s">&quot;ows_enable_request&quot;</span> <span class="s">&quot;*&quot;</span>
+      <span class="k">END</span>
+    <span class="k">END</span>
+    <span class="k">PROJECTION</span>
+      <span class="s">&quot;init=epsg:4326&quot;</span>
+    <span class="k">END</span>
+    <span class="k">LAYER</span>
+      <span class="k">NAME</span> <span class="s">&quot;country_bounds&quot;</span>
+      <span class="k">TYPE</span> <span class="nb">RASTER</span>
+      <span class="k">CONNECTION</span> <span class="s">&quot;http://demo.mapserver.org/cgi-bin/wms?&quot;</span>
+      <span class="k">CONNECTIONTYPE</span> <span class="nb">WMS</span>
+      <span class="k">METADATA</span>
+        <span class="s">&quot;wms_srs&quot;</span>             <span class="s">&quot;EPSG:4326&quot;</span>
+        <span class="s">&quot;wms_name&quot;</span>            <span class="s">&quot;country_bounds&quot;</span>
+        <span class="s">&quot;wms_server_version&quot;</span>  <span class="s">&quot;1.1.1&quot;</span>
+        <span class="s">&quot;wms_format&quot;</span>          <span class="s">&quot;image/gif&quot;</span>
+      <span class="k">END</span>
+    <span class="k">END</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+<p>You should now be able to test the application is accessible through IIS using the following URL to retrieve an image via WMS:
+<a class="reference external" href="http://localhost/mapserver/mapserv?map=C:/MapServer/apps/test/test.map&amp;SERVICE=WMS&amp;VERSION=1.3.0&amp;REQUEST=GetMap&amp;LAYERS=country_bounds&amp;STYLES=&amp;CRS=EPSG:4326&amp;BBOX=-180,-90,180,90&amp;WIDTH=400&amp;HEIGHT=300&amp;FORMAT=image/png">http://localhost/mapserver/mapserv?map=C:/MapServer/apps/test/test.map&amp;SERVICE=WMS&amp;VERSION=1.3.0&amp;REQUEST=GetMap&amp;LAYERS=country_bounds&amp;STYLES=&amp;CRS=EPSG:4326&amp;BBOX=-180,-90,180,90&amp;WIDTH=400&amp;HEIGHT=300&amp;FORMAT=image/png</a></p>
+</div>
+<div class="section" id="setting-up-logging">
+<h2><a class="toc-backref" href="#id5">Setting up Logging</a><a class="headerlink" href="#setting-up-logging" title="Lien permanent vers ce titre">¶</a></h2>
+<p>You can setup MapServer logging by adding the following lines to your <code class="docutils literal"><span class="pre">MAP</span></code> block.</p>
+<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">DEBUG</span> <span class="mi">5</span> <span class="c"># a value from 0 (OFF) to 5 (detailed)</span>
+<span class="k">CONFIG</span> <span class="s">&quot;MS_ERRORFILE&quot;</span> <span class="s">&quot;logs\ms.log&quot;</span>
+</pre></div>
+</div>
+<p>The path to the log file is relative to the Mapfile, so in this example you need to create a new <code class="docutils literal"><span class="pre">C:\MapServer\apps\test\logs</span></code> folder:</p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span><span class="k">md</span> C:\MapServer\apps\test\logs
+</pre></div>
+</div>
+<p>You will then need to set read-write permissions on the log file to the IIS application pool user (in this example we are using the default <code class="docutils literal"><span class="pre">IIS</span> <span class="pre">AppPool\DefaultAppPool</span></code> account
+that the MapServer FastCGI runs under):</p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span>icacls <span class="s2">&quot;C:\MapServer\apps\test\logs&quot;</span> /grant <span class="s2">&quot;IIS AppPool\DefaultAppPool&quot;</span>:(OI)(CI)RW
+</pre></div>
+</div>
+<p>If a different application pool is used, or you don&#8217;t set the permissions you will receive the following message
+(also check that the <code class="docutils literal"><span class="pre">C:\MapServer\apps\test\logs</span></code> folder exists as it will not be created automatically).</p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span>msSetErrorFile(): General error message. Failed to open MS_ERRORFILE C:/MapServer/apps/test/logs/ms.log
+</pre></div>
+</div>
+</div>
+<div class="section" id="troubleshooting">
+<h2><a class="toc-backref" href="#id6">Troubleshooting</a><a class="headerlink" href="#troubleshooting" title="Lien permanent vers ce titre">¶</a></h2>
+<ul>
+<li><p class="first">Check that the file exists if you receive the following error. If it does exist then check the file permissions.</p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span>msLoadMap(): Unable to access file. (C:/MapServer/apps/test/test.map)
+</pre></div>
+</div>
+</li>
+<li><p class="first">MapServer projections are stored in <code class="docutils literal"><span class="pre">C:\MapServer\bin\proj\SHARE</span></code>. When the projection is specified in the following form <code class="docutils literal"><span class="pre">&quot;init=epsg:3857&quot;</span></code>, MapServer
+will try to find this code in the <code class="docutils literal"><span class="pre">epsg</span></code> file, where it is listed as <code class="docutils literal"><span class="pre">&lt;3857&gt;</span> <span class="pre">+proj=merc</span> <span class="pre">+a=6378137...</span></code>. If you receive the error below then
+make sure the <code class="docutils literal"><span class="pre">CONFIG</span> <span class="pre">&quot;PROJ_LIB&quot;</span> <span class="pre">&quot;C:\MapServer\bin\proj\SHARE&quot;</span></code> setting is pointing to the correct path.
+<em>Note on one installation this message was shown as forward slashes rather than backslashes were used.</em></p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span>msProcessProjection(): Projection library error. proj error <span class="s2">&quot;No such file or directory&quot;</span> for <span class="s2">&quot;init=epsg:3857&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">The following error is caused if IIS has been locked-down so settings cannot be overridden at the <code class="docutils literal"><span class="pre">web.config</span></code> level.</p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span>HTTP Error 500.19 - Internal Server Error
+The requested page cannot be accessed because the related configuration data for the page is invalid.
+
+This configuration section cannot be used at this path. This happens when the section is locked at a parent level.
+Locking is either by default (overrideModeDefault=<span class="s2">&quot;Deny&quot;</span>), or set explicitly by a location tag with
+overrideMode=<span class="s2">&quot;Deny&quot;</span> or the legacy allowOverride=<span class="s2">&quot;false&quot;</span>.
+</pre></div>
+</div>
+<p>Run the following in a command window (with administrator permissions). This enables the handlers section in the /mapserver/web.config
+file to override the ones set at the machine level. See <a class="reference external" href="http://stackoverflow.com/questions/9794985/iis-this-configuration-section-cannot-be-used-at-this-path-configuration-lock">http://stackoverflow.com/questions/9794985/iis-this-configuration-section-cannot-be-used-at-this-path-configuration-lock</a></p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span><span class="nv">%windir%</span>\system32\inetsrv\appcmd.exe unlock config -section:system.webServer/handlers
+</pre></div>
+</div>
+</li>
+<li><p class="first">Check <code class="docutils literal"><span class="pre">C:\MapServer\bin\mapserv.exe</span></code> exists if you encounter the error below.</p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span>HTTP Error 500.0 - Internal Server Error
+The FastCGI executable could not be found
+</pre></div>
+</div>
+</li>
+<li><p class="first">To view the CGI applications registered with IIS you can use the command below (this reads the <code class="docutils literal"><span class="pre">C:\Windows\System32\inetsrv\config</span></code>):</p>
+<div class="highlight-bat"><div class="highlight"><pre><span></span><span class="s2">&quot;</span><span class="nv">%systemroot%</span><span class="s2">\system32\inetsrv\appcmd&quot;</span> list config /section:isapiCgiRestriction
+</pre></div>
+</div>
+<p>This should output XML similar to below for this section:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;system.webServer&gt;</span>
+  <span class="nt">&lt;security&gt;</span>
+    <span class="nt">&lt;isapiCgiRestriction&gt;</span>
+      <span class="nt">&lt;add</span> <span class="na">path=</span><span class="s">&quot;C:\MapServer\bin\mapserv.exe&quot;</span> <span class="na">allowed=</span><span class="s">&quot;true&quot;</span> <span class="na">description=</span><span class="s">&quot;MapServer&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/isapiCgiRestriction&gt;</span>
+  <span class="nt">&lt;/security&gt;</span>
+<span class="nt">&lt;/system.webServer&gt;</span>
+</pre></div>
+</div>
 </li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CONFIG</span> <span class="n">PROJ_LIB</span> <span class="s2">&quot;c:\ms4w\proj</span><span class="se">\n</span><span class="s2">ad</span><span class="se">\&quot;</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p class="first">changer la variable IMAGEPATH pour qu&#8217;elle soit un chemin absolu par rapport à votre dossier tmp/ms_tmp</p>
-</li>
-</ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">IMAGEPATH</span> <span class="s2">&quot;c:\ms4w</span><span class="se">\t</span><span class="s2">mp\ms_tmp&quot;</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="configuration-files">
-<h2><a class="toc-backref" href="#table-of-contents">Fichiers de configuration</a><a class="headerlink" href="#configuration-files" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Pour Chameleon</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span>\<span class="n">ms4w</span>\<span class="n">apps</span>\<span class="n">chameleon</span>\<span class="n">config</span>\<span class="n">chameleon</span><span class="o">.</span><span class="n">xml</span>
-<span class="n">C</span><span class="p">:</span>\<span class="n">ms4w</span>\<span class="n">apps</span>\<span class="n">chameleon</span>\<span class="n">config</span>\<span class="n">cwc2</span><span class="o">.</span><span class="n">xml</span>
-</pre></div>
-</div>
-<p>Pour phppgadmin: (si postgresql/postgis est utilisé)</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span>\<span class="n">ms4w</span>\<span class="n">apps</span>\<span class="n">phpPgAdmin</span>\<span class="n">conf</span>\<span class="n">config</span><span class="o">.</span><span class="n">inc</span><span class="o">.</span><span class="n">php</span>
-</pre></div>
-</div>
 </div>
 </div>
 
@@ -344,18 +428,17 @@
 <a href="../download.html" title="Downloads">Downloads</a><br>
 <a href="../documentation.html" title="Documentation">Documentation</a><br>
 <a href="../faq.html" title="FAQ">FAQ</a><br>
-<a href="../psc.html" title="PSC">PSC</a>
+<a href="../psc.html" title="PSC">PSC</a><br>
+<a href="https://twitter.com/mapserver_osgeo" title="Twitter">Twitter</a>
 </p>
   <h3>Current Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Paramétrage de IIS pour MapServer</a><ul>
-<li><a class="reference internal" href="#base-configuration">Configuration de base</a></li>
-<li><a class="reference internal" href="#php-ini-file">Fichier php.ini</a></li>
-<li><a class="reference internal" href="#internet-services-manager">Gestionnaire de service Internet</a></li>
-<li><a class="reference internal" href="#under-the-tree-for-your-new-website-add-virtual-directories-for">Sous l&#8217;arborescence pour votre nouveau site web - ajouter des répertoires virtuels pour</a></li>
-<li><a class="reference internal" href="#test-php">Test de PHP</a></li>
-<li><a class="reference internal" href="#mapfiles-for-iis">Les mapfiles pour IIS</a></li>
-<li><a class="reference internal" href="#configuration-files">Fichiers de configuration</a></li>
+<li><a class="reference internal" href="#mapserver-setup">MapServer Setup</a></li>
+<li><a class="reference internal" href="#configuring-with-iis">Configuring with IIS</a></li>
+<li><a class="reference internal" href="#setting-up-applications">Setting up Applications</a></li>
+<li><a class="reference internal" href="#setting-up-logging">Setting up Logging</a></li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
 </ul>
@@ -383,7 +466,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2017, Open Source Geospatial Foundation.
-      Mis à jour le 2017-06-21.
+      Mis à jour le 2017-07-22.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>
