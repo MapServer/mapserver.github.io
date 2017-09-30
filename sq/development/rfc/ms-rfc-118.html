@@ -160,9 +160,9 @@
 </tr>
 <tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:dmorissette&#37;&#52;&#48;mapgears&#46;com">dmorissette<span>&#64;</span>mapgears<span>&#46;</span>com</a></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Draft</td>
+<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Last update:</th><td class="field-body">2017-08-15</td>
+<tr class="field-odd field"><th class="field-name">Last update:</th><td class="field-body">2017-09-20</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">MapServer 7.2</td>
 </tr>
@@ -217,6 +217,15 @@
 &amp;...
 </pre></div>
 </div>
+<p>GetMap on multiple layers, with empty filter on some layers:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>/cgi-bin/mapserv?map=...
+&amp;SERVICE=WMS
+&amp;REQUEST=GetMap
+&amp;LAYERS=road,popplace
+&amp;FILTER=()(&lt;Filter&gt;&lt;PropertyIsEqualTo&gt;&lt;PropertyName&gt;NAME&lt;/PropertyName&gt;&lt;Literal&gt;Digby&lt;/Literal&gt;&lt;/PropertyIsEqualTo&gt;&lt;/Filter&gt;)
+&amp;...
+</pre></div>
+</div>
 </div>
 <div class="section" id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this headline">¶</a></h2>
@@ -227,6 +236,7 @@
 <h2>4. Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h2>
 <p>This will only be implemented for GET requests, and will be subject to the limitation in URL length of the HTTP servers. The exact limit of GET URL length depends on the server configuration.</p>
 <p>The use of FILTER in WMS requires previous knowledge of the geometry and attribute column names that would normally be obtained with a WFS DescribeFeatureType.  While this is not strictly required for the FILTER to work on their own in the GetMap request, access to DescribeFeatureType can be provided by enabling the WFS interface on the corresponding layers.</p>
+<p>Since rendering of the filtered layers is done via the QUERYMAP mechanism, the MASK, OPACITY and COMPOSITE settings are ignored since they are not implemented for QUERYMAPs. (This could be considered a QUERYMAP bug but is out of scope for this RFC)</p>
 </div>
 <div class="section" id="backwards-compatibility-issues">
 <h2>5. Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this headline">¶</a></h2>
@@ -255,7 +265,7 @@
 </div>
 <div class="section" id="voting-history">
 <h2>10. Voting history<a class="headerlink" href="#voting-history" title="Permalink to this headline">¶</a></h2>
-<p>No vote yet</p>
+<p>+1 from TomK, SteveL, JukkaR, SteveW, MichaelS, StephanM, JeffM and DanielM.</p>
 </div>
 </div>
 
@@ -328,7 +338,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2017, Open Source Geospatial Foundation.
-      Last updated on 2017-09-13.
+      Last updated on 2017-09-30.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>
