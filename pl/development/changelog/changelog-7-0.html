@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MapServer 7.0 Changelog &#8212; MapServer 7.0.6 documentation</title>
+    <title>MapServer 7.0 Changelog &#8212; MapServer 7.0.7 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '7.0.6',
+        VERSION:     '7.0.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <link rel="index" title="Indeks" href="../../genindex.html" />
     <link rel="search" title="Szukaj" href="../../search.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.0.6 documentation" href="../../index.html" />
+    <link rel="top" title="MapServer 7.0.7 documentation" href="../../index.html" />
     <link rel="up" title="MapServer Changelogs" href="index.html" />
     <link rel="next" title="MapServer 6.4 Changelog" href="changelog-6-4.html" />
     <link rel="prev" title="MapServer Changelogs" href="index.html" /> 
@@ -153,6 +153,42 @@
 <span id="changelog-7-0"></span><h1>MapServer 7.0 Changelog<a class="headerlink" href="#mapserver-7-0-changelog" title="Stały odnośnik do tego nagłówka">¶</a></h1>
 <p>The summary of major changes for this release can be found in the <a class="reference external" href="https://github.com/mapserver/mapserver/blob/rel-7-0-0/HISTORY.TXT">HISTORY.TXT</a>
 file from the source directory.</p>
+<div class="section" id="changes-from-7-0-6-to-7-0-7">
+<span id="changelog-7-0-7"></span><h2>Changes from 7.0.6 to 7.0.7<a class="headerlink" href="#changes-from-7-0-6-to-7-0-7" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<ul class="simple">
+<li>Commented out vtable entries for msOracleSpatialEscapePropertyName. By that we don&#8217;t need the additional logic described below anymore (Martin.Icking) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/d1907912880b124c97472066ef20e0c61bf3c213">d190791</a></li>
+<li>Added the option to set a default value for variable substitution in the map&#8217;s WEB section. To do that there is a new method applyHashTableDefaultSubstitutions that is being called in msApplyDefaultSubstitutions with the map&#8217;s WEB section as the hash table to work on (Martin.Icking) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/572bd765e7a0f55b8826a9bdbd2b661e07ff44b9">572bd76</a></li>
+<li>WCS 2.0 RectifiedGrid: use &#8216;lon lat&#8217; and &#8216;x y&#8217; labels even with CRS with &#8216;inverted axis&#8217; order (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/3be54424026e24fb37b3bff82027b28484100452">3be5442</a></li>
+<li>WCS 2.0 DescribeCoverage result: fix RectifiedGrid.origin.Point to correspond to the coordinate of the pixel center (fixes  <a class="reference external" href="https://github.com/mapserver/mapserver/issues/5511">#5511</a> ) (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/31c25df6be067a59ffb89100f215d2d65840e364">31c25df</a></li>
+<li>UVRaster: fix reprojection issue of map extent to layer projection (fixes  <a class="reference external" href="https://github.com/mapserver/mapserver/issues/5501">#5501</a> ) (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/2a990dc46f13ed8b965f0d83cde7df7da17b831f">2a990dc</a></li>
+<li>Fix regression introduced by latest commit 8f85f8db46e65a3a4e8d3ec245ea90a56b6d794c ( <a class="reference external" href="https://github.com/mapserver/mapserver/issues/5502">#5502</a> ) (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/1ee7e0e87125fb1f94ec382a8bd71d2c09c56ea4">1ee7e0e</a></li>
+<li>UVRaster: support layers with lon_wrap=180 projection ( <a class="reference external" href="https://github.com/mapserver/mapserver/issues/5502">#5502</a> ) (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/8f85f8db46e65a3a4e8d3ec245ea90a56b6d794c">8f85f8d</a></li>
+<li>msSOSGetCapabilities(): use proper layer when generating the gml:name from sos_offering_name metadata (patch by wdc-rsat, fixes  <a class="reference external" href="https://github.com/mapserver/mapserver/issues/5506">#5506</a> ) (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/c7a1e517d5dd2dd80901008e9860cd589f1685a1">c7a1e51</a></li>
+<li>WCS 1.1 DescribeCoverage response: honour EPSG axis order for GridOrigin and GridOffsets ( <a class="reference external" href="https://github.com/mapserver/mapserver/issues/5504">#5504</a> ) (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/4f7520631f03d1347dadf529db6da55c2ea57186">4f75206</a></li>
+<li>msSLDApplySLD(): fix wrong index use (patch by wdc-rsat, fixes  <a class="reference external" href="https://github.com/mapserver/mapserver/issues/5505">#5505</a> ) (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/91fafe426c00c348c068be7deb35cd45d1fe262d">91fafe4</a></li>
+<li>Fix kerneldensity layer not to loose connection type on reopen ( <a class="reference external" href="https://github.com/mapserver/mapserver/issues/5497">#5497</a> ) (Tamas Szekeres) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/38f3cae73d6ad55a3d16786441a065275f3335b4">38f3cae</a></li>
+<li>WFS client layer: fix wrong BBOX argument in WFS 1.1 with EPSG code with non-axis inversion (patch by richie21, fixes  <a class="reference external" href="https://github.com/mapserver/mapserver/issues/5496">#5496</a> ) (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/7ca0c1c7d2ceef9c7376e7bc532e7131e0aeda4b">7ca0c1c</a></li>
+<li>JPEG output: add compatibility with libjpeg-turbo 1.5.2 (<a class="reference external" href="https://github.com/libjpeg-turbo/libjpeg-turbo/issues/162">https://github.com/libjpeg-turbo/libjpeg-turbo/issues/162</a>) (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/04d3a61493dd3842ffcb54acd79cb30a1ebb048b">04d3a61</a></li>
+<li>msProjectionsDiffer(): restrict attempts normalization with proj.4 (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/581ec9fcdd42c88348277d1a35a9f48ebfd382bc">581ec9f</a></li>
+<li>msExtentsOverlap(): optimize when layer and map projections are the same (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/8501873362d8db024221869eb4a9bacef1c04690">8501873</a></li>
+<li>msLayerIsVisible(): speed it up by doing layer vs map scale comparisons before extent comparison (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/6a5cad3dbc10e2cafd95269402a92fda34d01385">6a5cad3</a></li>
+<li>msDrawMap(): optimize pre-processing of WMS/WFS layers (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/226d19a6fe68ac1e0f19cc3a593841e3da54ce22">226d19a</a></li>
+<li>msDrawTextSymbol(): fix compiler warning about unused return value (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/35b82b93fe26e3b11d1e3cdefe11638bfda2966f">35b82b9</a></li>
+<li>Fix ANGLE AUTO in STYLE during mapObj.clone() <a class="reference external" href="https://github.com/mapserver/mapserver/issues/5483">#5483</a> (Bernard Bielecki) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/08780c2659cb645e3b32a9dc69579d0a122c1cfe">08780c2</a></li>
+<li>Fix MSVC2015+ builds ( <a class="reference external" href="https://github.com/mapserver/mapserver/issues/5274">#5274</a> ) (Tamas Szekeres) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/6c0969733c13b214dace9490bbdc898791077185">6c09697</a></li>
+<li>Fix label of scalebar and legend set with SWIG mapscript  <a class="reference external" href="https://github.com/mapserver/mapserver/issues/5470">#5470</a>  (Tamas Szekeres) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/870e027dfbfa0fa26240e46fe8c18f244dbb2945">870e027</a></li>
+<li>Fix potential memory corruption caused by freeSVGCache ( <a class="reference external" href="https://github.com/mapserver/mapserver/issues/5471">#5471</a> ) (Tamas Szekeres) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/8a5e0f3bcea89ca7045e8673e99f4fa6cf69eef5">8a5e0f3</a></li>
+<li>OGR output: fix &#8220;ESRI Shapefile&#8221; output with FORMATOPTION &#8220;STORAGE=memory&#8221; (Even Rouault) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/2c1e5c50791cac205cfbeed0e1fa98bb421f5c5c">2c1e5c5</a></li>
+<li>Fix error to support Oracle compound elements for GTYPE 2007 (multipolygon) and not only for GTYPE 2003 (polygon) (Martin.Icking) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/be21bcf37b47bfce77d011ec6abef15d495926a5">be21bcf</a></li>
+<li>Enclose the sortby property in double quotes by putting the result of  msLayerEscapePropertyName into double quotes (Martin.Icking) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/d5f89a3353854b0f6a8eda0758d99e74372fdf9f">d5f89a3</a></li>
+<li>Allow using double quoted aliases for Oracle column aliases (Martin Icking) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/608a118d407223fa33b20c1ff7a431596c2e2e46">608a118</a></li>
+<li>Enabled WFS sortby for Oracle plugin, quoted sortby parameter to enable non-capitalized column names (Martin.Icking) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/c08e349300283ee39bba8955045d4b6cf6b3419f">c08e349</a></li>
+<li>Allow for build path name with spaces [in csharp mapscript] (Martin.Icking) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/d7abbc6eb3261b100797f3ad6ea81679f8c1ad5f">d7abbc6</a></li>
+<li>This fix allows to have an out-of-source build on any location - previously it was assumed that the mapscript csharp sources had a fixed path relative to the build (Martin Icking) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/8f475c6f2619204b2cbece7a6fbd2913aeb49f23">8f475c6</a></li>
+<li>Removed bug that caused MapServer only to use the Oracle TranslateFilter method at the first call e.g. in an FCGI environment (Martin Icking) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/3e8c9c8e52b3beaab454afab6d71ef1f3bdf06cd">3e8c9c8</a></li>
+<li>Repeat transformation if extent is extreme (David Shorthouse) : <a class="reference external" href="https://github.com/mapserver/mapserver/commit/bbfa86661216c370fa5e4860ca4d4a9efcbc3a7e">bbfa866</a></li>
+</ul>
+</div>
 <div class="section" id="changes-from-7-0-5-to-7-0-6">
 <span id="changelog-7-0-6"></span><h2>Changes from 7.0.5 to 7.0.6<a class="headerlink" href="#changes-from-7-0-5-to-7-0-6" title="Stały odnośnik do tego nagłówka">¶</a></h2>
 <ul class="simple">
@@ -721,6 +757,7 @@ file from the source directory.</p>
   <h3>Current Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">MapServer 7.0 Changelog</a><ul>
+<li><a class="reference internal" href="#changes-from-7-0-6-to-7-0-7">Changes from 7.0.6 to 7.0.7</a></li>
 <li><a class="reference internal" href="#changes-from-7-0-5-to-7-0-6">Changes from 7.0.5 to 7.0.6</a></li>
 <li><a class="reference internal" href="#changes-from-7-0-4-to-7-0-5">Changes from 7.0.4 to 7.0.5</a></li>
 <li><a class="reference internal" href="#changes-from-7-0-3-to-7-0-4">Changes from 7.0.3 to 7.0.4</a></li>
@@ -757,7 +794,7 @@ file from the source directory.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2017, Open Source Geospatial Foundation.
-      Ostatnia modyfikacja 2017-09-29.
+      Ostatnia modyfikacja 2017-11-15.
       Utworzone przy pomocy <a href="http://sphinx-doc.org/">Sphinx</a>'a 1.4.9.
     </div>
   </body>

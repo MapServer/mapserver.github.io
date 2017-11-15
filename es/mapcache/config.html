@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuration File &#8212; MapServer 7.0.6 documentation</title>
+    <title>Configuration File &#8212; MapServer 7.0.7 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.6',
+        VERSION:     '7.0.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <link rel="index" title="Índice" href="../genindex.html" />
     <link rel="search" title="Búsqueda" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.6 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.0.7 documentation" href="../index.html" />
     <link rel="up" title="MapCache 1.6.1" href="index.html" />
     <link rel="next" title="Supported Tile Services" href="services.html" />
     <link rel="prev" title="Compilation &amp; Installation" href="install.html" /> 
@@ -138,7 +138,7 @@
           <a href="install.html" title="Compilation &amp; Installation"
              accesskey="P">anterior</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentación MapServer 7.0.6</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentación MapServer 7.0.7</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapCache 1.6.1</a> &#187;</li> 
       </ul>
     </div>
@@ -176,9 +176,9 @@ It is an XML file comprising a list of entries, as outlined here:</p>
 <div class="section" id="source">
 <span id="mapcache-config-source"></span><h2>Source<a class="headerlink" href="#source" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>A source is a service mod-mapcache can query to obtain image data. This is
-typically a WMS server accessible by a URL. (There are currently no sources
-other than WMS implemented, though others may be added later if the need
-arises).</p>
+typically a WMS server accessible by a URL. (There are currently only WMS, WMTS
+and mapfile as sources, though others may be added later if the need arises,
+see <a class="reference internal" href="sources.html#mapcache-sources"><span class="std std-ref">Data Sources</span></a>).</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;source</span> <span class="na">name=</span><span class="s">&quot;vmap0&quot;</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span><span class="nt">&gt;</span>
 
    <span class="c">&lt;!--</span>
@@ -231,19 +231,16 @@ arises).</p>
 <span class="nt">&lt;/source&gt;</span>
 </pre></div>
 </div>
-<ul class="simple">
-<li>The name and type attributes are straightforward: <cite>type</cite> is &#8220;wms&#8221;, and <cite>name</cite></li>
-<li>is the key by which this source will be referenced; <cite>&lt;url&gt;</cite> is the HTTP</li>
-<li>location where the service can be accessed; and <cite>&lt;wmsparams&gt;</cite> is a list of</li>
-<li>parameters that will be added to the WMS request. You should probably at the</li>
-<li>very least add the FORMAT and LAYERS parameters. By convention(?), WMS</li>
-<li>parameters are uppercase, and you should respect this convention in your</li>
-<li>configuration file.</li>
-<li></li>
-<li>This is where you can also override some default WMS parameters if needed. By</li>
-<li>default, the parameters that will be used are: <cite>&lt;REQUEST&gt;GetMap&lt;/REQUEST&gt;</cite></li>
-<li><cite>&lt;SERVICE&gt;WMS&lt;/SERVICE&gt;</cite> <cite>&lt;STYLES&gt;&lt;/STYLES&gt;</cite> <cite>&lt;VERSION&gt;1.1.0&lt;/VERSION&gt;</cite></li>
-</ul>
+<p>The name and type attributes are straightforward: <cite>type</cite> is &#8220;wms&#8221;, and <cite>name</cite>
+is the key by which this source will be referenced; <cite>&lt;url&gt;</cite> is the HTTP
+location where the service can be accessed; and <cite>&lt;wmsparams&gt;</cite> is a list of
+parameters that will be added to the WMS request. You should probably at the
+very least add the FORMAT and LAYERS parameters. By convention(?), WMS
+parameters are uppercase, and you should respect this convention in your
+configuration file.</p>
+<p>This is where you can also override some default WMS parameters if needed. By
+default, the parameters that will be used are: <cite>&lt;REQUEST&gt;GetMap&lt;/REQUEST&gt;</cite>
+<cite>&lt;SERVICE&gt;WMS&lt;/SERVICE&gt;</cite> <cite>&lt;STYLES&gt;&lt;/STYLES&gt;</cite> <cite>&lt;VERSION&gt;1.1.0&lt;/VERSION&gt;</cite></p>
 </div>
 <div class="section" id="cache">
 <h2>Cache<a class="headerlink" href="#cache" title="Enlazar permanentemente con este título">¶</a></h2>
@@ -692,7 +689,7 @@ the client in a given <em>format</em>.</p>
 <span class="c">        number of seconds after creation date of the tile. This is the value</span>
 <span class="c">        that will be set in the HTTP Expires and Cache-Control headers, and</span>
 <span class="c">        has no effect on the actual expiration of tiles in the caches (see</span>
-<span class="c">        &lt;auto_expire&gt; for that).</span>
+<span class="c">        &lt;auto_expire&gt; for that). Defaults to 300 if unset.</span>
 <span class="c">   --&gt;</span>
    <span class="nt">&lt;expires&gt;</span>3600<span class="nt">&lt;/expires&gt;</span>
 
@@ -702,7 +699,7 @@ the client in a given <em>format</em>.</p>
 <span class="c">        updated in the cache. Note that this will only delete tiles from the</span>
 <span class="c">        cache when they are accessed: You cannot use this configuration to</span>
 <span class="c">        limit the size of the created cache. Note that, if set, this value</span>
-<span class="c">        overrides the value given by &lt;expires&gt;.</span>
+<span class="c">        overrides the value given by &lt;expires&gt;. By default tiles don&#39;t expire.</span>
 <span class="c">   --&gt;</span>
    <span class="nt">&lt;auto_expire&gt;</span>86400<span class="nt">&lt;/auto_expire&gt;</span>
 
@@ -979,13 +976,13 @@ of course, enable at least one.</p>
           <a href="install.html" title="Compilation &amp; Installation"
              >anterior</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentación MapServer 7.0.6</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentación MapServer 7.0.7</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >MapCache 1.6.1</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2017, Open Source Geospatial Foundation.
-      Actualizado por última vez en 2017-09-29.
+      Actualizado por última vez en 2017-11-15.
       Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>
