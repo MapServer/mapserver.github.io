@@ -265,6 +265,13 @@ performance impacts when using spatial subqueries however. Try using
 MapServer&#8217;s <a class="reference internal" href="#filter">FILTER</a> whenever possible instead. You can also see the SQL
 submitted by forcing an error, for instance by submitting a DATA parameter
 you know won&#8217;t work, using for example a bad column name.</p>
+<p>In a standard use case, when PostGIS, SpatiaLite, or GeoPackage are used as data
+source the BBOX filter (bounding boxes intersect, <cite>&amp;&amp;</cite> with PostGIS) is used
+automatically. However in some rare use case, a subquery can be very time
+consuming if data is really important as the final data will be filtered only
+in the query. In order to filter data sooner, ie before the final query, one
+can filter data directly in the subquery using the !BOX! variable:
+<cite>WHERE ST_Intersects(wkb_geometry,!BOX!)</cite>.</p>
 <div class="last admonition seealso">
 <p class="first admonition-title">Siehe auch</p>
 <p class="last"><a class="reference internal" href="../input/vector/index.html#vector"><span class="std std-ref">Vector Data</span></a> for specific connection information for various
@@ -1436,7 +1443,7 @@ substitutions.  See <a class="reference internal" href="../cgi/runsub.html#runsu
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Zuletzt aktualisiert am 2018-06-13.
+      Zuletzt aktualisiert am 2018-07-12.
       Mit <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9 erstellt.
     </div>
   </body>

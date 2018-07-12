@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Client WMS &#8212; MapServer 7.0.7 documentation</title>
+    <title>WMS Client &#8212; MapServer 7.0.7 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -30,9 +30,9 @@
     <link rel="search" title="Recherche" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="MapServer 7.0.7 documentation" href="../index.html" />
-    <link rel="up" title="Gestion et configuration des standards OGC" href="index.html" />
+    <link rel="up" title="OGC Support and Configuration" href="index.html" />
     <link rel="next" title="WMS Time" href="wms_time.html" />
-    <link rel="prev" title="Service de vue INSPIRE" href="inspire.html" /> 
+    <link rel="prev" title="INSPIRE View Service" href="inspire.html" /> 
   </head>
   <body role="document">
 
@@ -135,11 +135,11 @@
           <a href="wms_time.html" title="WMS Time"
              accesskey="N">suivant</a> |</li>
         <li class="right" >
-          <a href="inspire.html" title="Service de vue INSPIRE"
+          <a href="inspire.html" title="INSPIRE View Service"
              accesskey="P">précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Gestion et configuration des standards OGC</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">OGC Support and Configuration</a> &#187;</li> 
       </ul>
     </div>
   
@@ -150,7 +150,7 @@
           <div class="body" role="main">
             
   <div class="section" id="wms-client">
-<span id="index-0"></span><span id="id1"></span><h1><a class="toc-backref" href="#table-of-contents">Client WMS</a><a class="headerlink" href="#wms-client" title="Lien permanent vers ce titre">¶</a></h1>
+<span id="index-0"></span><span id="id1"></span><h1><a class="toc-backref" href="#table-of-contents">WMS Client</a><a class="headerlink" href="#wms-client" title="Lien permanent vers ce titre">¶</a></h1>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -166,51 +166,64 @@
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title first">Table of Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#wms-client" id="id2">Client WMS</a><ul>
+<li><a class="reference internal" href="#wms-client" id="id2">WMS Client</a><ul>
 <li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
 <li><a class="reference internal" href="#compilation-installation" id="id4">Compilation / Installation</a></li>
-<li><a class="reference internal" href="#mapfile-configuration" id="id5">Configuration du MapFile</a></li>
-<li><a class="reference internal" href="#limitations-todo" id="id6">Limitations/A faire</a></li>
+<li><a class="reference internal" href="#mapfile-configuration" id="id5">MapFile Configuration</a></li>
+<li><a class="reference internal" href="#limitations-todo" id="id6">Limitations/TODO</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="introduction">
 <h2><a class="toc-backref" href="#table-of-contents">Introduction</a><a class="headerlink" href="#introduction" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Un WMS (ou Web Map Service) autorise l&#8217;utilisation de données depuis de nombreux serveurs différents, et permet la création de réseaux de serveurs cartographiques depuis lesquels les clients peuvent personnaliser leurs cartes.  Le document suivant contient des informations sur le type de connexion WMS MapServer pour inclure les couches depuis des serveurs WMS distants dans des applications MapServer.</p>
-<p>MapServer supporte les version WMS suivantes quand il fonctionne en tant que client: 1.0.0, 1.0.7, 1.1.0, 1.1.1 (voir <a class="reference internal" href="ogc_support.html#ogc-support"><span class="std std-ref">Support des spécifications OGC dans MapServer</span></a> pour une liste à jour).</p>
-<p>Ce document assume que vous êtes déjà familier avec certains aspects de MapServer :</p>
+<p>A WMS (or Web Map Server) allows for use of data from several different servers,
+and enables for the creation of a network of Map Servers from which clients can
+build customized maps.  The following document contains information about using
+MapServer&#8217;s WMS connection type to include layers from remote WMS servers in
+MapServer applications.</p>
+<p>MapServer  supports the following WMS versions when acting as client:
+1.0.0, 1.0.7, 1.1.0, 1.1.1 (see <a class="reference internal" href="ogc_support.html#ogc-support"><span class="std std-ref">MapServer  OGC Specification support</span></a> for an updated
+list).</p>
+<p>This document assumes that you are already familiar with certain aspects of
+MapServer:</p>
 <ul class="simple">
-<li><p class="first">Développement d&#8217;application MapServer et configuration des fichiers .map.</p>
-</li>
-<li><p class="first">La familiarité avec la spécification WMS est un avantage. Un lien vers le document de spécification WMS est inclus ci-dessous.</p>
-</li>
+<li>MapServer application development and setting up .map files.</li>
+<li>Familiarity with the WMS spec would be an asset. A link to the WMS specification
+document is included below.</li>
 </ul>
 <div class="section" id="wms-related-information">
-<h3>Informations relatives au WMS<a class="headerlink" href="#wms-related-information" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>WMS-Related Information<a class="headerlink" href="#wms-related-information" title="Lien permanent vers ce titre">¶</a></h3>
 <ul class="simple">
-<li><p class="first"><a class="reference internal" href="wms_server.html#wms-server"><span class="std std-ref">Guide serveur WMS MapServer</span></a></p>
-</li>
-<li><p class="first"><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=1081&amp;version=1&amp;format=pdf">Spécification WMS 1.1.1</a></p>
-</li>
+<li><a class="reference internal" href="wms_server.html#wms-server"><span class="std std-ref">MapServer WMS Server HowTo</span></a></li>
+<li><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=1081&amp;version=1&amp;format=pdf">WMS 1.1.1 specification</a></li>
 <li><a class="reference external" href="http://mapserver.github.io/ms-ogc-workshop/">MapServer OGC Web Services Workshop package</a></li>
 </ul>
 </div>
 </div>
 <div class="section" id="compilation-installation">
 <h2><a class="toc-backref" href="#table-of-contents">Compilation / Installation</a><a class="headerlink" href="#compilation-installation" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Le type de connexion WMS est activé par l&#8217;option <em>&#8211;with-wmsclient</em> lors de configure. Il nécessite PROJ4, GDAL et libcurl version 7.10.1 ou plus récent.   Les utilisateurs Windows qui ne veulent pas compiler MapServer devrait utiliser <a class="reference external" href="http://www.ms4w.com">MS4W</a> (qui est fourni prêt pour les usages client et serveur WMS/WFS), ou vérifiez la disponibilité d&#8217;autres <a class="reference internal" href="../download.html#windows"><span class="std std-ref">binaires Windows</span></a> avec le support WMS.</p>
+<p>The WMS connection type is enabled by the <em>&#8211;with-wmsclient</em> configure switch.
+It requires PROJ4, GDAL and libcurl version 7.10.1 or more recent.   Windows
+users who do not want to compile MapServer should use
+<a class="reference external" href="http://www.ms4w.com">MS4W</a> (which comes ready for WMS/WFS client and server use), or check for the
+availability of other <a class="reference internal" href="../download.html#windows"><span class="std std-ref">Windows binaries</span></a> with WMS support.</p>
 <ul class="simple">
-<li><p class="first">Pour l&#8217;installation de PROJ4 et GDAL, voir le guide de compilation MapServer (<a class="reference internal" href="../installation/unix.html#unix"><span class="std std-ref">Compiler sous Unix</span></a> / <a class="reference internal" href="../installation/win32.html#win32"><span class="std std-ref">Compiler sous Win32</span></a>)</p>
-</li>
-<li><p class="first">Pour <a class="reference external" href="http://curl.haxx.se/libcurl/c/">libcurl</a>, assurez-vous d&#8217;avoir la version 7.10.1 ou plus récente installée sur votre système. Vous pouvez trouver votre version de libcurl en utilisant <em>curl-config &#8211;version</em>. (si votre système vient avec une ancienne version de libcurl préinstallée alors vous DEVEZ le désinstaller avant d&#8217;installer la nouvelle version)</p>
-</li>
+<li>For PROJ4 and GDAL installation, see the MapServer Compilation HowTo (<a class="reference internal" href="../installation/unix.html#unix"><span class="std std-ref">Compiling on Unix</span></a> / <a class="reference internal" href="../installation/win32.html#win32"><span class="std std-ref">Compiling on Win32</span></a>)</li>
+<li>For <a class="reference external" href="http://curl.haxx.se/libcurl/c/">libcurl</a>, make sure you have version 7.10.1 or more recent installed on your
+system. You can find out your libcurl version using <em>curl-config &#8211;version</em>.
+(if your system came with an older version of libcurl preinstalled then you MUST
+uninstall it prior to installing the new version)</li>
 </ul>
-<p>Une fois les bibliothèques requises installées, alors configurez MapServer en utilisant l&#8217;option <em>&#8211;with-wmsclient</em> (avec toutes les autres options que vous avez l&#8217;habitude d&#8217;utiliser) et recompilez. Cela vous donnera un nouveau jeu d&#8217;exécutables (et éventuellement php_mapscript.si vous l&#8217;avez demandé). Voir le guide de compilation MapServer (liens ci-dessus) pour les détails d&#8217;installation.</p>
+<p>Once the required libraries are installed, then configure MapServer using the
+<em>&#8211;with-wmsclient</em> switch (plus all the other switches you used to use) and recompile.
+This will give you a new set of executables (and possibly php_mapscript.so if you
+requested it). See the MapServer Compilation HowTo (links above) for installation details.</p>
 <div class="section" id="check-your-mapserver-executable">
-<h3>Vérifiez votre exécutable MapServer<a class="headerlink" href="#check-your-mapserver-executable" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Pour vérifier que votre exécutable mapserv inclut le support WMS, utilisez l&#8217;option de ligne de commande &#8220;-v&#8221; et confirmez la présence de &#8220;SUPPORTS=WMS_CLIENT&#8221;.</p>
-<p>Exemple 1. Information de version de Mapserv sous Unix:</p>
+<h3>Check your MapServer executable<a class="headerlink" href="#check-your-mapserver-executable" title="Lien permanent vers ce titre">¶</a></h3>
+<p>To check that your mapserv executable includes WMS support, use the &#8220;-v&#8221; command-line
+switch and look for &#8220;SUPPORTS=WMS_CLIENT&#8221;.</p>
+<p>Example 1. Mapserv Version Info on Unix:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ ./mapserv -v
 MapServer version 7.0.1 OUTPUT=PNG OUTPUT=JPEG OUTPUT=KML SUPPORTS=PROJ
 SUPPORTS=AGG SUPPORTS=FREETYPE SUPPORTS=CAIRO SUPPORTS=ICONV
@@ -220,7 +233,7 @@ SUPPORTS=THREADS SUPPORTS=GEOS INPUT=JPEG INPUT=POSTGIS INPUT=OGR
 INPUT=GDAL INPUT=SHAPEFILE
 </pre></div>
 </div>
-<p>Exemple 2. Information de version de Mapserv sous Windows:</p>
+<p>Example 2. Mapserv Version Info on Windows:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span>\<span class="n">ms4w</span><span class="o">&gt;</span> <span class="n">setenv</span><span class="o">.</span><span class="n">bat</span>
 
 <span class="n">C</span><span class="p">:</span>\<span class="n">ms4w</span><span class="o">&gt;</span> <span class="n">mapserv</span> <span class="o">-</span><span class="n">v</span>
@@ -234,34 +247,54 @@ INPUT=GDAL INPUT=SHAPEFILE
 </div>
 </div>
 <div class="section" id="install-optional-proj4-epsg-codes">
-<h3>Installation de codes de projection EPSG optionnels<a class="headerlink" href="#install-optional-proj4-epsg-codes" title="Lien permanent vers ce titre">¶</a></h3>
-<p>(Note: l&#8217;installation des codes PROJ4 est optionnelle, installez-les seulement si vous en avez besoin)</p>
-<p>Quelques serveurs WMS Canadiens utiliseront quelques codes de projection non standard non inclus dans la distribution par défaut (par exemple, EPSG:42304, etc.). Si vous prévoyez d&#8217;utiliser MapServer pour vous connecter à des serveurs WMS Canadiens alors vous aurez peut-être besoin de <a class="reference external" href="http://www.maptools.org/dl/proj4-epsg-with-42xxx.zip">télécharger un fichier epsg Canadien personnalisé</a> avec ces codes, et décompressez-le dans le répertoire /usr/local/share/proj (ou /ms4w/proj/nad/ pour les utilisateurs de MS4W users).</p>
-<p>Enfin, les serveurs WMS ESRI viennent aussi avec leur propres séries de codes non-standard. Si vous prévoyez de vous connecter à des serveurs WMS ESRI alors vous aurez peut-être besoin d&#8217;un fichier epsg personnalisé qui contienne les codes Candiens et les codes ESRI, vous permettant de vous connecter à n&#8217;importe quel serveur. Téléchargez le <a class="reference external" href="http://www.maptools.org/dl/proj4-epsg-with-42xxx-and-esri.zip">fichier epsg ESRI personnalisé</a>  et décompressez-le dans /usr/local/share/proj (ou /ms4w/proj/nad/ pour les utilisateurs de MS4W users).</p>
+<h3>Install Optional PROJ4 EPSG Codes<a class="headerlink" href="#install-optional-proj4-epsg-codes" title="Lien permanent vers ce titre">¶</a></h3>
+<p>(Note: installing these PROJ4 codes is optional, install only if you need them)</p>
+<p>Some Canadian WMS servers will use some non-standard projection codes not included
+in the default distribution (e.g. EPSG:42304, etc.). If you are planning to use
+MapServer to connect to Canadian WMS servers then you might want to <a class="reference external" href="http://www.maptools.org/dl/proj4-epsg-with-42xxx.zip">download a custom
+Canadian epsg file</a> with those codes, and unzip it in the /usr/local/share/proj
+directory (or /ms4w/proj/nad/ for MS4W users).</p>
+<p>Finally, ESRI WMS servers also come with their own series of non-standard codes. If you
+are planning to connect to ESRI WMS servers then you might want to get a custom epsg file
+that contains the canadian codes and the ESRI codes, allowing you to connect to any server.
+Download the <a class="reference external" href="http://www.maptools.org/dl/proj4-epsg-with-42xxx-and-esri.zip">custom ESRI epsg file</a>  and unzip it in /usr/local/share/proj (or
+/ms4w/proj/nad/ for MS4W users).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Q:</th><td class="field-body"><p class="first last">Mais pourquoi ne pas toujours installer et distribuer le fichier the proj4-epsg-with-42xxx-and-esri.zip alors qu&#8217;il est plus complet?</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Q:</th><td class="field-body">But why not always install and distribute the proj4-epsg-with-42xxx-and-esri.zip file
+then since it&#8217;s more complete?</td>
 </tr>
-<tr class="field-even field"><th class="field-name">A:</th><td class="field-body"><p class="first last">Vous devez seulement installer les codes de projection epsg dont vous avez besoin, le fichier epsg avec tous les codes ESRI est environ 20% plus gros que celui par défaut, ainsi cela provoque une surcharge dont vous n&#8217;avez pas forcément besoin. Notez aussi quand vous créez les serveurs WMS, pour être vraiment interopérable, seulement les codes EPSG qui sont dans la liste EPSG standard devraient être utilisés. C&#8217;est une mauvaise idée pour l&#8217;interopérabilité d&#8217;utiliser les codes Canadiens personnalisés ou ceux d&#8217;ESRI et nous ne souhaitons pas trop promouvoir leur utilisation.</p>
-</td>
+<tr class="field-even field"><th class="field-name">A:</th><td class="field-body">You should install only the epsg projection codes that you need, the epsg file with all
+ESRI codes in it is 20% larger than the default one, so it comes with extra overhead
+that you may not need. Also note that when creating WMS servers, in order to be really
+interoperable, only EPSG codes that are part of the standard EPSG list should be used.
+i.e. it is a bad idea for interoperability to use the custom canadian codes or the custom
+ESRI codes and we do not want to promote their use too much.</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 <div class="section" id="mapfile-configuration">
-<span id="index-1"></span><h2><a class="toc-backref" href="#table-of-contents">Configuration du MapFile</a><a class="headerlink" href="#mapfile-configuration" title="Lien permanent vers ce titre">¶</a></h2>
+<span id="index-1"></span><h2><a class="toc-backref" href="#table-of-contents">MapFile Configuration</a><a class="headerlink" href="#mapfile-configuration" title="Lien permanent vers ce titre">¶</a></h2>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Un bloc PROJECTION doit être défini dans le mapfile dans la partie MAP à moins que vous soyez sûr que toutes vos couches WMS supportent une seule projection qui soit la même que la PROJECTION de la carte. La PROJECTION de MAP peut être définie en utilisant le codes &#8220;init=epsg:xxxx&#8221; ou en utilisant des paramètres PROJ4 classiques. L&#8217;incapacité à définir une PROJECTION pour MAP peut causer un renvoi de cartes vides/blanches à partir de serveurs WMS distants (à cause de combinaisons inconsistantes entre BBOX et SRS utilisées dans une URL de connexion WMS).</p>
+<p class="last">A PROJECTION must be set in the mapfile for the MAP unless you are sure that all your
+WMS layers support only a single projection which is the same as the PROJECTION of the map.
+The MAP PROJECTION can be set using &#8220;init=epsg:xxxx&#8221; codes or using regular PROJ4 parameters.
+Failure to set a MAP PROJECTION may result in blank maps coming from remote WMS servers
+(because of inconsistent BBOX+SRS combination being used in the WMS connection URL).</p>
 </div>
 <div class="section" id="storing-temporary-files">
-<h3>Stocker les fichiers temporaires<a class="headerlink" href="#storing-temporary-files" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Avant la version 6.0, et en version 6.0 quand la métadonnée wms_cache_to_disk est activée,vous devez définir la valeur de IMAGEPATH dans l&#8217;objet WEB de votre mapfile pour qu&#8217;il pointe vers un répertoire valide et supportant un fonctionnement en écriture. MapServer utilisera ce répertoire pour stocker les fichiers temporaires téléchargés depuis les serveurs distants. Les The fichiers temporaires sont automatiquement supprimés par MapServer et ainsi vous ne les remarquerez pas.</p>
-<p>Exemple 3. Définir le paramètre IMAGEPATH dans un Mapfile</p>
+<h3>Storing Temporary Files<a class="headerlink" href="#storing-temporary-files" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Before version 6.0, and in version 6.0 when wms_cache_to_disk metadata is turned on,
+you have to set the IMAGEPATH value in the WEB object of your mapfile to point to a valid and
+writable directory. MapServer will use this directory to store temporary files downloaded from
+the remote servers. The temporary files are automatically deleted by MapServer so you won&#8217;t
+notice them.</p>
+<p>Example 3. Setting IMAGEPATH Parameter in Mapfile</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">MAP</span>
   <span class="p">...</span>
   <span class="k">WEB</span>
@@ -283,7 +316,8 @@ INPUT=GDAL INPUT=SHAPEFILE
 <span class="k">END</span>
 </pre></div>
 </div>
-<p>Si vous souhaitez garder ce fichier temporaire pour effectuer du debuggage, vous devez ajouter la déclaration suivante à l&#8217;objet LAYER de votre mapfile:</p>
+<p>If you want to keep this temporary file for debugging purposes, you should add the following
+statement to the LAYER object of your mapfile:</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="p">....</span>
   <span class="k">DEBUG</span> <span class="nb">ON</span>
@@ -293,8 +327,9 @@ INPUT=GDAL INPUT=SHAPEFILE
 </div>
 </div>
 <div class="section" id="adding-a-wms-layer">
-<h3>Ajout d&#8217;une couche WMS<a class="headerlink" href="#adding-a-wms-layer" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Les couches WMS sont accédés via un type de connexion WMS dans le <a class="reference internal" href="../mapfile/index.html#mapfile"><span class="std std-ref">Mapfile</span></a>. Voici un exemple de couche utilisant ce type de connexion:</p>
+<h3>Adding a WMS Layer<a class="headerlink" href="#adding-a-wms-layer" title="Lien permanent vers ce titre">¶</a></h3>
+<p>WMS layers are accessed via the WMS connection type in the <a class="reference internal" href="../mapfile/index.html#mapfile"><span class="std std-ref">Mapfile</span></a>. Here is an
+example of a layer using this connection type:</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="k">NAME</span> <span class="s">&quot;country_bounds&quot;</span>
   <span class="k">TYPE</span> <span class="nb">RASTER</span>
@@ -332,43 +367,61 @@ by a comma (,) such as:</p>
 <p class="last">Layer names must be separated by a comma, without any spaces around the comma</p>
 </div>
 <div class="section" id="required-layer-parameters-and-metadata">
-<span id="index-2"></span><h4>Paramètres et métadonnées requises<a class="headerlink" href="#required-layer-parameters-and-metadata" title="Lien permanent vers ce titre">¶</a></h4>
+<span id="index-2"></span><h4>Required Layer Parameters and Metadata<a class="headerlink" href="#required-layer-parameters-and-metadata" title="Lien permanent vers ce titre">¶</a></h4>
 <ul class="simple">
 <li><strong>CONNECTIONTYPE WMS</strong></li>
-<li><p class="first"><strong>CONNECTION</strong> - c&#8217;est l&#8217;URL &#8220;online resource&#8221; du serveur distant, juste l&#8217;URL de base sans aucun des paramètres WMS. La version diu serveur, le format d&#8217;image, le nom de la couche, etc. seront fournis par les métadonnées, voir ci-dessous.</p>
-</li>
+<li><strong>CONNECTION</strong>
+- this is the remote server&#8217;s online resource URL, just the base URL
+without any of the WMS parameters. The server version, image format,
+layer name, etc. will be provided via metadata, see below.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Notez que si la valeur du paramètre CONNECTION n&#8217;est pas définie, la valeur de la métadonnée &#8220;wms_onlineresource&#8221; sera utilisée. Si à la fois CONNECTION et &#8220;wms_onlineresource&#8221; sont définis alors la métadonnée &#8220;wms_onlineresource&#8221; à la précédence.</p>
+<p class="last">Note that if the CONNECTION parameter value is not set the the value of
+the &#8220;wms_onlineresource&#8221; metadata will be used. If both CONNECTION and
+&#8220;wms_onlineresource&#8221; are set then the &#8220;wms_onlineresource&#8221; metadata takes precedence.</p>
 </div>
 <ul class="simple">
-<li><p class="first"><strong>métadonnée &#8220;wms_format&#8221;</strong> - le format d&#8217;image à utiliser dans les requêtes GetMap.</p>
-</li>
+<li><strong>&#8220;wms_format&#8221; metadata</strong>
+- the image format to use in GetMap requests.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Si wms_formatlist est fourni alors wms_format est optionnel et MapServer prendra le premier format supporté dans wms_formatlist pour effectuer les requêtes GetMap. Si à la fois, wms_format et wms_formatlist sont fournis alors wms_format prend la précédence. Notez aussi que les serveurs WMS n&#8217;affichent seulement les formats supportés qui font partis des bibliothèques GD/GDAL.</p>
+<p class="last">If wms_formatlist is provided then wms_format is optional and MapServer will
+pick the first supported format in wms_formatlist for use in GetMap requests.
+If both wms_format and wms_formatlist are provided then wms_format takes precedence.
+Also note that WMS Servers only advertize supported formats that are part of the GD/GDAL
+libraries.</p>
 </div>
 <ul class="simple">
 <li><strong>&#8220;wms_name&#8221; metadata</strong>
 - comma-separated list of layers to be fetched from the remote WMS server. This
 value is used to set the LAYERS and QUERY_LAYERS WMS URL parameters.  Note that when
 specifying multiple layers there must not be any spaces between the comma and the layer name.</li>
-<li><p class="first"><strong>métadonnée &#8220;wms_server_version&#8221;</strong> - la version du protocole WMS supportée par le serveur WMS distant et qui sera utilisé pour résoudre les requêtes GetMap.</p>
-</li>
-<li><p class="first"><strong>métadonnée &#8220;wms_srs&#8221;</strong> - liste délimitée par des espaces de codes de projection EPSG supportés par le serveur distant. Vous obtenez normalement cette sortie des &#8220;capabilities&#8221; du serveur. Cette valeur devrait être mise en majuscule (EPSG:4236.....et pas epsg:4236) pour éviter les problèmes avec les plates-formes sensibles à la casse. La valeur est utilisée pour définir le paramètre SRS de l&#8217;URL WMS.</p>
-</li>
+<li><strong>&#8220;wms_server_version&#8221; metadata</strong>
+- the version of the WMS protocol supported by the remote WMS server and that will be
+used for issuing GetMap requests.</li>
+<li><strong>&#8220;wms_srs&#8221; metadata</strong>
+- space-delimited list of EPSG projection codes supported by the remote server.
+You normally get this from the server&#8217;s capabilities output. This value should
+be upper case (EPSG:4236.....not epsg:4236) to avoid problems with case sensitive
+platforms. The value is used to set the SRS WMS URL parameter.</li>
 </ul>
 </div>
 <div class="section" id="optional-layer-parameters-and-metadata">
-<h4>Métadonnées et paramètres optionnels de la couche<a class="headerlink" href="#optional-layer-parameters-and-metadata" title="Lien permanent vers ce titre">¶</a></h4>
+<h4>Optional Layer Parameters and Metadata<a class="headerlink" href="#optional-layer-parameters-and-metadata" title="Lien permanent vers ce titre">¶</a></h4>
 <ul>
-<li><p class="first"><strong>MINSCALE, MAXSCALE</strong> - si les &#8220;capabilities&#8221; du serveur distant contient une valeur dans ScaleHint pour cette couche alors vous voudrez peut-être définir l&#8217;échelle minimum MINSCALE et maximum MAXSCALE dans l&#8217;objet LAYER dans le mapfile. Cela permettra à MapServer d&#8217;interroger la couche seulement aux échelles où cela fait sens</p>
+<li><p class="first"><strong>MINSCALE, MAXSCALE</strong>
+- if the remote server&#8217;s capabilities contains a ScaleHint value for this layer
+then you might want to set the MINSCALE and MAXSCALE in the LAYER object in the mapfile.
+This will allow MapServer to request the layer only at scales where it makes sense</p>
 </li>
-<li><p class="first"><strong>objet PROJECTION</strong> - il est optionnel. MapServer en créera un en interne seulement si requis.  En inclure un peut permettre à MapServer d&#8217;éviter la recherche de définition dans les fichiers PROJ.4.</p>
+<li><p class="first"><strong>PROJECTION object</strong>
+- it is optional at this point. MapServer will create one internally if needed.  Including one may
+allow MapServer to avoid looking up a definition in the PROJ.4 init files.</p>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_auth_username&#8221;</strong> - chaîne d&#8217;autorisation avec style msEncrypt.  Les chaînes vides sont aussi acceptées.</p>
+<li><p class="first"><strong>&#8220;wms_auth_username&#8221; metadata</strong>
+- msEncrypt-style authorization string.  Empty strings are also accepted.</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">METADATA</span>
   <span class="s">&quot;wms_auth_username&quot;</span> <span class="s">&quot;foo&quot;</span>
   <span class="s">&quot;wms_auth_password&quot;</span> <span class="s">&quot;{FF88CFDAAE1A5E33}&quot;</span>
@@ -376,16 +429,15 @@ specifying multiple layers there must not be any spaces between the comma and th
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_auth_type&#8221;</strong> - Type d&#8217;autorisation .  Les types supportés incluent:</p>
+<li><p class="first"><strong>&#8220;wms_auth_type&#8221; metadata</strong>
+- Authorization type.  Supported types include:</p>
 <blockquote>
 <div><ul class="simple">
 <li>basic</li>
 <li>digest</li>
 <li>ntlm</li>
-<li><p class="first">any (la bibliothèque http sous-jacente prend la meilleure option parmi celles supportées par le serveur distant)</p>
-</li>
-<li><p class="first">anysafe (la bibliothèque http sous-jacente prend seulement les méthodes sûres parmi celles supportées par le serveur distant)</p>
-</li>
+<li>any (the underlying http library picks the best among the opotions supported by the remote server)</li>
+<li>anysafe (the underlying http library picks only safe methods among the options supported by the remote server)</li>
 </ul>
 </div></blockquote>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">METADATA</span>
@@ -394,7 +446,11 @@ specifying multiple layers there must not be any spaces between the comma and th
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_connectiontimeout&#8221;</strong> - le temps maximum à attendre pour charger une couche WMS distante, définit en secondes (par défaut est à 30 secondes). Cette métadonnée peut être ajoutée au niveau du bloc LAYER afin qu&#8217;elle n&#8217;affecte que cette couche, ou peut être ajoutée au niveau du bloc MAP (dans l&#8217;objet WEB) afin qu&#8217;elles affectent toutes les couches. Notez que wms_connectiontimeout au niveau de LAYER a priorité sur celle au niveau MAP.</p>
+<li><p class="first"><strong>&#8220;wms_connectiontimeout&#8221; metadata</strong>
+- the maximum time to wait for a remote WMS layer to load, set in seconds (default is 30
+seconds). This metadata can be added at the layer level so that it affects only that layer,
+or it can be added at the map level (in the web object) so that it affects all of the layers.
+Note that wms_connectiontimeout at the layer level has priority over the map level.</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">METADATA</span>
   <span class="p">...</span>
   <span class="s">&quot;wms_connectiontimeout&quot;</span> <span class="s">&quot;60&quot;</span>
@@ -414,7 +470,7 @@ specifying multiple layers there must not be any spaces between the comma and th
 <span class="k">END</span>
 </pre></div>
 </div>
-<p>qui devrait retourner cette exception xml dans le MS_ERRORFILE:</p>
+<p>Which would return this xml exception in the MS_ERRORFILE:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>Tue Jan 17 18:05:13 2006 - msDrawWMSLayerLow(): WMS server error.
 WMS GetMap request got XML exception for layer &#39;prov_bound&#39;:
 &lt;?xml version=&#39;1.0&#39; encoding=&quot;ISO-8859-1&quot; standalone=&quot;no&quot; ?&gt;
@@ -429,27 +485,37 @@ given in the LAYERS parameter.
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_force_separate_request&#8221;</strong> - définir celle-ci à &#8220;1&#8221; pour forcer cette couche WMS à être interrogée en utilisant sa propre requête spéarée GetMap. Par défaut, MapServer essayera de fusionner des couches WMS multiples adjacentes depuis le même serveur dans une seule requête GetMap multi-couches pour réduire la charge sur les serveurs distants et améliorer le temps de réponse. Cette métadonnée est utilisée pour contourner ce comportement.</p>
+<li><p class="first"><strong>&#8220;wms_force_separate_request&#8221; metadata</strong>
+- set this to &#8220;1&#8221; to force this WMS layer to be requested using its own separate GetMap
+request. By default MapServer will try to merge multiple adjacent WMS layers from the
+same server into a single multi-layer GetMap request to reduce the load on remote servers
+and improve response time. This metadata is used to bypass that behavior.</p>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_formatlist&#8221;</strong> - liste séparée par des virgules des formats d&#8217;image supportés par le serveur WMS distant. Notez que wms_formatlist est utilisé seulement si wms_format n&#8217;est pas défini. Si à la fois wms_format et wms_formatlist sont fournis alors wms_format prend la précédence.</p>
+<li><p class="first"><strong>&#8220;wms_formatlist&#8221; metadata</strong>
+- comma-separated list of image formats supported by the remote WMS server.
+Note that wms_formatlist is used only if wms_format is not set. If both wms_format and
+wms_formatlist are provided then wms_format takes precedence.</p>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_latlonboundingbox&#8221;</strong> - le rectangle englobant de cette couche en coordonnées géographiques dans le format &#8220;lon_min lat_min lon_max lat_max&#8221;. S&#8217;il est défini alors MapServer interrogera seulement la couche quand la vue de la carte se superpose avec ce rectangle englobant. Vous obtenez normalement ceci depuis la sortie &#8220;capabilities&#8221; du serveur.</p>
+<li><p class="first"><strong>&#8220;wms_latlonboundingbox&#8221; metadata</strong>
+- the bounding box of this layer in geographic coordinates in the format &#8220;lon_min lat_min
+lon_max lat_max&#8221;. If it is set then MapServer will request the layer only when the map
+view overlaps that bounding box. You normally get this from the server&#8217;s capabilities
+output.</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">METADATA</span>
   <span class="s">&quot;wms_latlonboundingbox&quot;</span> <span class="s">&quot;-124 48 -123 49&quot;</span>
 <span class="k">END</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_proxy_auth_type&#8221;</strong> - le type d&#8217;autorisation à utiliser pour une connexion par proxy.  Les types supportés incluent:</p>
+<li><p class="first"><strong>&#8220;wms_proxy_auth_type&#8221; metadata</strong>
+- the authorization type to use for a proxy connection.  Supported types include:</p>
 <blockquote>
 <div><ul class="simple">
 <li>basic</li>
 <li>digest</li>
 <li>ntlm</li>
-<li><p class="first">any (la bibliothèque http sous-jacente prend la meilleure option parmi celles supportées par le serveur distant)</p>
-</li>
-<li><p class="first">anysafe (la bibliothèque http sous-jacente prend seulement les méthodes sûres parmi celles supportées par le serveur distant)</p>
-</li>
+<li>any (the underlying http library picks the best among the opotions supported by the remote server)</li>
+<li>anysafe (the underlying http library picks only safe methods among the options supported by the remote server)</li>
 </ul>
 </div></blockquote>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">METADATA</span>
@@ -458,28 +524,32 @@ given in the LAYERS parameter.
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_proxy_host&#8221;</strong> - le nom de domaine du proxy à utiliser, en format &#8220;décimale à point&#8221;, avec un composant de port optionnel (par exemple &#8216;192.168.2.10:8080&#8217;).</p>
+<li><p class="first"><strong>&#8220;wms_proxy_host&#8221; metadata</strong>
+- the hostname of the proxy to use, in &#8220;dot-quad&#8221; format, with an optional port component (e.g. &#8216;192.168.2.10:8080&#8217;).</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">METADATA</span>
   <span class="s">&quot;wms_proxy_host&quot;</span> <span class="s">&quot;192.168.2.10&quot;</span>
 <span class="k">END</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_proxy_port&#8221;</strong> - le port à utiliser pour une connexion proxy.</p>
+<li><p class="first"><strong>&#8220;wms_proxy_port&#8221; metadata</strong>
+- the port to use for a proxy connection.</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">METADATA</span>
   <span class="s">&quot;wms_proxy_port&quot;</span> <span class="s">&quot;8080&quot;</span>
 <span class="k">END</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_proxy_type&#8221;</strong> - le type de connexion proxy.  Les valeurs valides sont &#8216;http&#8217; et &#8216;socks5&#8217;, qui sont sensibles à la casse.</p>
+<li><p class="first"><strong>&#8220;wms_proxy_type&#8221; metadata</strong>
+- the type of the proxy connection.  Valid values are &#8216;http&#8217; and &#8216;socks5&#8217;, which are case sensitive.</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">METADATA</span>
   <span class="s">&quot;wms_proxy_type&quot;</span> <span class="s">&quot;http&quot;</span>
 <span class="k">END</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_proxy_username&#8221;</strong> - chaîne avec style msEncrypt pour une connexion proxy.  Les chaînes vides sont aussi acceptées.</p>
+<li><p class="first"><strong>&#8220;wms_proxy_username&#8221; metadata</strong>
+- msEncrypt-style string for a proxy connection.  Empty strings are also accepted.</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">METADATA</span>
   <span class="s">&quot;wms_proxy_username&quot;</span> <span class="s">&quot;foo&quot;</span>
   <span class="s">&quot;wms_proxy_password&quot;</span> <span class="s">&quot;{FF88CFDAAE1A5E33}&quot;</span>
@@ -487,13 +557,18 @@ given in the LAYERS parameter.
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_sld_body&#8221;</strong> -  peut être utilisée pour spécifier un document SLD &#8220;inline&#8221;.</p>
+<li><p class="first"><strong>&#8220;wms_sld_body&#8221; metadata</strong>
+-  can be used to specify an inline SLD document.</p>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_sld_url&#8221;</strong> - peut être utilisée pour spécifier un lien vers un document SLD.</p>
+<li><p class="first"><strong>&#8220;wms_sld_url&#8221; metadata</strong>
+- can be used to specify a link to an SLD document.</p>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_style&#8221;</strong> - nom du style à utiliser pourle paramètre de STYLES dans les requêtes GetMap pour cette couche.</p>
+<li><p class="first"><strong>&#8220;wms_style&#8221; metadata</strong>
+- name of style to use for the STYLES parameter in GetMap requests for this layer.</p>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_style_&lt;stylename&gt;_sld&#8221; metadata</strong> URL d&#8217;un SLD à utiliser dans les requêtes GetMap. Remplace &lt;stylename&gt; dans le nom de métadonnée avec le nom de style auxquel le SLD s&#8217;applique.</p>
+<li><p class="first"><strong>&#8220;wms_style_&lt;stylename&gt;_sld&#8221; metadata</strong>
+URL of a SLD to use in GetMap requests. Replace
+&lt;stylename&gt; in the metadta name with the name of the style to which the SLD applies.</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">METADATA</span>
   <span class="p">...</span>
   <span class="s">&quot;wms_style&quot;</span>              <span class="s">&quot;mystyle&quot;</span>
@@ -502,30 +577,54 @@ given in the LAYERS parameter.
 <span class="k">END</span>
 </pre></div>
 </div>
-<p>Pour plus d&#8217;informations  sur les SLDs dans MapServer, voir le <a class="reference internal" href="sld.html#sld"><span class="std std-ref">guide sur SLD</span></a>.</p>
+<p>For more information on SLDs in MapServer see the <a class="reference internal" href="sld.html#sld"><span class="std std-ref">SLD HowTo document</span></a>.</p>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_time&#8221;</strong> - valeur à utiliser pour le paramètre TIME dans les requêtes GetMap pour cette couche. Merci de regarder <a class="reference internal" href="wms_time.html#wms-time"><span class="std std-ref">le guide WMS Time</span></a> pour plus d&#8217;informations.</p>
+<li><p class="first"><strong>&#8220;wms_time&#8221; metadata</strong>
+- value to use for the TIME parameter in GetMap requests for this layer. Please see the
+<a class="reference internal" href="wms_time.html#wms-time"><span class="std std-ref">WMS Time HowTo</span></a> for more information.</p>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_bgcolor&#8221;</strong> - spécifie la couleur à utiliser comme fond pour la carte. Le format général de BGCOLOR est un encodage hexadécimal d&#8217;une valeur RGB où deux caractères hexadécimaux sont utilisés pour chacune des valeurs de couleur rouge (Red), vert (Green), et bleu (Blue). les valeurs sont comprises entre 00 et FF pour chacune (0 et 255, en base 10). Le format est 0xRRGGBB; les caractères majuscules ou minuscules sont autorisés pour les valeurs RR, GG et BB. Le préfixe &#8220;0x&#8221; doit avoir une casse minuscule avec &#8220;x&#8221;.</p>
+<li><p class="first"><strong>&#8220;wms_bgcolor&#8221; metadata</strong>
+- specifies the color to be used as the background of the map. The general format of BGCOLOR is a hexadecimal encoding of an RGB value where two hexadecimal characters are used for each of Red, Green, and Blue color values. The values can range between 00 and FF for each (0 and 255, base 10). The format is 0xRRGGBB; either upper or lower case characters are allowed for RR, GG, and BB values. The &#8220;0x&#8221; prefix shall have a lower case &#8220;x&#8221;.</p>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_transparent&#8221;</strong> - spécifie si le fond de la carte doit être transparent ou non. TRANSPARENT peut prendre deux valeurs, &#8220;TRUE&#8221; ou &#8220;FALSE&#8221;.  S&#8217;il n&#8217;est pas spécifié, MapServer définit par défaut la valeur à &#8220;TRUE&#8221;</p>
+<li><p class="first"><strong>&#8220;wms_transparent&#8221; metadata</strong>
+- specifies whether the map background is to be made transparent or not. TRANSPARENT can take on two values, &#8220;TRUE&#8221; or &#8220;FALSE&#8221;.  If not specified, MapServer sets default to &#8220;TRUE&#8221;</p>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_cache_to_disk&#8221;</strong> - définit celle-ci à &#8220;1&#8221; pour forcer MapServer à écrire les images récupérées sur le disque.  Ecrire sur le disque est nécessaire pour tirer parti du de la logique de mise en cache de MapServer afin d&#8217;aviter de redemander les requêtes WMS déjà effectuées.  Cette fonctionnalité est nouvelle depuis MapServer 6.0 - les résultats étaient antérieurement toujours écrit sur le disque.</p>
+<li><p class="first"><strong>&#8220;wms_cache_to_disk&#8221; metadata</strong>
+- set this to &#8220;1&#8221; to force MapServer to write fetched images to disk.  Writing to disk
+is necessary to take advantage of MapServer&#8217;s caching logic to avoid refetching WMS
+requests made previously.  This feature is new to MapServer 6.0 - previously results were always written
+to disk.</p>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_nonsquare_ok&#8221;</strong> - définit celle-ci à &#8220;0&#8221; pour indiquer que le WMS distant supporte seulement des requêtes pour des pixels carré.  Dans ce cas, MapServer fera attention à seulement faire des requêtes  en pixels carré même si cela signifie suréchantillonner dans une dimension en comparant avec la résolution de la donnée image requise.  Cette fonctionnalité est nouvelle depuis MapServer 6.0.</p>
+<li><p class="first"><strong>&#8220;wms_nonsquare_ok&#8221; metadata</strong>
+- set this to &#8220;0&#8221; to indicate that the remote WMS only supports requests for square pixels.  In this
+case MapServer will be careful to only make square pixel requests even if it means oversampling in one
+dimension compared to the resolution of image data required.  This feature is new to MapServer 6.0.</p>
 </li>
-<li><p class="first"><strong>métadonnée &#8220;wms_extent&#8221;</strong> - S&#8217;il y a exactement un seul SRS supporté par cette couche (comme listé dans la métadonnée wms_srs), et si l&#8217;élement de métadonnée wms_extent (ou une étendue spécifiée via le mot-clé EXTENT) est défini alors MapServer gérera les requêtes qui sont comprises à l&#8217;intérieur de cette zone.  Cela permet de court-circuiter les requêtes complètement en dehors de la couche, de réduire le traitement pour les couches  qui ne superposent que partiellement avec l&#8217;aire de la carte cible  et d&#8217;éviter les mauvais fonctionnements avec reprojection dans certaines aires.  Le contenu de l&#8217;élément de métadonnée doit être de la forme &#8220;minx miny maxx maxy&#8221;.  Cette fonctionnalité est nouvelle depuis MapServer 6.0.</p>
+<li><p class="first"><strong>&#8220;wms_extent&#8221; metadata</strong>
+- If there is exactly one SRS supported by this layer (as listed in the wms_srs metadata), and if
+the wms_extent metadata item (or an extent specified via the EXTENT keyword) is set then MapServer will
+take care to only making requests within this area.  This can short circuit requests completely outside
+the layer, reduce processing for layers that only partially overlap the target map area and avoid poor
+behaviors with reprojection in some areas.  The contents of this metadata item should be of the form
+&#8220;minx miny maxx maxy&#8221;.  This feature is new to MapServer 6.0.</p>
 </li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Notez que chacune des métadonnées ci-dessus peut aussi être référée  comme &#8216;ows_*&#8217; plutôt que &#8216;wms_*&#8217;. MapServer essaye en premier la métadonnée &#8216;wms_*&#8217;, et s&#8217;il ne le trouve pas, il essaye le nom &#8216;ows_*&#8217; correspondant. Utiliser ceci réduit la quantité de duplication dans les mapfiles qui supportent des interfaces OGC multiples, comme la métadonnée &#8220;ows_*&#8221; peut être utilisée presque partout pour les éléments de métadonnées partagés par les interfaces OGC multiples.</p>
+<p class="last">Note that each of the above metadata can also be referred to as &#8216;ows_*&#8217; instead of &#8216;wms_*&#8217;.
+MapServer tries the &#8216;wms_*&#8217; metadata first, and if not found it tries the corresponding
+&#8216;ows_*&#8217; name. Using this reduces the amount of duplication in mapfiles that support multiple
+OGC interfaces since &#8220;ows_*&#8221; metadata can be used almost everywhere for common metadata items
+shared by multiple OGC interfaces.</p>
 </div>
 </div>
 <div class="section" id="old-connection-parameter-format-from-version-3-5-and-3-6-deprecated">
-<h4>Ancien format de paramètre de CONNECTION depuis les versions 3.5 et 3.6 (déprécié)<a class="headerlink" href="#old-connection-parameter-format-from-version-3-5-and-3-6-deprecated" title="Lien permanent vers ce titre">¶</a></h4>
-<p>Dans les versions 3.5 et 3.6 de MapServer, le paramètre de CONNECTION devait inclure au minimum les paramètres WMS VERSION, LAYERS, FORMAT et TRANSPARENT. Ce mode de fonctionnement est encore supportémais est déprécié et vous êtes encouragés à utiliser les éléments métadonnées pour ces paramètres comme documenté dans la section précédente ci-dessus.</p>
-<p>Voici un exemple de definition de couche utilisant le format de paramètre de CONNECTION déprécié:</p>
+<h4>Old CONNECTION parameter format from version 3.5 and 3.6 (deprecated)<a class="headerlink" href="#old-connection-parameter-format-from-version-3-5-and-3-6-deprecated" title="Lien permanent vers ce titre">¶</a></h4>
+<p>In MapServer version 3.5 and 3.6, the CONNECTION parameter had to include at a
+minimum the VERSION, LAYERS, FORMAT and TRANSPARENT WMS parameters. This mode of
+operation is still supported but is deprecated and you are encouraged to use metadata
+items for those parameters as documented in the previous section above.</p>
+<p>Here is an example of a layer definition using this deprecated CONNECTION parameter format:</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
  <span class="k">NAME</span> <span class="s">&quot;bathymetry_elevation&quot;</span>
  <span class="k">TYPE</span> <span class="nb">RASTER</span>
@@ -542,12 +641,17 @@ given in the LAYERS parameter.
 </div>
 </div>
 <div class="section" id="limitations-todo">
-<h2><a class="toc-backref" href="#table-of-contents">Limitations/A faire</a><a class="headerlink" href="#limitations-todo" title="Lien permanent vers ce titre">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents">Limitations/TODO</a><a class="headerlink" href="#limitations-todo" title="Lien permanent vers ce titre">¶</a></h2>
 <ol class="arabic simple">
-<li><p class="first">GetFeatureInfo n&#8217;est pas complètement supporté comme la sortie de getFeatureInfo est laissée à la discrétion du serveur distant. Une méthode layer.getWMSFeatureInfoURL() a été ajoutée à MapScript pour les applications qui veulent accéder aux résultats de featureInfo et les manipuler directement.</p>
-</li>
-<li><p class="first">MapServer ne cherche pas à récupérer les &#8220;capabilities&#8221; de la couche. Faire ainsi à chaque à dessin de carte serait extrêmement inefficace. Et mettre en cache cette information ne fait parti du coeur de MapServer. Cela peut être mieux fait au niveau applicatif, dans un script, et seule l&#8217;information nécessaire est passée au coeur de MapServer via la chaîne CONNECTION et les métadonnées.</p>
-</li>
+<li>GetFeatureInfo is not fully supported since the output of getFeatureInfo is
+left to the discretion of the remote server. A method layer.getWMSFeatureInfoURL()
+has been added to MapScript for applications that want to access featureInfo results
+and handle them directly.</li>
+<li>MapServer does not attempt to fetch the layer&#8217;s capabilities. Doing so at every
+map draw would be extremely inefficient. And caching that information does not belong
+in the core of MapServer. This is better done at the application level, in a script,
+and only the necessary information is passed to the MapServer core via the CONNECTION
+string and metadata.</li>
 </ol>
 </div>
 </div>
@@ -581,27 +685,27 @@ given in the LAYERS parameter.
 </p>
   <h3>Current Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Client WMS</a><ul>
+<li><a class="reference internal" href="#">WMS Client</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a><ul>
-<li><a class="reference internal" href="#wms-related-information">Informations relatives au WMS</a></li>
+<li><a class="reference internal" href="#wms-related-information">WMS-Related Information</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#compilation-installation">Compilation / Installation</a><ul>
-<li><a class="reference internal" href="#check-your-mapserver-executable">Vérifiez votre exécutable MapServer</a></li>
-<li><a class="reference internal" href="#install-optional-proj4-epsg-codes">Installation de codes de projection EPSG optionnels</a></li>
+<li><a class="reference internal" href="#check-your-mapserver-executable">Check your MapServer executable</a></li>
+<li><a class="reference internal" href="#install-optional-proj4-epsg-codes">Install Optional PROJ4 EPSG Codes</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#mapfile-configuration">Configuration du MapFile</a><ul>
-<li><a class="reference internal" href="#storing-temporary-files">Stocker les fichiers temporaires</a></li>
-<li><a class="reference internal" href="#adding-a-wms-layer">Ajout d&#8217;une couche WMS</a><ul>
-<li><a class="reference internal" href="#required-layer-parameters-and-metadata">Paramètres et métadonnées requises</a></li>
-<li><a class="reference internal" href="#optional-layer-parameters-and-metadata">Métadonnées et paramètres optionnels de la couche</a></li>
-<li><a class="reference internal" href="#old-connection-parameter-format-from-version-3-5-and-3-6-deprecated">Ancien format de paramètre de CONNECTION depuis les versions 3.5 et 3.6 (déprécié)</a></li>
+<li><a class="reference internal" href="#mapfile-configuration">MapFile Configuration</a><ul>
+<li><a class="reference internal" href="#storing-temporary-files">Storing Temporary Files</a></li>
+<li><a class="reference internal" href="#adding-a-wms-layer">Adding a WMS Layer</a><ul>
+<li><a class="reference internal" href="#required-layer-parameters-and-metadata">Required Layer Parameters and Metadata</a></li>
+<li><a class="reference internal" href="#optional-layer-parameters-and-metadata">Optional Layer Parameters and Metadata</a></li>
+<li><a class="reference internal" href="#old-connection-parameter-format-from-version-3-5-and-3-6-deprecated">Old CONNECTION parameter format from version 3.5 and 3.6 (deprecated)</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#limitations-todo">Limitations/A faire</a></li>
+<li><a class="reference internal" href="#limitations-todo">Limitations/TODO</a></li>
 </ul>
 </li>
 </ul>
@@ -620,16 +724,16 @@ given in the LAYERS parameter.
           <a href="wms_time.html" title="WMS Time"
              >suivant</a> |</li>
         <li class="right" >
-          <a href="inspire.html" title="Service de vue INSPIRE"
+          <a href="inspire.html" title="INSPIRE View Service"
              >précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Gestion et configuration des standards OGC</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >OGC Support and Configuration</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

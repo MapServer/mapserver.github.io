@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Exemple 1.4 &#8212; MapServer 7.0.7 documentation</title>
+    <title>Example 1.4 &#8212; MapServer 7.0.7 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -139,16 +139,21 @@
           <div class="body" role="main">
             
   <div class="section" id="example-1-4">
-<span id="example1-4"></span><h1>Exemple 1.4<a class="headerlink" href="#example-1-4" title="Lien permanent vers ce titre">¶</a></h1>
+<span id="example1-4"></span><h1>Example 1.4<a class="headerlink" href="#example-1-4" title="Lien permanent vers ce titre">¶</a></h1>
 <div class="section" id="labeling-the-map">
-<h2>Etiqueter la carte<a class="headerlink" href="#labeling-the-map" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Nous pouvons aussi rajouter des étiquettes à notre carte...</p>
+<h2>Labeling the Map<a class="headerlink" href="#labeling-the-map" title="Lien permanent vers ce titre">¶</a></h2>
+<p>We can also add labels to our map...</p>
 <img alt="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-4.map&amp;layer=states_poly&amp;layer=states_line&amp;mode=map" src="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-4.map&amp;layer=states_poly&amp;layer=states_line&amp;mode=map" />
-<p>MapServer a un système de gestion des étiquettes très flexible. Il supporte en natif les polices bitmap comme truetype. LA mise à l&#8217;échelle des polices est supportée pour les polices truetype. Les angles et les placements des étiquettes peuvent être personnalisés...  Si vous prenez le temps d&#8217;apprendre les nombreux paramètres impliqués dans la création de bonnes étiquettes, vous serez récompensés avec des cartes informatives et esthétiquement jolies.</p>
-<p>C&#8217;est ce à quoi le mapfile ressemble: <a class="reference internal" href="example1-4-map.html#example1-4-map"><span class="std std-ref">Example1-4.map</span></a>.</p>
+<p>MapServer has a very flexible labeling engine.  It supports native
+bitmap as well as truetype fonts.  Font scaling is supported with
+truetype. The labeling angles and placements can be customized...  If
+you take the time to learn the many parameters involved in creating
+good labels, you will be rewarded with informative and aesthetically
+pleasing maps.</p>
+<p>This is what the map file looks like: <a class="reference internal" href="example1-4-map.html#example1-4-map"><span class="std std-ref">Example1-4.map</span></a>.</p>
 <div class="section" id="mapfile-structure">
-<h3>Structure d&#8217;un MapFile<a class="headerlink" href="#mapfile-structure" title="Lien permanent vers ce titre">¶</a></h3>
-<p>La structure du fichier .map, par objets, ressemble à ceci:</p>
+<h3>MapFile Structure<a class="headerlink" href="#mapfile-structure" title="Lien permanent vers ce titre">¶</a></h3>
+<p>The map file structure, by objects, looks like this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>                             <span class="n">MAP</span>
  <span class="p">(</span><span class="n">states_poly</span><span class="p">)</span> <span class="n">LAYER</span><span class="o">----------|---------</span><span class="n">LAYER</span> <span class="p">(</span><span class="n">states_line</span><span class="p">)</span>
 <span class="p">(</span><span class="n">land</span><span class="p">)</span> <span class="n">CLASS</span><span class="o">-----|-</span><span class="n">CLASS</span> <span class="p">(</span><span class="n">water</span><span class="p">)</span>         <span class="o">|-</span><span class="n">CLASS</span>
@@ -156,65 +161,88 @@
 </pre></div>
 </div>
 <div class="section" id="the-label-object-and-keywords">
-<h4>Mots-clés et objets de LABEL<a class="headerlink" href="#the-label-object-and-keywords" title="Lien permanent vers ce titre">¶</a></h4>
-<p>Ici, nous introduisons quelques paramètres en plus avec l&#8217;objet LABEL:</p>
+<h4>The LABEL Object and Keywords<a class="headerlink" href="#the-label-object-and-keywords" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Here we introduce a few more parameters along with the LABEL object:</p>
 <dl class="docutils">
 <dt><strong>FONTSET</strong></dt>
-<dd><p class="first last">Ici nous spécifionsle chemin complet vers notre fichier de liste de polices truetype (ou jeu de polices). Ce fichier liste chacune des polices disponibles. Regardez le fichier directement et  <a class="reference internal" href="../mapfile/fontset.html#fontset"><span class="std std-ref">la documentation du jeu de polices MapServer</span></a> pour plus d&#8217;informations. FONTSET est une paramètre de l&#8217;objet MAP.</p>
-</dd>
+<dd>Here we specify the full path to our truetype fonts list (or
+fontset) file. This file lists each of the available fonts. See the
+file itself and the <a class="reference internal" href="../mapfile/fontset.html#fontset"><span class="std std-ref">MapServer fontset documentation</span></a> for more info.  FONTSET is a parameter of the MAP
+object.</dd>
 <dt><strong>LABELITEM</strong></dt>
-<dd><p class="first last">Cela indique quelle donnée attributaire utiliser pour l&#8217;étiquetage, dans ce cas &#8220;STATE&#8221;. LABELITEM est un paramètre de l&#8217;objet LAYER.</p>
-</dd>
+<dd>This specifies which data attribute to use for labeling, in this
+case &#8220;STATE&#8221;. LABELITEM is a parameter of the LAYER object.</dd>
 <dt><strong>LABEL</strong></dt>
-<dd><p class="first last">Marque le début de l&#8217;objet LABEL. l&#8217;objet LABEL peut être utilisé à l&#8217;intérieur d&#8217;autres objets (comme l&#8217;objet de barre d&#8217;échelle SCALEBAR).</p>
-</dd>
+<dd>Marks the beginning of the LABEL object. The label object can be
+used under other objects (i.e. the SCALEBAR object).</dd>
 <dt><strong>COLOR</strong></dt>
-<dd><p class="first last">A l&#8217;intérieur de l&#8217;objet LABEL, COLOR spécifie la couleur de l&#8217;étiquette texte.</p>
-</dd>
+<dd>Within the LABEL object, COLOR specifies the color of the label
+text.</dd>
 <dt><strong>SHADOWCOLOR - deprecated</strong></dt>
-<dd><p class="first">Cela spécifie la couleur de l&#8217;ombre de l&#8217;étiquette texte.</p>
+<dd><p class="first">This specifies the shadow color of the label text.</p>
 <div class="last admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Depuis MapServer  6, le LABEL STYLE avec GEOMTRANSFORM LABELPOLY doit être utilisé à la place.  Les fichiers du tutoriel n&#8217;ont pas été mis à jour.</p>
+<p class="last">Since MapServer  6, LABEL STYLE with GEOMTRANSFORM LABELPOLY must
+be used instead.  The tutorial files have not been updated.</p>
 </div>
 </dd>
 <dt><strong>SHADOWSIZE - deprecated</strong></dt>
-<dd><p class="first">Spécifie la taille de l&#8217;ombre. La valeur correspond aux décalages de X et Y en pixels. Ainsi, &#8220;2 2&#8221; signifie deux pixels de large par deux pixels de haut.</p>
+<dd><p class="first">Specifies the shadow size. The value corresponds to the X and the Y
+shifts in pixels. So, &#8220;2 2&#8221; means two pixels wide by two pixels
+high.</p>
 <div class="last admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Depuis MapServer  6, le LABEL STYLE avec GEOMTRANSFORM LABELPOLY doit être utilisé à la place.  Les fichiers du tutoriel n&#8217;ont pas été mis à jour.</p>
+<p class="last">Since MapServer  6, LABEL STYLE with GEOMTRANSFORM LABELPOLY must
+be used instead.  The tutorial files have not been updated.</p>
 </div>
 </dd>
 <dt><strong>TYPE</strong></dt>
-<dd><p class="first last">A l&#8217;intérieur de l&#8217;objet LABEL, le TYPE spécifie quelle type de police utiliser. Nous avons le choix de TRUETYPE ou BITMAP (les polices intégrées par défaut). Nous choisissons TRUETYPE.</p>
-</dd>
+<dd>Within the LABEL object, TYPE specifies what type of font to
+use. We have the choice of TRUETYPE or BITMAP (the built-in
+fonts). We choose TRUETYPE.</dd>
 <dt><strong>FONT</strong></dt>
-<dd><p class="first last">Si vous indiquez le TYPE comme TRUETYPE, vous devrez spécifier quelle police utilisée. La valeur ici est &#8220;alias&#8221; dans le fichier de liste des polices.</p>
-</dd>
+<dd>If you specify TYPE as TRUETYPE, you need to specify what font to
+use.  The value here is the &#8220;alias&#8221; in the font list file.</dd>
 <dt><strong>SIZE</strong></dt>
-<dd><p class="first last">Si on utilise des polices truetype, la valeur de SIZE est en pixels. Si ce sont des polices bitmap, vous pouvez indiquer quleque chose &#8220;small&#8221; ou &#8220;large&#8221;.</p>
-</dd>
+<dd>If using truetype fonts, the value is size in pixels. If bitmap,
+you can say something like &#8220;small&#8221; or &#8220;large&#8221;.</dd>
 <dt><strong>ANTIALIAS</strong></dt>
-<dd><p class="first last">Cela active ou désactive l&#8217;anticrénelage (antialiasing) truetype. Rappelez-vous que la valeur n&#8217;est pas on ouoff mais TRUE ou FALSE.</p>
-</dd>
+<dd>This turns truetype antialiasing on or off. Remember the value
+isn&#8217;t on or off but TRUE or FALSE.</dd>
 <dt><strong>POSITION</strong></dt>
-<dd><p class="first last">Où positionner le texte des étiquettes en relation avec les points des étiquettes. La valeur est une combinaison de positions verticale et horizontale. Vous avez les choix suivants pour l&#8217;alignement vertical: C pour centre (Center), U pour Haut(Upper), et L pour bas (lower). Pour l&#8217;alignement horizontal, vous avez les choix suivants: C pour centre (Center), L pour gauche (left) et R pour droite (right). Ainsi, pour aligner l&#8217;étiquette au centre de l&#8217;identifiant d&#8217;étiquette, vous utiliserez la valeur &#8220;CC&#8221; (centre-centre). Ou si vous vous voulez être à la partie en bas à gauche de l&#8217;identifiant, vous utiliserez LL. Une autre manière est de laisser MapServer décider la meilleure position pour vos étiquettes. Pour cela, vous devrez utilisez la valeur &#8220;AUTO&#8221;.</p>
-</dd>
+<dd>Where to position the label text in relation to the label points.
+The value is a combination of vertical and horizontal
+positions. You have the following choices for vertical alignment: C
+for center, U for upper, and L for lower. For horizontal alignment
+you have the following choices: C for center, L for left, and R for
+right. So, to align the label text to the center of label ID you&#8217;d
+use the value &#8220;CC&#8221; (center-center). Or if you&#8217;d like it to be on
+the lower left of the ID, you&#8217;d use LL. Another way is to let
+MapServer decide the best position for your labels. For this you
+would use the value &#8220;AUTO&#8221;.</dd>
 <dt><strong>PARTIALS</strong></dt>
 <dd>Tells MapServer whether to generate incomplete label texts or not.
 The default here is not to generate fragments of a label text. The
 value is either TRUE or FALSE.</dd>
 <dt><strong>MINDISTANCE</strong></dt>
-<dd><p class="first last">C&#8217;est la distance minimum en pixels entre les étiquettes dupliquées. Regardez ce qu&#8217;il se passe si vous augmentez ou diminuez cette valeur.</p>
-</dd>
+<dd>This is the minimum distance in pixels between duplicate
+labels. See what happens if you increase or decrease this value.</dd>
 </dl>
 <p><strong>BUFFER</strong></p>
 <blockquote>
-<div><p>L&#8217;alignement (en pixels) pour chaque étiquette. Cela est utilisé pour amélioré la lisibilité. Un tampon ou BUFFER de 4 pixels signifie qu&#8217;aucune étiquette ne sera dessinée à moins de 4 pixels les uns des autres. A nouveau, faites des changements pour voir comment ça marche.</p>
-</div></blockquote>
-<p>Vous pouvez aussi créer des étiquettes séparées d&#8217;une couche POLYGON. Vous faîtes cela avec le TYPE de données ANNOTATION. Regardez le prochain exemple de fichier .map pour voir comment implémenter ce type d&#8217;étiquettes. Vous noterez que l&#8217;objet CLASS à l&#8217;intérieur de la couche &#8220;label&#8221; a un paramètre COLOR à &#8220;-1 -1 -1&#8221;. Le nombre négatif dit à Mapserver de donner à cette CLASS une couleur transparente (Les identifiants de labels ne se voient pas). Une fois de plus, jouez avec les valeurs pour comprendre comment cela affecte la carte.</p>
+<div>The padding (in pixels) for each label. This is used to enhance
+readability. A BUFFER of 4 pixels mean that no label will be drawn
+within four pixels of each other. Again, change to see how it
+works.</div></blockquote>
+<p>You can also create labels separate from a POLYGON layer. You do this
+with the ANNOTATION data type. Have a look at the next example&#8217;s map
+file to see how you&#8217;d implement this kind of labeling.  You will
+notice that the CLASS object within the &#8220;label&#8221; layer has a COLOR
+parameter value of &#8220;-1 -1 -1&#8221;. The negative number tells MapServer to
+give this CLASS a transparent color (the label IDs don&#8217;t show up).
+Once again, play with the values to understand how it affects the map.</p>
 <hr class="docutils" />
-<p><a class="reference internal" href="example1-3.html#example1-3"><span class="std std-ref">Revenir à l&#8217;exemple 1.3</span></a> | <a class="reference internal" href="example1-5.html#example1-5"><span class="std std-ref">Aller à l&#8217;exemple 1.5</span></a></p>
+<p><a class="reference internal" href="example1-3.html#example1-3"><span class="std std-ref">Back to Example 1.3</span></a> | <a class="reference internal" href="example1-5.html#example1-5"><span class="std std-ref">Proceed to Example 1.5</span></a></p>
 </div>
 </div>
 </div>
@@ -249,10 +277,10 @@ value is either TRUE or FALSE.</dd>
 </p>
   <h3>Current Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Exemple 1.4</a><ul>
-<li><a class="reference internal" href="#labeling-the-map">Etiqueter la carte</a><ul>
-<li><a class="reference internal" href="#mapfile-structure">Structure d&#8217;un MapFile</a><ul>
-<li><a class="reference internal" href="#the-label-object-and-keywords">Mots-clés et objets de LABEL</a></li>
+<li><a class="reference internal" href="#">Example 1.4</a><ul>
+<li><a class="reference internal" href="#labeling-the-map">Labeling the Map</a><ul>
+<li><a class="reference internal" href="#mapfile-structure">MapFile Structure</a><ul>
+<li><a class="reference internal" href="#the-label-object-and-keywords">The LABEL Object and Keywords</a></li>
 </ul>
 </li>
 </ul>
@@ -276,7 +304,7 @@ value is either TRUE or FALSE.</dd>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

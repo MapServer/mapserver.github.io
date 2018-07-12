@@ -31,7 +31,7 @@
     <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="MapServer 7.0.7 documentation" href="../index.html" />
     <link rel="up" title="MapCache 1.6.1" href="index.html" />
-    <link rel="next" title="Dimensions du jeu de données" href="dimensions.html" />
+    <link rel="next" title="Dimensions d’un jeu de tuiles" href="dimensions.html" />
     <link rel="prev" title="Types de cache" href="caches.html" /> 
   </head>
   <body role="document">
@@ -132,13 +132,13 @@
           <a href="../genindex.html" title="Index général"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="dimensions.html" title="Dimensions du jeu de données"
+          <a href="dimensions.html" title="Dimensions d’un jeu de tuiles"
              accesskey="N">suivant</a> |</li>
         <li class="right" >
           <a href="caches.html" title="Types de cache"
              accesskey="P">précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapCache 1.6.1</a> &#187;</li> 
       </ul>
     </div>
@@ -161,14 +161,10 @@
 </tr>
 </tbody>
 </table>
-<p>MapCache allows you to configure how the image should be saved to a cache once
-it has been requested from a source. The JPEG format should mostly be used for
-raster imagery, whereas the PNG format is most useful for vector based imagery
-where there are large uniform areas.</p>
+<p>MapCache vous permet de configurer comment l&#8217;image doit être sauvegardée dans le cache une fois qu&#8217;elle a été demandée à une source. Le format JPEG doit le plus souvent être utilisé pour les images raster tandis que le format PNG est plutôt utile basée sur des sources vecteurs où il y a des zones uniformes larges.</p>
 <div class="section" id="jpeg-format">
 <span id="mapcache-jpeg-format"></span><h2>Format JPEG<a class="headerlink" href="#jpeg-format" title="Lien permanent vers ce titre">¶</a></h2>
-<p>The JPEG format saves tiles to JPEG. You can configure the JPEG compression
-level (from 1 to 100) and the colorspace that should be used (RGB or YCbCr)</p>
+<p>Le format JPEG sauve les tuiles en jpeg. Vous pouvez configurer le niveau de compression JPEG (de 1 à 100) et l&#8217;espace de couleurs qui devrait être utilisée (RGB ou YCBCr)</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;format</span> <span class="na">name=</span><span class="s">&quot;myjpeg&quot;</span> <span class="na">type=</span><span class="s">&quot;JPEG&quot;</span><span class="nt">&gt;</span>
    <span class="nt">&lt;quality&gt;</span>85<span class="nt">&lt;/quality&gt;</span>
    <span class="nt">&lt;photometric&gt;</span>ycbcr<span class="nt">&lt;/photometric&gt;</span>
@@ -176,17 +172,15 @@ level (from 1 to 100) and the colorspace that should be used (RGB or YCbCr)</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li><em>quality</em>: This is the typical JPEG quality setting. Values under 50 produce
-lighter images but with notable compression artifacts. 100 should be avoided
-as it produces very heavy images.</li>
-<li><em>photometric</em>: By default the YCbCr colorspace is used as it produces images
-that tend to be 2 to 3 times lighter. Use RGB if you don&#8217;t want the default.</li>
+<li><p class="first"><em>quality</em>: c&#8217;est la configuration de qualité jpeg typique. les valeurs sous 50 produisent des images plus légères avec des artefacts de compression notables. 100 devrait être utilisé comme il produit des images de tailles très élevées</p>
+</li>
+<li><p class="first"><em>photometric</em>: Par défaut, l&#8217;espace de couleur YCbCr est utilisé comme il produit des images qui tendent à être 2 à 3 fois plus légères. Utilisez rgb si vous ne voulez pas la valeur par défaut.</p>
+</li>
 </ul>
 </div>
 <div class="section" id="png-format">
 <span id="mapcache-png-format"></span><h2>Format PNG<a class="headerlink" href="#png-format" title="Lien permanent vers ce titre">¶</a></h2>
-<p>The PNG format creates PNG images, with optional quantization (reduction of
-the number of colors to create an 8-bit palleted PNG).</p>
+<p>Le format PNG créé des images PNG, avec une quantization optionnelle (réduction du nombre de couleurs pour créer un PNG à palette 8bit)</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;format</span> <span class="na">name=</span><span class="s">&quot;mypng&quot;</span> <span class="na">type=</span><span class="s">&quot;PNG&quot;</span><span class="nt">&gt;</span>
    <span class="nt">&lt;compression&gt;</span>fast<span class="nt">&lt;/compression&gt;</span>
    <span class="nt">&lt;colors&gt;</span>256<span class="nt">&lt;/colors&gt;</span>
@@ -194,23 +188,15 @@ the number of colors to create an 8-bit palleted PNG).</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li><em>compression</em>: Choose which zlib compression to apply to the image data.
-Recognized values are &#8220;fast&#8221; and &#8220;best&#8221;. Omit the key to use the default
-zlib compression.</li>
-<li><em>colors</em>: Number of colors to use for quantization. Omit this key to
-produce 24 or 32 bit RGB/RGBA PNGs, or set to a value between 2 and 256
-to create an 8-bit palleted PNG. The quantization step is destructive:
-There is no guarantee that pixels will not have a noticeable shift in color
-in the case when the tile contains many colors.</li>
+<li><p class="first"><em>compression</em>: choisir quelle compression zlib à appliquer aux données de l&#8217;image. Les valeurs reconnues sont &#8220;fast&#8221; et &#8220;best&#8221;. Omettre la clé pour utiliser la compression zlib par défaut.</p>
+</li>
+<li><p class="first"><em>colors</em>: nombre de couleurs à utiliser pour la quantization. Omettre cette clé pour produire des pngs RGB/RGBA 24 ou 32 bit, ou définir une valeur entre 2 et 256 pour créer un png à palette 8-bit. L&#8217;étape de quantization est destructrice, il n&#8217;y a pas de garantie que les pixels ne subissent pas un changement notable de couleurs dans le cas où la tuile contient de nombreuses couleurs.</p>
+</li>
 </ul>
 </div>
 <div class="section" id="mixed-format">
 <span id="mapcache-mixed-format"></span><h2>Format mixte<a class="headerlink" href="#mixed-format" title="Lien permanent vers ce titre">¶</a></h2>
-<p>There is a third special format which mixes JPEG and PNG compression depending
-on the contents of the image. This format allows creation of caches for raster
-imagery using JPEG compression (which is more efficient) on zones with imagery
-data, and PNG compression (which supports trasnparency) on zones with no
-imagery or on a boundary between imagery and emptiness.</p>
+<p>Il y a un troisème type de format spécial qui mélange les compressions JPEG et PNG en fonction du contenu de l&#8217;image. Ce format permet de créer des caches pour les images raster en utilisant la compression JPEG (qui est plus efficace) sur les zones avec données images, et la compression PNG (qui supporte la transparence) sur les zones avec aucune image ou sur une limite entre les images et un contenu vide.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;format</span> <span class="na">name=</span><span class="s">&quot;mymixed&quot;</span> <span class="na">type=</span><span class="s">&quot;MIXED&quot;</span><span class="nt">&gt;</span>
    <span class="nt">&lt;opaque&gt;</span>myjpeg<span class="nt">&lt;/opaque&gt;</span>
    <span class="nt">&lt;transparent&gt;</span>mypng<span class="nt">&lt;/transparent&gt;</span>
@@ -218,9 +204,10 @@ imagery or on a boundary between imagery and emptiness.</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li><em>opaque</em>: The format to use when the image has only fully opaque pixels</li>
-<li><em>transparent</em>: The format to use when the image has some transparent or
-semi-opaque pixels.</li>
+<li><p class="first"><em>opaque</em>: le format à utiliser quand l&#8217;image a seulement des pixels totalement opaques</p>
+</li>
+<li><p class="first"><em>transparent</em>: le format à utiliser quand l&#8217;image a quelques pixels transparents ou semi-opaques.</p>
+</li>
 </ul>
 </div>
 </div>
@@ -273,19 +260,19 @@ semi-opaque pixels.</li>
           <a href="../genindex.html" title="Index général"
              >index</a></li>
         <li class="right" >
-          <a href="dimensions.html" title="Dimensions du jeu de données"
+          <a href="dimensions.html" title="Dimensions d’un jeu de tuiles"
              >suivant</a> |</li>
         <li class="right" >
           <a href="caches.html" title="Types de cache"
              >précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >MapCache 1.6.1</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

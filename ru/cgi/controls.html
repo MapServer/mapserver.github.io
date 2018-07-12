@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MapServer параметры CGI &#8212; MapServer 7.0.7 documentation</title>
+    <title>MapServer CGI Controls &#8212; MapServer 7.0.7 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -138,7 +138,7 @@
           <a href="mapcontext.html" title="Map Context Files"
              accesskey="P">назад</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Документация MapServer 7.0.7</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">CGI</a> &#187;</li> 
       </ul>
     </div>
@@ -150,29 +150,31 @@
           <div class="body" role="main">
             
   <div class="section" id="mapserver-cgi-controls">
-<span id="cgi-controls"></span><span id="index-0"></span><h1>MapServer параметры CGI<a class="headerlink" href="#mapserver-cgi-controls" title="Ссылка на этот заголовок">¶</a></h1>
+<span id="cgi-controls"></span><span id="index-0"></span><h1>MapServer CGI Controls<a class="headerlink" href="#mapserver-cgi-controls" title="Ссылка на этот заголовок">¶</a></h1>
 <div class="section" id="variables">
-<h2>Переменные<a class="headerlink" href="#variables" title="Ссылка на этот заголовок">¶</a></h2>
-<p>Имена переменных не зависят от регистра.</p>
+<h2>Variables<a class="headerlink" href="#variables" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Variable names are not case sensitive.</p>
 <dl class="docutils" id="index-1">
 <dt>BUFFER [distance]</dt>
-<dd><p class="first last">Дистанция, в той же координатной системе, что и map-файл, которая используется для создания нового охвата карты, в сочетании с MAPXY.</p>
-</dd>
+<dd>A distance, in the same coordinate system as the map file, used in
+conjunction with MAPXY to create an new map extent.</dd>
 </dl>
 <dl class="docutils" id="index-2">
 <dt>CLASSGROUP [name]</dt>
-<dd><p class="first last">Название группы классов в слое <a class="reference internal" href="../mapfile/layer.html#layer"><span class="std std-ref">LAYER</span></a> CLASSGROUP.  Требуется задать <a class="reference internal" href="../mapfile/layer.html#layer"><span class="std std-ref">LAYER</span></a> <cite>CLASSGROUP</cite> в имя <cite>name</cite> во всех слоях, имеющих как минимум один класс <a class="reference internal" href="../mapfile/class.html#class"><span class="std std-ref">CLASS</span></a>, который входит в группу CLASSGROUP <cite>name</cite>.</p>
-</dd>
+<dd>The name of a <a class="reference internal" href="../mapfile/layer.html#layer"><span class="std std-ref">LAYER</span></a> CLASSGROUP.  Set the <a class="reference internal" href="../mapfile/layer.html#layer"><span class="std std-ref">LAYER</span></a>
+<cite>CLASSGROUP</cite> to <cite>name</cite> for all layers that have at least one
+<a class="reference internal" href="../mapfile/class.html#class"><span class="std std-ref">CLASS</span></a> that is using the given CLASSGROUP <cite>name</cite>.</dd>
 </dl>
 <dl class="docutils" id="index-3">
 <dt>CONTEXT [filename]</dt>
-<dd><p class="first last">Путь к файлу контекста. Можно использовать путь относительно map-файла , или использовать URL (Смотри раздел &#8220;Map Context Support Through CGI&#8221; ниже для пояснений).</p>
-</dd>
+<dd>Path to a context file. Path is relative to the map file to be used, or
+can also be a URL path (See the section &#8220;Map Context Support Through
+CGI&#8221; below for more details).</dd>
 </dl>
 <dl class="docutils" id="index-4">
 <dt>ICON [layername],[classindex]</dt>
-<dd><p class="first last">Используется в режиме легенды MODE=legendicon для рендеринга иконки слоя. Индекс класса можно не указывать, по-умолчанию равен 0.</p>
-</dd>
+<dd>Used in MODE=legendicon to generate a legend icon for a layer.  The
+class index value is optional and defaults to 0.</dd>
 </dl>
 <dl class="docutils" id="index-5">
 <dt>ID [id-string]</dt>
@@ -181,91 +183,102 @@ and process id. This parameter overwrites the default.</dd>
 </dl>
 <dl class="docutils" id="index-6">
 <dt>IMG</dt>
-<dd><p class="first">Название, ассоциированное с внутренним изображением карты, которое используется для записи кликов пользователей. В основном передаются две переменные img.x и img.y.</p>
-<p class="last">Для приложений CGI это важная переменная, смотри примеры по применению.</p>
+<dd><p class="first">The name associated with the inline map image used to record user clicks.
+What actually is passed are two variables, img.x and img.y.</p>
+<p class="last">For the CGI Applications this is an essential variable, see the examples
+for sample usage.</p>
 </dd>
 </dl>
 <dl class="docutils" id="index-7">
 <dt>IMGBOX [x1] [y1] [x2] [y2]</dt>
-<dd><p class="first last">Координаты (в пикселях) рамки сдвига в изображении drag. Чаще всего используют в сочетании с Java фронендами к MapServer.</p>
-</dd>
+<dd>Coordinates (in pixels) of a box drag in the image. Most often used in
+conjunction with Java based front ends to the MapServer.</dd>
 </dl>
 <dl class="docutils" id="index-8">
 <dt>IMGEXT [minx] [miny] [maxx] [maxy]</dt>
-<dd><p class="first last">Пространственный охват созданного внутреннего изображения, того что пользователь видит у себя в браузере.</p>
-</dd>
+<dd>The spatial extent of the existing inline image, that is, the image the
+users can see in their browser.</dd>
 </dl>
 <dl class="docutils" id="index-9">
 <dt>IMGSHAPE [x1 y1 x2 y2 x3 y3 ...] | [WKT]</dt>
-<dd><p class="first">Произвольная фигура полигона (задается <strong>координатами изображения</strong>) для использования в запросах.</p>
-<p>Полигон, или указанный по координатам (множество экземпляров добавляются как части фигуры, поэтому можно собрать фигуру с отверстиями) или в виде представления WKT (Well Known Text).</p>
-<p class="last">Используется в режиме NQUERY.</p>
+<dd><p class="first">An arbitrary polygon shape (specified using <strong>image coordinates</strong>)
+to be used for query purposes.</p>
+<p>The polygon is specified by listing its coordinates (multiple
+instances simply add parts to the shape so it is possible to
+construct a shape with holes) or by specifying the WKT (Well
+Known Text) representation.</p>
+<p class="last">Used with the NQUERY mode.</p>
 </dd>
 </dl>
 <dl class="docutils" id="index-10">
 <dt>IMGSIZE [cols] [rows]</dt>
-<dd><p class="first last">Размер (в пикселях) созданного внутреннего изображения.</p>
-</dd>
+<dd>The size (in pixels) of the exiting inline image.</dd>
 </dl>
 <dl class="docutils" id="index-11">
 <dt>IMGXY [x] [y]</dt>
-<dd><p class="first last">Координаты (в пикселях) однократного клика мышки. Чаще всего используют в сочетании с Java фронендами к MapServer.</p>
-</dd>
+<dd>Coordinates (in pixels) of a single mouse click. Used most often in
+conjunction with Java based front ends to the MapServer.</dd>
 </dl>
 <dl class="docutils" id="index-12">
 <dt>LAYER [name]</dt>
-<dd><p class="first last">Имя слоя, как оно задано в map файле. Отправляются в mapserv только те имена слоев, у которых STATUS установлен в ON.</p>
-</dd>
+<dd>The name of a layer as it appears in the map file. Sending mapserv a layer
+name sets that layer&#8217;s STATUS to ON.</dd>
 </dl>
 <dl class="docutils" id="index-13">
 <dt>LAYERS [name name ...]</dt>
 <dd><p class="first">The names of the layers to be turned on. Layer names must be separated by
 spaces.</p>
-<p class="last">В версии 4.4 и выше: установка &#8216;LAYERS=all&#8217; задает автоматическое включение всех слоев.</p>
+<p class="last">Version 4.4 and above: passing &#8216;LAYERS=all&#8217; will automatically turn on all
+layers.</p>
 </dd>
 </dl>
 <dl class="docutils" id="index-14">
 <dt>MAP [filename]</dt>
-<dd><p class="first last">Путь к указанному map файлу, относительно папки CGI.</p>
-</dd>
+<dd>Path, relative to the CGI directory, of the map file to be used.</dd>
 </dl>
 <dl class="docutils" id="index-15">
 <dt>MAPEXT [minx] [miny] [maxx] [maxy] , MAPEXT (shape)</dt>
-<dd><p class="first">Пространственный охват создаваемой карты.</p>
-<p class="last">Может быть задан как фигура, в виде дополнительно параметра. В этом случае охват устанавливается по выбранной фигуре. Используется в запросах.</p>
+<dd><p class="first">The spatial extent of the map to be created.</p>
+<p class="last">Can be set to shape as an alternative option. In this case mapextent is
+set to the extent of a selected shape. Used with queries.</p>
 </dd>
 </dl>
 <dl class="docutils" id="index-16">
 <dt>MAPSHAPE [x1 y1 x2 y2 x3 y3 ...] | [WKT]</dt>
-<dd><p class="first">Произвольная фигура полигона (задается <strong>координатами карты</strong>) для использования в запросах.</p>
-<p>Полигон, или указанный по координатам (множество экземпляров добавляются как части фигуры, поэтому можно собрать фигуру с отверстиями) или в виде представления WKT (Well Known Text).</p>
-<p class="last">Используется в режиме NQUERY.</p>
+<dd><p class="first">An arbitrary polygon shape (specified using <strong>map coordinates</strong>)
+to be used for query purposes.</p>
+<p>The polygon is specified by listing its coordinates (multiple
+instances simply add parts to the shape so it is possible to
+construct a shape with holes) or by specifying a WKT (Well Known
+Text) representation of the polygon.</p>
+<p class="last">Used with the NQUERY mode.</p>
 </dd>
 </dl>
 <dl class="docutils" id="index-17">
 <dt>MAPSIZE [cols] [rows]</dt>
-<dd><p class="first last">Размер (в пикселях) изображения, которое будет создано. Полезен для пользователей, чтобы динамически менять разрешение карты на выходе.</p>
-</dd>
+<dd>The size (in pixels) of the image to be created. Useful for allowing users
+to change the resolution of the output map dynamically.</dd>
 </dl>
 <dl class="docutils" id="index-18">
 <dt>MAPXY [x] [y] , MAPXY (shape)</dt>
 <dd><p class="first">A point, in the same coordinate system as the shapefiles, to be used in
 conjunction with a buffer or a scale to construct a map extent.</p>
-<p class="last">Может быть задан как фигура, в виде дополнительно параметра. В этом случае охват устанавливается по выбранной фигуре. Используется в запросах.</p>
+<p class="last">Can be set to shape as an alternative option. In this case mapextent is
+set to the extent of a selected shape. Used with queries.</p>
 </dd>
 </dl>
 <span class="target" id="index-19"></span><span class="target" id="index-20"></span><span class="target" id="index-21"></span><dl class="docutils" id="index-22">
 <dt>MINX | MINY | MAXX | MAXY [number]</dt>
-<dd><p class="first last">Минимальная/максимальная x/y координата пространственного охвата для новой карты или запроса. Эти параметры часть набора параметров MAPEXT.</p>
-</dd>
+<dd>Minimum/Maximum x/y coordinate of the spatial extent for a new map/query.
+This set of parameters are the pieces of MAPEXT.</dd>
 </dl>
 <dl class="docutils" id="index-23">
 <dt>MODE [value]</dt>
-<dd><p class="first">Режим работы. Поддерживаются следующие режимы:</p>
+<dd><p class="first">Mode of operation. The following options are supported:</p>
 <dl class="docutils" id="index-24">
 <dt>BROWSE</dt>
-<dd><p class="first last">Полностью интерактивный интерфейс, где создаются карты (и интерактивные страницы). Это режим по-умолчанию.</p>
-</dd>
+<dd>Fully interactive interface where maps (and interactive pages) are
+created. This is the default mode.</dd>
 </dl>
 <dl class="docutils" id="index-25">
 <dt>COORDINATE</dt>
@@ -277,47 +290,53 @@ conjunction with a buffer or a scale to construct a map extent.</p>
 </dl>
 <dl class="docutils" id="index-26">
 <dt>FEATURENQUERY</dt>
-<dd><p class="first last">Пространственный поиск, который использует множество объектов из SLAYER для запроса по другим слоям.</p>
-</dd>
+<dd>A spatial search that uses multiple features from SLAYER to query
+other layers.</dd>
 </dl>
 <dl class="docutils" id="index-27">
 <dt>FEATUREQUERY</dt>
-<dd><p class="first last">Пространственный поиск, который использует один объект из SLAYER для запроса по другим слоям.</p>
-</dd>
+<dd>A spatial search that uses one feature from SLAYER to query other
+layers.</dd>
 </dl>
 <dl class="docutils" id="index-28">
 <dt>INDEXQUERY</dt>
-<dd><p class="first last">Просмотр объектов, на основании значений параметров SHAPEINDEX и TILEINDEX. SHAPEINDEX требуется, TILEINDEX опциональный и применим только со слоями мозаика shapefile.</p>
-</dd>
+<dd>Looks up a feature based on the values of SHAPEINDEX and TILEINDEX
+parameters. SHAPEINDEX is required, TILEINDEX is optional and is only
+used with tiled shapefile layers.</dd>
 </dl>
 <dl class="docutils" id="index-29">
 <dt>ITEMFEATURENQUERY</dt>
-<dd><p class="first last">Текстовый поиск по атрибутивным данным запускается QSTRING. Возвращает все совпадения. Слой по которому ведется поиск указан в параметре SLAYER. Результат поиска применяется ко всем  слоям (ограничение можно задать в параметре QLAYER).</p>
-</dd>
+<dd>A text search of attribute data is triggered using a QSTRING. Returns
+all matches. Layer to be searched is defined using slayer parameter.
+The results of this search are applied to other searchable layers
+(which can be limited using the QLAYER parameter).</dd>
 </dl>
 <dl class="docutils" id="index-30">
 <dt>ITEMFEATUREQUERY</dt>
-<dd><p class="first last">Текстовый поиск по атрибутивным данным запускается QSTRING. Возвращает первое совпадение. Слой по которому ведется поиск указан в параметре SLAYER. Результат поиска применяется ко всем  слоям (ограничение можно задать в параметре QLAYER).</p>
-</dd>
+<dd>A text search of attribute data is triggered using a QSTRING. Returns
+first match. Layer to be searched is defined using slayer parameter.
+The results of this search are applied to other searchable layers
+(which can be limited using the QLAYER parameter).</dd>
 </dl>
 <dl class="docutils" id="index-31">
 <dt>ITEMNQUERY</dt>
-<dd><p class="first last">Текстовый поиск по атрибутивным данным запускается QSTRING. Возвращает все совпадения.</p>
-</dd>
+<dd>A text search of attribute data is triggered using a QSTRING.
+Returns all matches.</dd>
 </dl>
 <dl class="docutils" id="index-32">
 <dt>ITEMQUERY</dt>
-<dd><p class="first last">Текстовый поиск по атрибутивным данным запускается слоем QSTRING. Возвращает первое совпадение.</p>
-</dd>
+<dd>A text search of attribute data is triggered using a layer QSTRING.
+Returns 1st match.</dd>
 </dl>
 <dl class="docutils" id="index-33">
 <dt>LEGEND</dt>
-<dd><p class="first last">Возвращает созданную легенду. Используется вместе с тегом  &lt;img ... &gt;.</p>
-</dd>
+<dd>The created legend is returned. Used within an &lt;img ... &gt; tag.</dd>
 </dl>
 <dl class="docutils" id="index-34">
 <dt>LEGENDICON</dt>
-<dd><p class="first">Возвращает иконку легенды. Параметр ICON должен быть использован для указания имени слоя и индекса класса. Индекс класса необязательный и по-умолчанию равен 0. Например:</p>
+<dd><p class="first">A legend icon is returned.  The ICON parameter must also be used
+to specify the layername and a class index.  Class index value is
+optional and defaults to 0.  For example:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span>mapserv.exe?map=/mapfiles/gmap75.map&amp;MODE=legendicon&amp;ICON=popplace,0
 </pre></div>
 </div>
@@ -325,28 +344,24 @@ conjunction with a buffer or a scale to construct a map extent.</p>
 </dl>
 <dl class="docutils" id="index-35">
 <dt>MAP</dt>
-<dd><p class="first last">Возвращает созданную карту. Используется вместе с тегом  &lt;img ... &gt;.</p>
-</dd>
+<dd>The created map is returned. Used within an &lt;img ... &gt; tag.</dd>
 </dl>
 <dl class="docutils" id="index-36">
 <dt>NQUERY</dt>
-<dd><p class="first last">Пространственный поиск (поиск всего) запускается по клику на карте или по рамке, выделенной пользователем.</p>
-</dd>
+<dd>A spatial search (finds all) is triggered by a click in a map or by
+user-define selection box.</dd>
 </dl>
 <dl class="docutils" id="index-37">
 <dt>QUERY</dt>
-<dd><p class="first last">Пространственный поиск (поиск ближайшего) запускается по клику на карте.</p>
-</dd>
+<dd>A spatial search (finds closest) is triggered by a click in a map.</dd>
 </dl>
 <dl class="docutils" id="index-38">
 <dt>REFERENCE</dt>
-<dd><p class="first last">Возвращает референсную карту. Используется вместе с тегом  &lt;img ... &gt;.</p>
-</dd>
+<dd>The created reference map is returned. Used within an &lt;img ... &gt; tag.</dd>
 </dl>
 <dl class="docutils" id="index-39">
 <dt>SCALEBAR</dt>
-<dd><p class="first last">Возвращает созданную масштабную шкалу. Используется вместе с тегом  &lt;img ... &gt;.</p>
-</dd>
+<dd>The created scalebar is returned. Used within an &lt;img ... &gt; tag.</dd>
 </dl>
 <dl class="docutils" id="index-40">
 <dt>TILE</dt>
@@ -354,24 +369,28 @@ conjunction with a buffer or a scale to construct a map extent.</p>
 </dl>
 <dl class="docutils" id="index-41">
 <dt>ZOOMIN</dt>
-<dd><p class="first last">Переключатель в режим BROWSE с параметром ZOOMDIR=1</p>
-</dd>
+<dd>Switch to mode BROWSE with ZOOMDIR=1</dd>
 </dl>
 <dl class="docutils" id="index-42">
 <dt>ZOOMOUT</dt>
-<dd><p class="first last">Переключатель в режим BROWSE с параметром ZOOMDIR=-1</p>
-</dd>
+<dd>Switch to mode BROWSE with ZOOMDIR=-1</dd>
 </dl>
 <div class="last admonition note">
 <p class="first admonition-title">Примечание</p>
-<p class="last">Ранее доступные режимы запросов map-only, типа  ITEMQUERYMAP, более не поддерживаются. Используйте вместо этого параметр <cite>QFORMAT</cite>.</p>
+<p class="last">The previously available map-only query modes, e.g.
+ITEMQUERYMAP, are no longer supported.  The <cite>QFORMAT</cite> parameter
+is now used instead.</p>
 </div>
 </dd>
 </dl>
 <dl class="docutils" id="index-43">
 <dt>QFORMAT [outputformat | mime/type] (optional)</dt>
-<dd><p class="first">Задается именем <cite>OUTPUTFORMAT</cite> или типом mime/type и будет использоваться в процессе обработки результатов запроса (в соответствии с параметром QUERYFORMAT объекта <a class="reference internal" href="../mapfile/web.html#web"><span class="std std-ref">WEB</span></a>). Параметр необязательный и применим с запросом <cite>MODE</cite>s. По-умолчанию значение text/html.</p>
-<p>Например (вывод карты):</p>
+<dd><p class="first">The <cite>OUTPUTFORMAT</cite> name or mime/type to be used to process a set
+of query results (corresponds to the <a class="reference internal" href="../mapfile/web.html#web"><span class="std std-ref">WEB</span></a> object&#8217;s
+QUERYFORMAT parameter).
+The parameter is optional and used in conjunction with query
+<cite>MODE</cite>s.  The default is text/html.</p>
+<p>Example (map output):</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span><span class="o">...&amp;</span><span class="n">mode</span><span class="o">=</span><span class="n">nquery</span><span class="o">&amp;</span><span class="n">qformat</span><span class="o">=</span><span class="n">png24</span><span class="o">&amp;...</span>
 </pre></div>
 </div>
@@ -379,88 +398,110 @@ conjunction with a buffer or a scale to construct a map extent.</p>
 </dl>
 <dl class="docutils" id="index-44">
 <dt>QITEM [name] (optional)</dt>
-<dd><p class="first last">Имя атрибута в таблице слоя, которую опрашивают. Параметр необязательный и применим совместно с QSTRING для поиска по атрибутам.</p>
-</dd>
+<dd>The name of an attribute in a layer attribute table to query on. The
+parameter is optional and used in conjunction with the QSTRING for
+attribute queries.</dd>
 </dl>
 <dl class="docutils" id="index-45">
 <dt>QLAYER [name]</dt>
-<dd><p class="first last">Запрашиваемый слой. Имя слоя, по которому будет производится поиск, такое как в map файле.</p>
-</dd>
+<dd>Query layer. The name of the layer to be queried as it appears in the map
+file.</dd>
 </dl>
 <dl class="docutils" id="index-46">
 <dt>QSTRING [expression]</dt>
-<dd><p class="first last">Поиск по атрибутам: Строка запроса передается в функцию запроса. Начиная с 5.0, qstring должен быть определен в параметре <cite>VALIDATION</cite> объекта <cite>LAYER</cite>, чтобы qstring запросы заработали (<em>qstring_validation_pattern</em> на уровне <cite>LAYER</cite> в разделе <cite>METADATA</cite> для MapServer старше версии 5.4).</p>
-</dd>
+<dd>Attribute queries: Query string passed to the query function.
+Since 5.0, qstring will have to be specified in the <cite>VALIDATION</cite>
+parameter of the <cite>LAYER</cite> for qstring queries to work
+(<em>qstring_validation_pattern</em> <cite>LAYER</cite>-level <cite>METADATA</cite> for
+MapServer  versions prior to 5.4).</dd>
 </dl>
 <dl class="docutils" id="index-47">
 <dt>QUERYFILE [filename]</dt>
-<dd><p class="first last">Применяется с режимом BROWSE или NQUERY. Эта опция идентифицирует файл запроса для загрузки перед любой другой обработкой. В режиме BROWSE это даст в результате карту в соответствии с запросом, вместо обычной карты. Такое действие полезно, если вы хотите подсветить объект в режиме сдвига и масштабирования. В режиме NQUERY будет получен доступ к любым шаблонам, используемым в нормальном отображении запроса, так что можно получить доступ и к картам по запросу, и к их атрибутам. Смотри параметр SAVEQUERY.</p>
-</dd>
+<dd>Used with BROWSE or NQUERY mode. This option identifies a query file to
+load before any regular processing. In BROWSE mode this result in a query
+map being produced instead of a regular map. This is useful when you want
+to hilite a feature while still in a pan/zoom mode. In NQUERY mode you&#8217;d
+gain access to any of the templates used in normally presenting the query,
+so you have access to query maps AND attribute information.
+See the SAVEQUERY option.</dd>
 </dl>
 <dl class="docutils" id="index-48">
 <dt>REF</dt>
-<dd><p class="first">Имя связанное с внутренним референсным изображение карты используемым для записи кликов пользователя. В основном передаются две переменные, ref.x и ref.y.</p>
-<p class="last">Для приложений CGI это важная переменная при использовании референсных карт, смотри примеры по применению.</p>
+<dd><p class="first">The name associated with the inline reference map image used to record
+user clicks. What actually is passed are two variables, ref.x and ref.y.</p>
+<p class="last">For the CGI Applications this is an essential variable when reference
+maps are used, see the examples for sample usage.</p>
 </dd>
 </dl>
 <dl class="docutils" id="index-49">
 <dt>REFXY [x] [y]</dt>
-<dd><p class="first last">Координаты (в пикселях) однократного клика мышки в референсном изображении. Чаще всего используют в сочетании с Java фронендами к MapServer.</p>
-</dd>
+<dd>Coordinates (in pixels) of a single mouse click in the reference image.
+Used in conjunction with Java based front ends to the MapServer.</dd>
 </dl>
 <dl class="docutils" id="index-50">
 <dt>SAVEQUERY</dt>
-<dd><p class="first last">В любом из режимов поиска этот параметр говорит MapServer сохранять результаты запросов во временные файлы для применения в последующих операциях (смотри QUERYFILE). Полезен для создания перманентных запросов.</p>
-</dd>
+<dd>When used with any of the query modes this tells the MapServer to save the
+query results to a temporary file for use in subsequent operations
+(see QUERYFILE). Useful for making queries persistent.</dd>
 </dl>
 <dl class="docutils" id="index-51">
 <dt>SCALEDENOM [number]</dt>
-<dd><p class="first last">Масштаб в котором будет новая карта. Используется вместе с mapxy. Масштаб задается как знаменатель дроби фактического масштаба, например, для карты масштаба 1:24000 задается 24000. Реализовано в MapServer 5.0, заменен устаревший параметр SCALE.</p>
-</dd>
+<dd>Scale to create a new map at. Used with mapxy. Scale is given as the
+denominator of the actual scale fraction, for example for a map at a scale
+of 1:24,000 use 24000.  Implemented in MapServer 5.0, to replace the
+deprecated SCALE parameter.</dd>
 <dt>SCALE [number] - deprecated</dt>
-<dd><p class="first last">Начиная с версии MapServer 5.0 рекомендуется использовать вместо этого параметр SCALEDENOM. Устаревший параметр SCALE - это масштаб, в котором создается новая карта. Используется вместе с mapxy. Масштаб задается как знаменатель дроби фактического масштаба, например, для карты в масштабе 1:24000 задается 24000.</p>
-</dd>
+<dd>Since MapServer 5.0 the proper parameter to use is SCALEDENOM
+instead.  The deprecated SCALE is the scale to create a new map at. Used
+with mapxy. Scale is given as the denominator of the actual scale fraction,
+for example for a map at a scale of 1:24,000 use 24000.</dd>
 </dl>
 <dl class="docutils" id="index-52">
 <dt>SEARCHMAP</dt>
-<dd><p class="first last">Есть возможность двигать или приближать интерфейс используя карты запросов querymaps. В этом случае вам, скорее всего, потребуется информация о контенте новой карты вместо предыдущей карты, это типовой путь выполнения запросов. Если указать параметр searchmap новая карта будет создана с охватом, который будет использован в запрашиваемых слоях. Используется только в режиме NQUERY.</p>
-</dd>
+<dd>It is possible to do pan/zoom interfaces using querymaps. In these cases
+you will likey want information about the contents of the new map rather
+than the previous map which is the normal way queries work. When
+searchmap is specified the new map is created and it&#8217;s extent is used
+to query layers. Useful with NQUERY mode only.</dd>
 </dl>
 <dl class="docutils" id="index-53">
 <dt>SHAPEINDEX [index]</dt>
-<dd><p class="first last">Используется в индексных запросах (в сочетании с INDEXQUERY).</p>
-</dd>
+<dd>Used for index queries (in conjunction with INDEXQUERY).</dd>
 </dl>
 <dl class="docutils" id="index-54">
 <dt>SLAYER [name]</dt>
-<dd><p class="first last">Выбранный слой. Имя слоя для применения в режиме запроса для получения любых объектов (в т.ч. поэтапных). Выбранный слой должен быть типа полигон. Выбранные объект(ы) будут доступны для представления пользователю.</p>
-</dd>
+<dd>Select layer. The name of the layer to be used for any of the feature
+(i.e. staged) query modes. The select layer must be a polygon layer. The
+selection feature(s) are available for presentation to the user.</dd>
 </dl>
 <dl class="docutils" id="index-55">
 <dt>TILEINDEX [index]</dt>
-<dd><p class="first last">Используется в индексных запросах (в сочетании с INDEXQUERY), применяется со слоями tiled shapefile.</p>
-</dd>
+<dd>Used for index queries (in conjunction with INDEXQUERY), used with tiled
+shapefile layers.</dd>
 </dl>
 <dl class="docutils" id="index-56">
 <dt>ZOOM [number]</dt>
-<dd><p class="first">Масштабирование применяемое при создании новой карты. Значения выше 0 приближают, равные 0 двигают, и значения ниже нуля уменьшают. Значение 2 означает &#8220;приблизить дважды&#8221;.</p>
-<p class="last">ZOOM может быть использован в качестве ярлыка вместе с ZOOMDIR/ZOOMSIZE. Масштаб ограничен параметрами MINZOOM/MAXZOOM при компиляции MapServer (по-умолчанию -25/25).</p>
+<dd><p class="first">Zoom scaling to apply to the creation of the new map. Values greater than
+0 resulting in zooming in, 0 is a pan, and values less than zero are for
+zooming out. A value of 2 means &#8220;zoom in twice&#8221;.</p>
+<p class="last">ZOOM can be used as a shortcut for the combination ZOOMDIR/ZOOMSIZE.
+The zoom is limited by the MINZOOM/MAXZOOM settings compiled into the
+MapServer (-25/25) by default.</p>
 </dd>
 </dl>
 <dl class="docutils" id="index-57">
 <dt>ZOOMDIR [1 | 0 | -1]</dt>
-<dd><p class="first last">Направление для увеличения. Смотри выше.</p>
-</dd>
+<dd>Direction to zoom. See above.</dd>
 </dl>
 <dl class="docutils" id="index-58">
 <dt>ZOOMSIZE [number]</dt>
-<dd><p class="first">Абсолютная величина зума. Используется с ZOOMDIR.</p>
-<p class="last">Параметр ZOOMDIR ограничен до величины MAXZOOM, скомпилированной в MapServer (25 по-умолчанию).</p>
+<dd><p class="first">Absolute magnitude of a zoom. Used with ZOOMDIR.</p>
+<p class="last">ZOOMDIR is limited to MAXZOOM compiled into the MapServer (25 by default).</p>
 </dd>
 </dl>
 </div>
 <div class="section" id="changing-map-file-parameters-via-a-form-or-a-url">
-<span id="cgi-mapfile-change-parameters"></span><span id="index-59"></span><h2>Изменение параметров map файла через форму или URL<a class="headerlink" href="#changing-map-file-parameters-via-a-form-or-a-url" title="Ссылка на этот заголовок">¶</a></h2>
+<span id="cgi-mapfile-change-parameters"></span><span id="index-59"></span><h2>Changing map file parameters via a form or a URL<a class="headerlink" href="#changing-map-file-parameters-via-a-form-or-a-url" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Beginning with version 3.3 it is possible to change virtually any map
 file value from a form or a URL (see <a class="reference internal" href="runsub.html#runsub"><span class="std std-ref">Run-time Substitution</span></a>).  The syntax for
 this is fairly straightforward, and depends on what version of
@@ -475,7 +516,7 @@ Within MapScript this is easy to do by yourself since the developer has
 complete control over how input is handled.</p>
 </div>
 <div class="section" id="using-mapserver-version-5">
-<h3>Используется в версии MapServer &gt;= 5<a class="headerlink" href="#using-mapserver-version-5" title="Ссылка на этот заголовок">¶</a></h3>
+<h3>Using MapServer version &gt;= 5<a class="headerlink" href="#using-mapserver-version-5" title="Ссылка на этот заголовок">¶</a></h3>
 <p>Previous versions of the MapServer CGI program allowed certain parameters
 to be changed via a URL using a cumbersome syntax such as
 map_layer_0_class_0_color=255+0+0 which changes the color in one classObj.
@@ -484,23 +525,23 @@ pass chunks of mapfiles (with security restrictions) to the CGI interface.
 The map_object notation is still necessary to identify which object you
 want to modify but you can change multiple properties at one time. Note
 that you can use either a &#8216;_&#8217; or a &#8216;.&#8217; to separate identifiers.</p>
-<p>Пример 1, изменение шкалы:</p>
+<p>Example 1, changing a scalebar object:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">...&amp;</span><span class="nb">map</span><span class="o">.</span><span class="n">scalebar</span><span class="o">=</span><span class="n">UNITS</span><span class="o">+</span><span class="n">MILES</span><span class="o">+</span><span class="n">COLOR</span><span class="o">+</span><span class="mi">121</span><span class="o">+</span><span class="mi">121</span><span class="o">+</span><span class="mi">121</span><span class="o">+</span><span class="n">SIZE</span><span class="o">+</span><span class="mi">300</span><span class="o">+</span><span class="mi">2</span><span class="o">&amp;...</span>
 </pre></div>
 </div>
-<p>Пример 2, изменение стиля представления:</p>
+<p>Example 2, changing a presentation style:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">...&amp;</span><span class="nb">map</span><span class="o">.</span><span class="n">layer</span><span class="p">[</span><span class="n">lakes</span><span class="p">]</span><span class="o">.</span><span class="n">class</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">style</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">SYMBOL</span><span class="o">+</span><span class="n">crosshatch</span><span class="o">+</span><span class="n">COLOR</span><span class="o">+</span><span class="mi">151</span><span class="o">+</span><span class="mi">51</span><span class="o">+</span><span class="mi">151</span><span class="o">+</span><span class="n">SIZE</span><span class="o">+</span><span class="mi">15</span><span class="o">&amp;...</span>
 </pre></div>
 </div>
-<p>Пример 3, создание нового элемента:</p>
+<p>Example 3, creating a new feature:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">...&amp;</span><span class="n">map_layer</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="n">FEATURE</span><span class="o">+</span><span class="n">POINTS</span><span class="o">+</span><span class="mi">500000</span><span class="o">+</span><span class="mi">1000000</span><span class="o">+</span><span class="n">END</span><span class="o">+</span><span class="n">TEXT</span><span class="o">+</span><span class="s1">&#39;A+test+point&#39;</span><span class="o">+</span><span class="n">END</span><span class="o">&amp;...</span>
 </pre></div>
 </div>
-<p>Пример 4, изменение нескольких параметров веб-объекта:</p>
+<p>Example 4, set multiple web object parameters:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">...&amp;</span><span class="n">map_web</span><span class="o">=</span><span class="n">imagepath</span><span class="o">+/</span><span class="n">ms4w</span><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ms_tmp</span><span class="o">/+</span><span class="n">imageurl</span><span class="o">+/</span><span class="n">ms_tmp</span><span class="o">/</span>
 </pre></div>
 </div>
-<p>Пример 5, изменение размера карты:</p>
+<p>Example 5, set the map size:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">...&amp;</span><span class="n">map_size</span><span class="o">=</span><span class="mi">800</span><span class="o">+</span><span class="mi">400</span>
 </pre></div>
 </div>
@@ -510,7 +551,7 @@ mapfile. You cannot create new objects other than inline features at
 this point.</p>
 </div>
 <div class="section" id="id1">
-<h3>Используется в версии MapServer &lt; 5<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h3>
+<h3>Using MapServer version &lt; 5<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h3>
 <p>For MapServer version &lt; 5, any value can be expressed using the
 hierarchy used in a map file. A map contains a layer, which contains a
 class, which contains a label, which has a color. This hierarchy is
@@ -543,15 +584,17 @@ rectangle) amounts of data.</p>
 </div>
 </div>
 <div class="section" id="specifying-the-location-of-mapfiles-using-an-apache-variable">
-<span id="index-60"></span><h2>Указание расположения map файлов используя переменные  Apache<a class="headerlink" href="#specifying-the-location-of-mapfiles-using-an-apache-variable" title="Ссылка на этот заголовок">¶</a></h2>
-<p>Переменные Apache  могут быть использованы для указания расположения map файлов (вместо раскрытия полных путей во внешний мир).</p>
+<span id="index-60"></span><h2>Specifying the location of mapfiles using an Apache variable<a class="headerlink" href="#specifying-the-location-of-mapfiles-using-an-apache-variable" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Apache variables can be used to specify the location of map files
+(instead of exposing full mapfile paths to the outside world).</p>
 <ol class="arabic">
-<li><p class="first">Задать переменную (в этом примере  <cite>MY_MAPFILE</cite>) в Apache в файле httpd.conf:</p>
+<li><p class="first">Set the variable (in this example <cite>MY_MAPFILE</cite>) in Apache&#8217;s
+httpd.conf:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SetEnv</span> <span class="n">MY_MAPFILE</span> <span class="s2">&quot;/opt/mapserver/map1/mymapfile.map&quot;</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Ссылка на переменную в mapserver CGI URL:</p>
+<li><p class="first">Refer to the variable in the mapserver CGI URL:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>http://localhost/cgi-bin/mapserv?map=MY_MAPFILE&amp;mode=...
 </pre></div>
 </div>
@@ -559,8 +602,8 @@ rectangle) amounts of data.</p>
 </ol>
 </div>
 <div class="section" id="rosa-applet-controls">
-<span id="index-61"></span><h2>Параметры ROSA-Applet<a class="headerlink" href="#rosa-applet-controls" title="Ссылка на этот заголовок">¶</a></h2>
-<p><em>замечание: Активная разработка и сопровождение ROSA Applet остановлена</em></p>
+<span id="index-61"></span><h2>ROSA-Applet Controls<a class="headerlink" href="#rosa-applet-controls" title="Ссылка на этот заголовок">¶</a></h2>
+<p><em>note: Active development and maintenance of the ROSA Applet has stopped</em></p>
 <p>The ROSA Applet parameters were added to the CGI MapServer in version 3.6.
 This Java Applet provides a more intuitive user interface to MapServer. The
 MapTools site provides detailed information on the ROSA Applet.</p>
@@ -569,11 +612,12 @@ values. Please note that the two parameters have to be handed over to te CGI
 application in the order identified below.</p>
 <dl class="docutils">
 <dt>INPUT_TYPE (auto_rect | auto_point)</dt>
-<dd><p class="first last">Параметр INPUT_TYPE требуется для интерпретирования координат, переданных в mapserver, заданных как прямоугольник или как точка.</p>
-</dd>
+<dd>The INPUT_TYPE parameter is needed to identify if the coordinates handed
+over to the mapserver have to be interpreted as rectangular or point data.</dd>
 <dt>INPUT_COORD [minx,miny;maxx,maxy]</dt>
-<dd><p class="first last">ROSA-Applet всегда заполняется парой координат. В случае точки  (input_type=auto_point) минимальная и максимальная координаты идентичны (MapServer использует минимальное значение).</p>
-</dd>
+<dd>The ROSA-Applet always fills the pair of coordinates. In case of a point
+(input_type=auto_point) min and max coordinate are equal (MapServer
+uses the min value).</dd>
 </dl>
 </div>
 </div>
@@ -607,15 +651,15 @@ application in the order identified below.</p>
 </p>
   <h3>Current Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">MapServer параметры CGI</a><ul>
-<li><a class="reference internal" href="#variables">Переменные</a></li>
-<li><a class="reference internal" href="#changing-map-file-parameters-via-a-form-or-a-url">Изменение параметров map файла через форму или URL</a><ul>
-<li><a class="reference internal" href="#using-mapserver-version-5">Используется в версии MapServer &gt;= 5</a></li>
-<li><a class="reference internal" href="#id1">Используется в версии MapServer &lt; 5</a></li>
+<li><a class="reference internal" href="#">MapServer CGI Controls</a><ul>
+<li><a class="reference internal" href="#variables">Variables</a></li>
+<li><a class="reference internal" href="#changing-map-file-parameters-via-a-form-or-a-url">Changing map file parameters via a form or a URL</a><ul>
+<li><a class="reference internal" href="#using-mapserver-version-5">Using MapServer version &gt;= 5</a></li>
+<li><a class="reference internal" href="#id1">Using MapServer version &lt; 5</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#specifying-the-location-of-mapfiles-using-an-apache-variable">Указание расположения map файлов используя переменные  Apache</a></li>
-<li><a class="reference internal" href="#rosa-applet-controls">Параметры ROSA-Applet</a></li>
+<li><a class="reference internal" href="#specifying-the-location-of-mapfiles-using-an-apache-variable">Specifying the location of mapfiles using an Apache variable</a></li>
+<li><a class="reference internal" href="#rosa-applet-controls">ROSA-Applet Controls</a></li>
 </ul>
 </li>
 </ul>
@@ -637,13 +681,13 @@ application in the order identified below.</p>
           <a href="mapcontext.html" title="Map Context Files"
              >назад</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Документация MapServer 7.0.7</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >CGI</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Обновлено: 2018-06-13.
+      Обновлено: 2018-07-12.
       Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

@@ -30,7 +30,7 @@
     <link rel="search" title="Recherche" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="MapServer 7.0.7 documentation" href="../index.html" />
-    <link rel="up" title="Utilitaires" href="index.html" />
+    <link rel="up" title="Utilities" href="index.html" />
     <link rel="next" title="shptreetst" href="shptreetst.html" />
     <link rel="prev" title="shp2img" href="shp2img.html" /> 
   </head>
@@ -138,8 +138,8 @@
           <a href="shp2img.html" title="shp2img"
              accesskey="P">précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Utilitaires</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Utilities</a> &#187;</li> 
       </ul>
     </div>
   
@@ -152,16 +152,29 @@
   <div class="section" id="shptree">
 <span id="index-0"></span><span id="id1"></span><h1>shptree<a class="headerlink" href="#shptree" title="Lien permanent vers ce titre">¶</a></h1>
 <div class="section" id="purpose">
-<h2>Objectif<a class="headerlink" href="#purpose" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Créé un index spatial basé sur les quadrants pour un shapefile. La profondeur par défaut est calculé afin que chaque noeud de l&#8217;arbre (les cellules du quadrant) contienne 8 géométries. N&#8217;utilisez pas la valeur par défaut avec les points, une valeur entre 6 et 10 semble fonctionner. Vos valeurs peuvent être différentes et nécessitent quelques tests.</p>
-<p>La <a class="reference external" href="https://github.com/mapserver/mapserver/wiki/ShpTree">page wiki shptree</a> peut également contenir des informations sur cette commande.</p>
+<h2>Purpose<a class="headerlink" href="#purpose" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Creates a quadtree-based spatial index for a Shape data set.  The
+default tree depth is calculated so that each tree node (quadtree
+cell) contains 8 shapes.  Do not use the default with point files, a
+value between 6 and 10 seems to work ok.  Your millage may vary and
+you&#8217;ll need to do some experimenting.</p>
+<p>The <a class="reference external" href="https://github.com/mapserver/mapserver/wiki/ShpTree">shptree wiki page</a> may also contain
+information on this utility.</p>
 </div>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Cette commande est un must pour n&#8217;importe quelle application MapServer qui utilise des shapefiles. Shptree créé un index spatial de votre shapefile, en utilisant la méthode quadtree. Cela signifie que MapServer utilisera cet index pour trouver rapidement la géométrie appropriée. Il créé un fichier du même nom que votre shapefile avec une extension <em>.qix</em>. La méthode quadtree découpe le fichier en 4 parties (quadrant), récursivement jusqu&#8217;à ce que seules quelques géométries soient contenues dans chaque quadrant. Ce nombre minimal peut être défini avec le paramètre &lt;depth&gt; de la commande.</p>
+<p>This utility is a must for any MapServer application that uses Shape
+data sets.  Shptree creates a spatial index of your Shape data set,
+using a quadtree method.  This means that MapServer will use this
+index to quickly find the appropriate shapes to draw.  It creates a
+file of the same name as your Shape data set, with a <em>.qix</em> file
+extension.  The quadtree method breaks the file into 4 quadrants,
+recursively until only a few shapes are contained in each quadrant.
+This minimum number can be set with the &lt;depth&gt; parameter of the
+command.</p>
 </div>
 <div class="section" id="syntax">
-<h2>Syntaxe<a class="headerlink" href="#syntax" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Syntax<a class="headerlink" href="#syntax" title="Lien permanent vers ce titre">¶</a></h2>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">shptree</span> <span class="o">&lt;</span><span class="n">shpfile</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">depth</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">index_format</span><span class="o">&gt;</span><span class="p">]</span>
   <span class="n">Where</span><span class="p">:</span>
   <span class="o">&lt;</span><span class="n">shpfile</span><span class="o">&gt;</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="o">.</span><span class="n">shp</span> <span class="n">file</span> <span class="n">to</span> <span class="n">index</span><span class="o">.</span>
@@ -178,20 +191,25 @@
    <span class="n">The</span> <span class="n">default</span> <span class="n">index_format</span> <span class="n">on</span> <span class="n">this</span> <span class="n">system</span> <span class="ow">is</span><span class="p">:</span> <span class="n">NL</span>
 </pre></div>
 </div>
-<p>Exemple</p>
+<p>Example</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">shptree</span> <span class="n">us_states</span><span class="o">.</span><span class="n">shp</span>
   <span class="n">creating</span> <span class="n">index</span> <span class="n">of</span> <span class="n">new</span>  <span class="n">LSB</span> <span class="nb">format</span>
 </pre></div>
 </div>
 <dl class="docutils">
 <dt>Result</dt>
-<dd><p class="first last">Un fichier nommé &#8216;us_states.qix&#8217; a été créé au même endroit (notez que vous pouvez utiliser la commande shptreevis, décrite à la page suivante, pour visualiser les quadrants quadtree réels qui seront utilisés par MapServer dans ce fichier qix)</p>
-</dd>
+<dd>A file named &#8216;us_states.qix&#8217; is created in the same location.  (note
+that you can use the shptreevis utility, described next, to view the
+actual quadtree quadrants that are used by MapServer in this qix
+file)</dd>
 </dl>
 </div>
 <div class="section" id="mapfile-notes">
-<h2>Remarques sur le Mapfile<a class="headerlink" href="#mapfile-notes" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Les shapefiles sont gérés en natif par MapServer et ne nécessitent pas l&#8217;extension <em>.shp</em> dans le chemin DATA de l&#8217;objet LAYER. En fait, vous NE DEVEZ PAS définir l&#8217;extension pour que MapServer utilise les fichiers <em>.qix</em>, par exemple:</p>
+<h2>Mapfile Notes<a class="headerlink" href="#mapfile-notes" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Shape data sets are native to MapServer, and therefore do not require
+the <em>.shp</em> extension in the DATA path of the LAYER.  In fact, in order
+for MapServer to use the <em>.qix</em> extension you MUST NOT specify the
+extension, for example:</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="p">...</span>
   <span class="k">DATA</span> <span class="s">&quot;us_states&quot;</span>    <span class="c">#MapServer will search for us_states.qix and will use it</span>
@@ -207,7 +225,7 @@
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">À partir de MapServer 5.2 le fichier qix sera utilisé même lorsque l&#8217;extension .shp est spécifiée.</p>
+<p class="last">As of MapServer 5.2 the qix will be used even when the .shp extension is specified</p>
 </div>
 </div>
 </div>
@@ -242,10 +260,10 @@
   <h3>Current Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">shptree</a><ul>
-<li><a class="reference internal" href="#purpose">Objectif</a></li>
+<li><a class="reference internal" href="#purpose">Purpose</a></li>
 <li><a class="reference internal" href="#description">Description</a></li>
-<li><a class="reference internal" href="#syntax">Syntaxe</a></li>
-<li><a class="reference internal" href="#mapfile-notes">Remarques sur le Mapfile</a></li>
+<li><a class="reference internal" href="#syntax">Syntax</a></li>
+<li><a class="reference internal" href="#mapfile-notes">Mapfile Notes</a></li>
 </ul>
 </li>
 </ul>
@@ -267,13 +285,13 @@
           <a href="shp2img.html" title="shp2img"
              >précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Utilitaires</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Utilities</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

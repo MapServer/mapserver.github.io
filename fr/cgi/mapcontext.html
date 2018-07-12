@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Fichiers de Contexte de Carte &#8212; MapServer 7.0.7 documentation</title>
+    <title>Map Context Files &#8212; MapServer 7.0.7 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -31,7 +31,7 @@
     <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="MapServer 7.0.7 documentation" href="../index.html" />
     <link rel="up" title="CGI" href="index.html" />
-    <link rel="next" title="Contrôles CGI pour MapServer" href="controls.html" />
+    <link rel="next" title="MapServer CGI Controls" href="controls.html" />
     <link rel="prev" title="mapserv" href="mapserv.html" /> 
   </head>
   <body role="document">
@@ -132,13 +132,13 @@
           <a href="../genindex.html" title="Index général"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="controls.html" title="Contrôles CGI pour MapServer"
+          <a href="controls.html" title="MapServer CGI Controls"
              accesskey="N">suivant</a> |</li>
         <li class="right" >
           <a href="mapserv.html" title="mapserv"
              accesskey="P">précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">CGI</a> &#187;</li> 
       </ul>
     </div>
@@ -150,27 +150,35 @@
           <div class="body" role="main">
             
   <div class="section" id="map-context-files">
-<span id="mapcontext-cgi"></span><h1>Fichiers de Contexte de Carte<a class="headerlink" href="#map-context-files" title="Lien permanent vers ce titre">¶</a></h1>
+<span id="mapcontext-cgi"></span><h1>Map Context Files<a class="headerlink" href="#map-context-files" title="Lien permanent vers ce titre">¶</a></h1>
 <div class="section" id="support-for-local-map-context-files">
-<h2>Gestion des fichiers de contexte de carte locale<a class="headerlink" href="#support-for-local-map-context-files" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Il y a un paramètre CGI appellé CONTEXT qui est utilisé pour définir un fichier contexte local. L&#8217;utilisateur peut alors utiliser MapServer pour demander une carte en utilisant la syntaxe suivante :</p>
+<h2>Support for Local Map Context Files<a class="headerlink" href="#support-for-local-map-context-files" title="Lien permanent vers ce titre">¶</a></h2>
+<p>There is a CGI parameter called CONTEXT that is used to specify a local
+context file. The user can then use MapServer to request a map using the
+following syntax:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>http://localhost/mapserver.cgi?MODE=map&amp;MAP=/path/to/mapfile.map&amp;CONTEXT=
                      /path/to/contextfile.xml&amp;LAYERS=layer_name1 layers_name2
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Toutes les couches crées à partir du fichier contexte ont leur status à ON. Pour afficher des couches, l&#8217;utilisateur doit ajouter l&#8217;argument LAYERS dans l&#8217;URL.</p>
+<p class="last">All layers created from a context file have their status set to ON. To be
+able to display layers, the user needs to add the LAYERS argument in the
+URL.</p>
 </div>
 </div>
 <div class="section" id="support-for-context-files-accessed-through-a-url">
-<h2>Gestion de fichier de contexte accédé par une URL<a class="headerlink" href="#support-for-context-files-accessed-through-a-url" title="Lien permanent vers ce titre">¶</a></h2>
-<p>La syntaxe pour utiliser un fichier de contexte accessible par le web devrait être similaire à l&#8217;accès d&#8217;un fichier de contexte local.</p>
+<h2>Support for Context Files Accessed Through a URL<a class="headerlink" href="#support-for-context-files-accessed-through-a-url" title="Lien permanent vers ce titre">¶</a></h2>
+<p>The syntax of using a web accessible context file would be similar to
+accessing a local context file:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>http://localhost/mapserver.cgi?MODE=map&amp;MAP=/path/to/mapfile.map&amp;CONTEXT=
             http://URL/path/to/contextfile.xml&amp;LAYERS=layers_name1 layer_name2
 </pre></div>
 </div>
-<p>En raison de problèmes de sécurité, le chargement de fichier à partir d&#8217;une URL est désactivé par défaut. Pour activer cette fonctionnalité, l&#8217;utilisateur doit définir un paramètre CONFIG appelé CGI_CONTEXT_URL dans le fichier map par défaut qui permettra cette fonctionnalité.  Voici un exemple d&#8217;un fichier map avec le paramètre CONFIG :</p>
+<p>Due to security concerns loading a file from a URL is disabled by default. To
+enable this functionality, the user needs to set a CONFIG parameter called
+CGI_CONTEXT_URL in the default map file that will allow this functionality.
+Here is an example of a map file with the CONFIG parameter:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Start of map file</span>
 <span class="n">NAME</span> <span class="n">DEMO</span>
 <span class="n">STATUS</span> <span class="n">ON</span>
@@ -185,9 +193,16 @@
 </div>
 </div>
 <div class="section" id="default-map-file">
-<h2>Fichier Map par défaut<a class="headerlink" href="#default-map-file" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Pour exécuter une application avec le CGI de MapServer en douceur avec un contexte de carte, l&#8217;application de l&#8217;administrateur doit fournir un fichier map par défaut avec au moins les paramètres de base nécessaires qui seront utilisés avec le fichier de contexte. Ce fichier map par défaut peut contenir aussi peu d&#8217;informations que ImagePath et ImageUrl ou contenir une liste de couches. Les informations provenant du contexte (Par exemple : couches, largeur, hauteur, etc.) seront soit ajoutées ou remplaceront les valeurs trouvées dans le fichier de la carte.</p>
-<p>Voici un exemple d&#8217;un fichier map par défaut contenant les paramètres minimales obligatoire :</p>
+<h2>Default Map File<a class="headerlink" href="#default-map-file" title="Lien permanent vers ce titre">¶</a></h2>
+<p>To smoothly run a MapServer CGI application with a Map Context, the
+application administrator needs to provide a default map file with at least
+the basic required parameters that will be used with the Context file. This
+default map file can contain as little information as the imagepath and
+imageurl or contain a list of layers. Information coming from the context
+(e.g.: layers, width, height, â€¦) would either be appended or will replace
+values found in the map file.</p>
+<p>Here is an example of a default map file containing the minimum
+required parameters:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NAME</span> <span class="n">CGI</span><span class="o">-</span><span class="n">CONTEXT</span><span class="o">-</span><span class="n">DEMO</span>
 <span class="n">STATUS</span> <span class="n">ON</span>
 <span class="n">SIZE</span> <span class="mi">400</span> <span class="mi">300</span>
@@ -243,10 +258,10 @@
 </p>
   <h3>Current Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Fichiers de Contexte de Carte</a><ul>
-<li><a class="reference internal" href="#support-for-local-map-context-files">Gestion des fichiers de contexte de carte locale</a></li>
-<li><a class="reference internal" href="#support-for-context-files-accessed-through-a-url">Gestion de fichier de contexte accédé par une URL</a></li>
-<li><a class="reference internal" href="#default-map-file">Fichier Map par défaut</a></li>
+<li><a class="reference internal" href="#">Map Context Files</a><ul>
+<li><a class="reference internal" href="#support-for-local-map-context-files">Support for Local Map Context Files</a></li>
+<li><a class="reference internal" href="#support-for-context-files-accessed-through-a-url">Support for Context Files Accessed Through a URL</a></li>
+<li><a class="reference internal" href="#default-map-file">Default Map File</a></li>
 </ul>
 </li>
 </ul>
@@ -262,19 +277,19 @@
           <a href="../genindex.html" title="Index général"
              >index</a></li>
         <li class="right" >
-          <a href="controls.html" title="Contrôles CGI pour MapServer"
+          <a href="controls.html" title="MapServer CGI Controls"
              >suivant</a> |</li>
         <li class="right" >
           <a href="mapserv.html" title="mapserv"
              >précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >CGI</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

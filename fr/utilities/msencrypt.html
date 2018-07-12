@@ -30,7 +30,7 @@
     <link rel="search" title="Recherche" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="MapServer 7.0.7 documentation" href="../index.html" />
-    <link rel="up" title="Utilitaires" href="index.html" />
+    <link rel="up" title="Utilities" href="index.html" />
     <link rel="next" title="scalebar" href="scalebar.html" />
     <link rel="prev" title="legend" href="legend.html" /> 
   </head>
@@ -138,8 +138,8 @@
           <a href="legend.html" title="legend"
              accesskey="P">précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Utilitaires</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Utilities</a> &#187;</li> 
       </ul>
     </div>
   
@@ -152,8 +152,12 @@
   <span class="target" id="index-0"></span><span class="target" id="index-1"></span><div class="section" id="msencrypt">
 <span id="index-2"></span><span id="id1"></span><h1>msencrypt<a class="headerlink" href="#msencrypt" title="Lien permanent vers ce titre">¶</a></h1>
 <div class="section" id="purpose">
-<h2>Objectif<a class="headerlink" href="#purpose" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Utilisé pour créer une clé de chiffrage ou pour chiffrer des parties de la chaîne de connexion dans le mapfile (ajouté dans la version 4.10). Typiquement vous pouvez vouloir chiffrer une partir du paramètre CONNECTION pour la connexion à une base de données. Les types de connexion suivantes sont gérés pour utiliser la méthode de chiffrage :</p>
+<h2>Purpose<a class="headerlink" href="#purpose" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Used to create an encryption key or to encrypt portions of connection
+strings for use in mapfiles (added in v4.10).  Typically you might
+want to encrypt portions of the CONNECTION parameter for a database
+connection.  The following CONNECTIONTYPEs are supported for using
+this encryption method:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">OGR</span>
 <span class="n">Oracle</span> <span class="n">Spatial</span>
 <span class="n">PostGIS</span>
@@ -162,29 +166,32 @@
 </div>
 </div>
 <div class="section" id="syntax">
-<h2>Syntaxe<a class="headerlink" href="#syntax" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Pour créer une nouvelle clé de chiffrage:</p>
+<h2>Syntax<a class="headerlink" href="#syntax" title="Lien permanent vers ce titre">¶</a></h2>
+<p>To create a new encryption key:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">msencrypt</span> <span class="o">-</span><span class="n">keygen</span> <span class="p">[</span><span class="n">key_filename</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Pour chiffrer une chaîne de caractères:</p>
+<p>To encrypt a string:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">msencrypt</span> <span class="o">-</span><span class="n">key</span> <span class="p">[</span><span class="n">key_filename</span><span class="p">]</span> <span class="p">[</span><span class="n">string_to_encrypt</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="use-in-mapfile">
-<h2>Utilisation dans un Mapfile<a class="headerlink" href="#use-in-mapfile" title="Lien permanent vers ce titre">¶</a></h2>
-<p>La localisation de la clé de chiffrage peut être définie par deux mécanismes, soit en définissant la variable d&#8217;environnement MS_ENCRYPTION_KEY soit en utilisant le paramètre CONFIG  dans l&#8217;objet MAP de votre mapfile. Par exemple:</p>
+<h2>Use in Mapfile<a class="headerlink" href="#use-in-mapfile" title="Lien permanent vers ce titre">¶</a></h2>
+<p>The location of the encryption key can be specified by two mechanisms, either by
+setting the environment variable MS_ENCRYPTION_KEY or using a CONFIG directive
+in the MAP object of your mapfile.  For example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CONFIG</span> <span class="n">MS_ENCRYPTION_KEY</span> <span class="s2">&quot;/path/to/mykey.txt&quot;</span>
 </pre></div>
 </div>
-<p>Utiliser les caractères { et } comme délimiteur pour chiffrer les chaînes de caractères au sein du paramètre CONNECTION d&#8217;une base de données dans votre mapfile. Par exemple :</p>
+<p>Use the { and } characters as delimiters for encrypted strings inside database
+CONNECTIONs in your mapfile.  For example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CONNECTIONTYPE</span> <span class="n">ORACLESPATIAL</span>
 <span class="n">CONNECTION</span> <span class="s2">&quot;user/{MIIBugIBAAKBgQCP0Yj+Seh8==}@service&quot;</span>
 </pre></div>
 </div>
 <div class="section" id="example">
-<h3>Exemple<a class="headerlink" href="#example" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Example<a class="headerlink" href="#example" title="Lien permanent vers ce titre">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
   <span class="n">NAME</span> <span class="s2">&quot;provinces&quot;</span>
   <span class="n">TYPE</span> <span class="n">POLYGON</span>
@@ -199,32 +206,34 @@
 <span class="n">END</span>
 </pre></div>
 </div>
-<p>Voici les étapes pour chiffre le mot de passe dans la connexion ci-dessus:</p>
+<p>Here are the steps to encrypt the password in the above connection:</p>
 <ol class="arabic simple">
-<li><p class="first">Générez une clé de chiffrage (notez que cette clé ne doit pas être stockée quelque part dans un répertoire accessible par le serveur web):</p>
-</li>
+<li>Generate an encryption key (note that this key should not be stored
+anywhere within your web server&#8217;s accessible directories):</li>
 </ol>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">msencrypt</span> <span class="o">-</span><span class="n">keygen</span> <span class="s2">&quot;E:</span><span class="se">\t</span><span class="s2">emp\mykey.txt&quot;</span>
 </pre></div>
 </div>
-<p>et ce fichier de clé généré devrait contenir quelque chose comme:</p>
+<p>And this generated key file might contain something like:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">2137</span><span class="n">FEFDB5611448738D9FBB1DC59055</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li><p class="first">Chiffrez le mot de passe de la connexion en utilisant la clé générée:</p>
-</li>
+<li>Encrypt the connection&#8217;s password using that generated key:</li>
 </ol>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">msencrypt</span> <span class="o">-</span><span class="n">key</span> <span class="s2">&quot;E:</span><span class="se">\t</span><span class="s2">emp\mykey.txt&quot;</span> <span class="s2">&quot;iluvyou18&quot;</span>
 </pre></div>
 </div>
-<p>qui renvoie le mot de passe chiffré, en ligne de commande (vous allez l&#8217;utiliser rapidement)</p>
+<p>Which returns the password encrypted, at the commandline (you&#8217;ll use
+it in a second):</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">3656026</span><span class="n">A23DBAFC04C402EDFAB7CE714</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
-<li><p class="first">Éditez le mapfile pour vous assurez que le fichier :<a class="reference external" href="file:'mykey.txt">file:&#8217;mykey.txt</a>&#8216; peut être trouvé, en utilisant la variable d&#8217;environnement &#8220;MS_ENCRYPTION_KEY&#8221;. Le paramètre CONFIG dans l&#8217;objet MAP peut être utilisé pour définir la variable d&#8217;environnement dans le mapfile :</p>
-</li>
+<li>Edit the mapfile to make sure the &#8216;mykey.txt&#8217; can be found, using
+the &#8220;MS_ENCRYPTION_KEY&#8221; environment variable.  The CONFIG parameter
+inside the MAP object can be used to set an environment variable
+inside a mapfile:</li>
 </ol>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">MAP</span>
     <span class="o">...</span>
@@ -234,16 +243,16 @@
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
-<li><p class="first">Modifiez le paramètre CONNECTION de la couche pour utiliser la clé du mot de passe généré, assurez vous d&#8217;utiliser les accolades “{}” autour de la clé:</p>
-</li>
+<li>Modify the layer&#8217;s CONNECTION to use the generated password key,
+making sure to use the “{}” brackets around the key:</li>
 </ol>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CONNECTION</span> <span class="s2">&quot;host=127.0.0.1 dbname=gmap user=postgres</span>
             <span class="n">password</span><span class="o">=</span><span class="p">{</span><span class="mi">3656026</span><span class="n">A23DBAFC04C402EDFAB7CE714</span><span class="p">}</span> <span class="n">port</span><span class="o">=</span><span class="mi">5432</span><span class="s2">&quot;</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="5">
-<li><p class="first">Terminé ! Testez le nouveau mapfile chiffré avec la commande <a class="reference internal" href="shp2img.html#shp2img"><span class="std std-ref">shp2img</span></a>!</p>
-</li>
+<li>Done!  Give your new encrypted mapfile a try with the
+<a class="reference internal" href="shp2img.html#shp2img"><span class="std std-ref">shp2img</span></a> utility!</li>
 </ol>
 </div>
 </div>
@@ -279,10 +288,10 @@
   <h3>Current Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">msencrypt</a><ul>
-<li><a class="reference internal" href="#purpose">Objectif</a></li>
-<li><a class="reference internal" href="#syntax">Syntaxe</a></li>
-<li><a class="reference internal" href="#use-in-mapfile">Utilisation dans un Mapfile</a><ul>
-<li><a class="reference internal" href="#example">Exemple</a></li>
+<li><a class="reference internal" href="#purpose">Purpose</a></li>
+<li><a class="reference internal" href="#syntax">Syntax</a></li>
+<li><a class="reference internal" href="#use-in-mapfile">Use in Mapfile</a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
 </ul>
 </li>
 </ul>
@@ -306,13 +315,13 @@
           <a href="legend.html" title="legend"
              >précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Utilitaires</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Utilities</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

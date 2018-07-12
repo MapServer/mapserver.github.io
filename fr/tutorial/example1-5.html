@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Exemple 1.5 &#8212; MapServer 7.0.7 documentation</title>
+    <title>Example 1.5 &#8212; MapServer 7.0.7 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -139,25 +139,40 @@
           <div class="body" role="main">
             
   <div class="section" id="example-1-5">
-<span id="example1-5"></span><h1>Exemple 1.5<a class="headerlink" href="#example-1-5" title="Lien permanent vers ce titre">¶</a></h1>
+<span id="example1-5"></span><h1>Example 1.5<a class="headerlink" href="#example-1-5" title="Lien permanent vers ce titre">¶</a></h1>
 <div class="section" id="adding-a-raster-layer">
-<h2>Ajouter une couche raster<a class="headerlink" href="#adding-a-raster-layer" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Adding a Raster Layer<a class="headerlink" href="#adding-a-raster-layer" title="Lien permanent vers ce titre">¶</a></h2>
 <img alt="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-5.map&amp;layer=states&amp;layer=states_line&amp;layer=states_label&amp;layer=modis&amp;mode=map" src="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-5.map&amp;layer=states&amp;layer=states_line&amp;layer=states_label&amp;layer=modis&amp;mode=map" />
-<p>En plus du support des données vecteur (point, lignes, polygones et annotations), MapServer peut aussi afficher des données raster. Via l&#8217;utilisation de la bibliothèque GDAL, Mapserver peut lire en entrée et générer en sortie de multiple formats raster. Tandis que les versions antérieures à 4.x où l&#8217;entrée raster est limitée à une seule couche, avec des images en niveaux de gris ou en couleurs indexées, les versions récentes de MapServer supportent les images RGB et multispectres (multi-couche). Cet exemple lontre comment sélectionner quel couleur afficher quand on on utilise des données multispectres.</p>
+<p>In addition to vector data support (point, lines, polygons, and
+annotations), MapServer can also display raster data. Through the use
+of GDAL library, MapServer can input and output multiple raster
+formats. Whereas in versions prior to 4.x raster input is limited to
+single layer, grayscale or indexed color images, recent MapServer
+versions support RGB and multispectral (multi-layer) images. This
+example shows how to select what layers to display when using
+multispectral data.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Il est possible de voir une amélioration notable des performances quand on utilise les images RGB et multispectres.</p>
+<p class="last">There might be a noticeable performance hit when using RGB and
+multispectral images.</p>
 </div>
-<p>Parce que MapServer 5.x utilise la version 2.0.x de la bibliothèque GD pour générer les images en sortie, il supporte la sortie RGB (24-bit ou dite &#8220;true color&#8221;) également. Ainsi, avec le PNG 8-bit (couleurs indexées ou niveaux de gris), vous pouvez aussi utiliser le PNG (true color) en sortie. Cet exemple utilise le PNG comme IMAGETYPE.</p>
+<p>Because MapServer 5.x uses AGG or GD version 2.0.x to generate output
+images, it supports RGB (24-bit or true color) output as well. So,
+along with 8-bit (indexed color or grayscale) PNG8, you can now also
+use PNG (true color) for output. This example uses PNG as
+IMAGETYPE.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Comme avec l&#8217;entrée RGB, il est possible d&#8217;avoir une amélioration des performance très perceptible avec l&#8217;usage du PNG par rapport au PNG8.</p>
+<p class="last">As with RGB input, there might be a noticeable performance hit when
+using PNG compared to PNG8.</p>
 </div>
-<p>MapServer peut actuellement utiliser GDAL pour générer les image de sortie également, mais c&#8217;est un autre sujet. Si vous voulez en savoir plus à ce propos, regardez l&#8217;objet <a class="reference internal" href="../mapfile/outputformat.html#outputformat"><span class="std std-ref">OUTPUTFORMAT</span></a> dans la référence du mapfile.</p>
+<p>MapServer can actually use GDAL to generate output images as well, but
+that&#8217;s another topic. If you want to know more about it, look at the
+<a class="reference internal" href="../mapfile/outputformat.html#outputformat"><span class="std std-ref">OUTPUTFORMAT</span></a> object in the mapfile reference.</p>
 <div class="section" id="mapfile-structure">
-<h3>Structure d&#8217;un MapFile<a class="headerlink" href="#mapfile-structure" title="Lien permanent vers ce titre">¶</a></h3>
-<p>C&#8217;est ce à quoi le mapfile ressemble: <a class="reference internal" href="example1-5-map.html#example1-5-map"><span class="std std-ref">Example1-5.map</span></a>.</p>
-<p>La structure d&#8217;un mapfile, par objets, ressemble à ceci:</p>
+<h3>MapFile Structure<a class="headerlink" href="#mapfile-structure" title="Lien permanent vers ce titre">¶</a></h3>
+<p>This is what the mapfile looks like: <a class="reference internal" href="example1-5-map.html#example1-5-map"><span class="std std-ref">Example1-5.map</span></a></p>
+<p>The mapfile structure, by objects, looks like this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>                                             <span class="n">MAP</span>
              <span class="n">LAYER</span> <span class="c1">#1-------------LAYER #2----|----LAYER #3--------LAYER #4</span>
           <span class="p">(</span><span class="n">states_poly</span><span class="p">)</span>           <span class="p">(</span><span class="n">modis</span><span class="p">)</span>       <span class="p">(</span><span class="n">states_line</span><span class="p">)</span>   <span class="p">(</span><span class="n">states_label</span><span class="p">)</span>
@@ -167,37 +182,65 @@
     <span class="n">STYLE</span><span class="o">-|</span>     <span class="o">|-</span><span class="n">STYLE</span>                               <span class="o">|-</span><span class="n">STYLE</span>   <span class="n">STYLE</span><span class="o">-|-</span><span class="n">LABEL</span>
 </pre></div>
 </div>
-<p>Quand vous regardez le mapfile, vous verrez que le nouvel objet LAYER est ajouté en dessous (après) la couche POLYGON state. Pourquoi? MapServer génère les couches dans l&#8217;ordre inversé: &#8220;dernier arrivé, premier sorti&#8221; (LIFO). La première couche définie dans le mapfile est dessinée en dessous dans la carte.</p>
-<p>Ainsi, si nous avions dessiné la couche POLYGON state, elle serait en bas. Comme la couche raster est dessinée par dessus, nous ne la verrons pas. C&#8217;est pourquoi la première couche a la valeur de STATUS à OFF. La couche LINE state est définie en dessous de la couche raster ainsi elle est dessinée par dessus (et vous pouvez la voir). C&#8217;est pourquoi nous avons séparé la couche LINE state de la couche POLYGON state. Bien sûr les étiquettes sont dessinées par dessus tout le reste.</p>
-<p>MapServer peut automatiquement activer ou désactiver les couches en fonction du statut d&#8217;autres couches (disons que nous voulons la couche polygon states désactivée quand la couche raster est activée). Cela est fait en utilisant le paramètre REQUIRES. Garder cela en tête au cas où vous voudriez l&#8217;utiliser une fois que vous aurez commencé à créer vos propres applications MapServer.</p>
+<p>When you look at the mapfile, you&#8217;ll see that the new LAYER object is added below
+(after) the state POLYGON layer. Why? MapServer displays layers in reverse order:
+last in, first out (LIFO). The first layer defined in the mapfile is drawn at
+the bottom of the map.</p>
+<p>So, if we have drawn the state POLYGON layer, it would be on the bottom. Since the
+raster layer gets drawn on top of it, we won&#8217;t see it. That&#8217;s why the first layer
+gets the STATUS value of OFF. The state LINE layer is defined below the raster
+layer so it gets drawn on top (and you can see it). This is why we separated the
+state LINE layer from the state POLYGON layer. Of course the labels get drawn
+on top of everything.</p>
+<p>MapServer can automatically turn layers on or off based on the status of other
+layers (say you want the states polygon layer turned off when the raster layer
+is turned on). This is done by using the REQUIRES parameter. Keep this in
+mind as you might want to use it once you start creating your own MapServer
+applications.</p>
 </div>
 <div class="section" id="parameters">
-<h3>Paramètres<a class="headerlink" href="#parameters" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Regardons les nouveaux paramètres introduits dans le mapfile:</p>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Let&#8217;s have a look at the new parameters introduced in the mapfile:</p>
 <dl class="docutils">
 <dt><strong>IMAGETYPE</strong></dt>
-<dd><p class="first last">PNG est la version 24 bits ou dite &#8220;couleurs vraies&#8221; du format PNG.  A propos, essayez de changer votre valeur à PNG8.  Notez le temps que cela prend pour générer l&#8217;image en utilisant les différents formats. En choisissant entre &#8220;couleurs vraies&#8221;between et couleurs indexées, prenez</p>
-</dd>
+<dd>PNG is the 24-bit or true-color version of the PNG format.  By the
+way, try changing this value to PNG8.  Notice the time it takes to
+generate the image using either formats. In choosing between true
+color and indexed color, take into account the time it takes to
+generate the image.</dd>
 <dt><strong>SYMBOLSET</strong></dt>
-<dd><p class="first last">Pointe vers le chemin du fichier de définition des symboles. Les symboles dans ce fichier sont référencés par le paramètre SYMBOL dans l&#8217;objet <a class="reference internal" href="../mapfile/class.html#class"><span class="std std-ref">CLASS</span></a>. Il n&#8217;est pas vraiment nécessaire pour le moment mais il était bien de le présenter ici maintenant. Merci de vous référer à <a class="reference internal" href="../mapfile/symbology/construction.html#sym-construction"><span class="std std-ref">la référence des symboles cartographiques</span></a> pour plus d&#8217;informations.</p>
-</dd>
+<dd>Points to the path of the symbol definition file. The symbols in
+this file are referenced by the SYMBOL parameter in the <a class="reference internal" href="../mapfile/class.html#class"><span class="std std-ref">CLASS</span></a> object.  It&#8217;s not really needed at this point but I thought
+I&#8217;d throw this here now.  Please refer to the <a class="reference internal" href="../mapfile/symbology/construction.html#sym-construction"><span class="std std-ref">Cartographic
+Symbol Reference</span></a> for further information.</dd>
 <dt><strong>DATA raster/mod09a12003161_ugl_ll_8bit.tif</strong></dt>
-<dd><p class="first last">Dans le nouvel objet LAYER, le paramètre DATA pointe vers une image GeoTIFF. Comme pour les jeux de données vecteur, MapServer supporte de multiples formats de fichier. Ce support est fourni par l&#8217;intermédiaire de la bibliothèque GDAL. Pour plus d&#8217;informations sur les différents formats de fichiers raster supportés par MapServer et pour une discussion générale sur l&#8217;utilisation des rasters dans MapServer, merci de lire <a class="reference internal" href="../input/raster.html#raster"><span class="std std-ref">la référence des données raster</span></a>.</p>
-</dd>
+<dd>In the newly added LAYER object, the DATA parameter points to a
+GeoTIFF image.  Like vector datasets, MapServer supports multiple
+raster file formats. This support is accomplished through use of the
+GDAL library. For more information on the different raster formats
+supported by MapServer and for general discussion on the use of
+rasters in MapServer, please read the <a class="reference internal" href="../input/raster.html#raster"><span class="std std-ref">Raster Data Reference</span></a>.</dd>
 <dt><strong>TYPE RASTER</strong></dt>
-<dd><p class="first last">Quand des données raster (images) sont utilisées, nous utilisons la valeur RASTER pour le paramètre TYPE, qui est opposé aux valeurs POLYGON, LINE, et POINT pour les données vecteur et ANNOTATION pour les identifiants des étiquettes.</p>
-</dd>
+<dd>When using raster data (images) we use the value RASTER for the
+parameter TYPE, as opposed to the POLYGON, LINE, and POINT values
+for vector data and ANNOTATION for label IDs.</dd>
 <dt><strong>PROCESSING &#8220;BANDS=1,2,3&#8221;</strong></dt>
-<dd><p class="first last">Ce paramètre de l&#8217;objet LAYER a été ajouté dans MapServer 4.x. Le mot-clé <a class="reference internal" href="../mapfile/layer.html#layer"><span class="std std-ref">PROCESSING</span></a> a de nombreuses valeurs mais dans ce cas, nous l&#8217;utilisons pour sélectionner quelles bandes afficher dans une image multispectres. Les valeurs ici sont des chaînes de caractères qui seront passées à la bibliothèque GDAL.</p>
-</dd>
+<dd>This LAYER object parameter was added in MapServer 4.x. The
+<a class="reference internal" href="../mapfile/layer.html#layer"><span class="std std-ref">PROCESSING</span></a> keyword has many values but in this case
+we are using it to select which bands in a multispectral image to
+display. The values here are strings that will be passed to the GDAL
+library.</dd>
 <dt><strong>OFFSITE</strong></dt>
-<dd><p class="first last">Ce paramètre dit à MapServer quelles valeurs de pixel il faut afficher comme fond (ou ignorer). Vous pouvez obtenir les valeurs de pixel en utilisant des programmes de traitement ou de manipulation d&#8217;images (comme Imagine, Photoshop ou Gimp).</p>
-</dd>
+<dd>This parameter tells MapServer what pixel values to render as
+background (or ignore). You can get the pixel values using image
+processing or image manipulation programs (i.e. Imagine, Photoshop,
+Gimp).</dd>
 </dl>
 </div>
 <div class="section" id="rgb-vs-indexed-color-image">
-<h3>RGB vs Image à couleurs indexées<a class="headerlink" href="#rgb-vs-indexed-color-image" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Pour comparer la vitesse de création d&#8217;une carte quand on utilise une image RGB par opposition à une image à couleurs indexées, remplacez les lignes suivantes dans le mapfile:</p>
+<h3>RGB vs Indexed Color Image<a class="headerlink" href="#rgb-vs-indexed-color-image" title="Lien permanent vers ce titre">¶</a></h3>
+<p>To compare map creation speed when using RGB image as opposed to indexed color
+image, replace the following lines in the mapfile:</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">DATA</span> <span class="s">&quot;raster/mod09a12003161_ugl_ll_8bit.tif&quot;</span>
 <span class="k">STATUS</span> <span class="nb">DEFAULT</span>
 <span class="k">TYPE</span> <span class="nb">RASTER</span>
@@ -205,16 +248,16 @@
 <span class="k">OFFSITE</span> <span class="mi">71</span> <span class="mi">74</span> <span class="mi">65</span>
 </pre></div>
 </div>
-<p>avec ceci:</p>
+<p>with these:</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">DATA</span> <span class="s">&quot;raster/mod09a12003161_ugl_ll_idxa.tif&quot;</span>
 <span class="k">STATUS</span> <span class="nb">DEFAULT</span>
 <span class="k">TYPE</span> <span class="nb">RASTER</span>
 <span class="k">OFFSITE</span> <span class="mi">70</span> <span class="mi">74</span> <span class="mi">66</span>
 </pre></div>
 </div>
-<p>Essayer aussi de changer l&#8217;IMAGETYPE de PNG à PNG8.</p>
+<p>Also, try changing the IMAGETYPE from PNG to PNG8.</p>
 <hr class="docutils" />
-<p><a class="reference internal" href="example1-4.html#example1-4"><span class="std std-ref">Revenir à l&#8217;exemple 1.4</span></a> | <a class="reference internal" href="example1-6.html#example1-6"><span class="std std-ref">Aller à l&#8217;exemple 1.6</span></a></p>
+<p><a class="reference internal" href="example1-4.html#example1-4"><span class="std std-ref">Back to Example 1.4</span></a> | <a class="reference internal" href="example1-6.html#example1-6"><span class="std std-ref">Proceed to Example 1.6</span></a></p>
 </div>
 </div>
 </div>
@@ -248,11 +291,11 @@
 </p>
   <h3>Current Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Exemple 1.5</a><ul>
-<li><a class="reference internal" href="#adding-a-raster-layer">Ajouter une couche raster</a><ul>
-<li><a class="reference internal" href="#mapfile-structure">Structure d&#8217;un MapFile</a></li>
-<li><a class="reference internal" href="#parameters">Paramètres</a></li>
-<li><a class="reference internal" href="#rgb-vs-indexed-color-image">RGB vs Image à couleurs indexées</a></li>
+<li><a class="reference internal" href="#">Example 1.5</a><ul>
+<li><a class="reference internal" href="#adding-a-raster-layer">Adding a Raster Layer</a><ul>
+<li><a class="reference internal" href="#mapfile-structure">MapFile Structure</a></li>
+<li><a class="reference internal" href="#parameters">Parameters</a></li>
+<li><a class="reference internal" href="#rgb-vs-indexed-color-image">RGB vs Indexed Color Image</a></li>
 </ul>
 </li>
 </ul>
@@ -274,7 +317,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

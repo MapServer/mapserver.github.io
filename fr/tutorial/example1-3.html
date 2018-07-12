@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Exemple 1.3 &#8212; MapServer 7.0.7 documentation</title>
+    <title>Example 1.3 &#8212; MapServer 7.0.7 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -139,15 +139,16 @@
           <div class="body" role="main">
             
   <div class="section" id="example-1-3">
-<span id="example1-3"></span><h1>Exemple 1.3<a class="headerlink" href="#example-1-3" title="Lien permanent vers ce titre">¶</a></h1>
+<span id="example1-3"></span><h1>Example 1.3<a class="headerlink" href="#example-1-3" title="Lien permanent vers ce titre">¶</a></h1>
 <div class="section" id="displaying-classes-in-a-layer">
-<h2>Afficher des classes dans une couche<a class="headerlink" href="#displaying-classes-in-a-layer" title="Lien permanent vers ce titre">¶</a></h2>
-<p>En utilisant l&#8217;information des attributs non spatiaux de la donnée, nous pouvons créer une carte comme ceci:</p>
+<h2>Displaying Classes in a Layer<a class="headerlink" href="#displaying-classes-in-a-layer" title="Lien permanent vers ce titre">¶</a></h2>
+<p>By using non-spatial attribute information in the data, we can create
+a map like this:</p>
 <img alt="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-3.map&amp;layer=states_poly&amp;layer=states_line&amp;mode=map" src="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-3.map&amp;layer=states_poly&amp;layer=states_line&amp;mode=map" />
 <div class="section" id="mapfile-structure">
-<h3>Structure d&#8217;un MapFile<a class="headerlink" href="#mapfile-structure" title="Lien permanent vers ce titre">¶</a></h3>
-<p>C&#8217;est ce à quoi le mapfile ressemble: <a class="reference internal" href="example1-3-map.html#example1-3-map"><span class="std std-ref">Example1-3.map</span></a>.</p>
-<p>La structure d&#8217;un mapfile, par objets, ressemble à ceci:</p>
+<h3>MapFile Structure<a class="headerlink" href="#mapfile-structure" title="Lien permanent vers ce titre">¶</a></h3>
+<p>This is what the mapfile looks like: <a class="reference internal" href="example1-3-map.html#example1-3-map"><span class="std std-ref">Example1-3.map</span></a>.</p>
+<p>The mapfile structure, by objects, looks like this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>                            <span class="n">MAP</span>
 <span class="p">(</span><span class="n">states_poly</span><span class="p">)</span> <span class="n">LAYER</span><span class="o">----------|---------</span><span class="n">LAYER</span> <span class="p">(</span><span class="n">states_line</span><span class="p">)</span>
                <span class="o">|</span>                        <span class="o">|</span>
@@ -157,19 +158,35 @@
 </pre></div>
 </div>
 <div class="section" id="keywords">
-<h4>Mots-clés<a class="headerlink" href="#keywords" title="Lien permanent vers ce titre">¶</a></h4>
-<p>Notre mapfile n&#8217;a toujours que deux couches mais la couche polygon a été découpée en deux classes.  Jetons un oeil aux paramètres ajoutés:</p>
+<h4>Keywords<a class="headerlink" href="#keywords" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Our mapfile still only has two layers but the polygon layer has been
+broken down into two classes.  Let&#8217;s have a look at the additional
+parameters:</p>
 <dl class="docutils">
 <dt><strong>CLASSITEM</strong></dt>
-<dd><p class="first">Ce mot-clé est utilisé pour spécifier quel attribut utiliser pour séparer les objets CLASS. Dans cet exemple, cet attribut est &#8220;CLASS&#8221;. Si vous ouvrez le fichier de données attributaires associés avec le shapefile de la couche, vous verrez qu&#8217;il y a une colonne (un attribut) appelé &#8220;CLASS&#8221;.</p>
-<p class="last">Comment savoir quel attribut utiliser? Bien, les enregistrements dans les shapefiles sont stockés dans les fichiers DBF. Vous pouvez les ouvrir dans un logiciel de type comme Calc dans Openoffice.org, ou dans un logiciel SIG bureautique comme QGIS, Thuban, ou ArcView. Si votre donnée est fournie avec une métadonnée (Et cela devrait être le cas!), vous pouvez parcourir le fichier de métadonnée pour avoir les informations attributaires. Vous pouvez aussi utiliser &#8220;ogrinfo&#8221; pour afficher les attributs de vos shapefiles&#8211;revenez à l&#8217;exemple example 1.1 (les dernières lignes après &#8220;Layer SRS WKT:&#8221; montrent les noms et les types des attributs).</p>
+<dd><p class="first">This keyword is used to specify what attribute to use in separating
+the class objects.  In this example that attribute is &#8220;CLASS&#8221;.  If
+you open the database file associated with this layer&#8217;s shapefile,
+you&#8217;ll see that there&#8217;s a column (attribute) called &#8220;CLASS&#8221;.</p>
+<p class="last">How do we know which attribute to use?  Well, database records in
+shapefiles are stored in DBF files.  You can open it in a
+spreadsheet program such as Openoffice.org&#8217;s Calc, or in a desktop
+GIS software such as QGIS, Thuban, or ArcView.  If your data came
+with a metadata (and it should!), you can skim through through that
+metadata file for attribute information.  You can also use
+&#8220;ogrinfo&#8221; to display basic attribute info in your shapefiles&#8211;look
+back at example 1.1 (the last few lines after &#8220;Layer SRS WKT:&#8221; show
+the attribute names and types).</p>
 </dd>
 <dt><strong>EXPRESSION</strong></dt>
-<dd><p class="first last">Pour chaque classe, nous spécifions quelle valeur attributaire utiliser. C&#8217;est la forme la plus simple des EXPRESSION.  Les EXPRESSION peuvent être plus complexes que ça, permettant d&#8217;évaluer des expressions régulières ou logiques. Merci de regarder LES <a class="reference internal" href="../mapfile/expressions.html#expressions"><span class="std std-ref">Expressions</span></a> dans la référence du mapfile pour voir ce que nous pouvons faire avec l&#8217;objet EXPRESSION.</p>
-</dd>
+<dd>For each class, we specify what attribute value to use.  This is
+the simplest form of EXPRESSION.  EXPRESSIONs can be even more
+complex than this, allowing one to evaluate regular or logical
+expressions.  Please look at <a class="reference internal" href="../mapfile/expressions.html#expressions"><span class="std std-ref">Expressions</span></a> in the mapfile
+reference to see what you can do with EXPRESSION.</dd>
 </dl>
 <hr class="docutils" />
-<p><a class="reference internal" href="example1-2.html#example1-2"><span class="std std-ref">Revenir à l&#8217;exemple 1.2</span></a> | <a class="reference internal" href="example1-4.html#example1-4"><span class="std std-ref">Aller à l&#8217;exemple 1.4</span></a></p>
+<p><a class="reference internal" href="example1-2.html#example1-2"><span class="std std-ref">Back to Example 1.2</span></a> | <a class="reference internal" href="example1-4.html#example1-4"><span class="std std-ref">Proceed to Example 1.4</span></a></p>
 </div>
 </div>
 </div>
@@ -204,10 +221,10 @@
 </p>
   <h3>Current Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Exemple 1.3</a><ul>
-<li><a class="reference internal" href="#displaying-classes-in-a-layer">Afficher des classes dans une couche</a><ul>
-<li><a class="reference internal" href="#mapfile-structure">Structure d&#8217;un MapFile</a><ul>
-<li><a class="reference internal" href="#keywords">Mots-clés</a></li>
+<li><a class="reference internal" href="#">Example 1.3</a><ul>
+<li><a class="reference internal" href="#displaying-classes-in-a-layer">Displaying Classes in a Layer</a><ul>
+<li><a class="reference internal" href="#mapfile-structure">MapFile Structure</a><ul>
+<li><a class="reference internal" href="#keywords">Keywords</a></li>
 </ul>
 </li>
 </ul>
@@ -231,7 +248,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

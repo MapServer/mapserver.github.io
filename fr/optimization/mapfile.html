@@ -30,7 +30,7 @@
     <link rel="search" title="Recherche" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="MapServer 7.0.7 documentation" href="../index.html" />
-    <link rel="up" title="Optimisation" href="index.html" />
+    <link rel="up" title="Optimization" href="index.html" />
     <link rel="next" title="Raster" href="raster.html" />
     <link rel="prev" title="FastCGI" href="fastcgi.html" /> 
   </head>
@@ -138,8 +138,8 @@
           <a href="fastcgi.html" title="FastCGI"
              accesskey="P">précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Optimisation</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Optimization</a> &#187;</li> 
       </ul>
     </div>
   
@@ -159,8 +159,7 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">david.fawcett at gmail.com</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body"><p class="first last">01/08/2007</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2007/08/01</td>
 </tr>
 </tbody>
 </table>
@@ -175,7 +174,11 @@
 </div>
 <div class="section" id="introduction">
 <h2><a class="toc-backref" href="#table-of-contents">Introduction</a><a class="headerlink" href="#introduction" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Le contenu d&#8217;un fichier Map est utilisé par MapServer pour la configuration, l&#8217;accès aux données, la projection et beaucoup d&#8217;autres choses. Parce que le fichier Map est lu à chaque fois une image de carte est demandée, il est important de réfléchir ce que vous incluez dans le fichier afin d&#8217;optimiser les performances. Le fichier Map optimal est celui qui n&#8217;inclus rien d&#8217;autres que ce qui est nécessaire.</p>
+<p>The contents of a Map File are used by MapServer for configuration, data
+access, projection, and more. Because the Map File is parsed every time a map
+image is requested, it is important to think about what you include in the
+file in order to optimize performance. The optimal Map File is one that
+doesn&#8217;t include or reference anything that isn&#8217;t needed.</p>
 <div class="section" id="projections">
 <span id="index-1"></span><h3>1. Projections<a class="headerlink" href="#projections" title="Lien permanent vers ce titre">¶</a></h3>
 <p>There are two ways to define projections in a Map File. You can either use
@@ -185,7 +188,7 @@ parameters in the Proj4 database using the EPSG code as an ID. This database
 lookup takes significantly more resources than when the projection parameters
 are defined inline. This lookup takes place for each projection definition
 using EPSG codes in a Map File.</p>
-<p><strong>Projection définie en utilisant des paramètres de projection &#8220;en ligne&#8221;</strong></p>
+<p><strong>Projection defined using inline projection parameters</strong></p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">PROJECTION</span>
   <span class="s">&quot;proj=utm&quot;</span>
   <span class="s">&quot;ellps=GRS80&quot;</span>
@@ -197,37 +200,51 @@ using EPSG codes in a Map File.</p>
 <span class="k">END</span>
 </pre></div>
 </div>
-<p><strong>Projection définie en utilisant un code EPSG</strong></p>
+<p><strong>Projection defined using EPSG Code</strong></p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">PROJECTION</span>
    <span class="s">&quot;init=epsg:26915&quot;</span>
 <span class="k">END</span>
 </pre></div>
 </div>
-<p><strong>Suggestions d&#8217;optimisation</strong></p>
+<p><strong>Optimization Suggestions</strong></p>
 <ul class="simple">
-<li><p class="first">Utiliser des définitions de paramètres de projection &#8220;en ligne&#8221; au lieu des codes EPSG.</p>
-</li>
+<li>Use inline projection parameter definitions in place of EPSG codes.</li>
 <li>If you want to use EPSG codes, remove all unneeded projection definition
 records from the PROJ.4 <a class="reference internal" href="../glossary.html#term-epsg"><span class="xref std std-term">EPSG</span></a> database.</li>
 </ul>
 </div>
 <div class="section" id="layers">
 <span id="index-2"></span><h3>2. Layers<a class="headerlink" href="#layers" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Pour chaque couche dans un fichier map qui a un statut à ON ou à DEFAULT, MapServer chargera cette couche et la préparera pour l&#8217;affichage, même si cette couche n&#8217;est jamais affichée.</p>
-<p><strong>Suggestions d&#8217;optimisation</strong></p>
+<p>For every layer in a Map File that has a status of ON or DEFAULT, MapServer
+will load that layer and prepare it for display, even if that layer never gets
+displayed.</p>
+<p><strong>Optimization Suggestions</strong></p>
 <ul class="simple">
-<li><p class="first">Construire des mapfiles les plus minimaux, inclure seulement des couches que vous avez prévu d&#8217;utiliser.</p>
-</li>
-<li><p class="first">Éteignez les couches inutiles ; Plus Les couches affiche par MapServer , plus le temps qu&#8217;il faut. Ayez votre carte ouverture vue c&#8217;est le minimum nécessaire pour orienter l&#8217;utilisateur , et leur permettre de tourner sur des couches supplémentaires au besoin. Cela est particulièrement vrai de WMS distants ou de très grandes trames .</p>
-</li>
-<li><p class="first">Liée à la désactivation des couches , est de les activer , mais en utilisant MINSCALEDENOM et MAXSCALEDENOM de déterminer à quel zoomlevels la couche est disponible . Si l&#8217;affichage de la carte est en dehors de MINSCALEDENOM de la couche et la gamme de MAXSCALEDENOM , MapServer peut ignorer le traitement de cette couche. Il rend également pour un effet vraiment cool , que les frontières nationales changent magiquement au frontières de l&#8217;Etat .</p>
-</li>
-<li><p class="first">Si vous avez une application complexe, considérez l&#8217;usage de plusieurs mapfiles simples et spécifiques plutôt qu&#8217;un seul gros fichier mapfile &#8216;tout en un&#8217;.</p>
-</li>
-<li><p class="first">Dans la même veine , chaque classe prend également en charge MINSCALEDENOM et MAXSCALEDENOM . Si votre ensemble de données contient des données qui sont pertinentes à différents zoomlevels , alors vous pouvez trouver ça comme une astuce très pratique . Par exemple , donner un MINSCALEDENOM de 1: 1000000 , routes départementales un de MINSCALEDENOM de 1: 100000 , et les rues un MAXSCALEDENOM de 1: 50000 . Vous obtenez l&#8217;effet fraîcheur de nouvelles données qui apparaissent comme par magie , mais vous n&#8217;avez pas MapServer essayant pour attirant les routes du pays où toute la nation est en vue !</p>
-</li>
-<li><p class="first">Les classes sont traitées dans l&#8217;ordre , et une fonctionnalité est affectée à la première classe qui correspond . Donc, essayez de placer les classes les plus couramment utilisés dans le haut de la liste de classe , alors MapServer n&#8217;a pas avoir à essayer autant de classes avant de trouver un match . Par exemple , si vous voulez mettre en évidence l&#8217;état unique de Wyoming, vous auriez probablement le faire.</p>
-</li>
+<li>Build lean Map Files, only include layers that you plan to use.</li>
+<li>Turn off unnecessary layers; the more layers MapServer is displaying, the
+more time it takes. Have your opening map view show only the minimum
+necessary to orient the user, and allow them to turn on additional layers as
+needed. This is particularly true of remote WMS or very large rasters.</li>
+<li>Related to turning off layers, is turning them on but using MINSCALEDENOM
+and MAXSCALEDENOM to determine at what zoomlevels the layer is available. If
+a map&#8217;s display is outside of the layer&#8217;s MINSCALEDENOM and MAXSCALEDENOM
+range, then MapServer can skip processing that layer. It also makes for a
+really cool effect, that the national boundaries magically change to state
+boundaries.</li>
+<li>If you have a complex application, consider using multiple simple and
+specific Map Files in place of one large &#8216;do everything&#8217; Map File.</li>
+<li>In a similar vein, each class also supports MINSCALEDENOM and MAXSCALEDENOM.
+If your dataset has data that are relevant at different zoomlevels, then you
+may find this a very handy trick. For example, give a MINSCALEDENOM of
+1:1000000, county roads a MINSCALEDENOM of 1:100000, and streets a
+MAXSCALEDENOM of 1:50000. You get the cool effect of new data magically
+appearing, but you don&#8217;t have MapServer trying to draw the nation&#8217;s roads
+when the entire nation is in view!</li>
+<li>Classes are processed in order, and a feature is assigned to the first class
+that matches. So try placing the most commonly-used classes at the top of
+the class list, so MapServer doesn&#8217;t have to try as many classes before
+finding a match. For example, if you wanted to highlight the single state of
+Wyoming, you would probably do this:</li>
 </ul>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">CLASS</span>
    <span class="k">EXPRESSION</span> <span class="p">(</span><span class="s">&#39;[NAME]&#39;</span> <span class="ow">eq</span> <span class="s">&#39;WY&#39;</span><span class="p">])</span>
@@ -242,7 +259,8 @@ records from the PROJ.4 <a class="reference internal" href="../glossary.html#ter
 <span class="k">END</span>
 </pre></div>
 </div>
-<p>Mais cela sera beaucoup plus efficace de faire ceci, comme 98% des cas seront vérifiés au premier essai :</p>
+<p>But it would be a lot more efficient to do this, since 98% of cases will be
+matched on the first try:</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">CLASS</span>
   <span class="k">EXPRESSION</span> <span class="p">(</span><span class="s">&#39;[NAME]&#39;</span> <span class="ow">ne</span> <span class="s">&#39;WY&#39;</span><span class="p">])</span>
   <span class="k">STYLE</span>
@@ -257,26 +275,28 @@ records from the PROJ.4 <a class="reference internal" href="../glossary.html#ter
 </pre></div>
 </div>
 <ul class="simple">
-<li><p class="first">Utiliser les <a class="reference internal" href="tileindex.html#tileindex"><span class="std std-ref">index de tuiles</span></a> au lieu de plusieurs couches.</p>
-</li>
+<li>Use <a class="reference internal" href="tileindex.html#tileindex"><span class="std std-ref">tile indexes</span></a> instead of multiple layers.</li>
 </ul>
 </div>
 <div class="section" id="symbols">
 <span id="index-3"></span><h3>3. Symbols<a class="headerlink" href="#symbols" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Quand un mapfile est chargé, chaque symbole raster listé dans le fichier de symboles est récupéré depuis le système de fichiers et chargé.</p>
-<p><strong>Suggestions d&#8217;optimisation</strong></p>
+<p>When the Map File is loaded, each raster symbol listed in the symbols file is
+located on the filesystem and loaded.</p>
+<p><strong>Optimization Suggestions</strong></p>
 <ul class="simple">
-<li><p class="first">Inclure seulement les symboles raster dans votre fichier de symboles si vous savez qu&#8217;ils seront utilisés par votre application.</p>
-</li>
+<li>Only include raster symbols in your symbols file if you know that they will
+be used by your application.</li>
 </ul>
 </div>
 <div class="section" id="fonts">
 <span id="index-4"></span><h3>4. Fonts<a class="headerlink" href="#fonts" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Pour charger une police, MapServer ouvre le fichier fonts.list: ref: <cite>fontset</cite> qui contient un alias pour la police et le chemin pour ce fichier de police. Si vous avez un fichier fonts.list avec une longue liste de polices, il faudra plus de temps pour MapServer pour localiser et charger la police que vous avez besoin.</p>
-<p><strong>Suggestions d&#8217;optimisation</strong></p>
+<p>To load a font, MapServer opens up the fonts.list <a class="reference internal" href="../mapfile/fontset.html#fontset"><span class="std std-ref">FONTSET</span></a> file which
+contains an alias for the font and the path for that font file. If you have a
+fonts.list file with a long list of fonts, it will take more time for
+MapServer to locate and load the font that you need.</p>
+<p><strong>Optimization Suggestions</strong></p>
 <ul class="simple">
-<li><p class="first">Limiter les entrées dans le fichier fonts.list aux polices que vous utilisez véritablement.</p>
-</li>
+<li>Limit the entries in fonts.list to fonts that you actually use.</li>
 </ul>
 </div>
 </div>
@@ -340,13 +360,13 @@ records from the PROJ.4 <a class="reference internal" href="../glossary.html#ter
           <a href="fastcgi.html" title="FastCGI"
              >précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Optimisation</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Optimization</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

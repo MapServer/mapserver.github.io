@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Exemple 1.7 &#8212; MapServer 7.0.7 documentation</title>
+    <title>Example 1.7 &#8212; MapServer 7.0.7 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -139,81 +139,114 @@
           <div class="body" role="main">
             
   <div class="section" id="example-1-7">
-<span id="example1-7"></span><h1>Exemple 1.7<a class="headerlink" href="#example-1-7" title="Lien permanent vers ce titre">¶</a></h1>
+<span id="example1-7"></span><h1>Example 1.7<a class="headerlink" href="#example-1-7" title="Lien permanent vers ce titre">¶</a></h1>
 <div class="section" id="adding-ogc-wms-layers">
-<h2>Ajouter des couches WMS OGC<a class="headerlink" href="#adding-ogc-wms-layers" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Adding OGC WMS Layers<a class="headerlink" href="#adding-ogc-wms-layers" title="Lien permanent vers ce titre">¶</a></h2>
 <img alt="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-7.map&amp;layers=states+states_label+modis_jpl&amp;mode=map" src="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-7.map&amp;layers=states+states_label+modis_jpl&amp;mode=map" />
-<p>Une autre fonctionnalité excitante de MapServer est sa capacité à utiliser des couches provenant d&#8217;autres serveurs de carte. Dans ce cas, une application MapServer devient un client WMS (ou WFS). MapServer peut aussi partager (ou servir) les couches dans le mapfile à d&#8217;autres serveurs de carte. Cela fait d&#8217;une application un serveur WMS (ou WFS). Qu&#8217;est ce que le WMS ou le WFS? Ce sont des spécifications de &#8220;services d&#8217;interopérabilité basés sur le web&#8221; publiés par l&#8217;Open Geospatial Consortium (OGC). WMS équivaut à Web Map Service et WFS à Web Feature Service. La différence entre ces deux spécifications, en termes simples, est que le WMS utilise des formats raster (PNG, GIF, JPEG) pour partager des couches tandis que le WFS utilise le GML ou Geography Markup Language. Une troisième spécification OGC est la spécification Web Coverage Services specification ou WCS&#8211;MapServer supporte ce dernier au niveau du serveur seulement. Pour trouver plus d&#8217;informations sur le WMS, WFS et WCS, aller sur <a class="reference external" href="http://www.opengeospatial.org">le site web de l&#8217;OGC</a> et allez voir <a class="reference external" href="http://www.opengeospatial.org/specs/?page=specs">Les spécifications des implémentations OGC</a> ou <a class="reference external" href="http://www.opengeospatial.org/specs/?page=abstract">les résumés des spécifications OGC</a>. Le site web MapServer a aussi <a class="reference internal" href="../documentation.html#documentation"><span class="std std-ref">une documentation</span></a> et  <a class="reference external" href="https://github.com/mapserver/mapserver/wiki">des pages de WIKI</a> pour ces spécifications.</p>
-<p>Cet exemple montre comment ajouter une couche WMS dans votre mapfile.</p>
+<p>Another exciting feature of MapServer is its ability to use layers from other
+map servers. In this case, a MapServer application becomes a WMS (or WFS)
+client. MapServer can also share (or serve up) the layers in the mapfile to
+other map servers. This makes an application a WMS (or WFS) server. What is WMS
+or WFS? These are &#8220;web-based interoperability service&#8221; specifications published
+by the Open Geospatial Consortium (OGC). WMS stands for Web Map Service and WFS
+for Web Feature Service. The difference between these two specifications, in
+simple terms, is that WMS uses web raster formats (PNG, GIF, JPEG) to share
+layers while WFS uses GML, the Geography Markup Language. A third OGC
+interoperability specification is the Web Coverage Services specification or
+WCS.  MapServer supports WCS at the server level only. To find more information
+about WMS, WFS, and WCS go the the <a class="reference external" href="http://www.opengeospatial.org">OGC&#8217;s web site</a> and look for the <a class="reference external" href="http://www.opengeospatial.org/specs/?page=specs">OGC Implementation
+Specifications</a> or <a class="reference external" href="http://www.opengeospatial.org/specs/?page=abstract">OGC
+Abstract Specifications</a>.
+The MapServer web site also has <a class="reference internal" href="../documentation.html#documentation"><span class="std std-ref">documentation</span></a> and <a class="reference external" href="https://github.com/mapserver/mapserver/wiki">WIKI pages</a> for these specifications.</p>
+<p>This example shows you how to add a WMS layer in your mapfile.</p>
 <div class="section" id="the-mapfile">
-<h3>Le Mapfile<a class="headerlink" href="#the-mapfile" title="Lien permanent vers ce titre">¶</a></h3>
-<p>C&#8217;est ce à quoi le mapfile ressemble: <a class="reference internal" href="example1-7-map.html#example1-7-map"><span class="std std-ref">Example1-7.map</span></a>.</p>
+<h3>The MapFile<a class="headerlink" href="#the-mapfile" title="Lien permanent vers ce titre">¶</a></h3>
+<p>This is what the mapfile looks like: <a class="reference internal" href="example1-7-map.html#example1-7-map"><span class="std std-ref">Example1-7.map</span></a></p>
 <div class="section" id="layer-object-and-wms-parameters">
-<h4>Paramètres WMS et objet LAYER<a class="headerlink" href="#layer-object-and-wms-parameters" title="Lien permanent vers ce titre">¶</a></h4>
-<p>Regardons la couche WMS:</p>
+<h4>LAYER Object and WMS Parameters<a class="headerlink" href="#layer-object-and-wms-parameters" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Let&#8217;s have a look at the WMS layer:</p>
 <dl class="docutils">
 <dt><strong>LAYER # MODIS WMS map from JPL</strong></dt>
-<dd><p class="first last">Marquer le début de l&#8217;objet LAYER WMS.</p>
-</dd>
+<dd>Marks the start of the WMS LAYER object.</dd>
 <dt><strong>NAME modis_jpl</strong></dt>
-<dd><p class="first last">L&#8217;identifiant de couche LAYER.</p>
-</dd>
+<dd>The LAYER identifier.</dd>
 <dt><strong>TYPE RASTER</strong></dt>
-<dd><p class="first last">Comme cette couche WMS est une image, nous utilisons RASTER comme TYPE de couche.</p>
-</dd>
+<dd>Since this the WMS layer is an image, we use RASTER as LAYER TYPE.</dd>
 <dt><strong>OFFSITE 0 0 0</strong></dt>
-<dd><p class="first last">Ignorer la couleur de fond noir</p>
-</dd>
+<dd>Ignore the black background color</dd>
 <dt><strong>STATUS OFF</strong></dt>
-<dd><p class="first last">Désactiver cette couche par défaut.</p>
-</dd>
+<dd>Turn this layer off by default.</dd>
 <dt><strong>CONNECTIONTYPE WMS</strong></dt>
-<dd><p class="first">Le type de connection de la LAYER à utiliser. Par défaut c&#8217;est LOCAL</p>
+<dd><p class="first">The type of LAYER connection to use. The default is LOCAL.</p>
 <div class="last admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Si nous voulons être explicite, nous ajouterions CONNECTIONTYPE LOCAL à toutes nos autres couches vecteur et raster dans notre mapfile. A la place, nous définissons seulement les type de connection qui sont externes. WMS est une couche de donnée externe, venant d&#8217;un autre serveur de carte.</p>
+<p class="last">If we have to be explicit, we would add CONNECTIONTYPE LOCAL to
+all othe vector and raster layers in our mapfile. Instead we only
+define connection types that are external. WMS is an external
+data layer, coming from another map server.</p>
 </div>
 </dd>
 <dt><strong>CONNECTION &#8220;http://mapus.jpl.nasa.gov/wms.cgi?&#8221;</strong></dt>
-<dd><p class="first last">La chaîne de connection qui nous permet <em>d&#8217;obtenir</em> la donnée d&#8217;un autre serveur. Dans le cas de connections WMS, c&#8217;est une URL. Si nous utilisions une base de données PostGIS, cela serait une requête SQL. Remarquez que la chaîne doit être écrite sur une seule ligne dans votre mapfile.</p>
-</dd>
+<dd>The connection string that allows us to <em>get</em> the data from another
+server. In the case of WMS connections, this is a URL.  If we were
+using a PostGIS database, it would be an SQL statement.  Please
+note that the string has to be in a single line in your mapfile.</dd>
 <dt><strong>METADATA</strong></dt>
-<dd><p class="first last">marque le début de l&#8217;objet METADATA pour votre couche WMS. MapServer utilise les paramètres définis dans cet objet avec le paramètre CONNECTION au dessus pour former une requête WMS valide au serveur WMS.</p>
-</dd>
+<dd>marks the beginning of the METADATA object for our WMS layer.
+MapServer uses the parameters defined within this object along with
+the CONNECTION parameter above to form a valid WMS request to the
+WMS server.</dd>
 <dt><strong>&#8220;wms_srs&#8221; &#8220;epsg:4326&#8221;</strong></dt>
-<dd><p class="first last">La projection WMS. Quelquefois, le serveur WMS supporte plus qu&#8217;une seule projection. Si c&#8217;est le cas, vous voudrez peut être interroger la carte dans votre projection de sortie (epsg:2163). Malheureusement, le serveur JPL ne supporte pas cette projection.</p>
-</dd>
+<dd>The WMS projection.  Sometimes the WMS server supports more than
+one projection.  If this is the case you might want to request the
+map in your output projection (epsg:2163).  Unfortunately, the JPL
+server doesn&#8217;t support this projection.</dd>
 <dt><strong>&#8220;wms_name&#8221; &#8220;modis&#8221;</strong></dt>
-<dd><p class="first last">Le nom de la couche WMS. C&#8217;est comme ajouter le paramètre &#8220;layers=modis&#8221;.</p>
-</dd>
+<dd>The WMS layer name. This is like adding the parameter &#8220;layers=modis&#8221;.</dd>
 <dt><strong>&#8220;wms_server_version&#8221; &#8220;1.1.1&#8221;</strong></dt>
-<dd><p class="first last">La version du WMS avec lequel on doit se conformer.  Pour plus d&#8217;options, voir see <a class="reference internal" href="../ogc/ogc_support.html#ogc-support"><span class="std std-ref">Support des spécifications OGC dans MapServer</span></a>.</p>
-</dd>
+<dd>The WMS version the server complies to.  For more options, see
+<a class="reference internal" href="../ogc/ogc_support.html#ogc-support"><span class="std std-ref">MapServer  OGC Specification support</span></a>.</dd>
 <dt><strong>&#8220;wms_format&#8221; &#8220;image/jpeg&#8221;</strong></dt>
-<dd><p class="first last">Le format image que nous attendons de recevoir du serveur WMS. Vous piuvez essayer de remplacer la valeur avec <em>image/png</em> ou quelque chose d&#8217;autre.</p>
-</dd>
+<dd>The image format we expect to be receiving from the WMS server.
+You can try replacing the value with <em>image/png</em> or something else.</dd>
 <dt><strong>END</strong></dt>
-<dd><p class="first last">marque la fin de l&#8217;objet METADATA</p>
-</dd>
+<dd>marks the end of the METADATA object</dd>
 </dl>
-<p>Pour en savoir plus sur l&#8217;ajout de couches WMS dans vos applications, merci de visiter <a class="reference internal" href="../ogc/wms_client.html#wms-client"><span class="std std-ref">le Howto du client WMS Mapserver</span></a>.</p>
+<p>To know more about adding WMS layers to your applications, please visit the
+<a class="reference internal" href="../ogc/wms_client.html#wms-client"><span class="std std-ref">MapServer WMS Client Howto</span></a>.</p>
 </div>
 <div class="section" id="web-object-parameters">
-<h4>Paramètres de l&#8217;objet WEB<a class="headerlink" href="#web-object-parameters" title="Lien permanent vers ce titre">¶</a></h4>
-<p>En plus d&#8217;ajouter l&#8217;objet de la couche WMS, il y a aussi un autre objet dessous le MAP. C&#8217;est l&#8217;objet WEB. A l&#8217;intérieur de l&#8217;objet WEB se trouvent deux paramètres:</p>
+<h4>WEB Object Parameters<a class="headerlink" href="#web-object-parameters" title="Lien permanent vers ce titre">¶</a></h4>
+<p>In addition to adding the WMS layer object, there&#8217;s also a new object under MAP. This is the WEB object. Within the WEB object are two parameters:</p>
 <dl class="docutils">
 <dt><strong>IMAGEPATH &#8216;/data/tmp/&#8217;</strong></dt>
-<dd><p class="first last">Le chemin local absolu vers un répertoire temporaire accessible par le web. L&#8217;utilisateur qui fait fonctionner les processus du serveur web devrait être capable d&#8217;écrire dans ce répertoire. Assurez-vous que le chemin inclus un slash (/) à la fin. (Votre IMAGEPATH devrait ressembler à quelque chose comme ça: &#8220;/home/apache/htdocs/tmp/&#8221; ou &#8220;C:/Inetpub/wwwroot/tmp/&#8221;.)</p>
-</dd>
+<dd>The absolute local path to a web accessible temporary
+directory. The user running the web server processes should be able
+to write to this directory. Make sure that the path includes a
+slash (/) at the end. (Your IMAGEPATH might look something like
+this: &#8220;/home/apache/htdocs/tmp/&#8221; or &#8220;C:/Inetpub/wwwroot/tmp/&#8221;.)</dd>
 <dt><strong>IMAGEURL &#8216;/tmp/&#8217;</strong></dt>
-<dd><p class="first last">C&#8217;est comment IMAGEPATH apparaitra de manière relative à la racine du serveur web. Si nous devons taper l&#8217;URL complète pour cela, ce sera &#8220;<a class="reference external" href="http://terrasip.gis.umn.edu/tmp/">http://terrasip.gis.umn.edu/tmp/</a>&#8221;. Assurez-vous que la chemin inclus un slash (/) à la fin.</p>
-</dd>
+<dd>This is how IMAGEPATH will appear relative to the web server&#8217;s root
+directory. If we have to type the full URL for this, it will be
+&#8220;<a class="reference external" href="http://terrasip.gis.umn.edu/tmp/">http://terrasip.gis.umn.edu/tmp/</a>&#8221;. Make sure that the path
+includes a slash (/) at the end.</dd>
 </dl>
 <hr class="docutils" />
-<p>Enfin, à l&#8217;intérieur de l&#8217;object MAP, j&#8217;ai ajouter un nouveau paramètre: NAME. C&#8217;est l&#8217;identifiant pour l&#8217;objet MAP. MapServer utilise ceci comme préfixe de toutes les images qu&#8217;il créé et écrit dans le répertoire <em>tmp</em>;Cela n&#8217;est pas nécessaire à ce point mais cela ne fait pas de mal de l&#8217;avoir.</p>
-<p>Si vous voulez partager vos couches de données avec d&#8217;autres serveurs de carte, vous devrez ajouter des objets METADATA à lintérieur de votre objet MAP et dans chacun des objets LAYER que vous voudrez partager. Toutes les couches WMS que vous ajoutez d&#8217;un autre serveur seront automatiquement récupérées et seront aussi mises à disposition des autres. Pour en savoir plus sur comment faire de votre application Mapserver un serveur WMS, merci de lire <a class="reference internal" href="../ogc/wms_server.html#wms-server"><span class="std std-ref">le HowTo du serveur WMS MapServer</span></a>.  De la documentation existe aussi pour configurer les applications MapServer pour supporter le standard WFS, à la fois comme <a class="reference internal" href="../ogc/wfs_server.html#wfs-server"><span class="std std-ref">serveur</span></a> et comme <a class="reference internal" href="../ogc/wfs_client.html#wfs-client"><span class="std std-ref">client</span></a>.</p>
+<p>Finally, within the MAP object, I added a new parameter: NAME. This is
+the identifier for the MAP object. MapServer uses this as prefix to
+all images it creates and dumps to the <em>tmp</em> directory.  It&#8217;s not
+needed at this point but it also doesn&#8217;t hurt to have it.</p>
+<p>If you would like to share your data layers to other map servers, you
+will need to add METADATA objects within your MAP object and within
+each of the LAYER objects you would like to share. All the WMS layers
+that you added from another server will automatically be cascaded and
+will also become available to others. To know more about how to make
+your MapServer application become a WMS server, please read the
+<a class="reference internal" href="../ogc/wms_server.html#wms-server"><span class="std std-ref">MapServer WMS Server HowTo</span></a>.  Documentation also
+exists for configuring MapServer applications to support the WFS
+standard, both as a <a class="reference internal" href="../ogc/wfs_server.html#wfs-server"><span class="std std-ref">server</span></a> and as a <a class="reference internal" href="../ogc/wfs_client.html#wfs-client"><span class="std std-ref">client</span></a>.</p>
 <hr class="docutils" />
-<p><a class="reference internal" href="example1-6.html#example1-6"><span class="std std-ref">Revenir à l&#8217;exemple 1.6</span></a> | <a class="reference internal" href="example1-8.html#example1-8"><span class="std std-ref">Aller à l&#8217;exemple 1.8</span></a></p>
+<p><a class="reference internal" href="example1-6.html#example1-6"><span class="std std-ref">Back to Example 1.6</span></a> | <a class="reference internal" href="example1-8.html#example1-8"><span class="std std-ref">Proceed to Example 1.8</span></a></p>
 </div>
 </div>
 </div>
@@ -248,11 +281,11 @@
 </p>
   <h3>Current Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Exemple 1.7</a><ul>
-<li><a class="reference internal" href="#adding-ogc-wms-layers">Ajouter des couches WMS OGC</a><ul>
-<li><a class="reference internal" href="#the-mapfile">Le Mapfile</a><ul>
-<li><a class="reference internal" href="#layer-object-and-wms-parameters">Paramètres WMS et objet LAYER</a></li>
-<li><a class="reference internal" href="#web-object-parameters">Paramètres de l&#8217;objet WEB</a></li>
+<li><a class="reference internal" href="#">Example 1.7</a><ul>
+<li><a class="reference internal" href="#adding-ogc-wms-layers">Adding OGC WMS Layers</a><ul>
+<li><a class="reference internal" href="#the-mapfile">The MapFile</a><ul>
+<li><a class="reference internal" href="#layer-object-and-wms-parameters">LAYER Object and WMS Parameters</a></li>
+<li><a class="reference internal" href="#web-object-parameters">WEB Object Parameters</a></li>
 </ul>
 </li>
 </ul>
@@ -276,7 +309,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

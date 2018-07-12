@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Exemple 1.6 &#8212; MapServer 7.0.7 documentation</title>
+    <title>Example 1.6 &#8212; MapServer 7.0.7 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -139,19 +139,22 @@
           <div class="body" role="main">
             
   <div class="section" id="example-1-6">
-<span id="example1-6"></span><h1>Exemple 1.6<a class="headerlink" href="#example-1-6" title="Lien permanent vers ce titre">¶</a></h1>
+<span id="example1-6"></span><h1>Example 1.6<a class="headerlink" href="#example-1-6" title="Lien permanent vers ce titre">¶</a></h1>
 <div class="section" id="defining-projections-and-extents">
-<h2>Définir les projections et les étendues<a class="headerlink" href="#defining-projections-and-extents" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Defining Projections and Extents<a class="headerlink" href="#defining-projections-and-extents" title="Lien permanent vers ce titre">¶</a></h2>
 <img alt="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-6.map&amp;layer=states&amp;layer=states_label&amp;layer=modis&amp;mode=map" src="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-6.map&amp;layer=states&amp;layer=states_label&amp;layer=modis&amp;mode=map" />
-<p>Whoah! Qu&#8217;est ce qu&#8217;il s&#8217;est passé ici?</p>
+<p>Whoa! What happened here?</p>
 <p>You&#8217;ve just experienced on-the-fly reprojection. When a PROJECTION object is
 defined in the mapfile, MapServer passes the layer and projection info to the
 PROJ.4 library which does the reprojection.  For more information about the
 PROJ.4 library, please visit <a class="reference external" href="http://proj4.org/">http://proj4.org/</a>.</p>
-<p>Cet exemple a pour but de vous éclairer sur le support des projections dans MapServer.</p>
-<p>C&#8217;est ce à quoi le mapfile ressemble: <a class="reference internal" href="example1-6-map.html#example1-6-map"><span class="std std-ref">Example1-6.map</span></a>.</p>
-<p>LA première chose que vous avez peut être noté avec notre mapfile est que l&#8217;EXTENT original a été commenté et que les nouvelles valeurs de EXTENT ne ressemblent pas à des valeurs de latitude et longitude. Aussi, nous avons ajouté un objet PROJECTION près du début et dans chacune de nos couches.</p>
-<p>Regardons le nouvel objet et le nouveau paramètre:</p>
+<p>This example attempts to shed some light on the projection support in MapServer.</p>
+<p>This is what the mapfile looks like: <a class="reference internal" href="example1-6-map.html#example1-6-map"><span class="std std-ref">Example1-6.map</span></a></p>
+<p>The first thing you might have noticed with our mapfile is the original EXTENT
+has been commented out and the new EXTENT values don&#8217;t look anything like
+latitude and longitude values. Also, we have added a PROJECTION object near the
+top and within each of our layers.</p>
+<p>Let&#8217;s have a look at the new object and parameter:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">EXTENT</span>  <span class="mf">201621.496941</span> <span class="o">-</span><span class="mf">294488.285333</span> <span class="mf">1425518.020722</span> <span class="mf">498254.511514</span>
 </pre></div>
 </div>
@@ -163,27 +166,36 @@ command below is what can be used to reproject the original extent values:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cs2cs</span> <span class="o">+</span><span class="n">proj</span><span class="o">=</span><span class="n">latlong</span> <span class="o">+</span><span class="n">datum</span><span class="o">=</span><span class="n">WGS84</span> <span class="o">+</span><span class="n">to</span> <span class="o">+</span><span class="n">proj</span><span class="o">=</span><span class="n">laea</span> <span class="o">+</span><span class="n">ellps</span><span class="o">=</span><span class="n">clrk66</span> <span class="o">+</span><span class="n">lat_0</span><span class="o">=</span><span class="mi">45</span> <span class="o">+</span><span class="n">lon_0</span><span class="o">=-</span><span class="mi">100</span>
 </pre></div>
 </div>
-<p>Après avoir tapé la commande, entrez la paire de coordonnées sud-ouest (coordonnées du coin en bas à gauche), encore séparée par un espace:</p>
+<p>After typing the command, enter the southwestern coordinate pair (the lower
+left coordinates), separated by a space:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">-</span><span class="mf">97.5</span> <span class="mf">41.619778</span>
 </pre></div>
 </div>
-<p>pour lequel l&#8217;utilitaire &#8220;cs2cs&#8221; renvoie les valeurs:</p>
+<p>to which the &#8220;cs2cs&#8221; utility gives the values:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="mf">208398.01</span>       <span class="o">-</span><span class="mf">372335.44</span> <span class="mf">0.000</span>
 </pre></div>
 </div>
-<p>Ensuite, je tape la paire de coordonnées nord-est (coordonnées du coin en haut à droite), encore séparée par un espace:</p>
+<p>I then type the northeastern coordinate pair (upper right corner coordinates),
+again separated by space:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">-</span><span class="mf">82.122902</span> <span class="mf">49.38562</span>
 </pre></div>
 </div>
-<p>et les valeurs suivantes sont retournées:</p>
+<p>and the following values are returned:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="mf">1285308.08</span>      <span class="mf">632638.93</span> <span class="mf">0.000</span>
 </pre></div>
 </div>
-<p>Vous noterez que &#8220;cs2cs&#8221; retourne un jeu de trois valeurs.  Vous pouvez ignorez la troisième valeur, 0.000, comme c&#8217;est un moyen d&#8217;indiquer l&#8217;altitude (que nous n&#8217;utilisons pas). De toute façon, nous pouvons présenter l&#8217;EXTENT comme:</p>
+<p>You will notice that &#8220;cs2cs&#8221; returns a set of three values.  You can ignore the
+third value, 0.000, as it means to represent altitute (which we&#8217;re not using).
+Anyway, we can now present the EXTENT as:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">EXTENT</span> <span class="mf">208398.01</span> <span class="o">-</span><span class="mf">372335.44</span> <span class="mf">1285308.08</span> <span class="mf">632638.93</span>
 </pre></div>
 </div>
-<p>Mais il correspond pas à l&#8217;étendue ci-dessus, vous direz. Bien, c&#8217;est ce qu&#8217;il se passe quand vous reprojectez &#8211; la carte n&#8217;est plus nécessairement centrée où vous l&#8217;attendiez. Vous pouvez esquiver le problème, en prenant quelques milliers de mètres en moins sur la gauche et en ajoutant quelques uns à droite.  Ou, vous pouvez utiliser un logiciel SIG graphique pour obtenir l&#8217;étendue. <a class="reference external" href="http://biometry.gis.umn.edu/tutorial/arcview_extent.html">Voici les instructions</a> pour avoir l&#8217;EXTENT en utilisant ArcView.</p>
+<p>But it doesn&#8217;t match up the extent above, you say.  Well, that&#8217;s what usually
+happens when you reproject &#8211; the map doesn&#8217;t necessarily get centered as you&#8217;d
+expect.  You can fudge around it, taking a few thousand meters off to the left
+and adding a few to the right.  Or, you can use a graphical GIS package to give
+you the extent. <a class="reference external" href="http://biometry.gis.umn.edu/tutorial/arcview_extent.html">Here are the instructions</a>
+for getting <cite>EXTENT</cite> using ArcView.</p>
 <p>MapServer can take projection definitions in two ways. The first is shown in the
 mapfile&#8217;s output PROJECTION object (the first PROJECTION block). This is the
 traditional way of passing parameters to the PROJ.4 library. The other way is
@@ -198,17 +210,17 @@ you want to learn more about EPSG codes, have a look at
 <p class="first admonition-title">Note</p>
 <p class="last">You can search for EPSG codes and see MapServer usage examples at <a class="reference external" href="http://epsg.io/">http://epsg.io/</a></p>
 </div>
-<p>Allez vérifier le site web de l&#8217;EPSG <a class="reference external" href="http://www.epsg.org">http://www.epsg.org</a>.</p>
-<p>Si vous avez besoin d&#8217;en apprendre plus sur les projections, merci de regarder quelqu&#8217;uns des liens ci-dessous:</p>
+<p>Also, check out the EPSG web site at <a class="reference external" href="http://www.epsg.org">http://www.epsg.org</a>.</p>
+<p>If you need to learn more about projections, please look through some of the links below:</p>
 <ul class="simple">
 <li><a class="reference external" href="http://www.colorado.edu/geography/gcraft/notes/mapproj/mapproj_f.html">http://www.colorado.edu/geography/gcraft/notes/mapproj/mapproj_f.html</a></li>
 <li><a class="reference external" href="http://www.geography.hunter.cuny.edu/mp/">http://www.geography.hunter.cuny.edu/mp/</a></li>
 <li><a class="reference external" href="http://en.wikipedia.org/wiki/Map_projection">http://en.wikipedia.org/wiki/Map_projection</a></li>
 <li><a class="reference external" href="https://egsc.usgs.gov/isb//pubs/MapProjections/projections.pdf">https://egsc.usgs.gov/isb//pubs/MapProjections/projections.pdf</a></li>
 </ul>
-<p>Vous pouvez en savoir plus en cherchant sur le web &#8220;projection cartographique&#8221;.</p>
+<p>You can find more by searching the web for &#8220;map projection&#8221;.</p>
 <hr class="docutils" />
-<p><a class="reference internal" href="example1-5.html#example1-5"><span class="std std-ref">Revenir à l&#8217;exemple 1.5</span></a> | <a class="reference internal" href="example1-7.html#example1-7"><span class="std std-ref">Aller à l&#8217;exemple 1.7</span></a></p>
+<p><a class="reference internal" href="example1-5.html#example1-5"><span class="std std-ref">Back to Example 1.5</span></a> | <a class="reference internal" href="example1-7.html#example1-7"><span class="std std-ref">Proceed to Example 1.7</span></a></p>
 </div>
 </div>
 
@@ -241,8 +253,8 @@ you want to learn more about EPSG codes, have a look at
 </p>
   <h3>Current Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Exemple 1.6</a><ul>
-<li><a class="reference internal" href="#defining-projections-and-extents">Définir les projections et les étendues</a></li>
+<li><a class="reference internal" href="#">Example 1.6</a><ul>
+<li><a class="reference internal" href="#defining-projections-and-extents">Defining Projections and Extents</a></li>
 </ul>
 </li>
 </ul>
@@ -262,7 +274,7 @@ you want to learn more about EPSG codes, have a look at
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

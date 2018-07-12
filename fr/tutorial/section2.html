@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Section 2: les variables CGI et l’interface utilisateur &#8212; MapServer 7.0.7 documentation</title>
+    <title>Section 2: CGI variables and the User Interface &#8212; MapServer 7.0.7 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -30,9 +30,9 @@
     <link rel="search" title="Recherche" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="MapServer 7.0.7 documentation" href="../index.html" />
-    <link rel="up" title="Tutoriel Mapserver" href="index.html" />
-    <link rel="next" title="Section 3: Interrogation et plus avec les templates HTML" href="section3.html" />
-    <link rel="prev" title="Section 1: les cartes statiques et le MapFile" href="section1.html" /> 
+    <link rel="up" title="MapServer Tutorial" href="index.html" />
+    <link rel="next" title="Section 3: Query and more about HTML Templates" href="section3.html" />
+    <link rel="prev" title="Section 1: Static Maps and the MapFile" href="section1.html" /> 
   </head>
   <body role="document">
 
@@ -132,14 +132,14 @@
           <a href="../genindex.html" title="Index général"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="section3.html" title="Section 3: Interrogation et plus avec les templates HTML"
+          <a href="section3.html" title="Section 3: Query and more about HTML Templates"
              accesskey="N">suivant</a> |</li>
         <li class="right" >
-          <a href="section1.html" title="Section 1: les cartes statiques et le MapFile"
+          <a href="section1.html" title="Section 1: Static Maps and the MapFile"
              accesskey="P">précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Tutoriel Mapserver</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapServer Tutorial</a> &#187;</li> 
       </ul>
     </div>
   
@@ -150,34 +150,61 @@
           <div class="body" role="main">
             
   <div class="section" id="section-2-cgi-variables-and-the-user-interface">
-<span id="tutorial-section2"></span><h1>Section 2: les variables CGI et l&#8217;interface utilisateur<a class="headerlink" href="#section-2-cgi-variables-and-the-user-interface" title="Lien permanent vers ce titre">¶</a></h1>
-<p>Jusqu&#8217;à maintenant, nous avons seulement vu le mapfile pour créer des cartes. En créant des applications de cartographie en ligne, c&#8217;est généralement notre intention de faire des cartes qui peuvent manipulées interactivement par l&#8217;utilisateur (de l&#8217;application). C&#8217;est ça, un utilisateur devrait pouvoir changer le contenu de (ou l&#8217;information dans) la carte. Pour obtenir cette interactivité, nous utilisons les templates HTML MapServer.</p>
+<span id="tutorial-section2"></span><h1>Section 2: CGI variables and the User Interface<a class="headerlink" href="#section-2-cgi-variables-and-the-user-interface" title="Lien permanent vers ce titre">¶</a></h1>
+<p>So far we have only looked at the mapfile when creating maps. In
+creating web mapping applications, it is usually our intention to make
+maps that can be changed by the user (of the application)
+interactively. That is, a user should be able to change the content of
+(or the information in) the map. To accomplish this interactivity, we
+use the MapServer HTML templates.</p>
 <div class="section" id="html-templates">
-<h2>Templates HTML<a class="headerlink" href="#html-templates" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Un template HTML MapServer est essentiellement un fichier HTML avec quelques tags Mapserver spécifiques. Ces tags sont des variables CGI MapServer et sont entourés par des crochets &#8220;[]&#8221;. Quand le programme CGI MapServer exécute une application, en premier, il parse la chaîne d&#8217;interrogation et le mapfile, et produit la sortie adéquate. Une partie de la sortie devra être écrite dans le fichier de template HTML que vous devrez aussi spécifié dans le mapfile en utilisant le mot-clé du template web (ou dans un fichier d&#8217;initialisation HTML séparé). Le programme CGI ramplacera toutes les variables dans le template HTML avec leurs bonnes valeurs avant de de les renvoyer au navigateur web. Si vous voyez un template HTML dans votre navigateur web, aucune carte ne sera générée et à la place vous aurez des images vides avec d&#8217;autres trucs.</p>
+<h2>HTML Templates<a class="headerlink" href="#html-templates" title="Lien permanent vers ce titre">¶</a></h2>
+<p>A MapServer HTML template is essentially an HTML file with a few
+MapServer specific tags.  These tags are the MapServer CGI variables
+and are enclosed in square brackets &#8220;[]&#8221;.  When the MapServer CGI
+program processes an application, it first parses the query string and
+the mapfile, and produces the necessary output. Some of this output
+will need to be written to the HTML template file which you would have
+to also specify in the mapfile using the web template keyword (or in a
+separate HTML initialization file). The CGI program will replace all
+the variables in the HTML template with the proper value before
+sending it back to the web browser. If you are to directly view an
+HTML template in a web browser, there won&#8217;t be any maps rendered and
+you will instead get blank images and other junk.</p>
 <div class="section" id="variables">
 <h3>Variables<a class="headerlink" href="#variables" title="Lien permanent vers ce titre">¶</a></h3>
-<p>MapServer fournit de nombreuses variables pour la cartographie en ligne: la variable &#8220;img&#8221; que vous avez vu dans l&#8217;exemple 1.9 en est une des exemples. Il y a quelques variables CGI dans le coeur de Mapserver qui ont été originellement conçus pour l&#8217;interface cartographique mais de manière pratique, tous les paramètres du mapfile peuvent être définis comme des variables. La référence sur les variables CGI peut être trouvée sur <a class="reference internal" href="../cgi/index.html#cgi"><span class="std std-ref">ce lien</span></a>.</p>
-<p>Nous pouvons aussi définir nos propres variables, que MapServer passera à notre application. Par exemple, nous pouvons créer une variable appelée &#8220;root&#8221; pour représenter le répertoire racine de ce tutoriel, la valeur pour &#8220;root&#8221; sera alors &#8220;/tutorial&#8221;. Quand le programme CGI MapServer traite notre template HTML, il remplace chaque instance du tag  &#8220;[root]&#8221; avec &#8220;/tutorial&#8221;. Vous le verrez en action pour chacun des exemples suivants.</p>
+<p>MapServer provides several variables for web mapping: the &#8220;img&#8221;
+variable which you&#8217;ve seen in Example 1.9 is but one example. There
+area few core CGI variables originally designed as part of the mapping
+interface but practically all the mapfile parameters can be defined as
+variables. The definitive reference to the MapServer  CGI variables can
+be found <a class="reference internal" href="../cgi/index.html#cgi"><span class="std std-ref">here</span></a>.</p>
+<p>We can also define our own variables, which MapServer will pass along
+to our application.  For example, we can create a variable called
+&#8220;root&#8221; to represent the root directory of this tutorial, the value for
+&#8220;root&#8221; will then be &#8220;/tutorial&#8221;. When the MapServer CGI program
+processes our HTML template, it will replace every instance of he
+&#8220;[root]&#8221; tag with &#8220;/tutorial&#8221;. You will see this in action for each of
+the following examples.</p>
 </div>
 </div>
 <div class="section" id="examples">
-<h2>Exemples<a class="headerlink" href="#examples" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Bon, construisons une interface interactive pour votre application...</p>
+<h2>Examples<a class="headerlink" href="#examples" title="Lien permanent vers ce titre">¶</a></h2>
+<p>So, let&#8217;s build an interactive interface for our application...</p>
 <ul class="simple">
-<li><p class="first">Les utilisateurs d&#8217;une application de cartographie en ligne devrait pouvoir se déplacer et zoomer sur la carte: <a class="reference external" href="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example2.map&amp;layer=states&amp;zoom=0&amp;mode=browse&amp;root=/tutorial&amp;program=/cgi-bin/mapserv&amp;map_web=template+example2-1.html">Exemple 2.1 - Contrôles de déplacement et de zoom</a></p>
-</li>
-<li><p class="first">Ils devraient aussi être capable d&#8217;activer ou de désactiver des couches sur une carte: <a class="reference external" href="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example2.map&amp;layer=states&amp;zoom=0&amp;mode=browse&amp;root=/tutorial&amp;program=/cgi-bin/mapserv&amp;map_web=template+example2-2.html">Exemple 2.2 - Gestion des couches</a></p>
-</li>
-<li><p class="first">Une carte devrait toujours inclure une échelle. <a class="reference external" href="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example2.map&amp;layer=states&amp;zoom=0&amp;mode=browse&amp;root=/tutorial&amp;program=/cgi-bin/mapserv&amp;map_web=template+example2-3.html">Exemple 2.3 - Ajouter une échelle</a></p>
-</li>
-<li><p class="first">Si les utilisateurs doivent se déplacer par la carte, une carte de situation devrait être fournie: <a class="reference external" href="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example2.map&amp;layer=states&amp;zoom=0&amp;mode=browse&amp;root=/tutorial&amp;program=/cgi-bin/mapserv&amp;map_web=template+example2-4.html">Exemple 2.4 - Ajouter une carte de situation</a></p>
-</li>
-<li><p class="first">La carte devrait inclure une légende. <a class="reference external" href="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example2.map&amp;layer=states&amp;zoom=0&amp;mode=browse&amp;root=/tutorial&amp;program=/cgi-bin/mapserv&amp;map_web=template+example2-5.html">Exemple 2.5- Ajouter une légende</a></p>
-</li>
+<li>Users of a web mapping application should be able to pan and zoom on the map:
+<a class="reference external" href="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example2.map&amp;layer=states&amp;zoom=0&amp;mode=browse&amp;root=/tutorial&amp;program=/cgi-bin/mapserv&amp;map_web=template+example2-1.html">Example 2.1 - Pan and Zoom Controls</a></li>
+<li>They also should be able to turn on and off layers on a map:
+<a class="reference external" href="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example2.map&amp;layer=states&amp;zoom=0&amp;mode=browse&amp;root=/tutorial&amp;program=/cgi-bin/mapserv&amp;map_web=template+example2-2.html">Example 2.2 - Layer Control</a></li>
+<li>A map should always include a scalebar.
+<a class="reference external" href="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example2.map&amp;layer=states&amp;zoom=0&amp;mode=browse&amp;root=/tutorial&amp;program=/cgi-bin/mapserv&amp;map_web=template+example2-3.html">Example 2.3 - Adding a Scalebar</a></li>
+<li>If users are to navigate through the map, a reference map should be provided:
+<a class="reference external" href="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example2.map&amp;layer=states&amp;zoom=0&amp;mode=browse&amp;root=/tutorial&amp;program=/cgi-bin/mapserv&amp;map_web=template+example2-4.html">Example 2.4 - Adding a Reference Map</a></li>
+<li>The map should include a legend.
+<a class="reference external" href="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example2.map&amp;layer=states&amp;zoom=0&amp;mode=browse&amp;root=/tutorial&amp;program=/cgi-bin/mapserv&amp;map_web=template+example2-5.html">Example 2.5- Adding a Legend</a></li>
 </ul>
 <hr class="docutils" />
-<p><a class="reference internal" href="section1.html#tutorial-section1"><span class="std std-ref">Retour à l&#8217;index de la section 1</span></a> | <a class="reference internal" href="section3.html#tutorial-section3"><span class="std std-ref">Allez à la section 3</span></a></p>
+<p><a class="reference internal" href="section1.html#tutorial-section1"><span class="std std-ref">Back to Section 1 index</span></a> | <a class="reference internal" href="section3.html#tutorial-section3"><span class="std std-ref">Proceed to Section 3</span></a></p>
 </div>
 </div>
 
@@ -210,12 +237,12 @@
 </p>
   <h3>Current Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Section 2: les variables CGI et l&#8217;interface utilisateur</a><ul>
-<li><a class="reference internal" href="#html-templates">Templates HTML</a><ul>
+<li><a class="reference internal" href="#">Section 2: CGI variables and the User Interface</a><ul>
+<li><a class="reference internal" href="#html-templates">HTML Templates</a><ul>
 <li><a class="reference internal" href="#variables">Variables</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#examples">Exemples</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
 </ul>
@@ -231,19 +258,19 @@
           <a href="../genindex.html" title="Index général"
              >index</a></li>
         <li class="right" >
-          <a href="section3.html" title="Section 3: Interrogation et plus avec les templates HTML"
+          <a href="section3.html" title="Section 3: Query and more about HTML Templates"
              >suivant</a> |</li>
         <li class="right" >
-          <a href="section1.html" title="Section 1: les cartes statiques et le MapFile"
+          <a href="section1.html" title="Section 1: Static Maps and the MapFile"
              >précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Tutoriel Mapserver</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >MapServer Tutorial</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

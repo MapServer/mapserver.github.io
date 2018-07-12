@@ -30,7 +30,7 @@
     <link rel="search" title="Recherche" href="../../search.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
     <link rel="top" title="MapServer 7.0.7 documentation" href="../../index.html" />
-    <link rel="up" title="Données vecteur" href="index.html" />
+    <link rel="up" title="Vector Data" href="index.html" />
     <link rel="next" title="SDTS" href="sdts.html" />
     <link rel="prev" title="Oracle Spatial" href="oracle.html" /> 
   </head>
@@ -138,9 +138,9 @@
           <a href="oracle.html" title="Oracle Spatial"
              accesskey="P">précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../index.html" >Data Input</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Données vecteur</a> &#187;</li> 
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Vector Data</a> &#187;</li> 
       </ul>
     </div>
   
@@ -166,8 +166,8 @@
 <li><a class="reference internal" href="#postgis-postgresql" id="id2">PostGIS/PostgreSQL</a><ul>
 <li><a class="reference internal" href="#id1" id="id3">PostGIS/PostgreSQL</a></li>
 <li><a class="reference internal" href="#data-access-connection-method" id="id4">Data Access /Connection Method</a></li>
-<li><a class="reference internal" href="#ogrinfo-examples" id="id5">Exemples OGRINFO</a></li>
-<li><a class="reference internal" href="#mapfile-example" id="id6">Exemple de mapfile</a></li>
+<li><a class="reference internal" href="#ogrinfo-examples" id="id5">OGRINFO Examples</a></li>
+<li><a class="reference internal" href="#mapfile-example" id="id6">Mapfile Example</a></li>
 <li><a class="reference internal" href="#support-for-2-5d-geometries" id="id7">Support for 2.5D geometries</a></li>
 <li><a class="reference internal" href="#support-for-sql-mm-curves" id="id8">Support for SQL/MM Curves</a><ul>
 <li><a class="reference internal" href="#example-1-circularstring-in-mapserver" id="id9">Example#1: CircularString in MapServer</a></li>
@@ -175,7 +175,7 @@
 <li><a class="reference internal" href="#example-3-curvepolygon-in-mapserver" id="id11">Example#3: CurvePolygon in MapServer</a></li>
 <li><a class="reference internal" href="#example-4-multicurve-in-mapserver" id="id12">Example#4: MultiCurve in MapServer</a></li>
 <li><a class="reference internal" href="#example-5-multisurface-in-mapserver" id="id13">Example#5: MultiSurface in MapServer</a></li>
-<li><a class="reference internal" href="#using-mapserver-6-0" id="id14">Utilisation d&#8217;une version de MapServer &lt; 6.0</a></li>
+<li><a class="reference internal" href="#using-mapserver-6-0" id="id14">Using MapServer &lt; 6.0</a></li>
 </ul>
 </li>
 </ul>
@@ -196,8 +196,11 @@ MapServer to work.</p>
 <p>The PostgreSQL client libraries (libpq.so or libpq.dll) must be
 present in the system&#8217;s path environment for functionality to be
 present.</p>
-<p>Le paramètre CONNECTIONTYPE doit être défini à POSTGIS.</p>
-<p>Le paramètre CONNECTION est utilisé pour spécifier les paramètres pour se connecter à la base de données. Les paramètres de CONNECTION peuvent être dans n&#8217;importe quel ordre. La plupart sont en option. Le nom de la base de données est nécessaire. L&#8217;utilisateur est requis.  host par défaut à localhost, port par défaut à 5432 (le port standard pour PostgreSQL).</p>
+<p>The CONNECTIONTYPE parameter must be set to POSTGIS.</p>
+<p>The CONNECTION parameter is used to specify the parameters to connect
+to the database.  CONNECTION parameters can be in any order.  Most are
+optional.  dbname is required.  user is required.  host defaults to
+localhost, port defaults to 5432 (the standard port for PostgreSQL).</p>
 <p>The DATA parameter is used to specify the data used to draw the map.
 The form of DATA is &#8220;[geometry_column] from [table_name|sql_subquery]
 using unique [unique_key] using srid=[spatial_reference_id]&#8221;.  The
@@ -205,7 +208,7 @@ using unique [unique_key] using srid=[spatial_reference_id]&#8221;.  The
 features, but using them improves performance. If you want to make
 MapServer query calls to a PostGIS layer, your DATA parameter must
 include &#8220;using unique&#8221;. Omitting it will cause the query to fail.</p>
-<p>Voici un exemple générique simple :</p>
+<p>Here is a simple generic example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CONNECTIONTYPE</span> <span class="n">POSTGIS</span>
 <span class="n">CONNECTION</span> <span class="s2">&quot;host=yourhostname dbname=yourdatabasename user=yourdbusername</span>
             <span class="n">password</span><span class="o">=</span><span class="n">yourdbpassword</span> <span class="n">port</span><span class="o">=</span><span class="n">yourpgport</span><span class="s2">&quot;</span>
@@ -255,10 +258,11 @@ DATA &quot;the_geom from (select g.gid, ST_Union(g.the_geom, 10.0) as
 </div>
 </div>
 <div class="section" id="ogrinfo-examples">
-<h2><a class="toc-backref" href="#table-of-contents">Exemples OGRINFO</a><a class="headerlink" href="#ogrinfo-examples" title="Lien permanent vers ce titre">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents">OGRINFO Examples</a><a class="headerlink" href="#ogrinfo-examples" title="Lien permanent vers ce titre">¶</a></h2>
 <p>OGRINFO can be used to read out metadata about PostGIS tables directly
 from the database.</p>
-<p>D&#8217;abord, vous devez vous assurer que votre version de GDAL/OGR contient le pilote PostgreSQL, en utilisant la commande &#8216;&#8211;formats&#8217; :</p>
+<p>First you should make sure that your GDAL/OGR build contains the
+PostgreSQL driver, by using the &#8216;&#8211;formats&#8217; command:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">ogrinfo</span> <span class="o">--</span><span class="n">formats</span>
   <span class="n">Loaded</span> <span class="n">OGR</span> <span class="n">Format</span> <span class="n">Drivers</span><span class="p">:</span>
   <span class="o">...</span>
@@ -270,7 +274,8 @@ from the database.</p>
 </div>
 <p>If you don&#8217;t have the driver, you might want to try the <a class="reference external" href="http://fwtools.maptools.org">FWTools</a> or
 <a class="reference external" href="http://www.ms4w.com">MS4W</a> packages, which include the driver.</p>
-<p>Une fois que vous avez le pilote vous êtes prêt à essayer une commande ogrinfo sur votre base de données pour obtenir une liste des tables spatiales :</p>
+<p>Once you have the driver you are ready to try an ogrinfo command on
+your database to get a list of spatial tables:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>&gt;ogrinfo PG:&quot;host=127.0.0.1 user=postgres password=postgres dbname=canada port=5432&quot;
       using driver `PostgreSQL&#39; successful.
       1: province (Multi Polygon)
@@ -300,7 +305,7 @@ from the database.</p>
 </div>
 </div>
 <div class="section" id="mapfile-example">
-<h2><a class="toc-backref" href="#table-of-contents">Exemple de mapfile</a><a class="headerlink" href="#mapfile-example" title="Lien permanent vers ce titre">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents">Mapfile Example</a><a class="headerlink" href="#mapfile-example" title="Lien permanent vers ce titre">¶</a></h2>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
   <span class="n">NAME</span> <span class="s2">&quot;province&quot;</span>
   <span class="n">STATUS</span> <span class="n">ON</span>
@@ -314,7 +319,8 @@ from the database.</p>
 <span class="n">END</span>
 </pre></div>
 </div>
-<p>Pour plus d&#8217;informations à propos de PostGIS et MapServer regardez les docs de PostGIS : <a class="reference external" href="http://postgis.net/documentation/">http://postgis.net/documentation/</a></p>
+<p>For more info about PostGIS and MapServer see the PostGIS docs:
+<a class="reference external" href="http://postgis.net/documentation/">http://postgis.net/documentation/</a></p>
 </div>
 <div class="section" id="support-for-2-5d-geometries">
 <h2><a class="toc-backref" href="#table-of-contents">Support for 2.5D geometries</a><a class="headerlink" href="#support-for-2-5d-geometries" title="Lien permanent vers ce titre">¶</a></h2>
@@ -485,7 +491,7 @@ through MapServer directly.</p>
 <img alt="../../_images/multisurface.png" src="../../_images/multisurface.png" />
 </div>
 <div class="section" id="using-mapserver-6-0">
-<h3><a class="toc-backref" href="#table-of-contents">Utilisation d&#8217;une version de MapServer &lt; 6.0</a><a class="headerlink" href="#using-mapserver-6-0" title="Lien permanent vers ce titre">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents">Using MapServer &lt; 6.0</a><a class="headerlink" href="#using-mapserver-6-0" title="Lien permanent vers ce titre">¶</a></h3>
 <p>If you cannot upgrade to MapServer 6.0, then you can use the PostGIS function <em>ST_CurveToLine()</em> in your
 MapServer LAYER to draw the curves (note that this is much slower however):</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
@@ -542,8 +548,8 @@ MapServer LAYER to draw the curves (note that this is much slower however):</p>
 <li><a class="reference internal" href="#">PostGIS/PostgreSQL</a><ul>
 <li><a class="reference internal" href="#id1">PostGIS/PostgreSQL</a></li>
 <li><a class="reference internal" href="#data-access-connection-method">Data Access /Connection Method</a></li>
-<li><a class="reference internal" href="#ogrinfo-examples">Exemples OGRINFO</a></li>
-<li><a class="reference internal" href="#mapfile-example">Exemple de mapfile</a></li>
+<li><a class="reference internal" href="#ogrinfo-examples">OGRINFO Examples</a></li>
+<li><a class="reference internal" href="#mapfile-example">Mapfile Example</a></li>
 <li><a class="reference internal" href="#support-for-2-5d-geometries">Support for 2.5D geometries</a></li>
 <li><a class="reference internal" href="#support-for-sql-mm-curves">Support for SQL/MM Curves</a><ul>
 <li><a class="reference internal" href="#example-1-circularstring-in-mapserver">Example#1: CircularString in MapServer</a></li>
@@ -551,7 +557,7 @@ MapServer LAYER to draw the curves (note that this is much slower however):</p>
 <li><a class="reference internal" href="#example-3-curvepolygon-in-mapserver">Example#3: CurvePolygon in MapServer</a></li>
 <li><a class="reference internal" href="#example-4-multicurve-in-mapserver">Example#4: MultiCurve in MapServer</a></li>
 <li><a class="reference internal" href="#example-5-multisurface-in-mapserver">Example#5: MultiSurface in MapServer</a></li>
-<li><a class="reference internal" href="#using-mapserver-6-0">Utilisation d&#8217;une version de MapServer &lt; 6.0</a></li>
+<li><a class="reference internal" href="#using-mapserver-6-0">Using MapServer &lt; 6.0</a></li>
 </ul>
 </li>
 </ul>
@@ -575,14 +581,14 @@ MapServer LAYER to draw the curves (note that this is much slower however):</p>
           <a href="oracle.html" title="Oracle Spatial"
              >précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../index.html" >Data Input</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="index.html" >Données vecteur</a> &#187;</li> 
+          <li class="nav-item nav-item-3"><a href="index.html" >Vector Data</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

@@ -182,34 +182,225 @@ onto the main map image. See <cite>http://en.wikipedia.org/wiki/Blend_modes</cit
 The default compositing operator is &#8220;src-over&#8221;.</p>
 <p>Available operators are:</p>
 <ul class="simple">
-<li>clear</li>
-<li>color-burn</li>
-<li>color-dodge</li>
+<li><dl class="first docutils">
+<dt>clear</dt>
+<dd>Both the color and the alpha of the destination are cleared.
+Neither the source nor the destination are used. This is an
+unusual compose method that essentially ignores the overlay
+image completely, and just clears the background image.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>color-burn</dt>
+<dd>Divides the inverted bottom layer by the top layer, and then
+inverts the result. This darkens the top layer increasing the
+contrast to reflect the color of the bottom layer. The darker
+the bottom layer, the more its color is used.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>color-dodge</dt>
+<dd>Divides the bottom layer by the inverted top layer. This
+lightens the bottom layer depending on the value of the top
+layer: the brighter the top layer, the more its color affects
+the bottom layer. Blending any color with white gives
+white. Blending with black does not change the image.</dd>
+</dl>
+</li>
 <li>contrast*</li>
-<li>darken</li>
-<li>difference</li>
-<li>dst</li>
-<li>dst-atop</li>
-<li>dst-in</li>
-<li>dst-out</li>
-<li>dst-over</li>
-<li>exclusion</li>
-<li>hard-light</li>
+<li><dl class="first docutils">
+<dt>darken</dt>
+<dd>Creates a image that retains the smallest components of the
+foreground and background pixels. If the foreground pixel has
+the components r1, g1, and b1, and the background has r2, g2,
+b2, the resultant pixel is [min(r1,r2), min(g1,g2), min(b1,b2)]</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>difference</dt>
+<dd>Subtracts the bottom layer from the top layer or the other way
+round, to always get a positive value. Blending with black
+produces no change, as values for all colors are 0. (The RGB
+value for black is 0,0,0.) Blending with white inverts the
+picture.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dst</dt>
+<dd>This operator does nothing. The source, or overlay image, is
+completely ignored and the destination, or background image, is
+left unchanged. The method&#8217;s real use is as a means of &#8216;turning
+off&#8217; an alpha composition operation in other image operators.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dst-atop</dt>
+<dd>The part of the source lying inside of the destination is
+composited onto the destination.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dst-in</dt>
+<dd>The part of the destination lying inside of the source replaces
+the destination. Areas not overlaid are cleared. Will remove
+the overlay image&#8217;s shape from the background image like a
+cookie cutter which cuts out a cookie&#8217;s shape from cookie dough
+(result is the cookie).</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dst-out</dt>
+<dd>The part of the destination lying outside of the source
+replaces the destination. Using the &#8216;cookie dough&#8217; metaphor of
+&#8216;dst-in&#8217; the result of the &#8216;dst-out&#8217; method is the dough that
+was left behind once a cookie has been cut out. It can be used
+to cut holes, or take bites out of the background image, using
+the shape of the overlay. Any color in the overlay is again
+completely ignored.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dst-over</dt>
+<dd>The destination is composited over the source and the result
+replaces the destination.  Equivalent to placing the source
+overlay image &#8216;under&#8217; the destination. The result is that only
+the parts of our source or overlay image not hidden by the
+destination or background image will be visible as they peek
+out from underneath.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>exclusion</dt>
+<dd>This is sort of an averaged difference. White on white will
+produce black (no difference), the same with black on
+black. However grey on grey will produce a grey result. White
+and black naturally still produce white (maximum difference).</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>hard-light</dt>
+<dd>Hard Light is a combination of Multiply and Screen, each at
+half strength. Hard Light effects the blend layer&#8217;s
+relationship to the base layer in the same way Overlay effects
+the base layer&#8217;s relationship to the blend layer.</dd>
+</dl>
+</li>
 <li>invert*</li>
 <li>invert-rgb*</li>
-<li>lighten</li>
-<li>minus*</li>
-<li>multiply</li>
-<li>overlay</li>
-<li>plus</li>
-<li>screen</li>
-<li>soft-light</li>
-<li>src</li>
-<li>src-atop</li>
-<li>src-in</li>
-<li>src-out</li>
-<li>src-over</li>
-<li>xor</li>
+<li><dl class="first docutils">
+<dt>lighten</dt>
+<dd>Lighten has the opposite action of Darken. It selects the
+maximum of each component from the foreground and background
+pixels. If the foreground pixel has the components r1, g1, and
+b1, and the background has r2, g2, b2, the resultant pixel is
+[max(r1,r2), max(g1,g2), max(b1,b2)]</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>minus*</dt>
+<dd>Subtract the colors in the source image from the destination
+image. When transparency is involved, opaque areas is
+subtracted from any destination opaque areas.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>multiply</dt>
+<dd>A simple multiply of the two images. Its formula is: [Src *
+Dest]. This means that if one of the images is pure white, the
+result will be the other image. On the other hand if one image
+is black the result will be black. Between these extremes one
+image will darken the destination image by the amount
+given. Note that &#8216;Multiply&#8217; will only darken an image, it will
+never brighten it. That is, it &#8216;attenuates&#8217; an image toward
+black, which makes this compose method a &#8216;Burn&#8217; style of
+composition.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>overlay</dt>
+<dd>Overlay combines Multiply and Screen blend modes, at half
+strength. The parts of the top layer where the base layer is
+light become lighter, the parts where the base layer is dark
+become darker. Areas where the top layer are mid grey are
+unaffected.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>plus</dt>
+<dd>The source is added to the destination and replaces the
+destination. This operator is useful for averaging or a
+controlled merger of two images, rather than a direct overlay.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>screen</dt>
+<dd>The source and destination are complemented and then multiplied
+and then replace the destination. The resultant color is always
+at least as light as either of the two constituent
+colors. Screening any color with white produces
+white. Screening any color with black leaves the original color
+unchanged.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>soft-light</dt>
+<dd>Soft light is most closely related to Overlay and is only
+similar to Hard Light by name. Will add highlights and shadows
+to an existing color image. However, the colors of the
+destination image are modified to produce a softer contrast,
+and smoother gradient in lighting effects.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>src</dt>
+<dd>The source is copied to the destination. The destination is not
+used as input, though it is cleared. This operator completely
+replaces the background image with the overlay image. The
+colors and transparency in the background are completely junked
+leaving a blank image the same size as the original destination
+over which is applied the source image.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>src-atop</dt>
+<dd>The part of the source lying inside of the destination is
+composited onto the destination. Like &#8216;src-over&#8217; but limits the
+result to the original shape of the background image. In other
+words, the alpha channel on the destination is unchanged but
+the image colors are overlaid by any non-transparent parts of
+the source image. If the background image is fully opaque (no
+transparency), this operation will act exactly like the normal
+&#8216;src-over&#8217; composition. It only differs when the background
+contains transparency which also clips the overlay. What makes
+this useful is for overlaying lighting and shading effects that
+are limited to the object (shape) of the destination.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>src-in</dt>
+<dd>The part of the source lying inside of the destination replaces
+the destination.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>src-out</dt>
+<dd>The part of the source lying outside of the destination
+replaces the destination.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>src-over</dt>
+<dd>The source is composited over the destination. This is the
+default composite option if no other is specified.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>xor</dt>
+<dd>The part of the source that lies outside of the destination is
+combined with the part of the destination that lies outside of
+the source. Source or Destination, but not both.</dd>
+</dl>
+</li>
 </ul>
 <p class="last">Operators marked with a star (*) will only be supported when using an AGG
 backends <em>and</em> when pixman support is not enabled, and will fall back to
@@ -304,7 +495,7 @@ the value <cite>darken</cite>:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Ultimo aggiornamento 2018-06-13.
+      Ultimo aggiornamento 2018-07-12.
       Creato con <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

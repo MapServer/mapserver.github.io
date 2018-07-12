@@ -30,9 +30,9 @@
     <link rel="search" title="Recherche" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="MapServer 7.0.7 documentation" href="../index.html" />
-    <link rel="up" title="Optimisation" href="index.html" />
+    <link rel="up" title="Optimization" href="index.html" />
     <link rel="next" title="Mapfile" href="mapfile.html" />
-    <link rel="prev" title="Debugger Mapserver" href="debugging.html" /> 
+    <link rel="prev" title="Debugging MapServer" href="debugging.html" /> 
   </head>
   <body role="document">
 
@@ -135,11 +135,11 @@
           <a href="mapfile.html" title="Mapfile"
              accesskey="N">suivant</a> |</li>
         <li class="right" >
-          <a href="debugging.html" title="Debugger Mapserver"
+          <a href="debugging.html" title="Debugging MapServer"
              accesskey="P">précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Optimisation</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Optimization</a> &#187;</li> 
       </ul>
     </div>
   
@@ -163,8 +163,7 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">hobu.inc at gmail.com</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body"><p class="first last">15/07/2008</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2008/07/15</td>
 </tr>
 </tbody>
 </table>
@@ -173,40 +172,53 @@
 <ul class="simple">
 <li><a class="reference internal" href="#fastcgi" id="id2">FastCGI</a><ul>
 <li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
-<li><a class="reference internal" href="#obtaining-the-necessary-software" id="id4">Obtenir le logiciel nécessaire</a></li>
-<li><a class="reference internal" href="#mod-fcgid-configuration" id="id5">Configuration de mod_fcgid</a></li>
-<li><a class="reference internal" href="#deprecated-mod-fcgi-configuration" id="id6">Déprécié Configuration mod_fcgi</a></li>
-<li><a class="reference internal" href="#common-mod-fcgid-mod-fcgi-configuration" id="id7">Configuration commune mod_fcgid/mod_fcgi</a></li>
-<li><a class="reference internal" href="#common-problems" id="id8">Problèmes communs</a></li>
-<li><a class="reference internal" href="#fastcgi-on-win32" id="id9">FastCGI sur Win32</a></li>
+<li><a class="reference internal" href="#obtaining-the-necessary-software" id="id4">Obtaining the necessary software</a></li>
+<li><a class="reference internal" href="#mod-fcgid-configuration" id="id5">mod_fcgid Configuration</a></li>
+<li><a class="reference internal" href="#deprecated-mod-fcgi-configuration" id="id6">Deprecated mod_fcgi Configuration</a></li>
+<li><a class="reference internal" href="#common-mod-fcgid-mod-fcgi-configuration" id="id7">Common mod_fcgid/mod_fcgi Configuration</a></li>
+<li><a class="reference internal" href="#common-problems" id="id8">Common Problems</a></li>
+<li><a class="reference internal" href="#fastcgi-on-win32" id="id9">FastCGI on Win32</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="introduction">
 <h2><a class="toc-backref" href="#table-of-contents">Introduction</a><a class="headerlink" href="#introduction" title="Lien permanent vers ce titre">¶</a></h2>
-<p>FastCGI est un protocole pour garder les applications web de style cgi-bin lancé sous forme de démon pour optimiser la préservation des caches mémoires, et amortir les coûts important de démarrage (comme les coût de connections à la base de données)  pour de nombreuses requêtes.</p>
+<p>FastCGI is a protocol for keeping cgi-bin style web applications running as a
+daemon to take advantage of preserving memory caches, and amortizing other
+high startup costs (like heavy database connections) over many requests.</p>
 </div>
 <div class="section" id="obtaining-the-necessary-software">
-<h2><a class="toc-backref" href="#table-of-contents">Obtenir le logiciel nécessaire</a><a class="headerlink" href="#obtaining-the-necessary-software" title="Lien permanent vers ce titre">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents">Obtaining the necessary software</a><a class="headerlink" href="#obtaining-the-necessary-software" title="Lien permanent vers ce titre">¶</a></h2>
 <ol class="arabic simple">
-<li><p class="first">Il y a 3 pièces dans le puzzle FastCGI de MapServer. D&#8217;abord, vous avez besoin de la bibliothèque FastCGI. Elle peut être téléchargée à partir de <a class="reference external" href="http://www.fastcgi.com/">http://www.fastcgi.com/</a>. Cette bibliothèque nécessite l&#8217;ensemble habituel <em>configure, make, make install</em>. Une complication supplémentaire est qu&#8217;il s&#8217;installe par défaut dans /usr/local par conséquent vous avez besoin d&#8217;ajouter à la commande <em>configure</em> un &#8211;prefix=/usr pour le placer au bon endroit qui est déjà visible dans ldconfig.</p>
-</li>
-<li><p class="first">En assumant que vous avez <a class="reference external" href="http://httpd.apache.org">Apache</a> , la prochaine pièce dont vous avez besoin est le module fastcgi. Il existe deux implémentations de fastcgi pour apache :</p>
-<ul>
-<li><p class="first"><em>mod_fcgid</em>: mod_fcgid est la manière la plus récente et recommandée pour lancer des programmes fastcgi pour des versions apache récente. Il peut être téléchargé à partir de la <a class="reference external" href="http://httpd.apache.org/mod_fcgid/">page fcgid d&#8217;Apache</a></p>
-</li>
-<li><p class="first"><strong>déprécié</strong> <em>mod_fcgi</em> : mod_fcgi dépens de la version d&#8217;Apache que vous utilisez, assurez vous donc de télécharger le fork correct (Apache 1.3 vs. Apache 2).</p>
-</li>
+<li>There are three pieces to the MapServer FastCGI puzzle.  First, you need
+the actual FastCGI library.  This can be downloaded from
+<a class="reference external" href="http://www.fastcgi.com/">http://www.fastcgi.com/</a>.  This library does
+the usual <em>configure, make, make install</em> dance.  One added complication
+is that it installs by default in /usr/local, and you might give the
+<em>configure</em> command a &#8211;prefix=/usr to put it in a location that is
+already visible to ldconfig.</li>
+<li>Assuming you are running <a class="reference external" href="http://httpd.apache.org">Apache</a>, the next
+piece you need is the fastcgi module. There are two fastcgi implementations
+for apache:<ul>
+<li><em>mod_fcgid</em>: mod_fcgid is the newer and recommended way to run fastcgi
+programs under recent apache versions. It can be downloaded from the
+<a class="reference external" href="http://httpd.apache.org/mod_fcgid/">Apache fcgid homepage</a></li>
+<li><strong>deprecated</strong> <em>mod_fcgi</em>:  Mod_fcgi depends on the version of Apache
+you are running, so make sure to download the correct fork (Apache 1.3
+vs. Apache 2).</li>
 </ul>
 </li>
-<li><p class="first">La troisième et dernière étape est de compiler MapServer avec la gestion de FastCGI. C&#8217;est assez aisé, et tout ce dont vous avez besoin est de dire à &#8220;configure&#8221; où est installé la bibliothèque FastCGI. Si vous avez changé la variable prefix comme décrit plus haut, cela devrait être :</p>
-</li>
+<li>The third and final piece is to compile MapServer with FastCGI support.
+This is pretty straightforward, and all you need to do is tell
+<em>configure</em> where the FastCGI library is installed.  If you changed
+the prefix variable as described above, this would be:</li>
 </ol>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">configure</span> <span class="p">[</span><span class="n">other</span> <span class="n">options</span><span class="p">]</span> <span class="o">--</span><span class="k">with</span><span class="o">-</span><span class="n">fastcgi</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span>
 </pre></div>
 </div>
-<p>Avec ces deux étapes en place, le CGI de MapServer (mapserv) doit posséder l&#8217;activation FastCGI. Vous pouvez vérifier cela en le testant avec la ligne de commande :</p>
+<p>With those pieces in place, the MapServer CGI (mapserv) should now be
+FastCGI-enabled.  You can verify this by testing it on with the command line:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">hobu</span><span class="nd">@kenyon</span> <span class="n">mapserver</span><span class="o">-</span><span class="mf">6.2</span><span class="o">.</span><span class="mi">0</span><span class="p">]</span><span class="c1"># ./mapserv -v</span>
 <span class="n">MapServer</span> <span class="n">version</span> <span class="mf">6.2</span><span class="o">.</span><span class="mi">0</span> <span class="n">OUTPUT</span><span class="o">=</span><span class="n">GIF</span> <span class="n">OUTPUT</span><span class="o">=</span><span class="n">PNG</span> <span class="n">OUTPUT</span><span class="o">=</span><span class="n">JPEG</span> <span class="n">OUTPUT</span><span class="o">=</span><span class="n">WBMP</span>
 <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">PROJ</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">FREETYPE</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">WMS_SERVER</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">WMS_CLIENT</span>
@@ -217,24 +229,21 @@
 </div>
 </div>
 <div class="section" id="mod-fcgid-configuration">
-<h2><a class="toc-backref" href="#table-of-contents">Configuration de mod_fcgid</a><a class="headerlink" href="#mod-fcgid-configuration" title="Lien permanent vers ce titre">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents">mod_fcgid Configuration</a><a class="headerlink" href="#mod-fcgid-configuration" title="Lien permanent vers ce titre">¶</a></h2>
 <ol class="arabic simple">
-<li><p class="first">Modifier http.conf pour charger le module FastCGI</p>
-</li>
+<li>Modify http.conf to load the FastCGI module.</li>
 </ol>
 <div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nb">LoadModule</span> fcgid_module modules/mod_fcgid.so
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li><p class="first">Ajouter un handler Apache pour les applications FastCGI.</p>
-</li>
+<li>Add an Apache handler for FastCGI applications.</li>
 </ol>
 <div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nb">AddHandler</span> fcgid-script fcgi
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
-<li><p class="first">Définir les informations de traitement FastCGI</p>
-</li>
+<li>Set FastCGI processing information</li>
 </ol>
 <div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span> <span class="s">mod_fcgid.c</span><span class="nt">&gt;</span>
    <span class="nb">FcgidMaxProcessesPerClass</span> <span class="m">30</span>
@@ -245,20 +254,21 @@
 </div>
 </div>
 <div class="section" id="deprecated-mod-fcgi-configuration">
-<h2><a class="toc-backref" href="#table-of-contents">Déprécié Configuration mod_fcgi</a><a class="headerlink" href="#deprecated-mod-fcgi-configuration" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Cette section est laissée pour référence. La façon recommandée de lancer le programme fastcgi sous apache est d&#8217;utiliser mod_fcgi, comme décrit plus haut.</p>
+<h2><a class="toc-backref" href="#table-of-contents">Deprecated mod_fcgi Configuration</a><a class="headerlink" href="#deprecated-mod-fcgi-configuration" title="Lien permanent vers ce titre">¶</a></h2>
+<p>This section is left for reference. The recommended way to run fastcgi programs
+under apache is to use mod_fcgid, as detailed above.</p>
 <ol class="arabic">
-<li><p class="first">Modifier http.conf pour charger le module FastCGI</p>
+<li><p class="first">Modify http.conf to load the FastCGI module.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LoadModule</span> <span class="n">fastcgi_module</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">apache</span><span class="o">/</span><span class="mf">1.3</span><span class="o">/</span><span class="n">mod_fastcgi</span><span class="o">.</span><span class="n">so</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Ajouter un handler Apache pour les applications FastCGI.</p>
+<li><p class="first">Add an Apache handler for FastCGI applications.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">AddHandler</span> <span class="n">fastcgi</span><span class="o">-</span><span class="n">script</span> <span class="n">fcgi</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Définir les informations de traitement FastCGI</p>
+<li><p class="first">Set FastCGI processing information</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">FastCgiConfig</span> <span class="o">-</span><span class="n">initial</span><span class="o">-</span><span class="n">env</span> <span class="n">PROJ_LIB</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">proj</span>
 <span class="o">-</span><span class="n">initial</span><span class="o">-</span><span class="n">env</span> <span class="n">LD_LIBRARY_PATH</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">pgsql</span><span class="o">/</span><span class="n">lib</span><span class="p">:</span><span class="o">/</span><span class="n">usr3</span><span class="o">/</span><span class="n">pkg3</span><span class="o">/</span><span class="n">oracle9</span><span class="o">/</span><span class="n">lib</span>
 <span class="o">-</span><span class="n">appConnTimeout</span> <span class="mi">60</span> <span class="o">-</span><span class="n">idle</span><span class="o">-</span><span class="n">timeout</span> <span class="mi">60</span> <span class="o">-</span><span class="n">init</span><span class="o">-</span><span class="n">start</span><span class="o">-</span><span class="n">delay</span> <span class="mi">1</span>
@@ -269,27 +279,34 @@
 </ol>
 </div>
 <div class="section" id="common-mod-fcgid-mod-fcgi-configuration">
-<h2><a class="toc-backref" href="#table-of-contents">Configuration commune mod_fcgid/mod_fcgi</a><a class="headerlink" href="#common-mod-fcgid-mod-fcgi-configuration" title="Lien permanent vers ce titre">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents">Common mod_fcgid/mod_fcgi Configuration</a><a class="headerlink" href="#common-mod-fcgid-mod-fcgi-configuration" title="Lien permanent vers ce titre">¶</a></h2>
 <ol class="arabic">
-<li><p class="first">Installez une copie de l&#8217;exécutable mapserv (initialement <strong>mapserver</strong> ou <strong>mapserv.exe</strong>) dans le répertoire cgi-bin avec l&#8217;extension <strong>.fcgi</strong> (ie. <strong>mapserv.fcgi</strong>). Utilisez cet exécutable quand vous souhaitez utiliser fastcgi.</p>
-<p>Pour certaines plate-formes, le lien MapServer devrait être ensuite changé depuis:</p>
+<li><p class="first">Install a copy of the mapserv executable (originally <strong>mapserv</strong>
+or <strong>mapserv.exe</strong>) into the cgi-bin directory with the extension
+<strong>.fcgi</strong> (ie. <strong>mapserv.fcgi</strong>).  Use this executable when you
+want to utilize fastcgi support.</p>
+<p>For some platforms, the MapServer  link would then have to changed
+from:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>http://your.domain.name/cgi-bin/mapserv?MAP=/path/to/mapfile.map
 </pre></div>
 </div>
-<p>Par:</p>
+<p>To:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>http://your.domain.name/cgi-bin/mapserv.fcgi?MAP=/path/to/mapfile.map
 </pre></div>
 </div>
-<p>Pour les autres plate-formes, le lien MapServer devrait être ensuite changé depuis :</p>
+<p>For other platforms, the MapServer  link would then have to changed
+from:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>http://your.domain.name/cgi-bin/mapserv.exe?MAP=/path/to/mapfile.map
 </pre></div>
 </div>
-<p>Par:</p>
+<p>To:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>http://your.domain.name/cgi-bin/mapserv.fcgi?MAP=/path/to/mapfile.map
 </pre></div>
 </div>
 </li>
-<li><p class="first">Dans votre mapfile, définissez une directive PROCESSING pour informer FastCGI de mettre en cache les informations de connections et des couches de toutes les couches pour lesquelles le cache de connections est désiré - ie. toutes les couches lentes.</p>
+<li><p class="first">In your mapfile, set a PROCESSING directive to tell FastCGI to cache
+the connections and layer information on all layers for which connection
+caching is desired - ie. all slow layers.</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">PROCESSING</span> <span class="s">&quot;CLOSE_CONNECTION=DEFER&quot;</span>
 </pre></div>
 </div>
@@ -297,27 +314,35 @@
 </ol>
 </div>
 <div class="section" id="common-problems">
-<h2><a class="toc-backref" href="#table-of-contents">Problèmes communs</a><a class="headerlink" href="#common-problems" title="Lien permanent vers ce titre">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents">Common Problems</a><a class="headerlink" href="#common-problems" title="Lien permanent vers ce titre">¶</a></h2>
 <div class="section" id="file-permissions">
-<h3>Permissions fichier<a class="headerlink" href="#file-permissions" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Fedorac Core 3 n&#8217;autorise pas FastCGI d&#8217;écrire dans les logs des processus (quand vous utilisez la version d&#8217;Apache 2 de Red Hat plutôt que la votre). Cela est décrit <a class="reference external" href="http://www.fastcgi.com/archives/fastcgi-developers/2005-March/003638.html">ici</a>.</p>
-<p>FastCGI a besoin d&#8217;écrire ses informations de sockets quelque part. Cela peut être définie avec la directive &#8220;FastCgilpcDir&#8221;.</p>
+<h3>File permissions<a class="headerlink" href="#file-permissions" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Fedora Core 3 doesn&#8217;t allow FastCGI to write to the process logs (when you
+use RedHat&#8217;s Apache 2 rather than your own).  This is described <a class="reference external" href="http://www.fastcgi.com/archives/fastcgi-developers/2005-March/003638.html">here</a>.</p>
+<p>Also, FastCGI needs to write its socket information somewhere.  This
+can be directed with the <em>FastCgiIpcDir</em> directive.</p>
 </div>
 </div>
 <div class="section" id="fastcgi-on-win32">
-<h2><a class="toc-backref" href="#table-of-contents">FastCGI sur Win32</a><a class="headerlink" href="#fastcgi-on-win32" title="Lien permanent vers ce titre">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents">FastCGI on Win32</a><a class="headerlink" href="#fastcgi-on-win32" title="Lien permanent vers ce titre">¶</a></h2>
 <div class="section" id="ms4w-users">
-<h3>Utilisateurs MS4W<a class="headerlink" href="#ms4w-users" title="Lien permanent vers ce titre">¶</a></h3>
-<p><a class="reference external" href="http://www.ms4w.com/README_INSTALL.html#f-fastcgi">MS4W (MapServer pour Windows)</a> &gt;= version 2.2.2 contient  MapServer compilé avec la gestion de FastCGI. La version de MS4W &gt;= 2.2.8 contient également le module Apache nécessaire (mod_fcgid), et les utilisateurs doivent suivre les <a class="reference external" href="http://www.ms4w.com">instructions du README</a> pour paramétrer FastCGI avec leur application.</p>
+<h3>MS4W Users<a class="headerlink" href="#ms4w-users" title="Lien permanent vers ce titre">¶</a></h3>
+<p><a class="reference external" href="http://www.ms4w.com">MS4W (MapServer for Windows)</a> &gt;= version 2.2.2 contains MapServer compiled
+with FastCGI support. MS4W version &gt;= 2.2.8 also contains the required Apache
+module (mod_fcgid), and users must follow the <a class="reference external" href="http://www.ms4w.com/README_INSTALL.html#f-fastcgi">README instructions</a> to setup
+FastCGI with their application.</p>
 </div>
 <div class="section" id="building-fcgi-2-4-0">
-<h3>Compiler fcgi-2.4.0<a class="headerlink" href="#building-fcgi-2-4-0" title="Lien permanent vers ce titre">¶</a></h3>
-<p>J&#8217;ai utilisé libfcgi-2.4.0 pour utiliser avec Apache2 depuis le site <a class="reference external" href="http://www.fastcgi.com">http://www.fastcgi.com</a>.</p>
+<h3>Building fcgi-2.4.0<a class="headerlink" href="#building-fcgi-2-4-0" title="Lien permanent vers ce titre">¶</a></h3>
+<p>I used libfcgi-2.4.0 for use with Apache2 from <a class="reference external" href="http://www.fastcgi.com">http://www.fastcgi.com</a>.</p>
 </div>
 <div class="section" id="binary-io-patch">
-<h3>Patch binaire IO<a class="headerlink" href="#binary-io-patch" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Il est critique que stdio soit en mode binaire quand les images PNG et autres formats soit écrit. Pour accomplir cela avec la version de stdio utilisée par la bibliothèque FastCGI, J&#8217;ai dû réaliser cette modification dans le fichier libfcgi/fcgi_stdio.c au sein de la distribution fcgi-2.4.0.</p>
-<p>Dans FCGI_Accept(), faire les changements suivant</p>
+<h3>Binary IO Patch<a class="headerlink" href="#binary-io-patch" title="Lien permanent vers ce titre">¶</a></h3>
+<p>It is critical that stdio be in binary mode when PNG and other binary images
+are written to it. To accomplish this for stdio handled through the FastCGI
+library, I had to do the following hack to libfcgi/fcgi_stdio.c within the
+fcgi-2.4.0 distribution.</p>
+<p>In FCGI_Accept() made he following change</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">if</span><span class="p">(</span><span class="n">isCGI</span><span class="p">)</span> <span class="p">{</span>
   <span class="n">FCGI_stdin</span><span class="o">-&gt;</span><span class="n">stdio_stream</span> <span class="o">=</span> <span class="n">stdin</span><span class="p">;</span>
   <span class="n">FCGI_stdin</span><span class="o">-&gt;</span><span class="n">fcgx_stream</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
@@ -336,25 +361,28 @@
 <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 </pre></div>
 </div>
-<p>Ajouter également ce qui suit juste avant la fonction FCGI_Accept()</p>
+<p>Also, add the following just before the FCGI_Accept() function</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="cp">#ifdef _WIN32</span>
 <span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;io.h&gt;</span><span class="cp"></span>
 <span class="cp">#endif</span>
 </pre></div>
 </div>
-<p>Je suis sûr qu&#8217;il y a une meilleure façon d&#8217;y parvenir. Si vous savez comment, s&#8217;il vous plaît faites le moi savoir !</p>
+<p>I&#8217;m sure there is a better way of accomplishing this. If you know how, please
+let me know!</p>
 </div>
 <div class="section" id="building-libfcgi">
-<h3>Compiler libfcgi<a class="headerlink" href="#building-libfcgi" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Le fichier makefile.nt devrait convenir. Assurez vous juste que vous avez lancé VCVARS32.BAT (puisque nécessaire pour compiler MapServer) puis lancez la commande</p>
+<h3>Building libfcgi<a class="headerlink" href="#building-libfcgi" title="Lien permanent vers ce titre">¶</a></h3>
+<p>The makefile.nt should be fine. Just ensure you have run VCVARS32.BAT (as is
+needed for building MapServer) and then issue the command:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">nmake</span> <span class="o">/</span><span class="n">f</span> <span class="n">makefile</span><span class="o">.</span><span class="n">nt</span>
 </pre></div>
 </div>
-<p>Puis les fichiers .lib et .dll seront dans  libfcgi/Debug?. Assurez vous de copier les DLL quelque part d&#8217;approprié (tel que le répertoire cgi-bin).</p>
+<p>Then the .lib and .dll will be in libfcgi/Debug?. Make sure you copy the DLL
+somewhere appropriate (such as your cgi-bin directory).</p>
 </div>
 <div class="section" id="other-issues">
-<h3>Autres problèmes<a class="headerlink" href="#other-issues" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Other Issues<a class="headerlink" href="#other-issues" title="Lien permanent vers ce titre">¶</a></h3>
 <p>1) FastCGI&#8217;s receive a very limited environment on win32, seemingly even more
 restricted than normal cgi&#8217;s started by apache. Make sure that all DLLs
 required are either in the fastcgi directory or in windowssystem32. Any
@@ -400,20 +428,20 @@ MSVCRT.DLL (or all using MSVCRTD.DLL) using the MS SDK Dependency Walker.</p>
   <ul>
 <li><a class="reference internal" href="#">FastCGI</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#obtaining-the-necessary-software">Obtenir le logiciel nécessaire</a></li>
-<li><a class="reference internal" href="#mod-fcgid-configuration">Configuration de mod_fcgid</a></li>
-<li><a class="reference internal" href="#deprecated-mod-fcgi-configuration">Déprécié Configuration mod_fcgi</a></li>
-<li><a class="reference internal" href="#common-mod-fcgid-mod-fcgi-configuration">Configuration commune mod_fcgid/mod_fcgi</a></li>
-<li><a class="reference internal" href="#common-problems">Problèmes communs</a><ul>
-<li><a class="reference internal" href="#file-permissions">Permissions fichier</a></li>
+<li><a class="reference internal" href="#obtaining-the-necessary-software">Obtaining the necessary software</a></li>
+<li><a class="reference internal" href="#mod-fcgid-configuration">mod_fcgid Configuration</a></li>
+<li><a class="reference internal" href="#deprecated-mod-fcgi-configuration">Deprecated mod_fcgi Configuration</a></li>
+<li><a class="reference internal" href="#common-mod-fcgid-mod-fcgi-configuration">Common mod_fcgid/mod_fcgi Configuration</a></li>
+<li><a class="reference internal" href="#common-problems">Common Problems</a><ul>
+<li><a class="reference internal" href="#file-permissions">File permissions</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#fastcgi-on-win32">FastCGI sur Win32</a><ul>
-<li><a class="reference internal" href="#ms4w-users">Utilisateurs MS4W</a></li>
-<li><a class="reference internal" href="#building-fcgi-2-4-0">Compiler fcgi-2.4.0</a></li>
-<li><a class="reference internal" href="#binary-io-patch">Patch binaire IO</a></li>
-<li><a class="reference internal" href="#building-libfcgi">Compiler libfcgi</a></li>
-<li><a class="reference internal" href="#other-issues">Autres problèmes</a></li>
+<li><a class="reference internal" href="#fastcgi-on-win32">FastCGI on Win32</a><ul>
+<li><a class="reference internal" href="#ms4w-users">MS4W Users</a></li>
+<li><a class="reference internal" href="#building-fcgi-2-4-0">Building fcgi-2.4.0</a></li>
+<li><a class="reference internal" href="#binary-io-patch">Binary IO Patch</a></li>
+<li><a class="reference internal" href="#building-libfcgi">Building libfcgi</a></li>
+<li><a class="reference internal" href="#other-issues">Other Issues</a></li>
 </ul>
 </li>
 </ul>
@@ -434,16 +462,16 @@ MSVCRT.DLL (or all using MSVCRTD.DLL) using the MS SDK Dependency Walker.</p>
           <a href="mapfile.html" title="Mapfile"
              >suivant</a> |</li>
         <li class="right" >
-          <a href="debugging.html" title="Debugger Mapserver"
+          <a href="debugging.html" title="Debugging MapServer"
              >précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Optimisation</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Optimization</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

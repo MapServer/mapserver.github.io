@@ -138,7 +138,7 @@
           <a href="join.html" title="JOIN"
              accesskey="P">précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Mapfile</a> &#187;</li> 
       </ul>
     </div>
@@ -153,7 +153,10 @@
 <span id="index-0"></span><span id="id1"></span><h1>LABEL<a class="headerlink" href="#label" title="Lien permanent vers ce titre">¶</a></h1>
 <dl class="docutils" id="index-1">
 <dt>ALIGN [left|center|right]</dt>
-<dd><p class="first">Depuis la version 5.4. Définie l&#8217;alignement du texte pour les étiquettes de plusieurs lignes (voir <a class="reference internal" href="#wrap">WRAP</a>). Notez que l&#8217;algorithme pour l&#8217;alignement est loin d&#8217;être précis, n&#8217;espérez pas de résultats fabuleux (spécialement pour l&#8217;alignement à <em>droite</em>) si vous n&#8217;utilisez pas une police à taille fixe.</p>
+<dd><p class="first">Specifies text alignment for multiline labels (see <a class="reference internal" href="#wrap">WRAP</a>) Note
+that the alignment algorithm is far from precise, so don&#8217;t expect
+fabulous results (especially for <em>right</em> alignment) if you&#8217;re not
+using a fixed width font.</p>
 <div class="last versionadded">
 <p><span class="versionmodified">Nouveau dans la version 5.4.</span></p>
 </div>
@@ -165,7 +168,8 @@
 <li><p class="first">Angle, counterclockwise, given in degrees, to draw the label.
 Default is 0.</p>
 </li>
-<li><p class="first">AUTO permet à MapServer de calculer l&#8217;angle. Valide uniquement pour les couches de type ligne (LINE).</p>
+<li><p class="first">AUTO allows MapServer to compute the angle. Valid for LINE
+layers only.</p>
 </li>
 <li><p class="first">AUTO2 same as AUTO, except no logic is applied to try to keep
 the text from being rendered in reading orientation (i.e. the
@@ -176,7 +180,11 @@ arrows indicating the line direction.</p>
 compute a curved label for appropriate linear features (see
 <a class="reference internal" href="../development/rfc/ms-rfc-11.html#rfc11"><span class="std std-ref">MS RFC 11: Support for Curved Labels</span></a> for specifics).  See also <cite>MAXOVERLAPANGLE</cite>.</p>
 </li>
-<li><p class="first">[ATTRIBUTE] a été implémenté dans la version 5.0 pour spécifier le nom de l&#8217;attribut dans la table attributaire à utiliser pour les valeurs angulaires. Les crochets [] sont nécessaires. Par exemple, si le fichier DBF de votre fichier Shape contient un champ nommé &#8220;MONANGLE&#8221; qui indique la valeur de l&#8217;angle pour chaque enregistrement, votre objet LABEL doit contenir :</p>
+<li><p class="first">[<em>Attribute</em>] was introduced in version 5.0, to specify the item
+name in the attribute table to use for angle values.  The hard
+brackets [] are required.  For example, if your shapefile&#8217;s DBF
+has a field named &#8220;MYANGLE&#8221; that holds angle values for each
+record, your LABEL object might contain:</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LABEL</span>
   <span class="k">COLOR</span>  <span class="mi">150</span> <span class="mi">150</span> <span class="mi">150</span>
   <span class="k">OUTLINECOLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
@@ -189,46 +197,54 @@ compute a curved label for appropriate linear features (see
 <span class="k">END</span>
 </pre></div>
 </div>
-<p>le document RFC associé pour cette fonctionnalité est <a class="reference internal" href="../development/rfc/ms-rfc-19.html#rfc19"><span class="std std-ref">MS RFC 19: Style &amp; Label attribute binding</span></a>.</p>
+<p>The associated RFC document for this feature is <a class="reference internal" href="../development/rfc/ms-rfc-19.html#rfc19"><span class="std std-ref">MS RFC 19: Style &amp; Label attribute binding</span></a>.</p>
 </li>
 </ul>
 </dd>
 </dl>
 <dl class="docutils" id="index-3">
 <dt>ANTIALIAS [true|false]</dt>
-<dd><p class="first last">Le texte devrait-il être anticrênelé? Notez que cela nécessite  plus de couleurs disponibles, diminue les performances de rendu, et renvoie des images de sortie de taille un peu plus large. Seulement utile pour le rendu GD (gif). Par défaut, défini à &#8220;false&#8221;. N&#8217;a pas d&#8217;effet sur les autres types de générateur de rendus (où l&#8217;anticrênelage ne peut pas être désactivé).</p>
-</dd>
+<dd>Should text be antialiased? Note that this requires more available
+colors, decreases drawing performance, and results in slightly
+larger output images.  Only useful for GD (gif) rendering.
+Default is false.  Has no effect for the other renderers (where
+anti-aliasing can not be turned off).</dd>
 <dt>BACKGROUNDCOLOR [r] [g] [b] | [hexadecimal string]</dt>
-<dd><p class="first">Couleur à utiliser pour dessiner un rectangle d&#8217;arrière plan (panneau d&#8217;étiquette (&#8220;billboard&#8221;). Désactivé par défaut.</p>
+<dd><p class="first">Color to draw a background rectangle (i.e. billboard). Off by default.</p>
 <div class="last admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Enlevé dans la version 6.0. Utilise un objet <a class="reference internal" href="#label-style">LABEL STYLE</a>  avec un <cite>GEOMTRANSFORM labelpoly</cite> et une <cite>COLOR</cite>.</p>
+<p class="last">Removed in 6.0.  Use a <a class="reference internal" href="#label-style">LABEL STYLE</a> object with
+<cite>GEOMTRANSFORM labelpoly</cite> and <cite>COLOR</cite>.</p>
 </div>
 </dd>
 <dt>BACKGROUNDSHADOWCOLOR [r] [g] [b] | [hexadecimal string]</dt>
-<dd><p class="first">Couleur à utiliser pour dessiner l&#8217;ombre d&#8217;un rectangle d&#8217;arrière plan (panneau d&#8217;étiquette (&#8220;billboard&#8221;). Désactivé par défaut.</p>
+<dd><p class="first">Color to draw a background rectangle (i.e. billboard) shadow. Off by
+default.</p>
 <div class="last admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Enlevé dans la version 6.0. Utilise un objet <a class="reference internal" href="#label-style">LABEL STYLE</a>  avec un <cite>GEOMTRANSFORM labelpoly</cite>, une <cite>COLOR</cite> et un <cite>OFFSET</cite>.</p>
+<p class="last">Removed in 6.0.  Use a <a class="reference internal" href="#label-style">LABEL STYLE</a> object with
+<cite>GEOMTRANSFORM labelpoly</cite>, <cite>COLOR</cite> and <cite>OFFSET</cite>.</p>
 </div>
 </dd>
 <dt>BACKGROUNDSHADOWSIZE [x][y]</dt>
-<dd><p class="first">Jusqu&#8217;où le rectangle d&#8217;arrière plan doit être décalé ? 1 par défaut.</p>
+<dd><p class="first">How far should the background rectangle be offset? Default is 1.</p>
 <div class="last admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Enlevé dans la version 6.0. Utilise un objet <a class="reference internal" href="#label-style">LABEL STYLE</a>  avec un <cite>GEOMTRANSFORM labelpoly</cite>, une <cite>COLOR</cite> et un <cite>OFFSET</cite>.</p>
+<p class="last">Removed in 6.0.  Use a <a class="reference internal" href="#label-style">LABEL STYLE</a> object with
+<cite>GEOMTRANSFORM labelpoly</cite>, <cite>COLOR</cite> and <cite>OFFSET</cite>.</p>
 </div>
 </dd>
 </dl>
 <dl class="docutils" id="index-4">
 <dt>BUFFER [integer]</dt>
-<dd><p class="first last">Remplissage, en pixels, autour des étiquettes. Utile pour maintenir un espace autour du texte pour en améliorer sa lecture. Disponible seulement pour les étiquettes &#8220;cachables&#8221;. 0 par défaut.</p>
-</dd>
+<dd>Padding, in pixels, around labels. Useful for maintaining spacing around
+text to enhance readability. Available only for cached labels.
+Default is 0.</dd>
 </dl>
 <dl class="docutils" id="index-5">
 <dt>COLOR [r] [g] [b] | [hexadecimal string] | [attribute]</dt>
 <dd><ul class="first last">
-<li><p class="first">Couleur à utiliser pour dessiner le texte.</p>
+<li><p class="first">Color to draw text with.</p>
 </li>
 <li><p class="first"><cite>r</cite>, <cite>g</cite> and <cite>b</cite> shall be integers [0..255].  To specify green,
 the following is used:</p>
@@ -254,7 +270,11 @@ semi-translucent magenta, the following is used:</p>
 </li>
 </ul>
 </li>
-<li><p class="first">[<em>ATTRIBUTE</em>] a été implémenté dans la version 5.0 pour spécifier le nom de l&#8217;attribut dans la table attributaire à utiliser pour les valeurs de couleur. Les crochets [] sont nécessaires. Par exemple, si le fichier DBF de votre fichier Shape contient un champ nommé &#8220;MACOULEUR&#8221; qui indique la valeur de la couleur pour chaque enregistrement, votre objet LABEL doit contenir :</p>
+<li><p class="first">[<em>Attribute</em>] was introduced in version 5.0, to specify the item
+name in the attribute table to use for color values.  The hard
+brackets [] are required.  For example, if your shapefile&#8217;s DBF
+has a field named &#8220;MYCOLOR&#8221; that holds color values for each
+record, your LABEL object might contain:</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LABEL</span>
   <span class="k">COLOR</span>  <span class="nx">[MYCOLOR]</span>
   <span class="k">OUTLINECOLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
@@ -266,7 +286,7 @@ semi-translucent magenta, the following is used:</p>
 <span class="k">END</span>
 </pre></div>
 </div>
-<p>le document RFC associé pour cette fonctionnalité est <a class="reference internal" href="../development/rfc/ms-rfc-19.html#rfc19"><span class="std std-ref">MS RFC 19: Style &amp; Label attribute binding</span></a>.</p>
+<p>The associated RFC document for this feature is <a class="reference internal" href="../development/rfc/ms-rfc-19.html#rfc19"><span class="std std-ref">MS RFC 19: Style &amp; Label attribute binding</span></a>.</p>
 </li>
 </ul>
 </dd>
@@ -287,19 +307,19 @@ data set encodings are handled using <a class="reference internal" href="layer.h
 </dl>
 <dl class="docutils" id="index-7">
 <dt>EXPRESSION [string]</dt>
-<dd><p class="first">Expression qui détermine quand un <cite>LABEL</cite> doit être appliqué. Voir <cite>EXPRESSION</cite> dans <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a>.</p>
+<dd><p class="first">Expression that determines when the <cite>LABEL</cite> is to be applied.
+See <cite>EXPRESSION</cite> in <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a>.</p>
 <div class="last versionadded">
 <p><span class="versionmodified">Nouveau dans la version 6.2.</span></p>
 </div>
 </dd>
 </dl>
 <dl class="docutils" id="index-8">
-<dt>FONT [nom|attribut]</dt>
+<dt>FONT [name|attribute]</dt>
 <dd><ul class="first last simple">
-<li><p class="first">Nom de la police de caractères (comme défini dans le FONTSET) à utiliser pour les étiquettes.</p>
-</li>
-<li><p class="first">[<em>Attribute</em>] a été introduit dans la version 5.6 pour définir l&#8217;alias de la police.</p>
-</li>
+<li>Font alias (as defined in the FONTSET) to use for labeling.</li>
+<li>[<em>Attribute</em>] was introduced in version 5.6 to specfify the font
+alias.</li>
 <li>May contain a comma-separated list of up to MS_MAX_LABEL_FONTS
 (usually 5) font aliases used as fallback fonts in renderers
 supporting it, if a glyph is not available in a font. If specified
@@ -311,12 +331,15 @@ See <a class="reference internal" href="../development/rfc/ms-rfc-98.html#rfc98"
 </dl>
 <span id="index-9"></span><dl class="docutils" id="force">
 <dt>FORCE [true|false]</dt>
-<dd><p class="first last">Force l&#8217;affichage des étiquettes d&#8217;une classe particulière, sans s&#8217;occuper des superpositions (collisions). Disponible seulement pour les étiquettes en cache. Désactivé par défaut. Si <cite>FORCE</cite> est à true et <cite>PARTIALS</cite> est à false, <cite>FORCE</cite> prend la précédence, et les étiquettes partielles sont dessinées.</p>
-</dd>
+<dd>Forces labels for a particular class on, regardless of collisions.
+Available only for cached labels.  Default is false.  If <cite>FORCE</cite>
+is true and <cite>PARTIALS</cite> is false, <cite>FORCE</cite> takes precedence, and
+partial labels are drawn.</dd>
 </dl>
 <span id="index-10"></span><dl class="docutils" id="maxlength">
 <dt>MAXLENGTH [integer]</dt>
-<dd><p class="first">Introduit dans mapserver 5.4, ce mot clé interagit avec le mot clé <a class="reference internal" href="#wrap">WRAP</a> afin que les retours à la lignes aient lieu seulement après un nombre défini de caractères.</p>
+<dd><p class="first">This keyword interacts with the <a class="reference internal" href="#wrap">WRAP</a> keyword so that line breaks
+only occur after the defined number of characters.</p>
 <table border="1" class="docutils" id="id2">
 <caption><span class="caption-text">Interaction with <a class="reference internal" href="#wrap">WRAP</a> keyword</span><a class="headerlink" href="#id2" title="Lien permanent vers ce tableau">¶</a></caption>
 <colgroup>
@@ -330,21 +353,16 @@ See <a class="reference internal" href="../development/rfc/ms-rfc-98.html#rfc98"
 <td><strong>maxlength &gt; 0</strong></td>
 </tr>
 <tr class="row-even"><td><strong>wrap = ‘char’</strong></td>
-<td><p class="first last">retour à la ligne au caractère <a class="reference internal" href="#wrap">WRAP</a></p>
-</td>
-<td><p class="first last">nouvelle ligne dès le premier caractère <a class="reference internal" href="#wrap">WRAP</a> après <a class="reference internal" href="#maxlength">MAXLENGTH</a> caractères</p>
-</td>
+<td>always wrap at the <a class="reference internal" href="#wrap">WRAP</a> character</td>
+<td>newline at the first <a class="reference internal" href="#wrap">WRAP</a> character after <a class="reference internal" href="#maxlength">MAXLENGTH</a> characters</td>
 </tr>
-<tr class="row-odd"><td><p class="first last"><strong>pas de wrap</strong></p>
-</td>
-<td><p class="first last">aucun traitement</p>
-</td>
-<td><p class="first last">ignore l&#8217;étiquette s&#8217;il contient plus que <a class="reference internal" href="#maxlength">MAXLENGTH</a> caractères</p>
-</td>
+<tr class="row-odd"><td><strong>no wrap</strong></td>
+<td>no processing</td>
+<td>skip label if it contains more than <a class="reference internal" href="#maxlength">MAXLENGTH</a> characters</td>
 </tr>
 </tbody>
 </table>
-<p>Le document RFC associé pour cette fonctionalité est <a class="reference internal" href="../development/rfc/ms-rfc-40.html#rfc40"><span class="std std-ref">MS RFC 40: Support Label Text Transformations</span></a>.</p>
+<p>The associated RFC document for this feature is <a class="reference internal" href="../development/rfc/ms-rfc-40.html#rfc40"><span class="std std-ref">MS RFC 40: Support Label Text Transformations</span></a>.</p>
 <div class="versionadded">
 <p><span class="versionmodified">Nouveau dans la version 5.4.</span></p>
 </div>
@@ -355,8 +373,17 @@ to include linebreaks or wrap characters.</p>
 </dl>
 <dl class="docutils" id="index-11">
 <dt>MAXOVERLAPANGLE [double]</dt>
-<dd><p class="first">Seuil de l&#8217;angle à utiliser pour filtrer les étiquettes ANGLE FOLLOW dans lesquelles les caractères se superposent (valeur flottante  en degrés). Ce filtrage sera activé par défaut avec MapServer 6.0. La valeur MAXOVERLAPANGLE par défaut sera 22.5 degrees, qui correspond aussi à celle par défaut de GeoServer. Les utilisateurs seront libres de personnaliser la valeur en plus ou en moins en fonction du type de données qu&#8217;ils gèrent et de leur tolérance à la mauvaise superposition des étiquettes. Selon la RFC 60, si MAXOVERLAPANGLE est défini à 0, alors on retombe sur le comportement antérieur à la version 6.0 qui était d&#8217;utiliser maxoverlapangle = 0.4*MS_PI (40% de 180 degrés = 72 degrés).</p>
-<p class="last">Le document RFC associé pour cette fonctionalité est <a class="reference internal" href="../development/rfc/ms-rfc-60.html#rfc60"><span class="std std-ref">MS RFC 60: Labeling enhancement: ability to skip ANGLE FOLLOW labels with too much character overlap</span></a>.</p>
+<dd><p class="first">Angle threshold to use in filtering out ANGLE FOLLOW labels in
+which characters overlap (floating point value in degrees). This
+filtering will be enabled by default starting with MapServer
+6.0. The default MAXOVERLAPANGLE value will be 22.5 degrees, which
+also matches the default in GeoServer. Users will be free to tune
+the value up or down depending on the type of data they are
+dealing with and their tolerance to bad overlap in labels.
+As per RFC 60, if MAXOVERLAPANGLE is set to 0, then we fall back
+on pre-6.0 behavior which was to use maxoverlapangle = 0.4*MS_PI
+(40% of 180 degrees = 72degree).</p>
+<p class="last">The associated RFC document for this feature is <a class="reference internal" href="../development/rfc/ms-rfc-60.html#rfc60"><span class="std std-ref">MS RFC 60: Labeling enhancement: ability to skip ANGLE FOLLOW labels with too much character overlap</span></a>.</p>
 </dd>
 </dl>
 <dl class="docutils" id="index-12">
@@ -375,8 +402,10 @@ map at a scale of 1:24,000 use 24000.</p>
 </dl>
 <dl class="docutils" id="index-13">
 <dt>MAXSIZE [double]</dt>
-<dd><p class="first last">Taille maximum de polices à utiliser quand on met à l&#8217;échelle le texte (pixels). Par défaut, la valeur est 256. A partir de la version 5.4, la valeur peut aussi être une valeur fractionnelle (et pas seulement un entier). Voir le <a class="reference internal" href="layer.html#symbolscaledenom"><span class="std std-ref">SYMBOLSCALEDENOM</span></a> de la <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a>.</p>
-</dd>
+<dd>Maximum font size to use when scaling text (pixels). Default is 256.
+Starting from version 5.4, the value can also be a fractional value
+(and not only integer).
+See <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> <a class="reference internal" href="layer.html#symbolscaledenom"><span class="std std-ref">SYMBOLSCALEDENOM</span></a>.</dd>
 </dl>
 <dl class="docutils" id="index-14">
 <dt>MINDISTANCE [integer]</dt>
@@ -386,8 +415,12 @@ label boundary. Prior versions used the label center.</dd>
 </dl>
 <dl class="docutils" id="index-15">
 <dt>MINFEATURESIZE [integer|auto]</dt>
-<dd><p class="first last">Taille minimale d&#8217;une entité devant être étiquettée, en pixels. Pour les données linéaires, la longueur totale de la ligne affichée est utilisée, pour les entités polygonales la taille du plus petit côté du rectangle englobant est utilisée. Le mot-clé &#8220;Auto&#8221; indique à MapServer d&#8217;étiqueter uniquement les entités plus grandes que leur propre étiquette. Disponible seulement pour les étiquettes en cache.</p>
-</dd>
+<dd>Minimum size a feature must be to be labeled. Given in pixels. For
+line data the overall length of the displayed line is used, for
+polygons features the smallest dimension of the bounding box is
+used. &#8220;Auto&#8221; keyword tells MapServer to only label features that
+are larger than their corresponding label. Available for cached
+labels only.</dd>
 </dl>
 <dl class="docutils" id="index-16">
 <dt>MINSCALEDENOM [double]</dt>
@@ -405,8 +438,10 @@ map at a scale of 1:24,000 use 24000.</p>
 </dl>
 <dl class="docutils" id="index-17">
 <dt>MINSIZE [double]</dt>
-<dd><p class="first last">Taille minimum de polices à utiliser quand on met à l&#8217;échelle le texte (pixels). Par défaut, la valeur est 4. A partir de la version 5.4, la valeur peut aussi être une valeur fractionnelle (et pas seulement un entier). Voir le <a class="reference internal" href="layer.html#symbolscaledenom"><span class="std std-ref">SYMBOLSCALEDENOM</span></a> de la <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a>.</p>
-</dd>
+<dd>Minimum font size to use when scaling text (pixels). Default is 4.
+Starting from version 5.4, the value can also be a fractional value
+(and not only integer).
+See <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> <a class="reference internal" href="layer.html#symbolscaledenom"><span class="std std-ref">SYMBOLSCALEDENOM</span></a>.</dd>
 </dl>
 <dl class="docutils" id="index-18">
 <dt>OFFSET [x][y]</dt>
@@ -428,7 +463,7 @@ depending on the sign of {x}.</li>
 <span id="index-19"></span><dl class="docutils" id="outlinecolor">
 <dt>OUTLINECOLOR [r] [g] [b] | [hexadecimal string] | [attribute]</dt>
 <dd><ul class="first last">
-<li><p class="first">Couleur utilisée pour dessiner une ligne d&#8217;un pixel autour du texte.</p>
+<li><p class="first">Color to draw a one pixel outline around the characters in the text.</p>
 </li>
 <li><p class="first"><cite>r</cite>, <cite>g</cite> and <cite>b</cite> shall be integers [0..255].  To specify green,
 the following is used:</p>
@@ -454,7 +489,11 @@ semi-translucent magenta, the following is used:</p>
 </li>
 </ul>
 </li>
-<li><p class="first">[<em>ATTRIBUTE</em>] a été implémenté dans la version 5.0 pour spécifier le nom de l&#8217;attribut dans la table attributaire à utiliser pour les valeurs de couleur. Les crochets [] sont nécessaires. Par exemple, si le fichier DBF de votre fichier Shape contient un champ nommé &#8220;MACOULEUREXTERIEURE&#8221; qui indique la valeur de la couleur pour chaque enregistrement, votre objet LABEL doit contenir :</p>
+<li><p class="first">[<em>attribute</em>] was introduced in version 5.0, to specify the item
+name in the attribute table to use for color values.  The hard
+brackets [] are required.  For example, if your shapefile&#8217;s DBF
+has a field named &#8220;MYOUTCOLOR&#8221; that holds color values for each
+record, your LABEL object might contain:</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LABEL</span>
   <span class="k">COLOR</span>  <span class="mi">150</span> <span class="mi">150</span> <span class="mi">150</span>
   <span class="k">OUTLINECOLOR</span> <span class="nx">[MYOUTCOLOR]</span>
@@ -466,7 +505,7 @@ semi-translucent magenta, the following is used:</p>
 <span class="k">END</span>
 </pre></div>
 </div>
-<p>le document RFC associé pour cette fonctionnalité est <a class="reference internal" href="../development/rfc/ms-rfc-19.html#rfc19"><span class="std std-ref">MS RFC 19: Style &amp; Label attribute binding</span></a>.</p>
+<p>The associated RFC document for this feature is <a class="reference internal" href="../development/rfc/ms-rfc-19.html#rfc19"><span class="std std-ref">MS RFC 19: Style &amp; Label attribute binding</span></a>.</p>
 </li>
 </ul>
 </dd>
@@ -483,19 +522,39 @@ OUTLINEWIDTH is therefore the width at the same scale at which the
 </dl>
 <dl class="docutils" id="index-21">
 <dt>PARTIALS [true|false]</dt>
-<dd><p class="first last">Le text peut-il sortir de la carte? Par défaut, oui.  Si <cite>FORCE</cite> est à &#8220;true&#8221; et <cite>PARTIALS</cite> est à &#8220;false&#8221;, <cite>FORCE</cite> prend la précédence, et les étiquettes partielles sont alors dessinées.</p>
-</dd>
+<dd>Can text run off the edge of the map? Default is true.  If <cite>FORCE</cite>
+is true and <cite>PARTIALS</cite> is false, <cite>FORCE</cite> takes precedence, and
+partial labels are drawn.</dd>
 </dl>
 <dl class="docutils" id="index-22">
 <dt>POSITION [ul|uc|ur|cl|cc|cr|ll|lc|lr|auto]</dt>
-<dd><p class="first last">Position de l&#8217;étiquette relative au point d&#8217;insertion (couches seulement). La première lettre est la position en &#8220;Y&#8221;, la seconde lettre est la position en &#8220;X&#8221;. &#8220;Auto&#8221; indique à MapServer de calculer une position d&#8217;étiquette qui n&#8217;interférera pas avec d&#8217;autres étiquettes. Avec des points, MapServer sélectionne l&#8217;une des 8 positions extérieures (c&#8217;est à dire en excluant cc). Avec les polygones, MapServer sélectionne cc (ajouté dans MapServer 5.4), uc, lc, cl et cr comme positions possible. Avec des lignes, il utilise seulement lc ou uc, jusqu&#8217;à ce    qu&#8217;il trouve une position qui n&#8217;entraîne pas de chevauchement (collision) avec des étiquettes déjà dessinées. Si toutes les positions entraînent un conflit, alors l&#8217;étiquette n&#8217;est pas dessinée (sauf si le paramètre d&#8217;étiquette <a class="reference internal" href="#force">FORCE</a> est à &#8220;true&#8221;). &#8220;Auto&#8221; est seulement disponible avec les étiquettes en cache.</p>
-</dd>
+<dd>Position of the label relative to the labeling point (layers
+only). First letter is &#8220;Y&#8221; position, second letter is &#8220;X&#8221;
+position. &#8220;Auto&#8221; tells MapServer to calculate a label position
+that will not interfere with other labels. With points, MapServer
+selects from the 8 outer positions (i.e. excluding cc). With
+polygons, MapServer selects from cc (added in MapServer 5.4), uc,
+lc, cl and cr as possible positions.  With lines, it only uses lc
+or uc, until it finds a position that doesn&#8217;t collide with labels
+that have already been drawn. If all positions cause a conflict,
+then the label is not drawn (Unless the label&#8217;s <a class="reference internal" href="#force">FORCE</a> a parameter
+is set to &#8220;true&#8221;). &#8220;Auto&#8221; placement is only available with cached
+labels.</dd>
 </dl>
 <dl class="docutils" id="index-23">
 <dt>PRIORITY [integer]|[item_name]|[attribute]</dt>
-<dd><p class="first">Le paramètre de priorité (ajouté dans la version 5.0) prend un chiffre entier entre 1 (la plus basse) et 10 (la plus haute). La valeur par défaut est de 1. Il est également possible d&#8217;affecter la priorité à un attribut (item_name) en utilisant des crochets autour de l&#8217;attribut. Par exemple &#8220;PRIORITY [monattribut]&#8221;</p>
-<p>Les étiquettes sont stockées dans le cache des étiquettes et sont dessinées par ordre de priorité : les plus hauts niveaux de priorité sont dessinés en premier. Spécifier dans le mapfile une valeur en dehors de la plage correcte du paramètre PRIORITY entrainera une erreur (&#8220;parse error&#8221;). Une valeur en dehors de la plage correcte récupérée depuis MapScript ou depuis un attribut prendra la valeur minimale ou maximale de PRIORITY au moment du rendu. Il n&#8217;y a pas d&#8217;impact attendu sur les performances lors de l&#8217;utilisation des priorités des étiquettes.</p>
-<p>[<em>Attribute</em>] a été introduit dans la version 5.6.</p>
+<dd><p class="first">The priority parameter takes an integer value between 1 (lowest)
+and 10 (highest). The default value is 1. It is also possible to
+bind the priority to an attribute (item_name) using square
+brackets around the [item_name]. e.g. &#8220;PRIORITY [someattribute]&#8221;</p>
+<p>Labels are stored in the label cache and rendered in order of
+priority, with the highest priority levels rendered first.
+Specifying an out of range PRIORITY value inside a map file will
+result in a parsing error. An out of range value set via
+MapScript or coming from a shape attribute will be clamped to the
+min/max values at rendering time.  There is no expected impact on
+performance for using label priorities.</p>
+<p>[<em>Attribute</em>] was introduced in version 5.6.</p>
 <div class="last versionadded">
 <p><span class="versionmodified">Nouveau dans la version 5.0.</span></p>
 </div>
@@ -503,8 +562,10 @@ OUTLINEWIDTH is therefore the width at the same scale at which the
 </dl>
 <dl class="docutils" id="index-24">
 <dt>REPEATDISTANCE [integer]</dt>
-<dd><p class="first">L&#8217;étiquette sera répétée sur chaque ligne d&#8217;une géométrie multligne et sera répétée plusieurs fois le long d&#8217;une ligne donnée dans un interval de REPEATDISTANCE pixels.</p>
-<p>Le document RFC associé pour cette fonctionalité est <a class="reference internal" href="../development/rfc/ms-rfc-57.html#rfc57"><span class="std std-ref">MS RFC 57: Labeling enhancements: ability to repeat labels along a line/multiline</span></a>.</p>
+<dd><p class="first">The label will be repeated on every line of a multiline shape and
+will be repeated multiple times along a given line at an interval
+of REPEATDISTANCE pixels.</p>
+<p>The associated RFC document for this feature is <a class="reference internal" href="../development/rfc/ms-rfc-57.html#rfc57"><span class="std std-ref">MS RFC 57: Labeling enhancements: ability to repeat labels along a line/multiline</span></a>.</p>
 <div class="last versionadded">
 <p><span class="versionmodified">Nouveau dans la version 5.6.</span></p>
 </div>
@@ -512,7 +573,10 @@ OUTLINEWIDTH is therefore the width at the same scale at which the
 </dl>
 <dl class="docutils" id="index-25">
 <dt>SHADOWCOLOR [r] [g] [b] | [hexadecimal string]</dt>
-<dd><p class="first">Couleur de l&#8217;ombre portée. Une étiquette avec le même texte sera rendu dans cette couleur avant le dessin de l&#8217;étiquette principale, donnant ainsi un effet d&#8217;ombrage sur les caractères de l&#8217;étiquette. Le décalage de l&#8217;ombre rendue est défini avec SHADOWSIZE.</p>
+<dd><p class="first">Color of drop shadow. A label with the same text will be rendered
+in this color before the main label is drawn, resulting in a
+shadow effect on the the label characters. The offset of the
+renderered shadow is set with SHADOWSIZE.</p>
 <ul class="last">
 <li><p class="first"><cite>r</cite>, <cite>g</cite> and <cite>b</cite> shall be integers [0..255].  To specify green,
 the following is used:</p>
@@ -543,8 +607,8 @@ semi-translucent magenta, the following is used:</p>
 </dl>
 <dl class="docutils" id="index-26">
 <dt>SHADOWSIZE [x][y]|[attribute][attribute]|[x][attribute]|[attribute][y]</dt>
-<dd><p class="first">Décalage de l&#8217;ombre en pixels, voir SHADOWCOLOR.</p>
-<p>[<em>Attribut</em>] a été introduit dans la version 6.0, et peut être utilisé de cette manière :</p>
+<dd><p class="first">Shadow offset in pixels, see SHADOWCOLOR.</p>
+<p>[<em>Attribute</em>] was introduced in version 6.0, and can be used like:</p>
 <div class="last highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">SHADOWSIZE</span> <span class="mi">2</span> <span class="mi">2</span>
 <span class="k">SHADOWSIZE</span> <span class="nx">[shadowsizeX]</span> <span class="mi">2</span>
 <span class="k">SHADOWSIZE</span> <span class="mi">2</span> <span class="nx">[shadowsizeY]</span>
@@ -556,10 +620,18 @@ semi-translucent magenta, the following is used:</p>
 <span id="index-27"></span><dl class="docutils" id="size">
 <dt>SIZE [integer]|[tiny|small|medium|large|giant]|[attribute]</dt>
 <dd><ul class="first">
-<li><p class="first">Taille de texte. Utilise un nombre pour donner la taille en pixels de votre étiquette basée sur la police TrueType, ou n&#8217;importe quel des 5 mots-clés listés pour les polices bitmap.</p>
-<p>Quand la mise à l&#8217;échelle est utilisée (<a class="reference internal" href="layer.html#symbolscaledenom"><span class="std std-ref">SYMBOLSCALEDENOM</span></a> est spécifié pour la <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a>), la <cite>SIZE</cite> donne la taille de la police qui doit être utilisée à l&#8217;échelle de carte 1:<cite>SYMBOLSCALEDENOM</cite>.</p>
+<li><p class="first">Text size. Use a number to give the size in pixels of your
+TrueType font based label, or any of the other 5 listed keywords
+for bitmap fonts.</p>
+<p>When scaling is in effect (<a class="reference internal" href="layer.html#symbolscaledenom"><span class="std std-ref">SYMBOLSCALEDENOM</span></a> is specified for the <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a>), <cite>SIZE</cite>
+gives the size of the font to be used at the map scale
+1:<cite>SYMBOLSCALEDENOM</cite>.</p>
 </li>
-<li><p class="first">[<em>Attribut</em>] a été introduit dans la version 5.0, pour spécifier le nom de l&#8217;élément  dans la table d&#8217;attribut pour utiliser les valeurs de taille. Les crochets [] sont requis. Par exemple, si le DBF de votre shapefile a un champ nommé &#8220;MYSIZE&#8221; qui porte des valeurs de taille  pour chaque enregistrement, votre objet LABEL contiendra peut-être :</p>
+<li><p class="first">[<em>Attribute</em>] was introduced in version 5.0, to specify the item
+name in the attribute table to use for size values.  The hard
+brackets [] are required.  For example, if your shapefile&#8217;s DBF
+has a field named &#8220;MYSIZE&#8221; that holds size values for each
+record, your LABEL object might contain:</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LABEL</span>
   <span class="k">COLOR</span>  <span class="mi">150</span> <span class="mi">150</span> <span class="mi">150</span>
   <span class="k">OUTLINECOLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
@@ -571,7 +643,7 @@ semi-translucent magenta, the following is used:</p>
 <span class="k">END</span>
 </pre></div>
 </div>
-<p>le document RFC associé pour cette fonctionnalité est <a class="reference internal" href="../development/rfc/ms-rfc-19.html#rfc19"><span class="std std-ref">MS RFC 19: Style &amp; Label attribute binding</span></a>.</p>
+<p>The associated RFC document for this feature is <a class="reference internal" href="../development/rfc/ms-rfc-19.html#rfc19"><span class="std std-ref">MS RFC 19: Style &amp; Label attribute binding</span></a>.</p>
 </li>
 </ul>
 <div class="last admonition note">
@@ -583,21 +655,25 @@ value), because the renderer Freetype only accepts integers.</p>
 </dl>
 <span id="index-28"></span><dl class="docutils" id="label-style">
 <dt><a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a></dt>
-<dd><p class="first">Le début d&#8217;un objet <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a></p>
-<p>Les mécanisme spécifiques aux étiquettes de l&#8217;objet <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> sont dans les options GEOMTRANSFORM :</p>
+<dd><p class="first">The start of a <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> object.</p>
+<p>Label specific mechanisms of the <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> object are the
+GEOMTRANSFORM options:</p>
 <dl class="docutils">
 <dt>GEOMTRANSFORM [labelpnt|labelpoly]</dt>
 <dd><p class="first">Creates a geometry that can be used for styling the label. Does not
 apply to ANGLE FOLLOW labels.</p>
 <ul class="simple">
-<li><p class="first">labelpnt dessine un marqueur sur la position géographique à laquelle l&#8217;étiquette est attachée. Cela correspond au centre de l&#8217;étiquette texte seulement si l&#8217;étiquette est en position CC.</p>
-</li>
-<li><p class="first">labelpoly génère le rectangle englobant pour le texte, avec 1 pixel d&#8217;espacement ajouté dans toutes les directions.</p>
-</li>
+<li>labelpnt draws a marker on the geographic position the label is
+attached to. This corresponds to the center of the label text
+only if the label is in position CC.</li>
+<li>labelpoly generates the bounding rectangle for the text, with
+1 pixel of padding added in all directions.</li>
 </ul>
-<p>Les géométries résultantes peuvent être stylées en utilisant les mécanismes disponibles dans l&#8217;objet <cite>STYLE</cite>.</p>
+<p>The resulting geometries can be styled using the mechanisms
+available in the <cite>STYLE</cite> object.</p>
 <blockquote class="last">
-<div><p>Exemple - dessine un rectangle de fond rouge pour les étiquettes avec un ombrage &#8220;shadow&#8221; en gris:</p>
+<div><p>Example - draw a red background rectangle for the labels
+(i.e. billboard) with a &#8220;shadow&#8221; in gray:</p>
 <div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">STYLE</span>
   <span class="k">GEOMTRANSFORM</span> <span class="s">&#39;labelpoly&#39;</span>
   <span class="k">COLOR</span> <span class="mi">153</span> <span class="mi">153</span> <span class="mi">153</span>
@@ -631,17 +707,22 @@ Overrides values obtained from the <a class="reference internal" href="layer.htm
 </dl>
 <span class="target" id="index-30"></span><span class="target" id="index-31"></span><dl class="docutils" id="index-32">
 <dt>TYPE [bitmap|truetype]</dt>
-<dd><p class="first">Type de polices à utiliser. Généralement, les polices bitmap  sont plus rapides à dessiner que les polices TrueType. Cependant, les polices TrueType permettent le changement d&#8217;échelles et sont disponibles dans une variété de types de polices. Assurez-vous d&#8217;avoir défini le paramètre FONT si vous avez sélectionné TrueType.</p>
+<dd><p class="first">Type of font to use. Generally bitmap fonts are faster to draw
+then TrueType fonts. However, TrueType fonts are scalable and
+available in a variety of faces. Be sure to set the FONT parameter
+if you select TrueType.</p>
 <div class="last admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Les polices Bitmap sont seulement supportées avec les moteurs de rendus AGG et GD</p>
+<p class="last">Bitmap fonts are only supported with the AGG and GD
+renderers.</p>
 </div>
 </dd>
 </dl>
 <span id="index-33"></span><dl class="docutils" id="wrap">
 <dt>WRAP [character]</dt>
-<dd><p class="first last">Caractère qui représente une condition de fin de ligne dans le texte de l&#8217;étiquette, par conséquent, donnant une étiquette multi-ligne. Interagit avec <a class="reference internal" href="#maxlength">MAXLENGTH</a> pour les conditions de retour à la ligne des étiquettes en fonction d&#8217;un nombre de caractères donné</p>
-</dd>
+<dd>Character that represents an end-of-line condition in label text,
+thus resulting in a multi-line label. Interacts with <a class="reference internal" href="#maxlength">MAXLENGTH</a>
+for conditional line wrapping after a given number of characters</dd>
 </dl>
 </div>
 
@@ -689,13 +770,13 @@ Overrides values obtained from the <a class="reference internal" href="layer.htm
           <a href="join.html" title="JOIN"
              >précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Mapfile</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

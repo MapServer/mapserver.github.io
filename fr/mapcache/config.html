@@ -138,7 +138,7 @@
           <a href="install.html" title="Compilation &amp; Installation"
              accesskey="P">précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapCache 1.6.1</a> &#187;</li> 
       </ul>
     </div>
@@ -161,24 +161,20 @@
 </tr>
 </tbody>
 </table>
-<p>The configuration file determines how mod-mapcache will serve incoming requests.
-It is an XML file comprising a list of entries, as outlined here:</p>
+<p>Le fichier de configuration détermine comment mod-mapcache va traiter les requêtes entrantes. C&#8217;est un fichier XML qui comprend un certain nombre d&#8217;éléments, comme indiqué ici :</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;mapcache&gt;</span>
    <span class="nt">&lt;grid&gt;</span>....<span class="nt">&lt;/grid&gt;</span>
    <span class="nt">&lt;source&gt;</span>....<span class="nt">&lt;/source&gt;</span>
    <span class="nt">&lt;cache&gt;</span>...<span class="nt">&lt;/cache&gt;</span>
    <span class="nt">&lt;format&gt;</span>...<span class="nt">&lt;/format&gt;</span>
    <span class="nt">&lt;tileset&gt;</span>...<span class="nt">&lt;/tileset&gt;</span>
-   <span class="nt">&lt;services&gt;</span>...<span class="nt">&lt;/services&gt;</span>
+   <span class="nt">&lt;service&gt;</span>...<span class="nt">&lt;/service&gt;</span>
 <span class="nt">&lt;/mapcache&gt;</span>
 </pre></div>
 </div>
 <div class="section" id="source">
 <span id="mapcache-config-source"></span><h2>Source<a class="headerlink" href="#source" title="Lien permanent vers ce titre">¶</a></h2>
-<p>A source is a service mod-mapcache can query to obtain image data. This is
-typically a WMS server accessible by a URL. (There are currently only WMS, WMTS
-and mapfile as sources, though others may be added later if the need arises,
-see <a class="reference internal" href="sources.html#mapcache-sources"><span class="std std-ref">Sources de données</span></a>).</p>
+<p>Une source est un service que mod-mapcache peut requérir pour obtenir une image. Il s&#8217;agit généralement d&#8217;un serveur WMS accessible par une URL (actuellement les seuls types de source disponibles sont WMS, WMTS et mapfile. D&#8217;autres pourront être ajoutés ultérieurement en fonction des besoins, voir <a class="reference internal" href="sources.html#mapcache-sources"><span class="std std-ref">Sources de données</span></a>).</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;source</span> <span class="na">name=</span><span class="s">&quot;vmap0&quot;</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span><span class="nt">&gt;</span>
 
    <span class="c">&lt;!--</span>
@@ -231,16 +227,8 @@ see <a class="reference internal" href="sources.html#mapcache-sources"><span cla
 <span class="nt">&lt;/source&gt;</span>
 </pre></div>
 </div>
-<p>The name and type attributes are straightforward: <cite>type</cite> is &#8220;wms&#8221;, and <cite>name</cite>
-is the key by which this source will be referenced; <cite>&lt;url&gt;</cite> is the HTTP
-location where the service can be accessed; and <cite>&lt;wmsparams&gt;</cite> is a list of
-parameters that will be added to the WMS request. You should probably at the
-very least add the FORMAT and LAYERS parameters. By convention(?), WMS
-parameters are uppercase, and you should respect this convention in your
-configuration file.</p>
-<p>This is where you can also override some default WMS parameters if needed. By
-default, the parameters that will be used are: <cite>&lt;REQUEST&gt;GetMap&lt;/REQUEST&gt;</cite>
-<cite>&lt;SERVICE&gt;WMS&lt;/SERVICE&gt;</cite> <cite>&lt;STYLES&gt;&lt;/STYLES&gt;</cite> <cite>&lt;VERSION&gt;1.1.0&lt;/VERSION&gt;</cite></p>
+<p>Les attributs de nom et de type sont simples: le type est &#8220;wms&#8221;, et <cite>name</cite> est la clé par laquelle la source sera référencée. <cite>&lt;url&gt;</cite> est l&#8217;emplacement HTTP où le service peut être accédé. <cite>&lt;wmsparams&gt;</cite> est la liste des paramètres qui seront ajoutés à la requête WMS. Vous devriez probablement au minimum ajouter les paramètres FORMAT et LAYERS. Par convention(?), les paramètres WMS sont en majuscules et vous devriez respecter cette convention dans votre fichier de configuration.</p>
+<p>C&#8217;est où vous pouvez aussi écraser quelques paramètres WMS par défaut si nécessaire. Par défaut, les paramètres qui seront utilisés sont: <cite>&lt;REQUEST&gt;GetMap&lt;/REQUEST&gt;</cite> <cite>&lt;SERVICE&gt;WMS&lt;/SERVICE&gt;</cite> <cite>&lt;STYLES&gt;&lt;/STYLES&gt;</cite> <cite>&lt;VERSION&gt;1.1.0&lt;/VERSION&gt;</cite></p>
 </div>
 <div class="section" id="cache">
 <h2>Cache<a class="headerlink" href="#cache" title="Lien permanent vers ce titre">¶</a></h2>
@@ -389,63 +377,47 @@ default, the parameters that will be used are: <cite>&lt;REQUEST&gt;GetMap&lt;/R
 </div>
 <div class="section" id="grid">
 <span id="mapcache-grids"></span><h2>Grille<a class="headerlink" href="#grid" title="Lien permanent vers ce titre">¶</a></h2>
-<p>A grid is the matrix that maps tiles onto an area, and consists of a spatial
-reference, a geographic extent, resolutions, and tile sizes.</p>
+<p>Une grille est la matrice faisant correspondre les tuiles sur une zone. Elle consiste en un système de coordonnées, une étendue géographique, des résolutions et des tailles de tuiles.</p>
 <div class="section" id="mandatory-configuration-options">
 <h3>Options de configuration obligatoires<a class="headerlink" href="#mandatory-configuration-options" title="Lien permanent vers ce titre">¶</a></h3>
 <ul>
-<li><p class="first"><strong>&lt;size&gt;</strong>: The width and height of an individual tile, in pixels. Must be
-specified as positive integers separated by a space character. The most common
-tile size is:</p>
+<li><p class="first"><strong>&lt;size&gt;</strong>: la largeur et la hauteur d&#8217;une tuile individuelle, en pixels. Doit être indiquée en utilisant des entiers positifs séparés par un espace. La valeur la plus courante est :</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;size&gt;</span>256 256<span class="nt">&lt;/size&gt;</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>&lt;extent&gt;</strong>: The geographical extent covered by the grid, in ground units
-(e.g. meters, degrees, feet, etc.). Must be specified as 4 floating point
-numbers separated by spaces, ordered as minx, miny, maxx, maxy.</p>
+<li><p class="first"><strong>&lt;extent&gt;</strong>: L&#8217;étendue géographique couverte par la grille, en unités terrain (mètres, degrés, pieds...). Elle doit être spécifiée par 4 nombres décimaux séparés par des espaces, dans l&#8217;ordre minx, miny, maxx, maxy.</p>
 <p>MapCache expects all of its extents to be given in lonlat, and does the
 translation to latlon at request time if needed.</p>
-<p>The (minx,miny) point defines the origin of the grid, i.e. the pixel at the
-bottom left of the bottom-left most tile is always placed on the (minx,miny)
-geographical point.</p>
+<p>Le point (minx, miny) définit l&#8217;origine de la grille, c&#8217;est-à-dire que le pixel le plus en bas à gauche de la tuile la plus en bas à gauche est toujours positionnée sur le point géographique correspondant à (minx,miny).</p>
 <p>Le point (maxx,maxy) est utilisé pour calculer le nombre de tuile pour chaque niveau de zoom.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;extent&gt;</span>-180 -90 180 90<span class="nt">&lt;/extent&gt;</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>&lt;srs&gt;</strong>: The projection of the grid, usually given by it EPSG identifier.
-This value isn&#8217;t used directly by MapCache to compute reprojections; it is
-only used to look up which grid to use when receiving WMS requests.</p>
+<li><p class="first"><strong>&lt;srs&gt;</strong>: La projection de la grille, généralement désignée par son code EPSG. La valeur saisie ici n&#8217;est pas directement utilisée par MapCache pour calculer des reprojections. Elle sert uniquement à déterminer quelle grille utiliser lors de la réception de requêtes WMS.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;srs&gt;</span>epsg:4326<span class="nt">&lt;/srs&gt;</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This is the value that is passed on to the <a class="reference internal" href="sources.html#mapcache-sources"><span class="std std-ref">source</span></a>
-when requesting a tile that is not already cached for the current grid. You
-must make sure that the source that is queried is capable of returning image
-data for this SRS.</p>
+<p class="last">C&#8217;est la valeur qui est transmise à la <a class="reference internal" href="sources.html#mapcache-sources"><span class="std std-ref">source</span></a> quand la tuile demandée n&#8217;est pas déjà présente dans le cache pour la grille correspondante. Vous devez vous assurer que la source indiquée est capable de renvoyer un résultat sous forme d&#8217;image pour le SRS utilisé par la grille.</p>
 </div>
 </li>
-<li><p class="first"><strong>&lt;units&gt;</strong>: The ground units used by the grid&#8217;s projection. This entry is not
-used directly by MapCache aside from calculating scales for the WMTS
-capabilities document. Allowed values are:</p>
+<li><p class="first"><strong>&lt;units&gt;</strong>: Les unités de mesure utilisées par la projection de la grille. Cette information n&#8217;est pas directement utilisée par MapCache si ce n&#8217;est pour calculer les échelles dans le document &#8220;GetCapabilities&#8221; produit en WMTS. Les valeurs autorisées sont:</p>
 <ul class="simple">
-<li><strong>m</strong>  : meters</li>
-<li><strong>dd</strong> : decimal degrees</li>
-<li><strong>ft</strong> : feet</li>
+<li><p class="first"><strong>m</strong>: mètres</p>
+</li>
+<li><p class="first"><strong>dd</strong>: degrés décimaux</p>
+</li>
+<li><p class="first"><strong>ft</strong>: pieds</p>
+</li>
 </ul>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;units&gt;</span>dd<span class="nt">&lt;/units&gt;</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>&lt;resolutions&gt;</strong>: This is a list of resolutions for each of the zoom levels
-defined by the grid. This must be supplied as a list of positive floating
-point values, separated by spaces and ordered from largest to smallest. The
-largest value will correspond to the grid&#8217;s zoom level 0. Resolutions are
-expressed in &#8220;units-per-pixel&#8221;, depending on the unit used by the grid (e.g.
-resolutions are in meters per pixel for most grids used in webmapping).</p>
+<li><p class="first"><em>&lt;resolutions&gt;*</em>: Il s&#8217;agit d&#8217;une liste de résolutions pour chacun des niveaux de zoom définis pour la grille. Cela doit être renseigné sous la forme d&#8217;une liste de nombres décimaux, séparés par des espaces et classés du plus grand au plus petit. La valeur la plus grande correspond au niveau de zoom 0. Les résolutions sont exprimées en &#8220;unités par pixel&#8221;, dépendant donc de l&#8217;unité utilisée par la grille (dans la plupart des cas les résolutions sont exprimées en mètres par pixel).</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;resolutions&gt;</span>0.703125000000000 0.351562500000000 0.175781250000000 8.78906250000000e-2 4.39453125000000e-2 2.19726562500000e-2 1.09863281250000e-2 5.49316406250000e-3 2.74658203125000e-3 1.37329101562500e-3 6.86645507812500e-4 3.43322753906250e-4 1.71661376953125e-4 8.58306884765625e-5 4.29153442382812e-5 2.14576721191406e-5 1.07288360595703e-5 5.36441802978516e-6<span class="nt">&lt;/resolutions&gt;</span>
 </pre></div>
 </div>
@@ -455,11 +427,7 @@ resolutions are in meters per pixel for most grids used in webmapping).</p>
 <div class="section" id="optional-configuration-options">
 <h3>Options de configuration optionnelles<a class="headerlink" href="#optional-configuration-options" title="Lien permanent vers ce titre">¶</a></h3>
 <ul>
-<li><p class="first"><strong>&lt;srsalias&gt;</strong>: This tag can be specified multiple times, and allows the user
-to add multiple SRS entries for a given grid. This is especially useful if
-the EPSG id for a given projection has evolved over time, or to support
-catalogs other than the EPSG one (which is the only catalog supported by the
-WMS specification).</p>
+<li><p class="first"><strong>&lt;srsalias&gt;</strong>: Cet élément peut être indiqué plusieurs fois, et permet à l&#8217;utilisateur d&#8217;ajouter plusieurs correspondances de srs pour une grille donnée. C&#8217;est particulièrement utile quand un code epsg a évolué dans le temps, ou pour utiliser d&#8217;autres catalogues que celui de l&#8217;EPSG (qui est le seul admis par les spécifications WMS).</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;srs&gt;</span>EPSG:310024802<span class="nt">&lt;/srs&gt;</span>
 <span class="nt">&lt;srsalias&gt;</span>IGNF:GEOPORTALFXX<span class="nt">&lt;/srsalias&gt;</span>
 <span class="nt">&lt;srsalias&gt;</span>EPSG:310024001<span class="nt">&lt;/srsalias&gt;</span>
@@ -473,10 +441,7 @@ WMS specification).</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>&lt;WellKnownScaleSet&gt;</strong>: See the WMTS keyword. This will add a
-WellKnownScaleSet entry to the WMTS capabilities document. It is up to the
-user to make sure that the supplied resolutions for the grid actually match
-the pre-defined WellKnownScaleSet.</p>
+<li><p class="first"><strong>&lt;WellKnownScaleSet&gt;</strong>: voir les options WMTS. Ceci ajoutera un élément WellKnownScaleSet au document de capacités WMTS. Il appartient à l&#8217;utilisateur de vérifier que les résolutions définies pour la grille correspondent bien à celle prédéfinies dans le WellKnownScaleSet</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;WellKnownScaleSet&gt;</span>urn:ogc:def:wkss:OGC:1.0:GoogleCRS84Quad<span class="nt">&lt;/WellKnownScaleSet&gt;</span>
 </pre></div>
 </div>
@@ -494,12 +459,9 @@ the pre-defined WellKnownScaleSet.</p>
 </div>
 <div class="section" id="preconfigured-grids">
 <h3>Grilles préconfigurées<a class="headerlink" href="#preconfigured-grids" title="Lien permanent vers ce titre">¶</a></h3>
-<p>There are three predefined grids you can use without defining them in the
-mapcache.xml file:</p>
+<p>Il y a trois grilles prédéfinies que vous pouvez utiliser sans les définir dans le fichier mapcache.xml:</p>
 <ul>
-<li><p class="first">The &#8220;WGS84&#8221; grid corresponds to a grid where the whole world is rendered on
-two 256x256-pixel tiles at level 0 (i.e. the (-180,-90,180,90) extent fits on
-a 512x256 image). It goes down to zoom level 17.</p>
+<li><p class="first">La grille &#8220;WGS84&#8221; correspond à une grille en plate-carrée où le monde entier est rendu en deux tuiles de 256x256 pixels au niveau 0 (c&#8217;est-à-dire que l&#8217;étendue (-180,-90,180,90) tient sur une image de 512x256 pixels). La grille descend ensuite jusqu&#8217;au niveau 17.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;grid</span> <span class="na">name=</span><span class="s">&quot;WGS84&quot;</span><span class="nt">&gt;</span>
    <span class="nt">&lt;metadata&gt;</span>
       <span class="nt">&lt;title&gt;</span>GoogleCRS84Quad<span class="nt">&lt;/title&gt;</span>
@@ -514,11 +476,7 @@ a 512x256 image). It goes down to zoom level 17.</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">The &#8220;g&#8221; grid may be used to overlay tiles on top of GoogleMaps, and is the
-default tiling scheme used in webmapping applications. This grid goes down to
-zoom level 18. Level 0 is a single 256x256 tile. This grid&#8217;s default SRS is
-EPSG:900913, which is non-standard but in wider use than than its official
-EPSG:3857 entry.</p>
+<li><p class="first">la grille &#8220;g&#8221; correspond au cas de figure où vous souhaitez superposer vos tuiles à GoogleMaps. Il s&#8217;agit du modèle de tuilage par défault dans les applications de webmapping. Cette grille descend au niveau 18. Le niveau 0 est une unique tuile de 256x256. Le srs par défaut de la grille est le EPSG:900913 qui n&#8217;est pas standard mais est plus répandu que l&#8217;officiel EPSG:3857.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;grid</span> <span class="na">name=</span><span class="s">&quot;g&quot;</span><span class="nt">&gt;</span>
    <span class="nt">&lt;metadata&gt;</span>
       <span class="nt">&lt;title&gt;</span>GoogleMapsCompatible<span class="nt">&lt;/title&gt;</span>
@@ -534,8 +492,7 @@ EPSG:3857 entry.</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">The &#8220;GoogleMapsCompatible&#8221; grid is nearly identical to the &#8220;g&#8221; grid, except
-that its default SRS is EPSG:3857 instead of EPSG:900913.</p>
+<li><p class="first">La grille GoogleMapsCompatible&#8221; est presque identique à la grille &#8220;g&#8221; si ce n&#8217;est qu&#8217;elle utilise l&#8217;EPSG:3857 par défaut plutôt que EPSG:900913.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;grid</span> <span class="na">name=</span><span class="s">&quot;GoogleMapsCompatible&quot;</span><span class="nt">&gt;</span>
    <span class="nt">&lt;metadata&gt;</span>
       <span class="nt">&lt;title&gt;</span>GoogleMapsCompatible<span class="nt">&lt;/title&gt;</span>
@@ -765,8 +722,7 @@ that its default SRS is EPSG:3857 instead of EPSG:900913.</p>
 </div>
 <div class="section" id="services">
 <h2>Services<a class="headerlink" href="#services" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Services are the type of request that mod-mapcache will respond to. You should,
-of course, enable at least one.</p>
+<p>Les services sont les types de requêtes auxquelles mod-mapcache répondra. Vous devez en activer au moins un.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
    <span class="c">&lt;!--</span>
 <span class="c">        This service should actually be called &quot;ogc&quot;. It is different from</span>
@@ -877,7 +833,7 @@ of course, enable at least one.</p>
 <span class="nt">&lt;/locker&gt;</span>
 </pre></div>
 </div>
-<p>For specific information about locking, read <a class="reference internal" href="locks.html#mapcache-locks"><span class="std std-ref">this</span></a>.</p>
+<p>Pour des informations sur le verrouillage, voir: <span class="xref std std-ref">&lt;mapcache_locks&gt;</span>.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="c">&lt;!-- log_level</span>
 
 <span class="c">     For CGI/FastCGI only; For the Apache module use the httpd.conf LogLevel</span>
@@ -971,13 +927,13 @@ of course, enable at least one.</p>
           <a href="install.html" title="Compilation &amp; Installation"
              >précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >MapCache 1.6.1</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

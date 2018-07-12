@@ -32,7 +32,7 @@
     <link rel="top" title="MapServer 7.0.7 documentation" href="../index.html" />
     <link rel="up" title="Mapfile" href="index.html" />
     <link rel="next" title="VALIDATION" href="validation.html" />
-    <link rel="prev" title="Exemples de symbologie" href="symbology/examples.html" /> 
+    <link rel="prev" title="Symbology Examples" href="symbology/examples.html" /> 
   </head>
   <body role="document">
 
@@ -135,10 +135,10 @@
           <a href="validation.html" title="VALIDATION"
              accesskey="N">suivant</a> |</li>
         <li class="right" >
-          <a href="symbology/examples.html" title="Exemples de symbologie"
+          <a href="symbology/examples.html" title="Symbology Examples"
              accesskey="P">précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Mapfile</a> &#187;</li> 
       </ul>
     </div>
@@ -168,30 +168,40 @@
 </tbody>
 </table>
 <div class="contents topic" id="table-of-contents">
-<p class="topic-title first">Table des matières</p>
+<p class="topic-title first">Table of Contents</p>
 <ul class="simple">
 <li><a class="reference internal" href="#templating" id="id1">Templating</a><ul>
 <li><a class="reference internal" href="#introduction" id="id2">Introduction</a></li>
 <li><a class="reference internal" href="#format" id="id3">Format</a></li>
-<li><a class="reference internal" href="#example-template" id="id4">Modèle exemple</a></li>
+<li><a class="reference internal" href="#example-template" id="id4">Example Template</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="introduction">
 <h2><a class="toc-backref" href="#table-of-contents">Introduction</a><a class="headerlink" href="#introduction" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Les modèles (template) sont utilisés :</p>
+<p>Templates are used:</p>
 <ul class="simple">
 <li>to define the look of a MapServer CGI application interface</li>
-<li><p class="first">pour présenter les résultats d&#8217;une requête.</p>
-</li>
+<li>to present the results of a query.</li>
 <li>to create custimised output (see <a class="reference internal" href="../output/template_output.html#template-output"><span class="std std-ref">Template-Driven Output</span></a>)</li>
 </ul>
-<p>Ils guident la présentation des résultats, que ce soit une interrogation ou une carte, à l&#8217;utilisateur.  Les modèles sont presque toujours des fichiers HTML malgré le fait qu&#8217;ils puissent aussi être une URL (c&#8217;est à dire <a class="reference external" href="http://www.somewhere.com/[ATTRIBUTE]/info.html">http://www.somewhere.com/[ATTRIBUTE]/info.html</a>). Les modèles d&#8217;URL peuvent seulement être utilisés avec les résultats d&#8217;une simple QUERY ou d&#8217;un ITEMQUERY, ainsi de nombreuses substitutions définies plus bas ne sont pas disponibles pour eux. Des interfaces de déplacement/zoom utilise un fichier de modèle seul tandis les requêtes compliquées nécessitent souvent plusieurs modèles. Les modèles utilise souvent du JavaScript pour améliorer l&#8217;interface basique.</p>
+<p>They guide the presentation of results, either a query or a map, to
+the user.  Templates are almost always HTML files although they can
+also be a URL (e.g..
+<a class="reference external" href="http://www.somewhere.com/[ATTRIBUTE]/info.html">http://www.somewhere.com/[ATTRIBUTE]/info.html</a>). URL templates can
+only be used with simple QUERY or ITEMQUERY results so many
+substitutions defined below are not available for them. Simple
+pan/zoom interfaces use a single template file while complicated
+queries often require many templates.  Templates often use JavaScript
+to enhance the basic interface.</p>
 <div class="section" id="notes">
-<h3>Remarques<a class="headerlink" href="#notes" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Notes<a class="headerlink" href="#notes" title="Lien permanent vers ce titre">¶</a></h3>
 <ul>
-<li><p class="first">Les modèles <em>doivent</em> contenir la chaîne magique &#8216;mapserver template&#8217; dans la première ligne du modèle. Souvent, cela prend la forme d&#8217;un commentaire HTML, javascript ou XML. Cette ligne <em>n&#8217;est</em> pas écrite dans le client. La chaîne magique n&#8217;est pas sensible à la casse.</p>
+<li><p class="first">Templates <em>must</em> contain the magic string &#8216;mapserver template&#8217; in
+the first line of the template. Often this takes the form of an
+HTML, javascript or XML comment. This line is <em>not</em> written to the
+client. The magic string is not case sensitive.</p>
 </li>
 <li><p class="first">MapServer will only accept certain file extensions for templates;
 valid file extensions are:</p>
@@ -207,41 +217,65 @@ valid file extensions are:</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Tous les <a class="reference internal" href="../cgi/index.html#cgi"><span class="std std-ref">paramètres CGI</span></a> peuvent être référencés  dans des substitutions de modèles, les paramètres spéciques de MapServer aussi bien que ceux définis par l&#8217;utilisateur. En principe, les paramètres sont gérés par le MapServer 1:1. Cette fonctionnalité est essentielle pour implémenter les applications MapServer.</p>
-<p>La référence ci-dessous liste seulement les chaînes de substitutions de modèle spécial qui sont nécessaires pour obtenir une information modifiée par MapServer, c&#8217;est à dire une nouvelle échelle, des résultats d&#8217;interrogation, etc.</p>
+<li><p class="first">All <a class="reference internal" href="../cgi/index.html#cgi"><span class="std std-ref">CGI parameters</span></a> can be referenced in template
+substitutions, MapServer specific parameters as well as user defined
+ones. In principle parameters are handed through by the MapServer
+1:1. This feature is essential for implementing MapServer
+applications.</p>
+<p>The reference below only lists special template substitution strings
+which are needed to obtain information modified by the MapServer,
+e.g. a new scale, query results, etc.</p>
 </li>
-<li><p class="first">Les chaînes de substitution des modèles sont sensibles à la casse.</p>
+<li><p class="first">Template substitution strings are case sensitive.</p>
 </li>
-<li><p class="first">Les substitutions des éléments attributaires doivent avoir la même casse que le nom des éléments dans le fichier dbase.</p>
+<li><p class="first">Attribute item substitutions must be the same case as the item names
+in the dbase file.</p>
 </li>
-<li><p class="first">ArcView et ArcInfo produisent généralement des fichiers dbase avec des noms d&#8217;éléments qui sont tous en majuscules. L&#8217;encodage approprié des URL (c&#8217;est à dire &#8216; &#8216; à &#8216;+&#8217;) est appliqué quand les templates sont des URL.</p>
+<li><p class="first">ArcView and ArcInfo generally produce dbase files with item names
+that are all uppercase. Appropriate URL encoding (i.e. &#8216; &#8216; to &#8216;+&#8217;)
+is applied when templates are URLs.</p>
 </li>
-<li><p class="first">Quelques substitutions sont aussi disponibles avec une forme échappée (c&#8217;est à dire une URL encodée).</p>
+<li><p class="first">Some substitutions are also available in escaped form (i.e. URL
+encoded).</p>
 </li>
 </ul>
-<p>Comme un exemple, ceci est nécessaire quand on génère des liens à l&#8217;intérieur d&#8217;un template. Cela est susceptible de passer l&#8217;étendue de la carte courante &#8220;mapextent&#8221; à un nouvel appel MapServer. <em>[mapext]</em> est substitué par un jeu de coordonnées &#8220;coin bas gauche&#8221; et &#8220;haut droite&#8221; séparés par des espaces. Comme cela casserais l&#8217;URL, <em>[mapext_esc]</em> est substitué par un jeu qui est correctement encodé.</p>
+<p>As an example this is needed when generating links within a
+template. This might pass the current mapextent to a new MapServer
+call. <em>[mapext]</em> is substituted by a space delimited set of lower left
+and upper right coordinates. This would break the URL. <em>[mapext_esc]</em>
+is substituted by a proper encoded set.</p>
 </div>
 </div>
 <div class="section" id="format">
 <h2><a class="toc-backref" href="#table-of-contents">Format</a><a class="headerlink" href="#format" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Les modèles sont simplement des fichiers HTML simples ou des chaînes d&#8217;URL qui contiennent des caractères spéciaux qui sont remplacés par <a class="reference internal" href="../cgi/mapserv.html#mapserv"><span class="std std-ref">mapserv</span></a> chaque fois que le modèle est lu. la substitution simple autorise des informations comme les couches actives ou l&#8217;étendue spatiale qui doit être passée de l&#8217;utilisateur de <a class="reference internal" href="../cgi/mapserv.html#mapserv"><span class="std std-ref">mapserv</span></a> et inversement. Le plus souvent les nouvelles valeurs sont envoyées vers des variables de formulaire qui seront passées à nouveau. La liste des caractères spéciaux et des variables de formulaires est donnée ci-dessous. Les modèles HTML peuvent inclure à peu près n&#8217;importe quoi en incluant des appels JavaScript et Java.</p>
+<p>Templates are simply HTML files or URL strings that contains special
+characters that are replaced by <a class="reference internal" href="../cgi/mapserv.html#mapserv"><span class="std std-ref">mapserv</span></a> each time the template
+is processed. The simple substitution allows information such as
+active layers or the spatial extent to be passed from the user to
+<a class="reference internal" href="../cgi/mapserv.html#mapserv"><span class="std std-ref">mapserv</span></a> and back again. Most often the new values are dumped
+into form variables that will be passed on again. The list of special
+characters and form variables is given below. HTML templates can
+include just about anything including JavaScript and Java calls.</p>
 <p>In HTML files, the attribute values can be inside quotes(&#8220;&#8221;). Writing
 attribute values inside quotes allows you to set special characters in
 value that you couldn&#8217;t use normally (ie: ],=,&#8221; and space). To write a
 single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 <div class="section" id="general">
-<h3>Général<a class="headerlink" href="#general" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>General<a class="headerlink" href="#general" title="Lien permanent vers ce titre">¶</a></h3>
 <dl class="docutils">
 <dt>[date]</dt>
-<dd><p class="first">Renvoie la date (d&#8217;après l&#8217;horloge du serveur web). Le format par défaut est le même que celui utilisé par les logs communs de Apache, qui ressemble à ceci :</p>
+<dd><p class="first">Outputs the date (as per the web server&#8217;s clock). The default
+format is the same as is used by Apache&#8217;s Common Log format,
+which looks like:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">01</span><span class="o">/</span><span class="n">Dec</span><span class="o">/</span><span class="mi">2010</span><span class="p">:</span><span class="mi">17</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mi">58</span> <span class="o">-</span><span class="mi">0800</span>
 </pre></div>
 </div>
-<p>Arguments disponibles :</p>
+<p>Available arguments:</p>
 <ul class="last">
 <li><dl class="first docutils">
 <dt>format=</dt>
-<dd><p class="first">Une chaîne formattée comme supportée par la function standard C strftime(). comme exemple, le format par défaut est défini comme :</p>
+<dd><p class="first">A format string as supported by the standard C strftime()
+function.  As an example, the default format is defined as:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">date</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%b/%Y:%H:%M:%S %z&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -250,131 +284,145 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>tz=</dt>
-<dd><p class="first">Le fuseau horaire à utiliser pour la date retournée. Par défaut, c&#8217;est &#8220;local&#8221;. Les valeurs valides sont :</p>
+<dd><p class="first">timezone to use for the date returned. Default is
+&#8220;local&#8221;. Valid values are:</p>
 <ul class="simple">
 <li><dl class="first docutils">
 <dt>&#8220;gmt&#8221;</dt>
-<dd><p class="first last">La date renvoyée sera en temps de Greenwich (GMT)</p>
-</dd>
+<dd>Output date will be Greenwich time</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>&#8220;local&#8221;</dt>
-<dd><p class="first last">Renvoie le temps du serveur web pour son fuseau horaire local.</p>
-</dd>
+<dd>Output the time in the web server&#8217;s local time zone.</dd>
 </dl>
 </li>
 </ul>
-<p class="last">En plus ou bien de manière alternative, les chaînes du format strftime %z et %Z  permettent de renvoyer le décalage de temps du fuseau horaire ou son nom.</p>
+<p class="last">Additionally or alternatively, the %z and %Z strftime format
+strings allow the timezone offset or name to be output.</p>
 </dd>
 </dl>
 </li>
 </ul>
 </dd>
 <dt>[version]</dt>
-<dd><p class="first last">Numéro de version de Mapserver.</p>
-</dd>
+<dd>The MapServer version number.</dd>
 <dt>[id]</dt>
-<dd><p class="first last">Identifiant de session unique. l&#8217;identifiant peut être passé via un formulaire mais est plus généralement généré par le logiciel. Dans ce cas, l&#8217;identifiant est la concaténation du temps UNIX (ou équivalent NT) et de l&#8217;identifiant du processus. A moins que vous obteniez plus de requêtes en une seconde que le système a d&#8217;identifiants de processus, alors l&#8217;identifiant peut être considéré comme unique. ;-&gt;</p>
-</dd>
+<dd>Unique session id. The id can be passed in via a form but is more
+commonly generated by the software. In that case the id is a
+concatenation of UNIX time (or NT equivalent) and the process
+id. Unless you&#8217;re getting more requests in a second than the
+system has process ids the id can be considered unique. ;-&gt;</dd>
 <dt>[host]</dt>
-<dd><p class="first last">Nom d&#8217;hôte du serveur web.</p>
-</dd>
+<dd>Hostname of the web server.</dd>
 <dt>[port]</dt>
-<dd><p class="first last">Port que le serveur web écoute.</p>
-</dd>
+<dd>Port the web server is listening to.</dd>
 <dt>[post or get variable name], [post or get variable name_esc]</dt>
-<dd><p class="first">Le contenu de n&#8217;importe quelle variable passée à MapServer, qu&#8217;elles soient ou non utilisées, peut être renvoyée de cette manière. Une utilisation peut être d&#8217;avoir un utilisateur qui définisse un titre de carte ou un style de flèche Nord dans composeur de carte interactif. Le système se moque des valeurs, mais elles peuvent être réellement importantes pour créer une sortie finale, c&#8217;est à dire que si vous spécifié un paramètre CGI comme mavaleur=...., vous pouvez accéder à celui-ci dans le fichier de template avec [mavaleur].</p>
-<p class="last">Aussi disponible comme une version &#8220;échappée&#8221;</p>
+<dd><p class="first">The contents of any variables passed to the MapServer, whether
+they were used or not, can be echoed this way. One use might be
+to have the user set a map title or north arrow style in an
+interactive map composer. The system doesn&#8217;t care about the
+values, but they might be real important in creating the final
+output, e.g. if you specified a CGI parameter like myvalue=....
+you can access this in the template file with [myvalue].</p>
+<p class="last">Also available as escaped version.</p>
 </dd>
 <dt>[web_meta data key],[web_meta data key_esc]</dt>
-<dd><p class="first">Accès aux métadonnées de l&#8217;objet web (c&#8217;est à dire [web_projection])</p>
-<p class="last">Aussi disponible comme une version &#8220;échappée&#8221;</p>
+<dd><p class="first">Web object meta data access (e.g [web_projection]</p>
+<p class="last">Also available as escaped version.</p>
 </dd>
 <dt>[errmsg], [errmsg_esc]</dt>
-<dd><p class="first">Sortie courante de la pile d&#8217;erreurs. Les différents messages d&#8217;erreurs sont délimités par des are delimited by semi-colons.</p>
-<p class="last">Aussi disponible comme une version &#8220;échappée&#8221;</p>
+<dd><p class="first">Current error stack output. Various error messages are delimited
+by semi-colons.</p>
+<p class="last">Also available as escaped version.</p>
 </dd>
 </dl>
 </div>
 <div class="section" id="file-reference">
-<h3>Référence de fichier<a class="headerlink" href="#file-reference" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>File Reference<a class="headerlink" href="#file-reference" title="Lien permanent vers ce titre">¶</a></h3>
 <dl class="docutils">
 <dt>[img]</dt>
-<dd><p class="first">Chemin (relatif à la racine du document) de la nouvelle image, juste le nom de l&#8217;image si le paramètre IMAGE_URL n&#8217;est pas défini dans le mapfile.</p>
-<p class="last">Dans un modèle d&#8217;interface de carte, [img] est substitué avec le chemin de l&#8217;image carte. Dans un modèle de résultats d&#8217;interrogation, il est substitué avec le chemin vers l&#8217;image de la &#8220;querymap&#8221; (si un objet <a class="reference internal" href="querymap.html#querymap"><span class="std std-ref">QUERYMAP</span></a> est défini dans le <a class="reference internal" href="index.html#mapfile"><span class="std std-ref">Mapfile</span></a>).</p>
+<dd><p class="first">Path (relative to document root) of the new image, just the image
+name if IMAGE_URL is not set in the mapfile.</p>
+<p class="last">In a map interface template, [img] is substituted with the path
+to the map image.  In a query results template, it is substituted
+with the path to the querymap image (if a <a class="reference internal" href="querymap.html#querymap"><span class="std std-ref">QUERYMAP</span></a> object
+is defined in the <a class="reference internal" href="index.html#mapfile"><span class="std std-ref">Mapfile</span></a>).</p>
 </dd>
 <dt>[ref]</dt>
-<dd><p class="first last">Chemin (relatif à la racine du document) de la nouvelle image de la carte de référence.</p>
-</dd>
+<dd>Path (relative to document root) of the new reference image.</dd>
 <dt>[legend]</dt>
-<dd><p class="first">Chemin (relatif à la racine du document) de la nouvelle image de légende générée par MapServer.</p>
-<p class="last">Depuis la version 3.5.1, un nouveau modèle de légende HTML est fourni par MapServer. Si un modèle est défini dans le <a class="reference internal" href="index.html#mapfile"><span class="std std-ref">Mapfile</span></a>, la chaîne [legend] est remplacée par la légende traitée. Voir la référence <a class="reference internal" href="../output/html_legend.html#html-legend"><span class="std std-ref">Légendes HTML avec MapServer</span></a> pour les détails.</p>
+<dd><p class="first">Path (relative to document root) of new legend image rendered by
+the MapServer.</p>
+<p class="last">Since version 3.5.1 a new HTML Legend template is provided by
+MapServer. If a template is defined in the <a class="reference internal" href="index.html#mapfile"><span class="std std-ref">Mapfile</span></a> the
+[legend] string is replaced by the processed legend as. See the
+<a class="reference internal" href="../output/html_legend.html#html-legend"><span class="std std-ref">HTML Legends with MapServer</span></a> for details.</p>
 </dd>
 <dt>[scalebar]</dt>
-<dd><p class="first last">Chemin (relatif à la racine du document) de la nouvelle image d&#8217;échelle.</p>
-</dd>
+<dd>Path (relative to document root) of new scalebar image.</dd>
 <dt>[queryfile]</dt>
-<dd><p class="first last">Chemin vers le fichier de requête (si savemap a été défini comme un <a class="reference internal" href="../cgi/index.html#cgi"><span class="std std-ref">paramètre CGI</span></a>).</p>
-</dd>
+<dd>Path to the query file (if savequery was set as a <a class="reference internal" href="../cgi/index.html#cgi"><span class="std std-ref">CGI
+Parameter</span></a>).</dd>
 <dt>[map]</dt>
-<dd><p class="first last">Chemin vers le fichier .map (si savemap a été défini comme un <a class="reference internal" href="../cgi/index.html#cgi"><span class="std std-ref">paramètre CGI</span></a>).</p>
-</dd>
+<dd>Path to the map file (if savemap was set as a <a class="reference internal" href="../cgi/index.html#cgi"><span class="std std-ref">CGI Parameter</span></a>).</dd>
 </dl>
 </div>
 <div class="section" id="image-geometry">
-<h3>Géométrie de l&#8217;image<a class="headerlink" href="#image-geometry" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Image Geometry<a class="headerlink" href="#image-geometry" title="Lien permanent vers ce titre">¶</a></h3>
 <dl class="docutils">
 <dt>[center]</dt>
-<dd><p class="first last">Centre calculé de l&#8217;image en pixels. Utile pour définir la variable de formulaire imgxy quand la taille de la carte change.</p>
-</dd>
+<dd>Computed image center in pixels. Useful for setting imgxy form
+variable when map sizes change.</dd>
 <dt>[center_x], [center_y]</dt>
-<dd><p class="first last">Coordonnées X ou Y du centre de l&#8217;image calculé en pixels.</p>
-</dd>
+<dd>Computed image center X or Y coordinate in pixels.</dd>
 <dt>[mapsize], [mapsize_esc]</dt>
-<dd><p class="first">Taille de l&#8217;image courante en colonne et en ligne (séparée par des espaces).</p>
-<p class="last">Aussi disponible comme une version &#8220;échappée&#8221;</p>
+<dd><p class="first">Current image size in cols and rows (separated by spaces).</p>
+<p class="last">Also available as escaped version.</p>
 </dd>
 <dt>[mapwidth], [mapheight]</dt>
-<dd><p class="first last">Largeur ou hauteur de l&#8217;image courante.</p>
-</dd>
+<dd>Current image width or height.</dd>
 <dt>[scaledenom]</dt>
-<dd><p class="first last">Echelle de l&#8217;image courante. La valeur exacte n&#8217;est pas appropriée pour les informations utilisateur mias essentielle pour certaines applications. La valeur peut être arrondie c&#8217;est à dire en utilisant du JavaScript ou un traitement côté serveur.</p>
-</dd>
+<dd>Current image scale. The exact value is not appropriate for user
+information but essential for some applications. The value can be
+rounded e.g. using JavaScript or server side post processing.</dd>
 <dt>[scale] - deprecated</dt>
-<dd><p class="first last">Depuis la version de MapServer 5.0, le paramètre approprié à utiliser est [scaledenom] à la place.  L&#8217;échelle [scale] dépréciée est l&#8217;échelle de l&#8217;image courante. La valeur exacte n&#8217;est pas appropriée pour les informations utilisateur mias essentielle pour certaines applications. La valeur peut être arrondie c&#8217;est à dire en utilisant du JavaScript ou un traitement côté serveur.</p>
-</dd>
+<dd>Since MapServer 5.0 the proper parameter to use is [scaledenom]
+instead.  The deprecated [scale] is the current image scale. The
+exact value is not appropriate for user information but essential
+for some applications. The value can be rounded e.g. using
+JavaScript or server side post processing.</dd>
 <dt>[cellsize]</dt>
-<dd><p class="first last">Taille d&#8217;un pixel dans l&#8217;image courante en unité de carte. Utile pour les outils de mesure de distance dans les interfaces utilisateurs.</p>
-</dd>
+<dd>Size of an pixel in the current image in map units. Useful for
+distance measurement tools in user interfaces.</dd>
 </dl>
 </div>
 <div class="section" id="map-geometry">
-<h3>Géométrie de la carte<a class="headerlink" href="#map-geometry" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Map Geometry<a class="headerlink" href="#map-geometry" title="Lien permanent vers ce titre">¶</a></h3>
 <dl class="docutils">
 <dt>[mapx], [mapy]</dt>
-<dd><p class="first last">Coordonnées X et Y du clic de souris.</p>
-</dd>
+<dd>X and Y coordinate of mouse click.</dd>
 <dt>[mapext], [mapext_esc]</dt>
-<dd><p class="first">Etendue complète &#8220;mapextent&#8221; (séparée par des espaces).</p>
-<p>Aussi disponible comme une version échappée. (mapext_esc est dépréciée dans MapServer 5.2. Vous devriez utiliser l&#8217;argument &#8220;escape=&#8221; à la place)</p>
-<p>Le modèle par défaut [mapext] retourne les coordonnées dans le format : mixx miny maxx maxy</p>
-<p>Arguments disponibles :</p>
+<dd><p class="first">Full mapextent (separated by spaces).</p>
+<p>Also available as escaped version. (mapext_esc is deprecated in
+MapServer 5.2.  You should use the &#8220;escape=&#8221; argument instead)</p>
+<p>The default template [mapext] returns coordinates in the format
+of: mixx miny maxx maxy</p>
+<p>Available arguments:</p>
 <ul class="last">
 <li><dl class="first docutils">
 <dt>escape=</dt>
-<dd><p class="first">Echappe les coordonnées retournées. La valeur par défaut est &#8220;none&#8221;. Les valeurs valides sont :</p>
+<dd><p class="first">Escape the coordinates returned.  Default is &#8220;none&#8221;.
+Valid values are:</p>
 <ul class="last simple">
 <li><dl class="first docutils">
 <dt>&#8220;url&#8221;</dt>
-<dd><p class="first last">Utilise les codes d&#8217;échappement d&#8217;URL pour encoder les coordonnées retournées.</p>
-</dd>
+<dd>Use URL escape codes to encode the coordinates returned.</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>&#8220;none&#8221;</dt>
-<dd><p class="first last">Ne pas échapper</p>
-</dd>
+<dd>Do not escape.</dd>
 </dl>
 </li>
 </ul>
@@ -383,11 +431,13 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>expand=</dt>
-<dd><p class="first">Aggrandit les bornes des étendues d&#8217;une valeur spécifique. Spécifié dans les coordonnées de carte. Par exemple, [mapext] pourrait retourner :</p>
+<dd><p class="first">Expand the bounds of the extents by a specific value.
+Specified in map coordinates.  For example, [mapext]
+might return:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">123456</span> <span class="mi">123456</span> <span class="mi">567890</span> <span class="mi">567890</span>
 </pre></div>
 </div>
-<p>et [mapext expand=1000] retournera par conséquent :</p>
+<p>and [mapext expand=1000] would therefore return:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span><span class="mi">122456</span> <span class="mi">122456</span> <span class="mi">568890</span> <span class="mi">568890</span>
 </pre></div>
 </div>
@@ -396,7 +446,9 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>format=</dt>
-<dd><p class="first">Format des coordonnées.  La valeur par défaut est &#8220;$minx $miny $maxx $maxy&#8221;. Par exemple, pour ajouter des virgules aux coordonnées, vous devriez utiliser :</p>
+<dd><p class="first">Format of the coordinates.  Default is &#8220;$minx $miny $maxx
+$maxy&#8221;.  For example, to add commas to the coordinates
+you would use:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">mapext</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$minx,$miny,$maxx,$maxy&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -405,39 +457,46 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>precision=</dt>
-<dd><p class="first last">Le nombre de décimales pour la sortie des coordonnées (par défaut, la valeur est 0).</p>
+<dd><p class="first last">The number of decimal places to output for coordinates
+(default is 0).</p>
 </dd>
 </dl>
 </li>
 </ul>
 </dd>
 <dt>[minx], [miny], [maxx], [maxy]</dt>
-<dd><p class="first last">Coordonnées X ou Y minimum / maximum de la nouvelle étendue de carte.</p>
-</dd>
+<dd>Minimum / maximum X or Y coordinate of new map extent.</dd>
 <dt>[dx], [dy]</dt>
-<dd><p class="first">La différences des coordonnées X ou Y minimum / maximum de la nouvelle étendue de carte.</p>
-<p class="last">Utile pour créer des étendues &#8220;cachable&#8221; (c&#8217;est à dire 0 0 dx dy) avec les légendes ou les barres d&#8217;échelle</p>
+<dd><p class="first">The differences of minimum / maximum X or Y coordinate of new map
+extent.</p>
+<p class="last">Useful for creating cachable extents (i.e. 0 0 dx dy) with
+legends and scalebars</p>
 </dd>
 <dt>[rawext], [rawext_esc]</dt>
-<dd><p class="first">Etendue de carte mapextent brute, c&#8217;est l&#8217;étendue avant de l&#8217;adapter à la taille de fenêtre (séparée par des espaces). Dans les cas où l&#8217;entrée vient de la boîte image imgbox (via Java ou autre), rawext se réfère aux coordonnées imgbox transformées en unités de carte. Utile pour la construction de requête spatiale.</p>
-<p>Aussi disponible en version échappée. (rawext_esc est déprécié dans MapServer 5.2.  Vous devriez utiliser l&#8217;argument &#8220;escape=&#8221; à la place)</p>
-<p>Le modèle par défaut [rawext] retourne les coordonnées dans le format : mixx miny maxx maxy</p>
-<p>Arguments disponibles :</p>
+<dd><p class="first">Raw mapextent, that is the extent before fitting to a window size
+(separated by spaces). In cases where input came from imgbox (via
+Java or whatever) rawext refers to imgbox coordinates transformed
+to map units.  Useful for spatial query building.</p>
+<p>Also available as escaped version. (rawext_esc is deprecated in
+MapServer 5.2.  You should use the &#8220;escape=&#8221; argument instead)</p>
+<p>The default template [rawext] returns coordinates in the format
+of: mixx miny maxx maxy</p>
+<p>Available arguments:</p>
 <ul class="last">
 <li><dl class="first docutils">
 <dt>escape=</dt>
-<dd><p class="first">Echappe les coordonnées retournées. La valeur par défaut est &#8220;none&#8221;. Les valeurs valides sont :</p>
+<dd><p class="first">Escape the coordinates returned.  Default is &#8220;none&#8221;.
+Valid values are:</p>
 <ul class="last simple">
 <li><dl class="first docutils">
 <dt>&#8220;url&#8221;</dt>
-<dd><p class="first last">Utilise les codes d&#8217;échappement d&#8217;URL pour encoder les coordonnées retournées.</p>
-</dd>
+<dd>Use URL escape codes to encode the coordinates
+returned.</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>&#8220;none&#8221;</dt>
-<dd><p class="first last">Ne pas échapper</p>
-</dd>
+<dd>Do not escape.</dd>
 </dl>
 </li>
 </ul>
@@ -446,11 +505,13 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>expand=</dt>
-<dd><p class="first">Aggrandit les bornes des étendues d&#8217;une valeur spécifique. Spécifié dans les coordonnées de carte. Par exemple, [rawext] pourrait retourner :</p>
+<dd><p class="first">Expand the bounds of the extents by a specific value.
+Specified in map coordinates.  For example, [rawext]
+might return:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">123456</span> <span class="mi">123456</span> <span class="mi">567890</span> <span class="mi">567890</span>
 </pre></div>
 </div>
-<p>et [rawext expand=1000] retournera par conséquent :</p>
+<p>and [rawext expand=1000] would therefore return:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span><span class="mi">122456</span> <span class="mi">122456</span> <span class="mi">568890</span> <span class="mi">568890</span>
 </pre></div>
 </div>
@@ -459,7 +520,9 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>format=</dt>
-<dd><p class="first">Format des coordonnées.  La valeur par défaut est &#8220;$minx $miny $maxx $maxy&#8221;. Par exemple, pour ajouter des virgules aux coordonnées, vous devriez utiliser :</p>
+<dd><p class="first">Format of the coordinates.  Default is &#8220;$minx $miny $maxx
+$maxy&#8221;.  For example, to add commas to the coordinates
+you would use:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">rawext</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$minx,$miny,$maxx,$maxy&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -468,41 +531,47 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>precision=</dt>
-<dd><p class="first last">Le nombre de décimales pour la sortie des coordonnées (par défaut, la valeur est 0).</p>
+<dd><p class="first last">The number of decimal places to output for coordinates
+(default is 0).</p>
 </dd>
 </dl>
 </li>
 </ul>
 </dd>
 <dt>[rawminx], [rawminy], [rawmaxx], [rawmaxy]</dt>
-<dd><p class="first last">Coordonnées X ou Y minimum / maximum de la carte brute / l&#8217;étendue de recherche.</p>
-</dd>
+<dd>Minimum / maximum X or Y coordinate of a raw map/search extent.</dd>
 </dl>
-<p>Les substitutions suivantes sont seulement disponibles si MapServer a été compilé avec le support de PROJ et qu&#8217;une <a class="reference internal" href="projection.html#projection"><span class="std std-ref">PROJECTION</span></a> est définie dans le <a class="reference internal" href="index.html#mapfile"><span class="std std-ref">Mapfile</span></a>.</p>
+<p>The following substitutions are only available if the MapServer was
+compiled with PROJ support and a <a class="reference internal" href="projection.html#projection"><span class="std std-ref">PROJECTION</span></a> is defined in the
+<a class="reference internal" href="index.html#mapfile"><span class="std std-ref">Mapfile</span></a>.</p>
 <dl class="docutils">
 <dt>[maplon], [maplat]</dt>
-<dd><p class="first last">Valuer de longitude / latitude du clic de souris. Disponible seulement si la projection est activée.</p>
-</dd>
+<dd>Longitude / latitude value of mouse click. Available only when
+projection enabled.</dd>
 <dt>[mapext_latlon], [mapext_latlon_esc]</dt>
-<dd><p class="first">Etendue complète &#8220;mapextent&#8221; (séparée par des espaces). Disponible seulement si la projection est activée.</p>
-<p>Aussi disponible comme une version échappée. (mapext_latlong_esc est dépréciée dans MapServer 5.2. Vous devriez utiliser l&#8217;argument &#8220;escape=&#8221; à la place)</p>
-<p>Le modèle par défaut [mapext_latlon] retourne les coordonnées dans le format : mixx miny maxx maxy</p>
-<p>Arguments disponibles :</p>
+<dd><p class="first">Full mapextent (separated by spaces). Available only when
+projection enabled.</p>
+<p>Also available as escaped version.  (mapext_latlon_esc is
+deprecated in MapServer 5.2.  You should use the &#8220;escape=&#8221;
+argument instead)</p>
+<p>The default template [mapext_latlon] returns coordinates in the
+format of: mixx miny maxx maxy</p>
+<p>Available arguments:</p>
 <ul class="last">
 <li><dl class="first docutils">
 <dt>escape=</dt>
-<dd><p class="first">Echappe les coordonnées retournées. La valeur par défaut est &#8220;none&#8221;. Les valeurs valides sont :</p>
+<dd><p class="first">Escape the coordinates returned.  Default is &#8220;none&#8221;.
+Valid values are:</p>
 <ul class="last simple">
 <li><dl class="first docutils">
 <dt>&#8220;url&#8221;</dt>
-<dd><p class="first last">Utilise les codes d&#8217;échappement d&#8217;URL pour encoder les coordonnées retournées.</p>
-</dd>
+<dd>Use URL escape codes to encode the coordinates
+returned.</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>&#8220;none&#8221;</dt>
-<dd><p class="first last">Ne pas échapper</p>
-</dd>
+<dd>Do not escape.</dd>
 </dl>
 </li>
 </ul>
@@ -511,11 +580,13 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>expand=</dt>
-<dd><p class="first">Aggrandit les bornes des étendues d&#8217;une valeur spécifique. Spécifié dans les coordonnées de carte. Par exemple, [mapext_latlon] pourrait retourner :</p>
+<dd><p class="first">Expand the bounds of the extents by a specific value.
+Specified in map coordinates.  For example,
+[mapext_latlon] might return:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">123456</span> <span class="mi">123456</span> <span class="mi">567890</span> <span class="mi">567890</span>
 </pre></div>
 </div>
-<p>et [mapext_latlon expand=1000] retournera par conséquent :</p>
+<p>and [mapext_latlon expand=1000] would therefore return:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span><span class="mi">122456</span> <span class="mi">122456</span> <span class="mi">568890</span> <span class="mi">568890</span>
 </pre></div>
 </div>
@@ -524,7 +595,9 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>format=</dt>
-<dd><p class="first">Format des coordonnées.  La valeur par défaut est &#8220;$minx $miny $maxx $maxy&#8221;. Par exemple, pour ajouter des virgules aux coordonnées, vous devriez utiliser :</p>
+<dd><p class="first">Format of the coordinates.  Default is &#8220;$minx $miny $maxx
+$maxy&#8221;.  For example, to add commas to the coordinates
+you would use:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">mapext_latlon</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$minx,$miny,$maxx,$maxy&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -533,36 +606,41 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>precision=</dt>
-<dd><p class="first last">Le nombre de décimales pour la sortie des coordonnées (par défaut, la valeur est 0).</p>
+<dd><p class="first last">The number of decimal places to output for coordinates
+(default is 0).</p>
 </dd>
 </dl>
 </li>
 </ul>
 </dd>
 <dt>[minlon], [minlat], [maxlon] [maxlat]</dt>
-<dd><p class="first last">Valuer de longitude ou latitude minimum / maximum de l&#8217;étendue de carte mapextent. Disponible seulement si la projection est activée.</p>
-</dd>
+<dd>Minimum / maximum longitude or latitude value of
+mapextent. Available only when projection enabled.</dd>
 <dt>[refext], [refext_esc]</dt>
-<dd><p class="first">Etendue de la carte de référence (séparée par des espaces)</p>
-<p>Ce modèle a été ajouté dans la version 4.6 suite à une demande d&#8217;amélioration. Voir le fil de discussion dans <a class="reference external" href="https://github.com/mapserver/mapserver/issues/1102">ticket #1102 MapServer</a> pour des cas d&#8217;utilisation potentiels.</p>
-<p>Aussi disponible comme une version échappée. (refext_esc est dépréciée dans MapServer 5.2. Vous devriez utiliser l&#8217;argument &#8220;escape=&#8221; à la place)</p>
-<p>Le modèle par défaut [refext] retourne les coordonnées dans le format : mixx miny maxx maxy</p>
-<p>Arguments disponibles :</p>
+<dd><p class="first">Reference map extent (separated by spaces).</p>
+<p>This template has been added with version 4.6 on behalf of an
+enhancement request. See the thread in the <a class="reference external" href="https://github.com/mapserver/mapserver/issues/1102">MapServer
+ticket#1102</a> for potential use cases.</p>
+<p>Also available as escaped version.  (refext_esc is deprecated in
+MapServer 5.2.  You should use the &#8220;escape=&#8221; argument instead)</p>
+<p>The default template [refext] returns coordinates in the format
+of: mixx miny maxx maxy</p>
+<p>Available arguments:</p>
 <ul class="last">
 <li><dl class="first docutils">
 <dt>escape=</dt>
-<dd><p class="first">Echappe les coordonnées retournées. La valeur par défaut est &#8220;none&#8221;. Les valeurs valides sont :</p>
+<dd><p class="first">Escape the coordinates returned.  Default is &#8220;none&#8221;.
+Valid values are:</p>
 <ul class="last simple">
 <li><dl class="first docutils">
 <dt>&#8220;url&#8221;</dt>
-<dd><p class="first last">Utilise les codes d&#8217;échappement d&#8217;URL pour encoder les coordonnées retournées.</p>
-</dd>
+<dd>Use URL escape codes to encode the coordinates
+returned.</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>&#8220;none&#8221;</dt>
-<dd><p class="first last">Ne pas échapper</p>
-</dd>
+<dd>Do not escape.</dd>
 </dl>
 </li>
 </ul>
@@ -571,11 +649,13 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>expand=</dt>
-<dd><p class="first">Aggrandit les bornes des étendues d&#8217;une valeur spécifique. Spécifié dans les coordonnées de carte. Par exemple, [refext] pourrait retourner :</p>
+<dd><p class="first">Expand the bounds of the extents by a specific value.
+Specified in map coordinates.  For example, [refext]
+might return:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">123456</span> <span class="mi">123456</span> <span class="mi">567890</span> <span class="mi">567890</span>
 </pre></div>
 </div>
-<p>et [refext expand=1000] retournera par conséquent :</p>
+<p>and [refext expand=1000] would therefore return:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span><span class="mi">122456</span> <span class="mi">122456</span> <span class="mi">568890</span> <span class="mi">568890</span>
 </pre></div>
 </div>
@@ -584,7 +664,9 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>format=</dt>
-<dd><p class="first">Format des coordonnées.  La valeur par défaut est &#8220;$minx $miny $maxx $maxy&#8221;. Par exemple, pour ajouter des virgules aux coordonnées, vous devriez utiliser :</p>
+<dd><p class="first">Format of the coordinates.  Default is &#8220;$minx $miny $maxx
+$maxy&#8221;.  For example, to add commas to the coordinates
+you would use:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">refwext</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$minx,$miny,$maxx,$maxy&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -593,7 +675,8 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>precision=</dt>
-<dd><p class="first last">Le nombre de décimales pour la sortie des coordonnées (par défaut, la valeur est 0).</p>
+<dd><p class="first last">The number of decimal places to output for coordinates
+(default is 0).</p>
 </dd>
 </dl>
 </li>
@@ -602,57 +685,74 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </dl>
 </div>
 <div class="section" id="layer">
-<h3>Couche<a class="headerlink" href="#layer" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Layer<a class="headerlink" href="#layer" title="Lien permanent vers ce titre">¶</a></h3>
 <dl class="docutils">
 <dt>[layers] | [layers_esc]</dt>
-<dd><p class="first">Toutes les couches actives délimitées avec un espace. Utilisé pour une requête &#8220;POST&#8221;</p>
-<p class="last">Aussi disponible comme une version &#8220;échappée&#8221;</p>
+<dd><p class="first">All active layers space delimited. Used for a &#8220;POST&#8221; request.</p>
+<p class="last">Also available as escaped version.</p>
 </dd>
 <dt>[toggle_layers] | [toggle_layers_esc]</dt>
-<dd><p class="first">Liste de toutes les couches qui peuvent être activées/désactivées, c&#8217;est à dire toutes les couches définies dans le <a class="reference internal" href="index.html#mapfile"><span class="std std-ref">Mapfile</span></a> dont le status n&#8217;est pas couramment à &#8220;default&#8221;.</p>
-<p class="last">Aussi disponible comme une version &#8220;échappée&#8221;</p>
+<dd><p class="first">List of all layers that can be toggled, i.e. all layers defined
+in the <a class="reference internal" href="index.html#mapfile"><span class="std std-ref">Mapfile</span></a> which status is currently not default.</p>
+<p class="last">Also available as escaped version.</p>
 </dd>
 <dt>[layername_check | select]</dt>
-<dd><p class="first last">Utilisé pour rendre les couches persistantes pendant une session de création de carte. La chaîne est remplacée avec le mot-clé &#8220;checked&#8221;, &#8220;selected&#8221; ou &#8220;&#8221; si &#8220;layername&#8221; est activée. Layername estle nom de la couche tel qu&#8217;il apparaît dans le <a class="reference internal" href="index.html#mapfile"><span class="std std-ref">Mapfile</span></a>. Ne fonctionne pas pour les couches default.</p>
-</dd>
+<dd>Used for making layers persistent across a map creation
+session. String is replaced with the keyword &#8220;checked&#8221;,
+&#8220;selected&#8221; or &#8220;&#8221; if layername is on.  Layername is the name of a
+layer as it appears in the <a class="reference internal" href="index.html#mapfile"><span class="std std-ref">Mapfile</span></a>. Does not work for
+default layers.</dd>
 <dt>[layername_meta data key]</dt>
-<dd><p class="first last">Accès aux métadonnées de couche (c&#8217;est à dire [streets_build], le tiret bas est essentiel)</p>
-</dd>
+<dd>Layer meta data access (e.g. [streets_build] the underscore is
+essential).</dd>
 </dl>
 </div>
 <div class="section" id="zoom">
 <h3>Zoom<a class="headerlink" href="#zoom" title="Lien permanent vers ce titre">¶</a></h3>
 <dl class="docutils">
 <dt>[zoom_minzoom to maxzoom_check|select]</dt>
-<dd><p class="first">Utilisé pour rendre le facteur de zoom persistant. Les valeurs de zoom peuvent prendre des valeurs entre -25 et 25 par défaut. La chaîne est remplacée avec le mot-clé HTML &#8220;checked&#8221;, &#8220;selected&#8221; ou &#8220;&#8221; en fonction de la valeur de zoom courante.</p>
-<p class="last">C&#8217;est à dire si le zoom est 12, un [zoom_12_select] est remplacé avec &#8220;selected&#8221;, tandis qu&#8217;un [zoom_13_select] dans le même fichier de modèle HTML ne l&#8217;est pas.</p>
+<dd><p class="first">Used for making the zoom factor persistent. Zoom values can range
+from -25 to 25 by default. The string is replaced with the HTML
+keyword &#8220;checked&#8221;, &#8220;selected&#8221; or &#8220;&#8221; depending on the current zoom
+value.</p>
+<p class="last">E.g. if the zoom is 12, a [zoom_12_select] is replaced with
+&#8220;selected&#8221;, while a [zoom_13_select] in the same HTML template
+file is not.</p>
 </dd>
 <dt>[zoomdir_-1|0|1_check|select]</dt>
-<dd><p class="first last">Utilisé pour rendre la direction de zoom persistante. Utilise &#8220;check&#8221; avec un contrôle radio ou select avec une liste de sélection. Voir la démo pour un exemple. La chaîne est remplacée avec le mot-clé HTML &#8220;checked&#8221;, &#8220;selected&#8221; ou &#8220;&#8221; en fonction de la valeur de zoomdir.</p>
-</dd>
+<dd>Used for making the zoom direction persistent. Use check with a
+radio control or select with a selection list. See the demo for
+an example. The string is replaced with the HTML keyword
+&#8220;checked&#8221;, &#8220;selected&#8221; or &#8220;&#8221; depending on the current value of
+zoomdir.</dd>
 </dl>
 </div>
 <div class="section" id="query">
-<h3>Requête<a class="headerlink" href="#query" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Les substitutions suivantes sont seulement disponibles quand on traite le modèle comme le résultat d&#8217;une requête.</p>
+<h3>Query<a class="headerlink" href="#query" title="Lien permanent vers ce titre">¶</a></h3>
+<p>The following substitutions are only available when the template is
+processed as a result of a query.</p>
 <dl class="docutils">
 <dt>[shpext], [shpext_esc]</dt>
-<dd><p class="first">Etendue de la forme courante avec un tampon de 5 pourcents. Disponible seulement quand on traite les résultats de requête.</p>
-<p>Le modèle par défaut [shpext] retourne les coordonnées dans le format : mixx miny maxx maxy</p>
-<p>Arguments disponibles :</p>
+<dd><p class="first">Extent of current shape plus a 5 percent buffer. Available only
+when processing query results.</p>
+<p>The default template [shpext] returns coordinates in the format
+of: mixx miny maxx maxy</p>
+<p>Available arguments:</p>
 <ul class="last">
 <li><dl class="first docutils">
 <dt>escape=</dt>
-<dd><p class="first">Echappe les coordonnées retournées. La valeur par défaut est &#8220;none&#8221;. Les valeurs valides sont :</p>
+<dd><p class="first">Escape the coordinates returned.  Default is &#8220;none&#8221;.
+Valid values are:</p>
 <ul class="last">
 <li><p class="first">&#8220;url&#8221;</p>
 <blockquote>
-<div><p>Utilise les codes d&#8217;échappement d&#8217;URL pour encoder les coordonnées retournées.</p>
+<div><p>Use URL escape codes to encode the coordinates
+returned.</p>
 </div></blockquote>
 </li>
 <li><dl class="first docutils">
 <dt>&#8220;none&#8221;</dt>
-<dd><p class="first last">Ne pas échapper</p>
+<dd><p class="first last">Do not escape.</p>
 </dd>
 </dl>
 </li>
@@ -662,11 +762,13 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>expand=</dt>
-<dd><p class="first">Aggrandit les bornes des étendues d&#8217;une valeur spécifique. Spécifié dans les coordonnées de carte. Par exemple, [shpext] pourrait retourner :</p>
+<dd><p class="first">Expand the bounds of the extents by a specific value.
+Specified in map coordinates.  For example, [shpext]
+might return:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">123456</span> <span class="mi">123456</span> <span class="mi">567890</span> <span class="mi">567890</span>
 </pre></div>
 </div>
-<p>et [shpext expand=1000] retournera par conséquent :</p>
+<p>and [shpext expand=1000] would therefore return:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span><span class="mi">122456</span> <span class="mi">122456</span> <span class="mi">568890</span> <span class="mi">568890</span>
 </pre></div>
 </div>
@@ -675,7 +777,9 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>format=</dt>
-<dd><p class="first">Format des coordonnées.  La valeur par défaut est &#8220;$minx $miny $maxx $maxy&#8221;. Par exemple, pour ajouter des virgules aux coordonnées, vous devriez utiliser :</p>
+<dd><p class="first">Format of the coordinates.  Default is &#8220;$minx $miny $maxx
+$maxy&#8221;.  For example, to add commas to the coordinates
+you would use:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">shpext</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$minx,$miny,$maxx,$maxy&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -684,105 +788,124 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </li>
 <li><dl class="first docutils">
 <dt>precision=</dt>
-<dd><p class="first last">Le nombre de décimales pour la sortie des coordonnées (par défaut, la valeur est 0).</p>
+<dd><p class="first last">The number of decimal places to output for coordinates
+(default is 0).</p>
 </dd>
 </dl>
 </li>
 </ul>
 </dd>
 <dt>[shpminx], [shpminy], [shpmaxx], [shpmaxy]</dt>
-<dd><p class="first last">Coordonnées minimum / maximum X ou Y de l&#8217;étendue de la carte. Disponible seulement quand on traite les résultats de requête.</p>
-</dd>
+<dd>Minimum / maximum X or Y coordinate of shape extent. Available
+only when processing query results.</dd>
 <dt>[shpmid]</dt>
-<dd><p class="first last">Milieu de l&#8217;étendue de la forme courante. Disponible seulement quand on traite les résultats de requête.</p>
-</dd>
+<dd>Middle of the extent of current shape. Available only when
+processing query results.</dd>
 <dt>[shpmidx], [shpmidy]</dt>
-<dd><p class="first last">Coordonnées X ou Y du milieu de l&#8217;étendue de la forme courante. Disponible seulement quand on traite les résultats de requête.</p>
-</dd>
+<dd>X or Y coordinate of middle of the extent of the current
+shape. Available only when processing query results.</dd>
 <dt>[shpidx]</dt>
-<dd><p class="first last">Valeur de l&#8217;index de la forme courante. Disponible seulement quand on traite les résultats de requête.</p>
-</dd>
+<dd>Index value of the current shape. Available only when processing
+query results.</dd>
 <dt>[shpclass]</dt>
-<dd><p class="first last">Valeur de l&#8217;index de classe &#8220;Classindex&#8221; de la forme courante. Disponible seulement quand on traite les résultats de requête.</p>
-</dd>
+<dd>Classindex value of the current shape. Available only when
+processing query results.</dd>
 <dt>[shpxy formatting options]</dt>
-<dd><p class="first">La liste des coordonnées de la forme, avec options de formatage de liste, particulièrement utile pour le SVG.</p>
-<p>Le modèle par défaut [shpxy] retourne une liste séparée par des virgules de coordonnées délimitée par des espaces (c&#8217;est à dire x1 y1, x2 y2, x3 y3).</p>
-<p>Disponible seulement quand on traite les résultats de requête.</p>
-<p>Attributs disponibles (h = header (en-tête), f=footer (pied de page), s=separator (séparateur)):</p>
+<dd><p class="first">The list of shape coordinates, with list formatting options,
+especially useful for SVG.</p>
+<p>The default template [shpxy] returns a comma separated list of
+space delimited of coordinates (i.e. x1 y1, x2 y2, x3 y3).</p>
+<p>Available only when processing query results.</p>
+<p>Available attributes (h = header, f=footer, s=separator):</p>
 <ul>
 <li><dl class="first docutils">
 <dt>buffer=,</dt>
-<dd><p class="first last">Taille du tampon, actuellement la seule unité disponible est le pixel. Par défaut, sa valeur vaut 0.</p>
+<dd><p class="first last">Buffer size, currently the only unit available is pixels.
+Default is 0.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>centroid=</dt>
-<dd><p class="first last">Est-ce que le centroide de la forme est utilisé? true ou false (insensible à la casse). Par défaut, la valeur est false.</p>
+<dd><p class="first last">Should only the centroid of the shape be used?
+true or false (case insensitive).  Default is false.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>cs=</dt>
-<dd><p class="first last">Séparateur de coordonnées. Par défaut, c&#8217;est &#8221;,&#8221;.</p>
+<dd><p class="first last">Coordinate separator.  Default is &#8221;,&#8221;.</p>
 </dd>
 </dl>
 </li>
 <li><p class="first">irh=, irf=, orh=, orf=</p>
 <blockquote>
-<div><p>Caractères à mettre avant les anneaux internes de (<cite>irh</cite>) et après ceux de (<cite>irf</cite>), et avant les anneaux externes (des polygones à trous) de (<cite>orh</cite>) et après ceux de (<cite>orf</cite>). Par défaut, leurs valeurs sont &#8220;&#8221;.</p>
+<div><p>Characters to be put before (<cite>irh</cite>) and after (<cite>irf</cite>)
+inner rings, and before (<cite>orh</cite>) and after (<cite>orf</cite>) outer
+rings of polygons with holes.  Defaults are &#8220;&#8221;.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">A l&#8217;intérieur de chaque polygone, l&#8217;anneau externe est toujours envoyé en premier, suivi par les anneaux internes.</p>
+<p class="last">Within each polygon, the outer ring is always output
+first, followed by the inner rings.</p>
 </div>
-<p>Si ni <cite>irh</cite> ni <cite>orh</cite> ne sont définis, les anneaux sont renvoyées comme des &#8220;parties&#8221; en utilisant <cite>ph</cite>/<cite>pf</cite>/<cite>ps</cite>.</p>
+<p>If neither <cite>irh</cite> nor <cite>orh</cite> are set, rings are output as
+&#8220;parts&#8221; using <cite>ph</cite>/<cite>pf</cite>/<cite>ps</cite>.</p>
 </div></blockquote>
 </li>
 <li><dl class="first docutils">
 <dt>ph=, pf=, ps=</dt>
-<dd><p class="first last">Caractères à mettre avant (<cite>ph</cite>) et après (<cite>pf</cite>) et séparateurs entre les morceaux d&#8217;entité (<cite>ps</cite>) (c&#8217;est à dire les anneaux des multigéométries). Par défaut, leurs valeurs sont ph=&#8221;&#8221;, pf=&#8221;&#8221; et ps=&#8221; &#8221;.</p>
+<dd><p class="first last">Characters to put before (<cite>ph</cite>) and after (<cite>pf</cite>) and
+separators between (<cite>ps</cite>) feature parts (e.g. rings of
+multigeometries).  Defaults are ph=&#8221;&#8221;, pf=&#8221;&#8221; and ps=&#8221; &#8221;.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>precision=</dt>
-<dd><p class="first last">Le nombre de décimales pour la sortie des coordonnées. Par défaut, la valeur est 0.</p>
+<dd><p class="first last">The number of decimal places to output for coordinates.
+Default is 0.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>proj=</dt>
-<dd><p class="first last">La définition de de laprojection en sortie pour les coordonnées, une valeur spéciale de l&#8216;&#8220;image&#8221; sera convertie en coordonnées image.  Par défaut, la valeur est none.</p>
+<dd><p class="first last">The output projection definition for the coordinates, a
+special value of &#8220;image&#8221; will convert to image
+coordinates.  Default is none.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>scale=, scale_x=, scale_y=</dt>
-<dd><p class="first last">Facteur de mise à l&#8217;échelle pour les coordonnées : les deux axes (<cite>scale</cite>), l&#8217;axe x (<cite>scale_x</cite>) et l&#8217;axe y (<cite>scale_y</cite>). Par défaut, leurs valeurs sont 1.0.</p>
+<dd><p class="first last">Scaling factor for coordinates: Both axes (<cite>scale</cite>), x
+axis (<cite>scale_x</cite>) and y axis (<cite>scale_y</cite>).  Defaults are
+1.0.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>sh=, sf=</dt>
-<dd><p class="first last">Caractères à mettre avant (<cite>sh</cite>) et après (<cite>sf</cite>) une entité. Par défaut, leurs valeurs sont &#8220;&#8221;.</p>
+<dd><p class="first last">Characters to put before (<cite>sh</cite>) and after (<cite>sf</cite>) a
+feature.  Defaults are &#8220;&#8221;.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>xh=, xf=</dt>
-<dd><p class="first last">Caractères à mettre avant (<cite>xh</cite>) et après (<cite>xf</cite>) les coordonnées x. Leurs valeurs par défaut sont xh=&#8221;&#8221; et xf=&#8221;,&#8221;).</p>
+<dd><p class="first last">Characters to put before (<cite>xh</cite>) and after (<cite>xf</cite>) the x
+coordinates.  Defaults are xh=&#8221;&#8221; and xf=&#8221;,&#8221;).</p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>yh= yf=</dt>
-<dd><p class="first last">Caractères à mettre avant (<cite>yh</cite>) et après (<cite>yf</cite>) les coordonnées y. Par défaut, leurs valeurs sont &#8220;&#8221;.</p>
+<dd><p class="first last">Characters to put before (<cite>yh</cite>) and after (<cite>yf</cite>) the y
+coordinates.  Defaults are &#8220;&#8221;.</p>
 </dd>
 </dl>
 </li>
 </ul>
-<p>Comme un exemple simple :</p>
+<p>As a simple example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">shpxy</span> <span class="n">xh</span><span class="o">=</span><span class="s2">&quot;(&quot;</span> <span class="n">yf</span><span class="o">=</span><span class="s2">&quot;)&quot;</span><span class="p">]</span> <span class="n">will</span> <span class="n">result</span> <span class="ow">in</span><span class="p">:</span> <span class="p">(</span><span class="n">x1</span> <span class="n">y1</span><span class="p">),(</span><span class="n">x2</span> <span class="n">y2</span><span class="p">),(</span><span class="n">x3</span> <span class="n">y3</span><span class="p">)</span>
 
 <span class="ow">or</span>
@@ -794,7 +917,9 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 <span class="p">[</span><span class="n">shpxy</span> <span class="n">precision</span><span class="o">=</span><span class="s2">&quot;2&quot;</span> <span class="n">xf</span><span class="o">=</span><span class="s2">&quot; &quot;</span> <span class="n">xh</span><span class="o">=</span><span class="s2">&quot;(&quot;</span> <span class="n">yf</span><span class="o">=</span><span class="s2">&quot;)&quot;</span><span class="p">]</span> <span class="n">will</span> <span class="n">result</span> <span class="ow">in</span><span class="p">:</span> <span class="p">(</span><span class="n">x1</span> <span class="n">y1</span><span class="p">)</span> <span class="p">(</span><span class="n">x2</span> <span class="n">y2</span><span class="p">)</span> <span class="p">(</span><span class="n">x3</span> <span class="n">y3</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>et un exemple plus comliqué de sortie KML pour les multipolygones qui peuvent potentiellement avoir des trous (notez que les paramètres doivent tous être sur une seule ligne) :</p>
+<p>And a more complicated example of outputting KML for
+multipolygons which may potentially have holes (note that the
+parameters must all be on one line):</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">MultiGeometry</span><span class="o">&gt;</span>
     <span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span>
       <span class="o">&lt;</span><span class="n">coordinates</span><span class="o">&gt;</span><span class="p">[</span><span class="n">shplabel</span> <span class="n">proj</span><span class="o">=</span><span class="n">epsg</span><span class="p">:</span><span class="mi">4326</span> <span class="n">precision</span><span class="o">=</span><span class="mi">10</span><span class="p">],</span><span class="mi">0</span><span class="o">&lt;/</span><span class="n">coordinates</span><span class="o">&gt;</span>
@@ -810,90 +935,109 @@ single quote in a attribute value, just use two quotes (&#8220;&#8221;).</p>
 </div>
 </dd>
 <dt>[tileindex]</dt>
-<dd><p class="first last">La valeur d&#8217;index de la tuile courante. Si aucune tuile n&#8217;est utilisée pour la forme courante, elle est remplacée par &#8220;-1&#8221;. Disponible seulement quand on traite les résultats de requête.</p>
-</dd>
+<dd>Index value of the current tile. If no tiles used for the current
+shape this is replaced by &#8220;-1&#8221;. Available only when processing
+query results.</dd>
 <dt>[item formatting options]</dt>
-<dd><p class="first">Un élément &#8220;item&#8221; de table attributaire, avec des options de formatage de liste. L&#8217;attribut de nom &#8220;name&#8221; est requis.</p>
-<p>Disponible seulement quand on traite les résultats de requête.</p>
-<p>Attributs disponibles :</p>
+<dd><p class="first">An attribute table &#8220;item&#8221;, with list formatting options. The
+&#8220;name&#8221; attribute is required.</p>
+<p>Available only when processing query results.</p>
+<p>Available attributes:</p>
 <ul class="simple">
 <li><dl class="first docutils">
 <dt>name =</dt>
-<dd><p class="first last">Le nom d&#8217;un attribut, insensible à la casse. (requis)</p>
-</dd>
+<dd>The name of an attribute, case insenstive. (required)</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>precision =</dt>
-<dd><p class="first last">Le nombre de décimales à utiliser pour les données numériques. L&#8217;utilisation de ce paramètre forcera l&#8217;affichage comme un nombre et pourra mener à des résultats imprévisibles avec des données non numériques.</p>
-</dd>
+<dd>The number of decimal places to use for numeric data. Use
+of this will force display as a number and will lead to
+unpredicable results with non-numeric data.</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>pattern =</dt>
-<dd><p class="first last">Expression régulière pour comparer la valeur d&#8217;un élément avec. La balise est renvoyée seulement s&#8217;il y a une correspondance.</p>
-</dd>
+<dd>Regular expression to compare the value of an item
+against. The tag is output only if there is a match.</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>uc =</dt>
-<dd><p class="first last">Définit cet attribut à &#8220;true&#8221; pour convertir la valeur de l&#8217;attribut en majuscule.</p>
-</dd>
+<dd>Set this attribute to &#8220;true&#8221; to convert the attribute
+value to upper case.</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>lc =</dt>
-<dd><p class="first last">Définit cet attribut à &#8220;true&#8221; pour convertir la valeur de l&#8217;attribut en minuscule.</p>
-</dd>
+<dd>Set this attribute to &#8220;true&#8221; to convert the attribute
+value to lower case.</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>commify =</dt>
-<dd><p class="first last">Définit cet attribut à &#8220;true&#8221; pour ajouter des virgules à une valeur numérique. A nouveau, seulement utile avec des données numériques.</p>
-</dd>
+<dd>Set this attribute to &#8220;true&#8221; to add commas to a numeric
+value. Again, only useful with numeric data.</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>escape =</dt>
-<dd><p class="first last">L&#8217;échappement par défaut est pour le HTML, mais vous pouvez échapper pour une inclusion dans une URL (=url), ou ne rien échapper du tout (=none).</p>
-</dd>
+<dd>Default escaping is for HTML, but you can escape for
+inclusion in a URL (=url), or not escape at all (=none).</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>format =</dt>
-<dd><p class="first last">Une chaîne formatée utilisée pour renvoyer la valeur d&#8217;attribut. Le jeton &#8220;$valeur&#8221; est utilisé pour placer la valeur dans une présentation plus complexe. Par défaut, il renvoie seulement la valeur.</p>
-</dd>
+<dd>A format string used to output the attribute value. The
+token &#8220;$value&#8221; is used to place the value in a more
+complex presentation. Default is to output only the
+value.</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>nullformat =</dt>
-<dd><p class="first last">Chaîne à renvoyer si la valeur d&#8217;attribut est NULL, vide ou ne correspond pas au pattern (si défini). S&#8217;il n&#8217;est pas défini et qu&#8217;aucune de ces conditions est vérifiée, la balise de l&#8217;élément est remplacée avec une chaîne vide.</p>
-</dd>
+<dd>String to output if the attribute value is NULL, empty or
+doesn&#8217;t match the pattern (if defined). If not set and
+any of these conditions occur the item tag is replaced
+with an empty string.</dd>
 </dl>
 </li>
 </ul>
-<p>Comme un exemple simple :</p>
+<p>As a simple example:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">item</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;area&quot;</span> <span class="n">precision</span><span class="o">=</span><span class="s2">&quot;2&quot;</span> <span class="n">commify</span><span class="o">=</span><span class="s2">&quot;2&quot;</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;Area is $value&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
 <dt>[attribute name],[attrribute name_esc],[attribute item name_raw]</dt>
-<dd><p class="first">Nom d&#8217;attribut pour la table de données d&#8217;une couche interrogée. Seules les attributs pour les couches de requête active sont accessibles. La casse doit être la même que celle stocké dans le fichier de données. ArcView, par exemple, n&#8217;utilise que les majuscules sur les noms des champs shapefile. Disponible seulement quand on traite les résultats de requête.</p>
-<p class="last">Par défaut, les attributs sont encodés spécialement pour la représentation HTML. En plus, la version échappée (pour l&#8217;usage dans les URL) comme celle brute est disponible.</p>
+<dd><p class="first">Attribute name from the data table of a queried layer. Only
+attributes for the active query layers are accessible. Case must
+be the same as what is stored in the data file. ArcView, for
+example, uses all caps for shapefile field names. Available only
+when processing query results.</p>
+<p class="last">By default the attributes are encoded especially for HTML
+representation.  In addition the escaped version (for use in
+URLs) as well as the raw data is available.</p>
 </dd>
 </dl>
-<p>[Join nom_attribut nom],[Join nom_attribut nom_echappee], [Join nom_attribut nom_brute]</p>
+<p>[Join name_attribute name],[Join name_attribute name_esc], [Join
+name_attribute name_raw]</p>
 <blockquote>
-<div><p>Jointures une à une : en premier le nom de la jointure (comme spécifiée dans le <a class="reference internal" href="index.html#mapfile"><span class="std std-ref">Mapfile</span></a>) doit être donné, ensuite, les champs des tables peuvent être accédés de manière similaire aux données attributaires des couches. Disponible seulement quand on traite les résultats de requête.</p>
-<p>Par défaut, les attributs sont encodés spécialement pour la représentation HTML. En plus, la version échappée (pour l&#8217;usage dans les URL) comme celle brute est disponible.</p>
+<div><p>One-to-one joins: First the join name (as specified in the
+<a class="reference internal" href="index.html#mapfile"><span class="std std-ref">Mapfile</span></a> has to be given, second the tables fields can be
+accessed similar to the layers attribute data. Available only
+when processing query results.</p>
+<p>By default the attributes are encoded especially for HTML
+representation. In addition the escaped version (for use in URLs)
+as well as the raw data is available.</p>
 </div></blockquote>
 <dl class="docutils">
-<dt>[join_Join nom]</dt>
-<dd><p class="first last">Jointures une à plusieurs : la variante la plus complexe.Si lle type de jointure est multiple (une à plusieurs), le modèle est remplacé par le jeu d&#8217;en-tête, fichier de modèle et pied de page spécifié dans le <a class="reference internal" href="index.html#mapfile"><span class="std std-ref">Mapfile</span></a>.</p>
-</dd>
+<dt>[join_Join name]</dt>
+<dd>One-to-many joins: The more complex variant. If the join type is
+multiple (one-to-many) the template is replaced by the set of
+header, template file and footer specified in the <a class="reference internal" href="index.html#mapfile"><span class="std std-ref">Mapfile</span></a>.</dd>
 <dt>[metadata_meta data key], [metadata_meta data key_esc]</dt>
-<dd><p class="first">Accès aux métadonnées des couches interrogées (c&#8217;est à dire [metadata_projection])</p>
-<p class="last">Aussi disponible comme une version &#8220;échappée&#8221;</p>
+<dd><p class="first">Queried layer meta data access (e.g [metadata_projection]</p>
+<p class="last">Also available as escaped version.</p>
 </dd>
 </dl>
 <p>For query modes that allow for multiple result sets, the following
@@ -903,29 +1047,34 @@ selection layer. The selection layer results ARE available for display
 to the user.</p>
 <dl class="docutils">
 <dt>[nr]</dt>
-<dd><p class="first last">Nombre total de résultats. Utile dans les en-têtes et les pieds de page. Disponible seulement quand on traite les résultats de requête.</p>
-</dd>
+<dd>Total number of results. Useful in web header and
+footers. Available only when processing query results.</dd>
 <dt>[nl]</dt>
-<dd><p class="first last">Nombre de couches retournant des résultats. Utile dans les en-têtes et les pieds de page. Disponible seulement quand on traite les résultats de requête.</p>
-</dd>
+<dd>Number of layers returning results. Useful in web header and
+footers. Available only when processing query results.</dd>
 <dt>[nlr]</dt>
-<dd><p class="first last">Nombre total de résultats dans la couche courante. Utile dans les en-têtes et les pieds de page. Disponible seulement quand on traite les résultats de requête.</p>
-</dd>
+<dd>Total number of results within the current layer. Useful in web
+header and footers.  Available only when processing query
+results.</dd>
 <dt>[rn]</dt>
-<dd><p class="first last">Nombre résultat à l&#8217;intérieur de toutes les couches. Commence à 1. Utile dans les en-têtes et les pieds de page. Disponible seulement quand on traite les résultats de requête.</p>
-</dd>
+<dd>Result number within all layers. Starts at 1. Useful in web
+header and footers.  Available only when processing query
+results.</dd>
 <dt>[lrn]</dt>
-<dd><p class="first last">Nombre résultat à l&#8217;intérieur de la couche courante. Commence à 1. Utile dans les modèles d&#8217;interrogation. Disponible seulement quand on traite les résultats de requête.</p>
-</dd>
+<dd>Result number within the current layer. Starts at 1. Useful in
+query templates.  Available only when processing query results.</dd>
 <dt>[cl]</dt>
-<dd><p class="first last">Nom de couche courante. Utile dans les en-têtes et les pieds de page de couche. Disponible seulement quand on traite les résultats de requête.</p>
-</dd>
+<dd>Current layer name. Useful in layer headers and footers. Available
+only when processing query results.</dd>
 </dl>
 </div>
 </div>
 <div class="section" id="example-template">
-<h2><a class="toc-backref" href="#table-of-contents">Modèle exemple</a><a class="headerlink" href="#example-template" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Un petit exemple pour donner une idée de comment travailler avec des modèles. Notez qu&#8217;il couvre les modèles Mapserver spécifiques (c&#8217;est à dire le [map], [mapext]) et les modèles définis par l&#8217;utilisateur (c&#8217;est à dire [htmlroot] ou [program]) utilisé pour stocker les paramètres de l&#8217;application.</p>
+<h2><a class="toc-backref" href="#table-of-contents">Example Template</a><a class="headerlink" href="#example-template" title="Lien permanent vers ce titre">¶</a></h2>
+<p>A small example to give an idea how to work with templates. Note that
+it covers MapServer specific templates (e.g. the [map], [mapext]) and
+user defined templates (e.g. [htmlroot] or [program]) used to store
+application settings.</p>
 <div class="highlight-guess"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -1093,20 +1242,20 @@ to the user.</p>
   <ul>
 <li><a class="reference internal" href="#">Templating</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a><ul>
-<li><a class="reference internal" href="#notes">Remarques</a></li>
+<li><a class="reference internal" href="#notes">Notes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#format">Format</a><ul>
-<li><a class="reference internal" href="#general">Général</a></li>
-<li><a class="reference internal" href="#file-reference">Référence de fichier</a></li>
-<li><a class="reference internal" href="#image-geometry">Géométrie de l&#8217;image</a></li>
-<li><a class="reference internal" href="#map-geometry">Géométrie de la carte</a></li>
-<li><a class="reference internal" href="#layer">Couche</a></li>
+<li><a class="reference internal" href="#general">General</a></li>
+<li><a class="reference internal" href="#file-reference">File Reference</a></li>
+<li><a class="reference internal" href="#image-geometry">Image Geometry</a></li>
+<li><a class="reference internal" href="#map-geometry">Map Geometry</a></li>
+<li><a class="reference internal" href="#layer">Layer</a></li>
 <li><a class="reference internal" href="#zoom">Zoom</a></li>
-<li><a class="reference internal" href="#query">Requête</a></li>
+<li><a class="reference internal" href="#query">Query</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#example-template">Modèle exemple</a></li>
+<li><a class="reference internal" href="#example-template">Example Template</a></li>
 </ul>
 </li>
 </ul>
@@ -1125,16 +1274,16 @@ to the user.</p>
           <a href="validation.html" title="VALIDATION"
              >suivant</a> |</li>
         <li class="right" >
-          <a href="symbology/examples.html" title="Exemples de symbologie"
+          <a href="symbology/examples.html" title="Symbology Examples"
              >précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >Documentation de MapServer 7.0.7</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Mapfile</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-06-13.
+      Mis à jour le 2018-07-12.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>
