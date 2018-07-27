@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>WCS Server &#8212; MapServer 7.0.7 documentation</title>
+    <title>WCS Server &#8212; MapServer 7.2.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.7',
+        VERSION:     '7.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <link rel="index" title="Índice" href="../genindex.html" />
     <link rel="search" title="Búsqueda" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.0.7 documentation" href="../index.html" />
+    <link rel="top" title="MapServer 7.2.0 documentation" href="../index.html" />
     <link rel="up" title="OGC Support and Configuration" href="index.html" />
     <link rel="next" title="WCS Use Cases" href="wcs_format.html" />
     <link rel="prev" title="SLD" href="sld.html" /> 
@@ -138,7 +138,7 @@
           <a href="sld.html" title="SLD"
              accesskey="P">anterior</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.2.0 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">OGC Support and Configuration</a> &#187;</li> 
       </ul>
     </div>
@@ -167,7 +167,7 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">fabian.schindler at eox.at</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2012-08-30</td>
+<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2017-12-05</td>
 </tr>
 </tbody>
 </table>
@@ -181,11 +181,13 @@
 <li><a class="reference internal" href="#wcs-1-1-0-issues" id="id6">WCS 1.1.0+ Issues</a></li>
 <li><a class="reference internal" href="#wcs-2-0" id="id7">WCS 2.0</a></li>
 <li><a class="reference internal" href="#http-post-support" id="id8">HTTP-POST support</a></li>
-<li><a class="reference internal" href="#reference-section" id="id9">Reference Section</a></li>
-<li><a class="reference internal" href="#rules-for-handling-srs-in-a-mapserver-wcs" id="id10">Rules for handling SRS in a MapServer WCS</a></li>
-<li><a class="reference internal" href="#spatio-temporal-indexes" id="id11">Spatio/Temporal Indexes</a></li>
-<li><a class="reference internal" href="#wcs-2-0-application-profile-earth-observation-eo-wcs" id="id12">WCS 2.0 Application Profile - Earth Observation (EO-WCS)</a></li>
-<li><a class="reference internal" href="#to-do-items-and-known-limitations" id="id13">To-do Items and Known Limitations</a></li>
+<li><a class="reference internal" href="#inspire-download-service-support" id="id9">INSPIRE download service support</a></li>
+<li><a class="reference internal" href="#reference-section" id="id10">Reference Section</a></li>
+<li><a class="reference internal" href="#rules-for-handling-srs-in-a-mapserver-wcs" id="id11">Rules for handling SRS in a MapServer WCS</a></li>
+<li><a class="reference internal" href="#spatio-temporal-indexes" id="id12">Spatio/Temporal Indexes</a></li>
+<li><a class="reference internal" href="#wcs-2-0-application-profile-earth-observation-eo-wcs" id="id13">WCS 2.0 Application Profile - Earth Observation (EO-WCS)</a></li>
+<li><a class="reference internal" href="#to-do-items-and-known-limitations" id="id14">To-do Items and Known Limitations</a></li>
+<li><a class="reference internal" href="#credits" id="id15">Credits</a></li>
 </ul>
 </li>
 </ul>
@@ -701,7 +703,8 @@ Common Standard 2.0.0.</dd>
 <p><strong>SECTIONS=sections</strong></p>
 <p><strong>UPDATESEQUENCE=updatesequence</strong></p>
 <p><strong>ACCEPTFORMATS=formats:</strong> This parameter is currently ignored.</p>
-<p><strong>ACCEPTLANGUAGES=languages:</strong> This parameter is currently ignored.</p>
+<p><strong>ACCEPTLANGUAGES=languages:</strong> This is used for language negotiation for
+multi-lingual services</p>
 <p><strong>FORMAT=format:</strong> The desired format can now also be set with the
 name of the outputformat object defined in the mapfile. In
 contrast to previous versions of WCS this parameter is optional
@@ -739,7 +742,7 @@ http://www.yourserver.com/wcs?SERVICE=WCS&amp;VERSION=2.0.1
   &amp;SUBSETTINGCRS=http://www.opengis.net/def/crs/EPSG/0/4326
 </pre></div>
 </div>
-<p>Please refer to the <a class="reference external" href="https://github.com/mapserver/msautotest/blob/master/wxs/wcs_simple.map">WCS 2.0 tests in msautotest</a> for further sample
+<p>Please refer to the <a class="reference external" href="https://github.com/mapserver/mapserver/blob/master/msautotest/wxs/wcs_simple.map">WCS 2.0 tests in msautotest</a> for further sample
 requests.</p>
 </div>
 </div>
@@ -1047,8 +1050,28 @@ request:</p>
 Extension</a> and the <a class="reference external" href="http://schemas.opengis.net/wcs/2.0/">WCS 2.0 Schemas</a> for further information on POST
 request in WCS 2.0.</p>
 </div>
+<div class="section" id="inspire-download-service-support">
+<span id="wcs-inspire-support"></span><span id="index-5"></span><h2><a class="toc-backref" href="#table-of-contents">INSPIRE download service support</a><a class="headerlink" href="#inspire-download-service-support" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Since version 7.2, MapServer WCS 2.0 also supports the the INSPIRE download
+service. To enable this functionality, the <code class="docutils literal"><span class="pre">wcs_inspire_capabilities</span></code> setting
+must be set to either <code class="docutils literal"><span class="pre">url</span></code> or <code class="docutils literal"><span class="pre">embed</span></code>.</p>
+<p>Please refer to the <a class="reference internal" href="inspire_dl.html#inspire-download-service"><span class="std std-ref">INSPIRE Download Service</span></a> documentation for further
+metadata options.</p>
+<div class="section" id="multi-language-support">
+<h3>Multi-language support<a class="headerlink" href="#multi-language-support" title="Enlazar permanentemente con este título">¶</a></h3>
+<p>Part of the INSPIRE download service support is the support for multi-lingual
+WCS services. With the <code class="docutils literal"><span class="pre">wcs_languages</span></code> a (comma-separated) list of language
+specifiers can be set. When this is set, client and server can negotiate the
+result language using the <code class="docutils literal"><span class="pre">ACCEPTLANGUAGES</span></code> parameter (or the
+<code class="docutils literal"><span class="pre">&lt;ows:AcceptLanguages&gt;</span></code>/<code class="docutils literal"><span class="pre">&lt;ows:Language&gt;</span></code> tags when using XML). The first
+item in the accept languages list contained in the list specified with
+<code class="docutils literal"><span class="pre">wcs_languages</span></code> will be used for the resulting capabilities document</p>
+<p>Additional information can be found in the section for
+<a class="reference internal" href="inspire_dl.html#inspire-dl-multi-language-support"><span class="std std-ref">Multi-language support for certain capabilities fields</span></a>.</p>
+</div>
+</div>
 <div class="section" id="reference-section">
-<span id="index-5"></span><h2><a class="toc-backref" href="#table-of-contents">Reference Section</a><a class="headerlink" href="#reference-section" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents">Reference Section</a><a class="headerlink" href="#reference-section" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>To avoid confusion only &#8220;wcs_*&#8221; and &#8220;ows_*&#8221; prefixed metadata entries
 are evaluated in OGC WCS services. Previous versions used &#8220;wms_*&#8221;
 prefixed entries as fallback which is dropped in version 6.0 in favor of
@@ -1195,27 +1218,33 @@ onlineresource section of this document)</li>
 </ol>
 </li>
 </ul>
+<p id="index-47"><strong>wcs_languages</strong></p>
+<ul class="simple">
+<li><em>Description:</em> (Optional) A comma-separated list of supported languages. For
+details please refer to the section <a class="reference internal" href="inspire_dl.html#inspire-dl-multi-language-support"><span class="std std-ref">Multi-language support for certain capabilities fields</span></a>
+in the INSPIRE Download Service documentation.</li>
+</ul>
 </div>
 <div class="section" id="layer-object-metadata">
-<span id="index-47"></span><h3>Layer Object Metadata<a class="headerlink" href="#layer-object-metadata" title="Enlazar permanentemente con este título">¶</a></h3>
-<dl class="docutils" id="index-48">
+<span id="index-48"></span><h3>Layer Object Metadata<a class="headerlink" href="#layer-object-metadata" title="Enlazar permanentemente con este título">¶</a></h3>
+<dl class="docutils" id="index-49">
 <dt><strong>ows_allowed_ip_list</strong></dt>
 <dd>Same as ows_allowed_ip_list in the Web Object.</dd>
 </dl>
-<dl class="docutils" id="index-49">
+<dl class="docutils" id="index-50">
 <dt><strong>ows_denied_ip_list</strong></dt>
 <dd>Same as ows_denied_ip_list in the Web Object.</dd>
 </dl>
-<p id="index-50"><strong>wcs_abstract</strong></p>
+<p id="index-51"><strong>wcs_abstract</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Optional) A brief description of the service, maps
 to ows:Abstract (WCS 1.1+ only).</li>
 </ul>
-<p id="index-51"><strong>wcs_description</strong></p>
+<p id="index-52"><strong>wcs_description</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Optional) A description of the layer.</li>
 </ul>
-<p id="index-52"><strong>wcs_enable_request</strong> (or <strong>ows_enable_request</strong>)</p>
+<p id="index-53"><strong>wcs_enable_request</strong> (or <strong>ows_enable_request</strong>)</p>
 <ul>
 <li><p class="first"><em>Description:</em> Space separated list of requests to enable.
 The default is none.
@@ -1235,38 +1264,38 @@ A &#8221;!&#8221; in front of a request will disable the request.
 </div>
 </li>
 </ul>
-<p id="index-53"><strong>wcs_extent</strong></p>
+<p id="index-54"><strong>wcs_extent</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Optional) Bounding box of layer, which must be
 provided for tiled data.  Comma-delimited, in the format of:
 minx,miny,maxx,maxy</li>
 </ul>
-<p id="index-54"><strong>wcs_formats</strong></p>
+<p id="index-55"><strong>wcs_formats</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Optional) The formats which may be requested for
 this layer, separated by a space. (e.g. &#8220;GTiff MrSID&#8221;)</li>
 </ul>
-<p id="index-55"><strong>wcs_keywords</strong></p>
+<p id="index-56"><strong>wcs_keywords</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Optional) Short words for catalog searching.</li>
 </ul>
-<p id="index-56"><strong>wcs_label</strong></p>
+<p id="index-57"><strong>wcs_label</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Required) A human-readable label for the layer.</li>
 </ul>
-<p id="index-57"><strong>wcs_metadatalink_format</strong></p>
+<p id="index-58"><strong>wcs_metadatalink_format</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Optional) The file format MIME type of the metadata
 record (e.g.  &#8220;text/plain&#8221;). The web metadata wcs_metadatalink_type
 and wcs_metadatalink_href must also be specified.</li>
 </ul>
-<p id="index-58"><strong>wcs_metadatalink_href</strong></p>
+<p id="index-59"><strong>wcs_metadatalink_href</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Optional) The URL to the layer&#8217;s metadata. The web
 metadata wcs_metadatalink_format and wcs_metadatalink_type must also
 be specified.</li>
 </ul>
-<p id="index-59"><strong>wcs_metadatalink_type</strong></p>
+<p id="index-60"><strong>wcs_metadatalink_type</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Optional) The standard to which the metadata
 complies. Currently only two types are valid: &#8220;TC211&#8221; which refers
@@ -1274,11 +1303,11 @@ to [ISO 19115], and &#8220;FGDC&#8221; which refers to [FGDC-STD-001-1988]. The
 web metadata wcs_metadatalink_format and wcs_metadatalink_href must
 also be specified.</li>
 </ul>
-<p id="index-60"><strong>wcs_name</strong></p>
+<p id="index-61"><strong>wcs_name</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Optional) A name for the layer.</li>
 </ul>
-<p id="index-61"><strong>wcs_nativeformat</strong></p>
+<p id="index-62"><strong>wcs_nativeformat</strong></p>
 <ul class="simple">
 <li><dl class="first docutils">
 <dt><em>Description:</em> (Optional) The current format of the served raster</dt>
@@ -1286,7 +1315,7 @@ also be specified.</li>
 </dl>
 </li>
 </ul>
-<p id="index-62"><strong>wcs_native_format</strong></p>
+<p id="index-63"><strong>wcs_native_format</strong></p>
 <ul class="simple">
 <li><dl class="first docutils">
 <dt><em>Description:</em> (Optional) The mime-type of the current format of the</dt>
@@ -1296,6 +1325,28 @@ wcs_extent and wcs_size/wcs_resolution are set).  When set, WCS 2.0
 GetCoverage requests will use this format when no other format is
 specified (the format parameter is optional then).</dd>
 </dl>
+</li>
+</ul>
+<p id="index-64"><strong>wcs_outputformat_{OUTPUTFORMATNAME}_creationoption_{OPTIONNAME}</strong></p>
+<ul>
+<li><p class="first"><em>Description:</em> (Optional) (added in MapServer 7.2.0) To provide
+creation options in a (GDAL) output format specific and layer specific way.
+{OUTPUTFORMATNAME} should be substituted by the user with the OUTPUTFORMAT.NAME
+value of an output format allowed for the layer. And {OPTIONNAME} by a
+valid GDAL creation option valid for the OUTPUTFORMAT.DRIVER.</p>
+<p>The purpose of this metadata item is to provide creation options that depend
+on the layer,  typically to configure some metadata in the resulting raster
+file that depends on that layer (for non-layer dependent configuration options,
+OUTPUTFORMAT.FORMATOPTION should rather be used).</p>
+<p>For GDAL drivers that support band-specific creation output (at time of
+writing, only the GRIB  driver in GDAL 2.3.0), with a BAND_{bandnumber}_{OPTIONNAME}
+syntax for the GDAL creation option, it is also possible to use a MapServer
+metadata item named
+wcs_outputformat_{OUTPUTFORMATNAME}_creationoption_BAND_{bandnumber}_{OPTIONNAME}.
+bandnumber will be automatically adjusted when passed to GDAL so that the
+WCS band subsetting is properly taken into account.
+You can consult <a class="reference external" href="https://github.com/mapserver/mapserver/blob/master/msautotest/wxs/wcs_grib_output.map">WCS GRIB output in msautotest</a> as
+a practical example of how to configure GRIB2 WCS output (requires GDAL 2.3.0)</p>
 </li>
 </ul>
 <p><em>Axes Descriptions</em> (WCS 1.x only)</p>
@@ -1308,7 +1359,7 @@ generated by adding the name &#8220;bands&#8221; to the rangeset_axes list.  If
 found MapServer will automatically generate metadata for the image
 bands.  You may of course extend that basic support using the naming
 conventions below.</p>
-<p id="index-63"><strong>wcs_rangeset_axes</strong></p>
+<p id="index-65"><strong>wcs_rangeset_axes</strong></p>
 <ul>
 <li><p class="first"><em>Description:</em> (Optional) Delimited list of defined range sets.  If
 defined, you can also use the following nine metadata items, where
@@ -1327,38 +1378,44 @@ defined, you can also use the following nine metadata items, where
 </div></blockquote>
 </li>
 </ul>
-<p id="index-64"><strong>wcs_rangeset_description</strong></p>
+<p id="index-66"><strong>wcs_rangeset_description</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Optional, for DescribeCoverage request) Rangeset description (WCS 1.0 only)</li>
 </ul>
-<p id="index-65"><strong>wcs_rangeset_label</strong></p>
+<p id="index-67"><strong>wcs_rangeset_label</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Required, for DescribeCoverage request) Rangeset label (WCS 1.x only)</li>
 </ul>
-<p id="index-66"><strong>wcs_rangeset_name</strong></p>
+<p id="index-68"><strong>wcs_rangeset_name</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Required, for DescribeCoverage request) Rangeset name (WCS 1.x only)</li>
 </ul>
-<p id="index-67"><strong>wcs_rangeset_nullvalue</strong></p>
+<p id="index-69"><strong>wcs_rangeset_nullvalue</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Optional, for DescribeCoverage request) Rangeset single null value (WCS 1.x only)</li>
 </ul>
-<p id="index-68"><strong>wcs_srs</strong></p>
+<p id="index-70"><strong>wcs_srs</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Optional) Spatial reference system of the layer, in
 the form of: EPSG:code (e.g. EPSG:42304)</li>
 </ul>
-<p id="index-69"><strong>wcs_timeitem</strong></p>
+<p id="index-71"><strong>wcs_timeitem</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Optional) The attribute in the spatio/temporal index
 that contains time values.</li>
 </ul>
-<p id="index-70"><strong>wcs_timeposition</strong></p>
+<p id="index-72"><strong>wcs_timeposition</strong></p>
 <ul class="simple">
 <li><em>Description:</em> (Optional) A list of the start and end time of a
 given coverage (i.e. &#8220;2000-11-11T11:11:11Z,2001-11-11T11:11:11Z&#8221;),
 used when advertising GetCapabilities.</li>
 </ul>
+</div>
+<div class="section" id="layer-metadata-api">
+<h3>Layer Metadata API<a class="headerlink" href="#layer-metadata-api" title="Enlazar permanentemente con este título">¶</a></h3>
+<p>If <code class="docutils literal"><span class="pre">wcs_metadatalink_href</span></code> is not defined, MapServer will provide a link to
+the Layer Metadata API for the given layer. See the
+<a class="reference internal" href="layer_metadata.html#layer-metadata"><span class="std std-ref">Layer Metadata API</span></a> documentation for more information.</p>
 </div>
 </div>
 <div class="section" id="rules-for-handling-srs-in-a-mapserver-wcs">
@@ -1448,6 +1505,11 @@ validation be aware that there is a currently bug in libxml2 that
 breaks the validation of GML 3.2.1.</li>
 </ul>
 </div>
+<div class="section" id="credits">
+<h2><a class="toc-backref" href="#table-of-contents">Credits</a><a class="headerlink" href="#credits" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Support for per-layer creation options has been funded by Meteorological
+Service of Canada.</p>
+</div>
 </div>
 
 
@@ -1519,9 +1581,14 @@ breaks the validation of GML 3.2.1.</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#http-post-support">HTTP-POST support</a></li>
+<li><a class="reference internal" href="#inspire-download-service-support">INSPIRE download service support</a><ul>
+<li><a class="reference internal" href="#multi-language-support">Multi-language support</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#reference-section">Reference Section</a><ul>
 <li><a class="reference internal" href="#web-object-metadata">Web Object Metadata</a></li>
 <li><a class="reference internal" href="#layer-object-metadata">Layer Object Metadata</a></li>
+<li><a class="reference internal" href="#layer-metadata-api">Layer Metadata API</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#rules-for-handling-srs-in-a-mapserver-wcs">Rules for handling SRS in a MapServer WCS</a></li>
@@ -1531,6 +1598,7 @@ breaks the validation of GML 3.2.1.</li>
 </li>
 <li><a class="reference internal" href="#wcs-2-0-application-profile-earth-observation-eo-wcs">WCS 2.0 Application Profile - Earth Observation (EO-WCS)</a></li>
 <li><a class="reference internal" href="#to-do-items-and-known-limitations">To-do Items and Known Limitations</a></li>
+<li><a class="reference internal" href="#credits">Credits</a></li>
 </ul>
 </li>
 </ul>
@@ -1552,13 +1620,13 @@ breaks the validation of GML 3.2.1.</li>
           <a href="sld.html" title="SLD"
              >anterior</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.0.7 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.2.0 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >OGC Support and Configuration</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Actualizado por última vez en 2018-07-12.
+      Actualizado por última vez en 2018-07-27.
       Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>

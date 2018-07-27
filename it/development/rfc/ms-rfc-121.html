@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MS RFC 121: PostgreSQL and ElasticSearch Support in MapCache dimensions &#8212; MapServer 7.0.7 documentation</title>
+    <title>MS RFC 121: PostgreSQL and ElasticSearch Support in MapCache dimensions &#8212; MapServer 7.2.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '7.0.7',
+        VERSION:     '7.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,9 +29,9 @@
     <link rel="index" title="Indice" href="../../genindex.html" />
     <link rel="search" title="Cerca" href="../../search.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.0.7 documentation" href="../../index.html" />
+    <link rel="top" title="MapServer 7.2.0 documentation" href="../../index.html" />
     <link rel="up" title="Request for Comments" href="index.html" />
-    <link rel="next" title="GitHub" href="../git.html" />
+    <link rel="next" title="MS RFC 122: A Tool for Coverage Analysis of MapCache Multi-SQLite Caches" href="ms-rfc-122.html" />
     <link rel="prev" title="MS RFC 120: INSPIRE download service support for WCS 2.0" href="ms-rfc-120.html" /> 
   </head>
   <body role="document">
@@ -132,7 +132,7 @@
           <a href="../../genindex.html" title="Indice generale"
              accesskey="I">indice</a></li>
         <li class="right" >
-          <a href="../git.html" title="GitHub"
+          <a href="ms-rfc-122.html" title="MS RFC 122: A Tool for Coverage Analysis of MapCache Multi-SQLite Caches"
              accesskey="N">successivo</a> |</li>
         <li class="right" >
           <a href="ms-rfc-120.html" title="MS RFC 120: INSPIRE download service support for WCS 2.0"
@@ -155,11 +155,11 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2018/06/25</td>
+<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2018-06-25</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Jerome Boue</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapCache 1.7</td>
+<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapCache TBD</td>
 </tr>
 </tbody>
 </table>
@@ -323,13 +323,12 @@ values. Hereafter is an example of current Time Dimension configuration:</p>
 <span class="c"> --&gt;</span>
 <span class="hll"> <span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;time&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;d1&quot;</span><span class="nt">&gt;</span>
 </span>   <span class="nt">&lt;dbfile&gt;</span>/data/times.sqlite<span class="nt">&lt;/dbfile&gt;</span>
-   <span class="nt">&lt;list_query&gt;</span>SELECT ts FROM timedim<span class="nt">&lt;/list_query&gt;</span>
-   <span class="nt">&lt;validate_query&gt;</span>
+   <span class="nt">&lt;query&gt;</span>
         SELECT strftime(&quot;%Y-%m-%dT%H:%M:%SZ&quot;,ts) FROM timedim
          WHERE ts <span class="ni">&amp;gt;</span>= datetime(:start_timestamp,&quot;unixepoch&quot;)
            AND ts <span class="ni">&amp;lt;</span>= datetime(:end_timestamp,&quot;unixepoch&quot;)
       ORDER BY ts DESC
-   <span class="nt">&lt;/validate_query&gt;</span>
+   <span class="nt">&lt;/query&gt;</span>
  <span class="nt">&lt;/dimension&gt;</span>
 </pre></div>
 </div>
@@ -431,6 +430,68 @@ attribute to a dimension of any type among <code class="docutils literal"><span 
 
  <span class="nt">&lt;/dimension&gt;</span>
 </pre></div>
+</div>
+<div class="section" id="compatibility-issue-on-time-dimension-with-implicit-sqlite-back-end">
+<h4>Compatibility issue on Time Dimension with implicit SQLite back-end<a class="headerlink" href="#compatibility-issue-on-time-dimension-with-implicit-sqlite-back-end" title="Link a questa intestazione">¶</a></h4>
+<p>Together with explicit back-end configuration, an almost backward compatible
+configuration of Time dimension is still provided with an implicit SQLite
+back-end. Following example highlights the differences:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="first last highlight-xml"><div class="highlight"><pre><span></span><span class="c">&lt;!-- &quot;time&quot; dimension</span>
+
+<span class="c">     This example defines a &quot;time&quot; dimension whose possible values</span>
+<span class="c">     are stored in the /data/times.sqlite SQLite file. The</span>
+<span class="c">     default value is &quot;2010&quot;.</span>
+
+<span class="c">     A WMS request with that dimension may contain, e.g.  &quot;...</span>
+<span class="c">     &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
+<span class="c">--&gt;</span>
+<span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;time&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;2010&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;dbfile&gt;</span>/data/times.sqlite<span class="nt">&lt;/dbfile&gt;</span>
+<span class="hll">    <span class="nt">&lt;query&gt;</span>
+</span>         SELECT strftime(&quot;%Y-%m-%dT%H:%M:%SZ&quot;,ts) FROM time
+          WHERE ts <span class="ni">&amp;gt;</span>= datetime(:start_timestamp,&quot;unixepoch&quot;)
+            AND ts <span class="ni">&amp;lt;</span>= datetime(:end_timestamp,&quot;unixepoch&quot;)
+       ORDER BY ts DESC
+<span class="hll">    <span class="nt">&lt;/query&gt;</span>
+</span>
+<span class="nt">&lt;/dimension&gt;</span>
+</pre></div>
+</div>
+</td>
+<td><div class="first last highlight-xml"><div class="highlight"><pre><span></span><span class="c">&lt;!-- &quot;time&quot; dimension</span>
+
+<span class="c">     This example defines a &quot;time&quot; dimension whose possible values</span>
+<span class="c">     are stored in the /data/times.sqlite SQLite file. The</span>
+<span class="c">     default value is &quot;2010&quot;.</span>
+
+<span class="c">     A WMS request with that dimension may contain, e.g.  &quot;...</span>
+<span class="c">     &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
+<span class="c">--&gt;</span>
+<span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;time&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;2010&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;dbfile&gt;</span>/data/times.sqlite<span class="nt">&lt;/dbfile&gt;</span>
+<span class="hll">    <span class="nt">&lt;validate_query&gt;</span>
+</span>         SELECT strftime(&quot;%Y-%m-%dT%H:%M:%SZ&quot;,ts) FROM time
+          WHERE ts <span class="ni">&amp;gt;</span>= datetime(:start_timestamp,&quot;unixepoch&quot;)
+            AND ts <span class="ni">&amp;lt;</span>= datetime(:end_timestamp,&quot;unixepoch&quot;)
+       ORDER BY ts DESC
+<span class="hll">    <span class="nt">&lt;/validate_query&gt;</span>
+</span><span class="hll">    <span class="nt">&lt;list_query&gt;</span>SELECT ts FROM time<span class="nt">&lt;/list_query&gt;</span>
+</span><span class="nt">&lt;/dimension&gt;</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td>Up to MapCache 1.6.1</td>
+<td>From MapCache &gt; 1.6.1 on</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -567,7 +628,10 @@ PostgreSQL dimension</td>
 <li><a class="reference internal" href="#proposed-enhancements">2. Proposed Enhancements</a><ul>
 <li><a class="reference internal" href="#postgresql-dimensions">2.1. PostgreSQL Dimensions</a></li>
 <li><a class="reference internal" href="#elasticsearch-dimensions">2.2. ElasticSearch Dimensions</a></li>
-<li><a class="reference internal" href="#time-dimensions">2.3. Time Dimensions</a></li>
+<li><a class="reference internal" href="#time-dimensions">2.3. Time Dimensions</a><ul>
+<li><a class="reference internal" href="#compatibility-issue-on-time-dimension-with-implicit-sqlite-back-end">Compatibility issue on Time Dimension with implicit SQLite back-end</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#implementation-details">3. Implementation Details</a><ul>
@@ -591,7 +655,7 @@ PostgreSQL dimension</td>
           <a href="../../genindex.html" title="Indice generale"
              >indice</a></li>
         <li class="right" >
-          <a href="../git.html" title="GitHub"
+          <a href="ms-rfc-122.html" title="MS RFC 122: A Tool for Coverage Analysis of MapCache Multi-SQLite Caches"
              >successivo</a> |</li>
         <li class="right" >
           <a href="ms-rfc-120.html" title="MS RFC 120: INSPIRE download service support for WCS 2.0"
@@ -603,7 +667,7 @@ PostgreSQL dimension</td>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Ultimo aggiornamento 2018-07-12.
+      Ultimo aggiornamento 2018-07-27.
       Creato con <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>
