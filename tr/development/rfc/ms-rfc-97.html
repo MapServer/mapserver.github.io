@@ -1,25 +1,15 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="tr">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>MS RFC 97: Dynamic creation of higher zoom levels tiles &#8212; MapServer 7.2.0 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '7.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -29,12 +19,9 @@
     <link rel="index" title="Dizin" href="../../genindex.html" />
     <link rel="search" title="Ara" href="../../search.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.2.0 documentation" href="../../index.html" />
-    <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 98: Label/Text Rendering Overhaul" href="ms-rfc-98.html" />
     <link rel="prev" title="MS RFC 96: Time Dimension Support in MapCache Tilesets" href="ms-rfc-96.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -175,7 +162,7 @@ of the standard GoogleMapsCompatible or WGS84 grids.  Users whishing to serve lo
 resolution data at high resolutions are currently forced to use one of these
 approaches:</p>
 <ul class="simple">
-<li>setting a &lt;grid maxzoom=&#8221;15&#8221;&gt; attribute in their tilesets, meaning that all
+<li>setting a &lt;grid maxzoom=”15”&gt; attribute in their tilesets, meaning that all
 zoom levels higher than the maximum configured one are considered
 unavailable. Upsampled tiles or images for the higher zoom levels can then be
 obtained through WMS calls only, tile requests will fail.</li>
@@ -184,7 +171,7 @@ levels, which is inefficient both in terms of storage on the mapcache
 instance, and in terms of load set on the original WMS server when initially
 requesting images before splitting them into tiles.</li>
 </ul>
-<p>This RFC proposes to add the concept of &#8220;maximum cached level&#8221; for a given
+<p>This RFC proposes to add the concept of “maximum cached level” for a given
 tileset and a given grid. In practice, tiles above the configured maximum
 cached level are still transparently available for an end user or when
 vertically merging multiple tiles, however they are dynamically upscaled from
@@ -193,15 +180,15 @@ the maximum cached level instead of being cached on the mapcache instance
 </div>
 <div class="section" id="proposed-solution">
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
-<p>In order to be available for all tile operations, the <code class="docutils literal"><span class="pre">mapcache_tileset_tile_get</span></code>
+<p>In order to be available for all tile operations, the <code class="docutils literal notranslate"><span class="pre">mapcache_tileset_tile_get</span></code>
 function will detect calls that are over the maximum cached level and fall back to
-a new function who&#8217;s responsibility is to treat this special case. Two configurations
-will be available for this &#8220;over the maximum cached zoom&#8221; scenario:</p>
+a new function who’s responsibility is to treat this special case. Two configurations
+will be available for this “over the maximum cached zoom” scenario:</p>
 <ul class="simple">
 <li>Reconstruct the requested tile from the lower zoom level, by:<ul>
 <li>determining the one or four tiles of the maximum cached that interect the extent
 of the requested tile.</li>
-<li>calling <code class="docutils literal"><span class="pre">mapcache_tileset_tile_get</span></code> once again, this time with (x,y,z) adapted
+<li>calling <code class="docutils literal notranslate"><span class="pre">mapcache_tileset_tile_get</span></code> once again, this time with (x,y,z) adapted
 to have z=max-cached-level (to avoid infinite recursion).</li>
 <li>decoding the image data of the lower zoom level tile(s).</li>
 <li>upscaling the decoded image data into the final tile.</li>
@@ -210,7 +197,7 @@ use-cases for this functionality will be when overlaying multiple tilesets (i.e.
 access to the raw pixel data will happen)</li>
 </ul>
 </li>
-<li>Proxying the requested tile to the source WMS server, thus bypassing mapcache&#8217;s
+<li>Proxying the requested tile to the source WMS server, thus bypassing mapcache’s
 caching mechanism entirely (this will not be initially implemented):<ul>
 <li>construct the extent of the tile, eventually account for the metabuffer (but not
 the metatile size).</li>
@@ -222,7 +209,7 @@ a vertical assembly of multiple tilesets.</li>
 </ul>
 <p>Activating this functionality in the configuration file is done for each grid
 referenced by a tileset:</p>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;tileset&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;tileset&gt;</span>
   <span class="c">&lt;!-- ... --&gt;</span>
   <span class="nt">&lt;grid</span> <span class="na">max-cached-zoom=</span><span class="s">&quot;12&quot;</span> <span class="na">out-of-zoom-strategy=</span><span class="s">&quot;reassemble&quot;</span><span class="nt">&gt;</span>WGS84<span class="nt">&lt;/grid&gt;</span>
   <span class="nt">&lt;grid</span> <span class="na">max-cached-zoom=</span><span class="s">&quot;12&quot;</span> <span class="na">out-of-zoom-strategy=</span><span class="s">&quot;proxy&quot;</span><span class="nt">&gt;</span>g<span class="nt">&lt;/grid&gt;</span> <span class="c">&lt;!-- not implemented --&gt;</span>
@@ -233,9 +220,9 @@ referenced by a tileset:</p>
 </div>
 <div class="section" id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
-<p>Two new functions will be added, and will produce a tile&#8217;s image by either
+<p>Two new functions will be added, and will produce a tile’s image by either
 upscaling lower level tiles or directly querying the source wms. They will be
-called from the <code class="docutils literal"><span class="pre">mapcache_tileset_tile_get()</span></code> function when such a behavior
+called from the <code class="docutils literal notranslate"><span class="pre">mapcache_tileset_tile_get()</span></code> function when such a behavior
 has been requested in the configuration file.</p>
 <div class="section" id="files-affected">
 <h3>3.1 Files affected<a class="headerlink" href="#files-affected" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
@@ -294,12 +281,14 @@ tiles would be needed in order to produce a seamless upscaled version.</li>
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Hızlı Arama</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Git" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Git" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
@@ -354,8 +343,8 @@ tiles would be needed in order to produce a seamless upscaled version.</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Son güncelleme: 2018-07-30.
-      <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9 ile oluşturulmuştur.
+      Son güncelleme: 2018-07-31.
+      <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6 ile oluşturulmuştur.
     </div>
   </body>
 </html>

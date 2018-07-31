@@ -1,25 +1,15 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="el">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>MS RFC 64 - MapServer Expression Parser Overhaul &#8212; MapServer 7.2.0 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '7.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -29,12 +19,9 @@
     <link rel="index" title="Ευρετήριο" href="../../genindex.html" />
     <link rel="search" title="Αναζήτηση" href="../../search.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.2.0 documentation" href="../../index.html" />
-    <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 65 - Single-pass Query Changes for 6.0" href="ms-rfc-65.html" />
     <link rel="prev" title="MS RFC 63: Built-in OpenLayers map viewer" href="ms-rfc-63.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -171,7 +158,7 @@
 <h2>Overview<a class="headerlink" href="#overview" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <p>This is a draft RFC addressing 1) how the Bison/Yacc parser for logical expressions is implemented and 2) where in the MapServer code
 the  parser can be used. This RFC could have broader impacts on query processing depending on additional changes at the driver level,
-specifically the RDBMS ones. Those changes don&#8217;t have to occur for this to be a useful addition.</p>
+specifically the RDBMS ones. Those changes don’t have to occur for this to be a useful addition.</p>
 <p>A principle motivation for this work is to support OGC filter expressions in a single pass in a driver-independent manner.</p>
 <p>All of the work detailed here is being prototyped in a sandbox, visit:</p>
 <blockquote>
@@ -183,7 +170,7 @@ specifically the RDBMS ones. Those changes don&#8217;t have to occur for this to
 <blockquote>
 <div><ol class="arabic simple">
 <li>duplicate expression string[[BR]]</li>
-<li>substitute shape attributes into string (e.g. &#8216;[name]&#8217; =&gt; &#8216;Anoka&#8217;)[[BR]]</li>
+<li>substitute shape attributes into string (e.g. “[name]” =&gt; “Anoka”)[[BR]]</li>
 <li>parse with yyparse()</li>
 </ol>
 </div></blockquote>
@@ -191,7 +178,7 @@ specifically the RDBMS ones. Those changes don&#8217;t have to occur for this to
 <p><strong>Advantages</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li>it&#8217;s simple and it works</li>
+<li>it’s simple and it works</li>
 </ul>
 </div></blockquote>
 <p><strong>Disadvantages</strong></p>
@@ -210,9 +197,9 @@ Additional features capitalize on this core change to bring additional capabilit
 <p>I propose moving to a setup where a logical expression is tokenized once (via our Flex-generated lexer) and then Bison/Yacc parser
 works through tokens (via a custom version of yylex() defined in mapparser.y) as necessary for each feature. This eliminates the
 substitution and tokenize steps currently necessary and opens up possibilities for supporting more complex objects in expressions.
-Basically we&#8217;d hang a list of tokens off an expressionObj, populate it in msLayerWhichItems() and leverage the tokens as needed
+Basically we’d hang a list of tokens off an expressionObj, populate it in msLayerWhichItems() and leverage the tokens as needed
 in the parser. The following new structs and enums are added to mapserver.h:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">enum</span> <span class="n">MS_TOKEN_LOGICAL_ENUM</span> <span class="p">{</span> <span class="n">MS_TOKEN_LOGICAL_AND</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">MS_TOKEN_LOGICAL_OR</span><span class="p">,</span> <span class="n">MS_TOKEN_LOGICAL_NOT</span> <span class="p">};</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enum</span> <span class="n">MS_TOKEN_LOGICAL_ENUM</span> <span class="p">{</span> <span class="n">MS_TOKEN_LOGICAL_AND</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">MS_TOKEN_LOGICAL_OR</span><span class="p">,</span> <span class="n">MS_TOKEN_LOGICAL_NOT</span> <span class="p">};</span>
 <span class="n">enum</span> <span class="n">MS_TOKEN_LITERAL_ENUM</span> <span class="p">{</span> <span class="n">MS_TOKEN_LITERAL_NUMBER</span><span class="o">=</span><span class="mi">110</span><span class="p">,</span> <span class="n">MS_TOKEN_LITERAL_STRING</span><span class="p">,</span> <span class="n">MS_TOKEN_LITERAL_TIME</span><span class="p">,</span> <span class="n">MS_TOKEN_LITERAL_SHAPE</span> <span class="p">};</span>
 <span class="n">enum</span> <span class="n">MS_TOKEN_COMPARISON_ENUM</span> <span class="p">{</span>
   <span class="n">MS_TOKEN_COMPARISON_EQ</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_NE</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_GT</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_LT</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_LE</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_GE</span><span class="p">,</span> <span class="n">MS_TOKEN_COMPARISON_IEQ</span><span class="p">,</span>
@@ -247,10 +234,10 @@ the information necessary to quickly access the correct data (typically an item 
 the case here, although different data are shared in this context. One thing to note is that once an expression is tokenized we no longer have
 to rely on the flex-generated lexer so, in theory, it should be easier to implement a thread-safe parser should we choose to do so.</p>
 <p><strong>Extending the Yacc grammar to support spatial operators</strong></p>
-<p>The mapserver.h definitions above allow for using shapeObj&#8217;s within the Yacc grammar (we also define a shapeObj as a new base token type
+<p>The mapserver.h definitions above allow for using shapeObj’s within the Yacc grammar (we also define a shapeObj as a new base token type
 within mapparser.y). There are two types of shape-related tokens: 1) a shape binding, that is, a reference to the geometry being evaluated and
 2) shape literals, shapes described as WKT within the expression string. For example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="n">the</span> <span class="n">expression</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="n">the</span> <span class="n">expression</span><span class="p">:</span>
   <span class="n">EXPRESSION</span> <span class="p">(</span><span class="n">fromText</span><span class="p">(</span><span class="s1">&#39;POINT(500000 5000000)&#39;</span><span class="p">)</span> <span class="n">Intersects</span> <span class="p">[</span><span class="n">shape</span><span class="p">])</span>
 
   <span class="mi">1</span><span class="p">)</span> <span class="n">fromText</span><span class="p">(</span><span class="s1">&#39;POINT(500000 5000000)&#39;</span><span class="p">)</span> <span class="n">defines</span> <span class="n">a</span> <span class="n">shape</span> <span class="n">literal</span> <span class="p">(</span><span class="n">the</span> <span class="n">WKT</span> <span class="n">to</span> <span class="n">shapeObj</span> <span class="n">conversion</span> <span class="ow">is</span> <span class="n">done</span> <span class="n">only</span> <span class="n">once</span><span class="p">)</span>
@@ -262,35 +249,35 @@ example fromText() appears as a function operating on a string. This is handled 
 want to do this once. So we create a shape literal based on the enclosed WKT string at this time.</p>
 <p><strong>Extending the grammar to support spatial functions</strong></p>
 <p>By supporting the use of more complex objects we can support functions on those objects. We could write:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">EXPRESSION</span> <span class="p">(</span><span class="n">area</span><span class="p">([</span><span class="n">shape</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EXPRESSION</span> <span class="p">(</span><span class="n">area</span><span class="p">([</span><span class="n">shape</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>or rely on even more of the GEOS operators. (Note: only the area function is present in the sandbox.) To do this we need to somehow store
-a shapeObj&#8217;s scope so that working copies can be free&#8217;d as appropriate. I would propose adding a &#8216;&#8217;int scope&#8217;&#8217; to the shapeObj structure
+a shapeObj’s scope so that working copies can be free’d as appropriate. I would propose adding a “”int scope”” to the shapeObj structure
 definition. Shapes created in the course of expression evaluation would be tagged as having limited scope while literals or bindings would
 be left alone and presumably destroyed later. This saves having to make copies of shapes which can be expensive.</p>
 <p><strong>Context Sensitive Parsing</strong></p>
 <p>We could have done this all along but this would be an opportune time to implement context sensitive parser use. Presently we expect the
-parser to produce a true or false result, but certainly aren&#8217;t limited to that. The idea is to use the parser to compute values in other situations.
+parser to produce a true or false result, but certainly aren’t limited to that. The idea is to use the parser to compute values in other situations.
 Two places are working in the sandbox and are detailed below.</p>
 <p>Class <strong>TEXT</strong> Parameter</p>
 <p>Currently you can write:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CLASS</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CLASS</span>
   <span class="o">...</span>
   <span class="n">TEXT</span> <span class="p">([</span><span class="n">area</span><span class="p">]</span> <span class="n">acres</span><span class="p">)</span>
 <span class="n">END</span>
 </pre></div>
 </div>
-<p>It looks as if the TEXT value is an expression (and it is stored as such) but it&#8217;s not evaluated as one. It would be very useful to treat this as
-a true expression. This would open up a world of formatting options for drivers that don&#8217;t support it otherwise (e.g. shapefiles). Ticket
-<cite>2950 &lt;https://github.com/mapserver/mapserver/issues/2950&gt;</cite> is an example where this would come in handy. Within the sandbox I&#8217;ve added
+<p>It looks as if the TEXT value is an expression (and it is stored as such) but it’s not evaluated as one. It would be very useful to treat this as
+a true expression. This would open up a world of formatting options for drivers that don’t support it otherwise (e.g. shapefiles). Ticket
+<cite>2950 &lt;https://github.com/mapserver/mapserver/issues/2950&gt;</cite> is an example where this would come in handy. Within the sandbox I’ve added
 toString, round and commify functions so that you can write:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">TEXT</span> <span class="p">(</span><span class="n">commify</span><span class="p">(</span><span class="n">toString</span><span class="p">([</span><span class="n">area</span><span class="p">]</span><span class="o">*</span><span class="mf">0.000247105381</span><span class="p">,</span><span class="s2">&quot;</span><span class="si">%.2f</span><span class="s2">&quot;</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39; ac&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TEXT</span> <span class="p">(</span><span class="n">commify</span><span class="p">(</span><span class="n">toString</span><span class="p">([</span><span class="n">area</span><span class="p">]</span><span class="o">*</span><span class="mf">0.000247105381</span><span class="p">,</span><span class="s2">&quot;</span><span class="si">%.2f</span><span class="s2">&quot;</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39; ac&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Which converts area from sq. meters to acres, truncates the result to two decimal places adds commas (213234.123455 =&gt; 213,234.12) for
 crowd pleasing display. To add this support, in addition to grammar changes, we add these declarations to mapserver.h:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">enum</span> <span class="n">MS_PARSE_RESULT_TYPE_ENUM</span> <span class="p">{</span> <span class="n">MS_PARSE_RESULT_BOOLEAN</span><span class="p">,</span> <span class="n">MS_PARSE_RESULT_STRING</span><span class="p">,</span> <span class="n">MS_PARSE_RESULT_SHAPE</span> <span class="p">};</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enum</span> <span class="n">MS_PARSE_RESULT_TYPE_ENUM</span> <span class="p">{</span> <span class="n">MS_PARSE_RESULT_BOOLEAN</span><span class="p">,</span> <span class="n">MS_PARSE_RESULT_STRING</span><span class="p">,</span> <span class="n">MS_PARSE_RESULT_SHAPE</span> <span class="p">};</span>
 
 <span class="n">typedef</span> <span class="n">union</span> <span class="p">{</span>
   <span class="nb">int</span> <span class="n">intval</span><span class="p">;</span>
@@ -300,11 +287,11 @@ crowd pleasing display. To add this support, in addition to grammar changes, we 
 </pre></div>
 </div>
 <p>Then in the grammar we set a parse result type and set the result accordingly. One side effect is that we have to define a standard way to convert
-numbers to strings when in the string context and simply using &#8220;%g&#8221; as a format string for snprintf does wonders to output.</p>
+numbers to strings when in the string context and simply using «%g» as a format string for snprintf does wonders to output.</p>
 <p>Style <strong>GEOMTRANSFORM</strong></p>
-<p>Within the sandbox I&#8217;ve implemented GEOMTRANSFORMs as expressions as opposed to the original implementation. The parser has also been
+<p>Within the sandbox I’ve implemented GEOMTRANSFORMs as expressions as opposed to the original implementation. The parser has also been
 extended to support the GEOS buffer operator. So you can write:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">STYLE</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">STYLE</span>
   <span class="n">GEOMTRANSFORM</span> <span class="p">(</span><span class="n">buffer</span><span class="p">([</span><span class="n">shape</span><span class="p">],</span> <span class="o">-</span><span class="mi">3</span><span class="p">))</span>
   <span class="o">...</span>
 <span class="n">END</span>
@@ -318,9 +305,9 @@ classes and/or styles (and consequently in query modes too).</p>
 <div class="section" id="expression-use-elsewhere">
 <h2>Expression Use Elsewhere<a class="headerlink" href="#expression-use-elsewhere" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <p>Currently the logical expression syntax is also used with REQUIRES/LABELREQUIRES and with rasters. In the REQUIRES/LABELREQUIRES case the code
-would remain mostly &#8220;as is&#8221; we&#8217;d still do the substitutions bases on layer status, then explicitly tokenize and parse. Since this done at most once per
-layer there&#8217;s really no need to do anything more.</p>
-<p>Rasters present more of a challenge. We&#8217;d need to handle them as a special case when tokenizing an expression by defining pixel bindings and then
+would remain mostly «as is» we’d still do the substitutions bases on layer status, then explicitly tokenize and parse. Since this done at most once per
+layer there’s really no need to do anything more.</p>
+<p>Rasters present more of a challenge. We’d need to handle them as a special case when tokenizing an expression by defining pixel bindings and then
 pass a pixel to the parser when evaluating the expression. This should be <strong>much, much</strong> faster than the current method where each pixel value is
 converted to a string representation (and then back to a number), especially given the number of pixels often evaluated. Some interesting drawing
 effects are also possible if you could expose a pixel location to the GEOS operators. For example, one could create a mask showing only pixels within
@@ -328,7 +315,7 @@ a particular geometry.</p>
 </div>
 <div class="section" id="query-impact">
 <h2>Query Impact<a class="headerlink" href="#query-impact" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
-<p>This is where things get interesting. I&#8217;m proposing adding a new query, msQueryByFilter() that would work off an expression string (this is working in
+<p>This is where things get interesting. I’m proposing adding a new query, msQueryByFilter() that would work off an expression string (this is working in
 the sandbox). The expression string would still have to be accompanied by an extent parameter. Drivers like shapefiles still need to first apply a bounding
 box before applying a secondary filter. Other drivers could choose to combine the extent and expression string (more likely the tokens) if they so choose.
 msQueryByFilter() works much like msQueryByAttributes(). The layer API has been extended to include a prototype, msLayerSupportsCommonFilters(), that
@@ -345,7 +332,7 @@ think it makes more sense and is more user friendly to simply define case-insens
 regex (modeled after Postgres).</p>
 <p>The additional operators, functions and parsing contexts are new functionality.</p>
 <p>A great deal of code would be made obsolete if this were pursued. Much of the OWS filter evaluation would be handled by the msQueryByFilter() function and
-numerous associated enums, defines, etc... could go away.</p>
+numerous associated enums, defines, etc… could go away.</p>
 <p>Grammar summary (<strong>bold means new</strong>):</p>
 <blockquote>
 <div><ul class="simple">
@@ -364,15 +351,15 @@ think the largest risks are buffer overflows associated with string operators in
 developing a comprehensive set of test cases.</p>
 </div>
 <div class="section" id="todo-s">
-<h2>Todo&#8217;s<a class="headerlink" href="#todo-s" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>Todo’s<a class="headerlink" href="#todo-s" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <blockquote>
 <div><ol class="arabic simple">
-<li>The &#8216;&#8217;IN&#8217;&#8217; operator is in dire need of optimization.</li>
+<li>The “”IN”” operator is in dire need of optimization.</li>
 <li>All OGC filter operations need to be supported. Bounding box filters in particular have not been looked at.</li>
-<li>Need &#8216;&#8217;LIKE&#8217;&#8217; operator code. (e.g. Dr. Dobbs, 9/08, &#8216;&#8217;Matching Wildcards: An Algorithm&#8217;&#8216;, pp. 37-39)</li>
+<li>Need “”LIKE”” operator code. (e.g. Dr. Dobbs, 9/08, “”Matching Wildcards: An Algorithm”“, pp. 37-39)</li>
 <li>How to handle layer tolerances in msQueryByFilter()?</li>
 <li>Best way to manage tokens: array, list, tree? Bison/Yacc needs array or list, but both Frank and Paul have referred to trees. (Update: the tokens are now managed as a linked list.)</li>
-<li>Thread safety...</li>
+<li>Thread safety…</li>
 <li>Parser error handling, any errors have basically always been silently ignored.</li>
 </ol>
 </div></blockquote>
@@ -397,12 +384,14 @@ developing a comprehensive set of test cases.</p>
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Σύντομη αναζήτηση</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Πάμε" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Πάμε" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
@@ -426,7 +415,7 @@ developing a comprehensive set of test cases.</p>
 <li><a class="reference internal" href="#query-impact">Query Impact</a></li>
 <li><a class="reference internal" href="#backwards-compatibility-issues">Backwards Compatibility Issues</a></li>
 <li><a class="reference internal" href="#security-issues">Security Issues</a></li>
-<li><a class="reference internal" href="#todo-s">Todo&#8217;s</a></li>
+<li><a class="reference internal" href="#todo-s">Todo’s</a></li>
 <li><a class="reference internal" href="#bug-id">Bug ID</a></li>
 <li><a class="reference internal" href="#voting-history">Voting history</a></li>
 </ul>
@@ -456,8 +445,8 @@ developing a comprehensive set of test cases.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Τελευταία ενημέρωση στις 2018-07-30.
-      Δημιουργήθηκε με το <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+      Τελευταία ενημέρωση στις 2018-07-31.
+      Δημιουργήθηκε με το <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>

@@ -1,25 +1,15 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="sq">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>MS RFC 80: Font Fallback Support &#8212; MapServer 7.2.0 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '7.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -28,12 +18,9 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.2.0 documentation" href="../../index.html" />
-    <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 81: Offset Labels with Leader Lines" href="ms-rfc-81.html" />
     <link rel="prev" title="MS RFC 79: Layer Masking" href="ms-rfc-79.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -156,7 +143,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2011/12/07</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Thomas &#8220;fake&#8221; Jakobi</td>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Thomas «fake» Jakobi</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Thomas Bonfort</td>
 </tr>
@@ -174,17 +161,17 @@
 <h2>1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>This RFC proposes allowing for the definition of fallback fonts for labels, to
 be used when a glyph is not available in the initial font.</p>
-<p>Presently, if a glyph is not available in the font of a label, the font&#8217;s error
+<p>Presently, if a glyph is not available in the font of a label, the font’s error
 glyph is drawn (usually an empty box). This is problematic when rendering
 international data, as it may contain a wide range of unicode characters. Up
 to now, this can only be fixed using a (near-)complete unicode font. The free
-&#8220;unifont&#8221; contains all glyphs of the basic unicode set (~60.000), but does not
+«unifont» contains all glyphs of the basic unicode set (~60.000), but does not
 look very pleasing as a default font.</p>
 <p>With fallback fonts, glyph lookup would try a set of fonts, in a given order,
 before accepting the error glyph. This way, a unicode font like unifont would
-only be used as &#8220;last resort&#8221; on a glyph-by-glyph basis.</p>
+only be used as «last resort» on a glyph-by-glyph basis.</p>
 <p>In the mapfile, a list of fonts would be given as a comma-separated string like
-&#8220;font1,font2,font3&#8221;, where each font is listed in the fonts.lst as usual. If
+«font1,font2,font3», where each font is listed in the fonts.lst as usual. If
 only one font is specified, this functionality has no effect. The same fontlist
 support is available for attribute binding.</p>
 </div>
@@ -217,11 +204,11 @@ expects a comma-separated list of fontset keys.</p>
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this headline">¶</a></h2>
 <p>The proposed implementation adds font fallback support to the cairo and agg
 renderers.</p>
-<p>The labelObj is unchanged, but its &#8220;char* font&#8221; member semantics
+<p>The labelObj is unchanged, but its «char* font» member semantics
 is changed to contain a comma separated list of fontset keys instead of a
 single fontset key. This ensures minimal backwards incompatibility for
 mapscript applications and datasource bindings.</p>
-<p>A new function &#8220;msFontsetLookupFonts()&#8221; is called before labelling
+<p>A new function «msFontsetLookupFonts()» is called before labelling
 renderer-specific functions are called, and maps the comma-separated
 labelObj-&gt;font into an array of full font filenames, by iterating
 through the labelObj-&gt;font keys and calling msFontsetLookup.</p>
@@ -269,7 +256,7 @@ in labelStyleObj</li>
 </div></blockquote>
 <ul class="simple">
 <li>mapsymbol.c: symbol font fallback adoptions</li>
-<li>maputil.c: only bind font from shape if it&#8217;s different</li>
+<li>maputil.c: only bind font from shape if it’s different</li>
 <li>mapdummyrenderer.c: getTruetypeTextBBox signature change</li>
 </ul>
 </div>
@@ -281,7 +268,7 @@ in labelStyleObj</li>
 </div>
 <div class="section" id="backwards-compatibility-issues">
 <h2>4. Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this headline">¶</a></h2>
-<p>None expected, unless existing fontset keys contained commas. I&#8217;m not
+<p>None expected, unless existing fontset keys contained commas. I’m not
 sure this was valid syntax anyways, and was definitely bad practice.</p>
 </div>
 <div class="section" id="error-reporting">
@@ -313,12 +300,14 @@ to an inaccessible or corrupt ttf file).</p>
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
@@ -374,8 +363,8 @@ to an inaccessible or corrupt ttf file).</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Last updated on 2018-07-30.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+      Last updated on 2018-07-31.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>

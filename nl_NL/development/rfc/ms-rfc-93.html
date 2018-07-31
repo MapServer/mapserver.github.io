@@ -1,25 +1,15 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="nl_NL">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>MS RFC 93: UTF Grid Support &#8212; MapServer 7.2.0 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '7.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -28,12 +18,9 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Zoeken" href="../../search.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.2.0 documentation" href="../../index.html" />
-    <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 94: Shape Smoothing" href="ms-rfc-94.html" />
     <link rel="prev" title="MS RFC 92: Migrating from Autotools to CMake" href="ms-rfc-92.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -129,7 +116,7 @@
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="Algemene index"
-             accesskey="I">Index</a></li>
+             accesskey="I">index</a></li>
         <li class="right" >
           <a href="ms-rfc-94.html" title="MS RFC 94: Shape Smoothing"
              accesskey="N">volgende</a> |</li>
@@ -187,7 +174,7 @@
 <p>UTFGrid is a open solution for specifying raster interaction data. The goal being to provide highly scalable user
 interaction with raster maps. The objective of this RFC is to enable MapServer to produce UTFGrid output.</p>
 <p>The UTFGrid encoding scheme encodes interactivity data for a raster tile in a space efficient manner. It is designed to be used in browsers, e.g. for displaying tooltips when hovering over certain features of a map tile.</p>
-<p>Since slower browsers and machines can&#8217;t cope with rendering the actual polygons used to draw vectors on the map tile, we use a grid-based approach where we store the associated information for each pixel. UTFGrid uses JSON as a container format.</p>
+<p>Since slower browsers and machines can’t cope with rendering the actual polygons used to draw vectors on the map tile, we use a grid-based approach where we store the associated information for each pixel. UTFGrid uses JSON as a container format.</p>
 <p>The full spec and interactive demos are available at <a class="reference external" href="https://github.com/mapbox/utfgrid-spec">https://github.com/mapbox/utfgrid-spec</a>.</p>
 </div>
 <div class="section" id="proposed-solution">
@@ -199,12 +186,12 @@ CGI mode=map or WMS GetMap requests.</p>
 <h2>2.1 Rendering the UTFGrid<a class="headerlink" href="#rendering-the-utfgrid" title="Permalink naar deze titel">¶</a></h2>
 <p>New UTFGrid renderer that would utilize the AGG library using an unsigned int32 canvas to encode feature IDs as their
 literal UTF-8 respresentation. Feature IDs (starting at 1) would be assigned sequentially as features are rendered
-and a reference to the feature&#8217;s key would be maintained as part of the rendering process. The list of feature keys
+and a reference to the feature’s key would be maintained as part of the rendering process. The list of feature keys
 will be searched first to avoid duplication. It is certainly reasonable to define a key for feature that respresents a
 thematic property, for example population age class, which would result far smaller output than keys that are unique
 to each feature. A layers key item is defined by the new UTFITEM attribute.</p>
 <p>The UTFRenderer will draw points, lines and polygons based loosely on the underlying style definition.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Polygons</span><span class="p">:</span> <span class="n">solid</span> <span class="n">fill</span><span class="o">.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Polygons</span><span class="p">:</span> <span class="n">solid</span> <span class="n">fill</span><span class="o">.</span>
 <span class="n">Lines</span><span class="p">:</span> <span class="n">solid</span> <span class="n">line</span> <span class="k">with</span> <span class="n">width</span><span class="o">.</span> <span class="n">Patterns</span> <span class="n">are</span> <span class="ow">not</span> <span class="n">applied</span><span class="o">.</span>
 <span class="n">Points</span><span class="p">:</span> <span class="n">rectangle</span> <span class="n">based</span> <span class="n">on</span> <span class="n">the</span> <span class="n">bounding</span> <span class="n">box</span> <span class="n">of</span> <span class="n">the</span> <span class="n">symbol</span> <span class="n">will</span> <span class="n">be</span> <span class="n">used</span><span class="o">.</span>
 </pre></div>
@@ -213,7 +200,7 @@ to each feature. A layers key item is defined by the new UTFITEM attribute.</p>
 drawn to the map. It is also possible to choose the resolution of the grid. A larger resolution will make the grid
 smaller and therefore reduce its weight but also its precision. These are optionals capabilities which can be enabled
 through the output format:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">OUTPUTFORMAT</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">OUTPUTFORMAT</span>
   <span class="n">NAME</span> <span class="s2">&quot;myUTFGrid&quot;</span>
   <span class="n">DRIVER</span> <span class="n">UTFGRID</span>
   <span class="n">FORMATOPTION</span> <span class="s2">&quot;LABELS=true&quot;</span>
@@ -225,7 +212,7 @@ through the output format:</p>
 <p>It may be desirable NOT to remove duplicate feature id/key pairs since that process could be expensive depending
 on the number of features in the map. The format option duplicates=false can be used to skip this step. The resulting
 JSON file will be a bit larger.</p>
-<p>Note: due to upcoming changes to text rendering, Truetype symbols and labels rendering aren&#8217;t implemented yet and should
+<p>Note: due to upcoming changes to text rendering, Truetype symbols and labels rendering aren’t implemented yet and should
 be added in the future.</p>
 </div>
 <div class="section" id="exposing-feature-properties">
@@ -235,11 +222,11 @@ expression syntax identical to what is used with classObj-&gt;text class text sy
 expressionObj. If UTFITEMs is set the UTFDATA expose those so that keys and data can be connected.</p>
 <p>If a UTFITEM is not set the sequential id (based on rendering order) is being used.</p>
 <p>Examples:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">UTFITEM</span> <span class="s2">&quot;fid&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">UTFITEM</span> <span class="s2">&quot;fid&quot;</span>
 <span class="n">UTFDATA</span> <span class="s2">&quot;{</span><span class="se">\&quot;</span><span class="s2">id</span><span class="se">\&quot;</span><span class="s2">:</span><span class="se">\&quot;</span><span class="s2">[fid]</span><span class="se">\&quot;</span><span class="s2">, </span><span class="se">\&quot;</span><span class="s2">name</span><span class="se">\&quot;</span><span class="s2">:</span><span class="se">\&quot;</span><span class="s2">[name]</span><span class="se">\&quot;</span><span class="s2">, </span><span class="se">\&quot;</span><span class="s2">country</span><span class="se">\&quot;</span><span class="s2">:</span><span class="se">\&quot;</span><span class="s2">[country_code]</span><span class="se">\&quot;</span><span class="s2">, </span><span class="se">\&quot;</span><span class="s2">area</span><span class="se">\&quot;</span><span class="s2">:</span><span class="se">\&quot;</span><span class="s2">[area]</span><span class="se">\&quot;</span><span class="s2">}&quot;</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># no UTFITEM</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># no UTFITEM</span>
 <span class="n">UTFDATA</span> <span class="s2">&quot;{</span><span class="se">\&quot;</span><span class="s2">name</span><span class="se">\&quot;</span><span class="s2">:</span><span class="se">\&quot;</span><span class="s2">[name]</span><span class="se">\&quot;</span><span class="s2">, </span><span class="se">\&quot;</span><span class="s2">country</span><span class="se">\&quot;</span><span class="s2">:</span><span class="se">\&quot;</span><span class="s2">[country_code]</span><span class="se">\&quot;</span><span class="s2">, </span><span class="se">\&quot;</span><span class="s2">area</span><span class="se">\&quot;</span><span class="s2">:</span><span class="se">\&quot;</span><span class="s2">[area]</span><span class="se">\&quot;</span><span class="s2">}&quot;</span>
 </pre></div>
 </div>
@@ -251,7 +238,7 @@ add multiples UTFGrid, with for example OpenLayers, you need to add new layer in
 <div class="section" id="examples">
 <h2>2.3 Examples<a class="headerlink" href="#examples" title="Permalink naar deze titel">¶</a></h2>
 <p>This is how the output format should look like.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">OUTPUTFORMAT</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">OUTPUTFORMAT</span>
   <span class="n">NAME</span> <span class="s2">&quot;utfgrid&quot;</span>
   <span class="n">DRIVER</span> <span class="n">UTFGRID</span>
   <span class="n">MIMETYPE</span> <span class="s2">&quot;application/json&quot;</span>
@@ -262,7 +249,7 @@ add multiples UTFGrid, with for example OpenLayers, you need to add new layer in
 </pre></div>
 </div>
 <p>And this is how the new UTFITEM and UTFDATA word should be added in the layer.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
   <span class="n">NAME</span>         <span class="n">basic</span>
   <span class="n">DATA</span>         <span class="n">ne_50m_admin_0_countries</span>
   <span class="n">TYPE</span>         <span class="n">POLYGON</span>
@@ -275,7 +262,7 @@ add multiples UTFGrid, with for example OpenLayers, you need to add new layer in
 </pre></div>
 </div>
 <p>Here is an image rendered as a JSON with UTFGrid renderer:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
   <span class="s2">&quot;                            &amp;&amp;&amp;&amp;&quot;</span><span class="p">,</span>
   <span class="s2">&quot;                       &amp;&amp; &amp;&amp;&amp;&amp;&amp;&amp;&quot;</span><span class="p">,</span>
   <span class="s2">&quot;                     &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&quot;</span><span class="p">,</span>
@@ -312,19 +299,19 @@ add multiples UTFGrid, with for example OpenLayers, you need to add new layer in
 </pre></div>
 </div>
 <p>And now we get the following keys and datas if we use the UTFITEM with the postal code as the key :</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;keys&quot;</span><span class="p">:[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;AI&quot;</span><span class="p">,</span><span class="s2">&quot;D&quot;</span><span class="p">,</span><span class="s2">&quot;DK&quot;</span><span class="p">,</span><span class="s2">&quot;NL&quot;</span><span class="p">,</span><span class="s2">&quot;N&quot;</span><span class="p">,</span><span class="s2">&quot;PL&quot;</span><span class="p">,</span><span class="s2">&quot;RUS&quot;</span><span class="p">,</span><span class="s2">&quot;S&quot;</span><span class="p">],</span><span class="s2">&quot;data&quot;</span><span class="p">:{</span><span class="s2">&quot;AI&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Aland&quot;</span><span class="p">},</span><span class="s2">&quot;D&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Germany&quot;</span><span class="p">},</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;keys&quot;</span><span class="p">:[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;AI&quot;</span><span class="p">,</span><span class="s2">&quot;D&quot;</span><span class="p">,</span><span class="s2">&quot;DK&quot;</span><span class="p">,</span><span class="s2">&quot;NL&quot;</span><span class="p">,</span><span class="s2">&quot;N&quot;</span><span class="p">,</span><span class="s2">&quot;PL&quot;</span><span class="p">,</span><span class="s2">&quot;RUS&quot;</span><span class="p">,</span><span class="s2">&quot;S&quot;</span><span class="p">],</span><span class="s2">&quot;data&quot;</span><span class="p">:{</span><span class="s2">&quot;AI&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Aland&quot;</span><span class="p">},</span><span class="s2">&quot;D&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Germany&quot;</span><span class="p">},</span>
 <span class="s2">&quot;DK&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Denmark&quot;</span><span class="p">},</span><span class="s2">&quot;NL&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Netherlands&quot;</span><span class="p">},</span><span class="s2">&quot;N&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Norway&quot;</span><span class="p">},</span><span class="s2">&quot;PL&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Poland&quot;</span><span class="p">},</span>
 <span class="s2">&quot;RUS&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Russia&quot;</span><span class="p">},</span><span class="s2">&quot;S&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Sweden&quot;</span><span class="p">}}</span>
 </pre></div>
 </div>
 <p>And if we turn off the UTFITEM we obtain the following keys and datas:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;keys&quot;</span><span class="p">:[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;2&quot;</span><span class="p">,</span><span class="s2">&quot;3&quot;</span><span class="p">,</span><span class="s2">&quot;4&quot;</span><span class="p">,</span><span class="s2">&quot;5&quot;</span><span class="p">,</span><span class="s2">&quot;6&quot;</span><span class="p">,</span><span class="s2">&quot;7&quot;</span><span class="p">,</span><span class="s2">&quot;8&quot;</span><span class="p">,</span><span class="s2">&quot;9&quot;</span><span class="p">],</span><span class="s2">&quot;data&quot;</span><span class="p">:{</span><span class="s2">&quot;1&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Aland&quot;</span><span class="p">},</span><span class="s2">&quot;2&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Germany&quot;</span><span class="p">},</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;keys&quot;</span><span class="p">:[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;2&quot;</span><span class="p">,</span><span class="s2">&quot;3&quot;</span><span class="p">,</span><span class="s2">&quot;4&quot;</span><span class="p">,</span><span class="s2">&quot;5&quot;</span><span class="p">,</span><span class="s2">&quot;6&quot;</span><span class="p">,</span><span class="s2">&quot;7&quot;</span><span class="p">,</span><span class="s2">&quot;8&quot;</span><span class="p">,</span><span class="s2">&quot;9&quot;</span><span class="p">],</span><span class="s2">&quot;data&quot;</span><span class="p">:{</span><span class="s2">&quot;1&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Aland&quot;</span><span class="p">},</span><span class="s2">&quot;2&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Germany&quot;</span><span class="p">},</span>
 <span class="s2">&quot;3&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Denmark&quot;</span><span class="p">},</span><span class="s2">&quot;4&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Netherlands&quot;</span><span class="p">},</span><span class="s2">&quot;5&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Norway&quot;</span><span class="p">},</span><span class="s2">&quot;6&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Poland&quot;</span><span class="p">},</span>
 <span class="s2">&quot;7&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Russia&quot;</span><span class="p">},</span><span class="s2">&quot;8&quot;</span><span class="p">:{</span><span class="s2">&quot;admin&quot;</span><span class="p">:</span><span class="s2">&quot;Sweden&quot;</span><span class="p">}}</span>
 </pre></div>
 </div>
 <p>It is also possible to only keeps the UTFITEM which returns :</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;keys&quot;</span><span class="p">:[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;AI&quot;</span><span class="p">,</span><span class="s2">&quot;D&quot;</span><span class="p">,</span><span class="s2">&quot;DK&quot;</span><span class="p">,</span><span class="s2">&quot;NL&quot;</span><span class="p">,</span><span class="s2">&quot;N&quot;</span><span class="p">,</span><span class="s2">&quot;PL&quot;</span><span class="p">,</span><span class="s2">&quot;RUS&quot;</span><span class="p">,</span><span class="s2">&quot;S&quot;</span><span class="p">],</span><span class="s2">&quot;data&quot;</span><span class="p">:{}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;keys&quot;</span><span class="p">:[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;AI&quot;</span><span class="p">,</span><span class="s2">&quot;D&quot;</span><span class="p">,</span><span class="s2">&quot;DK&quot;</span><span class="p">,</span><span class="s2">&quot;NL&quot;</span><span class="p">,</span><span class="s2">&quot;N&quot;</span><span class="p">,</span><span class="s2">&quot;PL&quot;</span><span class="p">,</span><span class="s2">&quot;RUS&quot;</span><span class="p">,</span><span class="s2">&quot;S&quot;</span><span class="p">],</span><span class="s2">&quot;data&quot;</span><span class="p">:{}</span>
 </pre></div>
 </div>
 </div>
@@ -344,7 +331,7 @@ add multiples UTFGrid, with for example OpenLayers, you need to add new layer in
 <div class="section" id="files-affected">
 <h2>4. Files affected<a class="headerlink" href="#files-affected" title="Permalink naar deze titel">¶</a></h2>
 <p>The following files will be modified/added by this RFC:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mapserver</span><span class="o">.</span><span class="n">h</span><span class="p">:</span> <span class="n">Add</span> <span class="n">new</span> <span class="n">output</span> <span class="nb">format</span> <span class="n">defines</span><span class="p">,</span> <span class="n">extend</span> <span class="n">layerObj</span><span class="p">,</span> <span class="n">etc</span><span class="o">...</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapserver</span><span class="o">.</span><span class="n">h</span><span class="p">:</span> <span class="n">Add</span> <span class="n">new</span> <span class="n">output</span> <span class="nb">format</span> <span class="n">defines</span><span class="p">,</span> <span class="n">extend</span> <span class="n">layerObj</span><span class="p">,</span> <span class="n">etc</span><span class="o">...</span>
 <span class="n">mapfile</span><span class="o">.</span><span class="n">c</span><span class="o">/</span><span class="n">mapfile</span><span class="o">.</span><span class="n">h</span><span class="p">:</span> <span class="n">Add</span> <span class="n">new</span> <span class="n">keywords</span><span class="p">:</span> <span class="n">UTFITEM</span> <span class="ow">and</span> <span class="n">UTFDATA</span><span class="o">.</span>
 <span class="n">mapoutput</span><span class="o">.</span><span class="n">c</span><span class="p">:</span> <span class="n">Add</span> <span class="n">appropriate</span> <span class="n">entries</span> <span class="k">for</span> <span class="n">new</span> <span class="n">UTFGRID</span> <span class="n">driver</span><span class="o">.</span>
 <span class="n">maputfgrid</span><span class="o">.</span><span class="n">cpp</span><span class="o">/</span><span class="n">maputfgrid</span><span class="o">.</span><span class="n">h</span><span class="p">:</span> <span class="n">Implementation</span> <span class="n">of</span> <span class="n">the</span> <span class="n">new</span> <span class="n">UTFGrid</span> <span class="n">renderer</span><span class="o">.</span>
@@ -403,12 +390,14 @@ add multiples UTFGrid, with for example OpenLayers, you need to add new layer in
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Snel zoeken</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Ga" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Zoek" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
@@ -453,7 +442,7 @@ add multiples UTFGrid, with for example OpenLayers, you need to add new layer in
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="Algemene index"
-             >Index</a></li>
+             >index</a></li>
         <li class="right" >
           <a href="ms-rfc-94.html" title="MS RFC 94: Shape Smoothing"
              >volgende</a> |</li>
@@ -467,8 +456,8 @@ add multiples UTFGrid, with for example OpenLayers, you need to add new layer in
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2018-07-30.
-      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+      Laatste aanpassing op 2018-07-31.
+      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>

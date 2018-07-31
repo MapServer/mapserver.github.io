@@ -1,25 +1,15 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ar">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>MS RFC 24: Mapscript memory management &#8212; MapServer 7.2.0 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '7.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -27,10 +17,8 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.2.0 documentation" href="../../index.html" /> 
-  </head>
-  <body role="document">
+    <link rel="copyright" title="Copyright" href="../../copyright.html" /> 
+  </head><body>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -214,7 +202,7 @@ of mapserver-HEAD as of 31st December 2006.</p>
 <div class="section" id="object-equality-identity">
 <h3>Object equality/identity<a class="headerlink" href="#object-equality-identity" title="Permalink to this headline">¶</a></h3>
 <p>Consider the following Java MapScript code:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mapObj</span> <span class="nb">map</span><span class="o">=</span><span class="n">new</span> <span class="n">mapObj</span><span class="p">(</span><span class="s2">&quot;my.map&quot;</span><span class="p">);</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapObj</span> <span class="nb">map</span><span class="o">=</span><span class="n">new</span> <span class="n">mapObj</span><span class="p">(</span><span class="s2">&quot;my.map&quot;</span><span class="p">);</span>
 <span class="n">layerObj</span> <span class="n">layer</span><span class="o">=</span><span class="n">new</span> <span class="n">layerObj</span><span class="p">(</span><span class="n">null</span><span class="p">);</span>
 <span class="o">//</span> <span class="n">add</span> <span class="n">layer</span> <span class="n">to</span> <span class="n">the</span> <span class="nb">map</span>
 <span class="nb">int</span> <span class="n">index</span><span class="o">=</span><span class="nb">map</span><span class="o">.</span><span class="n">insertLayer</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
@@ -230,21 +218,21 @@ of mapserver-HEAD as of 31st December 2006.</p>
 </pre></div>
 </div>
 <p>when executed will produce the following output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">null</span><span class="o">==</span><span class="n">Change</span> <span class="n">me</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">null</span><span class="o">==</span><span class="n">Change</span> <span class="n">me</span>
 <span class="n">false</span>
 </pre></div>
 </div>
 <p>This happens because the current implementation strategy copies
 the layer when it is inserted into the map. The Java reference is not re-pointed
-to the new copy and is therefore &#8216;disconnected&#8217; from the actual memory area.
+to the new copy and is therefore 'disconnected' from the actual memory area.
 This currently happens for the most used insert methods (i.e. <em>insertClass</em>).</p>
 </div>
 <div class="section" id="early-garbage-collection">
 <h3>Early garbage collection<a class="headerlink" href="#early-garbage-collection" title="Permalink to this headline">¶</a></h3>
-<p>Objects created through MapScript can be garbage-collected &#8220;early&#8221;, when there
+<p>Objects created through MapScript can be garbage-collected &quot;early&quot;, when there
 are live objects still referencing them.
 See this example in Java:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>mapObj map=new mapObj(&quot;data/emptymap.map&quot;);
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mapObj map=new mapObj(&quot;data/emptymap.map&quot;);
 
 layerObj layer=new layerObj(map);
 layer.setName(&quot;Layer 0&quot;);
@@ -264,7 +252,7 @@ clazz.getLayer().getMap().draw();
 </pre></div>
 </div>
 <p>and its Perl equivalent:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>use mapscript;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>use mapscript;
 
 $map = new mapscript::mapObj(&quot;../../tests/test.map&quot;);
 $layer = new mapscript::layerObj($map);
@@ -324,7 +312,7 @@ called <em>refcount</em>.</p>
 for debugging</p>
 <p>The reference counter increment and decrement will be implemented by the
 following macros:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#define MS_REF_INCR(obj) obj-&gt;refcount++</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define MS_REF_INCR(obj) obj-&gt;refcount++</span>
 <span class="c1">#define MS_REF_DECR(obj) (--(obj-&gt;refcount))</span>
 </pre></div>
 </div>
@@ -349,19 +337,19 @@ fwtools</li>
 experience a tini tiny (if any at all) performance drop because of the
 extra if and ++</li>
 <li>we can always opt to introduce USE_MAPSCRIPT later</li>
-<li>it simplifies the build process maintaining exactly like it&#8217;s been until now</li>
-<li>it simplifies the developer&#8217;s life because of one less define to maintain</li>
+<li>it simplifies the build process maintaining exactly like it's been until now</li>
+<li>it simplifies the developer's life because of one less define to maintain</li>
 </ol>
 <p>The following is the text (now obsolete) documenting USE_MAPSCRIPT.</p>
 <p>Since this member will not be used by the CGI this RFC proposes that:</p>
 <ol class="arabic simple">
 <li>it is wrapped by a new define USE_MAPSCRIPT</li>
-<li>a new <em>configure</em> option is added that is called <em>&#8211;enable-mapscript</em></li>
-<li>starting from 5.0 on it will be required to specify <em>&#8211;enable-mapscript</em>
+<li>a new <em>configure</em> option is added that is called <em>--enable-mapscript</em></li>
+<li>starting from 5.0 on it will be required to specify <em>--enable-mapscript</em>
 to build any MapScript (with the exception of php, maybe)</li>
 </ol>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="n">CLASS</span> <span class="n">OBJECT</span> <span class="o">-</span> <span class="n">basic</span> <span class="n">symbolization</span> <span class="ow">and</span> <span class="n">classification</span> <span class="n">information</span> <span class="o">*/</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="n">CLASS</span> <span class="n">OBJECT</span> <span class="o">-</span> <span class="n">basic</span> <span class="n">symbolization</span> <span class="ow">and</span> <span class="n">classification</span> <span class="n">information</span> <span class="o">*/</span>
 <span class="n">typedef</span> <span class="n">struct</span> <span class="n">class_obj</span><span class="p">{</span>
 <span class="c1">#ifndef USE_MAPSCRIPT</span>
         <span class="c1">#ifdef SWIG</span>
@@ -394,7 +382,7 @@ to contain</p>
 relationships between these objects and we solve the early garbage collection
 problem. This is also important to avoid unexpected crashes in the hosting
 language when the layer dereferences its parent object
-(<em>grep &#8216;layer-&gt;map&#8217; *.c</em> reports 105 usages).</p>
+(<em>grep 'layer-&gt;map' *.c</em> reports 105 usages).</p>
 <p>As stated earlier, it has been decided to drop the requirement to fully
 support object equality/identity.</p>
 <p>This item will be implemented in a second phase, after the basic refcounting
@@ -416,7 +404,7 @@ the new feature</li>
 <li>the macro will be modified to suit the implementation at previous item</li>
 </ol>
 <p>To implement item 1 we will use a perl pie like the following:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;s/([mM])ap-&gt;layers\[(.*?)\]\]\./GET_LAYER(</span><span class="se">\1</span><span class="s2">ap, </span><span class="se">\2</span><span class="s2">\])-&gt;/g&quot;</span> <span class="o">*.</span><span class="n">c</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;s/([mM])ap-&gt;layers\[(.*?)\]\]\./GET_LAYER(</span><span class="se">\1</span><span class="s2">ap, </span><span class="se">\2</span><span class="s2">\])-&gt;/g&quot;</span> <span class="o">*.</span><span class="n">c</span>
 <span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;s/([mM])ap-&gt;layers\[(.*?)\]\./GET_LAYER(</span><span class="se">\1</span><span class="s2">ap, </span><span class="se">\2</span><span class="s2">)-&gt;/g&quot;</span> <span class="o">*.</span><span class="n">c</span>
 <span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;s/([mM])ap-&gt;layers\[(.*?)\]\]/GET_LAYER(</span><span class="se">\1</span><span class="s2">ap, </span><span class="se">\2</span><span class="s2">\])/g&quot;</span> <span class="o">*.</span><span class="n">c</span>
 <span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;s/([mM])ap-&gt;layers\[(.*?)\]/GET_LAYER(</span><span class="se">\1</span><span class="s2">ap, </span><span class="se">\2</span><span class="s2">)/g&quot;</span> <span class="o">*.</span><span class="n">c</span>
@@ -427,7 +415,7 @@ the new feature</li>
 </pre></div>
 </div>
 <p>and this is the macro that will be used:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#define GET_LAYER(map, pos) map-&gt;layers[pos]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define GET_LAYER(map, pos) map-&gt;layers[pos]</span>
 </pre></div>
 </div>
 <p>This will leave only very few occurrences (about 4 or 5) out that must be
@@ -453,7 +441,7 @@ the insert operation (<em>layerobject.c</em>, line 52, function <em>msInsertClas
 <h3>Destructors obey the reference counter<a class="headerlink" href="#destructors-obey-the-reference-counter" title="Permalink to this headline">¶</a></h3>
 <p>The various free* methods must check the counter before freeing memory.
 This will be implemented in the native code as in the following example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>void msFreeMap(mapObj *map) {
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>void msFreeMap(mapObj *map) {
         if(!map) return;
         if ( MS_REF_DECR(obj) &gt; 0) return;
         // go on destroying the object as usual
@@ -466,7 +454,7 @@ free some of its children:</p>
 <ol class="loweralpha simple">
 <li>if the parent is destroyed before its children the parent should
 NULLify its pointer in the children</li>
-<li>viceversa, when the children are GC&#8217;ed earlier than their parent, they must
+<li>viceversa, when the children are GC'ed earlier than their parent, they must
 NULLify their pointers in the parent (we are evaluating whether this
 could ever happen once the parent reference is in place)</li>
 </ol>
@@ -479,7 +467,7 @@ because SWIG will acquire object ownership by default and is only a matter of
 removing all <em>%newobject</em> statements in the swig interface files.</p>
 <p>At the moment there are 58 <em>%newobject</em> statements.</p>
 <p>C# must also change the following three lines in <em>csmodule.i</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>csharp/csmodule.i:375:  if (map != null) this.swigCMemOwn = false;$excode
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>csharp/csmodule.i:375:  if (map != null) this.swigCMemOwn = false;$excode
 csharp/csmodule.i:379:  if (layer != null) this.swigCMemOwn = false;$excode
 csharp/csmodule.i:383:  if (parent_class != null) this.swigCMemOwn = false;$excode
 </pre></div>
@@ -491,7 +479,7 @@ csharp/csmodule.i:383:  if (parent_class != null) this.swigCMemOwn = false;$exco
 <p>Tamas has proposed a more object oriented approach to this problem, which can
 be adopted for those languages that support OOrientation.</p>
 <p>Code example for layerObj (<em>javamodule.i</em>):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>/*
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/*
    Modified constructor according to:
    - cache population and sync, item 3.2
 */
@@ -528,7 +516,7 @@ be adopted for those languages that support OOrientation.</p>
 <div class="section" id="perl-mapscript-code-example-for-layerobj">
 <h3>PERL: MapScript code example for layerObj<a class="headerlink" href="#perl-mapscript-code-example-for-layerobj" title="Permalink to this headline">¶</a></h3>
 <p>Code example for layerObj (<em>plmodule.i</em>):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>%feature(&quot;shadow&quot;) layerObj(mapObj *map)
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>%feature(&quot;shadow&quot;) layerObj(mapObj *map)
 %{
 sub new {
         my $pkg = shift;
@@ -583,8 +571,8 @@ sub DESTROY {
 <h2><a class="toc-backref" href="#table-of-contents">Implementation plan</a><a class="headerlink" href="#implementation-plan" title="Permalink to this headline">¶</a></h2>
 <p>It seems that for most MapScripts (java, csharp, perl and python) there
 is enough functionality in SWIG to implement the features described in this RFC.
-For ruby we&#8217;ll probably have to go a different route and implement the
-<em>%trackobjects</em> feature to achieve 3.2. As of Tcl I currently don&#8217;t know if it&#8217;s possible.</p>
+For ruby we'll probably have to go a different route and implement the
+<em>%trackobjects</em> feature to achieve 3.2. As of Tcl I currently don't know if it's possible.</p>
 <p>The two following section describe in detail the required SWIG-MapScript
 features (injection of code and constructor customization).
 Each language gets then a specific section to deal with its own characteristics</p>
@@ -596,7 +584,7 @@ Each language gets then a specific section to deal with its own characteristics<
 <li>python through %pythoncode</li>
 <li>csharp through %cscode</li>
 <li>ruby does not have any ruby code at all in its wrapper objects</li>
-<li>swig-Tcl doesn&#8217;t support a %tclcode construct</li>
+<li>swig-Tcl doesn't support a %tclcode construct</li>
 </ol>
 <p>This swig construct will be used to inject in the wrapper the definition for
 the references described in 3.2 and the wrapper methods.</p>
@@ -607,7 +595,7 @@ the references described in 3.2 and the wrapper methods.</p>
 objects (item 3.3) is only available in csharp and java.
 It should be possible to simulate its behavior with
 <em>%pythonprepend</em> or <em>%pythonprepend</em> in python and with
-<em>%perlcode</em> or <em>%feature(&#8220;shadow&#8221;)</em> in perl.</p>
+<em>%perlcode</em> or <em>%feature(&quot;shadow&quot;)</em> in perl.</p>
 <p>This swig construct will be used to populate parent backreferences.</p>
 </div>
 <div class="section" id="java-and-c-sharp">
@@ -637,7 +625,7 @@ exactly as described.</p>
 </div>
 <div class="section" id="ruby">
 <h3>Ruby<a class="headerlink" href="#ruby" title="Permalink to this headline">¶</a></h3>
-<p>Needs investigation, probably we&#8217;ll have to use rb_gc_* functions to mark objects
+<p>Needs investigation, probably we'll have to use rb_gc_* functions to mark objects
 and prevent their garbage collection or use <em>%trackobjects</em>.
 Ruby will not implement this RFC as of item 3.2.</p>
 </div>
@@ -695,291 +683,291 @@ with one of the following marks:</p>
 <tbody valign="top">
 <tr class="row-even"><td>mapObj (constructor)</td>
 <td>+</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getSymbolset</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getFontset</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getLabelcache</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getExtent</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>setSaved_extent</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getSaved_extent</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getImagecolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getOutputformat</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getReference</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getScalebar</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getLegend</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getQuerymap</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getWeb</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getConfigoptions</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>insertLayer</td>
 <td>+</td>
 <td>&lt;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>&lt;</td>
 <td>&lt;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>removeLayer</td>
 <td>-</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getLayer</td>
 <td>+</td>
 <td>&lt;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>&lt;</td>
 <td>&lt;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getLayerByName</td>
 <td>+</td>
 <td>&lt;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>&lt;</td>
 <td>&lt;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>prepareImage</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>setOutputFormat</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>draw</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>drawQuery</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>drawLegend</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>drawScalebar</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>drawReferenceMap</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getLabel</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>nextLabel</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getOutputFormatByName</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>appendOutputFormat</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>removeOutputFormat</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>clone</td>
 <td>=1</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -1012,137 +1000,137 @@ with one of the following marks:</p>
 <tr class="row-even"><td>layerObj (constructor)</td>
 <td>+</td>
 <td>&lt;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>&lt;</td>
 <td>&lt;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getMap</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getOffsite</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getMetadata</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>cloneLayer</td>
 <td>=1</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>insertClass</td>
 <td>+</td>
 <td>&lt;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>&lt;</td>
 <td>&lt;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>removeClass</td>
 <td>-</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>nextShape</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getFeature</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getShape</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getResult</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getClass</td>
 <td>+</td>
 <td>&lt;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>&lt;</td>
 <td>&lt;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getResults</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>addFeature</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getExtent</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -1175,92 +1163,92 @@ with one of the following marks:</p>
 <tr class="row-even"><td>classObj (constructor)</td>
 <td>+</td>
 <td>&lt;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>&lt;</td>
 <td>&lt;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getLabel</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getMetadata</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getLayer</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>clone</td>
 <td>=1</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>createLegendIcon</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>drawLegendIcon</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getStyle</td>
 <td>+</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>insertStyle</td>
 <td>+</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>removeStyle</td>
 <td>-</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -1289,44 +1277,44 @@ with one of the following marks:</p>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>webObj (constructor)</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getMap</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getExtent</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>setExtent</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getMetadata</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -1360,111 +1348,111 @@ It is not necessary to add the reference pointing back to the container object.<
 <tbody valign="top">
 <tr class="row-even"><td>styleObj (constructor)</td>
 <td>+</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>setColor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getColor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getBackgroundcolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>setBackgroundcolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getOutlinecolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>setOutlinecolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getMincolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>setMincolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getMaxcolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>setMaxcolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>clone</td>
 <td>=1</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -1495,92 +1483,92 @@ It is not necessary to add the reference pointing back to the container object.<
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>labelObj (constructor)</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getColor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>setColor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>setOutlinecolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getOutlinecolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>setShadowcolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getShadowcolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getBackgroundcolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>setBackgroundcolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>setBackgroundshadowcolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getBackgroundshadowcolor</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -1611,12 +1599,12 @@ It is not necessary to add the reference pointing back to the container object.<
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>hashTableObj (constructor)</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -1647,12 +1635,12 @@ It is not necessary to add the reference pointing back to the container object.<
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>colorObj (constructor)</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -1683,12 +1671,12 @@ It is not necessary to add the reference pointing back to the container object.<
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>imageObj (constructor)</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -1719,124 +1707,124 @@ It is not necessary to add the reference pointing back to the container object.<
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>shapeObj (constructor)</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getLine</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getBounds</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>get</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>add</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>clone</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>copy</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>buffer</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>convexHull</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>boundary</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getCentroid</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>Union</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>intersection</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>difference</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>symDifference</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -1867,44 +1855,44 @@ It is not necessary to add the reference pointing back to the container object.<
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>lineObj (constructor)</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getPoint</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>get</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>add</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>set</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -1935,20 +1923,20 @@ It is not necessary to add the reference pointing back to the container object.<
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>pointObj (constructors)</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>toShape</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -1980,76 +1968,76 @@ It is not necessary to add the reference pointing back to the container object.<
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>symbolsetObj (constructor)</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>setSymbol(symbolObj value)</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getSymbol</td>
 <td>+</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getSymbol(int i)</td>
 <td>+</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getSymbolByName</td>
 <td>+</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>index</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>appendSymbol</td>
 <td>+</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>removeSymbol</td>
 <td>-</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -2083,48 +2071,48 @@ It is not necessary to add the reference pointing back to the container object.<
 <tbody valign="top">
 <tr class="row-even"><td>symbolObj (constructor)</td>
 <td>+</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>setPoints</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>getPoints</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>getImage</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td>setImage</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 </tr>
 </tbody>
 </table>
@@ -2180,12 +2168,14 @@ and be described under this section.</p>
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
@@ -2277,8 +2267,8 @@ and be described under this section.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Last updated on 2018-07-30.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+      Last updated on 2018-07-31.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>

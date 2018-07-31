@@ -1,25 +1,15 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="sq">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>MS RFC 33: Removing msLayerWhichItems() from maplayer.c &#8212; MapServer 7.2.0 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '7.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -28,12 +18,9 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.2.0 documentation" href="../../index.html" />
-    <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 34: MapServer Release Manager and Release Process" href="ms-rfc-34.html" />
     <link rel="prev" title="MS RFC 32: Support for Anti-Grain Geometry (AGG) Rendering Engine" href="ms-rfc-32.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -173,15 +160,15 @@
 <p>The function msLayerWhichItems() is a function in maplayer.c that determines
 exactly which feature attributes need to be retrieved from a given data
 source. All item-based properties (e.g. CLASSITEM, bound properties,
-EXPRESSIONs, etc...) are checked and a master list (an array) is compiled. At
+EXPRESSIONs, etc…) are checked and a master list (an array) is compiled. At
 the same time index references are made (e.g. classitemindex, labelitemindex,
-etc...). The item indexes are used instead of names to access attribute values
+etc…). The item indexes are used instead of names to access attribute values
 at runtime.</p>
 <p>The problem with this method is that a feature (a shapeObj) used for drawing
 or the first pass of a query is not the same as that used for presentation
 (the second pass of a query). The second pass of a query uses
 msLayerGetShape() which by default requests all attributes of a feature since
-we don&#8217;t know ahead of time which attributes might be output.</p>
+we don’t know ahead of time which attributes might be output.</p>
 <p>By removing msLayerWhichItems() and always retrieving all attributes a feature
 is a feature whether drawing, querying or outputting via a template so caching
 features now becomes practical.</p>
@@ -203,7 +190,7 @@ in the code base the change is relatively minor. The use of attribute binding
 isolates much of this code so this change is smaller for version 5.0 that it
 otherwise would have been.</li>
 </ol>
-<div class="highlight-default"><div class="highlight"><pre><span></span>int msGetItemIndex(char **itemlist, int numitems, char *item) {
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>int msGetItemIndex(char **itemlist, int numitems, char *item) {
   int i;
 
   if (!itemlist || numitems &lt;= 0 || !item) return -1;
@@ -241,9 +228,9 @@ values.</p>
 <h2>Input Driver Changes<a class="headerlink" href="#input-driver-changes" title="Permalink to this headline">¶</a></h2>
 <p>It is unclear how each driver made use of the output of msLayerWhichItems().
 It may be as easy as calling msLayerGetItems() instead of using
-msLayerGetItemInfo() in msLayerOpen() in which case we&#8217;d loose the
+msLayerGetItemInfo() in msLayerOpen() in which case we’d loose the
 msLayerGetItemInfo() function for each driver too (and the main wrapper
-function). TODO...</p>
+function). TODO…</p>
 <p>mapshape.c -
 mapsde.c -
 mapogr.cpp -
@@ -281,12 +268,14 @@ mapmygis.c -</p>
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
@@ -339,8 +328,8 @@ mapmygis.c -</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Last updated on 2018-07-30.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+      Last updated on 2018-07-31.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>

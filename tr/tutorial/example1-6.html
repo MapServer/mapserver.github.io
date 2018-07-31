@@ -1,25 +1,15 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="tr">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Example 1.6 &#8212; MapServer 7.2.0 documentation</title>
-    
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '7.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -28,10 +18,8 @@
     <link rel="author" title="Bu belgeler hakkında" href="../about.html" />
     <link rel="index" title="Dizin" href="../genindex.html" />
     <link rel="search" title="Ara" href="../search.html" />
-    <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.2.0 documentation" href="../index.html" /> 
-  </head>
-  <body role="document">
+    <link rel="copyright" title="Copyright" href="../copyright.html" /> 
+  </head><body>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -144,68 +132,68 @@
 <h2>Defining Projections and Extents<a class="headerlink" href="#defining-projections-and-extents" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
 <img alt="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-6.map&amp;layer=states&amp;layer=states_label&amp;layer=modis&amp;mode=map" src="http://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-6.map&amp;layer=states&amp;layer=states_label&amp;layer=modis&amp;mode=map" />
 <p>Whoa! What happened here?</p>
-<p>You&#8217;ve just experienced on-the-fly reprojection. When a PROJECTION object is
+<p>You’ve just experienced on-the-fly reprojection. When a PROJECTION object is
 defined in the mapfile, MapServer passes the layer and projection info to the
 PROJ.4 library which does the reprojection.  For more information about the
 PROJ.4 library, please visit <a class="reference external" href="http://proj4.org/">http://proj4.org/</a>.</p>
 <p>This example attempts to shed some light on the projection support in MapServer.</p>
 <p>This is what the mapfile looks like: <a class="reference internal" href="example1-6-map.html#example1-6-map"><span class="std std-ref">Example1-6.map</span></a></p>
 <p>The first thing you might have noticed with our mapfile is the original EXTENT
-has been commented out and the new EXTENT values don&#8217;t look anything like
+has been commented out and the new EXTENT values don’t look anything like
 latitude and longitude values. Also, we have added a PROJECTION object near the
 top and within each of our layers.</p>
-<p>Let&#8217;s have a look at the new object and parameter:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">EXTENT</span>  <span class="mf">201621.496941</span> <span class="o">-</span><span class="mf">294488.285333</span> <span class="mf">1425518.020722</span> <span class="mf">498254.511514</span>
+<p>Let’s have a look at the new object and parameter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EXTENT</span>  <span class="mf">201621.496941</span> <span class="o">-</span><span class="mf">294488.285333</span> <span class="mf">1425518.020722</span> <span class="mf">498254.511514</span>
 </pre></div>
 </div>
 <p>The extent we provide to MapServer needs to be in the same units as the output
-projection.  Since Lambert Azimuthal Equal-Area&#8217;s units are in meters, we have
+projection.  Since Lambert Azimuthal Equal-Area’s units are in meters, we have
 to give the new extent in meters.  We can calculate the new extent using
-ArcView or some other GIS package, or you can use PROJ.4&#8217;s cs2cs utility.  The
+ArcView or some other GIS package, or you can use PROJ.4’s cs2cs utility.  The
 command below is what can be used to reproject the original extent values:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cs2cs</span> <span class="o">+</span><span class="n">proj</span><span class="o">=</span><span class="n">latlong</span> <span class="o">+</span><span class="n">datum</span><span class="o">=</span><span class="n">WGS84</span> <span class="o">+</span><span class="n">to</span> <span class="o">+</span><span class="n">proj</span><span class="o">=</span><span class="n">laea</span> <span class="o">+</span><span class="n">ellps</span><span class="o">=</span><span class="n">clrk66</span> <span class="o">+</span><span class="n">lat_0</span><span class="o">=</span><span class="mi">45</span> <span class="o">+</span><span class="n">lon_0</span><span class="o">=-</span><span class="mi">100</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cs2cs</span> <span class="o">+</span><span class="n">proj</span><span class="o">=</span><span class="n">latlong</span> <span class="o">+</span><span class="n">datum</span><span class="o">=</span><span class="n">WGS84</span> <span class="o">+</span><span class="n">to</span> <span class="o">+</span><span class="n">proj</span><span class="o">=</span><span class="n">laea</span> <span class="o">+</span><span class="n">ellps</span><span class="o">=</span><span class="n">clrk66</span> <span class="o">+</span><span class="n">lat_0</span><span class="o">=</span><span class="mi">45</span> <span class="o">+</span><span class="n">lon_0</span><span class="o">=-</span><span class="mi">100</span>
 </pre></div>
 </div>
 <p>After typing the command, enter the southwestern coordinate pair (the lower
 left coordinates), separated by a space:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">-</span><span class="mf">97.5</span> <span class="mf">41.619778</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="mf">97.5</span> <span class="mf">41.619778</span>
 </pre></div>
 </div>
-<p>to which the &#8220;cs2cs&#8221; utility gives the values:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mf">208398.01</span>       <span class="o">-</span><span class="mf">372335.44</span> <span class="mf">0.000</span>
+<p>to which the “cs2cs” utility gives the values:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">208398.01</span>       <span class="o">-</span><span class="mf">372335.44</span> <span class="mf">0.000</span>
 </pre></div>
 </div>
 <p>I then type the northeastern coordinate pair (upper right corner coordinates),
 again separated by space:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">-</span><span class="mf">82.122902</span> <span class="mf">49.38562</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="mf">82.122902</span> <span class="mf">49.38562</span>
 </pre></div>
 </div>
 <p>and the following values are returned:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mf">1285308.08</span>      <span class="mf">632638.93</span> <span class="mf">0.000</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">1285308.08</span>      <span class="mf">632638.93</span> <span class="mf">0.000</span>
 </pre></div>
 </div>
-<p>You will notice that &#8220;cs2cs&#8221; returns a set of three values.  You can ignore the
-third value, 0.000, as it means to represent altitute (which we&#8217;re not using).
+<p>You will notice that “cs2cs” returns a set of three values.  You can ignore the
+third value, 0.000, as it means to represent altitute (which we’re not using).
 Anyway, we can now present the EXTENT as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">EXTENT</span> <span class="mf">208398.01</span> <span class="o">-</span><span class="mf">372335.44</span> <span class="mf">1285308.08</span> <span class="mf">632638.93</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EXTENT</span> <span class="mf">208398.01</span> <span class="o">-</span><span class="mf">372335.44</span> <span class="mf">1285308.08</span> <span class="mf">632638.93</span>
 </pre></div>
 </div>
-<p>But it doesn&#8217;t match up the extent above, you say.  Well, that&#8217;s what usually
-happens when you reproject &#8211; the map doesn&#8217;t necessarily get centered as you&#8217;d
+<p>But it doesn’t match up the extent above, you say.  Well, that’s what usually
+happens when you reproject – the map doesn’t necessarily get centered as you’d
 expect.  You can fudge around it, taking a few thousand meters off to the left
 and adding a few to the right.  Or, you can use a graphical GIS package to give
 you the extent. <a class="reference external" href="http://biometry.gis.umn.edu/tutorial/arcview_extent.html">Here are the instructions</a>
 for getting <cite>EXTENT</cite> using ArcView.</p>
 <p>MapServer can take projection definitions in two ways. The first is shown in the
-mapfile&#8217;s output PROJECTION object (the first PROJECTION block). This is the
+mapfile’s output PROJECTION object (the first PROJECTION block). This is the
 traditional way of passing parameters to the PROJ.4 library. The other way is
 to use the EPSG codes. These codes are standard projection codes (or spatial
 reference identifiers) as defined by the European Petroleum Survey Group
 (EPSG). In the case of our Lambert Azimuthal Equal-Area projection, it has a
-code of &#8220;2163&#8221;. If you comment out the four lines after PROJECTION and uncomment
-the line &#8220;init=epsg:2163&#8221;, this will provide the same information to PROJ.4. If
+code of “2163”. If you comment out the four lines after PROJECTION and uncomment
+the line “init=epsg:2163”, this will provide the same information to PROJ.4. If
 you want to learn more about EPSG codes, have a look at
-&#8220;/usr/local/share/proj/epsg&#8221; or &#8220;C:/proj/nad/epsg&#8221; (&#8220;/ms4w/proj/nad&#8221; in MS4W).</p>
+“/usr/local/share/proj/epsg” or “C:/proj/nad/epsg” (“/ms4w/proj/nad” in MS4W).</p>
 <div class="admonition note">
 <p class="first admonition-title">Not</p>
 <p class="last">You can search for EPSG codes and see MapServer usage examples at <a class="reference external" href="http://epsg.io/">http://epsg.io/</a></p>
@@ -218,7 +206,7 @@ you want to learn more about EPSG codes, have a look at
 <li><a class="reference external" href="http://en.wikipedia.org/wiki/Map_projection">http://en.wikipedia.org/wiki/Map_projection</a></li>
 <li><a class="reference external" href="https://egsc.usgs.gov/isb//pubs/MapProjections/projections.pdf">https://egsc.usgs.gov/isb//pubs/MapProjections/projections.pdf</a></li>
 </ul>
-<p>You can find more by searching the web for &#8220;map projection&#8221;.</p>
+<p>You can find more by searching the web for “map projection”.</p>
 <hr class="docutils" />
 <p><a class="reference internal" href="example1-5.html#example1-5"><span class="std std-ref">Back to Example 1.5</span></a> | <a class="reference internal" href="example1-7.html#example1-7"><span class="std std-ref">Proceed to Example 1.7</span></a></p>
 </div>
@@ -232,12 +220,14 @@ you want to learn more about EPSG codes, have a look at
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Hızlı Arama</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Git" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Git" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
@@ -274,8 +264,8 @@ you want to learn more about EPSG codes, have a look at
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Son güncelleme: 2018-07-30.
-      <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9 ile oluşturulmuştur.
+      Son güncelleme: 2018-07-31.
+      <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6 ile oluşturulmuştur.
     </div>
   </body>
 </html>

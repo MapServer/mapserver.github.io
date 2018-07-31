@@ -1,25 +1,15 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>MS RFC 3: Feature Layer Plug-in Architecture &#8212; MapServer 7.2.0 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '7.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -29,12 +19,9 @@
     <link rel="index" title="Índice" href="../../genindex.html" />
     <link rel="search" title="Búsqueda" href="../../search.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.2.0 documentation" href="../../index.html" />
-    <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 4: MapServer Raster Resampling" href="ms-rfc-4.html" />
     <link rel="prev" title="MS RFC 2: Creating line features and/or shapes using WKT" href="ms-rfc-2.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -169,19 +156,19 @@
 </table>
 <div class="section" id="abstract-solution">
 <h2>Abstract Solution<a class="headerlink" href="#abstract-solution" title="Enlazar permanentemente con este título">¶</a></h2>
-<p>Implement a virtual table structure for <code class="docutils literal"><span class="pre">layerObj</span></code>. This structure
+<p>Implement a virtual table structure for <code class="docutils literal notranslate"><span class="pre">layerObj</span></code>. This structure
 will contain function pointers for all layer specific operations.
 This structure will be populated when the layer is opened or first
 time accessed.  After that all back-end format specific layer
 operations will happen through this vtable which is cached in the
-<code class="docutils literal"><span class="pre">layerObj</span></code> struct.</p>
+<code class="docutils literal notranslate"><span class="pre">layerObj</span></code> struct.</p>
 </div>
 <div class="section" id="technical-solution">
 <h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>All file names and numbers are against released MapServer 4.6.0 source
 code.</p>
 <ol class="arabic">
-<li><p class="first">Add new field to the <code class="docutils literal"><span class="pre">layerObj</span></code>. It will be pointer to the vtable,
+<li><p class="first">Add new field to the <code class="docutils literal notranslate"><span class="pre">layerObj</span></code>. It will be pointer to the vtable,
 which will contain function pointers for this layer.</p>
 </li>
 <li><p class="first">Add the virtual table architecture</p>
@@ -190,86 +177,86 @@ first time.
 The vtable will be populated with dummies when it is created and
 these dummies will implement feasible default actions if there is
 any (e.g. do nothing) or return error by default.</p>
-<p>2.1. Standard functions which are found currently from <code class="docutils literal"><span class="pre">maplayer.c</span></code></p>
+<p>2.1. Standard functions which are found currently from <code class="docutils literal notranslate"><span class="pre">maplayer.c</span></code></p>
 <blockquote>
 <div><p>2.1.1. InitItemInfo</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerInitItemInfo</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerInitItemInfo</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></blockquote>
 <p>2.1.2. FreeItemInfo</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerFreeItemInfo</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerFreeItemInfo</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></blockquote>
 <p>2.1.3. Open</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerOpen</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerOpen</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>Currently there are two layers which accept more than
 the generic layer arg for LayerOpen function:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">msOGRLayerOpen</span><span class="p">(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">msOGRLayerOpen</span><span class="p">(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">,</span>
                    <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">pszOverrideConnection</span><span class="p">);</span>
 <span class="nb">int</span> <span class="n">msWFSLayerOpen</span><span class="p">(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">lp</span><span class="p">,</span>
                    <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">pszGMLFilename</span><span class="p">,</span>
                    <span class="n">rectObj</span> <span class="o">*</span><span class="n">defaultBBOX</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>However, these are called from <code class="docutils literal"><span class="pre">msLayerOpen</span></code> with
-<code class="docutils literal"><span class="pre">NULL</span></code> args, so I think that proposed interface for
+<p>However, these are called from <code class="docutils literal notranslate"><span class="pre">msLayerOpen</span></code> with
+<code class="docutils literal notranslate"><span class="pre">NULL</span></code> args, so I think that proposed interface for
 this virtual table function should be fine.</p>
 </div></blockquote>
 <p>2.1.4. IsOpen</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerIsOpen</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerIsOpen</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></blockquote>
 <p>2.1.5. WhichShapes</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerWhichShapes</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">,</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerWhichShapes</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">,</span>
                         <span class="n">rectObj</span> <span class="n">rect</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></blockquote>
 <p>2.1.6. NextShape</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerNextShape</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">,</span> <span class="n">shapeObj</span> <span class="o">*</span><span class="n">shape</span><span class="p">);</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerNextShape</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">,</span> <span class="n">shapeObj</span> <span class="o">*</span><span class="n">shape</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></blockquote>
 <p>2.1.7. GetShape</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerGetShape</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">,</span> <span class="n">shapeObj</span> <span class="o">*</span><span class="n">shape</span><span class="p">,</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerGetShape</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">,</span> <span class="n">shapeObj</span> <span class="o">*</span><span class="n">shape</span><span class="p">,</span>
                      <span class="nb">int</span> <span class="n">tile</span><span class="p">,</span> <span class="n">long</span> <span class="n">record</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></blockquote>
 <p>2.1.8. LayerClose</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerClose</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerClose</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></blockquote>
 <p>2.1.9. LayerGetItems</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerGetItems</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerGetItems</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></blockquote>
 <p>2.1.10. GetExtent</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerGetExtent</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">,</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerGetExtent</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">,</span>
                       <span class="n">rectObj</span> <span class="o">*</span><span class="n">extent</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></blockquote>
 <p>2.1.11. GetAutoStyle</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerGetAutoStyle</span><span class="p">)(</span><span class="n">mapObj</span> <span class="o">*</span><span class="nb">map</span><span class="p">,</span> <span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">,</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerGetAutoStyle</span><span class="p">)(</span><span class="n">mapObj</span> <span class="o">*</span><span class="nb">map</span><span class="p">,</span> <span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">,</span>
                          <span class="n">classObj</span> <span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="nb">int</span> <span class="n">tile</span><span class="p">,</span>
                          <span class="n">long</span> <span class="n">record</span><span class="p">);</span>
 </pre></div>
@@ -282,24 +269,24 @@ this virtual table function should be fine.</p>
 <blockquote>
 <div><p>This function is used to actually close the
 connection, in case that layer implements some kind of
-connection pooling by its own.  If layer doesn&#8217;t use
+connection pooling by its own.  If layer doesn’t use
 any connection pooling, this function should be
-implemented as no-op. Caller should first call layer&#8217;s
-&#8220;close&#8221; function, and finally at the very end
-<code class="docutils literal"><span class="pre">CloseConnection</span></code>.</p>
+implemented as no-op. Caller should first call layer’s
+«close» function, and finally at the very end
+<code class="docutils literal notranslate"><span class="pre">CloseConnection</span></code>.</p>
 <p>The signature of function is</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerCloseConnection</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerCloseConnection</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>And the main place where this function will be called,
-is <code class="docutils literal"><span class="pre">mapfile.c:</span> <span class="pre">4822</span></code></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">msCloseConnections</span><span class="p">(</span><span class="n">mapObj</span> <span class="o">*</span><span class="nb">map</span><span class="p">)</span>
+is <code class="docutils literal notranslate"><span class="pre">mapfile.c:</span> <span class="pre">4822</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">msCloseConnections</span><span class="p">(</span><span class="n">mapObj</span> <span class="o">*</span><span class="nb">map</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This function is needed because e.g. <code class="docutils literal"><span class="pre">POSTGIS</span></code> is
+<p>This function is needed because e.g. <code class="docutils literal notranslate"><span class="pre">POSTGIS</span></code> is
 implementing this usage pattern at the moment
-<code class="docutils literal"><span class="pre">maplayer.c:599</span></code></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">void</span> <span class="n">msLayerClose</span><span class="p">(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">)</span>
+<code class="docutils literal notranslate"><span class="pre">maplayer.c:599</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">void</span> <span class="n">msLayerClose</span><span class="p">(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">)</span>
  <span class="o">...</span>
 <span class="o">/*</span>
  <span class="o">*</span> <span class="n">Due</span> <span class="n">to</span> <span class="n">connection</span> <span class="n">sharing</span><span class="p">,</span> <span class="n">we</span> <span class="n">need</span> <span class="n">to</span> <span class="n">close</span> <span class="n">the</span> <span class="n">results</span>
@@ -313,24 +300,24 @@ implementing this usage pattern at the moment
 <blockquote>
 <div><p>This function is used to create a time filter for
 layer. At the moment we have three special cases
-(<code class="docutils literal"><span class="pre">maplayer.c:</span> <span class="pre">1635</span></code>):</p>
+(<code class="docutils literal notranslate"><span class="pre">maplayer.c:</span> <span class="pre">1635</span></code>):</p>
 <ol class="arabic simple">
-<li><code class="docutils literal"><span class="pre">POSTGIS</span></code> with it&#8217;s own function</li>
+<li><code class="docutils literal notranslate"><span class="pre">POSTGIS</span></code> with it’s own function</li>
 <li>Layers with backticks delimited expressions</li>
 <li>Layers without backticks</li>
 </ol>
 <p>The idea is provide a generic helper function,</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">makeTimeFilter</span><span class="p">(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">lp</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">makeTimeFilter</span><span class="p">(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">lp</span><span class="p">,</span>
                    <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">timestring</span><span class="p">,</span>
                    <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">timefield</span><span class="p">,</span>
                    <span class="n">const</span> <span class="nb">bool</span> <span class="n">bBackTicks</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>And the actual layer&#8217;s <code class="docutils literal"><span class="pre">SetTimeFilter</span></code> could use the
+<p>And the actual layer’s <code class="docutils literal notranslate"><span class="pre">SetTimeFilter</span></code> could use the
 above, or implement something totally different as
-<code class="docutils literal"><span class="pre">POSTGIS</span></code> is doing at the moment.</p>
-<p>The signature for layer&#8217;s vtable function is</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerSetTimeFilter</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">lp</span><span class="p">,</span>
+<code class="docutils literal notranslate"><span class="pre">POSTGIS</span></code> is doing at the moment.</p>
+<p>The signature for layer’s vtable function is</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerSetTimeFilter</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">lp</span><span class="p">,</span>
                           <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">timestring</span><span class="p">,</span>
                           <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">timefield</span><span class="p">);</span>
 </pre></div>
@@ -339,36 +326,36 @@ above, or implement something totally different as
 </div></blockquote>
 <p>2.3. Extra functions to add to the vtable</p>
 <blockquote>
-<div><p>2.3.1. FLTApplyFilterToLayer (<code class="docutils literal"><span class="pre">mapogcfilter.c:</span> <span class="pre">1084</span></code>)</p>
+<div><p>2.3.1. FLTApplyFilterToLayer (<code class="docutils literal notranslate"><span class="pre">mapogcfilter.c:</span> <span class="pre">1084</span></code>)</p>
 <blockquote>
 <div><p>This is the main filter interface for layers.  We will
-provide two helper functions, one for &#8220;SQL&#8221; case and
-the another for &#8220;non-SQL&#8221; case, and set all layers,
-except <code class="docutils literal"><span class="pre">POSTGIS</span></code>, <code class="docutils literal"><span class="pre">ORACLESPATIAL</span></code> and <code class="docutils literal"><span class="pre">OGR</span></code> to
-call directly this &#8220;non-SQL&#8221; version of this helper
+provide two helper functions, one for «SQL» case and
+the another for «non-SQL» case, and set all layers,
+except <code class="docutils literal notranslate"><span class="pre">POSTGIS</span></code>, <code class="docutils literal notranslate"><span class="pre">ORACLESPATIAL</span></code> and <code class="docutils literal notranslate"><span class="pre">OGR</span></code> to
+call directly this «non-SQL» version of this helper
 function (else-branch of if).</p>
-<p><code class="docutils literal"><span class="pre">ORACLESPATIAL</span></code>, <code class="docutils literal"><span class="pre">POSTGIS</span></code> and <code class="docutils literal"><span class="pre">OGR</span></code> could use
-&#8220;SQL&#8221; version of the helper function (actual if-branch)
+<p><code class="docutils literal notranslate"><span class="pre">ORACLESPATIAL</span></code>, <code class="docutils literal notranslate"><span class="pre">POSTGIS</span></code> and <code class="docutils literal notranslate"><span class="pre">OGR</span></code> could use
+«SQL» version of the helper function (actual if-branch)
 if the conditions for this are met, otherwise they will
 use Non-SQL version of the function.</p>
 </div></blockquote>
 <p>2.3.2. layerObj-&gt;items allocation</p>
 <blockquote>
-<div><p>There will be vtable function for allocation <code class="docutils literal"><span class="pre">items</span></code> and
-initialization for <code class="docutils literal"><span class="pre">numitems</span></code>. If layer has some
+<div><p>There will be vtable function for allocation <code class="docutils literal notranslate"><span class="pre">items</span></code> and
+initialization for <code class="docutils literal notranslate"><span class="pre">numitems</span></code>. If layer has some
 special needs for these objects it can override default
 function.</p>
 <p>The signature for function will be:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">CreateItems</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">CreateItems</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>which does the allocation and set numitems to correct
 value.</p>
 </div></blockquote>
-<p>2.3.3. msCheckConnection (<code class="docutils literal"><span class="pre">mapfile.c:</span> <span class="pre">4779</span></code>)</p>
+<p>2.3.3. msCheckConnection (<code class="docutils literal notranslate"><span class="pre">mapfile.c:</span> <span class="pre">4779</span></code>)</p>
 <blockquote>
 <div><p>This API is deprecated. It is called only from
-<code class="docutils literal"><span class="pre">msMYGISLayerOpen</span></code>.  We will not provide this
+<code class="docutils literal notranslate"><span class="pre">msMYGISLayerOpen</span></code>.  We will not provide this
 functionality through vtable.</p>
 </div></blockquote>
 </div></blockquote>
@@ -378,28 +365,28 @@ functionality through vtable.</p>
 <p>2.4.1 Function interface to initialize internal layer type</p>
 <blockquote>
 <div><p>We need a per layer type a function which will be called
-when the layer&#8217;s vtable has to be initialized. These
+when the layer’s vtable has to be initialized. These
 functions will be</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">msXXXInitializeLayerVirtualTable</span><span class="p">(</span><span class="n">layerObj</span> <span class="o">*</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">msXXXInitializeLayerVirtualTable</span><span class="p">(</span><span class="n">layerObj</span> <span class="o">*</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>where XXX will be name of the layer. This function is
-called anytime when the vtable isn&#8217;t initialized and the
+called anytime when the vtable isn’t initialized and the
 layer is accessed at the first time.</p>
 </div></blockquote>
 <p>2.4.2 Function interface to change the connectiontype of layer</p>
 <blockquote>
 <div><p>To change the connection type of layer, it has to be
 done by function interface. Accessing directly
-<code class="docutils literal"><span class="pre">connectiontype</span></code> field is not supported anymore.</p>
+<code class="docutils literal notranslate"><span class="pre">connectiontype</span></code> field is not supported anymore.</p>
 <p>To change the connectiontype and to connect to the new
 layer, there will be following interface function</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">msConnectLayer</span><span class="p">(</span><span class="nb">int</span> <span class="n">connectiontype</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">msConnectLayer</span><span class="p">(</span><span class="nb">int</span> <span class="n">connectiontype</span><span class="p">,</span>
                    <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">library_str</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>where <code class="docutils literal"><span class="pre">connectiontype</span></code> is the type of new layer, and
-<code class="docutils literal"><span class="pre">library_str</span></code> is the name of library which will
+<p>where <code class="docutils literal notranslate"><span class="pre">connectiontype</span></code> is the type of new layer, and
+<code class="docutils literal notranslate"><span class="pre">library_str</span></code> is the name of library which will
 prodive functionality for this new layer.  For internal
 layer types this second argument is ignored.</p>
 </div></blockquote>
@@ -407,10 +394,10 @@ layer types this second argument is ignored.</p>
 </li>
 <li><p class="first">Remove unwanted interfaces</p>
 <p>Frank Warmerdam proposed <a class="reference internal" href="#fw1" id="id1">[FW1]</a> that we remove all layer specific
-interface functions from <code class="docutils literal"><span class="pre">map.h</span></code>.</p>
+interface functions from <code class="docutils literal notranslate"><span class="pre">map.h</span></code>.</p>
 <blockquote>
-<div><p>I see each &#8220;built-in&#8221; module such as mapsde.c providing a
-registration function such as &#8220;msSDEInitializeLayerVirtualTable&#8221;
+<div><p>I see each «built-in» module such as mapsde.c providing a
+registration function such as «msSDEInitializeLayerVirtualTable»
 so that none of the layer type specific definitions need to
 appear in map.h any more.</p>
 </div></blockquote>
@@ -418,10 +405,10 @@ appear in map.h any more.</p>
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id1">[FW1]</a></td><td><div class="first last line-block">
-<div class="line"><code class="docutils literal"><span class="pre">Frank</span> <span class="pre">Warmerdam</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">mapserver-dev:</span></code></div>
-<div class="line"><code class="docutils literal"><span class="pre">Message-Id:</span> <span class="pre">&lt;smtpd.490f.4303f2ee.d8246.1&#64;mtaout-c.tc.umn.edu&gt;</span></code></div>
-<div class="line"><code class="docutils literal"><span class="pre">Date:</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">Wed,</span> <span class="pre">17</span> <span class="pre">Aug</span> <span class="pre">2005</span> <span class="pre">22:31:09</span> <span class="pre">-0400</span></code></div>
-<div class="line"><code class="docutils literal"><span class="pre">Subject:</span>&#160;&#160;&#160; <span class="pre">Re:</span> <span class="pre">MapServer</span>&#160; <span class="pre">Plug-in</span> <span class="pre">Infastructure:</span> <span class="pre">RFC</span> <span class="pre">and</span> <span class="pre">PATCH</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">Frank</span> <span class="pre">Warmerdam</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">mapserver-dev:</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">Message-Id:</span> <span class="pre">&lt;smtpd.490f.4303f2ee.d8246.1&#64;mtaout-c.tc.umn.edu&gt;</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">Date:</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">Wed,</span> <span class="pre">17</span> <span class="pre">Aug</span> <span class="pre">2005</span> <span class="pre">22:31:09</span> <span class="pre">-0400</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">Subject:</span>&#160;&#160;&#160; <span class="pre">Re:</span> <span class="pre">MapServer</span>&#160; <span class="pre">Plug-in</span> <span class="pre">Infastructure:</span> <span class="pre">RFC</span> <span class="pre">and</span> <span class="pre">PATCH</span></code></div>
 </div>
 </td></tr>
 </tbody>
@@ -433,31 +420,31 @@ appear in map.h any more.</p>
 <h2>Files and objects affected<a class="headerlink" href="#files-and-objects-affected" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>This proposal will affect at least following files and objects:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">map.h</span></code><ul>
-<li><code class="docutils literal"><span class="pre">layerObj</span></code> will contain new fields. There will be a new
-object <code class="docutils literal"><span class="pre">vtableObj</span></code> in the <code class="docutils literal"><span class="pre">map.h</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">map.h</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">layerObj</span></code> will contain new fields. There will be a new
+object <code class="docutils literal notranslate"><span class="pre">vtableObj</span></code> in the <code class="docutils literal notranslate"><span class="pre">map.h</span></code>.</li>
 </ul>
 </li>
-<li><code class="docutils literal"><span class="pre">maplayer.c</span></code><ul>
-<li>Various changes, layer specific <code class="docutils literal"><span class="pre">switch</span></code>-statements will go
+<li><code class="docutils literal notranslate"><span class="pre">maplayer.c</span></code><ul>
+<li>Various changes, layer specific <code class="docutils literal notranslate"><span class="pre">switch</span></code>-statements will go
 away, vtable handling and layers vtable initialization will be
 added.</li>
 </ul>
 </li>
-<li><code class="docutils literal"><span class="pre">mapfile.c</span></code><ul>
-<li>Cleaning of  <code class="docutils literal"><span class="pre">msCheckConnection</span></code></li>
-<li>Vtable for <code class="docutils literal"><span class="pre">msCloseConnection</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">mapfile.c</span></code><ul>
+<li>Cleaning of  <code class="docutils literal notranslate"><span class="pre">msCheckConnection</span></code></li>
+<li>Vtable for <code class="docutils literal notranslate"><span class="pre">msCloseConnection</span></code></li>
 </ul>
 </li>
-<li><code class="docutils literal"><span class="pre">mapogcfilter.c</span></code><ul>
-<li>Remove layer-logic from <code class="docutils literal"><span class="pre">FLTApplyFilterToLayer</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">mapogcfilter.c</span></code><ul>
+<li>Remove layer-logic from <code class="docutils literal notranslate"><span class="pre">FLTApplyFilterToLayer</span></code></li>
 </ul>
 </li>
-<li><code class="docutils literal"><span class="pre">mapXXX.c</span></code>, where <code class="docutils literal"><span class="pre">XXX</span></code> is the name of layer.<ul>
+<li><code class="docutils literal notranslate"><span class="pre">mapXXX.c</span></code>, where <code class="docutils literal notranslate"><span class="pre">XXX</span></code> is the name of layer.<ul>
 <li>Add new initialization function</li>
 <li>Add all new interface functions</li>
 <li>Fix existing interface functions, if needed / add wrappers for
-<code class="docutils literal"><span class="pre">msOGRLayerOpen</span></code> and <code class="docutils literal"><span class="pre">msWFSLayerOpen</span></code>.</li>
+<code class="docutils literal notranslate"><span class="pre">msOGRLayerOpen</span></code> and <code class="docutils literal notranslate"><span class="pre">msWFSLayerOpen</span></code>.</li>
 </ul>
 </li>
 </ul>
@@ -466,10 +453,10 @@ added.</li>
 <h2>Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>This is binary and source code level backward incompatible change. The
 proposal will remove some previously public functions, and add new
-field(s) to the <code class="docutils literal"><span class="pre">layerObj</span></code> struct.</p>
+field(s) to the <code class="docutils literal notranslate"><span class="pre">layerObj</span></code> struct.</p>
 <p>This proposal is not MapScript backward compatible, it will break
-scripts which change directly <code class="docutils literal"><span class="pre">connectiontype</span></code> field in
-<code class="docutils literal"><span class="pre">layerObj</span></code>.</p>
+scripts which change directly <code class="docutils literal notranslate"><span class="pre">connectiontype</span></code> field in
+<code class="docutils literal notranslate"><span class="pre">layerObj</span></code>.</p>
 <p>The proposal is MAP-file backward compatible.</p>
 </div>
 <div class="section" id="implementation-issues">
@@ -481,8 +468,8 @@ However, there is a prototype implementation of external plug-in
 architecture which works at the moment and is based on ideas
 presented in this proposal.  So there is some real life experience
 that this architecture change is feasible thing to do.</li>
-<li>I also like to note that this proposal won&#8217;t remove all layer
-specific code from MapServer e.g. <code class="docutils literal"><span class="pre">WMF</span></code>, <code class="docutils literal"><span class="pre">WMS</span></code> and <code class="docutils literal"><span class="pre">GRATICULE</span></code>
+<li>I also like to note that this proposal won’t remove all layer
+specific code from MapServer e.g. <code class="docutils literal notranslate"><span class="pre">WMF</span></code>, <code class="docutils literal notranslate"><span class="pre">WMS</span></code> and <code class="docutils literal notranslate"><span class="pre">GRATICULE</span></code>
 are used as special cases from place to place.</li>
 </ul>
 </div>
@@ -500,13 +487,13 @@ are used as special cases from place to place.</li>
 <div class="section" id="open-questions">
 <h2>Open questions<a class="headerlink" href="#open-questions" title="Enlazar permanentemente con este título">¶</a></h2>
 <ul>
-<li><p class="first">How do we like to expose layer&#8217;s virtual table to the layers. We
+<li><p class="first">How do we like to expose layer’s virtual table to the layers. We
 have at least two different routes to go:</p>
 <ul class="simple">
 <li>expose it as a struct, layers will fill vtable pointers by
-accessing directly struct&#8217;s field.</li>
+accessing directly struct’s field.</li>
 <li>expose it as a complete opaque type, vtable pointers will be set
-by accessing functions <code class="docutils literal"><span class="pre">setLayerOpenFP</span></code>, <code class="docutils literal"><span class="pre">setLayerCloseFP</span></code> and
+by accessing functions <code class="docutils literal notranslate"><span class="pre">setLayerOpenFP</span></code>, <code class="docutils literal notranslate"><span class="pre">setLayerCloseFP</span></code> and
 so on.</li>
 </ul>
 <p>The advance of second option is that this way we could easily add
@@ -528,12 +515,14 @@ which is handled via the layer API?</p>
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Búsqueda rápida</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Ir a" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Ir a" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
@@ -584,9 +573,9 @@ which is handled via the layer API?</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Actualizado por última vez en 2018-07-30.
-      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+        &#169; <a href="../../copyright.html">Derechos de autor</a> 2018, Open Source Geospatial Foundation.
+      Actualizado por última vez en 2018-07-31.
+      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>

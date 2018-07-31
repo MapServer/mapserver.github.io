@@ -1,25 +1,15 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="sq">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Mapfile &#8212; MapServer 7.2.0 documentation</title>
-    
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '7.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -28,12 +18,9 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.2.0 documentation" href="../index.html" />
-    <link rel="up" title="Optimization" href="index.html" />
     <link rel="next" title="Raster" href="raster.html" />
     <link rel="prev" title="FastCGI" href="fastcgi.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -177,7 +164,7 @@
 access, projection, and more. Because the Map File is parsed every time a map
 image is requested, it is important to think about what you include in the
 file in order to optimize performance. The optimal Map File is one that
-doesn&#8217;t include or reference anything that isn&#8217;t needed.</p>
+doesn’t include or reference anything that isn’t needed.</p>
 <div class="section" id="projections">
 <span id="index-1"></span><h3>1. Projections<a class="headerlink" href="#projections" title="Permalink to this headline">¶</a></h3>
 <p>There are two ways to define projections in a Map File. You can either use
@@ -188,7 +175,7 @@ lookup takes significantly more resources than when the projection parameters
 are defined inline. This lookup takes place for each projection definition
 using EPSG codes in a Map File.</p>
 <p><strong>Projection defined using inline projection parameters</strong></p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">PROJECTION</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">PROJECTION</span>
   <span class="s">&quot;proj=utm&quot;</span>
   <span class="s">&quot;ellps=GRS80&quot;</span>
   <span class="s">&quot;datum=NAD83&quot;</span>
@@ -200,7 +187,7 @@ using EPSG codes in a Map File.</p>
 </pre></div>
 </div>
 <p><strong>Projection defined using EPSG Code</strong></p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">PROJECTION</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">PROJECTION</span>
    <span class="s">&quot;init=epsg:26915&quot;</span>
 <span class="k">END</span>
 </pre></div>
@@ -226,26 +213,26 @@ necessary to orient the user, and allow them to turn on additional layers as
 needed. This is particularly true of remote WMS or very large rasters.</li>
 <li>Related to turning off layers, is turning them on but using MINSCALEDENOM
 and MAXSCALEDENOM to determine at what zoomlevels the layer is available. If
-a map&#8217;s display is outside of the layer&#8217;s MINSCALEDENOM and MAXSCALEDENOM
+a map’s display is outside of the layer’s MINSCALEDENOM and MAXSCALEDENOM
 range, then MapServer can skip processing that layer. It also makes for a
 really cool effect, that the national boundaries magically change to state
 boundaries.</li>
 <li>If you have a complex application, consider using multiple simple and
-specific Map Files in place of one large &#8216;do everything&#8217; Map File.</li>
+specific Map Files in place of one large ‹do everything› Map File.</li>
 <li>In a similar vein, each class also supports MINSCALEDENOM and MAXSCALEDENOM.
 If your dataset has data that are relevant at different zoomlevels, then you
 may find this a very handy trick. For example, give a MINSCALEDENOM of
 1:1000000, county roads a MINSCALEDENOM of 1:100000, and streets a
 MAXSCALEDENOM of 1:50000. You get the cool effect of new data magically
-appearing, but you don&#8217;t have MapServer trying to draw the nation&#8217;s roads
+appearing, but you don’t have MapServer trying to draw the nation’s roads
 when the entire nation is in view!</li>
 <li>Classes are processed in order, and a feature is assigned to the first class
 that matches. So try placing the most commonly-used classes at the top of
-the class list, so MapServer doesn&#8217;t have to try as many classes before
+the class list, so MapServer doesn’t have to try as many classes before
 finding a match. For example, if you wanted to highlight the single state of
 Wyoming, you would probably do this:</li>
 </ul>
-<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">CLASS</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">CLASS</span>
    <span class="k">EXPRESSION</span> <span class="p">(</span><span class="s">&#39;[NAME]&#39;</span> <span class="ow">eq</span> <span class="s">&#39;WY&#39;</span><span class="p">])</span>
    <span class="k">STYLE</span>
      <span class="k">COLOR</span> <span class="mi">255</span> <span class="mi">0</span> <span class="mi">0</span>
@@ -260,7 +247,7 @@ Wyoming, you would probably do this:</li>
 </div>
 <p>But it would be a lot more efficient to do this, since 98% of cases will be
 matched on the first try:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">CLASS</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">CLASS</span>
   <span class="k">EXPRESSION</span> <span class="p">(</span><span class="s">&#39;[NAME]&#39;</span> <span class="ow">ne</span> <span class="s">&#39;WY&#39;</span><span class="p">])</span>
   <span class="k">STYLE</span>
     <span class="k">COLOR</span> <span class="mi">128</span> <span class="mi">128</span> <span class="mi">128</span>
@@ -309,12 +296,14 @@ MapServer to locate and load the font that you need.</p>
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
@@ -365,8 +354,8 @@ MapServer to locate and load the font that you need.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Last updated on 2018-07-30.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+      Last updated on 2018-07-31.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>

@@ -1,25 +1,15 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="sq">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>MS RFC 98: Label/Text Rendering Overhaul &#8212; MapServer 7.2.0 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '7.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -28,12 +18,9 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.2.0 documentation" href="../../index.html" />
-    <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 99: Remove support for GD renderer" href="ms-rfc-99.html" />
     <link rel="prev" title="MS RFC 97: Dynamic creation of higher zoom levels tiles" href="ms-rfc-97.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -174,20 +161,20 @@
 <ul>
 <li><p class="first">the string eventually goes through iconv to be converted to utf8</p>
 </li>
-<li><p class="first">the string goes through fribidi to reorder the glyphs from &#8220;logical order&#8221; to &#8220;visual order&#8221;,
+<li><p class="first">the string goes through fribidi to reorder the glyphs from «logical order» to «visual order»,
 to support languages that are written from right to left. e.g. supposing capital letters are
-arabic letters, the text which is stored in the feature as <code class="docutils literal"><span class="pre">this</span> <span class="pre">is</span> <span class="pre">some</span> <span class="pre">ARABIC</span> <span class="pre">text</span></code> is
-transformed into <code class="docutils literal"><span class="pre">this</span> <span class="pre">is</span> <span class="pre">some</span> <span class="pre">CIBARA</span> <span class="pre">text</span></code> in order to be fed transparently to the
+arabic letters, the text which is stored in the feature as <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">is</span> <span class="pre">some</span> <span class="pre">ARABIC</span> <span class="pre">text</span></code> is
+transformed into <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">is</span> <span class="pre">some</span> <span class="pre">CIBARA</span> <span class="pre">text</span></code> in order to be fed transparently to the
 renderers that currently layout glyphs from left to right</p>
 </li>
 <li><p class="first">the string goes through line breaking, which is currently broken for RTL
-scripts for line breaking as we render (for <code class="docutils literal"><span class="pre">arabic</span> <span class="pre">\n</span> <span class="pre">text</span></code>)</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">TXET</span>
+scripts for line breaking as we render (for <code class="docutils literal notranslate"><span class="pre">arabic</span> <span class="pre">\n</span> <span class="pre">text</span></code>)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TXET</span>
 <span class="n">CIBARA</span>
 </pre></div>
 </div>
 <p>instead of the required</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CIBARA</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CIBARA</span>
 <span class="n">TXET</span>
 </pre></div>
 </div>
@@ -220,7 +207,7 @@ depending on context (see the <a class="reference external" href="http://en.wiki
 While this is partly taken care of for us by fribidi for arabic (which has a shaping
 algorithm that inserts ligatures for us), we currently fail hard for other complex
 text languages.</li>
-<li>We don&#8217;t support double spacing or line spacing at all, and our text alignment
+<li>We don’t support double spacing or line spacing at all, and our text alignment
 (center, right) is imprecise, as implementation for these would need to be added
 to each individual renderer.</li>
 </ul>
@@ -232,7 +219,7 @@ to each individual renderer.</li>
 <p>In short, instead of passing a string of text and a starting position to the renderers,
 we pass a list of glyphs (i.e. a glyph is a specific entry inside a specific font file)
 along with their precise positioning, very similarly to what we do currently when
-rendering <code class="docutils literal"><span class="pre">FOLLOW</span></code> labels, as is already outlined in <a class="reference external" href="https://github.com/mapserver/mapserver/issues/3611">bug 3611</a> . The actual shaping and layout
+rendering <code class="docutils literal notranslate"><span class="pre">FOLLOW</span></code> labels, as is already outlined in <a class="reference external" href="https://github.com/mapserver/mapserver/issues/3611">bug 3611</a> . The actual shaping and layout
 happens in a single mapserver function, and the renderers just dumbly place glyphs where
 they are told to.</p>
 <div class="section" id="architecture-implications">
@@ -246,7 +233,7 @@ of just plain text strings.</p>
 <li>Freetype becomes a central mapserver dependency, as we need the information about glyph
 sizes at a higher level than currently (where freetype is a dependency of the individual
 renderers). We also need a single central glyph cache to be used across harfbuzz and the
-renderers. <code class="docutils literal"><span class="pre">fontsetObj</span></code> will likely need to be extended to be more than a simple
+renderers. <code class="docutils literal notranslate"><span class="pre">fontsetObj</span></code> will likely need to be extended to be more than a simple
 filename hashtable.</li>
 <li>Fribidi (which has some thread safety issues) is kept as the library that handles the
 bidi algorithm for us. We do not use it for shaping anymore.</li>
@@ -285,41 +272,41 @@ the bidi algorithm, harfbuzz, line-breaking, text alignment, and in the future t
 spacing. This step could be in most part implemented transparently through pango, however
 pango is hard to support across platforms, and, to my knowledge, has a hard dependency on
 fontconfig which is incompatible with our fontset approach.</p>
-<p>Text is represented by a &#8220;textPathObj&#8221; which is basically a list of
-positioned glyphs. (e.g the word &#8220;Label&#8221; at size 10 for an arial font
-is represented by arial font&#8217;s glyph &#8220;L&#8221; at position (x,y)= (0,0),
-glyph &#8220;a&#8221; at position (10,0) , &#8220;b&#8221; at (18,0), etc...). Multiline text
+<p>Text is represented by a «textPathObj» which is basically a list of
+positioned glyphs. (e.g the word «Label» at size 10 for an arial font
+is represented by arial font’s glyph «L» at position (x,y)= (0,0),
+glyph «a» at position (10,0) , «b» at (18,0), etc…). Multiline text
 is handled transparently by having glyphs positioned at different y
-values. A textPath can be either &#8220;absolute&#8221; (i.e. the glyph positions
+values. A textPath can be either «absolute» (i.e. the glyph positions
 are in absolute image coordinates, used to position glyphs for angle
-follow labels), or &#8220;relative&#8221;, in which case they must be offset by
+follow labels), or «relative», in which case they must be offset by
 their labeling point.</p>
 <p>All the shaping happens in textlayout.c,
-who&#8217;s principal role is to take a string of text as input, and return
+who’s principal role is to take a string of text as input, and return
 a list of positioned glyphs as output. The input string goes through
 multiple steps, and is plit into multiple run. Each run will have a
-distinct line number, bidi direction, and script &#8220;language&#8221;.</p>
-<p>As an example, we&#8217;ll be working with the input unicode string &#8220;this is
-some text in english, ARABIC and JAPANESE&#8221;. Capital letters are used
+distinct line number, bidi direction, and script «language».</p>
+<p>As an example, we’ll be working with the input unicode string «this is
+some text in english, ARABIC and JAPANESE». Capital letters are used
 to denote non latin glyphs, also note that ARABIC is stored in logical
 (=reading) order, whereas it would be rendered as CIBARA.</p>
 <ul class="simple">
 <li>iconv encoding conversion to convert the string to unicode</li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run1</span> <span class="o">=</span> <span class="s2">&quot;this is some text in english, ARABIC and JAPANESE&quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="mi">0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run1</span> <span class="o">=</span> <span class="s2">&quot;this is some text in english, ARABIC and JAPANESE&quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="mi">0</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li>line wrapping: break on wrap character, break long lines on spaces</li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run1</span> <span class="o">=</span> <span class="s2">&quot;this is some text in english,&quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="mi">0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run1</span> <span class="o">=</span> <span class="s2">&quot;this is some text in english,&quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="mi">0</span>
 <span class="n">run2</span> <span class="o">=</span> <span class="s2">&quot;ARABIC and JAPANESE&quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="mi">1</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li>bidi levels, each run has a single bidi direction (i.e. left-to-right or right-to-left)</li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run1</span> <span class="o">=</span> <span class="s2">&quot;this is some text in english,&quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">LTR</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run1</span> <span class="o">=</span> <span class="s2">&quot;this is some text in english,&quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">LTR</span>
 <span class="n">run2</span> <span class="o">=</span> <span class="s2">&quot;ARABIC&quot;</span> <span class="n">line</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">RTL</span>
 <span class="n">run3</span> <span class="o">=</span> <span class="s2">&quot; and JAPANESE&quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="n">LTR</span>
 </pre></div>
@@ -328,7 +315,7 @@ to denote non latin glyphs, also note that ARABIC is stored in logical
 <li>script detection is applied to enable language dependent shaping,
 and also to refine which fonts will be used (more on that later)</li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run1</span> <span class="o">=</span> <span class="s2">&quot;this is some text in english,&quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">LTR</span><span class="p">,</span> <span class="n">script</span><span class="o">=</span><span class="n">latin</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run1</span> <span class="o">=</span> <span class="s2">&quot;this is some text in english,&quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">LTR</span><span class="p">,</span> <span class="n">script</span><span class="o">=</span><span class="n">latin</span>
 <span class="n">run2</span> <span class="o">=</span> <span class="s2">&quot;ARABIC&quot;</span> <span class="n">line</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">RTL</span><span class="p">,</span> <span class="n">script</span><span class="o">=</span><span class="n">arabic</span>
 <span class="n">run3</span> <span class="o">=</span> <span class="s2">&quot; and &quot;</span> <span class="n">line</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">LTR</span><span class="p">,</span> <span class="n">script</span><span class="o">=</span><span class="n">latin</span>
 <span class="n">run4</span> <span class="o">=</span> <span class="s2">&quot;JAPANESE&quot;</span> <span class="n">line</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">LTR</span><span class="p">,</span> <span class="n">script</span><span class="o">=</span><span class="n">hiragana</span>
@@ -340,11 +327,11 @@ the same font inside a given run. <a class="reference internal" href="ms-rfc-80.
 multiple fonts for a LABEL, this has been extended to be able to fine
 tune which fonts are to be preferably used for a given script:</li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">FONT</span> <span class="s2">&quot;arialuni,arial,cjk,arabic&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FONT</span> <span class="s2">&quot;arialuni,arial,cjk,arabic&quot;</span>
 </pre></div>
 </div>
 <p>can now be written prefixed by a script identifier, i.e.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>  <span class="n">FONT</span> <span class="s2">&quot;arialuni,en:arial,ja:cjk,ar:arabic&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">FONT</span> <span class="s2">&quot;arialuni,en:arial,ja:cjk,ar:arabic&quot;</span>
 
 <span class="n">This</span> <span class="ow">is</span> <span class="n">needed</span> <span class="k">as</span> <span class="n">there</span> <span class="ow">is</span> <span class="ow">and</span> <span class="n">will</span> <span class="n">be</span> <span class="n">overlap</span> <span class="n">between</span> <span class="n">font</span> <span class="n">glyph</span>
 <span class="n">coverages</span><span class="p">,</span> <span class="ow">and</span> <span class="n">it</span> <span class="n">should</span> <span class="n">be</span> <span class="n">possible</span> <span class="n">to</span> <span class="n">prioritize</span> <span class="n">which</span> <span class="n">font</span> <span class="ow">is</span> <span class="n">used</span>
@@ -355,8 +342,8 @@ tune which fonts are to be preferably used for a given script:</li>
 <li>Each run is then fed into harfbuzz, which returns a list of
 positioned glyphs. The number of returned glyphs is not meant to be
 identical to the number of glyphs we had in the unicode string, and
-are ordered from left to right. As a speedup, a run who&#8217;s script is
-&#8220;latin&#8221; is not fed through harfbuzz, but instead uses cached glyph
+are ordered from left to right. As a speedup, a run who’s script is
+«latin» is not fed through harfbuzz, but instead uses cached glyph
 advances.</li>
 <li>The glyphs of each run are reassembled to account for line numbers
 and run positions (e.g. run 3 is offset down by one line, and placed
@@ -374,10 +361,10 @@ substantially simplified.</p>
 <p>Work has been done to trim down the labelcache computations as much as possible:</p>
 <p>When inserting features into the labelcache:</p>
 <ul class="simple">
-<li>We&#8217;ll insert a reference to the original labelObj instead of a copy
-if the labelObj and it&#8217;s child styleObjs don&#8217;t contain any bindings.
-This cuts dow on memory usage when attribute bindings aren&#8217;t in use.</li>
-<li>We don&#8217;t insert features that will never get rendered (e.g. out of
+<li>We’ll insert a reference to the original labelObj instead of a copy
+if the labelObj and it’s child styleObjs don’t contain any bindings.
+This cuts dow on memory usage when attribute bindings aren’t in use.</li>
+<li>We don’t insert features that will never get rendered (e.g. out of
 scale, too large for their feature (minfeaturesize keyword) )</li>
 </ul>
 <p>At the msDrawLabelCache phase:</p>
@@ -388,7 +375,7 @@ checked conditions that would cause it not be renderered, i.e.</p>
 <li>if they have a MINDISTANCE set and a neighbouring label with
 identical text has already been rendered</li>
 <li>for labels without markers, we first check that the labelpoint
-doesn&#8217;t collide with an existing label.</li>
+doesn’t collide with an existing label.</li>
 </ul>
 </li>
 <li><p class="first">The Collision detection has been optimized:</p>
@@ -398,7 +385,7 @@ checking the status of all the labels in the labelcache for each
 member</li>
 <li>The bounding metrics for a label has been cut down from a full
 shapeObj to a struct containing a bounding rect and an optional
-lineObj. For non rotated labels, there&#8217;s no information needed more
+lineObj. For non rotated labels, there’s no information needed more
 than the bounding box, which makes intersection detection much easier
 for two labels like this (i.e. the overlapping of these two labels is
 the same as the overlapping of their bounding boxes, no need to go
@@ -453,12 +440,14 @@ penalty.</li>
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
@@ -524,8 +513,8 @@ penalty.</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Last updated on 2018-07-30.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+      Last updated on 2018-07-31.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>

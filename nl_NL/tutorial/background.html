@@ -1,25 +1,15 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="nl_NL">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Tutorial background &#8212; MapServer 7.2.0 documentation</title>
-    
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '7.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -28,12 +18,9 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Zoeken" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.2.0 documentation" href="../index.html" />
-    <link rel="up" title="MapServer Tutorial" href="index.html" />
     <link rel="next" title="Section 1: Static Maps and the MapFile" href="section1.html" />
     <link rel="prev" title="MapServer Tutorial" href="index.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -129,7 +116,7 @@
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="Algemene index"
-             accesskey="I">Index</a></li>
+             accesskey="I">index</a></li>
         <li class="right" >
           <a href="section1.html" title="Section 1: Static Maps and the MapFile"
              accesskey="N">volgende</a> |</li>
@@ -158,7 +145,7 @@ example in detail can probably expect to finish in one week.</p>
 <div class="section" id="tutorial-data">
 <h2>Tutorial Data<a class="headerlink" href="#tutorial-data" title="Permalink naar deze titel">¶</a></h2>
 <p>The dataset used in this tutorial was taken from the U.S. Department of the
-Interior&#8217;s National Atlas of the United States (which is now hosted by
+Interior’s National Atlas of the United States (which is now hosted by
 <a class="reference external" href="https://catalog.data.gov/harvest/1997-2014-edition-of-the-national-atlas-of-the-united-states">data.gov</a>).
 The dataset was clipped to the upper great lakes region (Minnesota, Michigan,
 and Wisconsin) to reduce storage size. Additional raster images were added
@@ -178,7 +165,7 @@ This web server has to have support for common gateway interface (CGI) programs.
 </li>
 <li><p class="first">Users should have a basic understanding of web servers and internet security.
 A poorly configured web server can easily be attacked by malicious people.
-At the very least your software installation will be corrupted and you&#8217;ll
+At the very least your software installation will be corrupted and you’ll
 lose hours of productivity, at worst your computer can be used to attack
 other computers on the internet.</p>
 </li>
@@ -206,42 +193,42 @@ exists on how to compile and install MapServer:</p>
 <p>This tutorial was created on Linux/UNIX but should work with minimal changes on
 Windows platform. The main differences are the paths in the map files. Windows
 users need to specify the drive letter of the hard disk where their tutorial
-files reside. Here&#8217;s an example:</p>
+files reside. Here’s an example:</p>
 <p>A UNIX map file might include a parameter like this:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">SHAPEPATH</span> <span class="s">&quot;/data/projects/tutorial/data&quot;</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">SHAPEPATH</span> <span class="s">&quot;/data/projects/tutorial/data&quot;</span>
 </pre></div>
 </div>
 <p>In Windows, the same parameters might look like this:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">SHAPEPATH</span> <span class="s">&quot;C:/data/projects/tutorial/data&quot;</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">SHAPEPATH</span> <span class="s">&quot;C:/data/projects/tutorial/data&quot;</span>
 </pre></div>
 </div>
 <p>or:</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">SHAPEPATH</span> <span class="s">&quot;C:\data\projects</span><span class="se">\t</span><span class="s">utorial\data&quot;</span><span class="p">.</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">SHAPEPATH</span> <span class="s">&quot;C:\data\projects</span><span class="se">\t</span><span class="s">utorial\data&quot;</span><span class="p">.</span>
 </pre></div>
 </div>
 <p>Notice that either slash or backslash works in Windows. The usual
 backslash may work well for you if you want to make a distinction
 between virtual (as in URLs or web addresses) and local paths in your
 map file. However, if you plan to move your application to UNIX at
-some point, you&#8217;ll have the tedious task of switching all backslashes
+some point, you’ll have the tedious task of switching all backslashes
 to slashes.</p>
-<p>While we&#8217;re on the subject of paths, keep in mind that paths in
-mapfiles are typically relative to the system&#8217;s root directory: the
-slash (&#8220;/&#8221;) in UNIX or some drive letter (&#8220;C:&#8221;) in Windows. This is
+<p>While we’re on the subject of paths, keep in mind that paths in
+mapfiles are typically relative to the system’s root directory: the
+slash (“/”) in UNIX or some drive letter (“C:”) in Windows. This is
 true except when specifically asked to enter a URL or when referencing
 a URL. When working with HTML template files, paths are relative to
-the web server&#8217;s root directory.  i.e., &#8220;/tutorial/&#8221; is relative to
-&#8220;<a class="reference external" href="http://demo.mapserver.org/">http://demo.mapserver.org/</a>&#8221;. Please read
+the web server’s root directory.  i.e., “/tutorial/” is relative to
+“<a class="reference external" href="http://demo.mapserver.org/">http://demo.mapserver.org/</a>”. Please read
 <a class="reference external" href="http://www.alistapart.com/articles/slashforward/">http://www.alistapart.com/articles/slashforward/</a> for a few insights on
 URLs.</p>
 </div>
 <div class="section" id="executable">
 <h3>Executable<a class="headerlink" href="#executable" title="Permalink naar deze titel">¶</a></h3>
-<p>Another issue is that UNIX executable files don&#8217;t require a .EXE or
+<p>Another issue is that UNIX executable files don’t require a .EXE or
 .COM extensions, but they do in Windows. If you are using Windows,
-append .exe to all instances of &#8220;/cgi-bin/mapserv&#8221; or
-&#8220;/cgi-bin/mapserv50&#8221; to make it &#8220;/cgi-bin/mapserv.exe&#8221; or
-&#8220;/cgi-bin/mapserv50.exe&#8221;.</p>
+append .exe to all instances of “/cgi-bin/mapserv” or
+“/cgi-bin/mapserv50” to make it “/cgi-bin/mapserv.exe” or
+“/cgi-bin/mapserv50.exe”.</p>
 </div>
 </div>
 <div class="section" id="other-resources">
@@ -264,12 +251,14 @@ scripting interface for MapServer.</p>
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Snel zoeken</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Ga" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Zoek" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
@@ -308,7 +297,7 @@ scripting interface for MapServer.</p>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="Algemene index"
-             >Index</a></li>
+             >index</a></li>
         <li class="right" >
           <a href="section1.html" title="Section 1: Static Maps and the MapFile"
              >volgende</a> |</li>
@@ -322,8 +311,8 @@ scripting interface for MapServer.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2018-07-30.
-      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+      Laatste aanpassing op 2018-07-31.
+      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>

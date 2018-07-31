@@ -1,25 +1,15 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>MS RFC 65 - Single-pass Query Changes for 6.0 &#8212; MapServer 7.2.0 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '7.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -29,12 +19,9 @@
     <link rel="index" title="索引" href="../../genindex.html" />
     <link rel="search" title="検索" href="../../search.html" />
     <link rel="copyright" title="著作権" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.2.0 documentation" href="../../index.html" />
-    <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 66: Better handling of temporary files" href="ms-rfc-66.html" />
     <link rel="prev" title="MS RFC 64 - MapServer Expression Parser Overhaul" href="ms-rfc-64.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -181,7 +168,7 @@ For Oracle, the result set ID was being passed in the tileindex and the shapeind
 reasonable thing to do and the PostGIS driver was changed at the sprint to behave the same way. So, the shapeindex contains the
 overall record index and the tileindex contains the index relative to the query result set. This re-use of the tileindex takes
 advantage of a an attribute that otherwise would go unused and saves us from further complicating things. Layers that use
-tile indexes are always file-based and don&#8217;t suffer (generally) from the performance problems what caused the changes in the
+tile indexes are always file-based and don't suffer (generally) from the performance problems what caused the changes in the
 first place.</p>
 </div>
 <div class="section" id="drivers-that-implement-mslayerresultsgetshape">
@@ -203,25 +190,25 @@ and msLayerGetShape() into a new msLayerGetShape().</li>
 <li>Remove resultsGetShape() and getFeature() methods from MapScript.</li>
 <li>Refactor getShape() MapScript method to a) return a shapeObj * like getFeature() does and to b) take a resultCacheMemberObj as input
 instead of the shape and tile indexes. That simplifies the inferface and abstracts the indexes so that we have more flexibility moving
-forward. We wouldn&#8217;t necessarily have to change the driver implementations to take a resultCacheMemberObj at this point, that could
+forward. We wouldn't necessarily have to change the driver implementations to take a resultCacheMemberObj at this point, that could
 be done later.</li>
 </ol>
 <p>The refactored getShape() signature would like so (in layer.i for SWIG):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">newobject</span> <span class="n">getShape</span><span class="p">;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">newobject</span> <span class="n">getShape</span><span class="p">;</span>
 <span class="n">shapeObj</span> <span class="o">*</span><span class="n">getShape</span><span class="p">(</span><span class="n">resultCacheMemberObj</span> <span class="o">*</span><span class="n">r</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>I&#8217;d also like to consider adding another query saving function to MapScript, something like saveQueryFeatures(). This function would write
-a pre-5.6 query file which consisted of a series of shape and tile indexes. We wouldn&#8217;t write tile indexes for layers that weren&#8217;t tiled
-(e.g. layers that didn&#8217;t have a TILEINDEX). This would restore some useful funcitonallity that was removed with the 5.6 changes.</p>
+<p>I'd also like to consider adding another query saving function to MapScript, something like saveQueryFeatures(). This function would write
+a pre-5.6 query file which consisted of a series of shape and tile indexes. We wouldn't write tile indexes for layers that weren't tiled
+(e.g. layers that didn't have a TILEINDEX). This would restore some useful funcitonallity that was removed with the 5.6 changes.</p>
 <ol class="arabic simple">
 <li>Add signatures to the two styles of query files (query parameters and query results). This will allow us to write a single loader function
 and improve security.</li>
-<li>Add an optional flag to saveQuery() method in MapScript to save the actual query results (e.g. all the resultCacheMemberObj&#8217;s) instead
+<li>Add an optional flag to saveQuery() method in MapScript to save the actual query results (e.g. all the resultCacheMemberObj's) instead
 of just the query parameters.</li>
 </ol>
 <p>Post RFC a query action in MapScript would look like so:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>...
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>...
 my $rect = new mapscript::rectObj(420000, 5120000, 582000, 5200000);
 $layer-&gt;queryByRect($map, $rect); # layer is left open after this operation
 
@@ -236,7 +223,7 @@ $map-&gt;saveQuery(&#39;myquery.qy&#39;, 1); # old style (query feature indexes)
 </pre></div>
 </div>
 <p>The changes are relatively technically mild. The changes in MapScript are big in that scripts that process query results will need
-an update. In the end I think that&#8217;s worth it and this will be more intuitive for users.</p>
+an update. In the end I think that's worth it and this will be more intuitive for users.</p>
 </div>
 <div class="section" id="bug-id">
 <h2>Bug ID<a class="headerlink" href="#bug-id" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -256,12 +243,14 @@ an update. In the end I think that&#8217;s worth it and this will be more intuit
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>クイック検索</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="検索" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
@@ -310,8 +299,8 @@ an update. In the end I think that&#8217;s worth it and this will be more intuit
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      最終更新: 2018-07-30
-      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9 で生成しました。
+      最終更新: 2018-07-31
+      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6 で生成しました。
     </div>
   </body>
 </html>

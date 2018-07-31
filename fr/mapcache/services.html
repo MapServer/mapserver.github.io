@@ -1,25 +1,15 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Services de tuilage supportés &#8212; MapServer 7.2.0 documentation</title>
-    
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '7.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -29,12 +19,9 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Recherche" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="MapServer 7.2.0 documentation" href="../index.html" />
-    <link rel="up" title="MapCache 1.6.1" href="index.html" />
     <link rel="next" title="Alimentation du cache" href="seed.html" />
     <link rel="prev" title="Fichier de configuration" href="config.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -164,22 +151,16 @@
 </tbody>
 </table>
 <p>MapCache a la capacité de servir des tuiles en utilisant de nombreux protocoles de requête et de conventions de nommage pour les tuiles. Le but de ce document est de les décrire. Les divers services doivent être activés dans le fichier mapcache.xml afin que MapCache puisse répondre à leurs requêtes spécifiques.</p>
-<p>Tous les services sont disponibles dans l&#8217;interface de démonstration, à partir duquel vous être encouragés à copier/coller le code JavaScript avant de vous lancer dans le codage de vos propres pages utilisant les tuiles MapCache.</p>
+<p>Tous les services sont disponibles dans l’interface de démonstration, à partir duquel vous être encouragés à copier/coller le code JavaScript avant de vous lancer dans le codage de vos propres pages utilisant les tuiles MapCache.</p>
 <p>La notation suivante est utilisée sur cette page et fait référence aux noms des objets dans le fichier de configuration mapcache.xml.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p class="first">&lt;tileset_name&gt; - nom d&#8217;un jeu de tuiles configuré</p>
-</li>
-<li><p class="first">&lt;grid_name&gt; - nom de la grille définie explicitement ou implicitement</p>
-</li>
-<li><p class="first">&lt;quadkey&gt; - spécifique au service de tuilage Virtual Earth</p>
-</li>
-<li><p class="first">&lt;z&gt; - Niveau de zoom dans le schéma de nommage zxy</p>
-</li>
-<li><p class="first">&lt;y&gt; - numéro de ligne dans le schéma de nommage zxy</p>
-</li>
-<li><p class="first">&lt;x&gt; - numéro de colonne dans le schéma de nommage zxy</p>
-</li>
+<li>&lt;tileset_name&gt; - nom d’un jeu de tuiles configuré</li>
+<li>&lt;grid_name&gt; - nom de la grille définie explicitement ou implicitement</li>
+<li>&lt;quadkey&gt; - spécifique au service de tuilage Virtual Earth</li>
+<li>&lt;z&gt; - Niveau de zoom dans le schéma de nommage zxy</li>
+<li>&lt;y&gt; - numéro de ligne dans le schéma de nommage zxy</li>
+<li>&lt;x&gt; - numéro de colonne dans le schéma de nommage zxy</li>
 </ul>
 </div></blockquote>
 <div class="section" id="tms-service">
@@ -187,59 +168,56 @@
 <p>Le service TMS service utilise un schéma de tuilage de type z/x/y où:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p class="first"><em>z</em> est le niveau de zoom</p>
-</li>
-<li><p class="first"><em>x</em> est le numéro de colonne</p>
-</li>
-<li><p class="first"><em>y</em> est le numéro de ligne</p>
-</li>
+<li><em>z</em> est le niveau de zoom</li>
+<li><em>x</em> est le numéro de colonne</li>
+<li><em>y</em> est le numéro de ligne</li>
 </ul>
 </div></blockquote>
 <p>Pour activer le service TMS, ajoutez ces lignes au fichier de configuration mapcache.xml:</p>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;tms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;tms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
 </pre></div>
 </div>
-<p>Un document de &#8220;capabilities&#8221; peut être récupéré via:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">myhost</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">mapcache</span><span class="o">/</span><span class="n">tms</span><span class="o">/</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span>
+<p>Un document de «&nbsp;capabilities&nbsp;» peut être récupéré via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">myhost</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">mapcache</span><span class="o">/</span><span class="n">tms</span><span class="o">/</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span>
 </pre></div>
 </div>
 <p>Les tuiles sont demandées en utilisant le schéma:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">myhost</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">mapcache</span><span class="o">/</span><span class="n">tms</span><span class="o">/</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span><span class="o">/&lt;</span><span class="n">tileset_name</span><span class="o">&gt;@&lt;</span><span class="n">grid_name</span><span class="o">&gt;/&lt;</span><span class="n">z</span><span class="o">&gt;/&lt;</span><span class="n">x</span><span class="o">&gt;/&lt;</span><span class="n">y</span><span class="o">&gt;.</span><span class="n">png</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">myhost</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">mapcache</span><span class="o">/</span><span class="n">tms</span><span class="o">/</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span><span class="o">/&lt;</span><span class="n">tileset_name</span><span class="o">&gt;@&lt;</span><span class="n">grid_name</span><span class="o">&gt;/&lt;</span><span class="n">z</span><span class="o">&gt;/&lt;</span><span class="n">x</span><span class="o">&gt;/&lt;</span><span class="n">y</span><span class="o">&gt;.</span><span class="n">png</span>
 </pre></div>
 </div>
 <p>Pour les grilles epsg:3857 ou epsg:900913 ou GoogleMapsCompatible, avec cellules = [z/x/y]:</p>
 <p>z0:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>z1:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="p">]</span>
 <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>z2:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">2</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">2</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="mi">0</span><span class="p">]</span>
 <span class="p">[</span><span class="mi">2</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="mi">1</span><span class="p">]</span>
 <span class="p">[</span><span class="mi">2</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span><span class="o">...</span>
 <span class="p">[</span><span class="mi">2</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">3</span><span class="p">]</span><span class="o">...</span>
 </pre></div>
 </div>
-<p>etc...</p>
+<p>etc…</p>
 <p>Pour les grilles epsg:4326 ou WGS84:</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">La spécification OGC WMTS impose de manière un peu absurde au WellKnownScaleset GoogleCRS84Quad d&#8217;avoir un niveau 0 dont l&#8217;étendue géographiques est -180,-180,180,180. La grille MapCache par défaut &#8220;WGS84&#8221; respecte cela, ce qui peut provoquer des incompatibilités avec les logiciels qui s&#8217;attendent à ce qu&#8217;au niveau 0 on ait 2 x 1 tuiles avec pour étendue -180,-90,180,90</p>
+<p class="last">La spécification OGC WMTS impose de manière un peu absurde au WellKnownScaleset GoogleCRS84Quad d’avoir un niveau 0 dont l’étendue géographiques est -180,-180,180,180. La grille MapCache par défaut «&nbsp;WGS84&nbsp;» respecte cela, ce qui peut provoquer des incompatibilités avec les logiciels qui s’attendent à ce qu’au niveau 0 on ait 2 x 1 tuiles avec pour étendue -180,-90,180,90</p>
 </div>
 <p>z0:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>z1:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>z2:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">2</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">2</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="mi">0</span><span class="p">]</span>
 <span class="p">[</span><span class="mi">2</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -247,15 +225,12 @@
 </div>
 <div class="section" id="kml-service">
 <span id="mapcache-kml"></span><h2>Service KML<a class="headerlink" href="#kml-service" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Le service KML produit des &#8216;<a class="reference external" href="http://code.google.com/apis/kml/documentation/kml_21tutorial.html#superoverlays">Super-Overlays</a> pour les jeux de tuiles qui sont alignés sur les grilles WGS84 / epsg:4326. Un Super-Overlay est un fichier KML liée à l&#8217;URL d&#8217;une image du cache et à un ensemble d&#8217;autres URLs correspondant aux résolutions voisines. Le service KML utilise un modèle de nommage de tuiles z/x/y où:</p>
+<p>Le service KML produit des “<a class="reference external" href="http://code.google.com/apis/kml/documentation/kml_21tutorial.html#superoverlays">Super-Overlays</a> pour les jeux de tuiles qui sont alignés sur les grilles WGS84 / epsg:4326. Un Super-Overlay est un fichier KML liée à l’URL d’une image du cache et à un ensemble d’autres URLs correspondant aux résolutions voisines. Le service KML utilise un modèle de nommage de tuiles z/x/y où:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p class="first"><em>z</em> est le niveau de zoom</p>
-</li>
-<li><p class="first"><em>x</em> est le numéro de colonne</p>
-</li>
-<li><p class="first"><em>y</em> est le numéro de ligne</p>
-</li>
+<li><em>z</em> est le niveau de zoom</li>
+<li><em>x</em> est le numéro de colonne</li>
+<li><em>y</em> est le numéro de ligne</li>
 </ul>
 </div></blockquote>
 <div class="admonition note">
@@ -263,28 +238,28 @@
 <p class="last">Pour que le service KML soit opérationnel, le service TMS doit aussi être activé car le KML Super-Overlay fait un lien vers les images en utilisant cette spécification.</p>
 </div>
 <p>Pour activer le service KML, ajoutez ces lignes au fichier de configuration mapcache.xml:</p>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;tms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;tms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;kml&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
 </pre></div>
 </div>
 <p>Les tuiles sont demandées en utilisant le schéma:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">myhost</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">mapcache</span><span class="o">/</span><span class="n">kml</span><span class="o">/&lt;</span><span class="n">tileset_name</span><span class="o">&gt;@&lt;</span><span class="n">grid_name</span><span class="o">&gt;/&lt;</span><span class="n">z</span><span class="o">&gt;/&lt;</span><span class="n">x</span><span class="o">&gt;/&lt;</span><span class="n">y</span><span class="o">&gt;.</span><span class="n">kml</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">myhost</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">mapcache</span><span class="o">/</span><span class="n">kml</span><span class="o">/&lt;</span><span class="n">tileset_name</span><span class="o">&gt;@&lt;</span><span class="n">grid_name</span><span class="o">&gt;/&lt;</span><span class="n">z</span><span class="o">&gt;/&lt;</span><span class="n">x</span><span class="o">&gt;/&lt;</span><span class="n">y</span><span class="o">&gt;.</span><span class="n">kml</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="ogc-wmts-service">
 <span id="mapcache-wmts"></span><h2>Service WMTS OGC<a class="headerlink" href="#ogc-wmts-service" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Pour activer le service WMTS, ajoutez ces lignes au fichier de configuration mapcache.xml:</p>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wmts&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wmts&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
 </pre></div>
 </div>
 <p>Ce service respecte les requêtes du standard OGC WMTS et accepte à la fois les requêtes classiques OGC en mode KVP et les requêtes de type REST.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>http://myhost.com/mapcache/wmts?SERVICE=WMTS&amp;VERSION=1.0.0&amp;...
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://myhost.com/mapcache/wmts?SERVICE=WMTS&amp;VERSION=1.0.0&amp;...
 http://myhost.com/mapcache/wmts/1.0.0/....
 </pre></div>
 </div>
-<p>Les &#8220;capabilities&#8221; sont obtenues via:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>http://myhost.com/mapcache/wmts?service=wmts&amp;request=getcapabilities&amp;version=1.0.0
+<p>Les «&nbsp;capabilities&nbsp;» sont obtenues via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://myhost.com/mapcache/wmts?service=wmts&amp;request=getcapabilities&amp;version=1.0.0
 http://myhost.com/mapcache/wmts/1.0.0/WMTSCapabilities.xml
 </pre></div>
 </div>
@@ -294,22 +269,22 @@ http://myhost.com/mapcache/wmts/1.0.0/WMTSCapabilities.xml
 </div>
 <div class="admonition seealso">
 <p class="first admonition-title">Voir aussi</p>
-<p class="last"><a class="reference internal" href="dimensions.html#mapcache-dimensions"><span class="std std-ref">Dimensions d&#8217;un jeu de tuiles</span></a></p>
+<p class="last"><a class="reference internal" href="dimensions.html#mapcache-dimensions"><span class="std std-ref">Dimensions d’un jeu de tuiles</span></a></p>
 </div>
 </div>
 <div class="section" id="ogc-wms-service">
 <span id="mapcache-wms"></span><h2>Service WMS OGC<a class="headerlink" href="#ogc-wms-service" title="Lien permanent vers ce titre">¶</a></h2>
 <p>MapCache répond aux requêtes WMS version 1.1.1, et a un support limité pour celles en version 1.3.0.</p>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Notez que le service WMS est un petit peu différent des autres services MapCache, car il écoute à la racine de l&#8217;instance configurée plutôt que sur un emplacement dédié (en fait le service répond sur <a class="reference external" href="http://server/mapcache/">http://server/mapcache/</a>? et non sur <a class="reference external" href="http://server/mapcache/wms">http://server/mapcache/wms</a>?). Ce comportement est rendu nécessaire pour permettre la <a class="reference internal" href="proxying.html#mapcache-proxying"><span class="std std-ref">proxyfication des requêtes non prises en charge</span></a> tout en offrant un point d&#8217;entrée unique à tous les services OGC.</p>
+<p class="last">Notez que le service WMS est un petit peu différent des autres services MapCache, car il écoute à la racine de l’instance configurée plutôt que sur un emplacement dédié (en fait le service répond sur <a class="reference external" href="http://server/mapcache/">http://server/mapcache/</a>? et non sur <a class="reference external" href="http://server/mapcache/wms">http://server/mapcache/wms</a>?). Ce comportement est rendu nécessaire pour permettre la <a class="reference internal" href="proxying.html#mapcache-proxying"><span class="std std-ref">proxyfication des requêtes non prises en charge</span></a> tout en offrant un point d’entrée unique à tous les services OGC.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">MapCache supporte principalement les requêtes WMS 1.1.1 mais a un support limité de la récente version 1.3.0. Pour les requêtes 1.3.0, MapCache choisira la <a class="reference internal" href="config.html#mapcache-grids"><span class="std std-ref">grille</span></a> à utiliser en lisant le paramètre CRS plutôt que SRS, et respectera l&#8217;ordre des axes de coordonnées pour les systèmes epsg qui inverse l&#8217;ordre x/y habituel du paramètre BBOX.</p>
+<p class="last">MapCache supporte principalement les requêtes WMS 1.1.1 mais a un support limité de la récente version 1.3.0. Pour les requêtes 1.3.0, MapCache choisira la <a class="reference internal" href="config.html#mapcache-grids"><span class="std std-ref">grille</span></a> à utiliser en lisant le paramètre CRS plutôt que SRS, et respectera l’ordre des axes de coordonnées pour les systèmes epsg qui inverse l’ordre x/y habituel du paramètre BBOX.</p>
 </div>
 <div class="admonition seealso">
 <p class="first admonition-title">Voir aussi</p>
@@ -317,18 +292,18 @@ http://myhost.com/mapcache/wmts/1.0.0/WMTSCapabilities.xml
 </div>
 <div class="admonition seealso">
 <p class="first admonition-title">Voir aussi</p>
-<p class="last"><a class="reference internal" href="dimensions.html#mapcache-dimensions"><span class="std std-ref">Dimensions d&#8217;un jeu de tuiles</span></a></p>
+<p class="last"><a class="reference internal" href="dimensions.html#mapcache-dimensions"><span class="std std-ref">Dimensions d’un jeu de tuiles</span></a></p>
 </div>
 <div class="admonition seealso">
 <p class="first admonition-title">Voir aussi</p>
 <p class="last"><a class="reference internal" href="tile_assembling.html#mapcache-tile-assembling"><span class="std std-ref">Assemblage de tuiles</span></a></p>
 </div>
-<p>Les requêtes WMS suivent le style d&#8217;encodage classique clé-valeur (Key Value Pair):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>http://myhost.com/mapcache?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=....
+<p>Les requêtes WMS suivent le style d’encodage classique clé-valeur (Key Value Pair):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://myhost.com/mapcache?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=....
 </pre></div>
 </div>
-<p>Le document de &#8220;capabilities&#8221; est retourné par:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>http://myhost.com/mapcache?service=wms&amp;request=getcapabilities
+<p>Le document de «&nbsp;capabilities&nbsp;» est retourné par:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://myhost.com/mapcache?service=wms&amp;request=getcapabilities
 </pre></div>
 </div>
 <div class="section" id="optional-wms-configuration-options">
@@ -336,7 +311,7 @@ http://myhost.com/mapcache/wmts/1.0.0/WMTSCapabilities.xml
 <div class="section" id="untiled-getmap-support">
 <h4>Untiled GetMap Support<a class="headerlink" href="#untiled-getmap-support" title="Lien permanent vers ce titre">¶</a></h4>
 <p>Support for untiled (non WMS-C) GetMap requests can be enabled or disabled:</p>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
    <span class="c">&lt;!-- full_wms</span>
 <span class="c">        Configure response to WMS requests that are not aligned to a tileset&#39;s grids.</span>
 <span class="c">        Responding to requests that are not in the SRS of a configured grid is not supported, but</span>
@@ -358,18 +333,18 @@ http://myhost.com/mapcache/wmts/1.0.0/WMTSCapabilities.xml
 <p>You may explicitly set which image format should be returned to the client for
 an untiled WMS request (i.e. whenever the tile data cannot be served directly
 from the caches but needs to go through a decompression/recompression phase).</p>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;format</span> <span class="na">allow_client_override=</span><span class="s">&quot;true/false&quot;</span><span class="nt">&gt;</span>myjpegformat<span class="nt">&lt;/format&gt;</span>
 <span class="nt">&lt;/service&gt;</span>
 </pre></div>
 </div>
 <p>If the <cite>allow_client_override</cite> attribute is set to true, then MapCache will honor
-the <cite>FORMAT=...</cite> parameter sent by the client. By default MapCache ignores this
+the <cite>FORMAT=…</cite> parameter sent by the client. By default MapCache ignores this
 parameter and uses its configured image format.</p>
 </div>
 <div class="section" id="image-resampling-quality">
 <h4>Image Resampling Quality<a class="headerlink" href="#image-resampling-quality" title="Lien permanent vers ce titre">¶</a></h4>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
    <span class="c">&lt;!-- resample mode</span>
 <span class="c">   Filter applied when resampling tiles for full WMS requests.</span>
 <span class="c">   Can be either:</span>
@@ -385,22 +360,19 @@ parameter and uses its configured image format.</p>
 </div>
 <div class="section" id="googlemaps-xyz-service">
 <span id="mapcache-gmaps"></span><h2>Service XYZ GoogleMaps<a class="headerlink" href="#googlemaps-xyz-service" title="Lien permanent vers ce titre">¶</a></h2>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;gmaps&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;gmaps&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
 </pre></div>
 </div>
-<p>Prérequis: votre WMS doit être capable de produire des images dans le SRS EPSG:900913 ou EPSG:3857 SRS, c&#8217;est à dire qu&#8217;il devrait référencer la grille &#8220;g&#8221; ou &#8220;GoogleMapsCompatible&#8221;</p>
-<p>Voici la page HTML minimale qui devrait vous permettre d&#8217;avancer. Les parties importantes sont dans les variables urlTemplate (pour v2) et getTileURL (pour v3).</p>
+<p>Prérequis: votre WMS doit être capable de produire des images dans le SRS EPSG:900913 ou EPSG:3857 SRS, c’est à dire qu’il devrait référencer la grille «&nbsp;g&nbsp;» ou «&nbsp;GoogleMapsCompatible&nbsp;»</p>
+<p>Voici la page HTML minimale qui devrait vous permettre d’avancer. Les parties importantes sont dans les variables urlTemplate (pour v2) et getTileURL (pour v3).</p>
 <ul class="simple">
-<li><p class="first">/mapcache est le chemin apache où MapCache gère les requêtes</p>
-</li>
-<li><p class="first">test&#64;g est le jeu de tuiles et la grille à utiliser, joints par un &#8216;&#64;&#8217; - le  {Z}/{X}/{Y}  devrait être laissé de côté</p>
-</li>
-<li><p class="first">l&#8217;extension finale devrait être changée en &#8220;jpg&#8221; si vous utilisez le format JPEG pour votre jeu de tuiles.</p>
-</li>
+<li>/mapcache est le chemin apache où MapCache gère les requêtes</li>
+<li>test&#64;g est le jeu de tuiles et la grille à utiliser, joints par un “&#64;” - le  {Z}/{X}/{Y}  devrait être laissé de côté</li>
+<li>l’extension finale devrait être changée en «&nbsp;jpg&nbsp;» si vous utilisez le format JPEG pour votre jeu de tuiles.</li>
 </ul>
 <div class="section" id="v2-api">
 <h3>API V2<a class="headerlink" href="#v2-api" title="Lien permanent vers ce titre">¶</a></h3>
-<div class="highlight-html"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html</span>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html</span>
 <span class="cp">  PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot;</span>
 <span class="cp">  &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns</span><span class="o">=</span><span class="s">&quot;http://www.w3.org/1999/xhtml&quot;</span><span class="p">&gt;</span>
@@ -437,8 +409,8 @@ parameter and uses its configured image format.</p>
 </div>
 <div class="section" id="v3-api">
 <h3>API V3<a class="headerlink" href="#v3-api" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Le JavaScript pour l&#8217;exemple précédent en V2 devrait être légèrement modifié ainsi:</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">google</span><span class="p">.</span><span class="nx">maps</span><span class="p">.</span><span class="nx">Map</span><span class="p">(</span><span class="s2">&quot;&lt;element-id&gt;&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="cm">/*options*/</span> <span class="p">});</span>
+<p>Le JavaScript pour l’exemple précédent en V2 devrait être légèrement modifié ainsi:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">google</span><span class="p">.</span><span class="nx">maps</span><span class="p">.</span><span class="nx">Map</span><span class="p">(</span><span class="s2">&quot;&lt;element-id&gt;&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="cm">/*options*/</span> <span class="p">});</span>
 <span class="kd">var</span> <span class="nx">layerOptions</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">getTileUrl</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">coord</span><span class="p">,</span> <span class="nx">zoom</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="s2">&quot;/mapcache/gmaps/test@g/&quot;</span> <span class="o">+</span> <span class="nx">zoom</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nx">coord</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nx">coord</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">;</span>
@@ -452,20 +424,20 @@ parameter and uses its configured image format.</p>
 </div>
 <div class="section" id="virtual-earth-tile-service">
 <span id="mapcache-ve"></span><h2>Service de tuilage Virtual Earth<a class="headerlink" href="#virtual-earth-tile-service" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Les tuiles sont organisées en un ou deux modèles différents selon qu&#8217;elles utilisent un projet Mercator Sphérique, comme EPSG:3857 ou EPSG:900913, or si elles utilisent une projection géographiques comme EPSG:4326.</p>
+<p>Les tuiles sont organisées en un ou deux modèles différents selon qu’elles utilisent un projet Mercator Sphérique, comme EPSG:3857 ou EPSG:900913, or si elles utilisent une projection géographiques comme EPSG:4326.</p>
 <p>Les tuiles sont demandées en utilisant le schéma:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>http://myhost.com/mapcache/ve?LAYER=&lt;tileset_name&gt;@&lt;grid_name&gt;&amp;tile=&lt;quadkey&gt;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://myhost.com/mapcache/ve?LAYER=&lt;tileset_name&gt;@&lt;grid_name&gt;&amp;tile=&lt;quadkey&gt;
 </pre></div>
 </div>
 <p>Pour les grilles EPSG:3857 ou EPSG:900913 ou GoogleMapsCompatible, &lt;quadkey&gt;  sont arrangés ainsi:</p>
 <p>z0:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>[0]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[0]
 
 http://myhost.com/mapcache/ve?LAYER=osm@GoogleMapsCompatible&amp;tile=0
 </pre></div>
 </div>
 <p>z1:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>[00][01]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[00][01]
 [02][03]
 
 http://myhost.com/mapcache/ve?LAYER=osm@GoogleMapsCompatible&amp;tile=00
@@ -474,19 +446,19 @@ http://myhost.com/mapcache/ve?LAYER=osm@GoogleMapsCompatible&amp;tile=02
 http://myhost.com/mapcache/ve?LAYER=osm@GoogleMapsCompatible&amp;tile=03
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">etc</span><span class="o">.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">etc</span><span class="o">.</span>
 </pre></div>
 </div>
 <p>Pour les grilles EPSG:4326 ou WGS84, &lt;quadkey&gt; sont arrangés ainsi:</p>
 <p>z1:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>[0][1]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[0][1]
 
 http://myhost.com/mapcache/ve?LAYER=osm@WGS84&amp;tile=0
 http://myhost.com/mapcache/ve?LAYER=osm@WGS84&amp;tile=1
 </pre></div>
 </div>
 <p>z2:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>[00][01][10][11]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[00][01][10][11]
 [02][03][12][13]
 
 http://myhost.com/mapcache/ve?LAYER=osm@WGS84&amp;tile=00
@@ -499,7 +471,7 @@ http://myhost.com/mapcache/ve?LAYER=osm@WGS84&amp;tile=12
 http://myhost.com/mapcache/ve?LAYER=osm@WGS84&amp;tile=13
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">etc</span><span class="o">.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">etc</span><span class="o">.</span>
 </pre></div>
 </div>
 </div>
@@ -513,12 +485,14 @@ http://myhost.com/mapcache/ve?LAYER=osm@WGS84&amp;tile=13
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Recherche rapide</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
@@ -580,8 +554,8 @@ http://myhost.com/mapcache/ve?LAYER=osm@WGS84&amp;tile=13
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Mis à jour le 2018-07-30.
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+      Mis à jour le 2018-07-31.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>

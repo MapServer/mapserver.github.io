@@ -1,25 +1,15 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ar">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>MS RFC 100: Support for tile index with mixed SRS in raster layers &#8212; MapServer 7.2.0 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '7.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -28,12 +18,9 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="MapServer 7.2.0 documentation" href="../../index.html" />
-    <link rel="up" title="Request for Comments" href="index.html" />
     <link rel="next" title="MS RFC 101: Add Support for Content Dependent Legend Responses" href="ms-rfc-101.html" />
     <link rel="prev" title="MS RFC 99: Remove support for GD renderer" href="ms-rfc-99.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -178,13 +165,13 @@ it is desirable to have support for tile index with rasters of heterogeneous SRS
 <div class="section" id="proposed-solution">
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Permalink to this headline">¶</a></h2>
 <p>In the case where a tile index has tiles with mixed SRS, a new keyword, TILESRS
-&#8220;field_name&#8221;, must be added in a LAYER block to specify that the field
-&#8220;field_name&#8221; contains the SRS of each tile. The value of that field must be a
+&quot;field_name&quot;, must be added in a LAYER block to specify that the field
+&quot;field_name&quot; contains the SRS of each tile. The value of that field must be a
 SRS expressed as WKT, PROJ.4 string, or EPSG:xxxx code (actually any string that
 is parsed by OSRSetFromUserInput()). If, for a tile, the field is empty, an
 attempt will be made to fetch the SRS from the tile raster directly with
 GDALGetProjectionRef().</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
     <span class="k">NAME</span> <span class="s">&quot;tile_index_mixed_srs_26711&quot;</span>
     <span class="k">TYPE</span> <span class="nb">RASTER</span>
     <span class="k">STATUS</span> <span class="nb">ON</span>
@@ -203,12 +190,12 @@ LAYER block), so that spatial queries in the tileindex can work.</p>
 <p>Such tileindex files that have tiles with mixed SRS can be generated with an
 updated version of the GDAL gdaltindex utility, by using the -t_srs and
 -src_srs_name options.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gdaltindex</span> <span class="o">-</span><span class="n">t_srs</span> <span class="n">EPSG</span><span class="p">:</span><span class="mi">4326</span> <span class="o">-</span><span class="n">src_srs_name</span> <span class="n">src_srs</span> <span class="n">mytileindex</span><span class="o">.</span><span class="n">shp</span> <span class="o">*.</span><span class="n">tif</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gdaltindex</span> <span class="o">-</span><span class="n">t_srs</span> <span class="n">EPSG</span><span class="p">:</span><span class="mi">4326</span> <span class="o">-</span><span class="n">src_srs_name</span> <span class="n">src_srs</span> <span class="n">mytileindex</span><span class="o">.</span><span class="n">shp</span> <span class="o">*.</span><span class="n">tif</span>
 </pre></div>
 </div>
 <p>Those tile index can be used for example in WMS or WCS layers. For WCS layers,
 a few metadata fields must be specified in the LAYER definition, so as to
-define a &#8220;virtual dataset&#8221; coverage (see <a class="reference internal" href="../../ogc/wcs_server.html#wcs-server"><span class="std std-ref">WCS Server</span></a>).
+define a &quot;virtual dataset&quot; coverage (see <a class="reference internal" href="../../ogc/wcs_server.html#wcs-server"><span class="std std-ref">WCS Server</span></a>).
 A new GDAL python sample script, wcs_virtds_params.py, will be added to ease the
 writing of such layers.</p>
 </div>
@@ -253,12 +240,12 @@ where a tile index with tiles in SRS=srs1 is requested with SRS=srs2.</p>
 <div class="section" id="related-bug-fixes">
 <h3>3.5 Related bug fixes<a class="headerlink" href="#related-bug-fixes" title="Permalink to this headline">¶</a></h3>
 <p>The following syntax did not work properly in layers that referred to a TILEINDEX.</p>
-<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">PROJECTION</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">PROJECTION</span>
     <span class="nb">AUTO</span>
 <span class="k">END</span>
 </pre></div>
 </div>
-<p>It couldn&#8217;t fetch the projection from the tile index layer, even when it was
+<p>It couldn't fetch the projection from the tile index layer, even when it was
 available.</p>
 <p>Another related fix/enhancement is to be able to guess the SRS of a shapefile,
 from its associated .prj file, when PROJECTION AUTO is specified in its LAYER
@@ -268,7 +255,7 @@ shapefile layers, to what was proposed in <a class="reference internal" href="ms
 implementation. The implementation for that PROJECTION AUTO mechanism follows
 what already works for raster layers with a single raster, and just tries to
 resolve layer-&gt;projection to an actual projection when
-layer-&gt;projection.args[0] == &#8220;auto&#8221;, before doing any reprojection.</p>
+layer-&gt;projection.args[0] == &quot;auto&quot;, before doing any reprojection.</p>
 </div>
 <div class="section" id="restrictions">
 <h3>3.6 Restrictions<a class="headerlink" href="#restrictions" title="Permalink to this headline">¶</a></h3>
@@ -312,11 +299,11 @@ match with the value of the TILESRS keyword. It will also support created
 tileindex in all supported OGR formats with the -f option (up to now only
 shapefile were supported).</p>
 <p>Example for a shapefile tileindex :</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gdaltindex</span> <span class="o">-</span><span class="n">t_srs</span> <span class="n">EPSG</span><span class="p">:</span><span class="mi">26711</span> <span class="o">-</span><span class="n">src_srs_name</span> <span class="n">src_srs</span> <span class="n">tile_index_mixed_srs_26711</span><span class="o">.</span><span class="n">shp</span> <span class="o">*.</span><span class="n">tif</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gdaltindex</span> <span class="o">-</span><span class="n">t_srs</span> <span class="n">EPSG</span><span class="p">:</span><span class="mi">26711</span> <span class="o">-</span><span class="n">src_srs_name</span> <span class="n">src_srs</span> <span class="n">tile_index_mixed_srs_26711</span><span class="o">.</span><span class="n">shp</span> <span class="o">*.</span><span class="n">tif</span>
 </pre></div>
 </div>
 <p>Example for a PostGIS layer tileindex :</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gdaltindex</span> <span class="o">-</span><span class="n">f</span> <span class="s2">&quot;PostgreSQL&quot;</span> <span class="o">-</span><span class="n">t_srs</span> <span class="n">EPSG</span><span class="p">:</span><span class="mi">26711</span> <span class="o">-</span><span class="n">src_srs_name</span> <span class="n">src_srs</span> <span class="o">-</span><span class="n">lyr_name</span> <span class="n">index_26711</span> <span class="n">pg</span><span class="p">:</span><span class="n">dbname</span><span class="o">=</span><span class="n">autotest</span> <span class="o">*.</span><span class="n">tif</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gdaltindex</span> <span class="o">-</span><span class="n">f</span> <span class="s2">&quot;PostgreSQL&quot;</span> <span class="o">-</span><span class="n">t_srs</span> <span class="n">EPSG</span><span class="p">:</span><span class="mi">26711</span> <span class="o">-</span><span class="n">src_srs_name</span> <span class="n">src_srs</span> <span class="o">-</span><span class="n">lyr_name</span> <span class="n">index_26711</span> <span class="n">pg</span><span class="p">:</span><span class="n">dbname</span><span class="o">=</span><span class="n">autotest</span> <span class="o">*.</span><span class="n">tif</span>
 </pre></div>
 </div>
 </div>
@@ -325,10 +312,10 @@ shapefile were supported).</p>
 <p>A sample script, wcs_virtds_params.py, will be added to generate the WCS
 layer definition from a tileindex with mixed SRS.</p>
 <p>Example for a shapefile tileindex :</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ python swig/python/samples/wcs_virtds_params.py tile_index_mixed_srs_26711.shp -src_srs_name src_srs
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python swig/python/samples/wcs_virtds_params.py tile_index_mixed_srs_26711.shp -src_srs_name src_srs
 </pre></div>
 </div>
-<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
     <span class="k">NAME</span> <span class="s">&quot;tile_index_mixed_srs_26711&quot;</span>
     <span class="k">TYPE</span> <span class="nb">RASTER</span>
     <span class="k">STATUS</span> <span class="nb">ON</span>
@@ -350,10 +337,10 @@ layer definition from a tileindex with mixed SRS.</p>
 </pre></div>
 </div>
 <p>Example for a PostGIS layer tileindex :</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ python swig/python/samples/wcs_virtds_params.py pg:dbname=autotest -lyr_name index_26711 -src_srs_name src_srs
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python swig/python/samples/wcs_virtds_params.py pg:dbname=autotest -lyr_name index_26711 -src_srs_name src_srs
 </pre></div>
 </div>
-<div class="highlight-mapfile"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
     <span class="k">NAME</span> <span class="s">&quot;index_26711_tileindex&quot;</span>
     <span class="k">TYPE</span> <span class="nb">POLYGON</span>
     <span class="k">STATUS</span> <span class="nb">OFF</span>
@@ -402,12 +389,14 @@ DanielM, JeffM and SteveL</p>
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
@@ -470,8 +459,8 @@ DanielM, JeffM and SteveL</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2018, Open Source Geospatial Foundation.
-      Last updated on 2018-07-30.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+      Last updated on 2018-07-31.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>
