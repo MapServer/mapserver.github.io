@@ -242,6 +242,13 @@ $ <span class="nb">cd</span> basemaps
 </pre></div>
 </div>
 <p>You can add all customs values from the main Makefile, here some example:</p>
+<div class="highlight-makefile notranslate"><div class="highlight"><pre><span></span><span class="nv">OSM_SRID</span> <span class="o">=</span> <span class="m">2154</span>
+<span class="nv">OSM_DB_CONNECTION</span> <span class="o">=</span> <span class="nv">host</span><span class="o">=</span>localhost <span class="nv">dbname</span><span class="o">=</span>osm <span class="nv">user</span><span class="o">=</span>www-data
+<span class="nv">password</span><span class="o">=</span>www-data <span class="nv">port</span><span class="o">=</span><span class="m">5432</span>
+
+<span class="cp">include Makefile</span>
+</pre></div>
+</div>
 <p>Here we cutomize the SRID of the data (see above when we imported data into the
 database) and the database connection.</p>
 </div>
@@ -259,6 +266,20 @@ database) and the database connection.</p>
 </pre></div>
 </div>
 <p>With such a content:</p>
+<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;VirtualHost</span> <span class="s">\*:80</span><span class="nt">&gt;</span>
+   <span class="nb">ErrorLog</span> ${APACHE_LOG_DIR}/osm_error.log
+   <span class="nb">CustomLog</span> ${APACHE_LOG_DIR}/osm_access.log combined
+
+   <span class="nb">ScriptAlias</span> <span class="sx">/osm-default</span> <span class="sx">/usr/lib/cgi-bin/mapserv</span>
+   <span class="nt">&lt;Location</span> <span class="s">/osm-default</span><span class="nt">&gt;</span>
+      <span class="c">#    Order Deny,Allow</span>
+      <span class="c">#    Deny from all</span>
+      <span class="c">#    Allow from 127.0.1.1 ::1</span>
+      <span class="nb">SetEnv</span> MS_MAPFILE <span class="sx">/path/to/basemaps/osm-default.map</span>
+   <span class="nt">&lt;/Location&gt;</span>
+<span class="nt">&lt;/VirtualHost&gt;</span>
+</pre></div>
+</div>
 <p>Finally enable this Apache virtual conf:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cp osm.conf /etc/apache/site-available/conf/
 $ sudo a2ensite osm
