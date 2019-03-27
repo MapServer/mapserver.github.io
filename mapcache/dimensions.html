@@ -125,9 +125,9 @@
 </tr>
 <tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Jerome Boue</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Last Updated:</th><td class="field-body">2018/05/04</td>
+<tr class="field-even field"><th class="field-name">Last Updated:</th><td class="field-body">2018/06/29</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">1.6.1</td>
+<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">1.8</td>
 </tr>
 </tbody>
 </table>
@@ -169,8 +169,9 @@ request (minus the <code class="docutils literal notranslate"><span class="pre">
 <li><code class="docutils literal notranslate"><span class="pre">default</span></code> (required): The default value for the dimension if none is
 explicitly provided in the WMS request.</li>
 <li><code class="docutils literal notranslate"><span class="pre">type</span></code> (required): MapCache defines several ways for specifying a
-dimension: <code class="docutils literal notranslate"><span class="pre">values</span></code>, <code class="docutils literal notranslate"><span class="pre">regex</span></code>, <code class="docutils literal notranslate"><span class="pre">sqlite</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code>. They are
-described in the following sections.</li>
+dimension: <code class="docutils literal notranslate"><span class="pre">values</span></code>, <code class="docutils literal notranslate"><span class="pre">regex</span></code>, <code class="docutils literal notranslate"><span class="pre">sqlite</span></code>, <code class="docutils literal notranslate"><span class="pre">postgresql</span></code>,
+<code class="docutils literal notranslate"><span class="pre">elasticsearch</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code>. They are described in the following
+sections.</li>
 <li><code class="docutils literal notranslate"><span class="pre">unit</span></code> (optional): dimension unit. This information is used only in the
 GetCapabilities response.</li>
 </ul>
@@ -178,15 +179,17 @@ GetCapabilities response.</li>
 </div>
 <div class="section" id="dimension-types">
 <h3>Dimension Types<a class="headerlink" href="#dimension-types" title="Permalink to this headline">¶</a></h3>
-<p>Several types of dimensions are supported by MapCache: Values, Regex, SQLite
-and Time. They can be classified into two groups depending on how dimension values are defined:</p>
+<p>Several types of dimensions are supported by MapCache: Values, Regex, SQLite,
+PostgreSQL, ElasticSearch and Time. They can be classified into two groups
+depending on how dimension values are defined:</p>
 <blockquote>
 <div><ul class="simple">
 <li>First level dimension types: Values and Regex. Dimensions values are
 statically specified in the configuration file.</li>
-<li>Second level dimensions types: SQLite and Time. Dimensions values are
-stored in a dynamic backend (a SQLite file) so that an update in the
-dimension values does not involve a server restart.</li>
+<li>Second level dimensions types: SQLite, PostgreSQL, ElasticSearch and Time.
+Dimensions values are stored in a dynamic backend (SQLite file, PostgreSQL
+database or ElasticSearch index) so that an update in the dimension values
+does not involve a server restart.</li>
 </ul>
 </div></blockquote>
 </div>
@@ -236,51 +239,10 @@ are two consecutive dots (..) in the path, to prevent file-system traversal.</p>
 </div>
 <div class="section" id="second-level-dimensions">
 <h2>Second Level Dimensions<a class="headerlink" href="#second-level-dimensions" title="Permalink to this headline">¶</a></h2>
-<p>Second level dimensions store values in a dynamic back-end, initially a SQLite
-file. This allows for adding new dimension values without modifying MapCache
-configuration file, which otherwise would need to restart the server.</p>
-<div class="section" id="time-dimensions">
-<h3>Time Dimensions<a class="headerlink" href="#time-dimensions" title="Permalink to this headline">¶</a></h3>
-<p>MapCache supports WMTS and WMS requests that include a TIME parameter, for both timestamps and time intervals.
-See <a class="reference internal" href="../development/rfc/ms-rfc-96.html#rfc96"><span class="std std-ref">MS RFC 96: Time Dimension Support in MapCache Tilesets</span></a> initial proposal for further details.</p>
-<p>Defining a Time dimension in MapCache involves a SQLite back-end. Two elements
-must be provided:</p>
-<blockquote>
-<div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">&lt;dbfile&gt;</span></code>: Location of the SQLite file implementing the time dimension</li>
-<li><code class="docutils literal notranslate"><span class="pre">&lt;query&gt;</span></code>: SQL query returning the list of available timestamp values
-within a given time interval. In that query, start time and end time are
-represented by the respective placeholders <code class="docutils literal notranslate"><span class="pre">:start_timestamp</span></code> and
-<code class="docutils literal notranslate"><span class="pre">:end_time_stamp</span></code>. Returned values shall be in <code class="docutils literal notranslate"><span class="pre">yyyy-mm-ddThh:mm:ssZ</span></code>
-time format, as specified in <a class="reference external" href="https://tools.ietf.org/html/rfc3339">RFC 3339</a>, but restricted to UTC.</li>
-</ul>
-</div></blockquote>
-<p>Time values in the SQLite back-end are expressed in Unix time, i.e. the number
-of seconds that have elapsed since January 1, 1970 (midnight UTC).</p>
-<p>Querying the back-end with an interval may result in returning multiple
-timestamp values, each of which referencing distinct tiles. Assembling these
-tiles is described in <a class="reference internal" href="#tile-assembly-policies">Tile Assembly Policies</a> section below.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- &quot;time&quot; dimension</span>
-
-<span class="c">     This example defines a &quot;time&quot; dimension whose possible values are</span>
-<span class="c">     stored in the /path/to/mapcache-time.sqlite SQLite file. The default</span>
-<span class="c">     value is &quot;2010&quot;.</span>
-
-<span class="c">     A WMS request with that dimension may contain, e.g.</span>
-<span class="c">     &quot;... &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
-<span class="c">--&gt;</span>
-<span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;time&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;2010&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;dbfile&gt;</span>/path/to/mapcache-time.sqlite<span class="nt">&lt;/dbfile&gt;</span>
-    <span class="nt">&lt;query&gt;</span>
-         SELECT strftime(&quot;%Y-%m-%dT%H:%M:%SZ&quot;,ts) FROM time
-          WHERE ts <span class="ni">&amp;gt;</span>= datetime(:start_timestamp,&quot;unixepoch&quot;)
-            AND ts <span class="ni">&amp;lt;</span>= datetime(:end_timestamp,&quot;unixepoch&quot;)
-       ORDER BY ts DESC
-    <span class="nt">&lt;/query&gt;</span>
-<span class="nt">&lt;/dimension&gt;</span>
-</pre></div>
-</div>
-</div>
+<p>Second level dimensions store values in a dynamic back-end, a SQLite file, a
+PostgreSQL database or an ElasticSearch index. This allows for adding new
+dimension values without modifying MapCache configuration file, which otherwise
+would need to restart the server.</p>
 <div class="section" id="sqlite-dimensions">
 <h3>SQLite Dimensions<a class="headerlink" href="#sqlite-dimensions" title="Permalink to this headline">¶</a></h3>
 <p>In a SQLite dimension, dimension values are stored in a SQLite file. Moreover,
@@ -326,6 +288,18 @@ performed at the “product” sub-dimension level. In case of a cache miss, the
 <p>Querying the back-end may then result in returning multiple sub-dimension
 values, each of which referencing distinct tiles. Assembling these tiles is
 described in <a class="reference internal" href="#tile-assembly-policies">Tile Assembly Policies</a> section below.</p>
+<p>A SQLite dimension is configured by specifying three elements:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">&lt;dbfile&gt;</span></code>: Location of the SQLite file implementing the dimension</li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;list_query&gt;</span></code>: SQL query returning all sub-dimension values for the
+dimension, e.g. <strong>spot-img1</strong>, <strong>spot-img2</strong>, <strong>phr-img1</strong>, <strong>phr-img2</strong>
+and  <strong>phr-img3</strong> in the “sensor” dimension example.</li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code>: SQL query returning the list of sub-dimension values
+for a given dimension value, e.g. <strong>spot-img1</strong> and <strong>spot-img2</strong> for the
+<strong>spot</strong> dimension value in the “sensor” dimension example.</li>
+</ul>
+</div></blockquote>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- &quot;sqlite&quot; dimension</span>
 
 <span class="c">     This example defines a &quot;sensor&quot; dimension whose possible values are</span>
@@ -336,16 +310,393 @@ described in <a class="reference internal" href="#tile-assembly-policies">Tile A
 <span class="c">     &quot;... &amp;dim_sensor=spot&amp; ...&quot;</span>
 <span class="c">--&gt;</span>
 <span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">name=</span><span class="s">&quot;sensor&quot;</span> <span class="na">default=</span><span class="s">&quot;phr&quot;</span><span class="nt">&gt;</span>
+
+   <span class="c">&lt;!-- Access Point --&gt;</span>
    <span class="nt">&lt;dbfile&gt;</span>/data/sensor.sqlite<span class="nt">&lt;/dbfile&gt;</span>
+
+   <span class="c">&lt;!-- All-values Query --&gt;</span>
    <span class="nt">&lt;list_query&gt;</span>
       SELECT distinct(product) FROM dim
    <span class="nt">&lt;/list_query&gt;</span>
+
+   <span class="c">&lt;!-- Selected-values Query --&gt;</span>
    <span class="nt">&lt;validate_query&gt;</span>
       SELECT product FROM dim
        WHERE sensor=:dim
    <span class="nt">&lt;/validate_query&gt;</span>
+
 <span class="nt">&lt;/dimension&gt;</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="postgresql-dimensions">
+<h3>PostgreSQL Dimensions<a class="headerlink" href="#postgresql-dimensions" title="Permalink to this headline">¶</a></h3>
+<p>PostgreSQL dimensions are very similar to SQLite dimensions. In particular, the
+sub-dimension feature described in the section above is also available with
+PostgreSQL dimensions. They differ only in the back-end implementation which is
+a PostgreSQL database, and in the way they are configured. A PostgreSQL
+dimension is configured by specifying three elements:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">&lt;connection&gt;</span></code>: Connection information of the PostgreSQL database
+implementing the dimension, as expected by the <a class="reference external" href="https://www.postgresql.org/docs/current/static/libpq-connect.html#id-1.7.3.8.2.12.2.1.2">PQconnectdb()</a>
+function of the libpq - C library.</li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;list_query&gt;</span></code>: SQL query returning all sub-dimension values for the
+dimension, e.g. <strong>spot-img1</strong>, <strong>spot-img2</strong>, <strong>phr-img1</strong>, <strong>phr-img2</strong>
+and  <strong>phr-img3</strong> in the “sensor” dimension example.</li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code>: SQL query returning the list of sub-dimension values
+for a given dimension value, e.g. <strong>spot-img1</strong> and <strong>spot-img2</strong> for the
+<strong>spot</strong> dimension value in the “sensor” dimension example.</li>
+</ul>
+</div></blockquote>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- &quot;postgresql&quot; dimension</span>
+
+<span class="c">     This example defines a &quot;sensor&quot; dimension whose possible values are</span>
+<span class="c">     stored in the postgresql://mapcache:mapcache@localhost:5433/mapcache</span>
+<span class="c">     PostgreSQL database. The default value is &quot;phr&quot;.</span>
+
+<span class="c">     A WMS request with that dimension may contain, e.g.</span>
+<span class="c">     &quot;... &amp;dim_sensor=spot&amp; ...&quot;</span>
+<span class="c">--&gt;</span>
+<span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;postgresql&quot;</span> <span class="na">name=</span><span class="s">&quot;sensor&quot;</span> <span class="na">default=</span><span class="s">&quot;phr&quot;</span><span class="nt">&gt;</span>
+
+   <span class="c">&lt;!-- Access Point --&gt;</span>
+  <span class="nt">&lt;connection&gt;</span>
+    host=localhost user=mapcache password=mapcache dbname=mapcache port=5433
+  <span class="nt">&lt;/connection&gt;</span>
+
+   <span class="c">&lt;!-- All-values Query --&gt;</span>
+  <span class="nt">&lt;list_query&gt;</span>SELECT distinct(product) FROM dim<span class="nt">&lt;/list_query&gt;</span>
+
+   <span class="c">&lt;!-- Selected-values Query --&gt;</span>
+  <span class="nt">&lt;validate_query&gt;</span>SELECT product FROM dim WHERE sensor=:dim<span class="nt">&lt;/validate_query&gt;</span>
+
+<span class="nt">&lt;/dimension&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="elasticsearch-dimensions">
+<h3>ElasticSearch Dimensions<a class="headerlink" href="#elasticsearch-dimensions" title="Permalink to this headline">¶</a></h3>
+<p>ElasticSearch dimensions are similar to SQLite or PostgreSQL dimensions. In
+particular, the sub-dimension feature described in the section above is also
+available with ElasticSearch dimensions. ElasticSearch main difference with
+SQLite and PostgreSQL is its query language, Query-DSL, based on JSON instead
+of SQL. Therefore, <code class="docutils literal notranslate"><span class="pre">&lt;list_query&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code> elements shall
+contain queries expressed in that language. Inserting JSON data in XML
+configuration may need to encapsulate it in a <code class="docutils literal notranslate"><span class="pre">&lt;![CDATA[</span> <span class="pre">...</span> <span class="pre">]]&gt;</span></code> element.</p>
+<p>In addition, the complex structure of ElasticSearch responses, also expressed
+in JSON, raises the need for extraction instructions to get sub-dimension
+values from query responses.</p>
+<p>For example, let’s assume that this ElasticSearch query:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>   <span class="nt">&quot;size&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;aggs&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;distinct_product&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;terms&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;product/keyword&quot;</span> <span class="p">}</span> <span class="p">}</span> <span class="p">},</span>
+    <span class="nt">&quot;query&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;term&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;sensor&quot;</span><span class="p">:</span> <span class="s2">&quot;phr&quot;</span> <span class="p">}</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>returns this response:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>   <span class="nt">&quot;took&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;timed_out&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;_shards&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;total&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nt">&quot;successful&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nt">&quot;skipped&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nt">&quot;failed&quot;</span><span class="p">:</span> <span class="mi">0</span> <span class="p">},</span>
+    <span class="nt">&quot;hits&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;total&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nt">&quot;max_score&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nt">&quot;hits&quot;</span><span class="p">:</span> <span class="p">[]</span> <span class="p">},</span>
+    <span class="nt">&quot;aggregations&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;distinct_product&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;doc_count_error_upper_bound&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;sum_other_doc_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;buckets&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span> <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;phr_img1&quot;</span><span class="p">,</span> <span class="nt">&quot;doc_count&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;phr_img2&quot;</span><span class="p">,</span> <span class="nt">&quot;doc_count&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;phr_img3&quot;</span><span class="p">,</span> <span class="nt">&quot;doc_count&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The expected sub-dimension values are then:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="s2">&quot;phr_img1&quot;</span><span class="p">,</span> <span class="s2">&quot;phr_img2&quot;</span><span class="p">,</span> <span class="s2">&quot;phr_img3&quot;</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>This list is obtained by extracting the <code class="docutils literal notranslate"><span class="pre">aggregations</span></code> item from the outer
+dictionary, then <code class="docutils literal notranslate"><span class="pre">distinct_product</span></code> , then <code class="docutils literal notranslate"><span class="pre">buckets</span></code>. Finally the <code class="docutils literal notranslate"><span class="pre">key</span></code>
+item is to be extracted from each dictionary of the <code class="docutils literal notranslate"><span class="pre">bucket</span></code> list. The
+extraction instructions take the form of a path-like list of keywords to be
+used to extract sub-dimension values from JSON response provided by
+ElasticSearch:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="s2">&quot;aggregations&quot;</span><span class="p">,</span> <span class="s2">&quot;distinct_product&quot;</span><span class="p">,</span> <span class="s2">&quot;buckets&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>This is specified in the MapCache configuration file by way of new XML
+elements, namely  <code class="docutils literal notranslate"><span class="pre">&lt;list_response&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;validate_response&gt;</span></code>, containing
+extraction instructions respectively for <code class="docutils literal notranslate"><span class="pre">&lt;list_query&gt;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code> queries.</p>
+<p>An ElasticSearch dimensions is defined by specifying five elements:</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">&lt;http&gt;</span></code>: Connection information of the ElasticSearch index implementing
+the dimension. This element contains two sub-elements:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">&lt;url&gt;</span></code>: Search URL of the ElasticSearch index</li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;headers&gt;</span></code>: HTTP headers needed to access the ElasticSearch index.
+It must contain the tag:
+<code class="docutils literal notranslate"><span class="pre">&lt;Content-Type&gt;application/json&lt;/Content-Type&gt;</span></code>.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">&lt;list_query&gt;</span></code>: <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html">Query DSL</a> query for getting all sub-dimension values
+for the dimension. This query is expressed in JSON format and may need to
+be escaped in a <code class="docutils literal notranslate"><span class="pre">&lt;![CDATA[</span> <span class="pre">...</span> <span class="pre">]]&gt;</span></code> tag.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code>: <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html">Query DSL</a> query for getting the list of
+sub-dimension values for a given dimension value. This query is expressed
+in JSON format and may need to be escaped in a <code class="docutils literal notranslate"><span class="pre">&lt;![CDATA[</span> <span class="pre">...</span> <span class="pre">]]&gt;</span></code> tag.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">&lt;list_response&gt;</span></code>: List of successive keywords needed to extract actual
+sub-dimension values from the raw ElasticSearch response to the
+<code class="docutils literal notranslate"><span class="pre">&lt;list_query&gt;</span></code> query.</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">&lt;validate_response&gt;</span></code>: List of successive keywords needed to extract
+actual sub-dimension values from the raw ElasticSearch response to the
+<code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code> query.</p>
+</li>
+</ul>
+</div></blockquote>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- &quot;elasticsearch&quot; dimension</span>
+
+<span class="c">     This example defines a &quot;sensor&quot; dimension whose possible values are</span>
+<span class="c">     stored in the http://localhost:9200/sensor ElasticSearch index. The</span>
+<span class="c">     default value is &quot;phr&quot;.</span>
+
+<span class="c">     A WMS request with that dimension may contain, e.g.</span>
+<span class="c">     &quot;... &amp;dim_sensor=spot&amp; ...&quot;</span>
+<span class="c">--&gt;</span>
+<span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;elasticsearch&quot;</span> <span class="na">name=</span><span class="s">&quot;sensor&quot;</span> <span class="na">default=</span><span class="s">&quot;phr&quot;</span><span class="nt">&gt;</span>
+
+  <span class="c">&lt;!-- Access Point --&gt;</span>
+  <span class="nt">&lt;http&gt;</span>
+    <span class="nt">&lt;url&gt;</span>http://localhost:9200/sensor/_search<span class="nt">&lt;/url&gt;</span>
+    <span class="nt">&lt;headers&gt;</span>
+      <span class="nt">&lt;Content-Type&gt;</span>application/json<span class="nt">&lt;/Content-Type&gt;</span>
+    <span class="nt">&lt;/headers&gt;</span>
+  <span class="nt">&lt;/http&gt;</span>
+
+  <span class="c">&lt;!-- Selected-values Query --&gt;</span>
+  <span class="nt">&lt;validate_query&gt;</span><span class="cp">&lt;![CDATA[</span>
+<span class="cp">    { &quot;size&quot;: 0,</span>
+<span class="cp">      &quot;aggs&quot;: {</span>
+<span class="cp">        &quot;products&quot;: { &quot;terms&quot;: { &quot;field&quot;: &quot;product.keyword&quot; } }</span>
+<span class="cp">      },</span>
+<span class="cp">      &quot;query&quot;: { &quot;term&quot;: { &quot;sensor&quot;: &quot;:dim&quot; } }</span>
+<span class="cp">    }</span>
+<span class="cp">  ]]&gt;</span><span class="nt">&lt;/validate_query&gt;</span>
+
+  <span class="c">&lt;!-- Selected-values Response Extration Instructions --&gt;</span>
+  <span class="nt">&lt;validate_response&gt;</span><span class="cp">&lt;![CDATA[</span>
+<span class="cp">    [ &quot;aggregations&quot;, &quot;products&quot;, &quot;buckets&quot;, &quot;key&quot; ]</span>
+<span class="cp">  ]]&gt;</span><span class="nt">&lt;/validate_response&gt;</span>
+
+  <span class="c">&lt;!-- All-values Query --&gt;</span>
+  <span class="nt">&lt;list_query&gt;</span><span class="cp">&lt;![CDATA[</span>
+<span class="cp">    { &quot;size&quot;: 0,</span>
+<span class="cp">      &quot;aggs&quot;: {</span>
+<span class="cp">        &quot;products&quot;: { &quot;terms&quot;: { &quot;field&quot;: &quot;product.keyword&quot; } }</span>
+<span class="cp">      }</span>
+<span class="cp">    }</span>
+<span class="cp">  ]]&gt;</span><span class="nt">&lt;/list_query&gt;</span>
+
+  <span class="c">&lt;!-- All-values Response Extration Instructions --&gt;</span>
+  <span class="nt">&lt;list_response&gt;</span><span class="cp">&lt;![CDATA[</span>
+<span class="cp">    [ &quot;aggregations&quot;, &quot;products&quot;, &quot;buckets&quot;, &quot;key&quot; ]</span>
+<span class="cp">  ]]&gt;</span><span class="nt">&lt;/list_response&gt;</span>
+<span class="nt">&lt;/dimension&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="time-dimensions">
+<h3>Time Dimensions<a class="headerlink" href="#time-dimensions" title="Permalink to this headline">¶</a></h3>
+<p>MapCache supports WMTS and WMS requests that include a TIME parameter, for both
+timestamps and time intervals.  See <a class="reference internal" href="../development/rfc/ms-rfc-96.html#rfc96"><span class="std std-ref">MS RFC 96: Time Dimension Support in
+MapCache Tilesets</span></a> initial proposal for further details.</p>
+<p>Up to Mapcache 1.6.1, defining a Time dimension involves a SQLite back-end. Two
+elements must be provided:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">&lt;dbfile&gt;</span></code>: Location of the SQLite file implementing the time dimension</li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;query&gt;</span></code>: SQL query returning the list of available timestamp values
+within a given time interval. In that query, start time and end time are
+represented by the respective placeholders <code class="docutils literal notranslate"><span class="pre">:start_timestamp</span></code> and
+<code class="docutils literal notranslate"><span class="pre">:end_time_stamp</span></code>. Returned values shall be in <code class="docutils literal notranslate"><span class="pre">yyyy-mm-ddThh:mm:ssZ</span></code>
+time format, as specified in <a class="reference external" href="https://tools.ietf.org/html/rfc3339">RFC 3339</a>, but restricted to UTC.</li>
+</ul>
+</div></blockquote>
+<p>From MapCache 1.8 on, dynamic back-ends for Time dimensions can be PostgreSQL
+databases or ElasticSearch indices in addition to SQLite files. Configuring a
+Time dimension with a specific back-end is made by setting a <code class="docutils literal notranslate"><span class="pre">time=&quot;true&quot;</span></code>
+attribute within a SQLite, PostgreSQL or ElasticSearch dimension configuration.</p>
+<p>Still, MapCache keeps an (almost) backward compatible configuration of Time
+dimension with an implicit SQLite back-end. Example in the following section
+highlights differences.</p>
+<p>Time values in the dynamic back-end are expressed in Unix time, i.e. the number
+of seconds that have elapsed since January 1, 1970 (midnight UTC).</p>
+<p>Querying the back-end with an interval may result in returning multiple
+timestamp values, each of which referencing distinct tiles. Assembling these
+tiles is described in <a class="reference internal" href="#tile-assembly-policies">Tile Assembly Policies</a> section below.</p>
+<div class="section" id="configuring-a-time-dimension-using-a-default-sqlite-back-end">
+<h4>Configuring a Time Dimension using a default SQLite back-end<a class="headerlink" href="#configuring-a-time-dimension-using-a-default-sqlite-back-end" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="first last highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- &quot;time&quot; dimension</span>
+
+<span class="c">     This example defines a &quot;time&quot; dimension whose possible values</span>
+<span class="c">     are stored in the /path/to/mapcache-time.sqlite SQLite file. The</span>
+<span class="c">     default value is &quot;2010&quot;.</span>
+
+<span class="c">     A WMS request with that dimension may contain, e.g.  &quot;...</span>
+<span class="c">     &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
+<span class="c">--&gt;</span>
+<span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;time&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;2010&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;dbfile&gt;</span>/path/to/mapcache-time.sqlite<span class="nt">&lt;/dbfile&gt;</span>
+<span class="hll">    <span class="nt">&lt;query&gt;</span>
+</span>         SELECT strftime(&quot;%Y-%m-%dT%H:%M:%SZ&quot;,ts) FROM time
+          WHERE ts <span class="ni">&amp;gt;</span>= datetime(:start_timestamp,&quot;unixepoch&quot;)
+            AND ts <span class="ni">&amp;lt;</span>= datetime(:end_timestamp,&quot;unixepoch&quot;)
+       ORDER BY ts DESC
+<span class="hll">    <span class="nt">&lt;/query&gt;</span>
+</span>
+<span class="nt">&lt;/dimension&gt;</span>
+</pre></div>
+</div>
+</td>
+<td><div class="first last highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- &quot;time&quot; dimension</span>
+
+<span class="c">     This example defines a &quot;time&quot; dimension whose possible values</span>
+<span class="c">     are stored in the /path/to/mapcache-time.sqlite SQLite file. The</span>
+<span class="c">     default value is &quot;2010&quot;.</span>
+
+<span class="c">     A WMS request with that dimension may contain, e.g.  &quot;...</span>
+<span class="c">     &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
+<span class="c">--&gt;</span>
+<span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;time&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;2010&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;dbfile&gt;</span>/path/to/mapcache-time.sqlite<span class="nt">&lt;/dbfile&gt;</span>
+<span class="hll">    <span class="nt">&lt;validate_query&gt;</span>
+</span>         SELECT strftime(&quot;%Y-%m-%dT%H:%M:%SZ&quot;,ts) FROM time
+          WHERE ts <span class="ni">&amp;gt;</span>= datetime(:start_timestamp,&quot;unixepoch&quot;)
+            AND ts <span class="ni">&amp;lt;</span>= datetime(:end_timestamp,&quot;unixepoch&quot;)
+       ORDER BY ts DESC
+<span class="hll">    <span class="nt">&lt;/validate_query&gt;</span>
+</span><span class="hll">    <span class="nt">&lt;list_query&gt;</span>SELECT ts FROM time<span class="nt">&lt;/list_query&gt;</span>
+</span><span class="nt">&lt;/dimension&gt;</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td>Up to MapCache 1.6.1</td>
+<td>From MapCache 1.8 on</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="configuring-a-time-dimension-using-an-explicit-back-end">
+<h4>Configuring a Time dimension using an explicit back-end<a class="headerlink" href="#configuring-a-time-dimension-using-an-explicit-back-end" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span> <span class="c">&lt;!-- &quot;time&quot; dimension, &quot;new-style&quot; definition using a SQLite back-end</span>
+
+<span class="c">      This example defines a &quot;time&quot; dimension whose possible values are</span>
+<span class="c">      stored in the /data/times.sqlite SQLite file. The default value is</span>
+<span class="c">      &quot;d1&quot;.</span>
+
+<span class="c">      A WMS request with that dimension may contain, e.g.</span>
+<span class="c">      &quot;... &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
+<span class="c"> --&gt;</span>
+<span class="hll"> <span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;d1&quot;</span> <span class="na">time=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+</span>   <span class="nt">&lt;dbfile&gt;</span>/data/times.sqlite<span class="nt">&lt;/dbfile&gt;</span>
+   <span class="nt">&lt;list_query&gt;</span>SELECT ts FROM timedim<span class="nt">&lt;/list_query&gt;</span>
+   <span class="nt">&lt;validate_query&gt;</span>
+        SELECT strftime(&quot;%Y-%m-%dT%H:%M:%SZ&quot;,ts) FROM timedim
+         WHERE ts <span class="ni">&amp;gt;</span>= datetime(:start_timestamp,&quot;unixepoch&quot;)
+           AND ts <span class="ni">&amp;lt;</span>= datetime(:end_timestamp,&quot;unixepoch&quot;)
+      ORDER BY ts DESC
+   <span class="nt">&lt;/validate_query&gt;</span>
+ <span class="nt">&lt;/dimension&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span> <span class="c">&lt;!-- &quot;time&quot; dimension, &quot;new-style&quot; definition using a PostgreSQL back-end</span>
+
+<span class="c">      This example defines a &quot;time&quot; dimension whose possible values are</span>
+<span class="c">      stored in the postgresql://mapcache:mapcache@localhost:5433/time</span>
+<span class="c">      PostgreSQL database. The default value is &quot;d1&quot;.</span>
+
+<span class="c">      A WMS request with that dimension may contain, e.g.</span>
+<span class="c">      &quot;... &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
+<span class="c"> --&gt;</span>
+<span class="hll"> <span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;postgresql&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;d1&quot;</span> <span class="na">time=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+</span>   <span class="nt">&lt;connection&gt;</span>
+     host=localhost user=mapcache password=mapcache dbname=times port=5433
+   <span class="nt">&lt;/connection&gt;</span>
+   <span class="nt">&lt;list_query&gt;</span>SELECT ts FROM timedim<span class="nt">&lt;/list_query&gt;</span>
+   <span class="nt">&lt;validate_query&gt;</span>
+        SELECT to_char(ts,&#39;YYYY-MM-DD&quot;T&quot;HH24:MI:SS&quot;Z&quot;&#39;) FROM timedim
+         WHERE ts <span class="ni">&amp;gt;</span>= to_timestamp(:start_timestamp)
+           AND ts <span class="ni">&amp;lt;</span>= to_timestamp(:end_timestamp)
+      ORDER BY ts DESC
+   <span class="nt">&lt;/validate_query&gt;</span>
+ <span class="nt">&lt;/dimension&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span> <span class="c">&lt;!-- &quot;time&quot; dimension, &quot;new-style&quot; definition using an ElasticSearch back-end</span>
+
+<span class="c">      This example defines a &quot;time&quot; dimension whose possible values are</span>
+<span class="c">      stored in the http://localhost:9200/times ElasticSearch index. The</span>
+<span class="c">      default value is &quot;d1&quot;.</span>
+
+<span class="c">      A WMS request with that dimension may contain, e.g.</span>
+<span class="c">      &quot;... &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
+<span class="c"> --&gt;</span>
+<span class="hll"> <span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;elasticsearch&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;d1&quot;</span> <span class="na">time=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+</span>   <span class="nt">&lt;http&gt;</span>
+     <span class="nt">&lt;url&gt;</span>http://localhost:9200/times/_search<span class="nt">&lt;/url&gt;</span>
+     <span class="nt">&lt;headers&gt;</span>
+       <span class="nt">&lt;Content-Type&gt;</span>application/json<span class="nt">&lt;/Content-Type&gt;</span>
+     <span class="nt">&lt;/headers&gt;</span>
+   <span class="nt">&lt;/http&gt;</span>
+
+   <span class="nt">&lt;list_query&gt;</span><span class="cp">&lt;![CDATA[</span>
+<span class="cp">     { &quot;query&quot;: { &quot;match_all&quot;: { } } }</span>
+<span class="cp">   ]]&gt;</span><span class="nt">&lt;/list_query&gt;</span>
+   <span class="nt">&lt;list_response&gt;</span><span class="cp">&lt;![CDATA[</span>
+<span class="cp">     [ &quot;hits&quot;, &quot;hits&quot;, &quot;_source&quot;, &quot;ts&quot; ]</span>
+<span class="cp">   ]]&gt;</span><span class="nt">&lt;/list_response&gt;</span>
+
+   <span class="nt">&lt;validate_query&gt;</span><span class="cp">&lt;![CDATA[</span>
+<span class="cp">     { &quot;query&quot;: {</span>
+<span class="cp">         &quot;range&quot;: {</span>
+<span class="cp">           &quot;ts&quot;: { &quot;gte&quot;: :start_timestamp, &quot;lte&quot;: :end_timestamp }</span>
+<span class="cp">         }</span>
+<span class="cp">       },</span>
+<span class="cp">       &quot;sort&quot;: { &quot;ts&quot;: { &quot;order&quot;: &quot;desc&quot; } },</span>
+<span class="cp">       &quot;script_fields&quot;: {</span>
+<span class="cp">         &quot;iso_ts&quot;: {</span>
+<span class="cp">           &quot;lang&quot;: &quot;painless&quot;,</span>
+<span class="cp">           &quot;source&quot;: &quot;SimpleDateFormat f=new SimpleDateFormat(params.fmt); f.setTimeZone(params.tz); return (f.format(doc.ts.value.getMillis()))&quot;,</span>
+<span class="cp">           &quot;params&quot;: {</span>
+<span class="cp">             &quot;fmt&quot;: &quot;yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;&quot;,</span>
+<span class="cp">             &quot;tz: &quot;UTC&quot;</span>
+<span class="cp">           }</span>
+<span class="cp">         }</span>
+<span class="cp">       }</span>
+<span class="cp">     }</span>
+<span class="cp">   ]]&gt;</span><span class="nt">&lt;/validate_query&gt;</span>
+   <span class="nt">&lt;validate_response&gt;</span><span class="cp">&lt;![CDATA[</span>
+<span class="cp">     [ &quot;hits&quot;, &quot;hits&quot;, &quot;fields&quot;, &quot;iso_ts&quot;, 0 ]</span>
+<span class="cp">   ]]&gt;</span><span class="nt">&lt;/validate_response&gt;</span>
+
+ <span class="nt">&lt;/dimension&gt;</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="tile-assembly-policies">
@@ -491,8 +842,14 @@ tile-based clients (for example an OpenLayers <code class="docutils literal notr
 </ul>
 </li>
 <li><a class="reference internal" href="#second-level-dimensions">Second Level Dimensions</a><ul>
-<li><a class="reference internal" href="#time-dimensions">Time Dimensions</a></li>
 <li><a class="reference internal" href="#sqlite-dimensions">SQLite Dimensions</a></li>
+<li><a class="reference internal" href="#postgresql-dimensions">PostgreSQL Dimensions</a></li>
+<li><a class="reference internal" href="#elasticsearch-dimensions">ElasticSearch Dimensions</a></li>
+<li><a class="reference internal" href="#time-dimensions">Time Dimensions</a><ul>
+<li><a class="reference internal" href="#configuring-a-time-dimension-using-a-default-sqlite-back-end">Configuring a Time Dimension using a default SQLite back-end</a></li>
+<li><a class="reference internal" href="#configuring-a-time-dimension-using-an-explicit-back-end">Configuring a Time dimension using an explicit back-end</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#tile-assembly-policies">Tile Assembly Policies</a></li>
 </ul>
 </li>
@@ -526,7 +883,7 @@ tile-based clients (for example an OpenLayers <code class="docutils literal notr
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Last updated on 2019-02-28.
+      Last updated on 2019-03-27.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
