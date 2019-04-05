@@ -1,18 +1,19 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 119: Mapbox Vector Tile (MVT) Support &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -111,22 +112,23 @@
             
   <div class="section" id="ms-rfc-119-mapbox-vector-tile-mvt-support">
 <span id="rfc119"></span><h1>MS RFC 119: Mapbox Vector Tile (MVT) Support<a class="headerlink" href="#ms-rfc-119-mapbox-vector-tile-mvt-support" title="Permalink to this headline">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2017-08-07</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Authors:</th><td class="field-body">Thomas Bonfort, Stephen Lime</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contacts:</th><td class="field-body"><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a>, <a class="reference external" href="mailto:sdlime&#37;&#52;&#48;comcast&#46;net">sdlime<span>&#64;</span>comcast<span>&#46;</span>net</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Draft</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 7.2</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2017-08-07</p>
+</dd>
+<dt class="field-even">Authors</dt>
+<dd class="field-even"><p>Thomas Bonfort, Stephen Lime</p>
+</dd>
+<dt class="field-odd">Contacts</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a>, <a class="reference external" href="mailto:sdlime&#37;&#52;&#48;comcast&#46;net">sdlime<span>&#64;</span>comcast<span>&#46;</span>net</a></p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Draft</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 7.2</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>Mapbox vector tiles (MVT) represent an alternative to delivering tiled map data to the client. In contrast to raster tiles, vector tiles encode coordinate and attribute information across any number of geospatial layers. This allows for rich application development where geospatial data can be filtered and symbolized on the client without the need for extra server interactions. See the <a class="reference external" href="https://www.mapbox.com/vector-tiles/specification/">specification</a>.</p>
@@ -135,9 +137,9 @@
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Permalink to this headline">¶</a></h2>
 <p>This RFC proposes the implementation of the MVT specification (version 2.1) within MapServer and MapCache. Highlights include:</p>
 <ul class="simple">
-<li>the introduction of no new mapfile keywords, all configuration uses existing mechanisms</li>
-<li>MVT are implemented as a new output driver and can be used with mode=map, mode=tile or WMS actions</li>
-<li>the implementation introduces a new dependency on protobuf/protobuf-c</li>
+<li><p>the introduction of no new mapfile keywords, all configuration uses existing mechanisms</p></li>
+<li><p>MVT are implemented as a new output driver and can be used with mode=map, mode=tile or WMS actions</p></li>
+<li><p>the implementation introduces a new dependency on protobuf/protobuf-c</p></li>
 </ul>
 </div>
 <div class="section" id="new-and-updated-files">
@@ -147,28 +149,28 @@
 <div class="section" id="mapserver">
 <h2>2.1.1 MapServer<a class="headerlink" href="#mapserver" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>mapmvt.c (new): MVT implementation code</li>
-<li>renderers/mvt/vector_tile.proto (new): protocol buffer definition file</li>
-<li>mapoutput.c (updated): register MVT renderer and default output format (application/x-protobuf)</li>
-<li>mapservutil.c (updated): intercept calls to produce MVT output</li>
-<li>mapwfs.c (updated): there are remnants of Thomas’ original work where bounding box (bbox) is expanded using the EDGE_BUFFER output format option. Currently there is no mechanism to create MVT output via WFS or queries in general although it could be added in the future (similar to drawing a query map).</li>
-<li>mapwms.c (updated): intercept calls to produce MVT output</li>
-<li>mapserver.h (updated): register MVT renderer and public function (e.g. msMVTWriteTile())</li>
-<li>CMakeLists.txt (updated): add protobuf/protobuf-c rules</li>
+<li><p>mapmvt.c (new): MVT implementation code</p></li>
+<li><p>renderers/mvt/vector_tile.proto (new): protocol buffer definition file</p></li>
+<li><p>mapoutput.c (updated): register MVT renderer and default output format (application/x-protobuf)</p></li>
+<li><p>mapservutil.c (updated): intercept calls to produce MVT output</p></li>
+<li><p>mapwfs.c (updated): there are remnants of Thomas’ original work where bounding box (bbox) is expanded using the EDGE_BUFFER output format option. Currently there is no mechanism to create MVT output via WFS or queries in general although it could be added in the future (similar to drawing a query map).</p></li>
+<li><p>mapwms.c (updated): intercept calls to produce MVT output</p></li>
+<li><p>mapserver.h (updated): register MVT renderer and public function (e.g. msMVTWriteTile())</p></li>
+<li><p>CMakeLists.txt (updated): add protobuf/protobuf-c rules</p></li>
 </ul>
 </div>
 <div class="section" id="mapcache">
 <h2>2.1.2 MapCache<a class="headerlink" href="#mapcache" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>include/mapcache.h (updated): new definitions for raw image format</li>
-<li>lib/cache_disk.c (updated): add raw image format support</li>
-<li>lib/configuration_xml.c (updated): process raw image format related configuration</li>
-<li>lib/core.c (updated): handle response for raw image format</li>
-<li>lib/image.c (updated): add raw image format support - no metatiling</li>
-<li>lib/image_raw.c (new): add raw image format support</li>
-<li>lib/service_wms.c (updated): add raw image format support</li>
-<li>lib/source_wms.c (updated): add raw image format support</li>
-<li>lib/tileset.c (updated): add raw image format support</li>
+<li><p>include/mapcache.h (updated): new definitions for raw image format</p></li>
+<li><p>lib/cache_disk.c (updated): add raw image format support</p></li>
+<li><p>lib/configuration_xml.c (updated): process raw image format related configuration</p></li>
+<li><p>lib/core.c (updated): handle response for raw image format</p></li>
+<li><p>lib/image.c (updated): add raw image format support - no metatiling</p></li>
+<li><p>lib/image_raw.c (new): add raw image format support</p></li>
+<li><p>lib/service_wms.c (updated): add raw image format support</p></li>
+<li><p>lib/source_wms.c (updated): add raw image format support</p></li>
+<li><p>lib/tileset.c (updated): add raw image format support</p></li>
 </ul>
 </div>
 <div class="section" id="configuration-notes">
@@ -177,11 +179,11 @@
 <div class="section" id="id1">
 <h2>2.2.1 MapServer<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>configuration of attribute data uses <cite>gml_</cite> or <cite>ows_</cite> metadata elements</li>
-<li>WMS_SRS metadata (layer and server) should include epsg:3857 and epsg:900913</li>
-<li>layers must define a projection</li>
-<li>the MVT output format supports an option called EDGE_BUFFER which defines the amount of overlap between tiles in map units (default is 10)</li>
-<li>the MVT output format supports an option called EXTENT which defines tile extent in coordinate units (default is 4096). Feature geometries are converted from map coordinates to tile coordinates using this value.</li>
+<li><p>configuration of attribute data uses <cite>gml_</cite> or <cite>ows_</cite> metadata elements</p></li>
+<li><p>WMS_SRS metadata (layer and server) should include epsg:3857 and epsg:900913</p></li>
+<li><p>layers must define a projection</p></li>
+<li><p>the MVT output format supports an option called EDGE_BUFFER which defines the amount of overlap between tiles in map units (default is 10)</p></li>
+<li><p>the MVT output format supports an option called EXTENT which defines tile extent in coordinate units (default is 4096). Feature geometries are converted from map coordinates to tile coordinates using this value.</p></li>
 </ul>
 </div>
 <div class="section" id="id2">
@@ -267,12 +269,12 @@
 <div class="section" id="bug-id-and-references">
 <h2>9. Bug ID and references<a class="headerlink" href="#bug-id-and-references" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>MapServer <a class="reference external" href="https://github.com/mapserver/mapserver/pull/5376">pull request#5376</a></li>
-<li>MapCache <a class="reference external" href="https://github.com/mapserver/mapcache/pull/166">pull request#166</a></li>
-<li>initial MapServer <a class="reference external" href="https://github.com/sdlime/mapserver/tree/vector-tiles">implementation</a></li>
-<li>demo using <a class="reference external" href="https://github.com/sdlime/mvt-demo">Mapbox GL JS and mode=tile</a></li>
-<li>loads of resources at <a class="reference external" href="https://openmaptiles.org/">openmaptiles.org</a></li>
-<li><a class="reference external" href="https://www.mapbox.com/mapbox-gl-js/api/">Mapbox GL JS</a></li>
+<li><p>MapServer <a class="reference external" href="https://github.com/mapserver/mapserver/pull/5376">pull request#5376</a></p></li>
+<li><p>MapCache <a class="reference external" href="https://github.com/mapserver/mapcache/pull/166">pull request#166</a></p></li>
+<li><p>initial MapServer <a class="reference external" href="https://github.com/sdlime/mapserver/tree/vector-tiles">implementation</a></p></li>
+<li><p>demo using <a class="reference external" href="https://github.com/sdlime/mvt-demo">Mapbox GL JS and mode=tile</a></p></li>
+<li><p>loads of resources at <a class="reference external" href="https://openmaptiles.org/">openmaptiles.org</a></p></li>
+<li><p><a class="reference external" href="https://www.mapbox.com/mapbox-gl-js/api/">Mapbox GL JS</a></p></li>
 </ul>
 </div>
 <div class="section" id="voting-history">
@@ -293,8 +295,6 @@
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -361,8 +361,8 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Last updated on 2019-03-29.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Last updated on 2019-04-05.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

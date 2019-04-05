@@ -1,18 +1,19 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 99: Remove support for GD renderer &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -111,22 +112,23 @@
             
   <div class="section" id="ms-rfc-99-remove-support-for-gd-renderer">
 <span id="rfc99"></span><h1>MS RFC 99: Remove support for GD renderer<a class="headerlink" href="#ms-rfc-99-remove-support-for-gd-renderer" title="Permalink to this headline">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2013/06</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Thomas Bonfort</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 7.0</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2013/06</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Thomas Bonfort</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 7.0</p>
+</dd>
+</dl>
 <div class="section" id="summary">
 <h2>1. Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
 <p>Keeping support for the GD rendering library is preventing MapServer from
@@ -138,20 +140,20 @@ overhead.</p>
 <div class="section" id="history">
 <h3>1.1 History<a class="headerlink" href="#history" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>The GD library was initially the only renderer supported by MapServer for producing
-bitmap images (i.e. for png, jpeg and gif outputformats).</li>
-<li>At the cost of major code duplication, support for SVG, PDF and SWF were later added.</li>
-<li>In 2007, again at the cost of another major code duplication, AGG support was added,
+<li><p>The GD library was initially the only renderer supported by MapServer for producing
+bitmap images (i.e. for png, jpeg and gif outputformats).</p></li>
+<li><p>At the cost of major code duplication, support for SVG, PDF and SWF were later added.</p></li>
+<li><p>In 2007, again at the cost of another major code duplication, AGG support was added,
 with some non-trivial issues when trying to work along with GD’s proprietary internal
-pixel reprensentation.</li>
-<li>In 2011, for the 6.0 release, a major rewrite of the rendering engine occurred in order
+pixel reprensentation.</p></li>
+<li><p>In 2011, for the 6.0 release, a major rewrite of the rendering engine occurred in order
 to cut down on the maintenance issues that had arose due to the previous code duplications.
 Already at that time dropping support for GD was discussed, but was finally kept for
 8bit modes only at the cost of a higher worload on the maintainers.
 At the same time, AGG became a central component inside the mapserver library, and was
-used for some rendering tasks not supported by other renderers.</li>
-<li>In 2012, for the 6.2 release, support for GD became optional and could be disabled at
-compile time.</li>
+used for some rendering tasks not supported by other renderers.</p></li>
+<li><p>In 2012, for the 6.2 release, support for GD became optional and could be disabled at
+compile time.</p></li>
 </ul>
 </div>
 <div class="section" id="current-gd-limitations">
@@ -184,10 +186,10 @@ simplify future maintenance.</p>
 <div class="section" id="backwards-compatibility">
 <h3>2.1 Backwards compatibility<a class="headerlink" href="#backwards-compatibility" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>GD outputformats configured in mapfiles will silently be mapped to AGG/PNG8, i.e AGG
+<li><p>GD outputformats configured in mapfiles will silently be mapped to AGG/PNG8, i.e AGG
 rendered images quantized down to 256 color pngs, as is done currently when GD support
-has beend disabled. The final resulting images will differ.</li>
-<li>Memory overhead for users still using the GD renderer will augment.</li>
+has beend disabled. The final resulting images will differ.</p></li>
+<li><p>Memory overhead for users still using the GD renderer will augment.</p></li>
 </ul>
 </div>
 <div class="section" id="voting-history">
@@ -214,8 +216,6 @@ DanielM and JeffM</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -273,8 +273,8 @@ DanielM and JeffM</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Last updated on 2019-03-29.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Last updated on 2019-04-05.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>
