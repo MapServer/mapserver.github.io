@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 97: Dynamic creation of higher zoom levels tiles &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -138,22 +139,23 @@
             
   <div class="section" id="ms-rfc-97-dynamic-creation-of-higher-zoom-levels-tiles">
 <span id="rfc97"></span><h1>MS RFC 97: Dynamic creation of higher zoom levels tiles<a class="headerlink" href="#ms-rfc-97-dynamic-creation-of-higher-zoom-levels-tiles" title="Lien permanent vers ce titre">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2013/04/15</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Thomas Bonfort</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapCache 1.2</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2013/04/15</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Thomas Bonfort</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapCache 1.2</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Lien permanent vers ce titre">¶</a></h2>
 <p>When tiling raster data, it is common for the native resolution of the original
@@ -162,16 +164,16 @@ of the standard GoogleMapsCompatible or WGS84 grids.  Users whishing to serve lo
 resolution data at high resolutions are currently forced to use one of these
 approaches:</p>
 <ul class="simple">
-<li>setting a &lt;grid maxzoom=&nbsp;»15&nbsp;»&gt; attribute in their tilesets, meaning that all
+<li><p>setting a &lt;grid maxzoom= »15 »&gt; attribute in their tilesets, meaning that all
 zoom levels higher than the maximum configured one are considered
 unavailable. Upsampled tiles or images for the higher zoom levels can then be
-obtained through WMS calls only, tile requests will fail.</li>
-<li>not setting a maxzoom parameter, and therefore caching all tiles at all zoom
+obtained through WMS calls only, tile requests will fail.</p></li>
+<li><p>not setting a maxzoom parameter, and therefore caching all tiles at all zoom
 levels, which is inefficient both in terms of storage on the mapcache
 instance, and in terms of load set on the original WMS server when initially
-requesting images before splitting them into tiles.</li>
+requesting images before splitting them into tiles.</p></li>
 </ul>
-<p>This RFC proposes to add the concept of «&nbsp;maximum cached level&nbsp;» for a given
+<p>This RFC proposes to add the concept of « maximum cached level » for a given
 tileset and a given grid. In practice, tiles above the configured maximum
 cached level are still transparently available for an end user or when
 vertically merging multiple tiles, however they are dynamically upscaled from
@@ -183,27 +185,29 @@ the maximum cached level instead of being cached on the mapcache instance
 <p>In order to be available for all tile operations, the <code class="docutils literal notranslate"><span class="pre">mapcache_tileset_tile_get</span></code>
 function will detect calls that are over the maximum cached level and fall back to
 a new function who’s responsibility is to treat this special case. Two configurations
-will be available for this «&nbsp;over the maximum cached zoom&nbsp;» scenario:</p>
+will be available for this « over the maximum cached zoom » scenario:</p>
 <ul class="simple">
-<li>Reconstruct the requested tile from the lower zoom level, by:<ul>
-<li>determining the one or four tiles of the maximum cached that interect the extent
-of the requested tile.</li>
-<li>calling <code class="docutils literal notranslate"><span class="pre">mapcache_tileset_tile_get</span></code> once again, this time with (x,y,z) adapted
-to have z=max-cached-level (to avoid infinite recursion).</li>
-<li>decoding the image data of the lower zoom level tile(s).</li>
-<li>upscaling the decoded image data into the final tile.</li>
-<li>the upscaled image data will not be encoded straight away, as one of the common
+<li><p>Reconstruct the requested tile from the lower zoom level, by:</p>
+<ul>
+<li><p>determining the one or four tiles of the maximum cached that interect the extent
+of the requested tile.</p></li>
+<li><p>calling <code class="docutils literal notranslate"><span class="pre">mapcache_tileset_tile_get</span></code> once again, this time with (x,y,z) adapted
+to have z=max-cached-level (to avoid infinite recursion).</p></li>
+<li><p>decoding the image data of the lower zoom level tile(s).</p></li>
+<li><p>upscaling the decoded image data into the final tile.</p></li>
+<li><p>the upscaled image data will not be encoded straight away, as one of the common
 use-cases for this functionality will be when overlaying multiple tilesets (i.e.
-access to the raw pixel data will happen)</li>
+access to the raw pixel data will happen)</p></li>
 </ul>
 </li>
-<li>Proxying the requested tile to the source WMS server, thus bypassing mapcache’s
-caching mechanism entirely (this will not be initially implemented):<ul>
-<li>construct the extent of the tile, eventually account for the metabuffer (but not
-the metatile size).</li>
-<li>send to the source wms.</li>
-<li>eventually decode data if using metabuffers or if the requested tile is to be
-a vertical assembly of multiple tilesets.</li>
+<li><p>Proxying the requested tile to the source WMS server, thus bypassing mapcache’s
+caching mechanism entirely (this will not be initially implemented):</p>
+<ul>
+<li><p>construct the extent of the tile, eventually account for the metabuffer (but not
+the metatile size).</p></li>
+<li><p>send to the source wms.</p></li>
+<li><p>eventually decode data if using metabuffers or if the requested tile is to be
+a vertical assembly of multiple tilesets.</p></li>
 </ul>
 </li>
 </ul>
@@ -227,10 +231,10 @@ has been requested in the configuration file.</p>
 <div class="section" id="files-affected">
 <h3>3.1 Files affected<a class="headerlink" href="#files-affected" title="Lien permanent vers ce titre">¶</a></h3>
 <ul class="simple">
-<li>mapcache.h</li>
-<li>configuration_xml.c</li>
-<li>tileset.c</li>
-<li>mapcache_seed.c</li>
+<li><p>mapcache.h</p></li>
+<li><p>configuration_xml.c</p></li>
+<li><p>tileset.c</p></li>
+<li><p>mapcache_seed.c</p></li>
 </ul>
 </div>
 <div class="section" id="backwards-compatibility-issues">
@@ -250,21 +254,21 @@ later phase should that need arise.</p>
 <div class="section" id="caveats">
 <h3>3.4 Caveats<a class="headerlink" href="#caveats" title="Lien permanent vers ce titre">¶</a></h3>
 <ul class="simple">
-<li>Bilinear resampling fails inside pixman for extreme resampling scales (i.e.
+<li><p>Bilinear resampling fails inside pixman for extreme resampling scales (i.e.
 when a requested tile spans only a couple of pixels in the max-cached-zoom
 tile). See <a class="reference external" href="https://bugs.freedesktop.org/show_bug.cgi?id=46277">https://bugs.freedesktop.org/show_bug.cgi?id=46277</a> For these cases,
 we switch to nearest-neighbour resampling, i.e. we set the tile to a uniform
-color.</li>
-<li>Bilinear resampling will produce slightly visible artifacts at the edge of
+color.</p></li>
+<li><p>Bilinear resampling will produce slightly visible artifacts at the edge of
 the max-cached-zoom tile. This is due to the fact that data from adjacent
-tiles would be needed in order to produce a seamless upscaled version.</li>
+tiles would be needed in order to produce a seamless upscaled version.</p></li>
 </ul>
 </div>
 </div>
 <div class="section" id="bug-id">
 <h2>5. Bug ID<a class="headerlink" href="#bug-id" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
-<li>63: <a class="reference external" href="https://github.com/mapserver/mapcache/pull/63">pull63</a></li>
+<li><p>63: <a class="reference external" href="https://github.com/mapserver/mapcache/pull/63">pull63</a></p></li>
 </ul>
 </div>
 <div class="section" id="voting-history">
@@ -285,8 +289,6 @@ tiles would be needed in order to produce a seamless upscaled version.</li>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -343,8 +345,8 @@ tiles would be needed in order to produce a seamless upscaled version.</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Mis à jour le 2019-03-29.
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Mis à jour le 2019-04-09.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

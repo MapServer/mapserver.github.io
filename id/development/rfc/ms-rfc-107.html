@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="id">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 107: Support for the edge of pixel (OGC) extent model in MapServer &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Tentang dokumen ini" href="../../about.html" />
     <link rel="index" title="Indeks" href="../../genindex.html" />
@@ -138,22 +139,23 @@
             
   <div class="section" id="ms-rfc-107-support-for-the-edge-of-pixel-ogc-extent-model-in-mapserver">
 <span id="rfc107"></span><h1>MS RFC 107: Support for the edge of pixel (OGC) extent model in MapServer<a class="headerlink" href="#ms-rfc-107-support-for-the-edge-of-pixel-ogc-extent-model-in-mapserver" title="Link permanen untuk headline ini">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2014/01</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Tamas Szekeres</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:szekerest&#37;&#52;&#48;gmail&#46;com">szekerest<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Draft</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 7.0</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2014/01</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Tamas Szekeres</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:szekerest&#37;&#52;&#48;gmail&#46;com">szekerest<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Draft</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 7.0</p>
+</dd>
+</dl>
 <p>This RFC is related to <a class="reference internal" href="ms-rfc-25.html#rfc25"><span class="std std-ref">MS RFC 25</span></a> which addresses the same issue,
 but we now intend to keep the current edge-of-pixel extent model as well by using
 a different implementation proposal.</p>
@@ -185,10 +187,10 @@ an adjustment code has been applied in MapServer (ie. in mapwms.c, mapwmslayer.c
 </div>
 <p>But this fix still doesn't resolve a couple of issues, like:</p>
 <ul class="simple">
-<li>The search rectangle is decreased by half pixels at each sides, therefore we get
-less amount of information we expect from the MapServer based OGC server</li>
-<li>msAdjustExtent still causes extent distortion (especially for small images),
-since (width-1)/(height-1) is not equal to width/height.</li>
+<li><p>The search rectangle is decreased by half pixels at each sides, therefore we get
+less amount of information we expect from the MapServer based OGC server</p></li>
+<li><p>msAdjustExtent still causes extent distortion (especially for small images),
+since (width-1)/(height-1) is not equal to width/height.</p></li>
 </ul>
 <p>Furthermore, mapscript users may incorrectly assume we use the OGC extent model
 (the documentation of setExtent/getExtent doesn't seem to provide guidance)
@@ -366,34 +368,34 @@ We also have to modify the signature of the 'fit' function for the rect object a
 <div class="section" id="files-affected">
 <h2>4. Files affected<a class="headerlink" href="#files-affected" title="Link permanen untuk headline ini">¶</a></h2>
 <ul class="simple">
-<li>mapchart.c: Modify the calculation of the search rectangle (see 3.4)</li>
-<li>mapcluster.c: Modify the calculation of the search rectangle (see 3.4)</li>
-<li>mapdraw.c: Modify the calls of msAdjustExtent and msCalculateScale (see 3.3)</li>
-<li>mapfile.c: Mofify the reader/writer (see 3.1)</li>
-<li>mapfile.h: Define PIXELAJUSTMENT</li>
-<li>mapgraticule.c: Modify the call of msAdjustExtent (3.3) and the search rectangle (3.4)</li>
-<li>maplegend.c: Modify the calls of msAdjustExtent and msCalculateScale (see 3.3)</li>
-<li>maplexer.c: Add support for reading PIXELADJUSTTMENT (see 3.1)</li>
-<li>maplexer.l: Add support for reading PIXELADJUSTTMENT (see 3.1)</li>
-<li>mapobject.c: Modify the calls of msAdjustExtent and msCalculateScale (3.3), modify msMapComputeGeotransform (3.5)</li>
-<li>mapquery.c: Modify the calls of msAdjustExtent and MS_CELLSIZE (see 3.3)</li>
-<li>mapraster.c: Modify the call of msAdjustExtent (see 3.3)</li>
-<li>maprasterquery.c: Modify the call of msAdjustExtent (see 3.3)</li>
-<li>mapscale.c: Implement changes in msCalculateScale (see chapter 3) and modify calls (3.3)</li>
-<li>mapserver.h: Implement changes in MS_CELLSIZE, add pixeladjustment to mapObj, modify the calls of msAdjustExtent and msCalculateScale</li>
-<li>mapservutil.c: Modify the calls of msAdjustExtent, MS_CELLSOZE and msCalculateScale (see 3.3)</li>
-<li>maptemplate.c: Modify the calculations in setExtent (FROMIMGBOX, FROMIMGPNT, FROMREFPNT, FROMSCALE), change the call of msAdjustExtent in checkWebScale</li>
-<li>maptile.c: Modify the adjustment code in msTileSetExtent (see 3.2)</li>
-<li>maputil.c: Implement changes in msAdjustExtent (see chapter 3)</li>
-<li>mapuvraster.c: Modify the cellsize and the extent calculation in msUVRASTERLayerWhichShapes</li>
-<li>mapwcs.c: Modify msWCSGetCoverage to include pixeladjustment in the formula when recomputing the BBOX.</li>
-<li>mapwms.c: Modify the adjustment code (3.2) and msAdjustExtent and MS_CELLSIZE calls (3.3)</li>
-<li>mapwmslayer.c: Modify the adjustment code (3.2) and msCalculateScale and MS_CELLSIZE calls (3.3)</li>
-<li>mapscript/swiginc/map.i: Modify the call of msCalculateScale (see 3.3)</li>
-<li>mapscript/swiginc/mapzoom.i: Modify the calls of msAdjustExtent and msCalculateScale (see 3.6)</li>
-<li>mapscript/swiginc/rect.i: Modify the signature of 'fit' (see 3.6)</li>
-<li>mapscript/php/map.c: Modify the calls of msAdjustExtent and msCalculateScale (see 3.6)</li>
-<li>mapscript/php/mapscript_i.c: Modify the calls of msCalculateScale, modify the signature of 'fit' (see 3.6)</li>
+<li><p>mapchart.c: Modify the calculation of the search rectangle (see 3.4)</p></li>
+<li><p>mapcluster.c: Modify the calculation of the search rectangle (see 3.4)</p></li>
+<li><p>mapdraw.c: Modify the calls of msAdjustExtent and msCalculateScale (see 3.3)</p></li>
+<li><p>mapfile.c: Mofify the reader/writer (see 3.1)</p></li>
+<li><p>mapfile.h: Define PIXELAJUSTMENT</p></li>
+<li><p>mapgraticule.c: Modify the call of msAdjustExtent (3.3) and the search rectangle (3.4)</p></li>
+<li><p>maplegend.c: Modify the calls of msAdjustExtent and msCalculateScale (see 3.3)</p></li>
+<li><p>maplexer.c: Add support for reading PIXELADJUSTTMENT (see 3.1)</p></li>
+<li><p>maplexer.l: Add support for reading PIXELADJUSTTMENT (see 3.1)</p></li>
+<li><p>mapobject.c: Modify the calls of msAdjustExtent and msCalculateScale (3.3), modify msMapComputeGeotransform (3.5)</p></li>
+<li><p>mapquery.c: Modify the calls of msAdjustExtent and MS_CELLSIZE (see 3.3)</p></li>
+<li><p>mapraster.c: Modify the call of msAdjustExtent (see 3.3)</p></li>
+<li><p>maprasterquery.c: Modify the call of msAdjustExtent (see 3.3)</p></li>
+<li><p>mapscale.c: Implement changes in msCalculateScale (see chapter 3) and modify calls (3.3)</p></li>
+<li><p>mapserver.h: Implement changes in MS_CELLSIZE, add pixeladjustment to mapObj, modify the calls of msAdjustExtent and msCalculateScale</p></li>
+<li><p>mapservutil.c: Modify the calls of msAdjustExtent, MS_CELLSOZE and msCalculateScale (see 3.3)</p></li>
+<li><p>maptemplate.c: Modify the calculations in setExtent (FROMIMGBOX, FROMIMGPNT, FROMREFPNT, FROMSCALE), change the call of msAdjustExtent in checkWebScale</p></li>
+<li><p>maptile.c: Modify the adjustment code in msTileSetExtent (see 3.2)</p></li>
+<li><p>maputil.c: Implement changes in msAdjustExtent (see chapter 3)</p></li>
+<li><p>mapuvraster.c: Modify the cellsize and the extent calculation in msUVRASTERLayerWhichShapes</p></li>
+<li><p>mapwcs.c: Modify msWCSGetCoverage to include pixeladjustment in the formula when recomputing the BBOX.</p></li>
+<li><p>mapwms.c: Modify the adjustment code (3.2) and msAdjustExtent and MS_CELLSIZE calls (3.3)</p></li>
+<li><p>mapwmslayer.c: Modify the adjustment code (3.2) and msCalculateScale and MS_CELLSIZE calls (3.3)</p></li>
+<li><p>mapscript/swiginc/map.i: Modify the call of msCalculateScale (see 3.3)</p></li>
+<li><p>mapscript/swiginc/mapzoom.i: Modify the calls of msAdjustExtent and msCalculateScale (see 3.6)</p></li>
+<li><p>mapscript/swiginc/rect.i: Modify the signature of 'fit' (see 3.6)</p></li>
+<li><p>mapscript/php/map.c: Modify the calls of msAdjustExtent and msCalculateScale (see 3.6)</p></li>
+<li><p>mapscript/php/mapscript_i.c: Modify the calls of msCalculateScale, modify the signature of 'fit' (see 3.6)</p></li>
 </ul>
 </div>
 <div class="section" id="backwards-compatibility-issues">
@@ -424,8 +426,6 @@ function: 'fit'.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -486,8 +486,8 @@ function: 'fit'.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Hak cipta</a> 2019, Open Source Geospatial Foundation.
-      Terakhir diperbarui pada 2019-03-29.
-      Dibuat menggunakan <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Terakhir diperbarui pada 2019-04-09.
+      Dibuat menggunakan <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

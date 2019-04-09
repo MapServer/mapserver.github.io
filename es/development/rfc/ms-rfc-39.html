@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 39: Support of WMS/SLD Named Styles &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Sobre este documento" href="../../about.html" />
     <link rel="index" title="Índice" href="../../genindex.html" />
@@ -138,22 +139,23 @@
             
   <div class="section" id="ms-rfc-39-support-of-wms-sld-named-styles">
 <span id="rfc39"></span><h1>MS RFC 39: Support of WMS/SLD Named Styles<a class="headerlink" href="#ms-rfc-39-support-of-wms-sld-named-styles" title="Enlazar permanentemente con este título">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2008/06/25</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Yewondwossen Assefa</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">assefa at dmsolutions.ca</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 5.2</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2008/06/25</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Yewondwossen Assefa</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>assefa at dmsolutions.ca</p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 5.2</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>When WMS and SLD support was added in MapServer few years back, one of
@@ -217,39 +219,39 @@ this is what is proposed:</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li>This introduces two new keywords, CLASSGROUP at the layer level and GROUP
-name in the class object.</li>
-<li>These parameters are optional</li>
-<li>If the CLASSGROUP parameter is set, only classes that have the same group
+<li><p>This introduces two new keywords, CLASSGROUP at the layer level and GROUP
+name in the class object.</p></li>
+<li><p>These parameters are optional</p></li>
+<li><p>If the CLASSGROUP parameter is set, only classes that have the same group
 name would be considered at rendering time. If it is not set, all classes
-(current behavior) would be used.</li>
-<li>Note that CLASSGROUP is acting as the default style if there are classes
+(current behavior) would be used.</p></li>
+<li><p>Note that CLASSGROUP is acting as the default style if there are classes
 within the same LAYER with different GROUPs defined. The idea is that STYLES
 parameter through a wms request (or cgi URL variable) would override the
 value of the CLASSGROUP. In the example above, only classes «name1» and
 «name3» would be considered for rendering (if STYLES= or STYLES=default),
-unless the client overrides this value using STYLES=group2.</li>
+unless the client overrides this value using STYLES=group2.</p></li>
 </ul>
 </div>
 <div class="section" id="affected-added-functionalities-in-mapserver">
 <h2>Affected/Added functionalities in MapServer<a class="headerlink" href="#affected-added-functionalities-in-mapserver" title="Enlazar permanentemente con este título">¶</a></h2>
 <ol class="arabic simple">
-<li>MapServer vector rendering (function msShapeGetClass) would use the setting
-of the classgroup if it is available</li>
-<li>Raster rendering (function msGetClass) : would use the setting of the
-classgroup if it is available</li>
-<li>Possibility to use the URL variables to modify the value of the classgroup
+<li><p>MapServer vector rendering (function msShapeGetClass) would use the setting
+of the classgroup if it is available</p></li>
+<li><p>Raster rendering (function msGetClass) : would use the setting of the
+classgroup if it is available</p></li>
+<li><p>Possibility to use the URL variables to modify the value of the classgroup
 (something like this would be valid :
 …&amp;map.layer[layername]=classgroup+group2. This would allow through the cgi
-to switch representation of a layer if needed</li>
-<li>WMS related functionalities:</li>
+to switch representation of a layer if needed</p></li>
+<li><p>WMS related functionalities:</p></li>
 </ol>
 <ul class="simple">
-<li>Advertise STYLES through the GetCapabilities: styles would be based on the
+<li><p>Advertise STYLES through the GetCapabilities: styles would be based on the
 different group names of the classes defined in the layer. If all classes do
 not have the GROUP set, the current behavior (returning the STYLE element with
 the “default” name) will be kept. If one or more classes have the GROUP set,
-It is proposed to output something like this for each «group»:</li>
+It is proposed to output something like this for each «group»:</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">Style</span><span class="o">&gt;</span>
       <span class="o">&lt;</span><span class="n">Name</span><span class="o">&gt;</span><span class="n">group1</span><span class="o">&lt;/</span><span class="n">Name</span><span class="o">&gt;</span>
@@ -262,32 +264,32 @@ It is proposed to output something like this for each «group»:</li>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Support Named Styles in SLD. This would have the effect of setting the layer
-level CLASSGROUP. We throw an exception if an invalid style is passed.</li>
-<li>Support style names in the STYLES parameter for the WMS GetMap request. We
+<li><p>Support Named Styles in SLD. This would have the effect of setting the layer
+level CLASSGROUP. We throw an exception if an invalid style is passed.</p></li>
+<li><p>Support style names in the STYLES parameter for the WMS GetMap request. We
 would still support the empty style names as well as the “default” keyword
-used for STYLES. We throw an exception if an invalid style is passed.</li>
-<li>GetLegendGraphic would be extended to support names in the STYLES
+used for STYLES. We throw an exception if an invalid style is passed.</p></li>
+<li><p>GetLegendGraphic would be extended to support names in the STYLES
 parameter. The if STYLE parameter is present and the value is not empty, we
-would throw an exception is the style passes is not valid.</li>
-<li>GetStyles : the current behavior is to return all the classes as UserStyle
+would throw an exception is the style passes is not valid.</p></li>
+<li><p>GetStyles : the current behavior is to return all the classes as UserStyle
 elements. the sld 1.0 specification does not seem to be clear on how to deal
 when multiple styles are available : section 13.1 specifies «…All
 requested styles that can in fact be described by SLD will be returned as
 UserStyle elements, and styles that cannot be will returned as NamedStyle
 elements. …». The proposed approach is to keep the current beahviour if
 the CLASSGROUP is not set and if set, to return UserStyle elements on
-specified classes only.</li>
+specified classes only.</p></li>
 </ul>
 <ol class="arabic simple" start="5">
-<li>Legend drawing would need to use the setting of the classgroup if it is
-available</li>
+<li><p>Legend drawing would need to use the setting of the classgroup if it is
+available</p></li>
 </ol>
 </div>
 <div class="section" id="other-considerations">
 <h2>Other Considerations<a class="headerlink" href="#other-considerations" title="Enlazar permanentemente con este título">¶</a></h2>
 <ul class="simple">
-<li>Does this apply to all types of layers such as chart layers ?</li>
+<li><p>Does this apply to all types of layers such as chart layers ?</p></li>
 </ul>
 </div>
 <div class="section" id="files-affected">
@@ -352,8 +354,6 @@ through a GetMap request</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Ir a" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -411,8 +411,8 @@ through a GetMap request</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Derechos de autor</a> 2019, Open Source Geospatial Foundation.
-      Actualizado por última vez en 2019-03-29.
-      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Actualizado por última vez en 2019-04-09.
+      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

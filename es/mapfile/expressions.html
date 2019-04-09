@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Expressions &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="Sobre este documento" href="../about.html" />
     <link rel="index" title="Índice" href="../genindex.html" />
@@ -138,49 +139,53 @@
             
   <div class="section" id="expressions">
 <span id="index-0"></span><span id="id1"></span><h1><a class="toc-backref" href="#contenido">Expressions</a><a class="headerlink" href="#expressions" title="Enlazar permanentemente con este título">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Dirk Tilger</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">dirk at MIRIUP.DE</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Umberto Nicoletti</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">umberto.nicoletti at gmail.com</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2018-08-24</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>Dirk Tilger</p>
+</dd>
+<dt class="field-even">Contact</dt>
+<dd class="field-even"><p>dirk at MIRIUP.DE</p>
+</dd>
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>Umberto Nicoletti</p>
+</dd>
+<dt class="field-even">Contact</dt>
+<dd class="field-even"><p>umberto.nicoletti at gmail.com</p>
+</dd>
+<dt class="field-odd">Last Updated</dt>
+<dd class="field-odd"><p>2018-08-24</p>
+</dd>
+</dl>
 <div class="contents topic" id="contenido">
 <p class="topic-title first">Contenido</p>
 <ul class="simple">
-<li><a class="reference internal" href="#expressions" id="id2">Expressions</a><ul>
-<li><a class="reference internal" href="#introduction" id="id3">Introduction</a><ul>
-<li><a class="reference internal" href="#string-quotation" id="id4">String quotation</a></li>
-<li><a class="reference internal" href="#quotes-escaping-in-strings" id="id5">Quotes escaping in strings</a></li>
-<li><a class="reference internal" href="#using-attributes" id="id6">Using attributes</a></li>
+<li><p><a class="reference internal" href="#expressions" id="id2">Expressions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#introduction" id="id3">Introduction</a></p>
+<ul>
+<li><p><a class="reference internal" href="#string-quotation" id="id4">String quotation</a></p></li>
+<li><p><a class="reference internal" href="#quotes-escaping-in-strings" id="id5">Quotes escaping in strings</a></p></li>
+<li><p><a class="reference internal" href="#using-attributes" id="id6">Using attributes</a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#expression-types" id="id7">Expression Types</a></li>
-<li><a class="reference internal" href="#string-comparison-equality" id="id8">String comparison (equality)</a></li>
-<li><a class="reference internal" href="#regular-expression-comparison" id="id9">Regular expression comparison</a></li>
-<li><a class="reference internal" href="#list-expressions" id="id10">List expressions</a></li>
-<li><a class="reference internal" href="#mapserver-expressions" id="id11">«MapServer expressions»</a><ul>
-<li><a class="reference internal" href="#typing" id="id12">Typing</a></li>
-<li><a class="reference internal" href="#logical-expressions" id="id13">Logical expressions</a></li>
-<li><a class="reference internal" href="#string-expressions-that-return-a-logical-value" id="id14">String expressions that return a logical value</a></li>
-<li><a class="reference internal" href="#arithmetic-expressions-that-return-a-logical-value" id="id15">Arithmetic expressions that return a logical value</a></li>
-<li><a class="reference internal" href="#spatial-expressions-that-return-a-logical-value-geos" id="id16">Spatial expressions that return a logical value (GEOS)</a></li>
-<li><a class="reference internal" href="#string-operations-that-return-a-string" id="id17">String operations that return a string</a></li>
-<li><a class="reference internal" href="#functions-that-return-a-string" id="id18">Functions that return a string</a></li>
-<li><a class="reference internal" href="#string-functions-that-return-a-number" id="id19">String functions that return a number</a></li>
-<li><a class="reference internal" href="#arithmetic-operations-and-functions-that-return-a-number" id="id20">Arithmetic operations and functions that return a number</a></li>
-<li><a class="reference internal" href="#spatial-functions-that-return-a-number-geos" id="id21">Spatial functions that return a number (GEOS)</a></li>
-<li><a class="reference internal" href="#spatial-functions-that-return-a-shape-geos" id="id22">Spatial functions that return a shape (GEOS)</a></li>
-<li><a class="reference internal" href="#temporal-expressions" id="id23">Temporal expressions</a></li>
+<li><p><a class="reference internal" href="#expression-types" id="id7">Expression Types</a></p></li>
+<li><p><a class="reference internal" href="#string-comparison-equality" id="id8">String comparison (equality)</a></p></li>
+<li><p><a class="reference internal" href="#regular-expression-comparison" id="id9">Regular expression comparison</a></p></li>
+<li><p><a class="reference internal" href="#list-expressions" id="id10">List expressions</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-expressions" id="id11">«MapServer expressions»</a></p>
+<ul>
+<li><p><a class="reference internal" href="#typing" id="id12">Typing</a></p></li>
+<li><p><a class="reference internal" href="#logical-expressions" id="id13">Logical expressions</a></p></li>
+<li><p><a class="reference internal" href="#string-expressions-that-return-a-logical-value" id="id14">String expressions that return a logical value</a></p></li>
+<li><p><a class="reference internal" href="#arithmetic-expressions-that-return-a-logical-value" id="id15">Arithmetic expressions that return a logical value</a></p></li>
+<li><p><a class="reference internal" href="#spatial-expressions-that-return-a-logical-value-geos" id="id16">Spatial expressions that return a logical value (GEOS)</a></p></li>
+<li><p><a class="reference internal" href="#string-operations-that-return-a-string" id="id17">String operations that return a string</a></p></li>
+<li><p><a class="reference internal" href="#functions-that-return-a-string" id="id18">Functions that return a string</a></p></li>
+<li><p><a class="reference internal" href="#string-functions-that-return-a-number" id="id19">String functions that return a number</a></p></li>
+<li><p><a class="reference internal" href="#arithmetic-operations-and-functions-that-return-a-number" id="id20">Arithmetic operations and functions that return a number</a></p></li>
+<li><p><a class="reference internal" href="#spatial-functions-that-return-a-number-geos" id="id21">Spatial functions that return a number (GEOS)</a></p></li>
+<li><p><a class="reference internal" href="#spatial-functions-that-return-a-shape-geos" id="id22">Spatial functions that return a shape (GEOS)</a></p></li>
+<li><p><a class="reference internal" href="#temporal-expressions" id="id23">Temporal expressions</a></p></li>
 </ul>
 </li>
 </ul>
@@ -191,12 +196,12 @@
 <h2><a class="toc-backref" href="#contenido">Introduction</a><a class="headerlink" href="#introduction" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>As of version 6.0, expressions are used in four places:</p>
 <ul class="simple">
-<li>In <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> <cite>FILTER</cite> to specify the features of the dataset that
-are to be included in the layer.</li>
-<li>In <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> <cite>EXPRESSION</cite> to specify to which features of the
-dataset the <cite>CLASS</cite> applies to.</li>
-<li>In <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> <cite>TEXT</cite> to specify text for labeling features.</li>
-<li>In <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> <cite>GEOMTRANSFORM</cite>.</li>
+<li><p>In <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> <cite>FILTER</cite> to specify the features of the dataset that
+are to be included in the layer.</p></li>
+<li><p>In <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> <cite>EXPRESSION</cite> to specify to which features of the
+dataset the <cite>CLASS</cite> applies to.</p></li>
+<li><p>In <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> <cite>TEXT</cite> to specify text for labeling features.</p></li>
+<li><p>In <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> <cite>GEOMTRANSFORM</cite>.</p></li>
 </ul>
 <div class="section" id="string-quotation">
 <span id="index-1"></span><h3><a class="toc-backref" href="#contenido">String quotation</a><a class="headerlink" href="#string-quotation" title="Enlazar permanentemente con este título">¶</a></h3>
@@ -209,8 +214,8 @@ dataset the <cite>CLASS</cite> applies to.</li>
 <div class="section" id="quotes-escaping-in-strings">
 <span id="index-2"></span><h3><a class="toc-backref" href="#contenido">Quotes escaping in strings</a><a class="headerlink" href="#quotes-escaping-in-strings" title="Enlazar permanentemente con este título">¶</a></h3>
 <div class="admonition note">
-<p class="first admonition-title">Nota</p>
-<p class="last">Quotes escaping is not supported in MapServer versions lower than 5.0.</p>
+<p class="admonition-title">Nota</p>
+<p>Quotes escaping is not supported in MapServer versions lower than 5.0.</p>
 </div>
 <p>Starting with MapServer 5.0, if your dataset contains double-quotes, you
 can use a C-like escape sequence:</p>
@@ -240,9 +245,9 @@ the string as follows:</p>
 expressions. Attribute references are case sensitive and can
 be used in the following types of expressions:</p>
 <ul class="simple">
-<li>In <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> <cite>FILTER</cite></li>
-<li>In <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> <cite>EXPRESSION</cite></li>
-<li>In <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> <cite>TEXT</cite></li>
+<li><p>In <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> <cite>FILTER</cite></p></li>
+<li><p>In <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> <cite>EXPRESSION</cite></p></li>
+<li><p>In <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> <cite>TEXT</cite></p></li>
 </ul>
 <p>Referencing an attribute is done by enclosing the attribute name in
 square brackets, like this: [ATTRIBUTENAME].  Then, every occurrence
@@ -262,11 +267,11 @@ can be accomplished as follows (single or double quotes):</p>
 <p>For <a class="reference internal" href="../input/raster.html#raster"><span class="std std-ref">Raster Data</span></a> layers special attributes have been defined that can
 be used for classification, for example:</p>
 <ul class="simple">
-<li>[PIXEL]
-… will become the pixel value as number</li>
-<li>[RED], [GREEN], [BLUE]
+<li><p>[PIXEL]
+… will become the pixel value as number</p></li>
+<li><p>[RED], [GREEN], [BLUE]
 … will become the color value for the red, green and blue
-component in the pixel value, respectively.</li>
+component in the pixel value, respectively.</p></li>
 </ul>
 </div>
 </div>
@@ -276,14 +281,14 @@ component in the pixel value, respectively.</li>
 checks.  There are three different types of expressions you can use
 with MapServer:</p>
 <ul class="simple">
-<li>String comparisons: A single attribute is compared with a string
-value.</li>
-<li>Regular expressions: A single attribute is matched with a regular
-expression.</li>
-<li>List expressions: Compare a string attribute to a list of multiple
-possible values</li>
-<li>Logical «MapServer expressions»: One or more attributes are compared
-using logical expressions.</li>
+<li><p>String comparisons: A single attribute is compared with a string
+value.</p></li>
+<li><p>Regular expressions: A single attribute is matched with a regular
+expression.</p></li>
+<li><p>List expressions: Compare a string attribute to a list of multiple
+possible values</p></li>
+<li><p>Logical «MapServer expressions»: One or more attributes are compared
+using logical expressions.</p></li>
 </ul>
 </div>
 <div class="section" id="string-comparison-equality">
@@ -343,19 +348,19 @@ meanings and characters that are interpreted as they are.
 Alphanumeric characters (A-Z, a-z and 0-9) are taken as they are.
 Characters with special meanings are:</p>
 <ul class="simple">
-<li><strong>.</strong> will match a single character.</li>
-<li><strong>[</strong> and <strong>]</strong> are used for grouping. For example <em>[A-Z]</em> would
-match the characters A,B,C,…,X,Y,Z.</li>
-<li><strong>{</strong>, <strong>}</strong>, and <strong>*</strong> are used to specify how often something
-should match.</li>
-<li><strong>^</strong> matches the beginning, <strong>$</strong> matches the end of the value.</li>
-<li>The backslash <strong>\</strong> is used to take away the special meaning.  For
-example <em>\$</em> would match the dollar sign.</li>
+<li><p><strong>.</strong> will match a single character.</p></li>
+<li><p><strong>[</strong> and <strong>]</strong> are used for grouping. For example <em>[A-Z]</em> would
+match the characters A,B,C,…,X,Y,Z.</p></li>
+<li><p><strong>{</strong>, <strong>}</strong>, and <strong>*</strong> are used to specify how often something
+should match.</p></li>
+<li><p><strong>^</strong> matches the beginning, <strong>$</strong> matches the end of the value.</p></li>
+<li><p>The backslash <strong>\</strong> is used to take away the special meaning.  For
+example <em>\$</em> would match the dollar sign.</p></li>
 </ul>
 <p>MapServer  supports two regex operators:</p>
 <ul class="simple">
-<li><strong>~</strong> case sensitive regular expression</li>
-<li><strong>~*</strong> case insensitive regular expression</li>
+<li><p><strong>~</strong> case sensitive regular expression</p></li>
+<li><p><strong>~*</strong> case insensitive regular expression</p></li>
 </ul>
 <p>The following <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> configuration would have all records
 rendered on the map that have «hotel» in the attribute named
@@ -369,8 +374,8 @@ rendered on the map that have «hotel» in the attribute named
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Nota</p>
-<p class="last">For <cite>FILTER</cite>, the regular expression is case-sensitive, thus
+<p class="admonition-title">Nota</p>
+<p>For <cite>FILTER</cite>, the regular expression is case-sensitive, thus
 records having «Hotel» in them would not have matched.</p>
 </div>
 <p>Example: Match records that have a value from 2000 to 2010 in the
@@ -400,8 +405,8 @@ CLASS
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Nota</p>
-<p class="last">If you experience frequently segmentation faults when working with
+<p class="admonition-title">Nota</p>
+<p>If you experience frequently segmentation faults when working with
 MapServer and regular expressions, it might be that your current
 working environment is linked against more than one regular
 expression library. This can happen when MapServer is linked with
@@ -415,7 +420,7 @@ editing the build files of some of the components, however.</p>
 <div class="section" id="list-expressions">
 <span id="index-9"></span><h2><a class="toc-backref" href="#contenido">List expressions</a><a class="headerlink" href="#list-expressions" title="Enlazar permanentemente con este título">¶</a></h2>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.4.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.4.</span></p>
 </div>
 <p>List expressions (see <a class="reference internal" href="../development/rfc/ms-rfc-95.html#rfc95"><span class="std std-ref">MS RFC 95: Support for lists in expression parser</span></a>) are a performant way to compare a
 string attribute to a list of multiple possible values. Their behavior
@@ -440,8 +445,8 @@ list of values between {}, <strong>without</strong> adding quotes or extra space
 </pre></div>
 </div>
 <div class="admonition warning">
-<p class="first admonition-title">Advertencia</p>
-<p class="last">List expressions do not support quote escaping, or attribute values that
+<p class="admonition-title">Advertencia</p>
+<p>List expressions do not support quote escaping, or attribute values that
 contain a comma in them.</p>
 </div>
 </div>
@@ -458,7 +463,7 @@ value, the expression has to finally become a logical value.</p>
 <span id="index-10"></span><h3><a class="toc-backref" href="#contenido">Typing</a><a class="headerlink" href="#typing" title="Enlazar permanentemente con este título">¶</a></h3>
 <p>The type of attributes and literals is determined as followed :</p>
 <ul class="simple">
-<li>Strings: enclosed in quote or single quote characters</li>
+<li><p>Strings: enclosed in quote or single quote characters</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;[string_attribute]&quot;</span> <span class="ow">or</span> <span class="s1">&#39;[string_attribute]&#39;</span>
 </pre></div>
@@ -467,7 +472,7 @@ value, the expression has to finally become a logical value.</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Numbers: no quoting</li>
+<li><p>Numbers: no quoting</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">numeric_attribute</span><span class="p">]</span>
 </pre></div>
@@ -476,7 +481,7 @@ value, the expression has to finally become a logical value.</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Date-time: enclosed in backquote characters</li>
+<li><p>Date-time: enclosed in backquote characters</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>`[date_time_attribute]`
 </pre></div>
@@ -492,21 +497,21 @@ round brackets.  Logical expressions take logical values as their
 input and return logical values. A logical expression is either “true”
 or “false”.</p>
 <ul id="index-11">
-<li><p class="first">( ( Expression1 ) AND ( Expression2 ) )</p>
+<li><p>( ( Expression1 ) AND ( Expression2 ) )</p>
 <p>( ( Expression1 ) &amp;&amp; ( Expression2 ) )</p>
 <p>returns true when both of the logical expressions (Expression1 and
 Expression2) are true.</p>
 </li>
 </ul>
 <ul id="index-12">
-<li><p class="first">( ( Expression1 ) OR ( Expression2 ) )</p>
+<li><p>( ( Expression1 ) OR ( Expression2 ) )</p>
 <p>( ( Expression1 ) || ( Expression2 ) )</p>
 <p>returns true when at least one of the logical expressions (Expression1
 or Expression2) is true.</p>
 </li>
 </ul>
 <ul id="index-13">
-<li><p class="first">NOT ( Expression1 )</p>
+<li><p>NOT ( Expression1 )</p>
 <p>! ( Expression1 )</p>
 <p>returns true when Expression1 is false.</p>
 </li>
@@ -517,63 +522,63 @@ or Expression2) is true.</p>
 <p>Syntactically, a string is something encapsulated in single or double
 quotes.</p>
 <ul id="index-15">
-<li><p class="first">( «String1» eq «String2» )</p>
+<li><p>( «String1» eq «String2» )</p>
 <p>( «String1» == «String2» ) - deprecated since 6.0</p>
 <p>( «String1» = «String2» )</p>
 <p>returns true when the strings are equal.  Case sensitive.</p>
 </li>
-<li><p class="first">( «String1» =* «String2» )</p>
+<li><p>( «String1» =* «String2» )</p>
 <p>returns true when the strings are equal.  Case insensitive.</p>
 </li>
 </ul>
 <ul id="index-16">
-<li><p class="first">( «String1» != «String2» )</p>
+<li><p>( «String1» != «String2» )</p>
 <p>( «String1» ne «String2» )</p>
 <p>returns true when the strings are not equal.</p>
 </li>
 </ul>
 <ul id="index-17">
-<li><p class="first">( «String1» &lt; «String2» )</p>
+<li><p>( «String1» &lt; «String2» )</p>
 <p>( «String1» lt «String2» )</p>
 <p>returns true when «String1» is lexicographically smaller than «String2»</p>
 </li>
 </ul>
 <ul id="index-18">
-<li><p class="first">( «String1» &gt; «String2» )</p>
+<li><p>( «String1» &gt; «String2» )</p>
 <p>( «String1» gt «String2» )</p>
 <p>returns true when «String1» is lexicographically larger than «String2».</p>
 </li>
 </ul>
 <ul id="index-19">
-<li><p class="first">( «String1» &lt;= «String2» )</p>
+<li><p>( «String1» &lt;= «String2» )</p>
 <p>( «String1» le «String2» )</p>
 <p>returns true when «String1» is lexicographically smaller than or equal
 to «String2»</p>
 </li>
 </ul>
 <ul id="index-20">
-<li><p class="first">( «String1» &gt;= «String2» )</p>
+<li><p>( «String1» &gt;= «String2» )</p>
 <p>( «String1» ge «String2» )</p>
 <p>returns true when «String1» is lexicographically larger than or equal
 to «String2».</p>
 </li>
 </ul>
 <ul id="index-21">
-<li><p class="first">( «String1» IN «token1,token2,…,tokenN» )</p>
+<li><p>( «String1» IN «token1,token2,…,tokenN» )</p>
 <p>returns true when «String1» is equal to one of the given tokens.</p>
 <div class="admonition note">
-<p class="first admonition-title">Nota</p>
-<p class="last">The separator for the tokens is the comma. That means that there
+<p class="admonition-title">Nota</p>
+<p>The separator for the tokens is the comma. That means that there
 can not be unnecessary white space in the list and that tokens
 that have commas in them cannot be compared.</p>
 </div>
 </li>
-<li><p class="first">( «String1» ~ «regexp» )</p>
+<li><p>( «String1» ~ «regexp» )</p>
 <p>returns true when «String1» matches the regular expression
 «regexp». This operation is identical to the regular expression
 matching described earlier.</p>
 </li>
-<li><p class="first">( «String1» ~* «regexp» )</p>
+<li><p>( «String1» ~* «regexp» )</p>
 <p>returns true when «String1» matches the regular expression «regexp»
 (case insensitive). This operation is identical to the regular
 expression matching described earlier.</p>
@@ -585,32 +590,32 @@ expression matching described earlier.</p>
 <p>The basic element for arithmetic operations is the number.  Arithmetic
 operations that return numbers will be covered in the next section.</p>
 <ul id="index-23">
-<li><p class="first">( n1 eq n2 )</p>
+<li><p>( n1 eq n2 )</p>
 <p>( n1 == n2 ) - deprecated since 6.0</p>
 <p>( n1 = n2 )</p>
 <p>returns true when the numbers are equal.</p>
 </li>
-<li><p class="first">( n1 != n2 )</p>
+<li><p>( n1 != n2 )</p>
 <p>( n1 ne n2 )</p>
 <p>returns true when the numbers are not equal.</p>
 </li>
-<li><p class="first">( n1 &lt; n2 )</p>
+<li><p>( n1 &lt; n2 )</p>
 <p>( n1 lt n2 )</p>
 <p>returns true when n1 is smaller than n2.</p>
 </li>
-<li><p class="first">( n1 &gt; n2 )</p>
+<li><p>( n1 &gt; n2 )</p>
 <p>( n1 gt n2 )</p>
 <p>returns true when n1 is larger than n2.</p>
 </li>
-<li><p class="first">( n1 &lt;= n2 )</p>
+<li><p>( n1 &lt;= n2 )</p>
 <p>( n1 le n2 )</p>
 <p>returns true when n1 is smaller than or equal to n2.</p>
 </li>
-<li><p class="first">( n1 &gt;= n2 )</p>
+<li><p>( n1 &gt;= n2 )</p>
 <p>( n1 ge n2 )</p>
 <p>returns true when n1 is larger than or equal to n2.</p>
 </li>
-<li><p class="first">( n1 IN «number1,number2,…,numberN» )</p>
+<li><p>( n1 IN «number1,number2,…,numberN» )</p>
 <p>returns true when n1 is equal to one of the given numbers.</p>
 </li>
 </ul>
@@ -618,81 +623,81 @@ operations that return numbers will be covered in the next section.</p>
 <div class="section" id="spatial-expressions-that-return-a-logical-value-geos">
 <span id="index-24"></span><h3><a class="toc-backref" href="#contenido">Spatial expressions that return a logical value (GEOS)</a><a class="headerlink" href="#spatial-expressions-that-return-a-logical-value-geos" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul id="index-25">
-<li><p class="first">( shape1 eq shape2 )</p>
+<li><p>( shape1 eq shape2 )</p>
 <p>returns true if shape1 and shape2 are equal</p>
 </li>
 </ul>
 <ul id="index-26">
-<li><p class="first">( shape1 intersects shape2 )</p>
+<li><p>( shape1 intersects shape2 )</p>
 <p>returns true if shape1 and shape2 intersect</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
 </ul>
 <ul id="index-27">
-<li><p class="first">( shape1 disjoint shape2 )</p>
+<li><p>( shape1 disjoint shape2 )</p>
 <p>returns true if shape1 and shape2 are disjoint</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
 </ul>
 <ul id="index-28">
-<li><p class="first">( shape1 touches shape2 )</p>
+<li><p>( shape1 touches shape2 )</p>
 <p>returns true if shape1 and shape2 touch</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
 </ul>
 <ul id="index-29">
-<li><p class="first">( shape1 overlaps shape2 )</p>
+<li><p>( shape1 overlaps shape2 )</p>
 <p>returns true if shape1 and shape2 overlap</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
 </ul>
 <ul id="index-30">
-<li><p class="first">( shape1 crosses shape2 )</p>
+<li><p>( shape1 crosses shape2 )</p>
 <p>returns true if shape1 and shape2 cross</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
 </ul>
 <ul id="index-31">
-<li><p class="first">( shape1 within shape2 )</p>
+<li><p>( shape1 within shape2 )</p>
 <p>returns true if shape1 is within shape2</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
 </ul>
 <ul id="index-32">
-<li><p class="first">( shape1 contains shape2 )</p>
+<li><p>( shape1 contains shape2 )</p>
 <p>returns true if shape1 contains shape2</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
 </ul>
 <ul id="index-33">
-<li><p class="first">( shape1 dwithin shape2 )</p>
+<li><p>( shape1 dwithin shape2 )</p>
 <p>returns true if the distance between shape1 and shape2
 is equal to 0</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
 </ul>
 <ul id="index-34">
-<li><p class="first">( shape1 beyond shape2 )</p>
+<li><p>( shape1 beyond shape2 )</p>
 <p>returns true if the distance between shape1 and shape2
 is greater than 0</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
 </ul>
@@ -700,7 +705,7 @@ is greater than 0</p>
 <div class="section" id="string-operations-that-return-a-string">
 <span id="index-35"></span><h3><a class="toc-backref" href="#contenido">String operations that return a string</a><a class="headerlink" href="#string-operations-that-return-a-string" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul>
-<li><p class="first">«String1» + «String2”</p>
+<li><p>«String1» + «String2”</p>
 <p>returns «String1String2», that is, the two strings concatenated
 to each other.</p>
 </li>
@@ -709,54 +714,54 @@ to each other.</p>
 <div class="section" id="functions-that-return-a-string">
 <h3><a class="toc-backref" href="#contenido">Functions that return a string</a><a class="headerlink" href="#functions-that-return-a-string" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul id="index-36">
-<li><p class="first">tostring ( n1, «Format1» )</p>
+<li><p>tostring ( n1, «Format1» )</p>
 <p>uses «Format1» to format the number n1 (C style formatting
 - sprintf).</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
 </ul>
 <ul id="index-37">
-<li><p class="first">commify ( «String1» )</p>
+<li><p>commify ( «String1» )</p>
 <p>adds thousands separators (commas) to a long number to make it
 more readable</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
 </ul>
 <ul id="index-38">
-<li><p class="first">upper ( «String1» )</p>
+<li><p>upper ( «String1» )</p>
 <p>force all characters to uppercase</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 7.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 7.0.</span></p>
 </div>
 </li>
 </ul>
 <ul id="index-39">
-<li><p class="first">lower ( «String1» )</p>
+<li><p>lower ( «String1» )</p>
 <p>force all characters to lowercase</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 7.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 7.0.</span></p>
 </div>
 </li>
 </ul>
 <ul id="index-40">
-<li><p class="first">initcap ( «String1» )</p>
+<li><p>initcap ( «String1» )</p>
 <p>force the first character to uppercase and the rest of the
 characters to lower case for EACH word in the string.</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 7.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 7.0.</span></p>
 </div>
 </li>
 </ul>
 <ul id="index-41">
-<li><p class="first">firstcap ( «String1» )</p>
+<li><p>firstcap ( «String1» )</p>
 <p>force the first character to uppercase and the rest of the
 characters to lower case in the first word in the string.</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 7.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 7.0.</span></p>
 </div>
 </li>
 </ul>
@@ -764,7 +769,7 @@ characters to lower case in the first word in the string.</p>
 <div class="section" id="string-functions-that-return-a-number">
 <span id="index-42"></span><h3><a class="toc-backref" href="#contenido">String functions that return a number</a><a class="headerlink" href="#string-functions-that-return-a-number" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul id="index-43">
-<li><p class="first">length ( «String1» )</p>
+<li><p>length ( «String1» )</p>
 <p>returns the number of characters of «String1»</p>
 </li>
 </ul>
@@ -772,37 +777,37 @@ characters to lower case in the first word in the string.</p>
 <div class="section" id="arithmetic-operations-and-functions-that-return-a-number">
 <span id="index-44"></span><h3><a class="toc-backref" href="#contenido">Arithmetic operations and functions that return a number</a><a class="headerlink" href="#arithmetic-operations-and-functions-that-return-a-number" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul id="index-45">
-<li><p class="first">round ( n1 , n2 )</p>
+<li><p>round ( n1 , n2 )</p>
 <p>returns n1 rounded to a multiple of n2: n2 * round(n1/n2)</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
-<li><p class="first">n1 + n2</p>
+<li><p>n1 + n2</p>
 <p>returns the sum of n1 and n2</p>
 </li>
-<li><p class="first">n1 - n2</p>
+<li><p>n1 - n2</p>
 <p>returns n2 subtracted from n1</p>
 </li>
-<li><p class="first">n1 * n2</p>
+<li><p>n1 * n2</p>
 <p>returns n1 multiplied with n2</p>
 </li>
-<li><p class="first">n1 / n2&gt;</p>
+<li><p>n1 / n2&gt;</p>
 <p>returns n1 divided by n2</p>
 </li>
-<li><p class="first">-n1</p>
+<li><p>-n1</p>
 <p>returns n1 negated</p>
 </li>
-<li><p class="first">n1 ^ n2</p>
+<li><p>n1 ^ n2</p>
 <p>returns n1 to the power of n2</p>
 </li>
-<li><p class="first">n1 % n2</p>
+<li><p>n1 % n2</p>
 <p>returns n1 %  n2 (the modulus operator). This returns the remainder after division of one number by another,
 for example 10 % 3 returns 1.</p>
 </li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Nota</p>
+<p class="admonition-title">Nota</p>
 <p>When the numerical operations above are used like logical
 operations, the following rule applies: values equal to zero will
 be taken as “false” and everything else will be “true”.  That
@@ -814,16 +819,16 @@ means the expression</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span> <span class="mi">5</span> <span class="o">-</span> <span class="mi">5</span> <span class="p">)</span>
 </pre></div>
 </div>
-<p class="last">would return false.</p>
+<p>would return false.</p>
 </div>
 </div>
 <div class="section" id="spatial-functions-that-return-a-number-geos">
 <span id="index-46"></span><h3><a class="toc-backref" href="#contenido">Spatial functions that return a number (GEOS)</a><a class="headerlink" href="#spatial-functions-that-return-a-number-geos" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul id="index-47">
-<li><p class="first">area ( shape1 )</p>
+<li><p>area ( shape1 )</p>
 <p>returns the area of shape1</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
 </ul>
@@ -831,31 +836,31 @@ means the expression</p>
 <div class="section" id="spatial-functions-that-return-a-shape-geos">
 <h3><a class="toc-backref" href="#contenido">Spatial functions that return a shape (GEOS)</a><a class="headerlink" href="#spatial-functions-that-return-a-shape-geos" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul id="index-48">
-<li><p class="first">fromtext ( «String1» )</p>
+<li><p>fromtext ( «String1» )</p>
 <p>returns the shape corresponding to String1 (WKT - well known text)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fromText</span><span class="p">(</span><span class="s1">&#39;POINT(500000 5000000)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
 </ul>
 <ul id="index-49">
-<li><p class="first">buffer (shape1 , n1 )</p>
+<li><p>buffer (shape1 , n1 )</p>
 <p>returns the shape that results when shape1 is buffered with
 bufferdistance n1</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
 </ul>
 <ul id="index-50">
-<li><p class="first">difference ( shape1 , shape2 )</p>
+<li><p>difference ( shape1 , shape2 )</p>
 <p>returns the shape that results when the common area of
 shape1 and shape2 is subtracted from shape1</p>
 <div class="versionadded">
-<p><span class="versionmodified">Nuevo en la versión 6.0.</span></p>
+<p><span class="versionmodified added">Nuevo en la versión 6.0.</span></p>
 </div>
 </li>
 </ul>
@@ -873,54 +878,54 @@ marks the start of the time component (ISO 8601), space - marks the
 end of the date and start of the time component, <strong>Z</strong> - zulu time (0
 UTC offset).</p>
 <ul class="simple">
-<li>`YYYY-MM-DDThh:mm:ssZ`</li>
-<li>`YYYY-MM-DDThh:mm:ss`</li>
-<li>`YYYY-MM-DD hh:mm:ss`</li>
-<li>`YYYY-MM-DDThh:mm`</li>
-<li>`YYYY-MM-DD hh:mm`</li>
-<li>`YYYY-MM-DDThh`</li>
-<li>`YYYY-MM-DD hh`</li>
-<li>`YYYY-MM-DD`</li>
-<li>`YYYY-MM`</li>
-<li>`YYYY`</li>
-<li>`Thh:mm:ssZ`</li>
-<li>`Thh:mm:ss`</li>
+<li><p>`YYYY-MM-DDThh:mm:ssZ`</p></li>
+<li><p>`YYYY-MM-DDThh:mm:ss`</p></li>
+<li><p>`YYYY-MM-DD hh:mm:ss`</p></li>
+<li><p>`YYYY-MM-DDThh:mm`</p></li>
+<li><p>`YYYY-MM-DD hh:mm`</p></li>
+<li><p>`YYYY-MM-DDThh`</p></li>
+<li><p>`YYYY-MM-DD hh`</p></li>
+<li><p>`YYYY-MM-DD`</p></li>
+<li><p>`YYYY-MM`</p></li>
+<li><p>`YYYY`</p></li>
+<li><p>`Thh:mm:ssZ`</p></li>
+<li><p>`Thh:mm:ss`</p></li>
 </ul>
 <p>For temporal values obtained this way, the following operations are
 supported:</p>
 <ul id="index-52">
-<li><p class="first">( t1 eq t2 )</p>
+<li><p>( t1 eq t2 )</p>
 <p>( t1 == t2 ) - deprecated since 6.0</p>
 <p>( t1 = t2 )</p>
 <p>returns true when the times are equal.</p>
 </li>
 </ul>
 <ul id="index-53">
-<li><p class="first">( t1 != t2 )</p>
+<li><p>( t1 != t2 )</p>
 <p>( t1 ne t2 )</p>
 <p>returns true when the times are not equal.</p>
 </li>
 </ul>
 <ul id="index-54">
-<li><p class="first">( t1 &lt; t2 )</p>
+<li><p>( t1 &lt; t2 )</p>
 <p>( t1 lt t2 )</p>
 <p>returns true when t1 is earlier than t2</p>
 </li>
 </ul>
 <ul id="index-55">
-<li><p class="first">( t1 &gt; t2 )</p>
+<li><p>( t1 &gt; t2 )</p>
 <p>( t1 gt t2 )</p>
 <p>returns true when t1 is later than t2.</p>
 </li>
 </ul>
 <ul id="index-56">
-<li><p class="first">( t1 &lt;= t2 )</p>
+<li><p>( t1 &lt;= t2 )</p>
 <p>( t1 le t2 )</p>
 <p>returns true when t1 is earlier than or equal to t2</p>
 </li>
 </ul>
 <ul id="index-57">
-<li><p class="first">( t1 &gt;= t2 )</p>
+<li><p>( t1 &gt;= t2 )</p>
 <p>( t1 ge t2 )</p>
 <p>returns true when t1 is later than or equal to t2.</p>
 </li>
@@ -941,8 +946,6 @@ supported:</p>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Ir a" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -1013,8 +1016,8 @@ supported:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Derechos de autor</a> 2019, Open Source Geospatial Foundation.
-      Actualizado por última vez en 2019-03-29.
-      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Actualizado por última vez en 2019-04-09.
+      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

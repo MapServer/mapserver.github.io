@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 22a: Feature cache for long running processes and query processing &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Об этих документах" href="../../about.html" />
     <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
@@ -138,24 +139,26 @@
             
   <div class="section" id="ms-rfc-22a-feature-cache-for-long-running-processes-and-query-processing">
 <span id="rfc22a"></span><h1>MS RFC 22a: Feature cache for long running processes and query processing<a class="headerlink" href="#ms-rfc-22a-feature-cache-for-long-running-processes-and-query-processing" title="Ссылка на этот заголовок">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2007/06/24</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Tamas Szekeres</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">szekerest at gmail.com</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Last Edited:</th><td class="field-body">2007/06/24</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Status:</th><td class="field-body">Discussion Draft</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">MapServer  5.0</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2007/06/24</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Tamas Szekeres</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>szekerest at gmail.com</p>
+</dd>
+<dt class="field-even">Last Edited</dt>
+<dd class="field-even"><p>2007/06/24</p>
+</dd>
+<dt class="field-odd">Status</dt>
+<dd class="field-odd"><p>Discussion Draft</p>
+</dd>
+<dt class="field-even">Version</dt>
+<dd class="field-even"><p>MapServer  5.0</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Currently the various query operations involve multiple accesses to the data
@@ -181,13 +184,13 @@ memory for the subsequent fetches. Here are some other examples where this
 framework would provide a solution:</p>
 <blockquote>
 <div><ol class="loweralpha simple">
-<li>Constructing geometries based on feature attributes</li>
-<li>Modifying the geometries or the feature attribute values</li>
-<li>Geometry transformations (like GEOS operations)</li>
-<li>Feature cache</li>
-<li>Providing default layer style based on external style information, or
-attribute based styling</li>
-<li>Providing custom data filters</li>
+<li><p>Constructing geometries based on feature attributes</p></li>
+<li><p>Modifying the geometries or the feature attribute values</p></li>
+<li><p>Geometry transformations (like GEOS operations)</p></li>
+<li><p>Feature cache</p></li>
+<li><p>Providing default layer style based on external style information, or
+attribute based styling</p></li>
+<li><p>Providing custom data filters</p></li>
 </ol>
 </div></blockquote>
 <p>Setting up a proper layer hierarchy one can solve pretty complex issues
@@ -195,9 +198,9 @@ without the need of creating additional (eg. mapscript) code. Later on - as a
 live example - I’ll show up the solution of the following scenario:</p>
 <blockquote>
 <div><ol class="loweralpha simple">
-<li>The user will select one or more shapes in one layer (by attribute selection in this case).</li>
-<li>Cascaded transformations will be applied on the selected shapes (I’ll use the GEOS convexhull and buffer operations)</li>
-<li>In another layer the features will be selected based on the transformed shapes as the selection shapes.</li>
+<li><p>The user will select one or more shapes in one layer (by attribute selection in this case).</p></li>
+<li><p>Cascaded transformations will be applied on the selected shapes (I’ll use the GEOS convexhull and buffer operations)</p></li>
+<li><p>In another layer the features will be selected based on the transformed shapes as the selection shapes.</p></li>
 </ol>
 </div></blockquote>
 <p>In this proposal to ensure the better readability I’ll avoid embedding much of the code inline. However most of the implementation patches are available at the tracking ticket of this RFC (see later).</p>
@@ -207,7 +210,7 @@ live example - I’ll show up the solution of the following scenario:</p>
 <p>This proposal involves writing additional data providers. These providers will use another layer as the source of the features. To set up this hierarchy of the layers, the CONNECTION parameter of these layers will contain the name of the source layer.
 In some cases the source layer doesn’t participate in the renderings and should be kept internal to the original layer. Therefore we will establish the support for nesting the layers into each other. In this regard the CONNECTION parameter will contain the full path of the layer it refers to. The path contains the layer names in the hierarchy using the slash „/“ as the separator between the names. We can specify the pathnames relative to the actual layer or relative to the map itself.</p>
 <ol class="loweralpha simple">
-<li>Specify a reference relative to the map:</li>
+<li><p>Specify a reference relative to the map:</p></li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
   <span class="n">NAME</span> <span class="s2">&quot;roads&quot;</span>
@@ -224,7 +227,7 @@ In some cases the source layer doesn’t participate in the renderings and shoul
 </pre></div>
 </div>
 <ol class="loweralpha simple" start="2">
-<li>Specify a reference relative to the outer layer</li>
+<li><p>Specify a reference relative to the outer layer</p></li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
   <span class="n">NAME</span> <span class="s2">&quot;cache&quot;</span>
@@ -764,8 +767,6 @@ msGetHashTableItemCount will retrieve the actual number of the hashtable items.<
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Искать" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -837,8 +838,8 @@ msGetHashTableItemCount will retrieve the actual number of the hashtable items.<
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Обновлено: 2019-03-29.
-      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Обновлено: 2019-04-09.
+      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

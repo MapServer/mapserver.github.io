@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="it">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 103: Layer Level Character Encoding Handling &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="A proposito di questi documenti" href="../../about.html" />
     <link rel="index" title="Indice" href="../../genindex.html" />
@@ -138,47 +139,48 @@
             
   <div class="section" id="ms-rfc-103-layer-level-character-encoding-handling">
 <span id="rfc103"></span><h1>MS RFC 103: Layer Level Character Encoding Handling<a class="headerlink" href="#ms-rfc-103-layer-level-character-encoding-handling" title="Link a questa intestazione">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2013/08</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Thomas Bonfort</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 7.0</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2013/08</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Thomas Bonfort</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 7.0</p>
+</dd>
+</dl>
 <div class="section" id="the-current-situation">
 <h2>1. The Current Situation<a class="headerlink" href="#the-current-situation" title="Link a questa intestazione">¶</a></h2>
 <p>MapServer has no knowledge of the character encoding of a datasource, which has
 multiple implications:</p>
 <ul class="simple">
-<li>FILTERs and EXPRESSIONs inside a mapfile must be written in the mapfile in
+<li><p>FILTERs and EXPRESSIONs inside a mapfile must be written in the mapfile in
 the same encoding as the datasource. While this is no hassle for fully UTF8
 datasources and mapfiles, this gets harder to maintain when using non UTF8
 datasources (as the mapfile needs to be saved in another encoding), and becomes
 unmanageable for datasources with mixed encodings (e.g. layer1 is UTF8 while
-layer2 is latin1).</li>
-<li>Handling of the encoding headers has to be manually specified so that correct
+layer2 is latin1).</p></li>
+<li><p>Handling of the encoding headers has to be manually specified so that correct
 content-type headers and xml encoding tags get sent back to clients for OGC
-documents (getcapabilities, getfeature, etc…)</li>
-<li>For rendering, we ass-hatedly specify the encoding at the LABEL level to transform
-label texts to UTF8, given that our renderers only supported that.</li>
+documents (getcapabilities, getfeature, etc…)</p></li>
+<li><p>For rendering, we ass-hatedly specify the encoding at the LABEL level to transform
+label texts to UTF8, given that our renderers only supported that.</p></li>
 </ul>
 <div class="section" id="related-issues">
 <h3>1.1 Related Issues<a class="headerlink" href="#related-issues" title="Link a questa intestazione">¶</a></h3>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/4028">https://github.com/mapserver/mapserver/issues/4028</a></li>
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/3297">https://github.com/mapserver/mapserver/issues/3297</a></li>
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/2831">https://github.com/mapserver/mapserver/issues/2831</a></li>
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/4255">https://github.com/mapserver/mapserver/issues/4255</a></li>
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/pull/4454">https://github.com/mapserver/mapserver/pull/4454</a></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/4028">https://github.com/mapserver/mapserver/issues/4028</a></p></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/3297">https://github.com/mapserver/mapserver/issues/3297</a></p></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/2831">https://github.com/mapserver/mapserver/issues/2831</a></p></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/4255">https://github.com/mapserver/mapserver/issues/4255</a></p></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/pull/4454">https://github.com/mapserver/mapserver/pull/4454</a></p></li>
 </ul>
 </div>
 </div>
@@ -191,12 +193,12 @@ to UTF8 in the GetShape and GetNextShape vtable wrappers.</p>
 <div class="section" id="implications">
 <h2>2.1 Implications<a class="headerlink" href="#implications" title="Link a questa intestazione">¶</a></h2>
 <ul class="simple">
-<li>The core of MapServer can forget about handling encodings, and will treat all strings
-as UTF8.</li>
-<li>All text documents ( e.g. capabilities, getfeature, query, etc.. ) will be emitted as
-UTF8.</li>
-<li>There will be no need to specify encoding metadata entries in the mapfile in order to
-produce somewhat correct ogc documents.</li>
+<li><p>The core of MapServer can forget about handling encodings, and will treat all strings
+as UTF8.</p></li>
+<li><p>All text documents ( e.g. capabilities, getfeature, query, etc.. ) will be emitted as
+UTF8.</p></li>
+<li><p>There will be no need to specify encoding metadata entries in the mapfile in order to
+produce somewhat correct ogc documents.</p></li>
 </ul>
 </div>
 <div class="section" id="backwards-compatibility">
@@ -204,13 +206,13 @@ produce somewhat correct ogc documents.</li>
 <p>This RFC has some notable backwards incompatibility issues for users who were treating
 non UTF8 or ASCII datasets:</p>
 <ul class="simple">
-<li>Mapfiles themselves will be expected to be UTF8-encoded. Non UTF8-encoded mapfiles
-will need to be iconv’d to utf8.</li>
-<li>All textual documents will be emitted as UTF8, with corresponding headers and/or
-preambles. Emitting in other encodings is unsupported.</li>
-<li>LABEL level ENCODING will be removed. As a means of helping backwards
+<li><p>Mapfiles themselves will be expected to be UTF8-encoded. Non UTF8-encoded mapfiles
+will need to be iconv’d to utf8.</p></li>
+<li><p>All textual documents will be emitted as UTF8, with corresponding headers and/or
+preambles. Emitting in other encodings is unsupported.</p></li>
+<li><p>LABEL level ENCODING will be removed. As a means of helping backwards
 compatibility, we might want to set the LAYER level encoding to that of the
-LABEL one when loading a mapfile.</li>
+LABEL one when loading a mapfile.</p></li>
 </ul>
 <p>It should be noted however that these incompatibilities can and should be seen
 as a way to fix MapServer’s flawed handling of these encoded datasources.</p>
@@ -219,8 +221,8 @@ as a way to fix MapServer’s flawed handling of these encoded datasources.</p>
 <h2>2.3 Performance Implications<a class="headerlink" href="#performance-implications" title="Link a questa intestazione">¶</a></h2>
 <p>None or barely noticeable:</p>
 <ul class="simple">
-<li>For UTF8 and ASCII datasources: none expected</li>
-<li>For other datasources: the overhead of the iconv calls should be marginal.</li>
+<li><p>For UTF8 and ASCII datasources: none expected</p></li>
+<li><p>For other datasources: the overhead of the iconv calls should be marginal.</p></li>
 </ul>
 </div>
 <div class="section" id="implementation-details">
@@ -228,12 +230,12 @@ as a way to fix MapServer’s flawed handling of these encoded datasources.</p>
 <div class="section" id="affected-files">
 <h3>3.1 Affected files<a class="headerlink" href="#affected-files" title="Link a questa intestazione">¶</a></h3>
 <ul class="simple">
-<li>mapfile.c : Layer level handling of the ENCODING keyword, possibly treating
-LABEL level ENCODING for backwards compatibility</li>
-<li>maplayer.c: iconv calls to convert the encoding of attributes in
-msLayerGetShape() and msLayerGetNextShape()</li>
-<li>TBD: removal of encoding workarounds and modification of header/preamble printing
-to announce utf8.</li>
+<li><p>mapfile.c : Layer level handling of the ENCODING keyword, possibly treating
+LABEL level ENCODING for backwards compatibility</p></li>
+<li><p>maplayer.c: iconv calls to convert the encoding of attributes in
+msLayerGetShape() and msLayerGetNextShape()</p></li>
+<li><p>TBD: removal of encoding workarounds and modification of header/preamble printing
+to announce utf8.</p></li>
 </ul>
 </div>
 <div class="section" id="tracking-issue">
@@ -247,8 +249,8 @@ to announce utf8.</li>
 encoding of the actual mapfile (to avoid forcing UTF8 as a mandatory mapfile
 encoding), this solution is not proposed, as:</p>
 <ul class="simple">
-<li>this adds substantial complexity throughout the codebase</li>
-<li>UTF8 is the widely recommended encoding to use nowadays</li>
+<li><p>this adds substantial complexity throughout the codebase</p></li>
+<li><p>UTF8 is the widely recommended encoding to use nowadays</p></li>
 </ul>
 </div>
 <div class="section" id="voting-history">
@@ -269,8 +271,6 @@ encoding), this solution is not proposed, as:</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Vai" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -331,8 +331,8 @@ encoding), this solution is not proposed, as:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Ultimo aggiornamento 2019-03-29.
-      Creato con <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Ultimo aggiornamento 2019-04-09.
+      Creato con <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

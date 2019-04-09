@@ -1,18 +1,19 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="nl_NL">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 61: Enhance MapServer Feature Style Support &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Over deze documenten" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -137,20 +138,20 @@
             
   <div class="section" id="ms-rfc-61-enhance-mapserver-feature-style-support">
 <span id="rfc61"></span><h1>MS RFC 61: Enhance MapServer Feature Style Support<a class="headerlink" href="#ms-rfc-61-enhance-mapserver-feature-style-support" title="Permalink naar deze titel">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2010/09/11</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Tamas Szekeres</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">szekerest at gmail.com</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted (Implemented on 2010/09/29, Documentation added)</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2010/09/11</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Tamas Szekeres</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>szekerest at gmail.com</p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted (Implemented on 2010/09/29, Documentation added)</p>
+</dd>
+</dl>
 <p>Description: This RFC proposes a generic implementation for rendering
 the feature styles retrieved from the various data sources. In this
 regard we intend to enhance the existing STYLEITEM option
@@ -209,18 +210,18 @@ style strings. This solution will allow to specify multiple style formats within
 <p>In order to implement this enhancement the following changes should be
 made in the MapServer codebase:</p>
 <ol class="arabic simple">
-<li>Modify msDrawVectorLayer (in mapdraw.cpp) to invoke a new method (msLayerGetFeatureStyle)
-when STYLEITEM is set for a particular layer.</li>
-<li>Implement msLayerGetFeatureStyle in maplayer.c which will call either msUpdateStyleFromString,
+<li><p>Modify msDrawVectorLayer (in mapdraw.cpp) to invoke a new method (msLayerGetFeatureStyle)
+when STYLEITEM is set for a particular layer.</p></li>
+<li><p>Implement msLayerGetFeatureStyle in maplayer.c which will call either msUpdateStyleFromString,
 msUpdateClassFromString or the new method: msOGRUpdateStyleFromString according to
-the actual style format retrieved from the layer.</li>
-<li>Modify msOGRLayerGetAutoStyle (in mapogr.cpp) and extract the bulk of the style
+the actual style format retrieved from the layer.</p></li>
+<li><p>Modify msOGRLayerGetAutoStyle (in mapogr.cpp) and extract the bulk of the style
 initialization into a separate function (msOGRUpdateStyle). We will add a new function
 (msOGRUpdateStyleFromString) where the style manager will be initialized by using
-OGRStyleMgr::InitStyleString instead of OGRStyleMgr::InitFromFeature</li>
-<li>Modify msLayerWhichItems in (maplayer.c) to retrieve the attribute containing the style string
+OGRStyleMgr::InitStyleString instead of OGRStyleMgr::InitFromFeature</p></li>
+<li><p>Modify msLayerWhichItems in (maplayer.c) to retrieve the attribute containing the style string
 specified in the STYLEITEM parameter. By using STYLEITEM “AUTO” no additional attribute
-will be retrieved just as before.</li>
+will be retrieved just as before.</p></li>
 </ol>
 </div>
 <div class="section" id="mapscript-issues">
@@ -233,10 +234,10 @@ attribute not only the “AUTO” value.</p>
 <h2>Files affected<a class="headerlink" href="#files-affected" title="Permalink naar deze titel">¶</a></h2>
 <p>To implement the solution the following files would require to be changed:</p>
 <ul class="simple">
-<li>mapserver.h =&gt; Add the declaration for msLayerGetFeatureStyle and msOGRUpdateStyleFromString</li>
-<li>mapogr.cpp =&gt; Add msOGRUpdateStyleFromString and msOGRUpdateStyle</li>
-<li>maplayer.c =&gt; Modify msLayerWhichItems and implement msLayerGetFeatureStyle</li>
-<li>mapdraw.c =&gt; Call msLayerGetFeatureStyle in addition to msLayerGetAutoStyle</li>
+<li><p>mapserver.h =&gt; Add the declaration for msLayerGetFeatureStyle and msOGRUpdateStyleFromString</p></li>
+<li><p>mapogr.cpp =&gt; Add msOGRUpdateStyleFromString and msOGRUpdateStyle</p></li>
+<li><p>maplayer.c =&gt; Modify msLayerWhichItems and implement msLayerGetFeatureStyle</p></li>
+<li><p>mapdraw.c =&gt; Call msLayerGetFeatureStyle in addition to msLayerGetAutoStyle</p></li>
 </ul>
 </div>
 <div class="section" id="backwards-compatibility-issues">
@@ -282,8 +283,6 @@ style string.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Zoek" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -339,8 +338,8 @@ style string.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2019-03-29.
-      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Laatste aanpassing op 2019-04-09.
+      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

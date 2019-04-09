@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 2: Creating line features and/or shapes using WKT &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Об этих документах" href="../../about.html" />
     <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
@@ -138,31 +139,32 @@
             
   <div class="section" id="ms-rfc-2-creating-line-features-and-or-shapes-using-wkt">
 <span id="rfc2"></span><h1>MS RFC 2: Creating line features and/or shapes using WKT<a class="headerlink" href="#ms-rfc-2-creating-line-features-and-or-shapes-using-wkt" title="Ссылка на этот заголовок">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2005/07/13</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Steve Lime</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">steve.lime at DNR.STATE.MN.US</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Completed</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 4.8</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2005/07/13</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Steve Lime</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>steve.lime at DNR.STATE.MN.US</p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Completed</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 4.8</p>
+</dd>
+</dl>
 <p>Description: Developing inline features or shapes within MapScript can be a
 bit cumbersome.  One alternative would be to allow users to define feature
 using the Well-Known Text format.  The proposed solution would allow users
 to use this format:</p>
 <ol class="arabic simple">
-<li>within a mapfile</li>
-<li>via URL</li>
-<li>via MapScript</li>
-<li>via MapServer query template</li>
+<li><p>within a mapfile</p></li>
+<li><p>via URL</p></li>
+<li><p>via MapScript</p></li>
+<li><p>via MapServer query template</p></li>
 </ol>
 <p>Instead of writing a new WKT parser we would provide access to underlying GEOS
 or OGR functionality to do this. Notes about the actual implementation are
@@ -170,22 +172,22 @@ included below.</p>
 <div class="section" id="files-affected">
 <h2>Files affected<a class="headerlink" href="#files-affected" title="Ссылка на этот заголовок">¶</a></h2>
 <ul class="simple">
-<li>mapfile.h =&gt; new constant, WKT</li>
-<li>maplexer.l =&gt; recognize the new constant</li>
-<li>mapfile.c =&gt; process new mapfile parameter with FEATURE block (WKT), and
-update URL parsing in a similar manner</li>
-<li>mapgeos.cpp =&gt; wrap GEOS WKT reading/writing code</li>
-<li>mapogr.cpp =&gt; wrap OGR WKT reading/writing code</li>
-<li>mapprimitive.c =&gt; wrap the GEOS and OGR WKT writer/reading code, this would
-be the «public» interface</li>
-<li>maptemplate.c =&gt; update the shpxy tag with a «-wkt» option so it would output
+<li><p>mapfile.h =&gt; new constant, WKT</p></li>
+<li><p>maplexer.l =&gt; recognize the new constant</p></li>
+<li><p>mapfile.c =&gt; process new mapfile parameter with FEATURE block (WKT), and
+update URL parsing in a similar manner</p></li>
+<li><p>mapgeos.cpp =&gt; wrap GEOS WKT reading/writing code</p></li>
+<li><p>mapogr.cpp =&gt; wrap OGR WKT reading/writing code</p></li>
+<li><p>mapprimitive.c =&gt; wrap the GEOS and OGR WKT writer/reading code, this would
+be the «public» interface</p></li>
+<li><p>maptemplate.c =&gt; update the shpxy tag with a «-wkt» option so it would output
 the WKT version of a shape. Placing here would allow us to take advantage of
 the projection support already in place, plus any future options (thining, buffers
-and so on).</li>
-<li>mapscript/swiginc/shape.i =&gt; update constructor to pass a WKT string and to
+and so on).</p></li>
+<li><p>mapscript/swiginc/shape.i =&gt; update constructor to pass a WKT string and to
 define a «toString» method that would output a WKT string. Similar modifications
 would have to be made within PHP/MapScript, patterned after the SWIG-based
-interface.</li>
+interface.</p></li>
 </ul>
 </div>
 <div class="section" id="backwards-compatibility-issues">
@@ -196,7 +198,7 @@ interface.</li>
 <h2>Implementation Details<a class="headerlink" href="#implementation-details" title="Ссылка на этот заголовок">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
-<li>The C API will take the form:</li>
+<li><p>The C API will take the form:</p></li>
 </ul>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">shapeObj</span> <span class="o">*</span><span class="n">msShapeFromWKT</span><span class="p">(</span> <span class="n">const</span> <span class="n">char</span> <span class="o">*</span> <span class="p">);</span>
@@ -208,37 +210,32 @@ are 2 places the WKT APIs will be used: 1) MapScript and 2) creating inline feat
 via URL or MapFiles. In both cases the above functions would be preferred.</p>
 </div></blockquote>
 <ul>
-<li><p class="first">In MapScript, creating a shape will take the form of an overloaded constructor, e.g.:</p>
+<li><p>In MapScript, creating a shape will take the form of an overloaded constructor, e.g.:</p>
 <p>$shape = new shapeObj($mapscript::MS_SHAPE_LINE);  OR
 $shape = new shapeObj(„LINESTRING(0 0,1 1,1 2)“);</p>
 </li>
-<li><p class="first">In MapScript, a toWKT() method will be added to shapeObj object.</p>
-</li>
-<li><p class="first">WKT is geometry only.  The attributes, index, tileindex, classindex,
-and text fields do not exist in WKT and will have to be set «elsewhere».</p>
-</li>
-<li><p class="first">There is no widely supported, or standardized approach to «measure»
+<li><p>In MapScript, a toWKT() method will be added to shapeObj object.</p></li>
+<li><p>WKT is geometry only.  The attributes, index, tileindex, classindex,
+and text fields do not exist in WKT and will have to be set «elsewhere».</p></li>
+<li><p>There is no widely supported, or standardized approach to «measure»
 values in WKT though Refractions does support it in «EWKT».  For now it
-is assumed that measure values will not be preserved from WKT.</p>
-</li>
-<li><p class="first">There is a well defined way of including Z coordinates and these should
-be carried through if MapServer is built with Z and M support enabled.</p>
-</li>
-<li><p class="first">Development will be accompanied by a set of tests. Sean Gillies has already created
-a test case or two.</p>
-</li>
+is assumed that measure values will not be preserved from WKT.</p></li>
+<li><p>There is a well defined way of including Z coordinates and these should
+be carried through if MapServer is built with Z and M support enabled.</p></li>
+<li><p>Development will be accompanied by a set of tests. Sean Gillies has already created
+a test case or two.</p></li>
 </ul>
 </div></blockquote>
 <div class="section" id="transformations-shapeobj-to-wkt">
 <h3>Transformations shapeObj to WKT<a class="headerlink" href="#transformations-shapeobj-to-wkt" title="Ссылка на этот заголовок">¶</a></h3>
 <blockquote>
 <div><ul class="simple">
-<li>MS_SHAPE_POINT: If numlines and numpoints are one, then this is converted
+<li><p>MS_SHAPE_POINT: If numlines and numpoints are one, then this is converted
 to a POINT object in WKT.  If there are more points, this is converted
-to a MULTIPOINT object.</li>
-<li>MS_SHAPE_LINE: if numlines is 1 then this will be translated to a LINESTRING
-otherwise it will be translated to a MULTILINESTRING.</li>
-<li>MS_SHAPE_POLYGON: MapServer does not keep track of interior and exterior
+to a MULTIPOINT object.</p></li>
+<li><p>MS_SHAPE_LINE: if numlines is 1 then this will be translated to a LINESTRING
+otherwise it will be translated to a MULTILINESTRING.</p></li>
+<li><p>MS_SHAPE_POLYGON: MapServer does not keep track of interior and exterior
 rings in a shape, since the scanline rasterization mechanism of GD
 does not require this information.  However, when converting to WKT we
 need to know whether we have a single polygon with holes, or multiple
@@ -246,8 +243,8 @@ polygons (more than one exterior ring).   If numlines is 1, we can directly
 translate to POLYGON(), otherwise the rings will need to be analysed to
 identify outer rings, and to associate inner rings with their outher ring.
 If more than one outer ring exist, a MULTIPOLYGON will be produced,
-otherwise a POLYGON will be produced.</li>
-<li>MS_SHAPE_NULL: This results in an empty WKT string.</li>
+otherwise a POLYGON will be produced.</p></li>
+<li><p>MS_SHAPE_NULL: This results in an empty WKT string.</p></li>
 </ul>
 </div></blockquote>
 </div>
@@ -255,18 +252,18 @@ otherwise a POLYGON will be produced.</li>
 <h3>Transformations WKT to shapeObj<a class="headerlink" href="#transformations-wkt-to-shapeobj" title="Ссылка на этот заголовок">¶</a></h3>
 <blockquote>
 <div><ul class="simple">
-<li>POINT: Translates to an MS_SHAPE_POINT object with one point and one line.</li>
-<li>LINESTRING: Translates to an MS_SHAPE_LINE object with one line.</li>
-<li>POLYGON: Translates to an MS_SHAPE_POLYGON object with one line for the
-outer ring and one line for each inner ring.</li>
-<li>MULTIPOINT: Translates to an MS_SHAPE_POINT object with one line, and one
-point for each line.</li>
-<li>MULTILINESTRING: Translates to an MS_SHAPE_LINE object with one line for
-each linestring in the container.</li>
-<li>MULTIPOLYGON: Translates into an MS_SHAPE_POLYGON with each ring of each
-polygon being a line in the resulting polygon object.</li>
-<li>GEOMETRYCOLLECTION: Treat as MULTIPOINT, MULTILINESTRING or MULTIPOLYGON if
-the contents are all compatible, otherwise throw an exception.</li>
+<li><p>POINT: Translates to an MS_SHAPE_POINT object with one point and one line.</p></li>
+<li><p>LINESTRING: Translates to an MS_SHAPE_LINE object with one line.</p></li>
+<li><p>POLYGON: Translates to an MS_SHAPE_POLYGON object with one line for the
+outer ring and one line for each inner ring.</p></li>
+<li><p>MULTIPOINT: Translates to an MS_SHAPE_POINT object with one line, and one
+point for each line.</p></li>
+<li><p>MULTILINESTRING: Translates to an MS_SHAPE_LINE object with one line for
+each linestring in the container.</p></li>
+<li><p>MULTIPOLYGON: Translates into an MS_SHAPE_POLYGON with each ring of each
+polygon being a line in the resulting polygon object.</p></li>
+<li><p>GEOMETRYCOLLECTION: Treat as MULTIPOINT, MULTILINESTRING or MULTIPOLYGON if
+the contents are all compatible, otherwise throw an exception.</p></li>
 </ul>
 </div></blockquote>
 </div>
@@ -296,8 +293,6 @@ the contents are all compatible, otherwise throw an exception.</li>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Искать" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -352,8 +347,8 @@ the contents are all compatible, otherwise throw an exception.</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Обновлено: 2019-03-29.
-      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Обновлено: 2019-04-09.
+      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

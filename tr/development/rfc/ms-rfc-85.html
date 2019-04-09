@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="tr">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 85: Vector Contour Rendering (CONNECTIONTYPE CONTOUR) &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Bu belgeler hakkında" href="../../about.html" />
     <link rel="index" title="Dizin" href="../../genindex.html" />
@@ -138,22 +139,23 @@
             
   <div class="section" id="ms-rfc-85-vector-contour-rendering-connectiontype-contour">
 <span id="rfc85"></span><h1>MS RFC 85: Vector Contour Rendering (CONNECTIONTYPE CONTOUR)<a class="headerlink" href="#ms-rfc-85-vector-contour-rendering-connectiontype-contour" title="Bu başlığın kalıcı bağlantısı">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2012/09/18</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Alan Boudreault</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">aboudreault at mapgears.com</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 6.4</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2012/09/18</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Alan Boudreault</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>aboudreault at mapgears.com</p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 6.4</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
 <p>This is a proposal to add the ability to compute and render contour layers on
@@ -179,28 +181,29 @@ included in this phase of work.</p>
 following options:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Set the layer TYPE to LINE.</li>
-<li>Set CONNECTIONTYPE to CONTOUR.</li>
-<li>Set the DATA to the raster file that contains the elevation band.</li>
-<li>Specify the band to use as elevation using PROCESSING “BANDS”, same as
-regular raster.</li>
-<li>Specify one or more classes and styles to render the line features.</li>
+<li><p>Set the layer TYPE to LINE.</p></li>
+<li><p>Set CONNECTIONTYPE to CONTOUR.</p></li>
+<li><p>Set the DATA to the raster file that contains the elevation band.</p></li>
+<li><p>Specify the band to use as elevation using PROCESSING “BANDS”, same as
+regular raster.</p></li>
+<li><p>Specify one or more classes and styles to render the line features.</p></li>
 </ul>
 </div></blockquote>
 <p>PROCESSING settings:</p>
 <blockquote>
 <div><p>These options should be specified at layer level:</p>
 <ul class="simple">
-<li>CONTOUR_INTERVAL: elevation interval between contours</li>
-<li>CONTOUR_LEVELS: comma-separated list of one or more ‘fixed levels’ to extract</li>
-<li>CONTOUR_ITEM: provides a name for the item (attribute) in which to put the
-elevation. (optional)</li>
+<li><p>CONTOUR_INTERVAL: elevation interval between contours</p></li>
+<li><p>CONTOUR_LEVELS: comma-separated list of one or more ‘fixed levels’ to extract</p></li>
+<li><p>CONTOUR_ITEM: provides a name for the item (attribute) in which to put the
+elevation. (optional)</p></li>
 </ul>
 <blockquote>
-<div>You can also provide explicit min/max scaledenom in the CONTOUR_iNTERVAL or
+<div><p>You can also provide explicit min/max scaledenom in the CONTOUR_iNTERVAL or
 CONTOUR_LEVELS values if you wish to use scale-dependent contour spacing. This
 is done by adding an optional “miscaledenom,maxscaledenom:” prefix to the
-value or list of values. See the example below.</div></blockquote>
+value or list of values. See the example below.</p>
+</div></blockquote>
 </div></blockquote>
 <p>Example of a simple layer definition:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LAYER</span> <span class="n">NAME</span> <span class="s2">&quot;my_contour_layer&quot;</span>
@@ -253,13 +256,13 @@ layer using whichShape, GetShape etc.</p>
 <p>Basic internal draw process of a CONTOUR layer:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>whichShape() is called: the raster data source is read using the internal
-GDAL functions, an ogr dataset is stored in the internal layer structure.</li>
+<li><p>whichShape() is called: the raster data source is read using the internal
+GDAL functions, an ogr dataset is stored in the internal layer structure.</p></li>
 </ol>
 <p>2. getShape() is  called: loop through the ogr dataset  and return the shapeObj
 (Line).</p>
 <ol class="arabic simple" start="3">
-<li>MapServer draws its line feature as any other vector layer.</li>
+<li><p>MapServer draws its line feature as any other vector layer.</p></li>
 </ol>
 </div></blockquote>
 <p>More info about GDAlContourGenerate algorithm at:
@@ -283,8 +286,8 @@ connection pooling API will be used.</p>
 done in one of the two ways:</p>
 <blockquote>
 <div><ul class="simple">
-<li>In GDAL functions during the raster processing. (resample + reprojection)</li>
-<li>In MapServer, like any other vector layer. (reprojection)</li>
+<li><p>In GDAL functions during the raster processing. (resample + reprojection)</p></li>
+<li><p>In MapServer, like any other vector layer. (reprojection)</p></li>
 </ul>
 </div></blockquote>
 </div>
@@ -326,7 +329,7 @@ rendering and queries.</p>
 <div class="section" id="bug-id">
 <h2>5. Bug ID<a class="headerlink" href="#bug-id" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/4613">https://github.com/mapserver/mapserver/issues/4613</a></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/4613">https://github.com/mapserver/mapserver/issues/4613</a></p></li>
 </ul>
 </div>
 <div class="section" id="voting-history">
@@ -347,8 +350,6 @@ rendering and queries.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Git" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -407,8 +408,8 @@ rendering and queries.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Son güncelleme: 2019-03-29.
-      <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6 ile oluşturulmuştur.
+      Son güncelleme: 2019-04-09.
+      <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0 ile oluşturulmuştur.
     </div>
   </body>
 </html>

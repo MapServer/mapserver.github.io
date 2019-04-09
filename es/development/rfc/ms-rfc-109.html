@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 109: Optimizing Runtime Substitutions &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Sobre este documento" href="../../about.html" />
     <link rel="index" title="Índice" href="../../genindex.html" />
@@ -138,39 +139,42 @@
             
   <div class="section" id="ms-rfc-109-optimizing-runtime-substitutions">
 <span id="rfc109"></span><h1>MS RFC 109: Optimizing Runtime Substitutions<a class="headerlink" href="#ms-rfc-109-optimizing-runtime-substitutions" title="Enlazar permanentemente con este título">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2014/03</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Thomas Bonfort</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:tbonfort&#37;&#52;&#48;terriscope&#46;fr">tbonfort<span>&#64;</span>terriscope<span>&#46;</span>fr</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 7.0</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Amended:</th><td class="field-body">2015/02</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2014/03/07</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2014/03</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Thomas Bonfort</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:tbonfort&#37;&#52;&#48;terriscope&#46;fr">tbonfort<span>&#64;</span>terriscope<span>&#46;</span>fr</a></p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 7.0</p>
+</dd>
+<dt class="field-even">Amended</dt>
+<dd class="field-even"><p>2015/02</p>
+</dd>
+<dt class="field-odd">Last Updated</dt>
+<dd class="field-odd"><p>2014/03/07</p>
+</dd>
+</dl>
 <div class="section" id="motivation">
 <h2>1. Motivation<a class="headerlink" href="#motivation" title="Enlazar permanentemente con este título">¶</a></h2>
 <ul class="simple">
-<li>While profiling the WMS shootout queries, a noticeable amount of time was
+<li><p>While profiling the WMS shootout queries, a noticeable amount of time was
 spent in the <a class="reference internal" href="../../cgi/runsub.html#runsub"><span class="std std-ref">Run-time Substitution</span></a> code, even though the functionality was not being
 used at all. As runtime substitutions apply to <strong>all</strong> mapserv requests, an
 optimization in this part of the code is beneficial for all mapserv
-operations.</li>
-<li>For some specific cases, there can be the need to apply runtime substitutions
+operations.</p></li>
+<li><p>For some specific cases, there can be the need to apply runtime substitutions
 inside metadata entries (e.g. modify ows_enable_request when using a proxy
 between mapserver and the client, to enable specific operations for
 authenticated clients). The current implementation prohibits this as it would
-put a far too noticeable hit on performance.</li>
+put a far too noticeable hit on performance.</p></li>
 </ul>
 </div>
 <div class="section" id="proposed-rewrite">
@@ -247,16 +251,16 @@ layer/class validations.</p>
 <p>Update from 2015/02, with +1 from ThomasB, StephanM, DanielM, MikeS and SteveW:
 As discussed on the email list, this RFC is extended with the two following features:</p>
 <ul class="simple">
-<li>Allow substitutions to happen in PROCESSING entries (needed for RFC91
+<li><p>Allow substitutions to happen in PROCESSING entries (needed for RFC91
 native filters, could also be used to e.g. allow to dynamically set resampling
-methods for raster layers)</li>
-<li>Allow substitution values to be read in priority from an envirronment variable.
+methods for raster layers)</p></li>
+<li><p>Allow substitution values to be read in priority from an envirronment variable.
 This would allow a server administrator to set substitutions based on a user id, etc…
 As an envirronment lookup would only happen if the mapfile contains the corresponding
 entry in a VALIDATION block, this feature would not allow the global environment to
 be leaked, unless the user has chosen a substitution key that matches an existing
 environment value. Note that a key from the envirronment would take precedence over
-the same key passed in the URL.</li>
+the same key passed in the URL.</p></li>
 </ul>
 <div class="section" id="backwards-incompatibilities">
 <h3>3.1 Backwards Incompatibilities<a class="headerlink" href="#backwards-incompatibilities" title="Enlazar permanentemente con este título">¶</a></h3>
@@ -264,8 +268,8 @@ the same key passed in the URL.</li>
 incompatibility for this uncommon scenario:</p>
 <blockquote>
 <div><ul class="simple">
-<li>a metadata block contains a %variable% substring in one of its entries</li>
-<li><strong>and</strong> the mapfile contains a VALIDATION block for the «variable» runsub.</li>
+<li><p>a metadata block contains a %variable% substring in one of its entries</p></li>
+<li><p><strong>and</strong> the mapfile contains a VALIDATION block for the «variable» runsub.</p></li>
 </ul>
 </div></blockquote>
 <p>In this case, a substitution will occur if variable=foo is present in the URL,
@@ -276,7 +280,7 @@ whereas this would not have been the case beforehand.</p>
 <p><a class="reference external" href="https://github.com/mapserver/mapserver/pull/4877">https://github.com/mapserver/mapserver/pull/4877</a></p>
 <p>see also:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/4596">https://github.com/mapserver/mapserver/issues/4596</a></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/4596">https://github.com/mapserver/mapserver/issues/4596</a></p></li>
 </ul>
 </div>
 <div class="section" id="voting-history">
@@ -298,8 +302,6 @@ whereas this would not have been the case beforehand.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Ir a" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -353,8 +355,8 @@ whereas this would not have been the case beforehand.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Derechos de autor</a> 2019, Open Source Geospatial Foundation.
-      Actualizado por última vez en 2019-03-29.
-      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Actualizado por última vez en 2019-04-09.
+      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

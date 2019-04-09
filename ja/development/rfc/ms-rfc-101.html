@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 101: Add Support for Content Dependent Legend Responses &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="このドキュメントについて" href="../../about.html" />
     <link rel="index" title="索引" href="../../genindex.html" />
@@ -138,22 +139,23 @@
             
   <div class="section" id="ms-rfc-101-add-support-for-content-dependent-legend-responses">
 <span id="rfc101"></span><h1>MS RFC 101: Add Support for Content Dependent Legend Responses<a class="headerlink" href="#ms-rfc-101-add-support-for-content-dependent-legend-responses" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2013-07-19</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Thomas Bonfort</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 6.4</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2013-07-19</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Thomas Bonfort</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 6.4</p>
+</dd>
+</dl>
 <div class="section" id="summary">
 <h2>1. Summary<a class="headerlink" href="#summary" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>The WMS GetLegendGraphic currently returns a legend image whose content matches
@@ -169,13 +171,13 @@ present in the mapview.</p>
 <p>Let us suppose we have a legend for a road network, comprising three classes
 for motorways, major roads and minor roads.</p>
 <ul class="simple">
-<li>When fully zoomed out, a GetLegendGraphic call will return an image
-containing the 3 road legend icons, one for each class.</li>
-<li>When zooming into a remote rural area (i.e. with only small roads), a
+<li><p>When fully zoomed out, a GetLegendGraphic call will return an image
+containing the 3 road legend icons, one for each class.</p></li>
+<li><p>When zooming into a remote rural area (i.e. with only small roads), a
 GetLegendGraphic call will return an image with a single road icon, for minor
-roads.</li>
-<li>When zooming into the ocean, a GetLegendGraphic will return an image with no
-icons for road features.</li>
+roads.</p></li>
+<li><p>When zooming into the ocean, a GetLegendGraphic will return an image with no
+icons for road features.</p></li>
 </ul>
 </div>
 </div>
@@ -200,32 +202,32 @@ classical legend rendering will occur.</p>
 <div class="section" id="code-impacts">
 <h3>2.2 Code Impacts<a class="headerlink" href="#code-impacts" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
-<li>Inside msWMSDispatch(), if the BBOX parameter is detected during a
+<li><p>Inside msWMSDispatch(), if the BBOX parameter is detected during a
 GetLegendGraphic request, then the processing will skip the current
 GetLegendGraphic codepath, and instead pass through the initialization phases
-of GetMap requests (setting up layer groups, applying SLDs, etc...)</li>
-<li>Once the GetMap initialization phases have occurred without error, go through
+of GetMap requests (setting up layer groups, applying SLDs, etc...)</p></li>
+<li><p>Once the GetMap initialization phases have occurred without error, go through
 msHitTestMap() instead of msDrawMap(). This new function mimics msDrawMap in
 the sense that it loops through active layers and calls
 msLayerWhichShapes/msLayerNextShape on them, but instead of rendering the
 features it marks their LAYER/CLASS/STYLE/LABEL as being activated or not by
-the map draw.</li>
-<li>msDrawLegend/msDrawLegenIcon get passed a new parameter that corresponds to
+the map draw.</p></li>
+<li><p>msDrawLegend/msDrawLegenIcon get passed a new parameter that corresponds to
 the hit-test result and will draw the map's legend icons or not depending if
-they are activated in the hit-test or not.</li>
-<li>mode=maplegend and mode=maplegendicon are added to the traditional mapserver
+they are activated in the hit-test or not.</p></li>
+<li><p>mode=maplegend and mode=maplegendicon are added to the traditional mapserver
 cgi. The mapserverObj struct gets an added map_hittest member that is used by
-the legend templating code to produce content dependent html legends.</li>
+the legend templating code to produce content dependent html legends.</p></li>
 </ul>
 </div>
 <div class="section" id="quirks-and-backwards-incompatibility-issues">
 <h3>2.3 Quirks and Backwards Incompatibility Issues<a class="headerlink" href="#quirks-and-backwards-incompatibility-issues" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
-<li>Clients that send BBOX, SRS and WIDTH/HEIGHT parameters expecting to obtain a non
+<li><p>Clients that send BBOX, SRS and WIDTH/HEIGHT parameters expecting to obtain a non
 content dependent legend will be returned erroneous results. It can be argued
 that these clients should not be sending out-of-spec parameters in the first
-place.</li>
-<li>MapServer currently treats WIDTH and HEIGHT as the size to use for the legend
+place.</p></li>
+<li><p>MapServer currently treats WIDTH and HEIGHT as the size to use for the legend
 icons. For content dependent legends these two parameters are used along with
 BBOX to compute the scale at which the current mapview is being rendered, and
 not for the size of the returned legend icons. While other parameter names
@@ -233,27 +235,27 @@ might have been chosen to avoid this overlap, the implementation sticks with
 WIDTH and HEIGHT as on the one hand they permit an implementation that reuses
 the current GetMap codepaths, and on the second hand these are the parameters
 that are already being used by the (only?) other WMS implementation to
-support this extension, namely Cubewerx.</li>
-<li>RULE is ignored for content-dependant legend requests</li>
-<li>GetLegendGraphic uses a LAYER= parameter to specify which layer to use
+support this extension, namely Cubewerx.</p></li>
+<li><p>RULE is ignored for content-dependant legend requests</p></li>
+<li><p>GetLegendGraphic uses a LAYER= parameter to specify which layer to use
 (MapServer has the extension to support multiple layers, by using
 LAYER=layer1,layer2), whereas GetMap requests use the plural LAYERS= . For
 content dependent GetLegendGraphic calls the code will duplicate the LAYER
 parameter into the LAYERS parameter in order to use the GetMap codepaths. The
 GetLegendGraphic response will be undefined if the client has included a
-LAYERS parameter in the URL that does not coincide with the LAYER parameter.</li>
+LAYERS parameter in the URL that does not coincide with the LAYER parameter.</p></li>
 </ul>
 </div>
 <div class="section" id="performance-impacts-mapscripts">
 <h3>2.4 Performance impacts, mapscripts<a class="headerlink" href="#performance-impacts-mapscripts" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
-<li>No performance impacts (aside from the fact that content dependent legend
-rendering will be obviously slower than traditional legend rendering)</li>
-<li>No user visible mapscript impacts (the mapscript code itself will need a few
-tweaks when calling the msDrawLegend() and msDrawLegenIcon() functions.</li>
-<li>The result of a hittest will not be available to mapscripts. Work in this
+<li><p>No performance impacts (aside from the fact that content dependent legend
+rendering will be obviously slower than traditional legend rendering)</p></li>
+<li><p>No user visible mapscript impacts (the mapscript code itself will need a few
+tweaks when calling the msDrawLegend() and msDrawLegenIcon() functions.</p></li>
+<li><p>The result of a hittest will not be available to mapscripts. Work in this
 direction may be accomplished in the longer run once the APIs and hittest
-structs have stabilized.</li>
+structs have stabilized.</p></li>
 </ul>
 </div>
 </div>
@@ -282,8 +284,6 @@ structs have stabilized.</li>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="検索" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -345,8 +345,8 @@ structs have stabilized.</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      最終更新: 2019-03-29
-      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6 で生成しました。
+      最終更新: 2019-04-09
+      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0 で生成しました。
     </div>
   </body>
 </html>

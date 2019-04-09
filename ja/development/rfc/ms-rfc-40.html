@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 40: Support Label Text Transformations &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="このドキュメントについて" href="../../about.html" />
     <link rel="index" title="索引" href="../../genindex.html" />
@@ -138,32 +139,34 @@
             
   <div class="section" id="ms-rfc-40-support-label-text-transformations">
 <span id="rfc40"></span><h1>MS RFC 40: Support Label Text Transformations<a class="headerlink" href="#ms-rfc-40-support-label-text-transformations" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2007/12/03</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Thomas Bonfort</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">thomas.bonfort at gmail.com</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Last Edited:</th><td class="field-body">2007/12/03</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Status:</th><td class="field-body">Implemented</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">MapServer 5.4</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2007/12/03</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Thomas Bonfort</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>thomas.bonfort at gmail.com</p>
+</dd>
+<dt class="field-even">Last Edited</dt>
+<dd class="field-even"><p>2007/12/03</p>
+</dd>
+<dt class="field-odd">Status</dt>
+<dd class="field-odd"><p>Implemented</p>
+</dd>
+<dt class="field-even">Version</dt>
+<dd class="field-even"><p>MapServer 5.4</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>MapServer 5.0 supports &quot;hard&quot; text wrapping, where the wrap character is
 unconditionally treated as a newline. This RFC proposes the addition of:</p>
 <ul class="simple">
-<li>conditional wrapping, i.e. newlines are only added when the current
-line length has met a user adjustable criteria</li>
-<li>line alignment, i.e. text aligned per user request, namely right, center and left</li>
+<li><p>conditional wrapping, i.e. newlines are only added when the current
+line length has met a user adjustable criteria</p></li>
+<li><p>line alignment, i.e. text aligned per user request, namely right, center and left</p></li>
 </ul>
 <p>These two additions are independent from one another, i.e. can be activated
 together or not.</p>
@@ -173,41 +176,41 @@ together or not.</p>
 <p>A new keyword, MAXLENGTH is added to the label object, and interacts with the
 label WRAP parameter as follows:</p>
 <ul class="simple">
-<li>the wrap character specifies what character can be replaced by a newline
+<li><p>the wrap character specifies what character can be replaced by a newline
 (no change w.r.t. the current meaning). Probably the most useful wrap
-character will become ' ' (i.e. the space character)</li>
-<li>the MAXLENGTH value specifies the maximum number of characters that can
+character will become ' ' (i.e. the space character)</p></li>
+<li><p>the MAXLENGTH value specifies the maximum number of characters that can
 compose a line before a newline is inserted. A value of 0 specifies the
 current &quot;hard&quot; wrapping. A positive value triggers wrapping at the WRAP
 character for lines longer than MAXLENGTH. A negative value triggers
 wrapping that is allowed to break words, i.e. not necessarily at
-the WRAP character.</li>
+the WRAP character.</p></li>
 </ul>
 <p>The WRAP / MAXLENGTH combinations are summarized here:</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="20%" />
-<col width="21%" />
-<col width="36%" />
-<col width="23%" />
+<col style="width: 20%" />
+<col style="width: 21%" />
+<col style="width: 36%" />
+<col style="width: 23%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">&#160;</th>
-<th class="head">maxlen =0</th>
-<th class="head">maxlen &gt; 0</th>
-<th class="head">maxlen &lt; 0</th>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>maxlen =0</p></th>
+<th class="head"><p>maxlen &gt; 0</p></th>
+<th class="head"><p>maxlen &lt; 0</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>wrap = 'char'</td>
-<td>current way</td>
-<td>conditional wrap if &gt; maxlen</td>
-<td>hard wrap</td>
+<tbody>
+<tr class="row-even"><td><p>wrap = 'char'</p></td>
+<td><p>current way</p></td>
+<td><p>conditional wrap if &gt; maxlen</p></td>
+<td><p>hard wrap</p></td>
 </tr>
-<tr class="row-odd"><td>no wrap</td>
-<td>no processing</td>
-<td>skip label if &gt; maxlen</td>
-<td>hard wrap</td>
+<tr class="row-odd"><td><p>no wrap</p></td>
+<td><p>no processing</p></td>
+<td><p>skip label if &gt; maxlen</p></td>
+<td><p>hard wrap</p></td>
 </tr>
 </tbody>
 </table>
@@ -225,19 +228,19 @@ The initial implementation could only rely on the number of characters in
 each text line:</p>
 <blockquote>
 <div><ul class="simple">
-<li>loop through text lines to find the line with the most characters l_max</li>
-<li>pad all the other lines with (l_max - l_cur)/2 space characters</li>
+<li><p>loop through text lines to find the line with the most characters l_max</p></li>
+<li><p>pad all the other lines with (l_max - l_cur)/2 space characters</p></li>
 </ul>
 </div></blockquote>
 <p>A more advanced implementation will be to use the exact line lengths as
 returned by the renderers with the msGetLabelSize function:</p>
 <blockquote>
 <div><ul class="simple">
-<li>compute the size in pixels of the &quot;  &quot; string (two spaces,
-accounts for kerning): l_2space</li>
-<li>loop through text lines to longest line of length pix_l_max</li>
-<li>pad all the other lines with
-(pix_l_max - pix_l_cur)/2 * 1/(2*l_2space) space characters</li>
+<li><p>compute the size in pixels of the &quot;  &quot; string (two spaces,
+accounts for kerning): l_2space</p></li>
+<li><p>loop through text lines to longest line of length pix_l_max</p></li>
+<li><p>pad all the other lines with
+(pix_l_max - pix_l_cur)/2 * 1/(2*l_2space) space characters</p></li>
 </ul>
 </div></blockquote>
 <p>'''Limitations''': aligning text to the right will produce ugly results using
@@ -246,12 +249,12 @@ this method, unless using a monospace font.</p>
 <div class="section" id="modifications-to-the-source-code">
 <h2>Modifications to the source code<a class="headerlink" href="#modifications-to-the-source-code" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <ul class="simple">
-<li>MAXLENGTH and ALIGN will be added to the LABEL object in map.h, in the
-mapfile parser/writer (mapfile.c) and in MapScript</li>
-<li>msTransformLabelText() in maplabel.c will be updated to support the
+<li><p>MAXLENGTH and ALIGN will be added to the LABEL object in map.h, in the
+mapfile parser/writer (mapfile.c) and in MapScript</p></li>
+<li><p>msTransformLabelText() in maplabel.c will be updated to support the
 modifications proposed. No other modifications should be required as the
 text itself is modified to fit the user's request (i.e. it is padded with
-spaces, and/or newlines are added to it)</li>
+spaces, and/or newlines are added to it)</p></li>
 </ul>
 </div>
 <div class="section" id="mapscript-implications">
@@ -276,28 +279,28 @@ and align property (ms_align_*).</p>
 <div class="section" id="bug-id">
 <h2>Bug ID<a class="headerlink" href="#bug-id" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <ul class="simple">
-<li>2383: <a class="reference external" href="https://github.com/mapserver/mapserver/issues/2383">https://github.com/mapserver/mapserver/issues/2383</a></li>
+<li><p>2383: <a class="reference external" href="https://github.com/mapserver/mapserver/issues/2383">https://github.com/mapserver/mapserver/issues/2383</a></p></li>
 </ul>
 </div>
 <div class="section" id="voting-history">
 <h2>Voting history<a class="headerlink" href="#voting-history" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <ul class="simple">
-<li>+1: SteveL, SteveW</li>
-<li>+0: FrankW, TomK</li>
+<li><p>+1: SteveL, SteveW</p></li>
+<li><p>+0: FrankW, TomK</p></li>
 </ul>
 </div>
 <div class="section" id="questions-comments-from-the-review-period">
 <h2>Questions/Comments from the review period<a class="headerlink" href="#questions-comments-from-the-review-period" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <ul class="simple">
-<li>SteveW: allow preciser computation of line offsets when
+<li><p>SteveW: allow preciser computation of line offsets when
 padding with spaces: done. The precise size of each line is
 calculated in pixels, and the closest number of space characters
-required for alignment is computed accordingly</li>
-<li>DanielM: allow multiple characters to be used when wrapping lines:
+required for alignment is computed accordingly</p></li>
+<li><p>DanielM: allow multiple characters to be used when wrapping lines:
 not addressed. Space characters can be <em>replaced</em> by a newline, while the
 hyphen character should generally be kept. Any idea how we can specify that
 some wrapping characters are to be kept while others are just markers
-for potential linebreaks?</li>
+for potential linebreaks?</p></li>
 </ul>
 </div>
 </div>
@@ -314,8 +317,6 @@ for potential linebreaks?</li>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="検索" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -371,8 +372,8 @@ for potential linebreaks?</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      最終更新: 2019-03-29
-      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6 で生成しました。
+      最終更新: 2019-04-09
+      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0 で生成しました。
     </div>
   </body>
 </html>

@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 92: Migrating from Autotools to CMake &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Об этих документах" href="../../about.html" />
     <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
@@ -138,42 +139,43 @@
             
   <div class="section" id="ms-rfc-92-migrating-from-autotools-to-cmake">
 <span id="rfc92"></span><h1>MS RFC 92: Migrating from Autotools to CMake<a class="headerlink" href="#ms-rfc-92-migrating-from-autotools-to-cmake" title="Ссылка на этот заголовок">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2013/03/26</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Thomas Bonfort</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 6.4</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2013/03/26</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Thomas Bonfort</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 6.4</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Our current autoconf + Makefile setup has several limitations:</p>
 <ul class="simple">
-<li>searching for external dependencies is inconsistent between searched libraries</li>
-<li>some external dependencies are not found in their default locations, forcing
+<li><p>searching for external dependencies is inconsistent between searched libraries</p></li>
+<li><p>some external dependencies are not found in their default locations, forcing
 the inclusion of default locations in the compiler/linker flags, and thus
 preventing the usage of other dependencies installed in non-standard locations
 (e.g. if -L/usr/lib is added to the linker flags, then /usr/lib/libgdal.so will
-be used even if the user asked to use gdal from /opt/local/)</li>
-<li>the number of iterations that happened in configure.in are starting to show…
-maintaining this file is now a fairly evolved task</li>
-<li>Build files for platforms that do not support autotools are hand maintained
-alongside the standard Makefiles</li>
-<li>Mapscript builds are not streamlined with the principal build, and require
-custom instructions for each language</li>
-<li>Supported features and available system functions are declared as defines on
+be used even if the user asked to use gdal from /opt/local/)</p></li>
+<li><p>the number of iterations that happened in configure.in are starting to show…
+maintaining this file is now a fairly evolved task</p></li>
+<li><p>Build files for platforms that do not support autotools are hand maintained
+alongside the standard Makefiles</p></li>
+<li><p>Mapscript builds are not streamlined with the principal build, and require
+custom instructions for each language</p></li>
+<li><p>Supported features and available system functions are declared as defines on
 the compiler command line, preventing the safe usage of our headers without the
 need to know exactly what defines should be added (thus the need for the
-mapserver-config and mapservervars hacks to be able to build mapscripts)</li>
+mapserver-config and mapservervars hacks to be able to build mapscripts)</p></li>
 </ul>
 </div>
 <div class="section" id="proposed-solution">
@@ -185,30 +187,28 @@ cross-platform way.</p>
 <div class="section" id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Ссылка на этот заголовок">¶</a></h2>
 <ul class="simple">
-<li>remove the current autotools/Makefile related files</li>
-<li>implement CMakefiles replicating our search for dependencies and build</li>
-<li>use a generated mapserver-config.h included by mapserver.h that contains
-the defines that we are now passing on the command line (-DUSE_OGR or -DNEED_STRSTR)</li>
-<li>store MapServer release information in the CMakefiles, and include that information
-in a generated mapserver-version.h</li>
+<li><p>remove the current autotools/Makefile related files</p></li>
+<li><p>implement CMakefiles replicating our search for dependencies and build</p></li>
+<li><p>use a generated mapserver-config.h included by mapserver.h that contains
+the defines that we are now passing on the command line (-DUSE_OGR or -DNEED_STRSTR)</p></li>
+<li><p>store MapServer release information in the CMakefiles, and include that information
+in a generated mapserver-version.h</p></li>
 </ul>
 </div>
 <div class="section" id="files-affected">
 <h2>3.2 Files affected<a class="headerlink" href="#files-affected" title="Ссылка на этот заголовок">¶</a></h2>
-<dl class="docutils">
-<dt>Files removed:</dt>
-<dd><ul class="first last simple">
-<li>*/Makefile */Makefile.in</li>
-<li>configure.in configure</li>
-<li>aclocal.m4</li>
-<li>README.Configure</li>
+<dl class="simple">
+<dt>Files removed:</dt><dd><ul class="simple">
+<li><p>*/Makefile */Makefile.in</p></li>
+<li><p>configure.in configure</p></li>
+<li><p>aclocal.m4</p></li>
+<li><p>README.Configure</p></li>
 </ul>
 </dd>
-<dt>Files added:</dt>
-<dd><ul class="first last simple">
-<li>*/CMakeLists.txt</li>
-<li>mapserver-config.h.in</li>
-<li>mapserver-version.h.in</li>
+<dt>Files added:</dt><dd><ul class="simple">
+<li><p>*/CMakeLists.txt</p></li>
+<li><p>mapserver-config.h.in</p></li>
+<li><p>mapserver-version.h.in</p></li>
 </ul>
 </dd>
 </dl>
@@ -221,21 +221,21 @@ requires the presence of SWIG.</p>
 <div class="section" id="backwards-compatibility-issues">
 <h2>3.4 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Ссылка на этот заголовок">¶</a></h2>
 <ul class="simple">
-<li>Current ./configure handling will not be supported.</li>
-<li>Linking against dependencies available as a static library only is not supported
+<li><p>Current ./configure handling will not be supported.</p></li>
+<li><p>Linking against dependencies available as a static library only is not supported
 directly. Workarounds should be possible and will be documented if that need
-arises</li>
-<li>Installed binaries will not have their rpath to libmapserver set. If libmapserver
+arises</p></li>
+<li><p>Installed binaries will not have their rpath to libmapserver set. If libmapserver
 is installed to a non-standard location, then LD_LIBRARY_PATH will have to be set
-pointing to that location.</li>
-<li>Current win32 buildfiles would need to be updated as the NEED_STRXXX defines have
-been renamed in mapserver.h to HAVE_STRXXX</li>
+pointing to that location.</p></li>
+<li><p>Current win32 buildfiles would need to be updated as the NEED_STRXXX defines have
+been renamed in mapserver.h to HAVE_STRXXX</p></li>
 </ul>
 </div>
 <div class="section" id="tips-when-migrating-from-autotools-habits">
 <h2>4. Tips when migrating from autotools habits<a class="headerlink" href="#tips-when-migrating-from-autotools-habits" title="Ссылка на этот заголовок">¶</a></h2>
 <ul>
-<li><p class="first">Cmake builds should preferably be run «out-of-source», i.e. in a separate
+<li><p>Cmake builds should preferably be run «out-of-source», i.e. in a separate
 directory from the source files:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd mapserver
 $ mkdir build
@@ -246,19 +246,15 @@ $ make
 </pre></div>
 </div>
 </li>
-<li><p class="first">Many new features are enabled/looked for by default instead of being silently
-ignored.</p>
-</li>
-<li><p class="first">Missing dependencies are reported with an error message indicating the resolution.
+<li><p>Many new features are enabled/looked for by default instead of being silently
+ignored.</p></li>
+<li><p>Missing dependencies are reported with an error message indicating the resolution.
 An unwanted dependency can be disabled by adding -DWITH_XXX=0 to the cmake
-invocation (e.g. -DWITH_FRIBIDI=0 -DWITH_WFS=0)</p>
-</li>
-<li><p class="first">Mapscripts are not built by default and are enabled by adding -DWITH_PHP=1
--DWITH_PYTHON=1, etc…</p>
-</li>
-<li><p class="first">Dependencies that are installed outside of default locations can be referenced by
-adding -DCMAKE_PREFIX_PATH=/path/to/gdal-prefix;/path/to/libxml2-prefix</p>
-</li>
+invocation (e.g. -DWITH_FRIBIDI=0 -DWITH_WFS=0)</p></li>
+<li><p>Mapscripts are not built by default and are enabled by adding -DWITH_PHP=1
+-DWITH_PYTHON=1, etc…</p></li>
+<li><p>Dependencies that are installed outside of default locations can be referenced by
+adding -DCMAKE_PREFIX_PATH=/path/to/gdal-prefix;/path/to/libxml2-prefix</p></li>
 </ul>
 </div>
 <div class="section" id="performance-implications">
@@ -288,8 +284,6 @@ SteveL, SteveW and PerryN</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Искать" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -345,8 +339,8 @@ SteveL, SteveW and PerryN</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Обновлено: 2019-03-29.
-      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Обновлено: 2019-04-09.
+      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

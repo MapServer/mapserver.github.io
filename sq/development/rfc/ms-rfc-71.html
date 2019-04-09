@@ -1,18 +1,19 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="sq">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 71: Integration of Mod-Geocache in the MapServer project &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -137,22 +138,23 @@
             
   <div class="section" id="ms-rfc-71-integration-of-mod-geocache-in-the-mapserver-project">
 <span id="rfc71"></span><h1>MS RFC 71: Integration of Mod-Geocache in the MapServer project<a class="headerlink" href="#ms-rfc-71-integration-of-mod-geocache-in-the-mapserver-project" title="Permalink to this headline">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2011/05/20</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Thomas Bonfort</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">tbonfort at terriscope dot fr</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 7.0</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2011/05/20</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Thomas Bonfort</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>tbonfort at terriscope dot fr</p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 7.0</p>
+</dd>
+</dl>
 <p>Description: This RFC proposes the integration of <a class="reference external" href="http://code.google.com/p/mod-geocache/">mod-geocache</a>
 in the MapServer project.</p>
 <div class="section" id="overview">
@@ -172,15 +174,15 @@ accomplish the task successfully but in a manner that does not integrate ideally
 project:</p>
 <blockquote>
 <div><ul class="simple">
-<li>They do not run native code, which incurs a minor performance overhead, and can be an inconvenience
-in the context of high performance data dissemination</li>
-<li>They do not share their configuration with the server they are proxying, as such requiring users
-to duplicate configuration variables and metadata.</li>
-<li>In the case of the python servers, they require an additional component to function (mod-python,
+<li><p>They do not run native code, which incurs a minor performance overhead, and can be an inconvenience
+in the context of high performance data dissemination</p></li>
+<li><p>They do not share their configuration with the server they are proxying, as such requiring users
+to duplicate configuration variables and metadata.</p></li>
+<li><p>In the case of the python servers, they require an additional component to function (mod-python,
 mod-wsgi, or fastcgi wrapper) that is cumbersome to configure on non-mainstream platforms. The GIL
 is also a bottleneck for multi-threaded servers for the requests that require an access to native
-code (notably related to image format encoding and decoding).</li>
-<li>NIH ;) and as it can be written in C, why not use that directly?</li>
+code (notably related to image format encoding and decoding).</p></li>
+<li><p>NIH ;) and as it can be written in C, why not use that directly?</p></li>
 </ul>
 </div></blockquote>
 </div>
@@ -194,26 +196,26 @@ fastcgi ipc).</p>
 <p>Its list of features include:</p>
 <blockquote>
 <div><ul class="simple">
-<li>services WMS, WMTS, TMS, VirtualEarth/Bing and GoogleMaps requests</li>
-<li>ability to respond to untiled WMS requests by merging tiles from the cache or forwarding
-them to the wms source</li>
-<li>responds to WMS/WMTS GetFeatureInfo requests (forwarded to source service)</li>
-<li>KML superoverlay generation</li>
-<li>data provided by WMS backends (GDAL supported sources planned)</li>
-<li>experimental memcached cache</li>
-<li>configurable metatiling, with inter-process/inter-thread locking and synchronization
-to avoid overloading the source wms when the tiles are not seeded yet.</li>
-<li>on-the-fly tile merging for combining multiple tiles into a single image</li>
-<li>image post-processing (recompression and quantization) when arriving from a backend</li>
-<li>interprets and produces cache control headers: Last-Modified, If-Modified-Since, Expires</li>
-<li>multithreaded seeding utility</li>
-<li>ability to add a custom watermark on stored tiles</li>
-<li>can produce a fastCGI executable for using with other webservers than apache</li>
-<li>configurable symbolic linking of blank tiles to gain disk storage</li>
-<li>configurable error reporting: plain http error code, textual message, or empty (blank) image</li>
-<li>ability to specify vendor params or dimensions to be forwarded to the WMS backend
-(and build a cache that takes these parameters into account)</li>
-<li>rule-based proxying of non-tile requests to (an)other server(s), e.g. for WFS, WFS-T, etc…</li>
+<li><p>services WMS, WMTS, TMS, VirtualEarth/Bing and GoogleMaps requests</p></li>
+<li><p>ability to respond to untiled WMS requests by merging tiles from the cache or forwarding
+them to the wms source</p></li>
+<li><p>responds to WMS/WMTS GetFeatureInfo requests (forwarded to source service)</p></li>
+<li><p>KML superoverlay generation</p></li>
+<li><p>data provided by WMS backends (GDAL supported sources planned)</p></li>
+<li><p>experimental memcached cache</p></li>
+<li><p>configurable metatiling, with inter-process/inter-thread locking and synchronization
+to avoid overloading the source wms when the tiles are not seeded yet.</p></li>
+<li><p>on-the-fly tile merging for combining multiple tiles into a single image</p></li>
+<li><p>image post-processing (recompression and quantization) when arriving from a backend</p></li>
+<li><p>interprets and produces cache control headers: Last-Modified, If-Modified-Since, Expires</p></li>
+<li><p>multithreaded seeding utility</p></li>
+<li><p>ability to add a custom watermark on stored tiles</p></li>
+<li><p>can produce a fastCGI executable for using with other webservers than apache</p></li>
+<li><p>configurable symbolic linking of blank tiles to gain disk storage</p></li>
+<li><p>configurable error reporting: plain http error code, textual message, or empty (blank) image</p></li>
+<li><p>ability to specify vendor params or dimensions to be forwarded to the WMS backend
+(and build a cache that takes these parameters into account)</p></li>
+<li><p>rule-based proxying of non-tile requests to (an)other server(s), e.g. for WFS, WFS-T, etc…</p></li>
 </ul>
 </div></blockquote>
 </div>
@@ -318,14 +320,14 @@ concern when writing the code, but I’m no security expert.</p>
 <h2>4.4 External Dependencies<a class="headerlink" href="#external-dependencies" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
-<li>libcurl (required)</li>
-<li>apr(required) / apr-util(optional)</li>
-<li>libpng (required)</li>
-<li>libjpeg (required)</li>
-<li>pcre (optional)</li>
-<li>OGR (for the seeder, optional)</li>
-<li>libcairo (optional, required for servicing GetMap requests built from cached tiles)</li>
-<li>FastCGI (optional)</li>
+<li><p>libcurl (required)</p></li>
+<li><p>apr(required) / apr-util(optional)</p></li>
+<li><p>libpng (required)</p></li>
+<li><p>libjpeg (required)</p></li>
+<li><p>pcre (optional)</p></li>
+<li><p>OGR (for the seeder, optional)</p></li>
+<li><p>libcairo (optional, required for servicing GetMap requests built from cached tiles)</p></li>
+<li><p>FastCGI (optional)</p></li>
 </ul>
 </div></blockquote>
 </div>
@@ -355,8 +357,6 @@ concern when writing the code, but I’m no security expert.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -426,8 +426,8 @@ concern when writing the code, but I’m no security expert.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Last updated on 2019-03-29.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Last updated on 2019-04-09.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

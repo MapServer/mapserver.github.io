@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="el">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 69: Support for clustering of features in point layers &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Σχετικά με αυτά τα κείμενα" href="../../about.html" />
     <link rel="index" title="Ευρετήριο" href="../../genindex.html" />
@@ -138,22 +139,23 @@
             
   <div class="section" id="ms-rfc-69-support-for-clustering-of-features-in-point-layers">
 <span id="rfc69"></span><h1>MS RFC 69: Support for clustering of features in point layers<a class="headerlink" href="#ms-rfc-69-support-for-clustering-of-features-in-point-layers" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2011/02/19</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Tamas Szekeres</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">szekerest at gmail.com</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted (Implemented on 2011-03-04)</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 6.0</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2011/02/19</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Tamas Szekeres</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>szekerest at gmail.com</p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted (Implemented on 2011-03-04)</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 6.0</p>
+</dd>
+</dl>
 <p>Description: This RFC proposes an implementation for clustering multiple features
 from a layer to single (aggregated) features based on their relative positions.</p>
 <div class="section" id="overview">
@@ -260,14 +262,14 @@ place where the features are retrieved from the original data source and then ca
 in the local clustering database (stored in layerinfo).</p>
 <p>The clustering process itself will be implemented in the following way:</p>
 <ol class="arabic simple">
-<li>For each feature we create a tentative cluster with some aggregate attributes
+<li><p>For each feature we create a tentative cluster with some aggregate attributes
 (like the feature count, the average position and the variance) the features are added into
 a customized quadtree data structure which provides quick access when searching for the
-neighboring shapes</li>
-<li>For each feature we will retrieve all the neighbouring shapes (that has already been retrieved earlier)
+neighboring shapes</p></li>
+<li><p>For each feature we will retrieve all the neighbouring shapes (that has already been retrieved earlier)
 within the specified distance (CLUSTERMAXDISTANCE) and search shape (CLUSTERREGION) by using a quadtree search. We will also inspect the filter and group conditions in each relations,
 In the related clusters we update the feature count (n) average positions (avg) and the variance (var)
-for each intersecting clusters by using the following recursive formula:</li>
+for each intersecting clusters by using the following recursive formula:</p></li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
 <span class="n">avg</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">=</span> <span class="n">avg</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span> <span class="o">+</span> <span class="n">x</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
@@ -275,15 +277,15 @@ for each intersecting clusters by using the following recursive formula:</li>
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
-<li>In a second turn we evaluate the tentative clusters based on their feature count and the offset of the
+<li><p>In a second turn we evaluate the tentative clusters based on their feature count and the offset of the
 average position related to the initial position and the variance. The best ranking clusters will
 be identified by minimizing the position offset and the variance. The individual features (having rank=0)
-will be retrieved first in this approach.</li>
-<li>The best ranking clusters will be added to the finalization list (in layerinfo) and the finalized
-clusters (and the related features) will be removed from the quadtree as well.</li>
-<li>Based on the finalized features we update the average position and the variance of the affected
-clusters which are still exist in the quadtree.</li>
-<li>Repeat from #4 until we have features in the quadtree.</li>
+will be retrieved first in this approach.</p></li>
+<li><p>The best ranking clusters will be added to the finalization list (in layerinfo) and the finalized
+clusters (and the related features) will be removed from the quadtree as well.</p></li>
+<li><p>Based on the finalized features we update the average position and the variance of the affected
+clusters which are still exist in the quadtree.</p></li>
+<li><p>Repeat from #4 until we have features in the quadtree.</p></li>
 </ol>
 <p>In LayerNextShape the features are served from the finalization list which is preserved until the layer is open.
 In LayerClose the vtable of the layer will be restored to the original methods
@@ -318,12 +320,12 @@ is open, so the single pass query approach is provided by this driver.</p>
 <h2>4. Implementation Details<a class="headerlink" href="#implementation-details" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <p>In order to implement this enhancement the following changes should be made in the MapServer codebase:</p>
 <ol class="arabic simple">
-<li>Modify the lexer to contain the new keywords</li>
-<li>Create a new struct (clusterObj) to contain the clustering parameters and implement the handlers
-(initCluster, loadCluster, freeCluster, writeCluster) in mapfile.c</li>
-<li>Modify maplayer.c to invoke msClusterlayerOpen based on the existence of the clustering parameters,
-and make msLayerWhichItems aware of the group and filter expressions</li>
-<li>Implement mapcluster.c containing the code of the cluster layer data provider</li>
+<li><p>Modify the lexer to contain the new keywords</p></li>
+<li><p>Create a new struct (clusterObj) to contain the clustering parameters and implement the handlers
+(initCluster, loadCluster, freeCluster, writeCluster) in mapfile.c</p></li>
+<li><p>Modify maplayer.c to invoke msClusterlayerOpen based on the existence of the clustering parameters,
+and make msLayerWhichItems aware of the group and filter expressions</p></li>
+<li><p>Implement mapcluster.c containing the code of the cluster layer data provider</p></li>
 </ol>
 </div>
 <div class="section" id="files-affected">
@@ -371,8 +373,6 @@ and make msLayerWhichItems aware of the group and filter expressions</li>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Πάμε" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -430,8 +430,8 @@ and make msLayerWhichItems aware of the group and filter expressions</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Τελευταία ενημέρωση στις 2019-03-29.
-      Δημιουργήθηκε με το <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Τελευταία ενημέρωση στις 2019-04-09.
+      Δημιουργήθηκε με το <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="tr">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 24: Mapscript memory management &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Bu belgeler hakkında" href="../../about.html" />
     <link rel="index" title="Dizin" href="../../genindex.html" />
@@ -128,43 +129,49 @@
             
   <div class="section" id="ms-rfc-24-mapscript-memory-management">
 <span id="rfc24"></span><h1><a class="toc-backref" href="#table-of-contents">MS RFC 24: Mapscript memory management</a><a class="headerlink" href="#ms-rfc-24-mapscript-memory-management" title="Bu başlığın kalıcı bağlantısı">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2006/12/3</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Umberto Nicoletti</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:umberto&#46;nicoletti&#37;&#52;&#48;gmail&#46;com">umberto<span>&#46;</span>nicoletti<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Last Edited:</th><td class="field-body">2006/12/31</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Status:</th><td class="field-body">Done</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">MapServer  5.0</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Tracker:</th><td class="field-body"><a class="reference external" href="https://github.com/mapserver/mapserver/issues/2032">https://github.com/mapserver/mapserver/issues/2032</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Tracker 3.2:</th><td class="field-body"><a class="reference external" href="https://github.com/mapserver/mapserver/issues/2442">https://github.com/mapserver/mapserver/issues/2442</a></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Id:</th><td class="field-body">$Id$</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2006/12/3</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Umberto Nicoletti</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:umberto&#46;nicoletti&#37;&#52;&#48;gmail&#46;com">umberto<span>&#46;</span>nicoletti<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+</dd>
+<dt class="field-even">Last Edited</dt>
+<dd class="field-even"><p>2006/12/31</p>
+</dd>
+<dt class="field-odd">Status</dt>
+<dd class="field-odd"><p>Done</p>
+</dd>
+<dt class="field-even">Version</dt>
+<dd class="field-even"><p>MapServer  5.0</p>
+</dd>
+<dt class="field-odd">Tracker</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/2032">https://github.com/mapserver/mapserver/issues/2032</a></p>
+</dd>
+<dt class="field-even">Tracker 3.2</dt>
+<dd class="field-even"><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/2442">https://github.com/mapserver/mapserver/issues/2442</a></p>
+</dd>
+<dt class="field-odd">Id</dt>
+<dd class="field-odd"><p>$Id$</p>
+</dd>
+</dl>
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title first">Table of Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#ms-rfc-24-mapscript-memory-management" id="id1">MS RFC 24: Mapscript memory management</a><ul>
-<li><a class="reference internal" href="#overview" id="id2">Overview</a></li>
-<li><a class="reference internal" href="#problem-description" id="id3">Problem description</a></li>
-<li><a class="reference internal" href="#proposed-implementation" id="id4">Proposed implementation</a></li>
-<li><a class="reference internal" href="#implementation-plan" id="id5">Implementation plan</a></li>
-<li><a class="reference internal" href="#implementation-checklist" id="id6">Implementation checklist</a></li>
-<li><a class="reference internal" href="#open-issues" id="id7">Open issues</a></li>
-<li><a class="reference internal" href="#api-compatibility" id="id8">API Compatibility</a></li>
-<li><a class="reference internal" href="#status" id="id9">Status</a></li>
-<li><a class="reference internal" href="#activity" id="id10">Activity</a></li>
+<li><p><a class="reference internal" href="#ms-rfc-24-mapscript-memory-management" id="id1">MS RFC 24: Mapscript memory management</a></p>
+<ul>
+<li><p><a class="reference internal" href="#overview" id="id2">Overview</a></p></li>
+<li><p><a class="reference internal" href="#problem-description" id="id3">Problem description</a></p></li>
+<li><p><a class="reference internal" href="#proposed-implementation" id="id4">Proposed implementation</a></p></li>
+<li><p><a class="reference internal" href="#implementation-plan" id="id5">Implementation plan</a></p></li>
+<li><p><a class="reference internal" href="#implementation-checklist" id="id6">Implementation checklist</a></p></li>
+<li><p><a class="reference internal" href="#open-issues" id="id7">Open issues</a></p></li>
+<li><p><a class="reference internal" href="#api-compatibility" id="id8">API Compatibility</a></p></li>
+<li><p><a class="reference internal" href="#status" id="id9">Status</a></p></li>
+<li><p><a class="reference internal" href="#activity" id="id10">Activity</a></p></li>
 </ul>
 </li>
 </ul>
@@ -281,19 +288,19 @@ for pointing it out.</p>
 <h2><a class="toc-backref" href="#table-of-contents">Proposed implementation</a><a class="headerlink" href="#proposed-implementation" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
 <p>To solve the problems shown at items 2.1, 2.2 and 2.3 this RFC proposes that:</p>
 <ol class="arabic simple">
-<li>a reference counter is added to each MapServer data structure that can be
+<li><p>a reference counter is added to each MapServer data structure that can be
 manipulated directly with MapScript AND inserted/added to another
-object (i.e. a layerObj)</li>
-<li>setters, getters and insert methods increase the counter whenever a
-reference to a MapServer data structure is created by MapScript</li>
-<li>all MapScript objects be always owned by SWIG or, more exactly, by the
-wrapper objects (<em>swigCMemOwn</em> is always true)</li>
-<li>the MapServer free* methods be modified so that the the underlying data
-structure is freed only when the counter is zero and decrease it otherwise</li>
-<li>wrapper objects be augmented to maintain a reference to their parents
-only and prevent early garbage collection</li>
-<li>all arrays of structures (map-&gt;layers and so on) be changed to arrays of
-pointers to eliminate the need for a copy operation on insert methods</li>
+object (i.e. a layerObj)</p></li>
+<li><p>setters, getters and insert methods increase the counter whenever a
+reference to a MapServer data structure is created by MapScript</p></li>
+<li><p>all MapScript objects be always owned by SWIG or, more exactly, by the
+wrapper objects (<em>swigCMemOwn</em> is always true)</p></li>
+<li><p>the MapServer free* methods be modified so that the the underlying data
+structure is freed only when the counter is zero and decrease it otherwise</p></li>
+<li><p>wrapper objects be augmented to maintain a reference to their parents
+only and prevent early garbage collection</p></li>
+<li><p>all arrays of structures (map-&gt;layers and so on) be changed to arrays of
+pointers to eliminate the need for a copy operation on insert methods</p></li>
 </ol>
 <p>By preliminary discussion it has been decided to drop the requirement to
 fully support object equality. As a result 2.1 will be implemented so
@@ -329,25 +336,25 @@ first strategy.</p>
 <p>The rfc should be modified to propose that the USE_MAPSCRIPT
 requirement is dropped on the following motivations:</p>
 <ol class="loweralpha simple">
-<li>with the advent of use_mapscript the compilation process will be
+<li><p>with the advent of use_mapscript the compilation process will be
 different if the user needs to build MapScript rather than the cgi.
 While this should not be a big deal for individuals it might place
 some extra burden on those maintaining binary distros like ms4w or
-fwtools</li>
-<li>having refcounting enabled does not harm the cgi which should only
+fwtools</p></li>
+<li><p>having refcounting enabled does not harm the cgi which should only
 experience a tini tiny (if any at all) performance drop because of the
-extra if and ++</li>
-<li>we can always opt to introduce USE_MAPSCRIPT later</li>
-<li>it simplifies the build process maintaining exactly like it’s been until now</li>
-<li>it simplifies the developer’s life because of one less define to maintain</li>
+extra if and ++</p></li>
+<li><p>we can always opt to introduce USE_MAPSCRIPT later</p></li>
+<li><p>it simplifies the build process maintaining exactly like it’s been until now</p></li>
+<li><p>it simplifies the developer’s life because of one less define to maintain</p></li>
 </ol>
 <p>The following is the text (now obsolete) documenting USE_MAPSCRIPT.</p>
 <p>Since this member will not be used by the CGI this RFC proposes that:</p>
 <ol class="arabic simple">
-<li>it is wrapped by a new define USE_MAPSCRIPT</li>
-<li>a new <em>configure</em> option is added that is called <em>–enable-mapscript</em></li>
-<li>starting from 5.0 on it will be required to specify <em>–enable-mapscript</em>
-to build any MapScript (with the exception of php, maybe)</li>
+<li><p>it is wrapped by a new define USE_MAPSCRIPT</p></li>
+<li><p>a new <em>configure</em> option is added that is called <em>–enable-mapscript</em></p></li>
+<li><p>starting from 5.0 on it will be required to specify <em>–enable-mapscript</em>
+to build any MapScript (with the exception of php, maybe)</p></li>
 </ol>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="n">CLASS</span> <span class="n">OBJECT</span> <span class="o">-</span> <span class="n">basic</span> <span class="n">symbolization</span> <span class="ow">and</span> <span class="n">classification</span> <span class="n">information</span> <span class="o">*/</span>
@@ -377,7 +384,7 @@ This object can be hereafter referred to as the <em>parent object</em>.</p>
 <p>In example, in the case of the layerObj the layerObj class will be extended
 to contain</p>
 <ul class="simple">
-<li>a reference to the mapObj that contains the layer</li>
+<li><p>a reference to the mapObj that contains the layer</p></li>
 </ul>
 <p>The purpose of these changes is that the hosting language knows of the
 relationships between these objects and we solve the early garbage collection
@@ -398,11 +405,11 @@ it is now. The modification of the code will be made a way that future RFC
 addressing dynamically-sized arrays can build upon.</p>
 <p>The strategy is as follows:</p>
 <ol class="arabic simple">
-<li>all accesses to array elements could be wrapped by a convenient C macro.
-In this way implementation is abstracted away from the client code</li>
-<li>struct definitions and free/init methods will be modified to implement
-the new feature</li>
-<li>the macro will be modified to suit the implementation at previous item</li>
+<li><p>all accesses to array elements could be wrapped by a convenient C macro.
+In this way implementation is abstracted away from the client code</p></li>
+<li><p>struct definitions and free/init methods will be modified to implement
+the new feature</p></li>
+<li><p>the macro will be modified to suit the implementation at previous item</p></li>
 </ol>
 <p>To implement item 1 we will use a perl pie like the following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;s/([mM])ap-&gt;layers\[(.*?)\]\]\./GET_LAYER(</span><span class="se">\1</span><span class="s2">ap, </span><span class="se">\2</span><span class="s2">\])-&gt;/g&quot;</span> <span class="o">*.</span><span class="n">c</span>
@@ -453,11 +460,11 @@ This will be implemented in the native code as in the following example:</p>
 garbage collected before them. To avoid that the parent attempts to double
 free some of its children:</p>
 <ol class="loweralpha simple">
-<li>if the parent is destroyed before its children the parent should
-NULLify its pointer in the children</li>
-<li>viceversa, when the children are GC’ed earlier than their parent, they must
+<li><p>if the parent is destroyed before its children the parent should
+NULLify its pointer in the children</p></li>
+<li><p>viceversa, when the children are GC’ed earlier than their parent, they must
 NULLify their pointers in the parent (we are evaluating whether this
-could ever happen once the parent reference is in place)</li>
+could ever happen once the parent reference is in place)</p></li>
 </ol>
 </div>
 <div class="section" id="always-give-object-ownership-to-swig">
@@ -581,11 +588,11 @@ Each language gets then a specific section to deal with its own characteristics<
 <h3>Checking SWIG-Mapscript capabilities: %javacode<a class="headerlink" href="#checking-swig-mapscript-capabilities-javacode" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
 <p>Swig provides the equivalent of <em>%javacode</em> for the following languages:</p>
 <ol class="arabic simple">
-<li>perl through %perlcode</li>
-<li>python through %pythoncode</li>
-<li>csharp through %cscode</li>
-<li>ruby does not have any ruby code at all in its wrapper objects</li>
-<li>swig-Tcl doesn’t support a %tclcode construct</li>
+<li><p>perl through %perlcode</p></li>
+<li><p>python through %pythoncode</p></li>
+<li><p>csharp through %cscode</p></li>
+<li><p>ruby does not have any ruby code at all in its wrapper objects</p></li>
+<li><p>swig-Tcl doesn’t support a %tclcode construct</p></li>
 </ol>
 <p>This swig construct will be used to inject in the wrapper the definition for
 the references described in 3.2 and the wrapper methods.</p>
@@ -608,8 +615,8 @@ equivalents by changing the <em>java</em> prefix into <em>cs</em> (i.e. <em>java
 <p>The implementation should follow exactly this RCF or be based on the proposal
 made by Tamas in the last discussion thread.</p>
 <div class="admonition note">
-<p class="first admonition-title">Not</p>
-<p class="last">as of Jan 2008 Tamas decided to write his own implementation of
+<p class="admonition-title">Not</p>
+<p>as of Jan 2008 Tamas decided to write his own implementation of
 <a class="reference internal" href="#rfc24"><span class="std std-ref">MS RFC 24: Mapscript memory management</span></a> for C#</p>
 </div>
 </div>
@@ -649,673 +656,673 @@ There is a table for each MapScript object and when a language has implemented
 this RFC for a given object the maintainer will populate the relative cell
 with one of the following marks:</p>
 <ul class="simple">
-<li>&lt; if the child-&gt;parent reference has been implemented</li>
-<li>a plus sign (+) if object has had the reference counter increased
-(under the CNT=Counter column)</li>
-<li>a minus sign (-) if object has had the reference counter decreased
-(under the CNT=Counter column)</li>
-<li>=1 if the reference counter has been reset to 1
-(under the CNT=Counter column)</li>
+<li><p>&lt; if the child-&gt;parent reference has been implemented</p></li>
+<li><p>a plus sign (+) if object has had the reference counter increased
+(under the CNT=Counter column)</p></li>
+<li><p>a minus sign (-) if object has had the reference counter decreased
+(under the CNT=Counter column)</p></li>
+<li><p>=1 if the reference counter has been reset to 1
+(under the CNT=Counter column)</p></li>
 </ul>
 <div class="section" id="mapobj">
 <h3>mapObj<a class="headerlink" href="#mapobj" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="21%" />
-<col width="7%" />
-<col width="13%" />
-<col width="12%" />
-<col width="12%" />
-<col width="13%" />
-<col width="10%" />
-<col width="13%" />
+<col style="width: 21%" />
+<col style="width: 7%" />
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">CNT</th>
-<th class="head">java</th>
-<th class="head">C#</th>
-<th class="head">perl</th>
-<th class="head">python</th>
-<th class="head">tcl</th>
-<th class="head">ruby</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>CNT</p></th>
+<th class="head"><p>java</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>perl</p></th>
+<th class="head"><p>python</p></th>
+<th class="head"><p>tcl</p></th>
+<th class="head"><p>ruby</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>mapObj (constructor)</td>
-<td>+</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p>mapObj (constructor)</p></td>
+<td><p>+</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getSymbolset</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getSymbolset</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getFontset</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getFontset</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getLabelcache</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getLabelcache</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getExtent</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getExtent</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>setSaved_extent</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>setSaved_extent</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getSaved_extent</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getSaved_extent</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getImagecolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getImagecolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getOutputformat</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getOutputformat</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getReference</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getReference</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getScalebar</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getScalebar</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getLegend</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getLegend</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getQuerymap</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getQuerymap</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getWeb</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getWeb</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getConfigoptions</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getConfigoptions</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>insertLayer</td>
-<td>+</td>
-<td>&lt;</td>
-<td>&#160;</td>
-<td>&lt;</td>
-<td>&lt;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>insertLayer</p></td>
+<td><p>+</p></td>
+<td><p>&lt;</p></td>
+<td></td>
+<td><p>&lt;</p></td>
+<td><p>&lt;</p></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>removeLayer</td>
-<td>-</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>removeLayer</p></td>
+<td><p>-</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getLayer</td>
-<td>+</td>
-<td>&lt;</td>
-<td>&#160;</td>
-<td>&lt;</td>
-<td>&lt;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getLayer</p></td>
+<td><p>+</p></td>
+<td><p>&lt;</p></td>
+<td></td>
+<td><p>&lt;</p></td>
+<td><p>&lt;</p></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getLayerByName</td>
-<td>+</td>
-<td>&lt;</td>
-<td>&#160;</td>
-<td>&lt;</td>
-<td>&lt;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getLayerByName</p></td>
+<td><p>+</p></td>
+<td><p>&lt;</p></td>
+<td></td>
+<td><p>&lt;</p></td>
+<td><p>&lt;</p></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>prepareImage</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>prepareImage</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>setOutputFormat</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>setOutputFormat</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>draw</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>draw</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>drawQuery</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>drawQuery</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>drawLegend</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>drawLegend</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>drawScalebar</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>drawScalebar</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>drawReferenceMap</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>drawReferenceMap</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getLabel</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getLabel</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>nextLabel</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>nextLabel</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getOutputFormatByName</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getOutputFormatByName</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>appendOutputFormat</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>appendOutputFormat</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>removeOutputFormat</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>removeOutputFormat</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>clone</td>
-<td>=1</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>clone</p></td>
+<td><p>=1</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="layerobj">
 <h3>layerObj<a class="headerlink" href="#layerobj" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="22%" />
-<col width="7%" />
-<col width="13%" />
-<col width="12%" />
-<col width="12%" />
-<col width="13%" />
-<col width="10%" />
-<col width="13%" />
+<col style="width: 22%" />
+<col style="width: 7%" />
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">CNT</th>
-<th class="head">java</th>
-<th class="head">C#</th>
-<th class="head">perl</th>
-<th class="head">python</th>
-<th class="head">tcl</th>
-<th class="head">ruby</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>CNT</p></th>
+<th class="head"><p>java</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>perl</p></th>
+<th class="head"><p>python</p></th>
+<th class="head"><p>tcl</p></th>
+<th class="head"><p>ruby</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>layerObj (constructor)</td>
-<td>+</td>
-<td>&lt;</td>
-<td>&#160;</td>
-<td>&lt;</td>
-<td>&lt;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p>layerObj (constructor)</p></td>
+<td><p>+</p></td>
+<td><p>&lt;</p></td>
+<td></td>
+<td><p>&lt;</p></td>
+<td><p>&lt;</p></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getMap</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getMap</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getOffsite</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getOffsite</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getMetadata</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getMetadata</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>cloneLayer</td>
-<td>=1</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>cloneLayer</p></td>
+<td><p>=1</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>insertClass</td>
-<td>+</td>
-<td>&lt;</td>
-<td>&#160;</td>
-<td>&lt;</td>
-<td>&lt;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>insertClass</p></td>
+<td><p>+</p></td>
+<td><p>&lt;</p></td>
+<td></td>
+<td><p>&lt;</p></td>
+<td><p>&lt;</p></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>removeClass</td>
-<td>-</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>removeClass</p></td>
+<td><p>-</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>nextShape</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>nextShape</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getFeature</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getFeature</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getShape</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getShape</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getResult</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getResult</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getClass</td>
-<td>+</td>
-<td>&lt;</td>
-<td>&#160;</td>
-<td>&lt;</td>
-<td>&lt;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getClass</p></td>
+<td><p>+</p></td>
+<td><p>&lt;</p></td>
+<td></td>
+<td><p>&lt;</p></td>
+<td><p>&lt;</p></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getResults</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getResults</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>addFeature</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>addFeature</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getExtent</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getExtent</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="classobj">
 <h3>classObj<a class="headerlink" href="#classobj" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="22%" />
-<col width="7%" />
-<col width="13%" />
-<col width="12%" />
-<col width="12%" />
-<col width="13%" />
-<col width="10%" />
-<col width="13%" />
+<col style="width: 22%" />
+<col style="width: 7%" />
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">CNT</th>
-<th class="head">java</th>
-<th class="head">C#</th>
-<th class="head">perl</th>
-<th class="head">python</th>
-<th class="head">tcl</th>
-<th class="head">ruby</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>CNT</p></th>
+<th class="head"><p>java</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>perl</p></th>
+<th class="head"><p>python</p></th>
+<th class="head"><p>tcl</p></th>
+<th class="head"><p>ruby</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>classObj (constructor)</td>
-<td>+</td>
-<td>&lt;</td>
-<td>&#160;</td>
-<td>&lt;</td>
-<td>&lt;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p>classObj (constructor)</p></td>
+<td><p>+</p></td>
+<td><p>&lt;</p></td>
+<td></td>
+<td><p>&lt;</p></td>
+<td><p>&lt;</p></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getLabel</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getLabel</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getMetadata</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getMetadata</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getLayer</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getLayer</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>clone</td>
-<td>=1</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>clone</p></td>
+<td><p>=1</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>createLegendIcon</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>createLegendIcon</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>drawLegendIcon</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>drawLegendIcon</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getStyle</td>
-<td>+</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getStyle</p></td>
+<td><p>+</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>insertStyle</td>
-<td>+</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>insertStyle</p></td>
+<td><p>+</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>removeStyle</td>
-<td>-</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>removeStyle</p></td>
+<td><p>-</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="webobj">
 <h3>webObj<a class="headerlink" href="#webobj" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="24%" />
-<col width="14%" />
-<col width="13%" />
-<col width="13%" />
-<col width="14%" />
-<col width="10%" />
-<col width="14%" />
+<col style="width: 24%" />
+<col style="width: 14%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 14%" />
+<col style="width: 10%" />
+<col style="width: 14%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">java</th>
-<th class="head">C#</th>
-<th class="head">perl</th>
-<th class="head">python</th>
-<th class="head">tcl</th>
-<th class="head">ruby</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>java</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>perl</p></th>
+<th class="head"><p>python</p></th>
+<th class="head"><p>tcl</p></th>
+<th class="head"><p>ruby</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>webObj (constructor)</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p>webObj (constructor)</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getMap</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getMap</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getExtent</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getExtent</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>setExtent</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>setExtent</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getMetadata</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getMetadata</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1324,136 +1331,136 @@ with one of the following marks:</p>
 <h3>styleObj<a class="headerlink" href="#styleobj" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
 <p>For styleObjs it is enough to disown them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="22%" />
-<col width="7%" />
-<col width="13%" />
-<col width="12%" />
-<col width="12%" />
-<col width="13%" />
-<col width="10%" />
-<col width="13%" />
+<col style="width: 22%" />
+<col style="width: 7%" />
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">CNT</th>
-<th class="head">java</th>
-<th class="head">C#</th>
-<th class="head">perl</th>
-<th class="head">python</th>
-<th class="head">tcl</th>
-<th class="head">ruby</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>CNT</p></th>
+<th class="head"><p>java</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>perl</p></th>
+<th class="head"><p>python</p></th>
+<th class="head"><p>tcl</p></th>
+<th class="head"><p>ruby</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>styleObj (constructor)</td>
-<td>+</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p>styleObj (constructor)</p></td>
+<td><p>+</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>setColor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>setColor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getColor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getColor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getBackgroundcolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getBackgroundcolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>setBackgroundcolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>setBackgroundcolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getOutlinecolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getOutlinecolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>setOutlinecolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>setOutlinecolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getMincolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getMincolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>setMincolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>setMincolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getMaxcolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getMaxcolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>setMaxcolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>setMaxcolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>clone</td>
-<td>=1</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>clone</p></td>
+<td><p>=1</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1462,114 +1469,114 @@ It is not necessary to add the reference pointing back to the container object.<
 <h3>labelObj<a class="headerlink" href="#labelobj" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
 <p>For labelObjs it is enough to disown them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="26%" />
-<col width="13%" />
-<col width="12%" />
-<col width="12%" />
-<col width="13%" />
-<col width="10%" />
-<col width="13%" />
+<col style="width: 26%" />
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">java</th>
-<th class="head">C#</th>
-<th class="head">perl</th>
-<th class="head">python</th>
-<th class="head">tcl</th>
-<th class="head">ruby</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>java</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>perl</p></th>
+<th class="head"><p>python</p></th>
+<th class="head"><p>tcl</p></th>
+<th class="head"><p>ruby</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>labelObj (constructor)</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p>labelObj (constructor)</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getColor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getColor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>setColor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>setColor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>setOutlinecolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>setOutlinecolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getOutlinecolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getOutlinecolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>setShadowcolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>setShadowcolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getShadowcolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getShadowcolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getBackgroundcolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getBackgroundcolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>setBackgroundcolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>setBackgroundcolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>setBackgroundshadowcolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>setBackgroundshadowcolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getBackgroundshadowcolor</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getBackgroundshadowcolor</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1578,34 +1585,34 @@ It is not necessary to add the reference pointing back to the container object.<
 <h3>hashTableObj<a class="headerlink" href="#hashtableobj" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
 <p>For hashTableObjs it is enough to disown them when they are fetched from the container object (i.e. a layerObj).
 It is not necessary to add the reference pointing back to the container object.</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="26%" />
-<col width="13%" />
-<col width="12%" />
-<col width="12%" />
-<col width="13%" />
-<col width="10%" />
-<col width="13%" />
+<col style="width: 26%" />
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">java</th>
-<th class="head">C#</th>
-<th class="head">perl</th>
-<th class="head">python</th>
-<th class="head">tcl</th>
-<th class="head">ruby</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>java</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>perl</p></th>
+<th class="head"><p>python</p></th>
+<th class="head"><p>tcl</p></th>
+<th class="head"><p>ruby</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>hashTableObj (constructor)</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p>hashTableObj (constructor)</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1614,34 +1621,34 @@ It is not necessary to add the reference pointing back to the container object.<
 <h3>colorObj<a class="headerlink" href="#colorobj" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
 <p>For colorObjs it is enough to disown them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="26%" />
-<col width="13%" />
-<col width="12%" />
-<col width="12%" />
-<col width="13%" />
-<col width="10%" />
-<col width="13%" />
+<col style="width: 26%" />
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">java</th>
-<th class="head">C#</th>
-<th class="head">perl</th>
-<th class="head">python</th>
-<th class="head">tcl</th>
-<th class="head">ruby</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>java</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>perl</p></th>
+<th class="head"><p>python</p></th>
+<th class="head"><p>tcl</p></th>
+<th class="head"><p>ruby</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>colorObj (constructor)</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p>colorObj (constructor)</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1650,34 +1657,34 @@ It is not necessary to add the reference pointing back to the container object.<
 <h3>imageObj<a class="headerlink" href="#imageobj" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
 <p>For imageObjs it is enough to own them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="26%" />
-<col width="13%" />
-<col width="12%" />
-<col width="12%" />
-<col width="13%" />
-<col width="10%" />
-<col width="13%" />
+<col style="width: 26%" />
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">java</th>
-<th class="head">C#</th>
-<th class="head">perl</th>
-<th class="head">python</th>
-<th class="head">tcl</th>
-<th class="head">ruby</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>java</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>perl</p></th>
+<th class="head"><p>python</p></th>
+<th class="head"><p>tcl</p></th>
+<th class="head"><p>ruby</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>imageObj (constructor)</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p>imageObj (constructor)</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1686,146 +1693,146 @@ It is not necessary to add the reference pointing back to the container object.<
 <h3>shapeObj<a class="headerlink" href="#shapeobj" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
 <p>For shapeObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="26%" />
-<col width="13%" />
-<col width="12%" />
-<col width="12%" />
-<col width="13%" />
-<col width="10%" />
-<col width="13%" />
+<col style="width: 26%" />
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">java</th>
-<th class="head">C#</th>
-<th class="head">perl</th>
-<th class="head">python</th>
-<th class="head">tcl</th>
-<th class="head">ruby</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>java</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>perl</p></th>
+<th class="head"><p>python</p></th>
+<th class="head"><p>tcl</p></th>
+<th class="head"><p>ruby</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>shapeObj (constructor)</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p>shapeObj (constructor)</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getLine</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getLine</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getBounds</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getBounds</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>get</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>get</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>add</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>add</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>clone</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>clone</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>copy</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>copy</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>buffer</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>buffer</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>convexHull</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>convexHull</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>boundary</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>boundary</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getCentroid</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getCentroid</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>Union</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>Union</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>intersection</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>intersection</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>difference</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>difference</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>symDifference</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>symDifference</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1834,66 +1841,66 @@ It is not necessary to add the reference pointing back to the container object.<
 <h3>lineObj<a class="headerlink" href="#lineobj" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
 <p>For lineObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="26%" />
-<col width="13%" />
-<col width="12%" />
-<col width="12%" />
-<col width="13%" />
-<col width="10%" />
-<col width="13%" />
+<col style="width: 26%" />
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">java</th>
-<th class="head">C#</th>
-<th class="head">perl</th>
-<th class="head">python</th>
-<th class="head">tcl</th>
-<th class="head">ruby</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>java</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>perl</p></th>
+<th class="head"><p>python</p></th>
+<th class="head"><p>tcl</p></th>
+<th class="head"><p>ruby</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>lineObj (constructor)</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p>lineObj (constructor)</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getPoint</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getPoint</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>get</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>get</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>add</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>add</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>set</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>set</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1902,42 +1909,42 @@ It is not necessary to add the reference pointing back to the container object.<
 <h3>pointObj<a class="headerlink" href="#pointobj" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
 <p>For pointObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="26%" />
-<col width="13%" />
-<col width="12%" />
-<col width="12%" />
-<col width="13%" />
-<col width="10%" />
-<col width="13%" />
+<col style="width: 26%" />
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">java</th>
-<th class="head">C#</th>
-<th class="head">perl</th>
-<th class="head">python</th>
-<th class="head">tcl</th>
-<th class="head">ruby</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>java</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>perl</p></th>
+<th class="head"><p>python</p></th>
+<th class="head"><p>tcl</p></th>
+<th class="head"><p>ruby</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>pointObj (constructors)</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p>pointObj (constructors)</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>toShape</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>toShape</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1945,100 +1952,100 @@ It is not necessary to add the reference pointing back to the container object.<
 <div class="section" id="symbolsetobj">
 <h3>symbolsetObj<a class="headerlink" href="#symbolsetobj" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
 <p>For symbolsetObjs it is not necessary to add the reference pointing back to the map.</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="25%" />
-<col width="7%" />
-<col width="12%" />
-<col width="11%" />
-<col width="11%" />
-<col width="12%" />
-<col width="9%" />
-<col width="12%" />
+<col style="width: 25%" />
+<col style="width: 7%" />
+<col style="width: 12%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 12%" />
+<col style="width: 9%" />
+<col style="width: 12%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">CNT</th>
-<th class="head">java</th>
-<th class="head">C#</th>
-<th class="head">perl</th>
-<th class="head">python</th>
-<th class="head">tcl</th>
-<th class="head">ruby</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>CNT</p></th>
+<th class="head"><p>java</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>perl</p></th>
+<th class="head"><p>python</p></th>
+<th class="head"><p>tcl</p></th>
+<th class="head"><p>ruby</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>symbolsetObj (constructor)</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p>symbolsetObj (constructor)</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>setSymbol(symbolObj value)</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>setSymbol(symbolObj value)</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getSymbol</td>
-<td>+</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getSymbol</p></td>
+<td><p>+</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getSymbol(int i)</td>
-<td>+</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getSymbol(int i)</p></td>
+<td><p>+</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getSymbolByName</td>
-<td>+</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getSymbolByName</p></td>
+<td><p>+</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>index</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>index</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>appendSymbol</td>
-<td>+</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>appendSymbol</p></td>
+<td><p>+</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>removeSymbol</td>
-<td>-</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>removeSymbol</p></td>
+<td><p>-</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -2047,73 +2054,73 @@ It is not necessary to add the reference pointing back to the container object.<
 <h3>symbolObj<a class="headerlink" href="#symbolobj" title="Bu başlığın kalıcı bağlantısı">¶</a></h3>
 <p>For symbolObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="25%" />
-<col width="7%" />
-<col width="12%" />
-<col width="11%" />
-<col width="11%" />
-<col width="12%" />
-<col width="9%" />
-<col width="12%" />
+<col style="width: 25%" />
+<col style="width: 7%" />
+<col style="width: 12%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 12%" />
+<col style="width: 9%" />
+<col style="width: 12%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">CNT</th>
-<th class="head">java</th>
-<th class="head">C#</th>
-<th class="head">perl</th>
-<th class="head">python</th>
-<th class="head">tcl</th>
-<th class="head">ruby</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>CNT</p></th>
+<th class="head"><p>java</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>perl</p></th>
+<th class="head"><p>python</p></th>
+<th class="head"><p>tcl</p></th>
+<th class="head"><p>ruby</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>symbolObj (constructor)</td>
-<td>+</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p>symbolObj (constructor)</p></td>
+<td><p>+</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>setPoints</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>setPoints</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>getPoints</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>getPoints</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>getImage</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>getImage</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>setImage</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>setImage</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -2173,8 +2180,6 @@ and be described under this section.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Git" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -2268,8 +2273,8 @@ and be described under this section.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Son güncelleme: 2019-03-29.
-      <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6 ile oluşturulmuştur.
+      Son güncelleme: 2019-04-09.
+      <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0 ile oluşturulmuştur.
     </div>
   </body>
 </html>

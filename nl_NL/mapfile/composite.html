@@ -1,18 +1,19 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="nl_NL">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>COMPOSITE &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="Over deze documenten" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -147,151 +148,149 @@ functionality is essential for more pleasant renderings of raster
 hillshadings over vector surfaces.  It is also useful for simulating
 different kinds of overprinting effects.</p>
 <div class="admonition seealso">
-<p class="first admonition-title">Zie ook</p>
-<p class="last"><a class="reference internal" href="../development/rfc/ms-rfc-113.html#rfc113"><span class="std std-ref">MS RFC 113: Layer Compositing Pipeline</span></a></p>
+<p class="admonition-title">Zie ook</p>
+<p><a class="reference internal" href="../development/rfc/ms-rfc-113.html#rfc113"><span class="std std-ref">MS RFC 113: Layer Compositing Pipeline</span></a></p>
 </div>
 <p>Performance is affected by advanced blending (all modes except
 <cite>src-over</cite>).</p>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink naar deze titel">¶</a></h2>
-<span id="index-1"></span><dl class="docutils" id="opacity">
-<dt>OPACITY [integer]</dt>
-<dd>Sets the opacity level (or the inability to see through the layer) of all
+<span id="index-1"></span><dl class="simple" id="opacity">
+<dt>OPACITY [integer]</dt><dd><p>Sets the opacity level (or the inability to see through the layer) of all
 classed pixels for a given layer.  A value of 100 is opaque and
-0 is fully transparent.</dd>
+0 is fully transparent.</p>
+</dd>
 </dl>
-<dl class="docutils" id="index-2">
-<dt>COMPOP [string]</dt>
-<dd><p class="first">Name of the compositing operator to use when blending the temporary image
+<dl id="index-2">
+<dt>COMPOP [string]</dt><dd><p>Name of the compositing operator to use when blending the temporary image
 onto the main map image. See <cite>http://en.wikipedia.org/wiki/Blend_modes</cite>.
 The default compositing operator is “src-over”.</p>
 <p>Available operators are:</p>
 <ul class="simple">
-<li><dl class="first docutils">
-<dt>clear</dt>
-<dd>Both the color and the alpha of the destination are cleared.
+<li><dl class="simple">
+<dt>clear</dt><dd><p>Both the color and the alpha of the destination are cleared.
 Neither the source nor the destination are used. This is an
 unusual compose method that essentially ignores the overlay
-image completely, and just clears the background image.</dd>
+image completely, and just clears the background image.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>color-burn</dt>
-<dd>Divides the inverted bottom layer by the top layer, and then
+<li><dl class="simple">
+<dt>color-burn</dt><dd><p>Divides the inverted bottom layer by the top layer, and then
 inverts the result. This darkens the top layer increasing the
 contrast to reflect the color of the bottom layer. The darker
-the bottom layer, the more its color is used.</dd>
+the bottom layer, the more its color is used.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>color-dodge</dt>
-<dd>Divides the bottom layer by the inverted top layer. This
+<li><dl class="simple">
+<dt>color-dodge</dt><dd><p>Divides the bottom layer by the inverted top layer. This
 lightens the bottom layer depending on the value of the top
 layer: the brighter the top layer, the more its color affects
 the bottom layer. Blending any color with white gives
-white. Blending with black does not change the image.</dd>
+white. Blending with black does not change the image.</p>
+</dd>
 </dl>
 </li>
-<li>contrast*</li>
-<li><dl class="first docutils">
-<dt>darken</dt>
-<dd>Creates a image that retains the smallest components of the
+<li><p>contrast*</p></li>
+<li><dl class="simple">
+<dt>darken</dt><dd><p>Creates a image that retains the smallest components of the
 foreground and background pixels. If the foreground pixel has
 the components r1, g1, and b1, and the background has r2, g2,
-b2, the resultant pixel is [min(r1,r2), min(g1,g2), min(b1,b2)]</dd>
+b2, the resultant pixel is [min(r1,r2), min(g1,g2), min(b1,b2)]</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>difference</dt>
-<dd>Subtracts the bottom layer from the top layer or the other way
+<li><dl class="simple">
+<dt>difference</dt><dd><p>Subtracts the bottom layer from the top layer or the other way
 round, to always get a positive value. Blending with black
 produces no change, as values for all colors are 0. (The RGB
 value for black is 0,0,0.) Blending with white inverts the
-picture.</dd>
+picture.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>dst</dt>
-<dd>This operator does nothing. The source, or overlay image, is
+<li><dl class="simple">
+<dt>dst</dt><dd><p>This operator does nothing. The source, or overlay image, is
 completely ignored and the destination, or background image, is
 left unchanged. The method’s real use is as a means of ‘turning
-off’ an alpha composition operation in other image operators.</dd>
+off’ an alpha composition operation in other image operators.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>dst-atop</dt>
-<dd>The part of the source lying inside of the destination is
-composited onto the destination.</dd>
+<li><dl class="simple">
+<dt>dst-atop</dt><dd><p>The part of the source lying inside of the destination is
+composited onto the destination.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>dst-in</dt>
-<dd>The part of the destination lying inside of the source replaces
+<li><dl class="simple">
+<dt>dst-in</dt><dd><p>The part of the destination lying inside of the source replaces
 the destination. Areas not overlaid are cleared. Will remove
 the overlay image’s shape from the background image like a
 cookie cutter which cuts out a cookie’s shape from cookie dough
-(result is the cookie).</dd>
+(result is the cookie).</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>dst-out</dt>
-<dd>The part of the destination lying outside of the source
+<li><dl class="simple">
+<dt>dst-out</dt><dd><p>The part of the destination lying outside of the source
 replaces the destination. Using the ‘cookie dough’ metaphor of
 ‘dst-in’ the result of the ‘dst-out’ method is the dough that
 was left behind once a cookie has been cut out. It can be used
 to cut holes, or take bites out of the background image, using
 the shape of the overlay. Any color in the overlay is again
-completely ignored.</dd>
+completely ignored.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>dst-over</dt>
-<dd>The destination is composited over the source and the result
+<li><dl class="simple">
+<dt>dst-over</dt><dd><p>The destination is composited over the source and the result
 replaces the destination.  Equivalent to placing the source
 overlay image ‘under’ the destination. The result is that only
 the parts of our source or overlay image not hidden by the
 destination or background image will be visible as they peek
-out from underneath.</dd>
+out from underneath.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>exclusion</dt>
-<dd>This is sort of an averaged difference. White on white will
+<li><dl class="simple">
+<dt>exclusion</dt><dd><p>This is sort of an averaged difference. White on white will
 produce black (no difference), the same with black on
 black. However grey on grey will produce a grey result. White
-and black naturally still produce white (maximum difference).</dd>
+and black naturally still produce white (maximum difference).</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>hard-light</dt>
-<dd>Hard Light is a combination of Multiply and Screen, each at
+<li><dl class="simple">
+<dt>hard-light</dt><dd><p>Hard Light is a combination of Multiply and Screen, each at
 half strength. Hard Light effects the blend layer’s
 relationship to the base layer in the same way Overlay effects
-the base layer’s relationship to the blend layer.</dd>
+the base layer’s relationship to the blend layer.</p>
+</dd>
 </dl>
 </li>
-<li>invert*</li>
-<li>invert-rgb*</li>
-<li><dl class="first docutils">
-<dt>lighten</dt>
-<dd>Lighten has the opposite action of Darken. It selects the
+<li><p>invert*</p></li>
+<li><p>invert-rgb*</p></li>
+<li><dl class="simple">
+<dt>lighten</dt><dd><p>Lighten has the opposite action of Darken. It selects the
 maximum of each component from the foreground and background
 pixels. If the foreground pixel has the components r1, g1, and
 b1, and the background has r2, g2, b2, the resultant pixel is
-[max(r1,r2), max(g1,g2), max(b1,b2)]</dd>
+[max(r1,r2), max(g1,g2), max(b1,b2)]</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>minus*</dt>
-<dd>Subtract the colors in the source image from the destination
+<li><dl class="simple">
+<dt>minus*</dt><dd><p>Subtract the colors in the source image from the destination
 image. When transparency is involved, opaque areas is
-subtracted from any destination opaque areas.</dd>
+subtracted from any destination opaque areas.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>multiply</dt>
-<dd>A simple multiply of the two images. Its formula is: [Src *
+<li><dl class="simple">
+<dt>multiply</dt><dd><p>A simple multiply of the two images. Its formula is: [Src *
 Dest]. This means that if one of the images is pure white, the
 result will be the other image. On the other hand if one image
 is black the result will be black. Between these extremes one
@@ -299,57 +298,57 @@ image will darken the destination image by the amount
 given. Note that ‘Multiply’ will only darken an image, it will
 never brighten it. That is, it ‘attenuates’ an image toward
 black, which makes this compose method a ‘Burn’ style of
-composition.</dd>
+composition.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>overlay</dt>
-<dd>Overlay combines Multiply and Screen blend modes, at half
+<li><dl class="simple">
+<dt>overlay</dt><dd><p>Overlay combines Multiply and Screen blend modes, at half
 strength. The parts of the top layer where the base layer is
 light become lighter, the parts where the base layer is dark
 become darker. Areas where the top layer are mid grey are
-unaffected.</dd>
+unaffected.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>plus</dt>
-<dd>The source is added to the destination and replaces the
+<li><dl class="simple">
+<dt>plus</dt><dd><p>The source is added to the destination and replaces the
 destination. This operator is useful for averaging or a
-controlled merger of two images, rather than a direct overlay.</dd>
+controlled merger of two images, rather than a direct overlay.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>screen</dt>
-<dd>The source and destination are complemented and then multiplied
+<li><dl class="simple">
+<dt>screen</dt><dd><p>The source and destination are complemented and then multiplied
 and then replace the destination. The resultant color is always
 at least as light as either of the two constituent
 colors. Screening any color with white produces
 white. Screening any color with black leaves the original color
-unchanged.</dd>
+unchanged.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>soft-light</dt>
-<dd>Soft light is most closely related to Overlay and is only
+<li><dl class="simple">
+<dt>soft-light</dt><dd><p>Soft light is most closely related to Overlay and is only
 similar to Hard Light by name. Will add highlights and shadows
 to an existing color image. However, the colors of the
 destination image are modified to produce a softer contrast,
-and smoother gradient in lighting effects.</dd>
+and smoother gradient in lighting effects.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>src</dt>
-<dd>The source is copied to the destination. The destination is not
+<li><dl class="simple">
+<dt>src</dt><dd><p>The source is copied to the destination. The destination is not
 used as input, though it is cleared. This operator completely
 replaces the background image with the overlay image. The
 colors and transparency in the background are completely junked
 leaving a blank image the same size as the original destination
-over which is applied the source image.</dd>
+over which is applied the source image.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>src-atop</dt>
-<dd>The part of the source lying inside of the destination is
+<li><dl class="simple">
+<dt>src-atop</dt><dd><p>The part of the source lying inside of the destination is
 composited onto the destination. Like ‘src-over’ but limits the
 result to the original shape of the background image. In other
 words, the alpha channel on the destination is unchanged but
@@ -359,36 +358,37 @@ transparency), this operation will act exactly like the normal
 ‘src-over’ composition. It only differs when the background
 contains transparency which also clips the overlay. What makes
 this useful is for overlaying lighting and shading effects that
-are limited to the object (shape) of the destination.</dd>
+are limited to the object (shape) of the destination.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>src-in</dt>
-<dd>The part of the source lying inside of the destination replaces
-the destination.</dd>
+<li><dl class="simple">
+<dt>src-in</dt><dd><p>The part of the source lying inside of the destination replaces
+the destination.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>src-out</dt>
-<dd>The part of the source lying outside of the destination
-replaces the destination.</dd>
+<li><dl class="simple">
+<dt>src-out</dt><dd><p>The part of the source lying outside of the destination
+replaces the destination.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>src-over</dt>
-<dd>The source is composited over the destination. This is the
-default composite option if no other is specified.</dd>
+<li><dl class="simple">
+<dt>src-over</dt><dd><p>The source is composited over the destination. This is the
+default composite option if no other is specified.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>xor</dt>
-<dd>The part of the source that lies outside of the destination is
+<li><dl class="simple">
+<dt>xor</dt><dd><p>The part of the source that lies outside of the destination is
 combined with the part of the destination that lies outside of
-the source. Source or Destination, but not both.</dd>
+the source. Source or Destination, but not both.</p>
+</dd>
 </dl>
 </li>
 </ul>
-<p class="last">Operators marked with a star (*) will only be supported when using an AGG
+<p>Operators marked with a star (*) will only be supported when using an AGG
 backends <em>and</em> when pixman support is not enabled, and will fall back to
 “src-over” when this is not the case.</p>
 </dd>
@@ -433,8 +433,6 @@ the value <cite>darken</cite>:</p>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Zoek" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -483,8 +481,8 @@ the value <cite>darken</cite>:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2019-03-29.
-      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Laatste aanpassing op 2019-04-09.
+      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

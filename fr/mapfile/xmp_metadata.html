@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>XMP Metadata Support &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -129,7 +130,7 @@
   <div class="section" id="xmp-metadata-support">
 <span id="xmp-metadata"></span><span id="index-0"></span><h1>XMP Metadata Support<a class="headerlink" href="#xmp-metadata-support" title="Lien permanent vers ce titre">¶</a></h1>
 <div class="versionadded">
-<p><span class="versionmodified">Nouveau dans la version 6.2.</span></p>
+<p><span class="versionmodified added">Nouveau dans la version 6.2.</span></p>
 </div>
 <p>One of the challenges of advertising licensing and terms of use in a
 web map service is that the terms are usually advertised separately
@@ -141,7 +142,7 @@ information that can be conveyed without detracting from the map
 output. Another approach to propagating license information is to
 embed the license information in the image file using a common
 metadata standard.</p>
-<p>XMP is the «&nbsp;<a class="reference external" href="http://en.wikipedia.org/wiki/Extensible_Metadata_Platform">extensible metadata platform</a>&nbsp;» which
+<p>XMP is the « <a class="reference external" href="http://en.wikipedia.org/wiki/Extensible_Metadata_Platform">extensible metadata platform</a> » which
 allows the embedding of metadata information across a wide range of
 document and image formats: PNG, GIF, JPEG, PDF, etc. XMP was
 originally developed by <a class="reference external" href="http://www.adobe.com/products/xmp/overview.html">Adobe</a> and is supported
@@ -156,20 +157,19 @@ schema. There is also a standard schema for Dublin Core metadata.</p>
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Lien permanent vers ce titre">¶</a></h2>
 <p>In order to use XMP metadata you will need to</p>
 <ol class="arabic">
-<li><p class="first">ensure that XMP support is built into MapServer.</p>
+<li><p>ensure that XMP support is built into MapServer.</p>
 <p>You can test for XMP support in an existing <cite>mapserv</cite> program by
 running <cite>mapserver -v</cite> and looking for <cite>SUPPORTS=XMP</cite> in the return
 line.</p>
 </li>
-<li><p class="first">use the GDAL output driver to produce your images.</p>
-</li>
+<li><p>use the GDAL output driver to produce your images.</p></li>
 </ol>
 <p>To build MapServer with XMP support, you will need to first install
 the <cite>exempi</cite> library on your system.</p>
 <ol class="arabic simple">
-<li>Download libexempi from
-<a class="reference external" href="http://libopenraw.freedesktop.org/wiki/Exempi">http://libopenraw.freedesktop.org/wiki/Exempi</a></li>
-<li>Configure MapServer using the <cite>–with-exempi</cite> option, and re-build</li>
+<li><p>Download libexempi from
+<a class="reference external" href="http://libopenraw.freedesktop.org/wiki/Exempi">http://libopenraw.freedesktop.org/wiki/Exempi</a></p></li>
+<li><p>Configure MapServer using the <cite>–with-exempi</cite> option, and re-build</p></li>
 </ol>
 <p>To use the GDAL output driver, for each format you want to output you
 will need to set up an <a class="reference internal" href="outputformat.html#outputformat"><span class="std std-ref">OUTPUTFORMAT</span></a> that uses
@@ -192,7 +192,7 @@ is set in the top level of the map file, in the <a class="reference internal" hr
 <cite>METADATA</cite> section.</p>
 <p>The <cite>METADATA</cite> key for each XMP entry is of the form
 <cite>xmp_&lt;namespace&gt;_&lt;tag&gt;</cite>, so for example setting just the Dublin Core
-«&nbsp;Title&nbsp;» would look like:</p>
+« Title » would look like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">WEB</span>
   <span class="n">METADATA</span>
     <span class="s2">&quot;xmp_dc_Title&quot;</span> <span class="s2">&quot;Super Map&quot;</span>
@@ -200,18 +200,18 @@ is set in the top level of the map file, in the <a class="reference internal" hr
 <span class="n">END</span>
 </pre></div>
 </div>
-<p>Note that the Dublin Core schema is specified using the code «&nbsp;dc&nbsp;», and
-the tag is specified using the fully spelled out tag name («&nbsp;Title&nbsp;»).
+<p>Note that the Dublin Core schema is specified using the code « dc », and
+the tag is specified using the fully spelled out tag name (« Title »).
 The following schema codes are supported by default:</p>
 <ul class="simple">
-<li>«&nbsp;<a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmp">meta</a>&nbsp;» which is the standard XMP tag set</li>
-<li>«&nbsp;<a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#cc">cc</a>&nbsp;» which is the Creative Commons tag set</li>
-<li>«&nbsp;<a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#dc">dc</a>&nbsp;» which is the Dublin Core tag set</li>
-<li>«&nbsp;<a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmpRights">rights</a>&nbsp;» which is the standard XMP Rights tag set</li>
-<li>«&nbsp;<a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#exif">exif</a>&nbsp;» which is the EXIF tags set</li>
-<li>«&nbsp;<a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#tiff">tiff</a>&nbsp;» which is the TIFF tags set</li>
-<li>«&nbsp;<a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#crs">crs</a>&nbsp;» which is the Photoshop Camera Raw Schema</li>
-<li>«&nbsp;<a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#photoshop">photoshop</a>&nbsp;» which is the Photoshop tag set</li>
+<li><p>« <a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmp">meta</a> » which is the standard XMP tag set</p></li>
+<li><p>« <a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#cc">cc</a> » which is the Creative Commons tag set</p></li>
+<li><p>« <a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#dc">dc</a> » which is the Dublin Core tag set</p></li>
+<li><p>« <a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmpRights">rights</a> » which is the standard XMP Rights tag set</p></li>
+<li><p>« <a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#exif">exif</a> » which is the EXIF tags set</p></li>
+<li><p>« <a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#tiff">tiff</a> » which is the TIFF tags set</p></li>
+<li><p>« <a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#crs">crs</a> » which is the Photoshop Camera Raw Schema</p></li>
+<li><p>« <a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#photoshop">photoshop</a> » which is the Photoshop tag set</p></li>
 </ul>
 <p>For a listing of the valid tags within each namespace, see
 <a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html</a>.</p>
@@ -237,7 +237,7 @@ like within it.  Here is an example:</p>
 <span class="n">END</span>
 </pre></div>
 </div>
-<p>The first tag, of the form «&nbsp;xmp_&lt;namespace&gt;_namespace&nbsp;» defines the
+<p>The first tag, of the form « xmp_&lt;namespace&gt;_namespace » defines the
 unique URI for the XML namespace, which will be declared in the XMP
 document.  The following tags can then reference the namespace the same
 way they reference the default namespaces.</p>
@@ -256,8 +256,6 @@ way they reference the default namespaces.</p>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -297,8 +295,8 @@ way they reference the default namespaces.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Mis à jour le 2019-03-29.
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Mis à jour le 2019-04-09.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

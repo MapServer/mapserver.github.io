@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 108: Dynamic Heatmap (Kernel Density Estimation) Layers &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -138,41 +139,45 @@
             
   <div class="section" id="ms-rfc-108-dynamic-heatmap-kernel-density-estimation-layers">
 <span id="rfc108"></span><h1>MS RFC 108: Dynamic Heatmap (Kernel Density Estimation) Layers<a class="headerlink" href="#ms-rfc-108-dynamic-heatmap-kernel-density-estimation-layers" title="Lien permanent vers ce titre">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2014/01</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Thomas Bonfort</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:tbonfort&#37;&#52;&#48;terriscope&#46;fr">tbonfort<span>&#64;</span>terriscope<span>&#46;</span>fr</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Mathieu Coudert</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:mathieu&#46;coudert&#37;&#52;&#48;gmail&#46;com">mathieu<span>&#46;</span>coudert<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 7.0</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Last Updated:</th><td class="field-body">2014/02/13</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2014/01</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Thomas Bonfort</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:tbonfort&#37;&#52;&#48;terriscope&#46;fr">tbonfort<span>&#64;</span>terriscope<span>&#46;</span>fr</a></p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Mathieu Coudert</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:mathieu&#46;coudert&#37;&#52;&#48;gmail&#46;com">mathieu<span>&#46;</span>coudert<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 7.0</p>
+</dd>
+<dt class="field-even">Last Updated</dt>
+<dd class="field-even"><p>2014/02/13</p>
+</dd>
+</dl>
 <div class="section" id="motivation">
 <h2>1. Motivation<a class="headerlink" href="#motivation" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Heatmaps are a popular method to represent sparse data on a regular raster
 grid, where each pixel on the grid is influenced inversely to its distance to
 each sample of the sparse dataset. They are usually represented with a
 color-ramp where the hue encodes the density of the data sample, optionally
-along with the intensity of an attribute. The «&nbsp;heatmap&nbsp;» term itself is used
+along with the intensity of an attribute. The « heatmap » term itself is used
 with varying meanings; in the context of this RFC, we will be using it to
 reference <a class="reference external" href="http://en.wikipedia.org/wiki/Multivariate_kernel_density_estimation">Kernel Density Estimation</a>
 maps.</p>
 <div class="figure align-center" id="id1">
 <img alt="../../_images/heatmap-wikipedia.png" src="../../_images/heatmap-wikipedia.png" />
-<p class="caption"><span class="caption-text">Example Kernel Density Estimation Map (image cc-by-sa wikipedia)</span></p>
+<p class="caption"><span class="caption-text">Example Kernel Density Estimation Map (image cc-by-sa wikipedia)</span><a class="headerlink" href="#id1" title="Lien permanent vers cette image">¶</a></p>
 </div>
 <p>This RFC proposes the addition of a vector to raster processing pipeline that
 will transform an input vector source into a 1-band 8-bit raster that can then
@@ -183,20 +188,22 @@ be styled with mapserver’s native raster handling.</p>
 <p>Adding a heatmap layer requires the following major changes to the mapserver
 library:</p>
 <ul class="simple">
-<li>implementation of an «&nbsp;kerneldensity&nbsp;» connectiontype for raster layers, where
+<li><p>implementation of an « kerneldensity » connectiontype for raster layers, where
 the connection refers to another mapfile layer or group used as the vector
-datasource - implementation of the actual vector to raster transformation:<ul>
-<li>accumulate vertice in a 1-band floating point bitmap array</li>
-<li>apply gaussian filtering to the bitmap, with a configurable radius</li>
-<li>apply normalization to scale the bitmap cells to 8bits</li>
-<li>create an in-memory GDAL datasource from the 8bit bitmap</li>
+datasource - implementation of the actual vector to raster transformation:</p>
+<ul>
+<li><p>accumulate vertice in a 1-band floating point bitmap array</p></li>
+<li><p>apply gaussian filtering to the bitmap, with a configurable radius</p></li>
+<li><p>apply normalization to scale the bitmap cells to 8bits</p></li>
+<li><p>create an in-memory GDAL datasource from the 8bit bitmap</p></li>
 </ul>
 </li>
-<li>extend the raster RANGE support to allow for missing features usually needed
-for heatmap color ramps:<ul>
-<li>allow multiple ranges (to allow for color ramps with multiple stops)</li>
-<li>allow color interpolation in HSL space instead of RGB</li>
-<li>account for alpha values in color interpolation</li>
+<li><p>extend the raster RANGE support to allow for missing features usually needed
+for heatmap color ramps:</p>
+<ul>
+<li><p>allow multiple ranges (to allow for color ramps with multiple stops)</p></li>
+<li><p>allow color interpolation in HSL space instead of RGB</p></li>
+<li><p>account for alpha values in color interpolation</p></li>
 </ul>
 </li>
 </ul>
@@ -213,34 +220,34 @@ for other vector-to-raster transformations arises, designing one for the scope
 of this RFC seems like premature over-engineering.</p>
 <p>The heatmap vector-to-raster takes the following parameters:</p>
 <ul class="simple">
-<li><strong>CONNECTION «&nbsp;layername&nbsp;»</strong> : reference to the NAME or GROUP of a layer to use
+<li><p><strong>CONNECTION « layername »</strong> : reference to the NAME or GROUP of a layer to use
 as an input vector datasource. NAME takes precedence, followed by the first
 layer from GROUP who’s minscale/maxscale matches the current map scale. The
 referenced layer should probably a TYPE POINT layer. Other layer types will
-result in one sample being added for each vertex of the input features.</li>
-<li><strong>PROCESSING «&nbsp;KERNELDENSITY_RADIUS=10&nbsp;»</strong> : radius in pixels of the gaussian
+result in one sample being added for each vertex of the input features.</p></li>
+<li><p><strong>PROCESSING « KERNELDENSITY_RADIUS=10 »</strong> : radius in pixels of the gaussian
 filter to apply to the bitmap array once all features have been accumulated.
 Higher values result in increased cpu time needed to compute the filtered
-data.</li>
+data.</p></li>
 </ul>
 <div class="figure align-center" id="id2">
 <img alt="../../_images/heatmap-hsl-10.png" src="../../_images/heatmap-hsl-10.png" />
-<p class="caption"><span class="caption-text">result with a radius set to 10 pixels</span></p>
+<p class="caption"><span class="caption-text">result with a radius set to 10 pixels</span><a class="headerlink" href="#id2" title="Lien permanent vers cette image">¶</a></p>
 </div>
 <div class="figure align-center" id="id3">
 <img alt="../../_images/heatmap-hsl.png" src="../../_images/heatmap-hsl.png" />
-<p class="caption"><span class="caption-text">result with a radius set to 20 pixels</span></p>
+<p class="caption"><span class="caption-text">result with a radius set to 20 pixels</span><a class="headerlink" href="#id3" title="Lien permanent vers cette image">¶</a></p>
 </div>
 <ul class="simple">
-<li><strong>PROCESSING «&nbsp;KERNELDENSITY_COMPUTE_BORDERS=ON|OFF&nbsp;»</strong> : A kernel of radius
-«&nbsp;r&nbsp;» cannot be applied to «&nbsp;r&nbsp;» pixels along the borders of the image.  The
+<li><p><strong>PROCESSING « KERNELDENSITY_COMPUTE_BORDERS=ON|OFF »</strong> : A kernel of radius
+« r » cannot be applied to « r » pixels along the borders of the image.  The
 default is to extend the searchrect of the input datasource to include
-features «&nbsp;r&nbsp;» pixels outside of the current map extent so that the computed
+features « r » pixels outside of the current map extent so that the computed
 heatmap extends to the full extent of the resulting image. This can be
-deactivated when tiling if the tiling software applies a metabuffer of «&nbsp;r&nbsp;»
+deactivated when tiling if the tiling software applies a metabuffer of « r »
 pixels to its requests, to avoid the performance overhead of computing this
-extra information.</li>
-<li><strong>PROCESSING «&nbsp;KERNELDENSITY_NORMALIZATION=AUTO|numeric&nbsp;»</strong> : if set to «&nbsp;AUTO&nbsp;»,
+extra information.</p></li>
+<li><p><strong>PROCESSING « KERNELDENSITY_NORMALIZATION=AUTO|numeric »</strong> : if set to « AUTO »,
 the created raster band will be scaled such that its intensities range from 0
 to 255, in order to fully span the configured color ramp. Such behavior may
 not be desirable (typically for tiling) as the resulting intensity of a pixel
@@ -249,17 +256,17 @@ request.If set to a numeric value, the samples will be multiplied by the
 given value. It is up to the user to determine which scaling value to use so
 the resulting pixels span the full 0-255 range; determining that value is
 mostly a process of trial and error. Pixels that fall outside the 0-255 range
-will be clipped to 0 or 255.</li>
+will be clipped to 0 or 255.</p></li>
 </ul>
 <div class="figure align-center" id="id4">
 <img alt="../../_images/heatmap-hsl-fix-scale.png" src="../../_images/heatmap-hsl-fix-scale.png" />
 <p class="caption"><span class="caption-text">fixed scaling applied. compared to the previous images, the greater number
 of red areas results from the fact that the chosen scaling factor made a
-large number of pixels overshoot the 255 limit</span></p>
+large number of pixels overshoot the 255 limit</span><a class="headerlink" href="#id4" title="Lien permanent vers cette image">¶</a></p>
 </div>
 <div class="figure align-center" id="id5">
 <img alt="../../_images/heatmap-hsl-fix-scale2.png" src="../../_images/heatmap-hsl-fix-scale2.png" />
-<p class="caption"><span class="caption-text">lower fixed scaling applied. no pixels have attained the 255 limit</span></p>
+<p class="caption"><span class="caption-text">lower fixed scaling applied. no pixels have attained the 255 limit</span><a class="headerlink" href="#id5" title="Lien permanent vers cette image">¶</a></p>
 </div>
 </div>
 <div class="section" id="advanced-sample-weighting-and-filtering">
@@ -277,7 +284,7 @@ achieved.</p>
 <img alt="../../_images/heatmap-hsl-density.png" src="../../_images/heatmap-hsl-density.png" />
 <p class="caption"><span class="caption-text">heatmap representing pure feature density when sample weighting or filtering
 are not applied, the actual vector points are represented alongside. (Other
-examples in this RFC are rendered with attribute weighting on each sample)</span></p>
+examples in this RFC are rendered with attribute weighting on each sample)</span><a class="headerlink" href="#id6" title="Lien permanent vers cette image">¶</a></p>
 </div>
 </div>
 <div class="section" id="raster-color-ramping">
@@ -287,7 +294,7 @@ support raster layers, will be extended in order to support more complex color
 ramps. Note that these additions will apply to all raster classifications, not
 only for heatmap layers.</p>
 <ul>
-<li><p class="first"><strong>Support for multiple stops</strong> : The actual support for ranges for raster
+<li><p><strong>Support for multiple stops</strong> : The actual support for ranges for raster
 layers is limited to a single COLORRANGE/DATARANGE. We will support multiple
 ranges in order to allow multiple color stops, and will also account for
 optional alpha values. The following example creates a ramp ranging from
@@ -306,22 +313,21 @@ for values ranging from 32 to 255.</p>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">A single style block will be used for each pixel value. It is up to the
+<p class="admonition-title">Note</p>
+<p>A single style block will be used for each pixel value. It is up to the
 user to ensure that the supplied DATARANGEs span 0 to 255 with no overlap,
 and that the chosen COLORRANGE stops are continuous from one stop to the
 next.</p>
 </div>
 </li>
-<li><p class="first"><strong>PROCESSING RANGE_COLORSPACE=RGB|HSL</strong>: The current RANGE support
+<li><p><strong>PROCESSING RANGE_COLORSPACE=RGB|HSL</strong>: The current RANGE support
 interpolates colors between stops in RGB space, which usually results in
 washed out colors. The interpolation can be done in HSL space which usually
-results in wanted output for heatmaps.</p>
-</li>
+results in wanted output for heatmaps.</p></li>
 </ul>
 <div class="figure align-center" id="id7">
 <img alt="../../_images/heatmap-rgb.png" src="../../_images/heatmap-rgb.png" />
-<p class="caption"><span class="caption-text">washed out colors when interpolating in RGB space</span></p>
+<p class="caption"><span class="caption-text">washed out colors when interpolating in RGB space</span><a class="headerlink" href="#id7" title="Lien permanent vers cette image">¶</a></p>
 </div>
 </div>
 <div class="section" id="scaletoken-additions">
@@ -428,7 +434,7 @@ for scales 1/25000000 and smaller:</p>
 <p>Different weights can be applied by using CLASS-&gt;STYLE-&gt;SIZE syntax on the
 source vector layer to apply a non default weight to each sample:</p>
 <ul>
-<li><p class="first">Weight read from a feature attribute:</p>
+<li><p>Weight read from a feature attribute:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">layer</span>
   <span class="k">name</span> <span class="s">&quot;points&quot;</span>
   <span class="k">status</span> <span class="nb">on</span>
@@ -443,7 +449,7 @@ source vector layer to apply a non default weight to each sample:</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Weight read from a non numeric attribute:</p>
+<li><p>Weight read from a non numeric attribute:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">layer</span>
   <span class="k">name</span> <span class="s">&quot;points&quot;</span>
   <span class="k">status</span> <span class="nb">on</span>
@@ -480,22 +486,22 @@ source vector layer to apply a non default weight to each sample:</p>
 <div class="section" id="comments-from-the-review-period">
 <h3>3.1 Comments from the review period<a class="headerlink" href="#comments-from-the-review-period" title="Lien permanent vers ce titre">¶</a></h3>
 <ul class="simple">
-<li>It was suggested that the color ramp used in the raster layer be defined by a
+<li><p>It was suggested that the color ramp used in the raster layer be defined by a
 static (png) image of exactly 256 pixels height instead of using
 CLASS-&gt;STYLE-&gt;COLORRANGE. This allows for easier visual generation of color
-ramps using standard image processing software.</li>
-<li>«&nbsp;radius&nbsp;» is the only parameter affecting the filtering kernel used. Providing
+ramps using standard image processing software.</p></li>
+<li><p>« radius » is the only parameter affecting the filtering kernel used. Providing
 a means to supply a hand-supplied kernel would be a feasible addition. More
-discussion may be needed to determine an appropriate syntax.</li>
-<li>It was suggested to use a LINE or POLYGON’s centroid as the resulting sample
+discussion may be needed to determine an appropriate syntax.</p></li>
+<li><p>It was suggested to use a LINE or POLYGON’s centroid as the resulting sample
 point instead of using each vertex. The resulting effect can be obtained by
 using layer level GEOMTRANSFORMs once they support the full range of
-available geomtransforms.</li>
-<li>It was proposed to use hand written formulas to determine the kernel radius
+available geomtransforms.</p></li>
+<li><p>It was proposed to use hand written formulas to determine the kernel radius
 and/or other filtering parameters. Introducing formula processing is out of
 scope of this RFC, and similar functionality can be achieved by using
 appropriate SCALETOKENS and/or weighing/filtering at the class-&gt;style-&gt;size
-level in the source vector layer.</li>
+level in the source vector layer.</p></li>
 </ul>
 </div>
 <div class="section" id="issue-tracking-id">
@@ -522,8 +528,6 @@ JeffM, SteveL and YewondwossenA</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -587,8 +591,8 @@ JeffM, SteveL and YewondwossenA</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Mis à jour le 2019-03-29.
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Mis à jour le 2019-04-09.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

@@ -1,18 +1,19 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="sq">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 66: Better handling of temporary files &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -137,24 +138,26 @@
             
   <div class="section" id="ms-rfc-66-better-handling-of-temporary-files">
 <span id="rfc66"></span><h1>MS RFC 66: Better handling of temporary files<a class="headerlink" href="#ms-rfc-66-better-handling-of-temporary-files" title="Permalink to this headline">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2011-01-12</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Alan Boudreault (aboudreault at mapgears.com)</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Daniel Morissette (dmorissette at mapgears.com)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Last Edited:</th><td class="field-body">2011-01-12</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Status:</th><td class="field-body">Adopted on 2011-01-17</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">MapServer 6.0</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2011-01-12</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Alan Boudreault (aboudreault at mapgears.com)</p>
+</dd>
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>Daniel Morissette (dmorissette at mapgears.com)</p>
+</dd>
+<dt class="field-even">Last Edited</dt>
+<dd class="field-even"><p>2011-01-12</p>
+</dd>
+<dt class="field-odd">Status</dt>
+<dd class="field-odd"><p>Adopted on 2011-01-17</p>
+</dd>
+<dt class="field-even">Version</dt>
+<dd class="field-even"><p>MapServer 6.0</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>At the moment, we write some temporary files in the web-accessible
@@ -170,8 +173,8 @@ is to add the ability to configure the temporary path.</p>
 <p>The files will still be written on the disk. The temporary path can be set
 by the two following ways:</p>
 <ul class="simple">
-<li>The environment variable MS_TEMPPATH.</li>
-<li>In the mapfile</li>
+<li><p>The environment variable MS_TEMPPATH.</p></li>
+<li><p>In the mapfile</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">WEB</span>
   <span class="n">TEMPPATH</span> <span class="s2">&quot;/tmp/&quot;</span>
@@ -185,36 +188,39 @@ of the work will be to modify the msTmpFile function.</p>
 <div class="section" id="purposes-of-temporary-files">
 <h2>Purposes of temporary files<a class="headerlink" href="#purposes-of-temporary-files" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>mapcontext.c: Load an OGC Web Map Context format from an URL</li>
-<li>mapgdal.c: msSaveImageGDAL() temporary file… memory support implemented</li>
-<li>mapkmlrenderer.cpp:<ul>
-<li>Merging raster buffer</li>
-<li>Create icon images</li>
-<li>Create a zip file with the kml file in it. Using cpl zip api.</li>
+<li><p>mapcontext.c: Load an OGC Web Map Context format from an URL</p></li>
+<li><p>mapgdal.c: msSaveImageGDAL() temporary file… memory support implemented</p></li>
+<li><p>mapkmlrenderer.cpp:</p>
+<ul>
+<li><p>Merging raster buffer</p></li>
+<li><p>Create icon images</p></li>
+<li><p>Create a zip file with the kml file in it. Using cpl zip api.</p></li>
 </ul>
 </li>
-<li>mapogcfilter.c: Save mapfiles after filter applied  (debug only)</li>
-<li>mapogcsld.c:<ul>
-<li>Save sld files.</li>
-<li>Save mapfiles after SLD applied (debug only)</li>
-<li>Download the symbol referenced by the URL and create a pixmap</li>
+<li><p>mapogcfilter.c: Save mapfiles after filter applied  (debug only)</p></li>
+<li><p>mapogcsld.c:</p>
+<ul>
+<li><p>Save sld files.</p></li>
+<li><p>Save mapfiles after SLD applied (debug only)</p></li>
+<li><p>Download the symbol referenced by the URL and create a pixmap</p></li>
 </ul>
 </li>
-<li>mapogroutput.c:<ul>
-<li>Create zip file (write from query)</li>
-<li>Create temporary directory (write from query)</li>
+<li><p>mapogroutput.c:</p>
+<ul>
+<li><p>Create zip file (write from query)</p></li>
+<li><p>Create temporary directory (write from query)</p></li>
 </ul>
 </li>
-<li>mapscript/php/image.c: Save web images</li>
-<li>mapwfslayer.c: Save gml files</li>
-<li>mapwmslayer.c: Save temporary request output files</li>
+<li><p>mapscript/php/image.c: Save web images</p></li>
+<li><p>mapwfslayer.c: Save gml files</p></li>
+<li><p>mapwmslayer.c: Save temporary request output files</p></li>
 </ul>
 </div>
 <div class="section" id="files-affected">
 <h2>Files affected<a class="headerlink" href="#files-affected" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>maputil.c: The msTmpFile function.</li>
-<li>All files that call msTmpFile().</li>
+<li><p>maputil.c: The msTmpFile function.</p></li>
+<li><p>All files that call msTmpFile().</p></li>
 </ul>
 </div>
 <div class="section" id="future-enhancement">
@@ -258,8 +264,6 @@ when available. A memory file can only be handled by the CPL services.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -313,8 +317,8 @@ when available. A memory file can only be handled by the CPL services.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Last updated on 2019-03-29.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Last updated on 2019-04-09.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

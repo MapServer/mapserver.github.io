@@ -1,18 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ar">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 76: Adding License Metadata to Output Images &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -119,10 +121,10 @@
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="ms-rfc-77.html" title="MS RFC 77: Support for Multiple Label Objects Within a Class"
-             accesskey="N">next</a> |</li>
+             accesskey="N">التالي</a> |</li>
         <li class="right" >
           <a href="ms-rfc-75.html" title="MS RFC 75: INSPIRE view service support"
-             accesskey="P">previous</a> |</li>
+             accesskey="P">السابق</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &#187;</li> 
@@ -137,26 +139,27 @@
             
   <div class="section" id="ms-rfc-76-adding-license-metadata-to-output-images">
 <span id="rfc76"></span><h1>MS RFC 76: Adding License Metadata to Output Images<a class="headerlink" href="#ms-rfc-76-adding-license-metadata-to-output-images" title="Permalink to this headline">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2011/06/22</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Paul Ramsey</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">pramsey at opengeo.org</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Passed</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 6.2</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2011/06/22</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Paul Ramsey</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>pramsey at opengeo.org</p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Passed</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 6.2</p>
+</dd>
+</dl>
 <p>Description: This RFC proposes allowing XML metadata information to be embedded in MapServer output images. The use case is for any organization producing maps that wishes to embed licensing and authorship information directly in the output images.</p>
 <div class="section" id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<p>XMP is the &quot;extensible metadata platform&quot; <a class="footnote-reference" href="#id13" id="id1">[1]</a> which allows the embedding of metadata information across a wide range of document and image formats: PNG, GIF, JPEG, PDF, etc. XMP was originally developed by Adobe <a class="footnote-reference" href="#id14" id="id2">[2]</a> and is supported across their product line. It is now being increasingly included in other standards for metadata embedding and supported by tools for viewing image information (e.g. exiftools). Creative Commons has standards for using XMP to embed commons licensing <a class="footnote-reference" href="#id15" id="id3">[3]</a> in images and other document, including a specific Creative Commons schema.</p>
+<p>XMP is the &quot;extensible metadata platform&quot; <a class="footnote-reference brackets" href="#id13" id="id1">1</a> which allows the embedding of metadata information across a wide range of document and image formats: PNG, GIF, JPEG, PDF, etc. XMP was originally developed by Adobe <a class="footnote-reference brackets" href="#id14" id="id2">2</a> and is supported across their product line. It is now being increasingly included in other standards for metadata embedding and supported by tools for viewing image information (e.g. exiftools). Creative Commons has standards for using XMP to embed commons licensing <a class="footnote-reference brackets" href="#id15" id="id3">3</a> in images and other document, including a specific Creative Commons schema.</p>
 <p>One of the challenges of advertising licensing and terms of use in WMS and other web mapping services is that the terms are usually advertised separately from the actual content. So a WMS service might specify terms in the Capabilities document, but the images themselves will be unmarked. Embedding license URLs inside the images themselves using a standard markup allows organizations to be unambiguous about the conditions attached to their content.</p>
 <p>The goal of this change is to allow users the option of embedding XMP metadata in their MapServer output using an Open Source XMP utility library.</p>
 </div>
@@ -165,7 +168,7 @@
 </div>
 <div class="section" id="driver-support">
 <h2>2.1. Driver Support<a class="headerlink" href="#driver-support" title="Permalink to this headline">¶</a></h2>
-<p>libexempi <a class="footnote-reference" href="#id16" id="id4">[4]</a> provides a standard C interface for reading and writing XMP content from multiple image formats. One limitation of libexempi (and all other XMP libraries we investigated) is that it only works on existing files. That means that any image that is going to be tagged with metadata must be written to the disk first. Fortunately the GDAL image driver already writes a temporary file to disk for every request, so we propose that XMP support be available only when using the GDAL output format driver.</p>
+<p>libexempi <a class="footnote-reference brackets" href="#id16" id="id4">4</a> provides a standard C interface for reading and writing XMP content from multiple image formats. One limitation of libexempi (and all other XMP libraries we investigated) is that it only works on existing files. That means that any image that is going to be tagged with metadata must be written to the disk first. Fortunately the GDAL image driver already writes a temporary file to disk for every request, so we propose that XMP support be available only when using the GDAL output format driver.</p>
 <p>For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">OUTPUTFORMAT</span>
   <span class="n">NAME</span> <span class="n">png</span>
@@ -185,29 +188,29 @@
 <p>Eight namespaces will be supported by default:</p>
 <blockquote>
 <div><ul class="simple">
-<li>&quot;meta&quot; which is the standard XMP tag set <a class="footnote-reference" href="#id17" id="id5">[5]</a></li>
-<li>&quot;cc&quot; which is the Creative Commons tag set <a class="footnote-reference" href="#id18" id="id6">[6]</a></li>
-<li>&quot;dc&quot; which is the Dublin Core tag set <a class="footnote-reference" href="#id19" id="id7">[7]</a></li>
-<li>&quot;rights&quot; which is the standard XMP Rights tag set <a class="footnote-reference" href="#id20" id="id8">[8]</a></li>
-<li>&quot;exif&quot; which is the EXIF tags set <a class="footnote-reference" href="#id21" id="id9">[9]</a></li>
-<li>&quot;tiff&quot; which is the TIFF tags set <a class="footnote-reference" href="#id22" id="id10">[10]</a></li>
-<li>&quot;crs&quot; which is the Photoshop Camera Raw Schema <a class="footnote-reference" href="#id23" id="id11">[11]</a></li>
-<li>&quot;photoshop&quot; which is the Photoshop tag set <a class="footnote-reference" href="#id24" id="id12">[12]</a></li>
+<li><p>&quot;meta&quot; which is the standard XMP tag set <a class="footnote-reference brackets" href="#id17" id="id5">5</a></p></li>
+<li><p>&quot;cc&quot; which is the Creative Commons tag set <a class="footnote-reference brackets" href="#id18" id="id6">6</a></p></li>
+<li><p>&quot;dc&quot; which is the Dublin Core tag set <a class="footnote-reference brackets" href="#id19" id="id7">7</a></p></li>
+<li><p>&quot;rights&quot; which is the standard XMP Rights tag set <a class="footnote-reference brackets" href="#id20" id="id8">8</a></p></li>
+<li><p>&quot;exif&quot; which is the EXIF tags set <a class="footnote-reference brackets" href="#id21" id="id9">9</a></p></li>
+<li><p>&quot;tiff&quot; which is the TIFF tags set <a class="footnote-reference brackets" href="#id22" id="id10">10</a></p></li>
+<li><p>&quot;crs&quot; which is the Photoshop Camera Raw Schema <a class="footnote-reference brackets" href="#id23" id="id11">11</a></p></li>
+<li><p>&quot;photoshop&quot; which is the Photoshop tag set <a class="footnote-reference brackets" href="#id24" id="id12">12</a></p></li>
 </ul>
 </div></blockquote>
 <p>Within those names spaces, users can specify any tag. The MapServer code will not check that the tags are valid for the namespace, that responsibility will fall to the user.</p>
 <p>Here are some examples of common tags within the default name spaces:</p>
 <blockquote>
 <div><ul class="simple">
-<li>xmp_rights_Marked ('true' or 'false') indicates whether the image is copyright (true) or public domain (false)</li>
-<li>xmp_rights_WebStatement (URL) link to a page that explains the terms and conditions under which the image is licensed</li>
-<li>xmp_rights_UsageTerms (text) a description of the terms and conditions under which the image is licensed. To save image space and ensure licensing is kept up to date, the web statement is preferred over the usage terms.</li>
-<li>xmp_cc_License (URL) link to the creative commons license that applies to this image (e.g. <a class="reference external" href="http://creativecommons.org/licenses/by-sa/2.0/">http://creativecommons.org/licenses/by-sa/2.0/</a>)</li>
-<li>xmp_cc_MorePermissions (URL) link to a page describing additional terms and conditions beyond the CC terms</li>
-<li>xmp_cc_AttributionURL (URL) link to a page of information about the author or organization that produced the content</li>
-<li>xmp_cc_AttributionName (text) name of the person or organization that produced the content</li>
-<li>xmp_dc_Title (text) title of the image</li>
-<li>xmp_dc_Rights (text) textual description of the license regime of the image</li>
+<li><p>xmp_rights_Marked ('true' or 'false') indicates whether the image is copyright (true) or public domain (false)</p></li>
+<li><p>xmp_rights_WebStatement (URL) link to a page that explains the terms and conditions under which the image is licensed</p></li>
+<li><p>xmp_rights_UsageTerms (text) a description of the terms and conditions under which the image is licensed. To save image space and ensure licensing is kept up to date, the web statement is preferred over the usage terms.</p></li>
+<li><p>xmp_cc_License (URL) link to the creative commons license that applies to this image (e.g. <a class="reference external" href="http://creativecommons.org/licenses/by-sa/2.0/">http://creativecommons.org/licenses/by-sa/2.0/</a>)</p></li>
+<li><p>xmp_cc_MorePermissions (URL) link to a page describing additional terms and conditions beyond the CC terms</p></li>
+<li><p>xmp_cc_AttributionURL (URL) link to a page of information about the author or organization that produced the content</p></li>
+<li><p>xmp_cc_AttributionName (text) name of the person or organization that produced the content</p></li>
+<li><p>xmp_dc_Title (text) title of the image</p></li>
+<li><p>xmp_dc_Rights (text) textual description of the license regime of the image</p></li>
 </ul>
 </div></blockquote>
 <p>Here is an example of setting tags using the default namespaces:</p>
@@ -281,78 +284,44 @@
 <span class="o">+</span><span class="mi">1</span> <span class="n">Mike</span> <span class="n">Smith</span>
 </pre></div>
 </div>
-<table class="docutils footnote" frame="void" id="id13" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><a class="reference external" href="http://en.wikipedia.org/wiki/Extensible_Metadata_Platform">http://en.wikipedia.org/wiki/Extensible_Metadata_Platform</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id14" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td><a class="reference external" href="http://www.adobe.com/products/xmp/overview.html">http://www.adobe.com/products/xmp/overview.html</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id15" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td><a class="reference external" href="http://wiki.creativecommons.org/XMP">http://wiki.creativecommons.org/XMP</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id16" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id4">[4]</a></td><td><a class="reference external" href="http://libopenraw.freedesktop.org/wiki/Exempi">http://libopenraw.freedesktop.org/wiki/Exempi</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id17" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id5">[5]</a></td><td><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmp">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmp</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id18" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id6">[6]</a></td><td><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#cc">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#cc</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id19" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id7">[7]</a></td><td><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#dc">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#dc</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id20" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id8">[8]</a></td><td><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmpRights">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmpRights</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id21" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id9">[9]</a></td><td><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#exif">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#exif</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id22" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id10">[10]</a></td><td><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#tiff">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#tiff</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id23" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id11">[11]</a></td><td><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#crs">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#crs</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id24" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id12">[12]</a></td><td><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#photoshop">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#photoshop</a></td></tr>
-</tbody>
-</table>
+<dl class="footnote brackets">
+<dt class="label" id="id13"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p><a class="reference external" href="http://en.wikipedia.org/wiki/Extensible_Metadata_Platform">http://en.wikipedia.org/wiki/Extensible_Metadata_Platform</a></p>
+</dd>
+<dt class="label" id="id14"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p><a class="reference external" href="http://www.adobe.com/products/xmp/overview.html">http://www.adobe.com/products/xmp/overview.html</a></p>
+</dd>
+<dt class="label" id="id15"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dd><p><a class="reference external" href="http://wiki.creativecommons.org/XMP">http://wiki.creativecommons.org/XMP</a></p>
+</dd>
+<dt class="label" id="id16"><span class="brackets"><a class="fn-backref" href="#id4">4</a></span></dt>
+<dd><p><a class="reference external" href="http://libopenraw.freedesktop.org/wiki/Exempi">http://libopenraw.freedesktop.org/wiki/Exempi</a></p>
+</dd>
+<dt class="label" id="id17"><span class="brackets"><a class="fn-backref" href="#id5">5</a></span></dt>
+<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmp">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmp</a></p>
+</dd>
+<dt class="label" id="id18"><span class="brackets"><a class="fn-backref" href="#id6">6</a></span></dt>
+<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#cc">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#cc</a></p>
+</dd>
+<dt class="label" id="id19"><span class="brackets"><a class="fn-backref" href="#id7">7</a></span></dt>
+<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#dc">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#dc</a></p>
+</dd>
+<dt class="label" id="id20"><span class="brackets"><a class="fn-backref" href="#id8">8</a></span></dt>
+<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmpRights">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmpRights</a></p>
+</dd>
+<dt class="label" id="id21"><span class="brackets"><a class="fn-backref" href="#id9">9</a></span></dt>
+<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#exif">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#exif</a></p>
+</dd>
+<dt class="label" id="id22"><span class="brackets"><a class="fn-backref" href="#id10">10</a></span></dt>
+<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#tiff">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#tiff</a></p>
+</dd>
+<dt class="label" id="id23"><span class="brackets"><a class="fn-backref" href="#id11">11</a></span></dt>
+<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#crs">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#crs</a></p>
+</dd>
+<dt class="label" id="id24"><span class="brackets"><a class="fn-backref" href="#id12">12</a></span></dt>
+<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#photoshop">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#photoshop</a></p>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -368,8 +337,6 @@
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -415,19 +382,19 @@
              >index</a></li>
         <li class="right" >
           <a href="ms-rfc-77.html" title="MS RFC 77: Support for Multiple Label Objects Within a Class"
-             >next</a> |</li>
+             >التالي</a> |</li>
         <li class="right" >
           <a href="ms-rfc-75.html" title="MS RFC 75: INSPIRE view service support"
-             >previous</a> |</li>
+             >السابق</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Request for Comments</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Last updated on 2019-03-29.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+        &#169; <a href="../../copyright.html"> حقوق النشر </a> 2019, Open Source Geospatial Foundation
+      Last updated on 2019-04-09.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

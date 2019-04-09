@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Proxyfier les requêtes non prise en charge &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -138,25 +139,23 @@
             
   <div class="section" id="proxying-unsupported-requests">
 <span id="mapcache-proxying"></span><h1>Proxyfier les requêtes non prise en charge<a class="headerlink" href="#proxying-unsupported-requests" title="Lien permanent vers ce titre">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Thomas Bonfort</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">tbonfort at terriscope.fr</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>Thomas Bonfort</p>
+</dd>
+<dt class="field-even">Contact</dt>
+<dd class="field-even"><p>tbonfort at terriscope.fr</p>
+</dd>
+</dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Cette page est un travail en cours</p>
+<p class="admonition-title">Note</p>
+<p>Cette page est un travail en cours</p>
 </div>
 <p>MapCache a la possibilité de transférer une requête entrante à laquelle il ne peut pas répondre nativement (en renvoyant une tuile ou en en <a class="reference internal" href="tile_assembling.html#mapcache-tile-assembling"><span class="std std-ref">fusionnant</span></a> plusieurs)</p>
 <p>Cette configuration permet à MapCache d’être positionné de manière transparente devant un serveur OGC pré-existant afin d’accélérer les requêtes tuilées ou non pour un nombre choisi de <a class="reference internal" href="config.html#mapcache-grids"><span class="std std-ref">grilles</span></a>, tout en maintenant la compatibilité du service pour d’autre types de requêtes (WFS, SRS non pris en charge…)</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">La proxyfication des requêtes se configure au sein du service <a class="reference internal" href="services.html#mapcache-wms"><span class="std std-ref">WMS</span></a> MapCache, ce qui peut sembler sémantiquement étrange.</p>
+<p class="admonition-title">Note</p>
+<p>La proxyfication des requêtes se configure au sein du service <a class="reference internal" href="services.html#mapcache-wms"><span class="std std-ref">WMS</span></a> MapCache, ce qui peut sembler sémantiquement étrange.</p>
 </div>
 <p>La configuration de ce comportement s’active par une succession d’instructions au sein de l’élément   &lt;forwarding_rule&gt; du &lt;service&gt; wms. Les règles sont testées dans l’ordre d’apparition dans le fichier mapcache.xml, et la première qui correspond est utilisée. Si aucune règle n’est indiquée, ou si aucune règle ne correspond à la requête entrante, une erreur est renvoyée à l’utilisateur.</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;service</span> <span class="na">type=</span><span class="s">&quot;wms&quot;</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
@@ -181,7 +180,7 @@
 <span class="c">&lt;forwarding_rule&gt;</span>
 </pre></div>
 </div>
-<p>L’attribut «&nbsp;type&nbsp;» est le même que ce qui est autorisé pour <a class="reference internal" href="dimensions.html#mapcache-dimensions"><span class="std std-ref">dimensions</span></a>, c’est-à-dire que les valeurs autorisées sont «&nbsp;values&nbsp;», «&nbsp;regex&nbsp;» et «&nbsp;intervals&nbsp;». Dans l’exemple précédent, la règle correspondrait à n’importe quelle requête ayant ..&amp;SERVICE=WFS&amp;… ou …&amp;SERVICE=WCS&amp;… dans ses paramètres.</p>
+<p>L’attribut « type » est le même que ce qui est autorisé pour <a class="reference internal" href="dimensions.html#mapcache-dimensions"><span class="std std-ref">dimensions</span></a>, c’est-à-dire que les valeurs autorisées sont « values », « regex » et « intervals ». Dans l’exemple précédent, la règle correspondrait à n’importe quelle requête ayant ..&amp;SERVICE=WFS&amp;… ou …&amp;SERVICE=WCS&amp;… dans ses paramètres.</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;forwarding_rule</span> <span class="na">name=</span><span class="s">&quot;first rule&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;SERVICE&quot;</span> <span class="na">type=</span><span class="s">&quot;values&quot;</span><span class="nt">&gt;</span>WFS,WCS<span class="nt">&lt;/param&gt;</span>
   <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;LAYERS&quot;</span> <span class="na">type=</span><span class="s">&quot;values&quot;</span><span class="nt">&gt;</span>somelayername<span class="nt">&lt;/param&gt;</span>
@@ -189,11 +188,11 @@
 <span class="c">&lt;forwarding_rule&gt;</span>
 </pre></div>
 </div>
-<p>Des règles multiples peuvent être utilisées si le filtrage a été fait sur de multiples paramètres. Dans l’exemple précédent, la règle correspondrait à des requêtes WFS ou WCS sur la couche «&nbsp;somelayername&nbsp;» uniquement.</p>
+<p>Des règles multiples peuvent être utilisées si le filtrage a été fait sur de multiples paramètres. Dans l’exemple précédent, la règle correspondrait à des requêtes WFS ou WCS sur la couche « somelayername » uniquement.</p>
 <p>Une règle de redirection qui n’a pas de &lt;param&gt; correspondra à n’importe qu’elle requête qui ne peut être traitée directement par MapCache à partir de son cache, et peut être utilisée pour transférer toutes les requêtes non prises en charge vers un serveur OGC complet qui fournira la réponse ad hoc.</p>
 <div class="admonition seealso">
-<p class="first admonition-title">Voir aussi</p>
-<p class="last"><a class="reference internal" href="dimensions.html#mapcache-dimensions"><span class="std std-ref">Dimensions d’un jeu de tuiles</span></a></p>
+<p class="admonition-title">Voir aussi</p>
+<p><a class="reference internal" href="dimensions.html#mapcache-dimensions"><span class="std std-ref">Dimensions d’un jeu de tuiles</span></a></p>
 </div>
 </div>
 <div class="section" id="proxy-destination">
@@ -208,8 +207,8 @@
 </pre></div>
 </div>
 <div class="admonition seealso">
-<p class="first admonition-title">Voir aussi</p>
-<p class="last"><a class="reference internal" href="http.html#mapcache-http"><span class="std std-ref">HTTP Requests</span></a></p>
+<p class="admonition-title">Voir aussi</p>
+<p><a class="reference internal" href="http.html#mapcache-http"><span class="std std-ref">HTTP Requests</span></a></p>
 </div>
 </div>
 </div>
@@ -226,8 +225,6 @@
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -275,8 +272,8 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Mis à jour le 2019-03-29.
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Mis à jour le 2019-04-09.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

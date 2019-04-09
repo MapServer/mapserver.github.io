@@ -1,18 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ar">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 105: Support for WFS 2.0 (server side) &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -119,10 +121,10 @@
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="ms-rfc-106.html" title="MS RFC 106: Support of Geomtransform JavaScript Plugin"
-             accesskey="N">next</a> |</li>
+             accesskey="N">التالي</a> |</li>
         <li class="right" >
           <a href="ms-rfc-104.html" title="MS RFC 104: Replace BITMAP labels with embedded Truetype font"
-             accesskey="P">previous</a> |</li>
+             accesskey="P">السابق</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &#187;</li> 
@@ -137,22 +139,23 @@
             
   <div class="section" id="ms-rfc-105-support-for-wfs-2-0-server-side">
 <span id="rfc105"></span><h1>MS RFC 105: Support for WFS 2.0 (server side)<a class="headerlink" href="#ms-rfc-105-support-for-wfs-2-0-server-side" title="Permalink to this headline">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2013/11</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Even Rouault</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">even dot rouault at mines-paris dot org</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Draft</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 7.0</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2013/11</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Even Rouault</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>even dot rouault at mines-paris dot org</p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Draft</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 7.0</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>MapServer currently supports the OGC WFS 1.0.0 and 1.1.0 protocols. The latest
@@ -168,28 +171,28 @@ mandates WFS 2.0 as the base protocol for the INSPIRE Download Services.</p>
 <p>There's apparently no official diff between WFS 1.1 and WFS 2.0, so here's
 a summary :</p>
 <ul class="simple">
-<li><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=20509">GML 3.2.1</a></li>
-<li><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=39968">Filter Encoding 2.0</a></li>
-<li>Paging support</li>
-<li>GetCapabilities changes</li>
-<li>GetFeature changes</li>
-<li>new operations that we will implement :</li>
+<li><p><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=20509">GML 3.2.1</a></p></li>
+<li><p><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=39968">Filter Encoding 2.0</a></p></li>
+<li><p>Paging support</p></li>
+<li><p>GetCapabilities changes</p></li>
+<li><p>GetFeature changes</p></li>
+<li><p>new operations that we will implement :</p></li>
 </ul>
 <blockquote>
 <div><ul class="simple">
-<li>GetPropertyValue</li>
-<li>ListStoredQueries</li>
-<li>DescribeStoredQueries</li>
-<li>GetFeature with stored queries</li>
+<li><p>GetPropertyValue</p></li>
+<li><p>ListStoredQueries</p></li>
+<li><p>DescribeStoredQueries</p></li>
+<li><p>GetFeature with stored queries</p></li>
 </ul>
 </div></blockquote>
 <ul class="simple">
-<li>new operations not covered by this work :</li>
+<li><p>new operations not covered by this work :</p></li>
 </ul>
 <blockquote>
 <div><ul class="simple">
-<li>CreateStoredQuery</li>
-<li>DropStoredQuery</li>
+<li><p>CreateStoredQuery</p></li>
+<li><p>DropStoredQuery</p></li>
 </ul>
 </div></blockquote>
 </div>
@@ -198,17 +201,17 @@ a summary :</p>
 <p>There are a few changes and additions in the response document of a GetCapabilities
 request w.r.t WFS 1.1 :</p>
 <ul class="simple">
-<li>the &lt;ows:OperationsMetadata&gt; element can have child elements that advertize
+<li><p>the &lt;ows:OperationsMetadata&gt; element can have child elements that advertize
 which conformance classes of the specification are supported by the implementation.
 In the case of MapServer, we report as supported : ImplementsBasicWFS,
 KVPEncoding, XMLEncoding, ImplementsResultPaging. We also publish the
-server side limit on feature count in &quot;CountDefault&quot;.</li>
-<li>the Filter_Capabilities respects the syntax of <a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=39968">Filter Encoding 2.0</a> capabilities.
+server side limit on feature count in &quot;CountDefault&quot;.</p></li>
+<li><p>the Filter_Capabilities respects the syntax of <a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=39968">Filter Encoding 2.0</a> capabilities.
 It has a &lt;fes:Conformance&gt; element that advertizes which parts of FE 2.0
 are supported by the implementation. In the case of MapServer, we report as
 supported : ImplementsQuery, ImplementsAdHocQuery, ImplementsResourceId,
 ImplementsMinStandardFilter, ImplementsStandardFilter, ImplementsMinSpatialFilter,
-ImplementsMinTemporalFilter and ImplementsMinimumXPath</li>
+ImplementsMinTemporalFilter and ImplementsMinimumXPath</p></li>
 </ul>
 <p>We also now support the SECTIONS parameter of the GetCapabilities that enable
 the user to request only parts of the GetCapabilities document. The value of
@@ -317,16 +320,16 @@ and COUNT (COUNT is the equivalent of WFS 1.1 MAXFEATURES) parameters.</p>
 <p>The FeatureCollection element has the &quot;numberReturned&quot; and &quot;numberMatched&quot; mandatory
 attributes.</p>
 <ul class="simple">
-<li>numberReturned contains the number of features returned in the document (0 is
-always eturned when RESULTTYPE=hits is specified).</li>
-<li>numberMatched contains the number of features that matches the criterion of the
+<li><p>numberReturned contains the number of features returned in the document (0 is
+always eturned when RESULTTYPE=hits is specified).</p></li>
+<li><p>numberMatched contains the number of features that matches the criterion of the
 request.
 If a &quot;wfs_maxfeatures&quot; metadata item is defined in the mapfile (or COUNT is specified
 in the request), &quot;unknown&quot; will be returned if the number of matching features
 reaches at least the server-side or client-side limit. This is to avoid performance
 issues on the server. By defining &quot;wfs_compute_number_matched&quot; &quot;true&quot;, the
 exact number of matching features will always be computed, but this can cause
-performance issues.</li>
+performance issues.</p></li>
 </ul>
 <p>When relevant, MapServer will fill the &quot;next&quot; and &quot;previous&quot; optional attributes
 that contain URL to navigate among the response pages.</p>
@@ -867,31 +870,31 @@ shapefile, since a full scan of the features of the layer is done.</p>
 <div class="section" id="related-bug-fixes">
 <h3>3.5 Related bug fixes<a class="headerlink" href="#related-bug-fixes" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/1583">https://github.com/mapserver/mapserver/issues/1583</a> : [WFS-Server] enable temporal support on filters</li>
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/3563">https://github.com/mapserver/mapserver/issues/3563</a> : WFS property name should respect gml_include/exclude_items</li>
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/3319">https://github.com/mapserver/mapserver/issues/3319</a> : WFS 1.1 property names, mandatory, optional attributes</li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/1583">https://github.com/mapserver/mapserver/issues/1583</a> : [WFS-Server] enable temporal support on filters</p></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/3563">https://github.com/mapserver/mapserver/issues/3563</a> : WFS property name should respect gml_include/exclude_items</p></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/3319">https://github.com/mapserver/mapserver/issues/3319</a> : WFS 1.1 property names, mandatory, optional attributes</p></li>
 </ul>
 </div>
 <div class="section" id="restrictions">
 <h3>3.6 Restrictions<a class="headerlink" href="#restrictions" title="Permalink to this headline">¶</a></h3>
 <p>The following features are not covered by this RFC :</p>
 <ul class="simple">
-<li>Standard, spatial or temporal joins in GetFeature operation. All are optional
-conformance classes of <cite>Filter Encoding 2.0</cite></li>
-<li>A very small subset of XPath 2.0 is supported (even if we shamelessly advertize
+<li><p>Standard, spatial or temporal joins in GetFeature operation. All are optional
+conformance classes of <cite>Filter Encoding 2.0</cite></p></li>
+<li><p>A very small subset of XPath 2.0 is supported (even if we shamelessly advertize
 ImplementsMinimumXPath to make CITE tests happy). This is limited to property
 names, &quot;groupname/propertyname&quot; syntax when using gml_group, as well as &#64;gml:id for
-the VALUEREFERENCE parameter of GetPropertyValue.</li>
-<li>Locking WFS</li>
-<li>Transactional WFS</li>
-<li>Feature versions</li>
-<li>Inheritance / schema-element() XPath function</li>
-<li>SOAP</li>
-<li>Namespaces: the NAMESPACE KVP parameter is ignored. namespace prefixes in
-layer and property names are just removed.</li>
-<li>the ALIAS parameter in a GetFeature request</li>
-<li>the various RESOLVExxxx parameters</li>
-<li>upgrade of the MapServer WFS client for WFS 2.0 protocol</li>
+the VALUEREFERENCE parameter of GetPropertyValue.</p></li>
+<li><p>Locking WFS</p></li>
+<li><p>Transactional WFS</p></li>
+<li><p>Feature versions</p></li>
+<li><p>Inheritance / schema-element() XPath function</p></li>
+<li><p>SOAP</p></li>
+<li><p>Namespaces: the NAMESPACE KVP parameter is ignored. namespace prefixes in
+layer and property names are just removed.</p></li>
+<li><p>the ALIAS parameter in a GetFeature request</p></li>
+<li><p>the various RESOLVExxxx parameters</p></li>
+<li><p>upgrade of the MapServer WFS client for WFS 2.0 protocol</p></li>
 </ul>
 </div>
 <div class="section" id="documentation">
@@ -914,8 +917,8 @@ msautotest/pymod/xmlvalidate.py script described in
 <div class="section" id="bug-id">
 <h2>4. Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Code pull request: <a class="reference external" href="https://github.com/mapserver/mapserver/pull/4815">pull4815</a></li>
-<li>msautotest pull request: <a class="reference external" href="https://github.com/mapserver/msautotest/pull/25">pull25</a></li>
+<li><p>Code pull request: <a class="reference external" href="https://github.com/mapserver/mapserver/pull/4815">pull4815</a></p></li>
+<li><p>msautotest pull request: <a class="reference external" href="https://github.com/mapserver/msautotest/pull/25">pull25</a></p></li>
 </ul>
 </div>
 <div class="section" id="ocg-compliance-tests">
@@ -947,11 +950,11 @@ WEB metadata that will return the right exception.</p>
 <h2>7. Reference documents<a class="headerlink" href="#reference-documents" title="Permalink to this headline">¶</a></h2>
 <p>The following documents apply for this development:</p>
 <ul class="simple">
-<li><a class="reference external" href="http://inspire.jrc.ec.europa.eu/documents/Network_Services/Technical_Guidance_Download_Services_v3.1.pdf">INSPIRE Technical Guidance Download Services v3.1</a></li>
-<li><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=39967">WFS 2.0</a>: ISO 19142:2010 Geographic information -- Web Feature Service, ISO 19142</li>
-<li><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=39968">Filter Encoding 2.0</a>: ISO 19143:2010 Geographic information -- Filter encoding, ISO 19143</li>
-<li><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=20509">GML 3.2.1</a>: OGC 10-129r1.1 OpenGIS Geography Markup Language (GML) Encoding Standard</li>
-<li><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=20040">OWS 1.1.0</a>:OGC 06-121r3 OpenGIS Web Service Common Implementation Specification</li>
+<li><p><a class="reference external" href="http://inspire.jrc.ec.europa.eu/documents/Network_Services/Technical_Guidance_Download_Services_v3.1.pdf">INSPIRE Technical Guidance Download Services v3.1</a></p></li>
+<li><p><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=39967">WFS 2.0</a>: ISO 19142:2010 Geographic information -- Web Feature Service, ISO 19142</p></li>
+<li><p><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=39968">Filter Encoding 2.0</a>: ISO 19143:2010 Geographic information -- Filter encoding, ISO 19143</p></li>
+<li><p><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=20509">GML 3.2.1</a>: OGC 10-129r1.1 OpenGIS Geography Markup Language (GML) Encoding Standard</p></li>
+<li><p><a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=20040">OWS 1.1.0</a>:OGC 06-121r3 OpenGIS Web Service Common Implementation Specification</p></li>
 </ul>
 </div>
 <div class="section" id="voting-history">
@@ -972,8 +975,6 @@ WEB metadata that will return the right exception.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -1048,19 +1049,19 @@ WEB metadata that will return the right exception.</p>
              >index</a></li>
         <li class="right" >
           <a href="ms-rfc-106.html" title="MS RFC 106: Support of Geomtransform JavaScript Plugin"
-             >next</a> |</li>
+             >التالي</a> |</li>
         <li class="right" >
           <a href="ms-rfc-104.html" title="MS RFC 104: Replace BITMAP labels with embedded Truetype font"
-             >previous</a> |</li>
+             >السابق</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Request for Comments</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Last updated on 2019-03-29.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+        &#169; <a href="../../copyright.html"> حقوق النشر </a> 2019, Open Source Geospatial Foundation
+      Last updated on 2019-04-09.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

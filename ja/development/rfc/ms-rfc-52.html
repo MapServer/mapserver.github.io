@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 52: One-pass query processing &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="このドキュメントについて" href="../../about.html" />
     <link rel="index" title="索引" href="../../genindex.html" />
@@ -138,24 +139,26 @@
             
   <div class="section" id="ms-rfc-52-one-pass-query-processing">
 <h1>MS RFC 52: One-pass query processing<a class="headerlink" href="#ms-rfc-52-one-pass-query-processing" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2009/03/08</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Authors:</th><td class="field-body">Steve Lime</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">sdlime at comcast.net</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Last Edited:</th><td class="field-body">2009/06/03</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Status:</th><td class="field-body">Adopted</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">MapServer 6.0</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2009/03/08</p>
+</dd>
+<dt class="field-even">Authors</dt>
+<dd class="field-even"><p>Steve Lime</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>sdlime at comcast.net</p>
+</dd>
+<dt class="field-even">Last Edited</dt>
+<dd class="field-even"><p>2009/06/03</p>
+</dd>
+<dt class="field-odd">Status</dt>
+<dd class="field-odd"><p>Adopted</p>
+</dd>
+<dt class="field-even">Version</dt>
+<dd class="field-even"><p>MapServer 6.0</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>This RFC proposes change(s) to the current of query (by point, by box, by shape,
@@ -198,35 +201,35 @@ rely on index values.</p>
 <p>Under this last solution data drivers would need to do two things:</p>
 <blockquote>
 <div><ul class="simple">
-<li>update the population of the shapeObj index property (long int) with a value
-that will allow msLayerResultsGetShape() to randomly access a result</li>
-<li>creation of the driver-specific version of msLayerResultsGetShape() to
-retrieve a shape from the results created in msLayerWhichShapes()</li>
-<li>the default implementation of msLayerResultsGetShape() would simply wrap
+<li><p>update the population of the shapeObj index property (long int) with a value
+that will allow msLayerResultsGetShape() to randomly access a result</p></li>
+<li><p>creation of the driver-specific version of msLayerResultsGetShape() to
+retrieve a shape from the results created in msLayerWhichShapes()</p></li>
+<li><p>the default implementation of msLayerResultsGetShape() would simply wrap
 msLayerGetShape() since most drivers would not have to implement the newer
-function (e.g. OGR or shapefiles)</li>
+function (e.g. OGR or shapefiles)</p></li>
 </ul>
 </div></blockquote>
 <p>The query functions would need to:</p>
 <blockquote>
 <div><ul class="simple">
-<li>not close the layer when finished with a query (we assume that users will
-want to do something with the results)</li>
-<li>allow msLayerWhichItems() to retrieve ALL items so that the retrieved
-shapes are presentation-ready (draw, template, or ...)</li>
+<li><p>not close the layer when finished with a query (we assume that users will
+want to do something with the results)</p></li>
+<li><p>allow msLayerWhichItems() to retrieve ALL items so that the retrieved
+shapes are presentation-ready (draw, template, or ...)</p></li>
 </ul>
 </div></blockquote>
 <p>The presentation functions:</p>
 <blockquote>
 <div><ul class="simple">
-<li>refrain from calling msLayerOpen(), msLayerWhichItems(), msLayerWhichShapes()
-since that has already been done in the query functions</li>
+<li><p>refrain from calling msLayerOpen(), msLayerWhichItems(), msLayerWhichShapes()
+since that has already been done in the query functions</p></li>
 </ul>
 </div></blockquote>
 <p>MapScript layerObj wrappers:</p>
 <blockquote>
 <div><ul class="simple">
-<li>add resultsGetShape() method</li>
+<li><p>add resultsGetShape() method</p></li>
 </ul>
 </div></blockquote>
 <p>This solution has been piloted in the single-pass sandbox with very promising
@@ -285,21 +288,21 @@ remain &quot;as is&quot; although the internals would change.</p>
 <div class="section" id="files-impacted">
 <h2>Files Impacted<a class="headerlink" href="#files-impacted" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <ul class="simple">
-<li>driver files: implement msXXXLayerResultsGetShape() function to shape fetching
-code if necessary</li>
-<li>maptemplate.c: don't open/close a layer when presenting results</li>
-<li>mapgml.c: don't open/close a layer when presenting results</li>
-<li>mapdraw.c: don't open/close a layer etc... IF if drawing a query map</li>
-<li>maplayer.c: refactor msLayerWhichItems(), add msLayerResultsGetShape() to the
-layer plugin API</li>
-<li>mapquery.c: re-work msSaveQuery() and msLoadQuery(), change query functions
-to take a lone mapObj as input, add msInitQuery() and msFreeQuery() functions</li>
-<li>mapserv.c: populate map-&gt;query before calling query functions</li>
-<li>mapwxs.c (various): populate map-&gt;query before calling query functions</li>
-<li>mapfile.c: leverage msInitQuery() and msFreeQuery() functions</li>
-<li>mapserver.h: define queryObj, add to mapObj</li>
-<li>mapscript (various): update map/layer query methods to populate a queryObj</li>
-<li>others? (mapcopy.c for one)</li>
+<li><p>driver files: implement msXXXLayerResultsGetShape() function to shape fetching
+code if necessary</p></li>
+<li><p>maptemplate.c: don't open/close a layer when presenting results</p></li>
+<li><p>mapgml.c: don't open/close a layer when presenting results</p></li>
+<li><p>mapdraw.c: don't open/close a layer etc... IF if drawing a query map</p></li>
+<li><p>maplayer.c: refactor msLayerWhichItems(), add msLayerResultsGetShape() to the
+layer plugin API</p></li>
+<li><p>mapquery.c: re-work msSaveQuery() and msLoadQuery(), change query functions
+to take a lone mapObj as input, add msInitQuery() and msFreeQuery() functions</p></li>
+<li><p>mapserv.c: populate map-&gt;query before calling query functions</p></li>
+<li><p>mapwxs.c (various): populate map-&gt;query before calling query functions</p></li>
+<li><p>mapfile.c: leverage msInitQuery() and msFreeQuery() functions</p></li>
+<li><p>mapserver.h: define queryObj, add to mapObj</p></li>
+<li><p>mapscript (various): update map/layer query methods to populate a queryObj</p></li>
+<li><p>others? (mapcopy.c for one)</p></li>
 </ul>
 <p>Although a number of files are impacted the changes in general are relatively simple.</p>
 </div>
@@ -332,8 +335,6 @@ checking need be done.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="検索" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -386,8 +387,8 @@ checking need be done.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      最終更新: 2019-03-29
-      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6 で生成しました。
+      最終更新: 2019-04-09
+      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0 で生成しました。
     </div>
   </body>
 </html>

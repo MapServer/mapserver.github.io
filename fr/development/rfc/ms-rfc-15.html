@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 15: Support for thread neutral operation of MapServer/MapScript &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -138,22 +139,23 @@
             
   <div class="section" id="ms-rfc-15-support-for-thread-neutral-operation-of-mapserver-mapscript">
 <span id="rfc15"></span><h1>MS RFC 15: Support for thread neutral operation of MapServer/MapScript<a class="headerlink" href="#ms-rfc-15-support-for-thread-neutral-operation-of-mapserver-mapscript" title="Lien permanent vers ce titre">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2006/05/01</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Tamas Szekeres</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">szekerest at gmail.com</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Draft</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">Not assigned yet</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2006/05/01</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Tamas Szekeres</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>szekerest at gmail.com</p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Draft</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>Not assigned yet</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Lien permanent vers ce titre">¶</a></h2>
 <p>By this time the core MapServer code has become widely used by many of the
@@ -176,7 +178,7 @@ compilation switch.</p>
 <div class="section" id="purpose">
 <h2>2. Purpose<a class="headerlink" href="#purpose" title="Lien permanent vers ce titre">¶</a></h2>
 <p>The purpose of this change is to get a significant performance boost by
-removing «&nbsp;big locks&nbsp;» from the code. It would add a significant improvement of
+removing « big locks » from the code. It would add a significant improvement of
 the applications having high number of multiple threads executed
 simultaneously. This activity could bring in a more feasible support for
 some application models not really aimed at now like Microsoft ASP.NET. May
@@ -203,7 +205,7 @@ considered ordering by the expediency. The latter is the less expedient.</p>
 enumerations - having been initialized at compilation time. Since these
 variables can be simultaneously read by multiple threads there is nothing
 to be done and even the locks should be removed - if exist - ensuring the
-thread isolation to be realized. Might be redeclared as «&nbsp;static const&nbsp;».</p>
+thread isolation to be realized. Might be redeclared as « static const ».</p>
 </div>
 <div class="section" id="retaining-the-variable-but-reconsidering-the-initialization-code">
 <h2>2.2 Retaining the variable, but reconsidering the initialization code<a class="headerlink" href="#retaining-the-variable-but-reconsidering-the-initialization-code" title="Lien permanent vers ce titre">¶</a></h2>
@@ -229,12 +231,12 @@ should be removed.</p>
 consider to use thread local variables instead. To implement thread local
 variables, theoretically we have at least 2 options to do:</p>
 <ol class="arabic simple">
-<li>By modifying the variable declaration we could use storage specifiers like
-Microsoft specific «&nbsp;__declspec(thread)&nbsp;» or «&nbsp;__thread&nbsp;» on
-the POSIX environments.</li>
-<li>By implementing the allocation of the thread local memory utilizing the
+<li><p>By modifying the variable declaration we could use storage specifiers like
+Microsoft specific « __declspec(thread) » or « __thread » on
+the POSIX environments.</p></li>
+<li><p>By implementing the allocation of the thread local memory utilizing the
 platform dependent TLS APIs like the Windows TLS or the unix
-Pthreads implementation.</li>
+Pthreads implementation.</p></li>
 </ol>
 <p>The first one is not applicable for MapServer  since the Microsoft
 implementation does not allow delay loading of the dll containing variables
@@ -342,7 +344,7 @@ remodel those to avoid using a static buffer.</p>
 <span class="n">mapio</span><span class="o">.</span><span class="n">c</span><span class="p">(</span><span class="mi">75</span><span class="p">):</span><span class="n">static</span> <span class="n">msIOContext</span> <span class="n">current_stderr_context</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>FrankW: Currently there is only one process wide set of «&nbsp;io handlers&nbsp;» for io.  This will almost certainly need to change at some point to be thread local in some fashion.  I hope to address this when I work on the redirectable OWS services accessible from MapScript this spring.</p>
+<p>FrankW: Currently there is only one process wide set of « io handlers » for io.  This will almost certainly need to change at some point to be thread local in some fashion.  I hope to address this when I work on the redirectable OWS services accessible from MapScript this spring.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">maplexer</span><span class="o">.</span><span class="n">c</span><span class="p">(</span><span class="mi">220</span><span class="p">):</span><span class="n">static</span> <span class="n">YY_BUFFER_STATE</span> <span class="n">yy_current_buffer</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="n">maplexer</span><span class="o">.</span><span class="n">c</span><span class="p">(</span><span class="mi">230</span><span class="p">):</span><span class="n">static</span> <span class="n">char</span> <span class="n">yy_hold_char</span><span class="p">;</span>
 <span class="n">maplexer</span><span class="o">.</span><span class="n">c</span><span class="p">(</span><span class="mi">232</span><span class="p">):</span><span class="n">static</span> <span class="nb">int</span> <span class="n">yy_n_chars</span><span class="p">;</span>         <span class="o">/*</span> <span class="n">number</span> <span class="n">of</span> <span class="n">characters</span> <span class="n">read</span> <span class="n">into</span> <span class="n">yy_ch_buf</span> <span class="o">*/</span>
@@ -604,11 +606,11 @@ The compatibility of the mapscript interface might be kept.</p>
 </div>
 <div class="section" id="bug-id">
 <h2>Bug ID<a class="headerlink" href="#bug-id" title="Lien permanent vers ce titre">¶</a></h2>
-<dl class="docutils">
-<dt>The following bug is added as a primary source for collecting the developer</dt>
-<dd>and user response. Nevertheless the MapServer users and developers list
+<dl class="simple">
+<dt>The following bug is added as a primary source for collecting the developer</dt><dd><p>and user response. Nevertheless the MapServer users and developers list
 will also be monitored and the RFC will be updated accordingly by the
-primary author.</dd>
+primary author.</p>
+</dd>
 </dl>
 <p>Bug <a class="reference external" href="https://github.com/mapserver/mapserver/issues/1764">1764</a></p>
 </div>
@@ -630,8 +632,6 @@ primary author.</dd>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -692,8 +692,8 @@ primary author.</dd>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Mis à jour le 2019-03-29.
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Mis à jour le 2019-04-09.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

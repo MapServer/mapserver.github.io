@@ -1,18 +1,19 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="nl_NL">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 67: Enable/Disable Layers in OGC Web Services &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Over deze documenten" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -137,26 +138,29 @@
             
   <div class="section" id="ms-rfc-67-enable-disable-layers-in-ogc-web-services">
 <span id="rfc67"></span><h1>MS RFC 67:  Enable/Disable Layers in OGC Web Services<a class="headerlink" href="#ms-rfc-67-enable-disable-layers-in-ogc-web-services" title="Permalink naar deze titel">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2011-02-01</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Alan Boudreault (aboudreault at mapgears.com)</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Daniel Morissette (dmorissette at mapgears.com)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Yewondwossen Assefa (yassefa at dmsolutions.ca)</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Last Edited:</th><td class="field-body">2011-02-10</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted on 2010-02-25 and implemented in MapServer 6.0</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 6.0</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2011-02-01</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Alan Boudreault (aboudreault at mapgears.com)</p>
+</dd>
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>Daniel Morissette (dmorissette at mapgears.com)</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Yewondwossen Assefa (yassefa at dmsolutions.ca)</p>
+</dd>
+<dt class="field-odd">Last Edited</dt>
+<dd class="field-odd"><p>2011-02-10</p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted on 2010-02-25 and implemented in MapServer 6.0</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 6.0</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink naar deze titel">¶</a></h2>
 <p>At the moment, it is not possible to hide/disable a layer in OGC Web
@@ -170,12 +174,12 @@ MapServer.</p>
 <h2>Use Cases<a class="headerlink" href="#use-cases" title="Permalink naar deze titel">¶</a></h2>
 <p>Here are some use cases to demonstrate the need of hiding layers:</p>
 <ul class="simple">
-<li>One needs the ability to hide tileindex layers to all OGC services</li>
-<li>In a WMS mapfile where multiple scale-dependent layers are in a common group, we want only the group to appear in GetCapabilities? and not the individual layers. However the layers should not be completely turned off since we want them to be visible in GetMap and queryable with GetFeatureInfo when the group is selected. This use case is common for WMS and may (or may not) apply to other OGC services.</li>
-<li>One may want to offer a given layer via WMS but not via WFS (or any combination of services). In other words, we need the ability to select in which OGC services a given layer is exposed.</li>
-<li>The copyright notice (i.e. layer with STATUS DEFAULT) shall not appear in the GetCapabilities output and shall not be queryable.</li>
-<li>Not about hiding a full layer, but setting the ability to say that one wants a certain layer to return the geometry as gml in a wms-getfeatureinfo-response (at this moment it is never returned)</li>
-<li>Handle wms_group_layers as real layers (relevant for INSPIRE), but move the rendering part into hidden layers in order to avoid redundant style configurations in the group layer and the sub layer.</li>
+<li><p>One needs the ability to hide tileindex layers to all OGC services</p></li>
+<li><p>In a WMS mapfile where multiple scale-dependent layers are in a common group, we want only the group to appear in GetCapabilities? and not the individual layers. However the layers should not be completely turned off since we want them to be visible in GetMap and queryable with GetFeatureInfo when the group is selected. This use case is common for WMS and may (or may not) apply to other OGC services.</p></li>
+<li><p>One may want to offer a given layer via WMS but not via WFS (or any combination of services). In other words, we need the ability to select in which OGC services a given layer is exposed.</p></li>
+<li><p>The copyright notice (i.e. layer with STATUS DEFAULT) shall not appear in the GetCapabilities output and shall not be queryable.</p></li>
+<li><p>Not about hiding a full layer, but setting the ability to say that one wants a certain layer to return the geometry as gml in a wms-getfeatureinfo-response (at this moment it is never returned)</p></li>
+<li><p>Handle wms_group_layers as real layers (relevant for INSPIRE), but move the rendering part into hidden layers in order to avoid redundant style configurations in the group layer and the sub layer.</p></li>
 </ul>
 </div>
 <div class="section" id="proposed-solution">
@@ -186,11 +190,11 @@ as we already do currently for some ows settings.</p>
 <p>All OWS services will be disabled by default unless enabled at map or layer
 level. The OWS services can be enabled using the following metadata:</p>
 <ul class="simple">
-<li>ows_enable_request: Apply to all OGC Web Services</li>
-<li>wms_enable_request: Apply to Web Map Service (WMS)</li>
-<li>wfs_enable_request: Apply to Web Feature Service (WFS)</li>
-<li>sos_enable_request: Apply to Sensor Observation Service (SOS)</li>
-<li>wcs_enable_request: Apply to Web Coverage Service (WCS)</li>
+<li><p>ows_enable_request: Apply to all OGC Web Services</p></li>
+<li><p>wms_enable_request: Apply to Web Map Service (WMS)</p></li>
+<li><p>wfs_enable_request: Apply to Web Feature Service (WFS)</p></li>
+<li><p>sos_enable_request: Apply to Sensor Observation Service (SOS)</p></li>
+<li><p>wcs_enable_request: Apply to Web Coverage Service (WCS)</p></li>
 </ul>
 <p>The value of the metadata is a list of the requests to enable:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;GetMap GetFeature GetFeatureInfo&quot;</span>
@@ -201,9 +205,9 @@ in the corresponding OGC specification.</p>
 <p>For convenience, there are also two special characters we can use in the
 requests list:</p>
 <ul class="simple">
-<li>*: Used alone, means all requests</li>
-<li>!: Placed before a request name, means disable this request</li>
-<li>!*: Means disable all requests</li>
+<li><p>*: Used alone, means all requests</p></li>
+<li><p>!: Placed before a request name, means disable this request</p></li>
+<li><p>!*: Means disable all requests</p></li>
 </ul>
 <p>Examples:</p>
 <p>Fully enable WMS:</p>
@@ -244,7 +248,7 @@ unless they are overridden at the layer level. Example:</p>
 <div class="section" id="implementation-notes">
 <h2>Implementation notes<a class="headerlink" href="#implementation-notes" title="Permalink naar deze titel">¶</a></h2>
 <ul class="simple">
-<li>Don’t forget to also update the list of supported operations in the GetCapabilities (e.g. don’t write out GetFeatureInfo as an operation if “wms_enable_request” “!GetFeatureInfo”)</li>
+<li><p>Don’t forget to also update the list of supported operations in the GetCapabilities (e.g. don’t write out GetFeatureInfo as an operation if “wms_enable_request” “!GetFeatureInfo”)</p></li>
 </ul>
 </div>
 <div class="section" id="improved-handling-of-wms-layer-group-as-real-layers">
@@ -259,8 +263,8 @@ configure the map file to show/hide low level layers and to allow or not WMS req
 different levels of the tree hierarchy.  This is especially important to be able to support the
 INSPIRE requirements.</p>
 <div class="admonition note">
-<p class="first admonition-title">Notitie</p>
-<p class="last">This section of the RFC was not implemented and will be done as part of
+<p class="admonition-title">Notitie</p>
+<p>This section of the RFC was not implemented and will be done as part of
 future INSPIRE related enhancements, likely in 6.2.</p>
 </div>
 </div>
@@ -277,16 +281,16 @@ ogc services working as before.</p>
 <h2>Tickets<a class="headerlink" href="#tickets" title="Permalink naar deze titel">¶</a></h2>
 <p>Main ticket:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/3703">https://github.com/mapserver/mapserver/issues/3703</a></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/3703">https://github.com/mapserver/mapserver/issues/3703</a></p></li>
 </ul>
 <p>Related tickets:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/337">https://github.com/mapserver/mapserver/issues/337</a> : Need a way to prevent layers from being served via WMS</li>
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/300">https://github.com/mapserver/mapserver/issues/300</a> : Extend behavior of DUMP mapfile parameter for GML output</li>
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/1952">https://github.com/mapserver/mapserver/issues/1952</a> : Tileindex Layer and WMS Get Capabilities</li>
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/1632">https://github.com/mapserver/mapserver/issues/1632</a> : support for named group layers using wms_layer_group</li>
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/3608">https://github.com/mapserver/mapserver/issues/3608</a> : INSPIRE related support</li>
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/3830">https://github.com/mapserver/mapserver/issues/3830</a> : DUMP keyword is made obsolete by RFC 67</li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/337">https://github.com/mapserver/mapserver/issues/337</a> : Need a way to prevent layers from being served via WMS</p></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/300">https://github.com/mapserver/mapserver/issues/300</a> : Extend behavior of DUMP mapfile parameter for GML output</p></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/1952">https://github.com/mapserver/mapserver/issues/1952</a> : Tileindex Layer and WMS Get Capabilities</p></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/1632">https://github.com/mapserver/mapserver/issues/1632</a> : support for named group layers using wms_layer_group</p></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/3608">https://github.com/mapserver/mapserver/issues/3608</a> : INSPIRE related support</p></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/3830">https://github.com/mapserver/mapserver/issues/3830</a> : DUMP keyword is made obsolete by RFC 67</p></li>
 </ul>
 </div>
 <div class="section" id="voting-history">
@@ -307,8 +311,6 @@ ogc services working as before.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Zoek" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -363,8 +365,8 @@ ogc services working as before.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2019-03-29.
-      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Laatste aanpassing op 2019-04-09.
+      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

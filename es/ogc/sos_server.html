@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>SOS Server &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="Sobre este documento" href="../about.html" />
     <link rel="index" title="Índice" href="../genindex.html" />
@@ -138,27 +139,27 @@
             
   <div class="section" id="sos-server">
 <span id="index-0"></span><span id="id1"></span><h1><a class="toc-backref" href="#table-of-contents">SOS Server</a><a class="headerlink" href="#sos-server" title="Enlazar permanentemente con este título">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Jeff McKenna</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">jmckenna at gatewaygeomatics.com</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2016-06-14</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>Jeff McKenna</p>
+</dd>
+<dt class="field-even">Contact</dt>
+<dd class="field-even"><p>jmckenna at gatewaygeomatics.com</p>
+</dd>
+<dt class="field-odd">Last Updated</dt>
+<dd class="field-odd"><p>2016-06-14</p>
+</dd>
+</dl>
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title first">Table of Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#sos-server" id="id2">SOS Server</a><ul>
-<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
-<li><a class="reference internal" href="#setting-up-an-sos-server-using-mapserver" id="id4">Setting Up an SOS Server Using MapServer</a></li>
-<li><a class="reference internal" href="#limitations-todo" id="id5">Limitations / TODO</a></li>
-<li><a class="reference internal" href="#reference-section" id="id6">Reference Section</a></li>
-<li><a class="reference internal" href="#use-of-sos-procedure-and-sos-procedure-item" id="id7">Use of sos_procedure and sos_procedure_item</a></li>
+<li><p><a class="reference internal" href="#sos-server" id="id2">SOS Server</a></p>
+<ul>
+<li><p><a class="reference internal" href="#introduction" id="id3">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#setting-up-an-sos-server-using-mapserver" id="id4">Setting Up an SOS Server Using MapServer</a></p></li>
+<li><p><a class="reference internal" href="#limitations-todo" id="id5">Limitations / TODO</a></p></li>
+<li><p><a class="reference internal" href="#reference-section" id="id6">Reference Section</a></p></li>
+<li><p><a class="reference internal" href="#use-of-sos-procedure-and-sos-procedure-item" id="id7">Use of sos_procedure and sos_procedure_item</a></p></li>
 </ul>
 </li>
 </ul>
@@ -179,32 +180,32 @@ MapServer <a class="reference internal" href="../development/rfc/ms-rfc-13.html#
 <p>This document assumes that you are already familiar with certain
 aspects of MapServer:</p>
 <ul class="simple">
-<li>MapServer application development and setting up .map files.</li>
+<li><p>MapServer application development and setting up .map files.</p></li>
 </ul>
 <div class="section" id="links-to-sos-related-information">
 <h3>Links to SOS-Related Information<a class="headerlink" href="#links-to-sos-related-information" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
-<li><a class="reference external" href="http://www.opengeospatial.org/standards/sos">SOS specification documents</a></li>
-<li>OGC’s <a class="reference external" href="http://www.opengeospatial.org/projects/groups/sensorwebdwg">Sensor Web Enablement</a>  working group</li>
+<li><p><a class="reference external" href="http://www.opengeospatial.org/standards/sos">SOS specification documents</a></p></li>
+<li><p>OGC’s <a class="reference external" href="http://www.opengeospatial.org/projects/groups/sensorwebdwg">Sensor Web Enablement</a>  working group</p></li>
 </ul>
 </div>
 <div class="section" id="relevant-definitions">
 <h3>Relevant Definitions<a class="headerlink" href="#relevant-definitions" title="Enlazar permanentemente con este título">¶</a></h3>
 <p>The following is taken from the SOS 1.0.0 specification:</p>
-<dl class="docutils">
-<dt>Observation</dt>
-<dd>An observation is an event with a result which has a value
-describing some phenomenon.</dd>
-<dt>Observation Offering</dt>
-<dd>An observation offering is a logical grouping of observations
-offered by a service that are related in some way.</dd>
-<dt>Observed Value</dt>
-<dd>A value describing a natural phenomenon, which may use one of a
-variety of scales including nominal, ordinal, ratio and interval.</dd>
-<dt>Sensor</dt>
-<dd>An entity capable of observing a phenomenon and returning an
+<dl class="simple">
+<dt>Observation</dt><dd><p>An observation is an event with a result which has a value
+describing some phenomenon.</p>
+</dd>
+<dt>Observation Offering</dt><dd><p>An observation offering is a logical grouping of observations
+offered by a service that are related in some way.</p>
+</dd>
+<dt>Observed Value</dt><dd><p>A value describing a natural phenomenon, which may use one of a
+variety of scales including nominal, ordinal, ratio and interval.</p>
+</dd>
+<dt>Sensor</dt><dd><p>An entity capable of observing a phenomenon and returning an
 observed value. A sensor can be an instrument or a living organism
-(e.g. a person).</dd>
+(e.g. a person).</p>
+</dd>
 </dl>
 </div>
 </div>
@@ -235,16 +236,16 @@ INPUT=OGR INPUT=GDAL INPUT=SHAPEFILE DEBUG=MSDEBUG
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Nota</p>
-<p class="last">Windows users can install <a class="reference external" href="http://ms4w.com">MS4W</a> which supports SOS server.</p>
+<p class="admonition-title">Nota</p>
+<p>Windows users can install <a class="reference external" href="http://ms4w.com">MS4W</a> which supports SOS server.</p>
 </div>
 <p>If you don’t have SOS support in your MapServer build, then you must
 compile MapServer with the following in mind:</p>
 <ul class="simple">
-<li>flag <em>-DUSE_SOS_SVR</em> is required</li>
-<li>requires either <em>-DUSE_WMS_SVR</em> or <em>-DUSE_WFS_SVR</em> flags to be enabled</li>
-<li>requires libxml2 and proj libraries</li>
-<li>requires ICONV support (<em>-DUSE_ICONV</em>) on Windows</li>
+<li><p>flag <em>-DUSE_SOS_SVR</em> is required</p></li>
+<li><p>requires either <em>-DUSE_WMS_SVR</em> or <em>-DUSE_WFS_SVR</em> flags to be enabled</p></li>
+<li><p>requires libxml2 and proj libraries</p></li>
+<li><p>requires ICONV support (<em>-DUSE_ICONV</em>) on Windows</p></li>
 </ul>
 <p>For more help with MapServer compilation see the appropriate HowTo:
 <a class="reference internal" href="../installation/unix.html#unix"><span class="std std-ref">Unix</span></a> / <a class="reference internal" href="../installation/win32.html#win32"><span class="std std-ref">Windows</span></a></p>
@@ -260,29 +261,31 @@ MapServer, but are <strong>required (or strongly recommended) for a SOS
 configuration:</strong></p>
 <p><strong>MAP level:</strong></p>
 <ul class="simple">
-<li>Map NAME</li>
-<li>Map PROJECTION</li>
-<li>Map Metadata (in the WEB Object):<ul>
-<li>sos_title</li>
-<li>sos_onlineresource</li>
-<li>sos_srs</li>
-<li>sos_enable_request</li>
-<li>see the <a class="reference internal" href="#reference-section">Reference Section</a> of this document for a full list of
-metadata and descriptions</li>
+<li><p>Map NAME</p></li>
+<li><p>Map PROJECTION</p></li>
+<li><p>Map Metadata (in the WEB Object):</p>
+<ul>
+<li><p>sos_title</p></li>
+<li><p>sos_onlineresource</p></li>
+<li><p>sos_srs</p></li>
+<li><p>sos_enable_request</p></li>
+<li><p>see the <a class="reference internal" href="#reference-section">Reference Section</a> of this document for a full list of
+metadata and descriptions</p></li>
 </ul>
 </li>
 </ul>
 <p><strong>LAYER level:</strong></p>
 <ul class="simple">
-<li>Layer NAME</li>
-<li>Layer PROJECTION</li>
-<li>Layer METADATA<ul>
-<li>sos_offering_id</li>
-<li>sos_observedproperty_id</li>
-<li>sos_observedproperty_id</li>
-<li>sos_describesensor_url</li>
-<li>see the <a class="reference internal" href="#reference-section">Reference Section</a> of this document for a full list of
-metadata and descriptions</li>
+<li><p>Layer NAME</p></li>
+<li><p>Layer PROJECTION</p></li>
+<li><p>Layer METADATA</p>
+<ul>
+<li><p>sos_offering_id</p></li>
+<li><p>sos_observedproperty_id</p></li>
+<li><p>sos_observedproperty_id</p></li>
+<li><p>sos_describesensor_url</p></li>
+<li><p>see the <a class="reference internal" href="#reference-section">Reference Section</a> of this document for a full list of
+metadata and descriptions</p></li>
 </ul>
 </li>
 </ul>
@@ -391,8 +394,8 @@ or metadata items. If you notice any warning in your XML output then you have
 to fix all of them before you can try your server with an SOS client, otherwise
 things are likely not going to work.</p>
 <div class="admonition note">
-<p class="first admonition-title">Nota</p>
-<p class="last">The SERVICE parameter is required for all SOS requests.</p>
+<p class="admonition-title">Nota</p>
+<p>The SERVICE parameter is required for all SOS requests.</p>
 </div>
 </div>
 <div class="section" id="getobservation-request">
@@ -409,24 +412,23 @@ the request or return an exception report.</p>
 <p><strong>service</strong>:  (Required) value must be «SOS».</p>
 <p><strong>version</strong>:  (Required) value must be «1.0.0».</p>
 <p><strong>offering</strong>: (Required) The Offering identified in the capabilities document.</p>
-<dl class="docutils">
-<dt><strong>observedProperty</strong>: (Required) The property identified in the</dt>
-<dd>capabilities document.</dd>
-<dt><strong>responseFormat</strong>: (Required) The format / encoding to be returned</dt>
-<dd>by the response.</dd>
-<dt><strong>eventTime</strong> (Optional) Specifies the time period for which</dt>
-<dd>observations are requested.</dd>
-<dt><strong>procedure</strong>: (Optional) The procedure specifies the sensor system</dt>
-<dd>used. In this implementation, the procedure is equivalent to be
+<dl class="simple">
+<dt><strong>observedProperty</strong>: (Required) The property identified in the</dt><dd><p>capabilities document.</p>
+</dd>
+<dt><strong>responseFormat</strong>: (Required) The format / encoding to be returned</dt><dd><p>by the response.</p>
+</dd>
+<dt><strong>eventTime</strong> (Optional) Specifies the time period for which</dt><dd><p>observations are requested.</p>
+</dd>
+<dt><strong>procedure</strong>: (Optional) The procedure specifies the sensor system</dt><dd><p>used. In this implementation, the procedure is equivalent to be
 the sensor id that will be used when doing a DescribeSensor
-request.</dd>
-<dt><strong>featureOfInterest</strong>: (Optional) In this implementation, this will</dt>
-<dd>be represented by a gml envelope defining the lower and upper
-corners.</dd>
-<dt><strong>Result</strong>: (Optional) The Result parameter provides a place to put</dt>
-<dd>OGC filter expressions based on property values.</dd>
-<dt><strong>resultModel</strong>: (Optional) Identifier of the result model to be</dt>
-<dd>used for the requested data. The resultModel values supported by a
+request.</p>
+</dd>
+<dt><strong>featureOfInterest</strong>: (Optional) In this implementation, this will</dt><dd><p>be represented by a gml envelope defining the lower and upper
+corners.</p>
+</dd>
+<dt><strong>Result</strong>: (Optional) The Result parameter provides a place to put</dt><dd><p>OGC filter expressions based on property values.</p>
+</dd>
+<dt><strong>resultModel</strong>: (Optional) Identifier of the result model to be</dt><dd><p>used for the requested data. The resultModel values supported by a
 SOS server are listed in the contents section of the service
 metadata (GetCapabilities).  MapServer currently supports
 om:Observation and om:Measurement.  om:Measurement provides a flat
@@ -434,7 +436,8 @@ model of the geometry and attributes, similar to WFS GetFeature
 output.  om:Observations provides a more compact definition which
 includes an XML header of the field names and definitions, followed
 by a «DataBlock» of delimited records (default is CSV delimited
-output).  The default output is om:Measurement.</dd>
+output).  The default output is om:Measurement.</p>
+</dd>
 </dl>
 <p><strong>srsName</strong>: (Optional) srs (EPSG code) of the output response.</p>
 </div></blockquote>
@@ -489,11 +492,11 @@ document.</p>
 <div><p><strong>request</strong>: (Required) value must be «DescribeSensor»</p>
 <p><strong>service</strong>:  (Required) value must be «SOS».</p>
 <p><strong>version</strong>:  (Required) value must be «1.0.0».</p>
-<dl class="docutils">
-<dt><strong>procedure</strong>: (Required) This is the sensor id, which was specified</dt>
-<dd>in the «sos_procedure» metadata.</dd>
-<dt><strong>outputFormat</strong>: (Required) The format encoding to be returned by</dt>
-<dd>the response.</dd>
+<dl class="simple">
+<dt><strong>procedure</strong>: (Required) This is the sensor id, which was specified</dt><dd><p>in the «sos_procedure» metadata.</p>
+</dd>
+<dt><strong>outputFormat</strong>: (Required) The format encoding to be returned by</dt><dd><p>the response.</p>
+</dd>
 </dl>
 </div></blockquote>
 <p>Here is a valid example:</p>
@@ -514,8 +517,8 @@ request to an existing SensorML document.</p>
 <span id="index-2"></span><h2><a class="toc-backref" href="#table-of-contents">Reference Section</a><a class="headerlink" href="#reference-section" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>The following metadata are available in the setup of the SOS Server mapfile:</p>
 <div class="admonition note">
-<p class="first admonition-title">Nota</p>
-<p class="last">Each of the metadata below can also be referred to as “ows_*” instead of
+<p class="admonition-title">Nota</p>
+<p>Each of the metadata below can also be referred to as “ows_*” instead of
 “sos_*”. MapServer tries the “sos_*” metadata first, and if not found it
 tries the corresponding “ows_*” name. Using this reduces the amount of
 duplication in mapfiles that support multiple OGC interfaces since «ows_*»
@@ -526,7 +529,7 @@ multiple OGC interfaces.</p>
 <span id="index-3"></span><h3>Web Object Metadata<a class="headerlink" href="#web-object-metadata" title="Enlazar permanentemente con este título">¶</a></h3>
 <span class="target" id="index-4"></span><p id="index-5"><strong>ows_allowed_ip_list</strong> (or sos_allowed_ip_list)</p>
 <ul>
-<li><p class="first"><em>Description:</em> (Optional) A list of IP addresses that will be
+<li><p><em>Description:</em> (Optional) A list of IP addresses that will be
 allowed access to the service.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">METADATA</span>
@@ -538,7 +541,7 @@ allowed access to the service.</p>
 </ul>
 <span class="target" id="index-6"></span><p id="index-7"><strong>ows_denied_ip_list</strong> (or sos_denied_ip_list)</p>
 <ul>
-<li><p class="first"><em>Description:</em> (Optional) A list of IP addresses that will be denied
+<li><p><em>Description:</em> (Optional) A list of IP addresses that will be denied
 access to the service.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">METADATA</span>
@@ -550,75 +553,74 @@ access to the service.</p>
 </ul>
 <p id="index-8"><strong>ows_language</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) Descriptive narrative for more information about
+<li><p><em>Description:</em> (Optional) Descriptive narrative for more information about
 the server. Identifier of the language used by all included exception text
 values. These language identifiers shall be as specified in IETF RFC 1766.
 When this attribute is omitted, the language used is not identified.
-Examples: «en-CA», «fr-CA», «en-US». Default is «en-US».</li>
+Examples: «en-CA», «fr-CA», «en-US». Default is «en-US».</p></li>
 </ul>
 <p id="index-9"><strong>ows_schemas_location</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) (Note the name ows_schemas_location and not
+<li><p><em>Description:</em> (Optional) (Note the name ows_schemas_location and not
 sos/_… this is because all OGC Web Services (OWS) use the same metadata)
 Root of the web tree where the family of OGC SOS XMLSchema files are
 located. This must be a valid URL where the actual .xsd files are located if
 you want your SOS output to validate in a validating XML parser. Default is
-<a class="reference external" href="http://schemas.opengis.net/sos/">http://schemas.opengis.net/sos/</a>.</li>
+<a class="reference external" href="http://schemas.opengis.net/sos/">http://schemas.opengis.net/sos/</a>.</p></li>
 </ul>
 <p id="index-10"><strong>ows_updatesequence</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) The updateSequence parameter can be used for
+<li><p><em>Description:</em> (Optional) The updateSequence parameter can be used for
 maintaining the consistency of a client cache of the contents of a service
 metadata document. The parameter value can be an integer, a timestamp in
-[ISO 8601:2000] format, or any other number or string.</li>
+[ISO 8601:2000] format, or any other number or string.</p></li>
 </ul>
 <p id="index-11"><strong>sos_abstract</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) Descriptive narrative for more information about
-the server.</li>
+<li><p><em>Description:</em> (Optional) Descriptive narrative for more information about
+the server.</p></li>
 </ul>
 <p id="index-12"><strong>sos_accessconstraints</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) Text describing any access constraints imposed by
-the service provider on the SOS or data retrieved from this service.</li>
+<li><p><em>Description:</em> (Optional) Text describing any access constraints imposed by
+the service provider on the SOS or data retrieved from this service.</p></li>
 </ul>
 <span class="target" id="index-13"></span><span class="target" id="index-14"></span><span class="target" id="index-15"></span><span class="target" id="index-16"></span><span class="target" id="index-17"></span><p id="index-18"><strong>sos_addresstype, sos_address, sos_city, sos_country, sos_postcode, sos_stateorprovince</strong></p>
 <ul class="simple">
-<li><em>Description:</em> Optional contact address information. If provided then all
-six metadata items are required.</li>
+<li><p><em>Description:</em> Optional contact address information. If provided then all
+six metadata items are required.</p></li>
 </ul>
 <p id="index-19"><strong>sos_contactelectronicmailaddress</strong></p>
 <ul class="simple">
-<li><em>Description:</em> Optional contact Email address.</li>
+<li><p><em>Description:</em> Optional contact Email address.</p></li>
 </ul>
 <p id="index-20"><strong>sos_contactfacsimiletelephone</strong></p>
 <ul class="simple">
-<li><em>Description:</em> Optional contact facsimile telephone number.</li>
+<li><p><em>Description:</em> Optional contact facsimile telephone number.</p></li>
 </ul>
 <p id="index-21"><strong>sos_contactinstructions</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) Supplemental instructions on how or when
-to contact the individual or organization.</li>
+<li><p><em>Description:</em> (Optional) Supplemental instructions on how or when
+to contact the individual or organization.</p></li>
 </ul>
 <span class="target" id="index-22"></span><span class="target" id="index-23"></span><p id="index-24"><strong>sos_contactorganization, sos_contactperson, sos_contactposition</strong></p>
 <ul class="simple">
-<li><em>Description:</em> Optional contact information. If provided then all
-three metadata items are required.</li>
+<li><p><em>Description:</em> Optional contact information. If provided then all
+three metadata items are required.</p></li>
 </ul>
 <p id="index-25"><strong>sos_contactvoicetelephone</strong></p>
 <ul class="simple">
-<li><em>Description:</em> Optional contact voice telephone number.</li>
+<li><p><em>Description:</em> Optional contact voice telephone number.</p></li>
 </ul>
 <p id="index-26"><strong>sos_enable_request</strong> (or <strong>ows_enable_request</strong>)</p>
 <ul>
-<li><p class="first"><em>Description:</em> Space separated list of requests to enable.
+<li><p><em>Description:</em> Space separated list of requests to enable.
 The default is none.
 The following requests can be enabled:
 <cite>GetCapabilities</cite>, <cite>GetObservation</cite> and <cite>DescribeSensor</cite>.
 A «!» in front of a request will disable the request.
-«*» enables all requests.</p>
-</li>
-<li><p class="first"><em>Examples:</em></p>
+«*» enables all requests.</p></li>
+<li><p><em>Examples:</em></p>
 <p>To enable only <cite>GetCapabilities</cite> and <cite>GetObservation</cite>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;sos_enable_request&quot;</span> <span class="s2">&quot;GetCapabilities GetObservation&quot;</span>
 </pre></div>
@@ -631,85 +633,84 @@ A «!» in front of a request will disable the request.
 </ul>
 <p id="index-27"><strong>sos_encoding_blockSeparator</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) For GetObservation requests using
+<li><p><em>Description:</em> (Optional) For GetObservation requests using
 resultModel=om:Observation (SWE DataBlock encoding).  Record
-separator to be used.  Default is “\n”</li>
+separator to be used.  Default is “\n”</p></li>
 </ul>
 <p id="index-28"><strong>sos_encoding_tokenSeparator</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) For GetObservation requests using
+<li><p><em>Description:</em> (Optional) For GetObservation requests using
 resultModel=om:Observation (SWE DataBlock encoding).  Token (field)
-separator to be used.  Default is “,”</li>
+separator to be used.  Default is “,”</p></li>
 </ul>
 <p id="index-29"><strong>sos_fees</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) Fees information. Use the reserved word
-«none» if there are no fees.</li>
+<li><p><em>Description:</em> (Optional) Fees information. Use the reserved word
+«none» if there are no fees.</p></li>
 </ul>
 <p id="index-30"><strong>sos_hoursofservice</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) Time period (including time zone) when
-individuals can contact the organization or individual.</li>
+<li><p><em>Description:</em> (Optional) Time period (including time zone) when
+individuals can contact the organization or individual.</p></li>
 </ul>
 <p id="index-31"><strong>sos_keywordlist</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) A comma-separated list of keywords or keyword
-phrases to help catalog searching.</li>
+<li><p><em>Description:</em> (Optional) A comma-separated list of keywords or keyword
+phrases to help catalog searching.</p></li>
 </ul>
 <p id="index-32"><strong>sos_maxfeatures</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) The number of elements to be returned by
-the SOS server. If the not set all observations are returned</li>
+<li><p><em>Description:</em> (Optional) The number of elements to be returned by
+the SOS server. If the not set all observations are returned</p></li>
 </ul>
 <p id="index-33"><strong>sos_onlineresource</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Required) The URL that will be used to access this
-OGC server.  This value is used in the GetCapabilities response.</li>
-<li>See the section «Onlineresource URL» above for more information.</li>
+<li><p><em>Description:</em> (Required) The URL that will be used to access this
+OGC server.  This value is used in the GetCapabilities response.</p></li>
+<li><p>See the section «Onlineresource URL» above for more information.</p></li>
 </ul>
 <p id="index-34"><strong>sos_role</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) Function performed by the responsible
+<li><p><em>Description:</em> (Optional) Function performed by the responsible
 party. Possible values of this Role shall include the values and the
-meanings listed in Subclause B.5.5 of ISO 19115:2003.</li>
+meanings listed in Subclause B.5.5 of ISO 19115:2003.</p></li>
 </ul>
 <p id="index-35"><strong>sos_service_onlineresource</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) Top-level onlineresource URL.</li>
+<li><p><em>Description:</em> (Optional) Top-level onlineresource URL.</p></li>
 </ul>
 <p id="index-36"><strong>sos_srs</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Required) Contains a list of EPSG projection codes
+<li><p><em>Description:</em> (Required) Contains a list of EPSG projection codes
 that should be advertized as being available for all layers in this
 server. The value can contain one or more EPSG:&lt;code&gt; pairs
 separated by spaces (e.g. «EPSG:4269 EPSG:4326») This value should
 be upper case (EPSG:42304…..not epsg:42304) to avoid problems with
-case sensitive platforms.</li>
+case sensitive platforms.</p></li>
 </ul>
 <p id="index-37"><strong>sos_title</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Recommended) A human-readable name for this Layer.</li>
+<li><p><em>Description:</em> (Recommended) A human-readable name for this Layer.</p></li>
 </ul>
 </div>
 <div class="section" id="layer-object-metadata">
 <span id="index-38"></span><h3>Layer Object Metadata<a class="headerlink" href="#layer-object-metadata" title="Enlazar permanentemente con este título">¶</a></h3>
-<dl class="docutils" id="index-39">
-<dt><strong>ows_allowed_ip_list</strong></dt>
-<dd>Same as ows_allowed_ip_list in the Web Object.</dd>
+<dl class="simple" id="index-39">
+<dt><strong>ows_allowed_ip_list</strong></dt><dd><p>Same as ows_allowed_ip_list in the Web Object.</p>
+</dd>
 </dl>
-<dl class="docutils" id="index-40">
-<dt><strong>ows_denied_ip_list</strong></dt>
-<dd>Same as ows_denied_ip_list in the Web Object.</dd>
+<dl class="simple" id="index-40">
+<dt><strong>ows_denied_ip_list</strong></dt><dd><p>Same as ows_denied_ip_list in the Web Object.</p>
+</dd>
 </dl>
 <p id="index-41"><strong>sos_describesensor_url</strong></p>
 <ul>
-<li><p class="first"><em>Description:</em> (Required) This metadata item is only a temporary
+<li><p><em>Description:</em> (Required) This metadata item is only a temporary
 measure until the describe sensor is generated from MapServer. Right
 now when a DescribeSensor request is sent with a procedure
 (sensorid), it will redirect it to the url defined by this metadata
-item.</p>
-</li>
-<li><p class="first">In MapServer 5.0, it is possible to use variable substitution on the
+item.</p></li>
+<li><p>In MapServer 5.0, it is possible to use variable substitution on the
 url. For example «sos_describesensor_url»
 «http://foo/foo?mysensor=%procedure%»will substitute the
 %procedure% in the metadata with the procedure value coming from the
@@ -721,14 +722,13 @@ request.</p>
 </ul>
 <p id="index-42"><strong>sos_enable_request</strong> (or <strong>ows_enable_request</strong>)</p>
 <ul>
-<li><p class="first"><em>Description:</em> Space separated list of requests to enable.
+<li><p><em>Description:</em> Space separated list of requests to enable.
 The default is none.
 The following requests can be enabled:
 <cite>GetCapabilities</cite>, <cite>GetObservation</cite> and <cite>DescribeSensor</cite>.
 A «!» in front of a request will disable the request.
-«*» enables all requests.</p>
-</li>
-<li><p class="first"><em>Examples:</em></p>
+«*» enables all requests.</p></li>
+<li><p><em>Examples:</em></p>
 <p>To enable only <cite>GetCapabilities</cite> and <cite>GetObservation</cite>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;sos_enable_request&quot;</span> <span class="s2">&quot;GetCapabilities GetObservation&quot;</span>
 </pre></div>
@@ -741,47 +741,47 @@ A «!» in front of a request will disable the request.
 </ul>
 <p id="index-43"><strong>sos_[item name]_alias</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) An alias for an attribute’s name that will
-be returned when executing a GetObservation request.</li>
+<li><p><em>Description:</em> (Optional) An alias for an attribute’s name that will
+be returned when executing a GetObservation request.</p></li>
 </ul>
 <p id="index-44"><strong>sos_[item name]_definition</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) An associated definition (usually a URN)
+<li><p><em>Description:</em> (Optional) An associated definition (usually a URN)
 for a component, that will be returned when executing a
-GetObservation request.  Default is «urn:ogc:object:definition»</li>
+GetObservation request.  Default is «urn:ogc:object:definition»</p></li>
 </ul>
 <p id="index-45"><strong>sos_[item name]_uom</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) An associated unit of measure URN) for a
+<li><p><em>Description:</em> (Optional) An associated unit of measure URN) for a
 component, that will be returned when executing a GetObservation
-request.  Default is «urn:ogc:object:uom»</li>
+request.  Default is «urn:ogc:object:uom»</p></li>
 </ul>
 <p id="index-46"><strong>sos_observedproperty_authority</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) An associated authority for a given
-component of an observed property</li>
+<li><p><em>Description:</em> (Optional) An associated authority for a given
+component of an observed property</p></li>
 </ul>
 <p id="index-47"><strong>sos_observedproperty_id</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Required) ID of observed property, possibly in number format.</li>
+<li><p><em>Description:</em> (Required) ID of observed property, possibly in number format.</p></li>
 </ul>
 <p id="index-48"><strong>sos_observedproperty_name</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) Name of observed property, possibly in
-string format.</li>
+<li><p><em>Description:</em> (Optional) Name of observed property, possibly in
+string format.</p></li>
 </ul>
 <p id="index-49"><strong>sos_observedproperty_version</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) An associated version for a given
-component of an observed property</li>
+<li><p><em>Description:</em> (Optional) An associated version for a given
+component of an observed property</p></li>
 </ul>
 <p id="index-50"><strong>sos_offering_description</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) Description of offering.</li>
+<li><p><em>Description:</em> (Optional) Description of offering.</p></li>
 </ul>
 <p id="index-51"><strong>sos_offering_extent</strong></p>
 <ul>
-<li><p class="first"><em>Description:</em> (Optional) Spatial extents of offering, in <em>minx,
+<li><p><em>Description:</em> (Optional) Spatial extents of offering, in <em>minx,
 miny, maxx, maxy</em> format:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;sos_offering_extent&quot;</span> <span class="s2">&quot;-66, 43, -62, 45&quot;</span>
 </pre></div>
@@ -789,13 +789,13 @@ miny, maxx, maxy</em> format:</p>
 <p>The logic for the bounding box returned as part of the offering is
 the following:</p>
 <ul class="simple">
-<li>note that it is a mandatory element that needs an espg code and
-lower/upper corner coordinates</li>
-<li>looks for the espg parameter in the first layer of the offering
+<li><p>note that it is a mandatory element that needs an espg code and
+lower/upper corner coordinates</p></li>
+<li><p>looks for the espg parameter in the first layer of the offering
 (this could be an ows/sos_srs or a projection object with the
-epsg code (mandatory)</li>
-<li>looks for sos_offering_extent. If the metadata is not available,
-the extents of all layers in the offering will be used to compute it.</li>
+epsg code (mandatory)</p></li>
+<li><p>looks for sos_offering_extent. If the metadata is not available,
+the extents of all layers in the offering will be used to compute it.</p></li>
 </ul>
 <p>Here is an example result from a GetCapabilities request:</p>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;gml:boundedBy&gt;</span>
@@ -810,19 +810,19 @@ the extents of all layers in the offering will be used to compute it.</li>
 </ul>
 <p id="index-52"><strong>sos_offering_id</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Required) ID of offering, possibly in number format.</li>
+<li><p><em>Description:</em> (Required) ID of offering, possibly in number format.</p></li>
 </ul>
 <p id="index-53"><strong>sos_offering_intendedapplication</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) The intended category of use for this offering.</li>
+<li><p><em>Description:</em> (Optional) The intended category of use for this offering.</p></li>
 </ul>
 <p id="index-54"><strong>sos_offering_name</strong></p>
 <ul class="simple">
-<li><em>Description:</em> (Optional) Name of offering, possibly in string format.</li>
+<li><p><em>Description:</em> (Optional) Name of offering, possibly in string format.</p></li>
 </ul>
 <p id="index-55"><strong>sos_offering_timeextent</strong></p>
 <ul>
-<li><p class="first"><em>Description:</em> (Optional) Time extent of offering, in the format of
+<li><p><em>Description:</em> (Optional) Time extent of offering, in the format of
 «begin/end».  Here is an example:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;sos_offering_timeextent&quot;</span> <span class="s">&quot;1990/2006&quot;</span>
 </pre></div>
@@ -841,13 +841,13 @@ result from a GetCapabilities request:</p>
 </ul>
 <p id="index-56"><strong>sos_procedure</strong></p>
 <ul>
-<li><p class="first"><em>Description:</em> (Required) Normally a sensor unique id.  One per layer:</p>
+<li><p><em>Description:</em> (Required) Normally a sensor unique id.  One per layer:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;sos_procedure&quot;</span>  <span class="s">&quot;NS01EE0014&quot;</span>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Nota</p>
-<p class="last">sos_procedure can also be a list, separated by spaces, i.e.:</p>
+<p class="admonition-title">Nota</p>
+<p>sos_procedure can also be a list, separated by spaces, i.e.:</p>
 </div>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;sos_procedure&quot;</span> <span class="s">&quot;35 2147 604&quot;</span>
 </pre></div>
@@ -863,7 +863,7 @@ GetCapabilities response:</p>
 </ul>
 <p id="index-57"><strong>sos_procedure_item</strong></p>
 <ul>
-<li><p class="first"><em>Description:</em> (Required if sos_procedure is not present): See
+<li><p><em>Description:</em> (Required if sos_procedure is not present): See
 section 5 for more details</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;sos_procedure_item&quot;</span>  <span class="s">&quot;attribute_field_name&quot;</span>
 </pre></div>
@@ -872,7 +872,7 @@ section 5 for more details</p>
 </ul>
 <p id="index-58"><strong>sos_timeitem</strong></p>
 <ul>
-<li><p class="first"><em>Description:</em> (Optional) Name of the time field. It will be used
+<li><p><em>Description:</em> (Optional) Name of the time field. It will be used
 for queries when a GetObservation request is called with an
 EVENTTIME parameter.  It is layer specific and should be set on all
 layers.</p>
@@ -903,63 +903,60 @@ accordingly if dealing with large observation collections.</p>
 <div class="section" id="getcapabilities">
 <h3>GetCapabilities<a class="headerlink" href="#getcapabilities" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
-<li>if sos_procedure is defined, use it</li>
-<li>if not look for sos_procedure_item :  procedure values are extracted
+<li><p>if sos_procedure is defined, use it</p></li>
+<li><p>if not look for sos_procedure_item :  procedure values are extracted
 from the layer’s attribute specified by this metadata. Not that this
-can be time consuming for layers with a large number of features.</li>
-<li>if none is defined return an exception</li>
+can be time consuming for layers with a large number of features.</p></li>
+<li><p>if none is defined return an exception</p></li>
 </ul>
 </div>
 <div class="section" id="describesensor">
 <h3>DescribeSensor<a class="headerlink" href="#describesensor" title="Enlazar permanentemente con este título">¶</a></h3>
 <ul class="simple">
-<li>if sos_procedure  is defined, use it</li>
-<li>if not look for sos_procedure_item :  procedure values are extracted
-from the layer’s attribute specified by this metadata</li>
-<li>if none is defined return an exception</li>
+<li><p>if sos_procedure  is defined, use it</p></li>
+<li><p>if not look for sos_procedure_item :  procedure values are extracted
+from the layer’s attribute specified by this metadata</p></li>
+<li><p>if none is defined return an exception</p></li>
 </ul>
 </div>
 <div class="section" id="getobservation">
 <h3>GetObservation<a class="headerlink" href="#getobservation" title="Enlazar permanentemente con este título">¶</a></h3>
 <p>Both sos_procedure and sos_procedure_item can be define. Here are the cases:</p>
 <ul class="simple">
-<li><dl class="first docutils">
-<dt>case 1 <span class="classifier-delimiter">:</span> <span class="classifier">only sos_procedure is defined.</span></dt>
-<dd><ul class="first last">
-<li>Use this metadata to match the layer with the procedure value
-sent in the request</li>
-<li>When outputting the &lt;member/procedure&gt; output the value of the metadata</li>
+<li><dl class="simple">
+<dt>case 1<span class="classifier">only sos_procedure is defined.</span></dt><dd><ul>
+<li><p>Use this metadata to match the layer with the procedure value
+sent in the request</p></li>
+<li><p>When outputting the &lt;member/procedure&gt; output the value of the metadata</p></li>
 </ul>
 </dd>
 </dl>
 </li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Nota</p>
-<p class="last">If more than one procedure is defined per LAYER object, output
+<p class="admonition-title">Nota</p>
+<p>If more than one procedure is defined per LAYER object, output
 observations will have incorrect sos:procedure values, because there is no
 way to map procedures to observations. This is where sos_procedure_item
 should be used (i.e. when more than one procedure makes up a LAYER
 object).</p>
 </div>
 <ul class="simple">
-<li><dl class="first docutils">
-<dt>case 2: only procedure_item is defined.</dt>
-<dd><ul class="first last">
-<li>Use the sos_procedure_item and do a query on the layer to match the
-procedure with the layer.</li>
-<li>When outputting the &lt;member/procedure&gt; use the procedure_item as a way
-to only output the attribute value corresponding to the feature.</li>
+<li><dl class="simple">
+<dt>case 2: only procedure_item is defined.</dt><dd><ul>
+<li><p>Use the sos_procedure_item and do a query on the layer to match the
+procedure with the layer.</p></li>
+<li><p>When outputting the &lt;member/procedure&gt; use the procedure_item as a way
+to only output the attribute value corresponding to the feature.</p></li>
 </ul>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>case 3: both are defined.</dt>
-<dd><ul class="first last">
-<li>check in sos_procedure to match the procedure with the layer.</li>
-<li>When outputting the &lt;member/procedure&gt; use the procedure_item as a
-way to only output the attribute value corresponding to the feature.</li>
+<li><dl class="simple">
+<dt>case 3: both are defined.</dt><dd><ul>
+<li><p>check in sos_procedure to match the procedure with the layer.</p></li>
+<li><p>When outputting the &lt;member/procedure&gt; use the procedure_item as a
+way to only output the attribute value corresponding to the feature.</p></li>
 </ul>
 </dd>
 </dl>
@@ -981,8 +978,6 @@ way to only output the attribute value corresponding to the feature.</li>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Ir a" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -1061,8 +1056,8 @@ way to only output the attribute value corresponding to the feature.</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Derechos de autor</a> 2019, Open Source Geospatial Foundation.
-      Actualizado por última vez en 2019-03-29.
-      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Actualizado por última vez en 2019-04-09.
+      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

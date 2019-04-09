@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 68: Support for combining features from multiple layers &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="O tych dokumentach" href="../../about.html" />
     <link rel="index" title="Indeks" href="../../genindex.html" />
@@ -138,22 +139,23 @@
             
   <div class="section" id="ms-rfc-68-support-for-combining-features-from-multiple-layers">
 <span id="rfc68"></span><h1>MS RFC 68: Support for combining features from multiple layers<a class="headerlink" href="#ms-rfc-68-support-for-combining-features-from-multiple-layers" title="Stały odnośnik do tego nagłówka">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2011/02/10</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Tamas Szekeres</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">szekerest at gmail.com</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted (Implemented on 2011-03-04)</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 6.0</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2011/02/10</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Tamas Szekeres</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>szekerest at gmail.com</p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted (Implemented on 2011-03-04)</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 6.0</p>
+</dd>
+</dl>
 <p>Description: This RFC proposes an implementation for creating a new data
 provider (CONNECTIONTYPE=UNION) which provides an option to represent features
 from multiple layers in a single layer.</p>
@@ -200,13 +202,13 @@ mapfiles as follows:</p>
 </div>
 <p>The new layer data provider will work in the following way:</p>
 <ol class="arabic simple">
-<li>In LayerOpen, it will open all of the source layers specified by the CONNECTION parameter</li>
-<li>The LayerWhichShapes call will be delegated to the underlying layers and provide the rectangle
-for the area of interest</li>
-<li>LayerNextShape will iterate through the layers and call LayerNextShape for the subsequent shapes.
+<li><p>In LayerOpen, it will open all of the source layers specified by the CONNECTION parameter</p></li>
+<li><p>The LayerWhichShapes call will be delegated to the underlying layers and provide the rectangle
+for the area of interest</p></li>
+<li><p>LayerNextShape will iterate through the layers and call LayerNextShape for the subsequent shapes.
 The layer index is assigned to the tileindex of the returned shapes. If we finish retrieving the
-shapes from one layer we start retrieving the features from the next source layer.</li>
-<li>LayerGetShape will identify the layer based on the tile index and then call LayerGetShape of this layer</li>
+shapes from one layer we start retrieving the features from the next source layer.</p></li>
+<li><p>LayerGetShape will identify the layer based on the tile index and then call LayerGetShape of this layer</p></li>
 </ol>
 <p>The union layer and the source layers must have the same geometry type otherwise an error is generated in
 the LayerOpen call.</p>
@@ -223,8 +225,8 @@ The set of the items can manually be overridden (and further attributes can be e
 by using the existing ITEMS processing option.
 At this stage of the development, the driver will expose the following additional attributes:</p>
 <ol class="arabic simple">
-<li>Combine:SourceLayerName - The name of the source layer the feature belongs to</li>
-<li>Combine:SourceLayerGroup - The group of the source layer the feature belongs to</li>
+<li><p>Combine:SourceLayerName - The name of the source layer the feature belongs to</p></li>
+<li><p>Combine:SourceLayerGroup - The group of the source layer the feature belongs to</p></li>
 </ol>
 </div>
 <div class="section" id="projections">
@@ -251,8 +253,8 @@ The queries on the union layer will anyway behave the same like with the other l
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Stały odnośnik do tego nagłówka">¶</a></h2>
 <p>In order to implement this enhancement the following changes should be made in the MapServer codebase:</p>
 <ol class="arabic simple">
-<li>Modify the lexer to interpret the new connection type (UNION).</li>
-<li>Implement mapunion.c containing the code of the union layer data source.</li>
+<li><p>Modify the lexer to interpret the new connection type (UNION).</p></li>
+<li><p>Implement mapunion.c containing the code of the union layer data source.</p></li>
 </ol>
 </div>
 <div class="section" id="files-affected">
@@ -298,8 +300,6 @@ No further impact is taken into account at the moment.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Szukaj" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -357,8 +357,8 @@ No further impact is taken into account at the moment.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Ostatnia modyfikacja 2019-03-29.
-      Utworzone przy pomocy <a href="http://sphinx-doc.org/">Sphinx</a>'a 1.7.6.
+      Ostatnia modyfikacja 2019-04-09.
+      Utworzone przy pomocy <a href="http://sphinx-doc.org/">Sphinx</a>'a 2.0.0.
     </div>
   </body>
 </html>

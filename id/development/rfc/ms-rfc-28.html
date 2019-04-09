@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="id">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 28: Redesign of LOG/DEBUG output mechanisms &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Tentang dokumen ini" href="../../about.html" />
     <link rel="index" title="Indeks" href="../../genindex.html" />
@@ -138,24 +139,26 @@
             
   <div class="section" id="ms-rfc-28-redesign-of-log-debug-output-mechanisms">
 <span id="rfc28"></span><h1>MS RFC 28: Redesign of LOG/DEBUG output mechanisms<a class="headerlink" href="#ms-rfc-28-redesign-of-log-debug-output-mechanisms" title="Link permanen untuk headline ini">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2007/06/14</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Daniel Morissette</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">dmorissette at mapgears.com</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Last Edited:</th><td class="field-body">2007/08/24</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Status:</th><td class="field-body">Adopted (2007-06-29) - Implementation completed (2007/07/06)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">MapServer 5.0</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2007/06/14</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Daniel Morissette</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>dmorissette at mapgears.com</p>
+</dd>
+<dt class="field-even">Last Edited</dt>
+<dd class="field-even"><p>2007/08/24</p>
+</dd>
+<dt class="field-odd">Status</dt>
+<dd class="field-odd"><p>Adopted (2007-06-29) - Implementation completed (2007/07/06)</p>
+</dd>
+<dt class="field-even">Version</dt>
+<dd class="field-even"><p>MapServer 5.0</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link permanen untuk headline ini">¶</a></h2>
 <p>MapServer 4.10 and older used to have multiple LOG/DEBUG output mechanisms
@@ -168,17 +171,17 @@ all supported web servers.</p>
 <h2>Inventory of existing mechanisms<a class="headerlink" href="#inventory-of-existing-mechanisms" title="Link permanen untuk headline ini">¶</a></h2>
 <p>MapServer 4.10 and older support the following LOG/DEBUG systems:</p>
 <ul>
-<li><p class="first">LOG [filename] in the WEB object:</p>
+<li><p>LOG [filename] in the WEB object:</p>
 <p>From the documentation: &quot;File to log MapServer activity in. Must be writable
 by the user the web server is running as.&quot;</p>
 <p>More specifically, the function writeLog() in mapserv.c logs information
 about the mapserv CGI request results at the end of its execution.
 This option has no effect with MapScript.</p>
 </li>
-<li><p class="first">MS_ERRORFILE environment variable:</p>
+<li><p>MS_ERRORFILE environment variable:</p>
 <p>If set then all calls to msSetError() are logged to this file.</p>
 </li>
-<li><p class="first">msDebug() with DEBUG ON/OFF at the MAP and LAYER level:</p>
+<li><p>msDebug() with DEBUG ON/OFF at the MAP and LAYER level:</p>
 <p>There are msDebug() calls in various areas of the code that generate
 information that may be useful in tuning and troubleshooting apps.
 The DEBUG ON/OFF statements in the MAP and LAYER objects are used to
@@ -195,7 +198,7 @@ MapServer's output.</p>
 <div class="section" id="questions">
 <h2>Questions<a class="headerlink" href="#questions" title="Link permanen untuk headline ini">¶</a></h2>
 <ul>
-<li><p class="first">Q: Is the mapserv-specific LOG option really used by anyone? Do we need to
+<li><p>Q: Is the mapserv-specific LOG option really used by anyone? Do we need to
 maintain it, should we get rid of it, or perhaps extend it? At a minimum
 this option should be better documented to avoid confusion with the other
 mechanisms described in this RFC.</p>
@@ -228,14 +231,14 @@ mechanism currently used by msGetErrorObj() in maperror.c.</p>
 possible values being either a file path on disk, or one of the following
 special values:</p>
 <ul class="simple">
-<li>&quot;stderr&quot; to send output to standard error. Under Apache stderr is the Apache
+<li><p>&quot;stderr&quot; to send output to standard error. Under Apache stderr is the Apache
 error_log file. Under IIS stderr goes to stdout so its use is discouraged.
-With IIS it is recommended to direct output to a file on disk instead.</li>
-<li>&quot;stdout&quot; to send output to standard output, combined with the rest of
-MapServer's output</li>
-<li>&quot;windowsdebug&quot; to send output to the Windows OutputDebugString API, allowing
+With IIS it is recommended to direct output to a file on disk instead.</p></li>
+<li><p>&quot;stdout&quot; to send output to standard output, combined with the rest of
+MapServer's output</p></li>
+<li><p>&quot;windowsdebug&quot; to send output to the Windows OutputDebugString API, allowing
 the use of external programs like SysInternals debugview to display the
-debug output.</li>
+debug output.</p></li>
 </ul>
 <p>It will be possible to specify MS_ERRORFILE either as an environment variable
 or via a CONFIG directive inside a mapfile:</p>
@@ -258,29 +261,29 @@ the MS_ERRORFILE directive has been parsed.</p>
 extended to support multiple debug levels as follows. The default is
 DEBUG OFF (Level 0):</p>
 <ul>
-<li><p class="first">Level 0: Errors only (DEBUG OFF, or DEBUG 0)</p>
+<li><p>Level 0: Errors only (DEBUG OFF, or DEBUG 0)</p>
 <p>In level 0, only msSetError() calls are logged to
 MS_ERORFILE. No msDebug() output at all. This is the default and
 corresponds to the original behavior of MS_ERRORFILE in MapServer 4.x</p>
 </li>
-<li><p class="first">Level 1: Errors and Notices (DEBUG ON, or DEBUG 1)</p>
+<li><p>Level 1: Errors and Notices (DEBUG ON, or DEBUG 1)</p>
 <p>Level 1 includes all output from Level 0 plus msDebug() warnings
 about common pitfalls, failed assertions or non-fatal error situations
 (e.g. missing or invalid values for some parameters, missing shapefiles
 in tileindex, timeout error from remote WMS/WFS servers, etc.)</p>
 </li>
-<li><p class="first">Level 2: Map Tuning (DEBUG 2)</p>
+<li><p>Level 2: Map Tuning (DEBUG 2)</p>
 <p>Level 2 includes all output from Level 1 plus notices and timing information
 useful for tuning mapfiles and applications</p>
 </li>
-<li><p class="first">Level 3: Verbose Debug (DEBUG 3)</p>
+<li><p>Level 3: Verbose Debug (DEBUG 3)</p>
 <p>All of Level 2 plus some debug output useful in troubleshooting problems
 such as WMS connection URLs being called, database connection calls, etc.</p>
 </li>
-<li><p class="first">Level 4: Very Verbose Debug (DEBUG 4)</p>
+<li><p>Level 4: Very Verbose Debug (DEBUG 4)</p>
 <p>Level 3 plus even more details...</p>
 </li>
-<li><p class="first">Level 5: Very Very Verbose Debug (DEBUG 5)</p>
+<li><p>Level 5: Very Very Verbose Debug (DEBUG 5)</p>
 <p>Level 4 plus any msDebug() output that might be more useful to
 the developers than to the users.</p>
 </li>
@@ -323,20 +326,20 @@ edited to adjust the debug level at which the various msDebug() calls kick in.</
 <div class="section" id="backwards-compatibility-issues">
 <h2>Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link permanen untuk headline ini">¶</a></h2>
 <ul class="simple">
-<li>The MapServer 4.x and older MS_ERRORFILE continues to work as before by
-default</li>
-<li>The DEBUG ON/OFF mechanism continues to work as before. However some
+<li><p>The MapServer 4.x and older MS_ERRORFILE continues to work as before by
+default</p></li>
+<li><p>The DEBUG ON/OFF mechanism continues to work as before. However some
 msDebug() output from previous versions of MapServer may require a higher
-debug level in order to be enabled.</li>
+debug level in order to be enabled.</p></li>
 </ul>
 </div>
 <div class="section" id="bug-id">
 <h2>Bug ID<a class="headerlink" href="#bug-id" title="Link permanen untuk headline ini">¶</a></h2>
 <ul class="simple">
-<li>709: <a class="reference external" href="https://github.com/mapserver/mapserver/issues/709">https://github.com/mapserver/mapserver/issues/709</a></li>
-<li>1333: <a class="reference external" href="https://github.com/mapserver/mapserver/issues/1333">https://github.com/mapserver/mapserver/issues/1333</a></li>
-<li>1783: <a class="reference external" href="https://github.com/mapserver/mapserver/issues/1783">https://github.com/mapserver/mapserver/issues/1783</a></li>
-<li>2124: <a class="reference external" href="https://github.com/mapserver/mapserver/issues/2124">https://github.com/mapserver/mapserver/issues/2124</a></li>
+<li><p>709: <a class="reference external" href="https://github.com/mapserver/mapserver/issues/709">https://github.com/mapserver/mapserver/issues/709</a></p></li>
+<li><p>1333: <a class="reference external" href="https://github.com/mapserver/mapserver/issues/1333">https://github.com/mapserver/mapserver/issues/1333</a></p></li>
+<li><p>1783: <a class="reference external" href="https://github.com/mapserver/mapserver/issues/1783">https://github.com/mapserver/mapserver/issues/1783</a></p></li>
+<li><p>2124: <a class="reference external" href="https://github.com/mapserver/mapserver/issues/2124">https://github.com/mapserver/mapserver/issues/2124</a></p></li>
 </ul>
 </div>
 <div class="section" id="voting-history">
@@ -347,7 +350,7 @@ debug level in order to be enabled.</li>
 <div class="section" id="questions-comments-from-the-review-period">
 <h2>Questions/Comments from the review period<a class="headerlink" href="#questions-comments-from-the-review-period" title="Link permanen untuk headline ini">¶</a></h2>
 <ul>
-<li><p class="first">Q: Can we catch the output of OGR/GDAL's CPLDebug calls, perhaps when
+<li><p>Q: Can we catch the output of OGR/GDAL's CPLDebug calls, perhaps when
 the map-level debug level is &gt;= 3?</p>
 <p>A: Frank suggests that we keep this for a later phase.</p>
 </li>
@@ -367,8 +370,6 @@ the map-level debug level is &gt;= 3?</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -427,8 +428,8 @@ the map-level debug level is &gt;= 3?</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Hak cipta</a> 2019, Open Source Geospatial Foundation.
-      Terakhir diperbarui pada 2019-03-29.
-      Dibuat menggunakan <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Terakhir diperbarui pada 2019-04-09.
+      Dibuat menggunakan <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

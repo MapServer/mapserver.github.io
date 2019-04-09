@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="de">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 43: Direct tile generation for Google Maps and Virtual Earth API &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Über dieses Dokument" href="../../about.html" />
     <link rel="index" title="Stichwortverzeichnis" href="../../genindex.html" />
@@ -138,24 +139,26 @@
             
   <div class="section" id="ms-rfc-43-direct-tile-generation-for-google-maps-and-virtual-earth-api">
 <span id="rfc43"></span><h1>MS RFC 43: Direct tile generation for Google Maps and Virtual Earth API<a class="headerlink" href="#ms-rfc-43-direct-tile-generation-for-google-maps-and-virtual-earth-api" title="Link zu dieser Überschrift">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2008/04/08</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Paul Ramsey</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">pramsey at cleverelephant.ca</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Last Edited:</th><td class="field-body">2008/05/02</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Status:</th><td class="field-body">Adopted on 2008/04/29 - Completed</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">MapServer 5.2</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2008/04/08</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Paul Ramsey</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>pramsey at cleverelephant.ca</p>
+</dd>
+<dt class="field-even">Last Edited</dt>
+<dd class="field-even"><p>2008/05/02</p>
+</dd>
+<dt class="field-odd">Status</dt>
+<dd class="field-odd"><p>Adopted on 2008/04/29 - Completed</p>
+</dd>
+<dt class="field-even">Version</dt>
+<dd class="field-even"><p>MapServer 5.2</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link zu dieser Überschrift">¶</a></h2>
 <p>Providing a simple access API in the mapserv CGI can make using MapServer  with
@@ -215,31 +218,31 @@ all layers being accessed. Google X/Y/Z coordinates will be converted to
 </div>
 <p>A request with tilemode of „gmap“ implies the following:</p>
 <ul class="simple">
-<li>The „tile“ parameter will be of the form: x y zoom</li>
-<li>The output CRS will be set to „spherical mercator“ (EPSG:900913)</li>
-<li>The service bounds be global in extent. The top „zoom“ level (0) will have 1 tile.</li>
-<li>The „zoom“ levels will run from 0 upwards</li>
-<li>The „y“ axis of the tile coordinates will run from top to bottom</li>
-<li>The „x“ axis of the tile coordinates will run from left to right</li>
-<li>The output tiles will be 256x256 in size</li>
-<li>Each zoom level will be related to parent and children by powers of two</li>
+<li><p>The „tile“ parameter will be of the form: x y zoom</p></li>
+<li><p>The output CRS will be set to „spherical mercator“ (EPSG:900913)</p></li>
+<li><p>The service bounds be global in extent. The top „zoom“ level (0) will have 1 tile.</p></li>
+<li><p>The „zoom“ levels will run from 0 upwards</p></li>
+<li><p>The „y“ axis of the tile coordinates will run from top to bottom</p></li>
+<li><p>The „x“ axis of the tile coordinates will run from left to right</p></li>
+<li><p>The output tiles will be 256x256 in size</p></li>
+<li><p>Each zoom level will be related to parent and children by powers of two</p></li>
 </ul>
 <p>A request with tilemode of „ve“ implies the following:</p>
 <ul class="simple">
-<li>The „tile“ parameter will use the VE tile numbering scheme, for example
+<li><p>The „tile“ parameter will use the VE tile numbering scheme, for example
 „0312“. See <a class="reference external" href="http://msdn.microsoft.com/en-us/library/bb545006.aspx">http://msdn.microsoft.com/en-us/library/bb545006.aspx</a> for more
-details.</li>
-<li>The output CRS will be set to „spherical mercator“ (EPSG:900913)</li>
-<li>The service bounds be global in extent. The top level will have 4 tiles (0,
-1, 2, 3).</li>
-<li>The output tiles will be 256x256 in size</li>
-<li>Each zoom level will be related to parent and children by powers of two</li>
+details.</p></li>
+<li><p>The output CRS will be set to „spherical mercator“ (EPSG:900913)</p></li>
+<li><p>The service bounds be global in extent. The top level will have 4 tiles (0,
+1, 2, 3).</p></li>
+<li><p>The output tiles will be 256x256 in size</p></li>
+<li><p>Each zoom level will be related to parent and children by powers of two</p></li>
 </ul>
 <p>The MapServer tile mode API will <em>not</em> explicitly attempt to address issues of
 meta-tiling or cross-tile labeling. However, the following steps will be taken
 to try to minimize these issues:</p>
 <ul class="simple">
-<li>Future phases will render into a target slightly larger than the tile and then clip off the extra border pixels.</li>
+<li><p>Future phases will render into a target slightly larger than the tile and then clip off the extra border pixels.</p></li>
 </ul>
 </div>
 <div class="section" id="mapscript-implications">
@@ -254,13 +257,15 @@ to try to minimize these issues:</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Documentation will be updated to reflect the new feature<ul>
-<li>MapServer  CGI Reference</li>
-<li>MapServer  Tile HOWTO &lt;new&gt;</li>
+<li><p>Documentation will be updated to reflect the new feature</p>
+<ul>
+<li><p>MapServer  CGI Reference</p></li>
+<li><p>MapServer  Tile HOWTO &lt;new&gt;</p></li>
 </ul>
 </li>
-<li>Test suite will be updated to exercise the new features<ul>
-<li>Frank Warmerdam has volunteered to do this</li>
+<li><p>Test suite will be updated to exercise the new features</p>
+<ul>
+<li><p>Frank Warmerdam has volunteered to do this</p></li>
 </ul>
 </li>
 </ul>
@@ -272,7 +277,7 @@ to try to minimize these issues:</p>
 <div class="section" id="bug-id">
 <h2>Bug ID<a class="headerlink" href="#bug-id" title="Link zu dieser Überschrift">¶</a></h2>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/2581">https://github.com/mapserver/mapserver/issues/2581</a></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/2581">https://github.com/mapserver/mapserver/issues/2581</a></p></li>
 </ul>
 </div>
 <div class="section" id="voting-history">
@@ -283,9 +288,9 @@ PericlesN and AssefaY.</p>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Link zu dieser Überschrift">¶</a></h2>
 <ul class="simple">
-<li><a class="reference external" href="http://msdn.microsoft.com/en-us/library/bb545006.aspx">http://msdn.microsoft.com/en-us/library/bb545006.aspx</a></li>
-<li><a class="reference external" href="http://code.google.com/apis/maps/documentation/reference.html#GTileLayer">http://code.google.com/apis/maps/documentation/reference.html#GTileLayer</a></li>
-<li><a class="reference external" href="http://www.worldwindcentral.com/wiki/TileService">http://www.worldwindcentral.com/wiki/TileService</a></li>
+<li><p><a class="reference external" href="http://msdn.microsoft.com/en-us/library/bb545006.aspx">http://msdn.microsoft.com/en-us/library/bb545006.aspx</a></p></li>
+<li><p><a class="reference external" href="http://code.google.com/apis/maps/documentation/reference.html#GTileLayer">http://code.google.com/apis/maps/documentation/reference.html#GTileLayer</a></p></li>
+<li><p><a class="reference external" href="http://www.worldwindcentral.com/wiki/TileService">http://www.worldwindcentral.com/wiki/TileService</a></p></li>
 </ul>
 </div>
 </div>
@@ -302,8 +307,6 @@ PericlesN and AssefaY.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Los" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -357,8 +360,8 @@ PericlesN and AssefaY.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Zuletzt aktualisiert am 2019-03-29.
-      Mit <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6 erstellt.
+      Zuletzt aktualisiert am 2019-04-09.
+      Mit <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0 erstellt.
     </div>
   </body>
 </html>

@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>MS RFC 112: Retry « Follow » label positioning after maxoverlapangle colision &#8212; MapServer 7.2.2 documentation</title>
+    <meta charset="utf-8" />
+    <title>MS RFC 112: Retry « Follow » label positioning after maxoverlapangle colision &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -137,55 +138,57 @@
           <div class="body" role="main">
             
   <div class="section" id="ms-rfc-112-retry-follow-label-positioning-after-maxoverlapangle-colision">
-<span id="rfc112"></span><h1>MS RFC 112: Retry «&nbsp;Follow&nbsp;» label positioning after maxoverlapangle colision<a class="headerlink" href="#ms-rfc-112-retry-follow-label-positioning-after-maxoverlapangle-colision" title="Lien permanent vers ce titre">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2014/10</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Thomas Bonfort</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Implemented</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 7.2</td>
-</tr>
-</tbody>
-</table>
+<span id="rfc112"></span><h1>MS RFC 112: Retry « Follow » label positioning after maxoverlapangle colision<a class="headerlink" href="#ms-rfc-112-retry-follow-label-positioning-after-maxoverlapangle-colision" title="Lien permanent vers ce titre">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2014/10</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Thomas Bonfort</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Implemented</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 7.2</p>
+</dd>
+</dl>
 <div class="section" id="the-current-situation">
 <h2>1. The Current Situation<a class="headerlink" href="#the-current-situation" title="Lien permanent vers ce titre">¶</a></h2>
-<p>The current algorithm used to place «&nbsp;FOLLOW&nbsp;» labels has the following limitations:</p>
+<p>The current algorithm used to place « FOLLOW » labels has the following limitations:</p>
 <ul class="simple">
-<li>When two subsequent caracters of the label have a relative angle that is over
-the defined «&nbsp;maxoverlapangle&nbsp;», the label is unconditionally discarded.</li>
-<li>The function used to compute character positions relies on «&nbsp;gotos&nbsp;» that
-interrupt the code flow</li>
-<li>Placement of repeated labels works optimally for odd number of repetitions
+<li><p>When two subsequent caracters of the label have a relative angle that is over
+the defined « maxoverlapangle », the label is unconditionally discarded.</p></li>
+<li><p>The function used to compute character positions relies on « gotos » that
+interrupt the code flow</p></li>
+<li><p>Placement of repeated labels works optimally for odd number of repetitions
 only when using repeatdistance, i.e. even if there’s room for two labels,
-only one will be rendered</li>
+only one will be rendered</p></li>
 </ul>
 </div>
 <div class="section" id="proposed-enhancement">
 <h2>2. Proposed enhancement<a class="headerlink" href="#proposed-enhancement" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
-<li>The algorithm will be extended to account for and try to correct for
+<li><p>The algorithm will be extended to account for and try to correct for
 colisions happening when maxoverlapangle kicks in, by ensuring that such
-colisions may only occur between words:<ul>
-<li>collisions hapenning on a “space” character will be ignored</li>
-<li>when a colision does occur, the label placement will be retried with an
+colisions may only occur between words:</p>
+<ul>
+<li><p>collisions hapenning on a “space” character will be ignored</p></li>
+<li><p>when a colision does occur, the label placement will be retried with an
 offset placed such that the colision falls either on a space or at the
-beginning or end of the string.</li>
+beginning or end of the string.</p></li>
 </ul>
 </li>
-<li>Code will be refactored to avoid usage of gotos</li>
-<li>The placement algorithm will be modified to optimally treat an even number of
-label repetitions:</li>
+<li><p>Code will be refactored to avoid usage of gotos</p></li>
+<li><p>The placement algorithm will be modified to optimally treat an even number of
+label repetitions:</p></li>
 </ul>
 <blockquote>
 <div><ul class="simple">
-<li>before:</li>
+<li><p>before:</p></li>
 </ul>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-------</span><span class="n">label</span><span class="o">--------</span>
@@ -193,7 +196,7 @@ label repetitions:</li>
 </div>
 </div></blockquote>
 <ul class="simple">
-<li>after:</li>
+<li><p>after:</p></li>
 </ul>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">label</span><span class="o">------</span><span class="n">label</span><span class="o">--</span>
@@ -205,13 +208,13 @@ label repetitions:</li>
 <div class="section" id="questions-limitations">
 <h2>2.1 Questions/Limitations<a class="headerlink" href="#questions-limitations" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
-<li>Should the retrying behavior be enabled by default, and/or can it be
+<li><p>Should the retrying behavior be enabled by default, and/or can it be
 deactivated ? Computing and testing a retried offset is not costly, the
 impact in terms of performance should be minimal and will result in more
-labels being placed.</li>
-<li>Should the maximum allowed offset be configurable?  Seems unnecessary for the
+labels being placed.</p></li>
+<li><p>Should the maximum allowed offset be configurable?  Seems unnecessary for the
 time being, all the relevant info as to what the maximum offset can be is contained
-by the line length, label length, and repeatdistance.</li>
+by the line length, label length, and repeatdistance.</p></li>
 </ul>
 </div>
 <div class="section" id="backwards-compatibility">
@@ -230,14 +233,14 @@ re-run for each retry.</p>
 <div class="section" id="affected-files">
 <h3>3.1 Affected files<a class="headerlink" href="#affected-files" title="Lien permanent vers ce titre">¶</a></h3>
 <ul class="simple">
-<li>mapprimitive.c: implement retrying behavior - compute retried offsets</li>
+<li><p>mapprimitive.c: implement retrying behavior - compute retried offsets</p></li>
 </ul>
 </div>
 <div class="section" id="tracking-issue">
 <h3>3.2 Tracking Issue<a class="headerlink" href="#tracking-issue" title="Lien permanent vers ce titre">¶</a></h3>
 <ul class="simple">
-<li>code: <a class="reference external" href="https://github.com/mapserver/mapserver/pull/5048">https://github.com/mapserver/mapserver/pull/5048</a></li>
-<li>tests: <a class="reference external" href="https://github.com/tbonfort/msautotest/tree/displace_follow_labels">https://github.com/tbonfort/msautotest/tree/displace_follow_labels</a></li>
+<li><p>code: <a class="reference external" href="https://github.com/mapserver/mapserver/pull/5048">https://github.com/mapserver/mapserver/pull/5048</a></p></li>
+<li><p>tests: <a class="reference external" href="https://github.com/tbonfort/msautotest/tree/displace_follow_labels">https://github.com/tbonfort/msautotest/tree/displace_follow_labels</a></p></li>
 </ul>
 </div>
 </div>
@@ -259,8 +262,6 @@ re-run for each retry.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -278,7 +279,7 @@ re-run for each retry.</p>
 </p>
   <h3>Current Table Of Contents</h3>
   <ul>
-<li><a class="reference internal" href="#">MS RFC 112: Retry «&nbsp;Follow&nbsp;» label positioning after maxoverlapangle colision</a><ul>
+<li><a class="reference internal" href="#">MS RFC 112: Retry « Follow » label positioning after maxoverlapangle colision</a><ul>
 <li><a class="reference internal" href="#the-current-situation">1. The Current Situation</a></li>
 <li><a class="reference internal" href="#proposed-enhancement">2. Proposed enhancement</a></li>
 <li><a class="reference internal" href="#questions-limitations">2.1 Questions/Limitations</a></li>
@@ -317,8 +318,8 @@ re-run for each retry.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Mis à jour le 2019-03-29.
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Mis à jour le 2019-04-09.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 91: Layer Filter Normalization &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="このドキュメントについて" href="../../about.html" />
     <link rel="index" title="索引" href="../../genindex.html" />
@@ -138,29 +139,30 @@
             
   <div class="section" id="ms-rfc-91-layer-filter-normalization">
 <span id="rfc91"></span><h1>MS RFC 91: Layer Filter Normalization<a class="headerlink" href="#ms-rfc-91-layer-filter-normalization" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2014/7/14</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Steve Lime</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:sdlime&#37;&#52;&#48;comcast&#46;net">sdlime<span>&#64;</span>comcast<span>&#46;</span>net</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Draft</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">TBD</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2014/7/14</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Steve Lime</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:sdlime&#37;&#52;&#48;comcast&#46;net">sdlime<span>&#64;</span>comcast<span>&#46;</span>net</a></p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Draft</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>TBD</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Layer filters are driver specific expressions that are used within MapServer in a couple of ways:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>to define feature subsets for rendering (independent of classes)</li>
-<li>to define feature subsets for selected query operations</li>
+<li><p>to define feature subsets for rendering (independent of classes)</p></li>
+<li><p>to define feature subsets for selected query operations</p></li>
 </ol>
 </div></blockquote>
 <p>The first use case generally applies to drivers that don't support some sort expression language (e.g. SQL). While
@@ -171,9 +173,9 @@ MapServer's standard expression syntax.</p>
 a data source. This leads to a number of issues:</p>
 <blockquote>
 <div><ul class="simple">
-<li>confusion and inconsistencies in mapfile syntax</li>
-<li>lack of portabilty of filters between drivers</li>
-<li>performance limitations because only the simplest filters are easy to represent and secure</li>
+<li><p>confusion and inconsistencies in mapfile syntax</p></li>
+<li><p>lack of portabilty of filters between drivers</p></li>
+<li><p>performance limitations because only the simplest filters are easy to represent and secure</p></li>
 </ul>
 </div></blockquote>
 <p>Furthermore, the above two use cases are mutually excluseive which again can lead to user confusion. Existing query
@@ -203,20 +205,24 @@ that utilize filters as part of their stock processing, specifically msQueryByFi
 filter exists it will be merged with the <em>new</em> filter. The existing filter will be cached as it always has been. Because this
 operation is will result in a filter expressed using the <em>common</em> syntax this operation can be done in a general way:</p>
 <blockquote>
-<div>expressionObj *msMergeFilters(expressionObj *filter1, expressionObj *filter2)</div></blockquote>
+<div><p>expressionObj *msMergeFilters(expressionObj *filter1, expressionObj *filter2)</p>
+</div></blockquote>
 <p>The resulting filter will then be translated to native representation if applicable later.</p>
 </div>
 <div class="section" id="filter-merging-examples">
 <h2>2.3 Filter Merging Examples<a class="headerlink" href="#filter-merging-examples" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Case 1: FILTERITEM and FILTER &quot;string&quot; (or case-insensitive)</p>
 <blockquote>
-<div>New FILTER becomes a logical expression: (([FILTERITEM] = &quot;string&quot;) AND (new filter))</div></blockquote>
+<div><p>New FILTER becomes a logical expression: (([FILTERITEM] = &quot;string&quot;) AND (new filter))</p>
+</div></blockquote>
 <p>Case 2: FILTERITEM and FILTER /string/ (or case-insensitive)</p>
 <blockquote>
-<div>New FILTER becomes a logical expression: (([FILTERITEM] ~ &quot;string&quot;) AND (new filter))</div></blockquote>
+<div><p>New FILTER becomes a logical expression: (([FILTERITEM] ~ &quot;string&quot;) AND (new filter))</p>
+</div></blockquote>
 <p>Case 3: FILTER (string) with no FILTERITEM</p>
 <blockquote>
-<div>New FILTER becomes a logical expression: ((string) AND (new filter))</div></blockquote>
+<div><p>New FILTER becomes a logical expression: ((string) AND (new filter))</p>
+</div></blockquote>
 <p>In the case where the old filter is already native filter and the translation fails we will leave the old filter in place
 so the driver can at least process that portion and then fall back to MapServer for the new filter.</p>
 </div>
@@ -242,39 +248,40 @@ implementation approach, instead it offers an opportunity for more complete tran
 <div class="section" id="summary-of-current-behaviour-by-driver">
 <h2>3.1 Summary of Current Behaviour (by driver)<a class="headerlink" href="#summary-of-current-behaviour-by-driver" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <ul class="simple">
-<li>shapefile: supports FILTERITEM and FILTERs -&gt; string, regular, logical expression</li>
-<li>OGR: supports FILTERTITEM and FILTERs -&gt; string, regular, logical expressions and native (starting with &quot;WHERE &quot;)</li>
-<li>PostGIS: supports FILTER -&gt; native SQL snippet</li>
-<li>Oracle Spatial: supports FILTERITEM and FILTERs -&gt; string and native (constructs native)</li>
-<li>SDE: supports FILTER -&gt; native SQL snippet</li>
-<li>MS SQL Server: supports FILTER -&gt; native SQL snippet</li>
+<li><p>shapefile: supports FILTERITEM and FILTERs -&gt; string, regular, logical expression</p></li>
+<li><p>OGR: supports FILTERTITEM and FILTERs -&gt; string, regular, logical expressions and native (starting with &quot;WHERE &quot;)</p></li>
+<li><p>PostGIS: supports FILTER -&gt; native SQL snippet</p></li>
+<li><p>Oracle Spatial: supports FILTERITEM and FILTERs -&gt; string and native (constructs native)</p></li>
+<li><p>SDE: supports FILTER -&gt; native SQL snippet</p></li>
+<li><p>MS SQL Server: supports FILTER -&gt; native SQL snippet</p></li>
 </ul>
 </div>
 <div class="section" id="id1">
 <h2>3.2 Overview<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <ul class="simple">
-<li>limited additions to logial expression syntax are recommended:<ul>
-<li>spatial operator syntax (e.g. A INTERSECTS B) will be deprecated in favor of a functional notation (e.g. INTERSECTS(A, B) = TRUE). This is more consistent with spatialally enabled SQL syntax and easer to translate.</li>
-<li>BEYOND/DWITHIN operators will <em>only</em> exist in the functional form, they are useless in logical expressions as they site now</li>
+<li><p>limited additions to logial expression syntax are recommended:</p>
+<ul>
+<li><p>spatial operator syntax (e.g. A INTERSECTS B) will be deprecated in favor of a functional notation (e.g. INTERSECTS(A, B) = TRUE). This is more consistent with spatialally enabled SQL syntax and easer to translate.</p></li>
+<li><p>BEYOND/DWITHIN operators will <em>only</em> exist in the functional form, they are useless in logical expressions as they site now</p></li>
 </ul>
 </li>
-<li>there are no changes to the MapScript API</li>
-<li>drivers that support complex expressions (e.g. PostGIS, Oracle, SDE, MS SQL Server, OGR) need to implement a translation
-function to construct a partial &quot;WHERE&quot; clause from a set of expression/filter tokens</li>
+<li><p>there are no changes to the MapScript API</p></li>
+<li><p>drivers that support complex expressions (e.g. PostGIS, Oracle, SDE, MS SQL Server, OGR) need to implement a translation
+function to construct a partial &quot;WHERE&quot; clause from a set of expression/filter tokens</p></li>
 </ul>
 </div>
 <div class="section" id="files-affected">
 <h2>3.2 Files affected<a class="headerlink" href="#files-affected" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>The following files will be modified by this RFC:</p>
 <ul class="simple">
-<li>mapserver.h: extend expressionObj to contain a native_string (char *). This will hold a the native expression of the filter.</li>
-<li>mapquery.c: call merging function in msQueryByAttribute() and msQueryByFilter(), call translation function in all query functions.</li>
-<li>mapdraw.c: call filter translation function in msDrawVectorLayer()</li>
-<li>maplayer.c: changes/additions to layer API function</li>
-<li>mapshape.c, mappostgis.c, mapogr.c.... : changes/additions to driver functions</li>
-<li>mapparser.y: add function-based versions of spatial operators, add BOOLEAN token type</li>
-<li>maplexer.l: recognize TRUE/FALSE as boolean tokens (store in token-&gt;dblval) in expression context</li>
-<li>mapogcfilter.c/mapogccommonfilter.c: update expression writing to use functional notation, fix dwithin/beyond processing</li>
+<li><p>mapserver.h: extend expressionObj to contain a native_string (char *). This will hold a the native expression of the filter.</p></li>
+<li><p>mapquery.c: call merging function in msQueryByAttribute() and msQueryByFilter(), call translation function in all query functions.</p></li>
+<li><p>mapdraw.c: call filter translation function in msDrawVectorLayer()</p></li>
+<li><p>maplayer.c: changes/additions to layer API function</p></li>
+<li><p>mapshape.c, mappostgis.c, mapogr.c.... : changes/additions to driver functions</p></li>
+<li><p>mapparser.y: add function-based versions of spatial operators, add BOOLEAN token type</p></li>
+<li><p>maplexer.l: recognize TRUE/FALSE as boolean tokens (store in token-&gt;dblval) in expression context</p></li>
+<li><p>mapogcfilter.c/mapogccommonfilter.c: update expression writing to use functional notation, fix dwithin/beyond processing</p></li>
 </ul>
 <p>Notes:</p>
 <p>Drivers: This can be implemented incrementally within drivers. At a minimum all drivers <em>must</em> implement the
@@ -348,8 +355,6 @@ The suggested changes would remove that step and improve performane in <em>all</
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="検索" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -412,8 +417,8 @@ The suggested changes would remove that step and improve performane in <em>all</
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      最終更新: 2019-03-29
-      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6 で生成しました。
+      最終更新: 2019-04-09
+      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0 で生成しました。
     </div>
   </body>
 </html>

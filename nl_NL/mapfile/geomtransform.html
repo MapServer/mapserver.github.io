@@ -1,18 +1,19 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="nl_NL">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>GEOMTRANSFORM - Geometry Transformations &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="Over deze documenten" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -137,71 +138,80 @@
             
   <div class="section" id="geomtransform-geometry-transformations">
 <span id="geomtransform"></span><span id="index-0"></span><h1>GEOMTRANSFORM - Geometry Transformations<a class="headerlink" href="#geomtransform-geometry-transformations" title="Permalink naar deze titel">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Håvard Tveite</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:havard&#46;tveite&#37;&#52;&#48;nmbu&#46;no">havard<span>&#46;</span>tveite<span>&#64;</span>nmbu<span>&#46;</span>no</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>Håvard Tveite</p>
+</dd>
+<dt class="field-even">Contact</dt>
+<dd class="field-even"><p><a class="reference external" href="mailto:havard&#46;tveite&#37;&#52;&#48;nmbu&#46;no">havard<span>&#46;</span>tveite<span>&#64;</span>nmbu<span>&#46;</span>no</a></p>
+</dd>
+</dl>
 <div class="contents local topic" id="table-of-contents">
 <p class="topic-title first">Table of Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#transformations-for-simple-styling-class-style-only" id="id23">Transformations for simple styling (<cite>CLASS</cite> <cite>STYLE</cite> only)</a><ul>
-<li><a class="reference internal" href="#bbox" id="id24">bbox</a></li>
-<li><a class="reference internal" href="#centroid" id="id25">centroid</a></li>
-<li><a class="reference internal" href="#end-and-start" id="id26"><cite>end</cite> and <cite>start</cite></a></li>
-<li><a class="reference internal" href="#vertices" id="id27">vertices</a></li>
+<li><p><a class="reference internal" href="#transformations-for-simple-styling-class-style-only" id="id23">Transformations for simple styling (<cite>CLASS</cite> <cite>STYLE</cite> only)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#bbox" id="id24">bbox</a></p></li>
+<li><p><a class="reference internal" href="#centroid" id="id25">centroid</a></p></li>
+<li><p><a class="reference internal" href="#end-and-start" id="id26"><cite>end</cite> and <cite>start</cite></a></p></li>
+<li><p><a class="reference internal" href="#vertices" id="id27">vertices</a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#labels-label-style-only" id="id28">Labels (<cite>LABEL</cite> <cite>STYLE</cite> only)</a><ul>
-<li><a class="reference internal" href="#labelpnt-and-labelpoly" id="id29">labelpnt and labelpoly</a></li>
+<li><p><a class="reference internal" href="#labels-label-style-only" id="id28">Labels (<cite>LABEL</cite> <cite>STYLE</cite> only)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#labelpnt-and-labelpoly" id="id29">labelpnt and labelpoly</a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#expressions-and-advanced-transformations-layer-and-class-style" id="id30">Expressions and advanced transformations (<cite>LAYER</cite> and <cite>CLASS</cite> <cite>STYLE</cite>)</a><ul>
-<li><a class="reference internal" href="#combining-chaining-expressions" id="id31">Combining / chaining expressions</a><ul>
-<li><a class="reference internal" href="#buffer" id="id32">buffer</a></li>
+<li><p><a class="reference internal" href="#expressions-and-advanced-transformations-layer-and-class-style" id="id30">Expressions and advanced transformations (<cite>LAYER</cite> and <cite>CLASS</cite> <cite>STYLE</cite>)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#combining-chaining-expressions" id="id31">Combining / chaining expressions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#buffer" id="id32">buffer</a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#generalize-shape-tolerance" id="id33">generalize ([shape], tolerance)</a></li>
-<li><a class="reference internal" href="#simplify-shape-tolerance" id="id34">simplify([shape], tolerance)</a></li>
-<li><a class="reference internal" href="#simplifypt-shape-tolerance" id="id35">simplifypt([shape], tolerance)</a></li>
-<li><a class="reference internal" href="#smoothsia-shape-smoothing-size-smoothing-iterations-preprocessing" id="id36">smoothsia ( [shape], smoothing_size, smoothing_iterations, preprocessing )</a><ul>
-<li><a class="reference internal" href="#tuning-the-behaviour-of-smoothsia" id="id37">Tuning the behaviour of smoothsia</a></li>
-<li><a class="reference internal" href="#dataset-resolution-is-too-high" id="id38">Dataset resolution is too high</a></li>
-<li><a class="reference internal" href="#dataset-resolution-is-too-low" id="id39">Dataset resolution is too low</a></li>
-<li><a class="reference internal" href="#curves" id="id40">Curves</a></li>
+<li><p><a class="reference internal" href="#generalize-shape-tolerance" id="id33">generalize ([shape], tolerance)</a></p></li>
+<li><p><a class="reference internal" href="#simplify-shape-tolerance" id="id34">simplify([shape], tolerance)</a></p></li>
+<li><p><a class="reference internal" href="#simplifypt-shape-tolerance" id="id35">simplifypt([shape], tolerance)</a></p></li>
+<li><p><a class="reference internal" href="#smoothsia-shape-smoothing-size-smoothing-iterations-preprocessing" id="id36">smoothsia ( [shape], smoothing_size, smoothing_iterations, preprocessing )</a></p>
+<ul>
+<li><p><a class="reference internal" href="#tuning-the-behaviour-of-smoothsia" id="id37">Tuning the behaviour of smoothsia</a></p></li>
+<li><p><a class="reference internal" href="#dataset-resolution-is-too-high" id="id38">Dataset resolution is too high</a></p></li>
+<li><p><a class="reference internal" href="#dataset-resolution-is-too-low" id="id39">Dataset resolution is too low</a></p></li>
+<li><p><a class="reference internal" href="#curves" id="id40">Curves</a></p></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#javascript-transformation" id="id41">Javascript transformation</a><ul>
-<li><a class="reference internal" href="#introduction" id="id42">Introduction</a></li>
-<li><a class="reference internal" href="#usage" id="id43">Usage</a><ul>
-<li><a class="reference internal" href="#example-1-simple-geomtransform" id="id44">Example 1. Simple Geomtransform</a></li>
-<li><a class="reference internal" href="#example-2-printing-logs-in-mapserver-logs" id="id45">Example 2. Printing logs in MapServer logs</a></li>
+<li><p><a class="reference internal" href="#javascript-transformation" id="id41">Javascript transformation</a></p>
+<ul>
+<li><p><a class="reference internal" href="#introduction" id="id42">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#usage" id="id43">Usage</a></p>
+<ul>
+<li><p><a class="reference internal" href="#example-1-simple-geomtransform" id="id44">Example 1. Simple Geomtransform</a></p></li>
+<li><p><a class="reference internal" href="#example-2-printing-logs-in-mapserver-logs" id="id45">Example 2. Printing logs in MapServer logs</a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#basic-api" id="id46">Basic API</a><ul>
-<li><a class="reference internal" href="#pointobj" id="id47">pointObj</a><ul>
-<li><a class="reference internal" href="#constructor" id="id48">Constructor</a></li>
-<li><a class="reference internal" href="#members" id="id49">Members</a></li>
-<li><a class="reference internal" href="#methods" id="id50">Methods</a></li>
+<li><p><a class="reference internal" href="#basic-api" id="id46">Basic API</a></p>
+<ul>
+<li><p><a class="reference internal" href="#pointobj" id="id47">pointObj</a></p>
+<ul>
+<li><p><a class="reference internal" href="#constructor" id="id48">Constructor</a></p></li>
+<li><p><a class="reference internal" href="#members" id="id49">Members</a></p></li>
+<li><p><a class="reference internal" href="#methods" id="id50">Methods</a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#lineobj" id="id51">lineObj</a><ul>
-<li><a class="reference internal" href="#id1" id="id52">Constructor</a></li>
-<li><a class="reference internal" href="#id2" id="id53">Members</a></li>
-<li><a class="reference internal" href="#id3" id="id54">Methods</a></li>
+<li><p><a class="reference internal" href="#lineobj" id="id51">lineObj</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id52">Constructor</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id53">Members</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id54">Methods</a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#shapeobj" id="id55">shapeObj</a><ul>
-<li><a class="reference internal" href="#id4" id="id56">Constructor</a></li>
-<li><a class="reference internal" href="#id5" id="id57">Members</a></li>
-<li><a class="reference internal" href="#id6" id="id58">Methods</a></li>
+<li><p><a class="reference internal" href="#shapeobj" id="id55">shapeObj</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id4" id="id56">Constructor</a></p></li>
+<li><p><a class="reference internal" href="#id5" id="id57">Members</a></p></li>
+<li><p><a class="reference internal" href="#id6" id="id58">Methods</a></p></li>
 </ul>
 </li>
 </ul>
@@ -229,27 +239,28 @@ that is possible.  If <cite>UNITS</cite> is defined in the <cite>LAYER</cite>, t
 <p>The following simple geometry transformations are available at
 the <cite>CLASS</cite> <cite>STYLE</cite> level:</p>
 <ul class="simple">
-<li>bbox</li>
-<li>centroid</li>
-<li>end</li>
-<li>start</li>
-<li>vertices</li>
+<li><p>bbox</p></li>
+<li><p>centroid</p></li>
+<li><p>end</p></li>
+<li><p>start</p></li>
+<li><p>vertices</p></li>
 </ul>
 <div class="section" id="bbox">
 <span id="index-1"></span><h3><a class="toc-backref" href="#table-of-contents">bbox</a><a class="headerlink" href="#bbox" title="Permalink naar deze titel">¶</a></h3>
 <ul class="simple">
-<li><cite>GEOMTRANSFORM bbox</cite> returns the bounding box of the geometry.<ul>
-<li>GEOMTRANSFORM “bbox”</li>
+<li><p><cite>GEOMTRANSFORM bbox</cite> returns the bounding box of the geometry.</p>
+<ul>
+<li><p>GEOMTRANSFORM “bbox”</p></li>
 </ul>
 </li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Notitie</p>
-<p class="last">Only available for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> context.</p>
+<p class="admonition-title">Notitie</p>
+<p>Only available for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> context.</p>
 </div>
 <div class="figure align-center" id="id7">
 <a class="reference internal image-reference" href="../_images/geomtrans-bbox.png"><img alt="../_images/geomtrans-bbox.png" src="../_images/geomtrans-bbox.png" style="width: 200px; height: 100px;" /></a>
-<p class="caption"><span class="caption-text">Geomtransform bbox</span></p>
+<p class="caption"><span class="caption-text">Geomtransform bbox</span><a class="headerlink" href="#id7" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 <p>Class definitions for the example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CLASS</span>
@@ -270,18 +281,19 @@ the <cite>CLASS</cite> <cite>STYLE</cite> level:</p>
 <div class="section" id="centroid">
 <span id="index-2"></span><h3><a class="toc-backref" href="#table-of-contents">centroid</a><a class="headerlink" href="#centroid" title="Permalink naar deze titel">¶</a></h3>
 <ul class="simple">
-<li><cite>GEOMTRANSFORM centroid</cite> returns the centroid of the geometry.<ul>
-<li>GEOMTRANSFORM “centroid”</li>
+<li><p><cite>GEOMTRANSFORM centroid</cite> returns the centroid of the geometry.</p>
+<ul>
+<li><p>GEOMTRANSFORM “centroid”</p></li>
 </ul>
 </li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Notitie</p>
-<p class="last">Only available for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> context.</p>
+<p class="admonition-title">Notitie</p>
+<p>Only available for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> context.</p>
 </div>
 <div class="figure align-center" id="id8">
 <a class="reference internal image-reference" href="../_images/geomtrans-centroid.png"><img alt="../_images/geomtrans-centroid.png" src="../_images/geomtrans-centroid.png" style="width: 200px; height: 100px;" /></a>
-<p class="caption"><span class="caption-text">Geomtransform centroid</span></p>
+<p class="caption"><span class="caption-text">Geomtransform centroid</span><a class="headerlink" href="#id8" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 <p>Style definitions for the example.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">STYLE</span>
@@ -307,23 +319,24 @@ the <cite>CLASS</cite> <cite>STYLE</cite> level:</p>
 <div class="section" id="end-and-start">
 <span id="index-4"></span><h3><a class="toc-backref" href="#table-of-contents"><cite>end</cite> and <cite>start</cite></a><a class="headerlink" href="#end-and-start" title="Permalink naar deze titel">¶</a></h3>
 <ul class="simple">
-<li><cite>GEOMTRANSFORM end</cite> returns the end point of a line.</li>
-<li><cite>GEOMTRANSFORM start</cite> returns the start point of a line.<ul>
-<li>GEOMTRANSFORM “start”</li>
-<li>GEOMTRANSFORM “end” (since <cite>END</cite> is used to end objects in the
-map file, <cite>end</cite> must be embedded in quotes)</li>
+<li><p><cite>GEOMTRANSFORM end</cite> returns the end point of a line.</p></li>
+<li><p><cite>GEOMTRANSFORM start</cite> returns the start point of a line.</p>
+<ul>
+<li><p>GEOMTRANSFORM “start”</p></li>
+<li><p>GEOMTRANSFORM “end” (since <cite>END</cite> is used to end objects in the
+map file, <cite>end</cite> must be embedded in quotes)</p></li>
 </ul>
 </li>
 </ul>
 <p>The direction of the line at the start / end point is available for
 rendering effects.</p>
 <div class="admonition note">
-<p class="first admonition-title">Notitie</p>
-<p class="last">Only available for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> context.</p>
+<p class="admonition-title">Notitie</p>
+<p>Only available for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> context.</p>
 </div>
 <div class="figure align-center" id="id9">
 <a class="reference internal image-reference" href="../_images/geomtrans-startend.png"><img alt="../_images/geomtrans-startend.png" src="../_images/geomtrans-startend.png" style="width: 200px; height: 200px;" /></a>
-<p class="caption"><span class="caption-text">Geomtransform start and end usage</span></p>
+<p class="caption"><span class="caption-text">Geomtransform start and end usage</span><a class="headerlink" href="#id9" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 <p>Class definitions for the example.</p>
 <p>Lower part of the figure:</p>
@@ -406,19 +419,20 @@ ANCHORPOINT (value for endarrow: 1 0.5):</p>
 <div class="section" id="vertices">
 <span id="index-5"></span><h3><a class="toc-backref" href="#table-of-contents">vertices</a><a class="headerlink" href="#vertices" title="Permalink naar deze titel">¶</a></h3>
 <ul class="simple">
-<li><cite>GEOMTRANSFORM vertices</cite> produces the set of vertices of a line (with
-direction information).<ul>
-<li>GEOMTRANSFORM “vertices”</li>
+<li><p><cite>GEOMTRANSFORM vertices</cite> produces the set of vertices of a line (with
+direction information).</p>
+<ul>
+<li><p>GEOMTRANSFORM “vertices”</p></li>
 </ul>
 </li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Notitie</p>
-<p class="last">Only available for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> context.</p>
+<p class="admonition-title">Notitie</p>
+<p>Only available for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> context.</p>
 </div>
 <div class="figure align-center" id="id10">
 <a class="reference internal image-reference" href="../_images/geomtrans-vertices.png"><img alt="../_images/geomtrans-vertices.png" src="../_images/geomtrans-vertices.png" style="width: 200px; height: 100px;" /></a>
-<p class="caption"><span class="caption-text">Geomtransform vertices</span></p>
+<p class="caption"><span class="caption-text">Geomtransform vertices</span><a class="headerlink" href="#id10" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 <p>Class definitions for the example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CLASS</span>
@@ -455,14 +469,14 @@ direction information).<ul>
 <p>The following simple geometry transformations are available at
 the <a class="reference internal" href="label.html#label"><span class="std std-ref">LABEL</span></a> <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> level:</p>
 <ul class="simple">
-<li>labelpnt</li>
-<li>labelpoly</li>
+<li><p>labelpnt</p></li>
+<li><p>labelpoly</p></li>
 </ul>
 <p>These are used for label styling (background colour, background
 shadow, background frame).</p>
 <div class="admonition note">
-<p class="first admonition-title">Notitie</p>
-<p class="last">The result of using <cite>labelpnt</cite> is affected by the <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a>
+<p class="admonition-title">Notitie</p>
+<p>The result of using <cite>labelpnt</cite> is affected by the <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a>
 <cite>LABELCACHE</cite> setting.  If <cite>LABELCACHE</cite> is <cite>ON</cite> (the default), the
 label will be shifted when a non-zero sized symbol is added using
 <cite>labelpnt</cite>.</p>
@@ -470,27 +484,29 @@ label will be shifted when a non-zero sized symbol is added using
 <span class="target" id="index-6"></span><div class="section" id="labelpnt-and-labelpoly">
 <span id="index-7"></span><h3><a class="toc-backref" href="#table-of-contents">labelpnt and labelpoly</a><a class="headerlink" href="#labelpnt-and-labelpoly" title="Permalink naar deze titel">¶</a></h3>
 <ul class="simple">
-<li><cite>GEOMTRANSFORM labelpnt</cite> produces the geographic position the label
+<li><p><cite>GEOMTRANSFORM labelpnt</cite> produces the geographic position the label
 is attached to.  This corresponds to the center of the label text
-only if the label is in position <cite>CC</cite>.<ul>
-<li>GEOMTRANSFORM “labelpnt”</li>
+only if the label is in position <cite>CC</cite>.</p>
+<ul>
+<li><p>GEOMTRANSFORM “labelpnt”</p></li>
 </ul>
 </li>
-<li><cite>GEOMTRANSFORM labelpoly</cite> produces a polygon that covers the label
-plus a 1 pixel padding.<ul>
-<li>GEOMTRANSFORM “labelpoly”</li>
+<li><p><cite>GEOMTRANSFORM labelpoly</cite> produces a polygon that covers the label
+plus a 1 pixel padding.</p>
+<ul>
+<li><p>GEOMTRANSFORM “labelpoly”</p></li>
 </ul>
 </li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Notitie</p>
-<p class="last">Only available for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the <a class="reference internal" href="label.html#label"><span class="std std-ref">LABEL</span></a> context.</p>
+<p class="admonition-title">Notitie</p>
+<p>Only available for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the <a class="reference internal" href="label.html#label"><span class="std std-ref">LABEL</span></a> context.</p>
 </div>
 <p>These transformations can be used to make background rectangles for
 labels and add symbols to the label points.</p>
 <div class="figure align-center" id="id11">
 <a class="reference internal image-reference" href="../_images/geomtrans-label.png"><img alt="../_images/geomtrans-label.png" src="../_images/geomtrans-label.png" style="width: 200px; height: 100px;" /></a>
-<p class="caption"><span class="caption-text">Geomtransform labelpnt and labelpoly</span></p>
+<p class="caption"><span class="caption-text">Geomtransform labelpnt and labelpoly</span><a class="headerlink" href="#id11" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 <p>Class definitions for the example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CLASS</span>
@@ -599,33 +615,34 @@ geomtransform is shown with a full black line.  The original polygon
 is the same as the one used at the top of the figure.</p>
 <div class="figure align-center" id="id12">
 <a class="reference internal image-reference" href="../_images/geomtrans-expressions.png"><img alt="../_images/geomtrans-expressions.png" src="../_images/geomtrans-expressions.png" style="width: 200px; height: 200px;" /></a>
-<p class="caption"><span class="caption-text">Combining geomtransform expressions</span></p>
+<p class="caption"><span class="caption-text">Combining geomtransform expressions</span><a class="headerlink" href="#id12" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 <div class="section" id="buffer">
 <span id="index-9"></span><h4><a class="toc-backref" href="#table-of-contents">buffer</a><a class="headerlink" href="#buffer" title="Permalink naar deze titel">¶</a></h4>
 <ul class="simple">
-<li><cite>GEOMTRANSFORM buffer</cite> returns the buffer of the original geometry.
-The result is always a polygon geometry.<ul>
-<li>GEOMTRANSFORM (buffer ([shape], buffersize))</li>
+<li><p><cite>GEOMTRANSFORM buffer</cite> returns the buffer of the original geometry.
+The result is always a polygon geometry.</p>
+<ul>
+<li><p>GEOMTRANSFORM (buffer ([shape], buffersize))</p></li>
 </ul>
 </li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Notitie</p>
-<p class="last">Negative values for <cite>buffersize</cite> (setback) is not supported.</p>
+<p class="admonition-title">Notitie</p>
+<p>Negative values for <cite>buffersize</cite> (setback) is not supported.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Notitie</p>
-<p class="last">Can be used at the <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> level and for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the
+<p class="admonition-title">Notitie</p>
+<p>Can be used at the <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> level and for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the
 <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> context.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Notitie</p>
-<p class="last">Buffer does not seem to work for point geometries.</p>
+<p class="admonition-title">Notitie</p>
+<p>Buffer does not seem to work for point geometries.</p>
 </div>
 <div class="figure align-center" id="id13">
 <a class="reference internal image-reference" href="../_images/geomtrans-buffer.png"><img alt="../_images/geomtrans-buffer.png" src="../_images/geomtrans-buffer.png" style="width: 200px; height: 200px;" /></a>
-<p class="caption"><span class="caption-text">Geomtransform buffer</span></p>
+<p class="caption"><span class="caption-text">Geomtransform buffer</span><a class="headerlink" href="#id13" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 <p>Some class definitions for the example.</p>
 <p>Lower part (polygon with buffers):</p>
@@ -674,11 +691,11 @@ The result is always a polygon geometry.<ul>
 <div class="section" id="generalize-shape-tolerance">
 <span id="index-10"></span><h3><a class="toc-backref" href="#table-of-contents">generalize ([shape], tolerance)</a><a class="headerlink" href="#generalize-shape-tolerance" title="Permalink naar deze titel">¶</a></h3>
 <ul>
-<li><p class="first"><cite>GEOMTRANSFORM generalize</cite> simplifies a geometry ([shape]) in a way
+<li><p><cite>GEOMTRANSFORM generalize</cite> simplifies a geometry ([shape]) in a way
 comparable to FME’s ThinNoPoint algorithm.  See
 <a class="reference external" href="http://trac.osgeo.org/gdal/ticket/966">http://trac.osgeo.org/gdal/ticket/966</a> for more information.</p>
 <ul class="simple">
-<li>GEOMTRANSFORM (generalize([shape], tolerance))</li>
+<li><p>GEOMTRANSFORM (generalize([shape], tolerance))</p></li>
 </ul>
 <p>tolerance is mandatory, and is a specification of the maximum
 deviation allowed for the generalized line compared to the original
@@ -687,20 +704,20 @@ simplified line.</p>
 </li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Notitie</p>
-<p class="last">Can be used at the <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> level and for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the
+<p class="admonition-title">Notitie</p>
+<p>Can be used at the <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> level and for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the
 <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> context.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Notitie</p>
-<p class="last">Depends on GEOS.</p>
+<p class="admonition-title">Notitie</p>
+<p>Depends on GEOS.</p>
 </div>
 <p>The figure below shows the result of applying <cite>generalize</cite> at the
 <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> level with increasing values for tolerance (10 - green,
 20 - blue and 40 - red).</p>
 <div class="figure align-center" id="id14">
 <a class="reference internal image-reference" href="../_images/geomtrans-generalize.png"><img alt="../_images/geomtrans-generalize.png" src="../_images/geomtrans-generalize.png" style="width: 200px; height: 200px;" /></a>
-<p class="caption"><span class="caption-text">Geomtransform generalize</span></p>
+<p class="caption"><span class="caption-text">Geomtransform generalize</span><a class="headerlink" href="#id14" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 <p>One of the <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> definitions for the example (tolerance 40):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">STYLE</span>
@@ -715,10 +732,10 @@ simplified line.</p>
 <div class="section" id="simplify-shape-tolerance">
 <span id="index-11"></span><h3><a class="toc-backref" href="#table-of-contents">simplify([shape], tolerance)</a><a class="headerlink" href="#simplify-shape-tolerance" title="Permalink naar deze titel">¶</a></h3>
 <ul>
-<li><p class="first"><cite>GEOMTRANSFORM simplify</cite> simplifies a geometry ([shape]) using the
+<li><p><cite>GEOMTRANSFORM simplify</cite> simplifies a geometry ([shape]) using the
 standard Douglas-Peucker algorithm.</p>
 <ul class="simple">
-<li>GEOMTRANSFORM (simplify([shape], tolerance))</li>
+<li><p>GEOMTRANSFORM (simplify([shape], tolerance))</p></li>
 </ul>
 <p>tolerance is mandatory, and is a specification of the maximum
 deviation allowed for the generalized line compared to the original
@@ -727,8 +744,8 @@ simplified line.</p>
 </li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Notitie</p>
-<p class="last">Can be used at the <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> level and for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the
+<p class="admonition-title">Notitie</p>
+<p>Can be used at the <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> level and for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the
 <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> context.</p>
 </div>
 <p>The figure below shows the result of applying <cite>simplify</cite> at the
@@ -736,7 +753,7 @@ simplified line.</p>
 20 - blue and 40 - red).</p>
 <div class="figure align-center" id="id15">
 <a class="reference internal image-reference" href="../_images/geomtrans-simplify.png"><img alt="../_images/geomtrans-simplify.png" src="../_images/geomtrans-simplify.png" style="width: 200px; height: 200px;" /></a>
-<p class="caption"><span class="caption-text">Geomtransform simplify</span></p>
+<p class="caption"><span class="caption-text">Geomtransform simplify</span><a class="headerlink" href="#id15" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 <p>One of the <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> definitions for the example (tolerance 40):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">STYLE</span>
@@ -751,12 +768,12 @@ simplified line.</p>
 <div class="section" id="simplifypt-shape-tolerance">
 <span id="index-12"></span><h3><a class="toc-backref" href="#table-of-contents">simplifypt([shape], tolerance)</a><a class="headerlink" href="#simplifypt-shape-tolerance" title="Permalink naar deze titel">¶</a></h3>
 <ul>
-<li><p class="first"><cite>GEOMTRANSFORM simplifypt</cite> simplifies a geometry ([shape]), ensuring
+<li><p><cite>GEOMTRANSFORM simplifypt</cite> simplifies a geometry ([shape]), ensuring
 that the result is a valid geometry having the same dimension and
 number of components as the input.  <cite>tolerance</cite> must be
 non-negative.</p>
 <ul class="simple">
-<li>GEOMTRANSFORM (simplifypt([shape], tolerance))</li>
+<li><p>GEOMTRANSFORM (simplifypt([shape], tolerance))</p></li>
 </ul>
 <p>tolerance is mandatory, and is a specification of the maximum
 deviation allowed for the generalized line compared to the original
@@ -765,8 +782,8 @@ simplified line.</p>
 </li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Notitie</p>
-<p class="last">Can be used at the <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> level and for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the
+<p class="admonition-title">Notitie</p>
+<p>Can be used at the <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> level and for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the
 <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> context.</p>
 </div>
 <p>The figure below shows the result of applying <cite>simplifypt</cite> at the
@@ -774,7 +791,7 @@ simplified line.</p>
 20 - blue and 40 - red).</p>
 <div class="figure align-center" id="id16">
 <a class="reference internal image-reference" href="../_images/geomtrans-simplifypt.png"><img alt="../_images/geomtrans-simplifypt.png" src="../_images/geomtrans-simplifypt.png" style="width: 200px; height: 200px;" /></a>
-<p class="caption"><span class="caption-text">Geomtransform simplifypt</span></p>
+<p class="caption"><span class="caption-text">Geomtransform simplifypt</span><a class="headerlink" href="#id16" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 <p>One of the <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> definitions for the example (tolerance 40):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">STYLE</span>
@@ -789,37 +806,38 @@ simplified line.</p>
 <div class="section" id="smoothsia-shape-smoothing-size-smoothing-iterations-preprocessing">
 <span id="index-15"></span><h3><a class="toc-backref" href="#table-of-contents">smoothsia ( [shape], smoothing_size, smoothing_iterations, preprocessing )</a><a class="headerlink" href="#smoothsia-shape-smoothing-size-smoothing-iterations-preprocessing" title="Permalink naar deze titel">¶</a></h3>
 <ul>
-<li><p class="first"><cite>GEOMTRANSFORM smoothsia</cite> returns a smoothed version of a line.</p>
+<li><p><cite>GEOMTRANSFORM smoothsia</cite> returns a smoothed version of a line.</p>
 <ul class="simple">
-<li>GEOMTRANSFORM (smoothsia ( [shape], smoothing_size,
-smoothing_iterations, preprocessing ))</li>
+<li><p>GEOMTRANSFORM (smoothsia ( [shape], smoothing_size,
+smoothing_iterations, preprocessing ))</p></li>
 </ul>
 <p>The following parameters are used:</p>
 <ul class="simple">
-<li><em>shape</em> (mandatory).
-Specify the geometry to be used</li>
-<li><em>smoothing_size</em> (optional).
+<li><p><em>shape</em> (mandatory).
+Specify the geometry to be used</p></li>
+<li><p><em>smoothing_size</em> (optional).
 The window size (number of points) used by the algorithm.  The
-default is 3.</li>
-<li><em>smoothing_iterations</em> (optional).
-The number of iterations of the algorithm. The default is 1.</li>
-<li><em>preprocessing</em> (optional).
+default is 3.</p></li>
+<li><p><em>smoothing_iterations</em> (optional).
+The number of iterations of the algorithm. The default is 1.</p></li>
+<li><p><em>preprocessing</em> (optional).
 Preprocessing method to add more vertices to the geometry prior to
 smoothing, described below.  There are two possible preprocessing
-methods:<ul>
-<li><em>all</em> Adds two intermediate vertices on each side of each original
+methods:</p>
+<ul>
+<li><p><em>all</em> Adds two intermediate vertices on each side of each original
 vertex.  This is useful to preserve the general shape of the line
-with low resolution data.</li>
-<li><em>angle</em> Add vertices at some specific places based on angle
-detection.</li>
+with low resolution data.</p></li>
+<li><p><em>angle</em> Add vertices at some specific places based on angle
+detection.</p></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Notitie</p>
-<p class="last">Can be used at the <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> level and for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the
+<p class="admonition-title">Notitie</p>
+<p>Can be used at the <a class="reference internal" href="layer.html#layer"><span class="std std-ref">LAYER</span></a> level and for <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> in the
 <a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> context.</p>
 </div>
 <p>Example of a simple layer definition:</p>
@@ -841,12 +859,12 @@ values.</p>
 <div class="figure align-center" id="id17">
 <a class="reference internal image-reference" href="../_images/smoothing11.png"><img alt="../_images/smoothing11.png" src="../_images/smoothing11.png" style="width: 400px; height: 200px;" /></a>
 <p class="caption"><span class="caption-text">Original geometry (left) and smoothsia with default parameters
-(right)</span></p>
+(right)</span><a class="headerlink" href="#id17" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 <div class="figure align-center" id="id18">
 <a class="reference internal image-reference" href="../_images/smoothing21.png"><img alt="../_images/smoothing21.png" src="../_images/smoothing21.png" style="width: 400px; height: 200px;" /></a>
 <p class="caption"><span class="caption-text">Smoothsia - Larger window size (left) and larger window size with
-more iterations (right)</span></p>
+more iterations (right)</span><a class="headerlink" href="#id18" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 <div class="section" id="tuning-the-behaviour-of-smoothsia">
 <h4><a class="toc-backref" href="#table-of-contents">Tuning the behaviour of smoothsia</a><a class="headerlink" href="#tuning-the-behaviour-of-smoothsia" title="Permalink naar deze titel">¶</a></h4>
@@ -868,7 +886,7 @@ simplification in a single geomtransform for that:</p>
 visualization of the issue:</p>
 <div class="figure align-center" id="id19">
 <a class="reference internal image-reference" href="../_images/smoothing_highres1.png"><img alt="../_images/smoothing_highres1.png" src="../_images/smoothing_highres1.png" style="width: 600px; height: 200px;" /></a>
-<p class="caption"><span class="caption-text">High resolution geometry, smoothing and simplification</span></p>
+<p class="caption"><span class="caption-text">High resolution geometry, smoothing and simplification</span><a class="headerlink" href="#id19" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 </div>
 <div class="section" id="dataset-resolution-is-too-low">
@@ -892,7 +910,7 @@ since there will be more vertices in the output.</p>
 <p>Here’s a visualization of the issue:</p>
 <div class="figure align-center" id="id20">
 <a class="reference internal image-reference" href="../_images/smoothing_lowres1.png"><img alt="../_images/smoothing_lowres1.png" src="../_images/smoothing_lowres1.png" style="width: 600px; height: 200px;" /></a>
-<p class="caption"><span class="caption-text">Effects of normal smoothing and preprocessing</span></p>
+<p class="caption"><span class="caption-text">Effects of normal smoothing and preprocessing</span><a class="headerlink" href="#id20" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 </div>
 <div class="section" id="curves">
@@ -903,7 +921,7 @@ you might notice bad smoothing for curved lines with large distances
 between the line vertices. See this example:</p>
 <div class="figure align-center" id="id21">
 <a class="reference internal image-reference" href="../_images/smoothing_curve11.png"><img alt="../_images/smoothing_curve11.png" src="../_images/smoothing_curve11.png" style="width: 400px; height: 200px;" /></a>
-<p class="caption"><span class="caption-text">Effects of normal smoothing (without preprocessing)</span></p>
+<p class="caption"><span class="caption-text">Effects of normal smoothing (without preprocessing)</span><a class="headerlink" href="#id21" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 <p>You can improve that by enabling another type of preprocessing:
 <cite>angle</cite>. This one will add points at some specific places based on
@@ -913,25 +931,24 @@ angle detection to recognize the curves. Here’s how you can enable it:</p>
 </div>
 <div class="figure align-center" id="id22">
 <a class="reference internal image-reference" href="../_images/smoothing_curve21.png"><img alt="../_images/smoothing_curve21.png" src="../_images/smoothing_curve21.png" style="width: 400px; height: 200px;" /></a>
-<p class="caption"><span class="caption-text">The use of <cite>angle</cite> with smoothsia</span></p>
+<p class="caption"><span class="caption-text">The use of <cite>angle</cite> with smoothsia</span><a class="headerlink" href="#id22" title="Permallink naar deze afbeelding">¶</a></p>
 </div>
 </div>
 </div>
 </div>
 <div class="section" id="javascript-transformation">
 <span id="geomtransformjs"></span><span id="index-16"></span><h2><a class="toc-backref" href="#table-of-contents">Javascript transformation</a><a class="headerlink" href="#javascript-transformation" title="Permalink naar deze titel">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Alan Boudreault</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">aboudreault at mapgears.com</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Last Updated:</th><td class="field-body">2013/16/12</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>Alan Boudreault</p>
+</dd>
+<dt class="field-even">Contact</dt>
+<dd class="field-even"><p>aboudreault at mapgears.com</p>
+</dd>
+<dt class="field-odd">Last Updated</dt>
+<dd class="field-odd"><p>2013/16/12</p>
+</dd>
+</dl>
 <div class="section" id="introduction">
 <h3><a class="toc-backref" href="#table-of-contents">Introduction</a><a class="headerlink" href="#introduction" title="Permalink naar deze titel">¶</a></h3>
 <p>Using <cite>GEOMTRANSFORM</cite> this way makes it possible to modify the geometry
@@ -972,19 +989,19 @@ preserved.</p>
 <code class="docutils literal notranslate"><span class="pre">shape.attributes</span></code> javascript object.</p>
 <p>The following javascript functions are available:</p>
 <ul class="simple">
-<li><dl class="first docutils">
-<dt>alert(str1, str2, …, str)</dt>
-<dd>print some text in MapServer logs</dd>
+<li><dl class="simple">
+<dt>alert(str1, str2, …, str)</dt><dd><p>print some text in MapServer logs</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>print(str1, str2, …, str)</dt>
-<dd>print some text in MapServer logs</dd>
+<li><dl class="simple">
+<dt>print(str1, str2, …, str)</dt><dd><p>print some text in MapServer logs</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>require(path_to_lib1, path_to_lib2, …, path_to_lib)</dt>
-<dd>include one or more javascript lib</dd>
+<li><dl class="simple">
+<dt>require(path_to_lib1, path_to_lib2, …, path_to_lib)</dt><dd><p>include one or more javascript lib</p>
+</dd>
 </dl>
 </li>
 </ul>
@@ -1045,45 +1062,45 @@ preserved.</p>
 </div>
 <div class="section" id="members">
 <h5><a class="toc-backref" href="#table-of-contents">Members</a><a class="headerlink" href="#members" title="Permalink naar deze titel">¶</a></h5>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="19%" />
-<col width="14%" />
-<col width="67%" />
+<col style="width: 19%" />
+<col style="width: 14%" />
+<col style="width: 67%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Type</th>
-<th class="head">Name</th>
-<th class="head">Note</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Note</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>double</td>
-<td>x</td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p>double</p></td>
+<td><p>x</p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>double</td>
-<td>y</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>double</p></td>
+<td><p>y</p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>double</td>
-<td>z</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>double</p></td>
+<td><p>z</p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>double</td>
-<td>m</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>double</p></td>
+<td><p>m</p></td>
+<td></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="methods">
 <h5><a class="toc-backref" href="#table-of-contents">Methods</a><a class="headerlink" href="#methods" title="Permalink naar deze titel">¶</a></h5>
-<dl class="docutils">
-<dt>void setXY(double x, double y[, double m])</dt>
-<dd>Set the x,y[,m] values.</dd>
-<dt>void setXYZ(double x, double y, double Z[, double m])</dt>
-<dd>Set the x,y,z[,m] values.</dd>
+<dl class="simple">
+<dt>void setXY(double x, double y[, double m])</dt><dd><p>Set the x,y[,m] values.</p>
+</dd>
+<dt>void setXYZ(double x, double y, double Z[, double m])</dt><dd><p>Set the x,y,z[,m] values.</p>
+</dd>
 </dl>
 </div>
 </div>
@@ -1097,37 +1114,37 @@ preserved.</p>
 </div>
 <div class="section" id="id2">
 <h5><a class="toc-backref" href="#table-of-contents">Members</a><a class="headerlink" href="#id2" title="Permalink naar deze titel">¶</a></h5>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="19%" />
-<col width="14%" />
-<col width="67%" />
+<col style="width: 19%" />
+<col style="width: 14%" />
+<col style="width: 67%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Type</th>
-<th class="head">Name</th>
-<th class="head">Note</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Note</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>int</td>
-<td>numpoints</td>
-<td>read-only</td>
+<tbody>
+<tr class="row-even"><td><p>int</p></td>
+<td><p>numpoints</p></td>
+<td><p>read-only</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="id3">
 <h5><a class="toc-backref" href="#table-of-contents">Methods</a><a class="headerlink" href="#id3" title="Permalink naar deze titel">¶</a></h5>
-<dl class="docutils">
-<dt>pointObj point(int index)</dt>
-<dd>Returns the point at the <cite>index</cite> position.</dd>
-<dt>void add(pointObj point)</dt>
-<dd>Add a point to the line.</dd>
-<dt>void addXY(double x, double y[, double m])</dt>
-<dd>Add point to the line from an x,y[,m] values.</dd>
-<dt>void addXYZ(double x, double y, double Z[, double m])</dt>
-<dd>Add point to the line from an x,y,z[,m] values.</dd>
+<dl class="simple">
+<dt>pointObj point(int index)</dt><dd><p>Returns the point at the <cite>index</cite> position.</p>
+</dd>
+<dt>void add(pointObj point)</dt><dd><p>Add a point to the line.</p>
+</dd>
+<dt>void addXY(double x, double y[, double m])</dt><dd><p>Add point to the line from an x,y[,m] values.</p>
+</dd>
+<dt>void addXYZ(double x, double y, double Z[, double m])</dt><dd><p>Add point to the line from an x,y,z[,m] values.</p>
+</dd>
 </dl>
 </div>
 </div>
@@ -1143,65 +1160,65 @@ shapeObj.Null</p>
 </div>
 <div class="section" id="id5">
 <h5><a class="toc-backref" href="#table-of-contents">Members</a><a class="headerlink" href="#id5" title="Permalink naar deze titel">¶</a></h5>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="19%" />
-<col width="14%" />
-<col width="67%" />
+<col style="width: 19%" />
+<col style="width: 14%" />
+<col style="width: 67%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Type</th>
-<th class="head">Name</th>
-<th class="head">Note</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Note</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>int</td>
-<td>numvalues</td>
-<td>read-only</td>
+<tbody>
+<tr class="row-even"><td><p>int</p></td>
+<td><p>numvalues</p></td>
+<td><p>read-only</p></td>
 </tr>
-<tr class="row-odd"><td>int</td>
-<td>numlines</td>
-<td>read-only</td>
+<tr class="row-odd"><td><p>int</p></td>
+<td><p>numlines</p></td>
+<td><p>read-only</p></td>
 </tr>
-<tr class="row-even"><td>int</td>
-<td>index</td>
-<td>read-only</td>
+<tr class="row-even"><td><p>int</p></td>
+<td><p>index</p></td>
+<td><p>read-only</p></td>
 </tr>
-<tr class="row-odd"><td>int</td>
-<td>type</td>
-<td>read-only</td>
+<tr class="row-odd"><td><p>int</p></td>
+<td><p>type</p></td>
+<td><p>read-only</p></td>
 </tr>
-<tr class="row-even"><td>int</td>
-<td>tileindex</td>
-<td>read-only</td>
+<tr class="row-even"><td><p>int</p></td>
+<td><p>tileindex</p></td>
+<td><p>read-only</p></td>
 </tr>
-<tr class="row-odd"><td>int</td>
-<td>classindex</td>
-<td>read-only</td>
+<tr class="row-odd"><td><p>int</p></td>
+<td><p>classindex</p></td>
+<td><p>read-only</p></td>
 </tr>
-<tr class="row-even"><td>text</td>
-<td>text</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>text</p></td>
+<td><p>text</p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>object</td>
-<td>attributes</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>object</p></td>
+<td><p>attributes</p></td>
+<td></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="id6">
 <h5><a class="toc-backref" href="#table-of-contents">Methods</a><a class="headerlink" href="#id6" title="Permalink naar deze titel">¶</a></h5>
-<dl class="docutils">
-<dt>shapeObj clone()</dt>
-<dd>Returns a clone of the shape.</dd>
-<dt>lineObj line(int index)</dt>
-<dd>Returns the line at the <cite>index</cite> position.</dd>
-<dt>void add(lineObj line)</dt>
-<dd>Add a line to the shape.</dd>
-<dt>void setGeometry(shapeObj shape)</dt>
-<dd>Replace the geometry of the object with the <cite>shape</cite> geometry.</dd>
+<dl class="simple">
+<dt>shapeObj clone()</dt><dd><p>Returns a clone of the shape.</p>
+</dd>
+<dt>lineObj line(int index)</dt><dd><p>Returns the line at the <cite>index</cite> position.</p>
+</dd>
+<dt>void add(lineObj line)</dt><dd><p>Add a line to the shape.</p>
+</dd>
+<dt>void setGeometry(shapeObj shape)</dt><dd><p>Replace the geometry of the object with the <cite>shape</cite> geometry.</p>
+</dd>
 </dl>
 </div>
 </div>
@@ -1221,8 +1238,6 @@ shapeObj.Null</p>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Zoek" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -1326,8 +1341,8 @@ shapeObj.Null</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2019-03-29.
-      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Laatste aanpassing op 2019-04-09.
+      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

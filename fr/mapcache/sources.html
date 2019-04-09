@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Sources de données &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -138,17 +139,15 @@
             
   <div class="section" id="data-sources">
 <span id="mapcache-sources"></span><h1>Sources de données<a class="headerlink" href="#data-sources" title="Lien permanent vers ce titre">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Thomas Bonfort</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body">tbonfort at terriscope.fr</td>
-</tr>
-</tbody>
-</table>
-<p>MapCache utilise le concept de «&nbsp;source&nbsp;» pour un service capable de renvoyer des données image à partir d’un jeu de paramètres (principalement une étendue géographique, une taille d’image et une projection). Une source est donc un serveur WMS distant que vous voulez mettre en cache.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>Thomas Bonfort</p>
+</dd>
+<dt class="field-even">Contact</dt>
+<dd class="field-even"><p>tbonfort at terriscope.fr</p>
+</dd>
+</dl>
+<p>MapCache utilise le concept de « source » pour un service capable de renvoyer des données image à partir d’un jeu de paramètres (principalement une étendue géographique, une taille d’image et une projection). Une source est donc un serveur WMS distant que vous voulez mettre en cache.</p>
 <div class="section" id="wms-sources">
 <span id="mapcache-source-wms"></span><h2>Sources WMS<a class="headerlink" href="#wms-sources" title="Lien permanent vers ce titre">¶</a></h2>
 <p>A WMS server is the main upstream server type used by MapCache. When processing a
@@ -167,12 +166,12 @@ those tiles in its cache for subsequent requests.</p>
 </pre></div>
 </div>
 <div class="admonition seealso">
-<p class="first admonition-title">Voir aussi</p>
-<p class="last"><a class="reference internal" href="http.html#mapcache-http"><span class="std std-ref">HTTP Requests</span></a> to configure how the <cite>&lt;http&gt;</cite> block should be expressed</p>
+<p class="admonition-title">Voir aussi</p>
+<p><a class="reference internal" href="http.html#mapcache-http"><span class="std std-ref">HTTP Requests</span></a> to configure how the <cite>&lt;http&gt;</cite> block should be expressed</p>
 </div>
 <div class="admonition warning">
-<p class="first admonition-title">Avertissement</p>
-<p class="last">You should usually only supply vendor-specific parameters to the
+<p class="admonition-title">Avertissement</p>
+<p>You should usually only supply vendor-specific parameters to the
 <cite>&lt;params&gt;</cite> block.  <strong>Never</strong> include any hardcoded BBOX, WIDTH, HEIGHT, SRS or
 any parameters related to dimensions inside this block, as these are calculated
 by MapCache itself at runtime.</p>
@@ -186,8 +185,8 @@ by MapCache itself at runtime.</p>
 <h2>WMTS Sources<a class="headerlink" href="#wmts-sources" title="Lien permanent vers ce titre">¶</a></h2>
 <p>MapCache WMTS source uses GDAL WMTS driver under the hood. Note that GDAL version must be &gt; 2.1 to be able to enable the driver correctly. GDAL WMTS driver documentation can be found on: <a class="reference external" href="http://www.gdal.org/frmt_wmts.html">http://www.gdal.org/frmt_wmts.html</a></p>
 <p>GDAL WMTS xml file is needed, example command to construct such a file directly from wmts source equipped with basic auth &amp; user/pass is:
-gdal_translate «&nbsp;WMTS:https://&lt;url to capabilities&gt;,layer=&lt;layer id&gt;&nbsp;» gdal_wmts.xml -of WMTS –config GDAL_HTTP_AUTH BASIC –config GDAL_HTTP_USERPWD &lt;user:pass&gt;</p>
-<p>After GDAL WMTS xml file is constructed, it’s validity can be checked with command «&nbsp;gdalinfo &lt;name of xml file&gt;&nbsp;».</p>
+gdal_translate « WMTS:https://&lt;url to capabilities&gt;,layer=&lt;layer id&gt; » gdal_wmts.xml -of WMTS –config GDAL_HTTP_AUTH BASIC –config GDAL_HTTP_USERPWD &lt;user:pass&gt;</p>
+<p>After GDAL WMTS xml file is constructed, it’s validity can be checked with command « gdalinfo &lt;name of xml file&gt; ».</p>
 <p>last step is to enable the new WMTS source with following configuration in mapcache.xml.</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;source</span> <span class="na">type=</span><span class="s">&quot;gdal&quot;</span> <span class="na">name=</span><span class="s">&quot;foo&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;data&gt;</span>/path/to/gdal/file (gdal_wmts.xml)<span class="nt">&lt;/data&gt;</span>
@@ -209,8 +208,6 @@ gdal_translate «&nbsp;WMTS:https://&lt;url to capabilities&gt;,layer=&lt;layer 
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -259,8 +256,8 @@ gdal_translate «&nbsp;WMTS:https://&lt;url to capabilities&gt;,layer=&lt;layer 
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Mis à jour le 2019-03-29.
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Mis à jour le 2019-04-09.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

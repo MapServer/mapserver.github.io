@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 13: Support of Sensor Observation Service in MapServer &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -138,43 +139,43 @@
             
   <div class="section" id="ms-rfc-13-support-of-sensor-observation-service-in-mapserver">
 <span id="rfc13"></span><h1>MS RFC 13: Support of Sensor Observation Service in MapServer<a class="headerlink" href="#ms-rfc-13-support-of-sensor-observation-service-in-mapserver" title="Lien permanent vers ce titre">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2006/02/21</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Yewondwossen Assefa</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">yassefa at dmsolutions.ca</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">passed</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2006/02/21</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Yewondwossen Assefa</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>yassefa at dmsolutions.ca</p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>passed</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Lien permanent vers ce titre">¶</a></h2>
 <p>This is the a first attempt to support part of the OGC Sensor Web Enablement
 (SWE) in MapServer.  The different specifications developed around the SWE are :</p>
 <ul class="simple">
-<li>Sensor Observation Service (SOS) :  provides an API for managing deployed
-sensors and retrieving sensor data.</li>
-<li>Observation &amp; Measurement: Information model and encoding for
-observations and measurements.</li>
-<li>Sensor Alert Service : A service by which a client can register for
+<li><p>Sensor Observation Service (SOS) :  provides an API for managing deployed
+sensors and retrieving sensor data.</p></li>
+<li><p>Observation &amp; Measurement: Information model and encoding for
+observations and measurements.</p></li>
+<li><p>Sensor Alert Service : A service by which a client can register for
 and receive sensor alert messages. The service supports both pre-defined
 and custom alerts and covers the process of alert publication,
-subscription, and notification.</li>
-<li>Sensor Model Language : Information model and XML encoding for discovering,
-querying and controlling Web-resident sensors.</li>
-<li>Sensor Planning Service : A service by which a client can determine
+subscription, and notification.</p></li>
+<li><p>Sensor Model Language : Information model and XML encoding for discovering,
+querying and controlling Web-resident sensors.</p></li>
+<li><p>Sensor Planning Service : A service by which a client can determine
 collection feasibility for a desired set of collection requests for
 one or more mobile sensors/platforms, or a client may submit collection
-requests directly to these sensors/platforms.</li>
-<li>Transducer markup Language (TML) : General characterizations of
-transducers (both receivers and transmitters)</li>
-<li>Web Notification Service : Executes and manages message dialogue between a
-client and Web service(s) for long duration asynchronous processes.</li>
+requests directly to these sensors/platforms.</p></li>
+<li><p>Transducer markup Language (TML) : General characterizations of
+transducers (both receivers and transmitters)</p></li>
+<li><p>Web Notification Service : Executes and manages message dialogue between a
+client and Web service(s) for long duration asynchronous processes.</p></li>
 </ul>
 <p>The intention here is to support the SOS mandatory operations.
 Please refer to the OGC site (<a class="reference external" href="https://www.opengeospatial.org/domain/swe/">https://www.opengeospatial.org/domain/swe/</a>)
@@ -189,14 +190,14 @@ description of what could be available is presented in <a class="reference inter
 <div class="section" id="changes-in-mapserver">
 <h2>Changes in MapServer<a class="headerlink" href="#changes-in-mapserver" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
-<li>All the development will be localized into a mapogcsos.c file.</li>
-<li>There will be additions to the mapows.c/h file to integrate the dispatch
-of the requests.</li>
-<li>In mapgml.c (function msGMLWriteWFSQuery), extract the loop that
+<li><p>All the development will be localized into a mapogcsos.c file.</p></li>
+<li><p>There will be additions to the mapows.c/h file to integrate the dispatch
+of the requests.</p></li>
+<li><p>In mapgml.c (function msGMLWriteWFSQuery), extract the loop that
 writes features ( gml:featureMember) into a separate function so the the
-GetObservation can also use it to output the results.</li>
-<li>The SOS capability will be available when MapServer is built using the
-flag USE_SOS.</li>
+GetObservation can also use it to output the results.</p></li>
+<li><p>The SOS capability will be available when MapServer is built using the
+flag USE_SOS.</p></li>
 </ul>
 </div>
 <div class="section" id="mapscript-implications">
@@ -222,13 +223,13 @@ GetCapbilities and GetObservation requests.</p>
 <div class="section" id="voting-history">
 <h2>Voting History<a class="headerlink" href="#voting-history" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
-<li>+1 : Assefa, Warmerdam, Nacionales</li>
-<li>+0 : Morissette</li>
-<li>-0 : Gillies</li>
+<li><p>+1 : Assefa, Warmerdam, Nacionales</p></li>
+<li><p>+0 : Morissette</p></li>
+<li><p>-0 : Gillies</p></li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">discussions, concerns are available in the mapserver-dev list
+<p class="admonition-title">Note</p>
+<p>discussions, concerns are available in the mapserver-dev list
 (Feb 2006 RFC 13 : SOS support)</p>
 </div>
 </div>
@@ -238,11 +239,11 @@ GetCapbilities and GetObservation requests.</p>
 able to deploy a Sensor Observation System (SOS)</p>
 <p>Specifications and useful links used :</p>
 <ul class="simple">
-<li>Sensor Observation Service (SOS) (OGC 05-088r1, Version 0.1.1)</li>
-<li>Observation and Measurement (OGC 05-087r1, toward Version 1.0)</li>
-<li>Sensor ML : Sensor Model Language(ML) OGC 04-019r2</li>
-<li><a class="reference external" href="http://www.opengeospatial.org/functional/?page=swe">http://www.opengeospatial.org/functional/?page=swe</a> svn link for
-members : <a class="reference external" href="https://svn.opengeospatial.org:8443/ogc-projects/ows-3/schema4demo/">https://svn.opengeospatial.org:8443/ogc-projects/ows-3/schema4demo/</a></li>
+<li><p>Sensor Observation Service (SOS) (OGC 05-088r1, Version 0.1.1)</p></li>
+<li><p>Observation and Measurement (OGC 05-087r1, toward Version 1.0)</p></li>
+<li><p>Sensor ML : Sensor Model Language(ML) OGC 04-019r2</p></li>
+<li><p><a class="reference external" href="http://www.opengeospatial.org/functional/?page=swe">http://www.opengeospatial.org/functional/?page=swe</a> svn link for
+members : <a class="reference external" href="https://svn.opengeospatial.org:8443/ogc-projects/ows-3/schema4demo/">https://svn.opengeospatial.org:8443/ogc-projects/ows-3/schema4demo/</a></p></li>
 </ul>
 <p>SOS provides several operations divided into core mandatory operations
 (GetCapabilities, DescribeSensor and GetObservation) and optional
@@ -252,8 +253,8 @@ MapServer will only address the core operations</p>
 <blockquote>
 <div><p>The GetCapabilities request will use the following parameters :</p>
 <ul class="simple">
-<li>Request : fixed at GetCapabilities</li>
-<li>Service : fixed at SOS</li>
+<li><p>Request : fixed at GetCapabilities</p></li>
+<li><p>Service : fixed at SOS</p></li>
 </ul>
 </div></blockquote>
 <p><strong>2. GetCapabilities returned document</strong></p>
@@ -262,83 +263,82 @@ MapServer will only address the core operations</p>
 The following elements are SOS items included in the capabilities document,
 with an equivalent MapServer implementation</p>
 <ul>
-<li><p class="first">ServiceIdentification (all elements are extracted from metadata at
+<li><p>ServiceIdentification (all elements are extracted from metadata at
 the web level)</p>
 <blockquote>
 <div><ul class="simple">
-<li>Title : extracted from a metadata at web level ows/sos_title.
-Same concept as wms/wfs</li>
-<li>Abstract : metadata ows/sos abstract</li>
-<li>ServiceType  : Fixed to SOS</li>
-<li>ServiceType version : Fixed to 0.3</li>
-<li>Fees : metadata Ows/sos_fees</li>
-<li>Access Constrains : metadata : Ows/sos_constrain</li>
+<li><p>Title : extracted from a metadata at web level ows/sos_title.
+Same concept as wms/wfs</p></li>
+<li><p>Abstract : metadata ows/sos abstract</p></li>
+<li><p>ServiceType  : Fixed to SOS</p></li>
+<li><p>ServiceType version : Fixed to 0.3</p></li>
+<li><p>Fees : metadata Ows/sos_fees</p></li>
+<li><p>Access Constrains : metadata : Ows/sos_constrain</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p class="first">ServiceProvider (all elements are extracted from metadata at the
+<li><p>ServiceProvider (all elements are extracted from metadata at the
 web level, using an equivalent name as the SOS element)</p>
 <blockquote>
 <div><ul class="simple">
-<li>ProviderName :</li>
-<li>ProviderSite</li>
-<li>IndividualName</li>
-<li>PositionName</li>
-<li>Voice</li>
-<li>Facsimile</li>
-<li>DeliveryPoint</li>
-<li>City</li>
-<li>AdministrativeArea</li>
-<li>PostalCode</li>
-<li>Country</li>
-<li>ElectronicmailAddress</li>
-<li>EndAddress</li>
-<li>OnlineResource</li>
-<li>HoursOfService</li>
-<li>ContactInstructions</li>
+<li><p>ProviderName :</p></li>
+<li><p>ProviderSite</p></li>
+<li><p>IndividualName</p></li>
+<li><p>PositionName</p></li>
+<li><p>Voice</p></li>
+<li><p>Facsimile</p></li>
+<li><p>DeliveryPoint</p></li>
+<li><p>City</p></li>
+<li><p>AdministrativeArea</p></li>
+<li><p>PostalCode</p></li>
+<li><p>Country</p></li>
+<li><p>ElectronicmailAddress</p></li>
+<li><p>EndAddress</p></li>
+<li><p>OnlineResource</p></li>
+<li><p>HoursOfService</p></li>
+<li><p>ContactInstructions</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p class="first">Operation Metadata : This part of the capabilities defines the operations
+<li><p>Operation Metadata : This part of the capabilities defines the operations
 that will be supported which are GetCapbilities and GetObservation.
 For more information refer to
 <a class="reference external" href="https://svn.opengeospatial.org:8443/ogc">https://svn.opengeospatial.org:8443/ogc</a>-
 projects/ows-3/schema4demo/ows/1.0.30/owsOperationsMetadata.xsd</p>
 <ul>
-<li><p class="first">Operation : GetCapabilities</p>
+<li><p>Operation : GetCapabilities</p>
 <blockquote>
 <div><ul class="simple">
-<li>Operation Name : Fixed at GetCapabilities</li>
-<li>HTTP : Connect point URL extracted. Only the Get request method is
-supported</li>
-<li>Parameter : includes name and version.  We could use the parameters
+<li><p>Operation Name : Fixed at GetCapabilities</p></li>
+<li><p>HTTP : Connect point URL extracted. Only the Get request method is
+supported</p></li>
+<li><p>Parameter : includes name and version.  We could use the parameters
 to propagate the name of the service SOS and the version. Other
-parameters may be added if needed.</li>
+parameters may be added if needed.</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p class="first">Operation : GetObservation</p>
+<li><p>Operation : GetObservation</p>
 <blockquote>
 <div><ul class="simple">
-<li>Operation Name : Fixed GetObservation</li>
-<li>DCP (HTTP) : extracted from a metadata</li>
-<li>Parameter : We could use this to propagate the parameters needed
-when doing a GetObservation request (Offering, eventTime)</li>
+<li><p>Operation Name : Fixed GetObservation</p></li>
+<li><p>DCP (HTTP) : extracted from a metadata</p></li>
+<li><p>Parameter : We could use this to propagate the parameters needed
+when doing a GetObservation request (Offering, eventTime)</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p class="first">Operation : DescribeSensor</p>
-</li>
+<li><p>Operation : DescribeSensor</p></li>
 </ul>
 </li>
-<li><p class="first">Filter Capabilities</p>
+<li><p>Filter Capabilities</p>
 <p>The Filter Capabilities that will be supported are the same ones that are
 currently supported in MapServer (See <a class="reference internal" href="../../ogc/filter_encoding.html#filter-encoding"><span class="std std-ref">WFS Filter Encoding</span></a> for more info) :
 Spatial Capabilities, Logical Operators, Comparison Operators</p>
 <p>There is a mention in the specifications of ogc filter temporal capabilities,
 but I could not locate the exact definition of it. In any case,</p>
 </li>
-<li><p class="first">SOS Contents (Observation Offerings)</p>
+<li><p>SOS Contents (Observation Offerings)</p>
 <p>As explained in SOS specifications (section 6.2) , “ …An observation offering
 is also analogous to a layer in a Web Map Service because each offering is intended
 to be a non-overlapping group of related observations. Each Observation Offering is
@@ -349,35 +349,32 @@ mapserer’s group parameter.  The metadata associated with a group
 (offering will be taken from the first layer of the group)</p>
 <p>The following properties would be set at a group level.</p>
 <ul>
-<li><p class="first">Standard Properties</p>
+<li><p>Standard Properties</p>
 <blockquote>
 <div><ul class="simple">
-<li>id : Unique Offering Identifier. Mandatory</li>
-<li>name : name used with the offering. Optional</li>
-<li>description : description of the offering. Optional</li>
+<li><p>id : Unique Offering Identifier. Mandatory</p></li>
+<li><p>name : name used with the offering. Optional</p></li>
+<li><p>description : description of the offering. Optional</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p class="first">Bounded By : used to define the geographical boundaries of the Offering.
-It should be extracted from a metadata. Mandatory</p>
-</li>
-<li><p class="first">EventTime : used to define a valid time range for the offering.
-It should be  extracted from a metadata. Mandatory</p>
-</li>
-<li><p class="first">Procedures : series of URLS reference to one or more systems that supply
-observations in the offering. It should be extracted from a metadata. Mandatory</p>
-</li>
+<li><p>Bounded By : used to define the geographical boundaries of the Offering.
+It should be extracted from a metadata. Mandatory</p></li>
+<li><p>EventTime : used to define a valid time range for the offering.
+It should be  extracted from a metadata. Mandatory</p></li>
+<li><p>Procedures : series of URLS reference to one or more systems that supply
+observations in the offering. It should be extracted from a metadata. Mandatory</p></li>
 </ul>
 </li>
-<li><p class="first">Observed property : Observables/Phenomena that can be requested in this offering.</p>
+<li><p>Observed property : Observables/Phenomena that can be requested in this offering.</p>
 <p>Two specializations are identified in the specifications:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Constrained : modifies base phenomenon by adding a single constrains (ex surface
-water  temperature add a constrain that depth is between 0, -0.3)</li>
-<li>Compound which is either a composite (a set of component phenomena that may or may not
+<li><p>Constrained : modifies base phenomenon by adding a single constrains (ex surface
+water  temperature add a constrain that depth is between 0, -0.3)</p></li>
+<li><p>Compound which is either a composite (a set of component phenomena that may or may not
 relate to each other)or a phenomenonSeries that applies one or more constrainstList to
-the base phenomenon)</li>
+the base phenomenon)</p></li>
 </ul>
 </div></blockquote>
 <p>There is no clear cut indication which representation would be the more natural for
@@ -389,7 +386,7 @@ phenomenon.</p>
 id element identifying the phenomenon and optional elements such as name and
 component.</p>
 </li>
-<li><p class="first">Feature Of Interest</p>
+<li><p>Feature Of Interest</p>
 <p>The definition given in the specification is : This is a single feature or a
 collection of features that represents the object on which the sensor systems are
 making observations. In case of in-situ sensor this may be a station to which the
@@ -401,7 +398,7 @@ It is represented by GML feature type and is expected to include bounding box ex
 information used to represent the individual sensors represent the feature of interest
 of the sensor. This is a requirement to be able to do spatial queries.</p>
 </li>
-<li><p class="first">Result Format</p>
+<li><p>Result Format</p>
 <p>MIME type of the result that will be returned to a GetObservation request.
 Fixed to text/xml;subtype=”om1.0.30”</p>
 </li>
@@ -414,12 +411,12 @@ the Get method. Post method will not be supported in the first implementation.</
 <p>Here are the parameters that will be supported and their definitions :</p>
 <blockquote>
 <div><ul class="simple">
-<li>Offering  : Equivalent to the Offering Id identified in the capabilities (Mandatory)</li>
-<li>evetnTime : single time or time period. This will be used as a Time filter to do the
-queries using an identified time attribute. (Optional)</li>
-<li>observedProperty : Identifies the layer in MapServer (Mandatory)</li>
-<li>featureOfInterest : Additional geographical filter using a bbox. (Optional)</li>
-<li>Result : Will be used to filter using the OGC Filter supported capabilities.</li>
+<li><p>Offering  : Equivalent to the Offering Id identified in the capabilities (Mandatory)</p></li>
+<li><p>evetnTime : single time or time period. This will be used as a Time filter to do the
+queries using an identified time attribute. (Optional)</p></li>
+<li><p>observedProperty : Identifies the layer in MapServer (Mandatory)</p></li>
+<li><p>featureOfInterest : Additional geographical filter using a bbox. (Optional)</p></li>
+<li><p>Result : Will be used to filter using the OGC Filter supported capabilities.</p></li>
 </ul>
 </div></blockquote>
 </div></blockquote>
@@ -427,29 +424,30 @@ queries using an identified time attribute. (Optional)</li>
 <blockquote>
 <div><p>An observation response should contain the following information :</p>
 <ul class="simple">
-<li>Information describing the Offering</li>
-<li>Valid time (instances or period)</li>
-<li>Description of the phenomenon (like the offering name)</li>
-<li>location and feature of interest for the offering</li>
-<li>The result associated with the offering</li>
+<li><p>Information describing the Offering</p></li>
+<li><p>Valid time (instances or period)</p></li>
+<li><p>Description of the phenomenon (like the offering name)</p></li>
+<li><p>location and feature of interest for the offering</p></li>
+<li><p>The result associated with the offering</p></li>
 </ul>
 <p>In the case of MapServer implementation, what is proposed is to be returned an
 observation collection reflecting the query results. Here is the different elements
 returned :</p>
 <ul class="simple">
-<li>name : The offering unique identifier</li>
-<li>description : Description of the offering</li>
-<li>time : Valid time instance or period</li>
-<li>featureofinterest : Geographical extents covered of the offering</li>
-<li>Member : This is repeated for all the observations returned. The following
-are the parameters included for each member<ul>
-<li>observed property : the phenomenon observed</li>
-<li>location : geographical coordinates</li>
-<li>procedure</li>
-<li>result : Result of the observation. In the first implementation It is proposed
+<li><p>name : The offering unique identifier</p></li>
+<li><p>description : Description of the offering</p></li>
+<li><p>time : Valid time instance or period</p></li>
+<li><p>featureofinterest : Geographical extents covered of the offering</p></li>
+<li><p>Member : This is repeated for all the observations returned. The following
+are the parameters included for each member</p>
+<ul>
+<li><p>observed property : the phenomenon observed</p></li>
+<li><p>location : geographical coordinates</p></li>
+<li><p>procedure</p></li>
+<li><p>result : Result of the observation. In the first implementation It is proposed
 that the gml:feature member is returned. This gives the possibility to return
 one/more attribute values in an easily manipulated format. The will be equivalent
-to a gml:feature member returned in wfs.</li>
+to a gml:feature member returned in wfs.</p></li>
 </ul>
 </li>
 </ul>
@@ -465,10 +463,10 @@ this implementation.</p>
 <p><strong>6. Examples</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li><a class="reference external" href="http://vast.uah.edu:8080/ows/weather?request=GetCapabilities">http://vast.uah.edu:8080/ows/weather?request=GetCapabilities</a></li>
-<li><a class="reference external" href="http://vast.uah.edu:8080/ows/weather">http://vast.uah.edu:8080/ows/weather</a>?
+<li><p><a class="reference external" href="http://vast.uah.edu:8080/ows/weather?request=GetCapabilities">http://vast.uah.edu:8080/ows/weather?request=GetCapabilities</a></p></li>
+<li><p><a class="reference external" href="http://vast.uah.edu:8080/ows/weather">http://vast.uah.edu:8080/ows/weather</a>?
 request=GetObservation&amp;offering=WEATHER_DATA&amp;time=2004-
-04-01T05:00:00Z/2004-04-01T06:00:00Z&amp;format=application/com-xml</li>
+04-01T05:00:00Z/2004-04-01T06:00:00Z&amp;format=application/com-xml</p></li>
 </ul>
 </div></blockquote>
 </div>
@@ -486,8 +484,6 @@ request=GetObservation&amp;offering=WEATHER_DATA&amp;time=2004-
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -542,8 +538,8 @@ request=GetObservation&amp;offering=WEATHER_DATA&amp;time=2004-
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Mis à jour le 2019-03-29.
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Mis à jour le 2019-04-09.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

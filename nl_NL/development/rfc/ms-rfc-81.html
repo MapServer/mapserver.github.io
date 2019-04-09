@@ -1,18 +1,19 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="nl_NL">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 81: Offset Labels with Leader Lines &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Over deze documenten" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -137,22 +138,23 @@
             
   <div class="section" id="ms-rfc-81-offset-labels-with-leader-lines">
 <span id="rfc81"></span><h1>MS RFC 81: Offset Labels with Leader Lines<a class="headerlink" href="#ms-rfc-81-offset-labels-with-leader-lines" title="Permalink naar deze titel">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2011/12/15</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Thomas Bonfort</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">tbonfort at terriscope.fr</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 6.2</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2011/12/15</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Thomas Bonfort</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>tbonfort at terriscope.fr</p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 6.2</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Permalink naar deze titel">¶</a></h2>
 <p>Current labelling schemes place label text at the proximity of the point
@@ -175,9 +177,9 @@ if the label was configured with “leader” parameters. There will be two
 configuration options that specify how the offsetted positions are determined:</p>
 <blockquote>
 <div><ul class="simple">
-<li>LEADERMAXDISTANCE will determine the maximum distance that the label text
-can be placed from its original anchoring position</li>
-<li>LEADERGRIDSTEP will determine the step in pixels between each tested position.</li>
+<li><p>LEADERMAXDISTANCE will determine the maximum distance that the label text
+can be placed from its original anchoring position</p></li>
+<li><p>LEADERGRIDSTEP will determine the step in pixels between each tested position.</p></li>
 </ul>
 </div></blockquote>
 <p>If a label cannot be placed due to a collision with an existing label or
@@ -259,14 +261,14 @@ configured LEADERMAXDISTANCE.</p>
 added constraints:</p>
 <blockquote>
 <div><ul class="simple">
-<li>A label cannot collide with an existing leader line, and a leader line
+<li><p>A label cannot collide with an existing leader line, and a leader line
 cannot collide with an existing label. Note that these collision detections
 operate on the bounding box of the label itself, without taking the label
 BUFFER into account (i.e. a leader line is allowed to cross the buffer area
-around an existing label)</li>
-<li>A leader line cannot intersect another leader line.</li>
-<li>A label who’s original position is inside the edge_buffer cannot be
-offseted, as this would cause rendering artifacts for tiled output.</li>
+around an existing label)</p></li>
+<li><p>A leader line cannot intersect another leader line.</p></li>
+<li><p>A label who’s original position is inside the edge_buffer cannot be
+offseted, as this would cause rendering artifacts for tiled output.</p></li>
 </ul>
 </div></blockquote>
 <p>If an offseted label has been placed, a line between the original and the
@@ -277,21 +279,21 @@ offseted position is rendered with the label style(s) that has(ve) the
 <h2>2.1 Expected issues<a class="headerlink" href="#expected-issues" title="Permalink naar deze titel">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
-<li>With RFC77’s multiple labels per feature, the offset should be applied
+<li><p>With RFC77’s multiple labels per feature, the offset should be applied
 as a whole to all the labels of the feature. In this sense, the leader
 parameters should be owned by the classObj and not the labelObj, which
-is semantically awkward.</li>
-<li>For labels with LABELPNT geomtransform, should the marker be rendered at
+is semantically awkward.</p></li>
+<li><p>For labels with LABELPNT geomtransform, should the marker be rendered at
 the original label point, or at the position the label was offseted to? This
-probably calls for an additional label style geomtransform.</li>
-<li>This functionality is computationally expensive as the label collision
+probably calls for an additional label style geomtransform.</p></li>
+<li><p>This functionality is computationally expensive as the label collision
 functions are called much more frequently than beforehand. The gridstep and
 maxdistance parameters allow to cut down the number of iterations and therefore
 the number of times the collision detection is called, at the expense of
 missing out some potential correct offseted positions. Note that with a gridstep
 of 1 and a maxdistance of the size of the image, there is the potential that
 every pixel in the image be tested for collisions. Reasonable values are a
-gridstep of 5 pixels, and a maxdistance of 30 pixels.</li>
+gridstep of 5 pixels, and a maxdistance of 30 pixels.</p></li>
 </ul>
 </div></blockquote>
 </div>
@@ -302,11 +304,11 @@ positions for a labelcache member against the already rendered labels. A
 configuration option (TBD) will be added, and this function will be called:</p>
 <blockquote>
 <div><ul class="simple">
-<li>either immediately once a label hasn’t been successfully rendered on its
-original position</li>
-<li>either after a label priority loop has finished. In this
+<li><p>either immediately once a label hasn’t been successfully rendered on its
+original position</p></li>
+<li><p>either after a label priority loop has finished. In this
 case, the function will be called for all unsuccessful labels of the current
-priority phase.</li>
+priority phase.</p></li>
 </ul>
 </div></blockquote>
 <p>The labelcache member objects will have two members added, namely a lineObj
@@ -319,12 +321,13 @@ check for intersections between leader lines and unbuffered existing labels.</p>
 <h2>3.1. Files Affected<a class="headerlink" href="#files-affected" title="Permalink naar deze titel">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
-<li>mapserver.h: additional members for labelcachememberobj and labelobj</li>
-<li>mapfile.c, maplexer.*, mapcopy.c : parsing and utility functions</li>
-<li>maplabel.c: additional collision tests in msTestLabelCacheCollisions</li>
-<li>mapdraw.c:<ul>
-<li>function for trying a label at offset positions</li>
-<li>calls to this function in msDrawLabelCache</li>
+<li><p>mapserver.h: additional members for labelcachememberobj and labelobj</p></li>
+<li><p>mapfile.c, maplexer.*, mapcopy.c : parsing and utility functions</p></li>
+<li><p>maplabel.c: additional collision tests in msTestLabelCacheCollisions</p></li>
+<li><p>mapdraw.c:</p>
+<ul>
+<li><p>function for trying a label at offset positions</p></li>
+<li><p>calls to this function in msDrawLabelCache</p></li>
 </ul>
 </li>
 </ul>
@@ -333,7 +336,7 @@ check for intersections between leader lines and unbuffered existing labels.</p>
 <div class="section" id="bug-id">
 <h2>3.2 Bug ID<a class="headerlink" href="#bug-id" title="Permalink naar deze titel">¶</a></h2>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/XXX">https://github.com/mapserver/mapserver/issues/XXX</a></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/XXX">https://github.com/mapserver/mapserver/issues/XXX</a></p></li>
 </ul>
 </div>
 <div class="section" id="backwards-compatibility-issues">
@@ -366,8 +369,6 @@ check for intersections between leader lines and unbuffered existing labels.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Zoek" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -423,8 +424,8 @@ check for intersections between leader lines and unbuffered existing labels.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2019-03-29.
-      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+      Laatste aanpassing op 2019-04-09.
+      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

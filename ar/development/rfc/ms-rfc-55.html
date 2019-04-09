@@ -1,18 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ar">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 55: Improve control of output resolution &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -119,10 +121,10 @@
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="ms-rfc-56.html" title="MS RFC 56: Tighten control of access to mapfiles and templates"
-             accesskey="N">next</a> |</li>
+             accesskey="N">التالي</a> |</li>
         <li class="right" >
           <a href="ms-rfc-54.html" title="MS RFC 54: Rendering Interface API"
-             accesskey="P">previous</a> |</li>
+             accesskey="P">السابق</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &#187;</li> 
@@ -137,24 +139,26 @@
             
   <div class="section" id="ms-rfc-55-improve-control-of-output-resolution">
 <span id="rfc55"></span><h1>MS RFC 55: Improve control of output resolution<a class="headerlink" href="#ms-rfc-55-improve-control-of-output-resolution" title="Permalink to this headline">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2009/03/09</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Authors:</th><td class="field-body">Daniel Morissette</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body">dmorissette at mapgears.com</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Last Edited:</th><td class="field-body">2009/10/06</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Status:</th><td class="field-body">Adopted (2009/03/16) and Implemented.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">MapServer 5.6</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2009/03/09</p>
+</dd>
+<dt class="field-even">Authors</dt>
+<dd class="field-even"><p>Daniel Morissette</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p>dmorissette at mapgears.com</p>
+</dd>
+<dt class="field-even">Last Edited</dt>
+<dd class="field-even"><p>2009/10/06</p>
+</dd>
+<dt class="field-odd">Status</dt>
+<dd class="field-odd"><p>Adopted (2009/03/16) and Implemented.</p>
+</dd>
+<dt class="field-even">Version</dt>
+<dd class="field-even"><p>MapServer 5.6</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>MapServer is often used to produce a printable map corresponding to the
@@ -184,19 +188,19 @@ More specifically, this is done by multiplying the layer-&gt;scalefactor value
 by the resolution/defresolution ratio in msPrepareImage().</p>
 <p>The following rendering parameters will be affected:</p>
 <ul class="simple">
-<li>size (symbols and labels)</li>
-<li>width (lines)</li>
+<li><p>size (symbols and labels)</p></li>
+<li><p>width (lines)</p></li>
 </ul>
 <p>The following rendering parameters which were not impacted by scaling in
 the past will also be fixed to follow the scaling from now on:</p>
 <ul class="simple">
-<li>offsets (line, point, polygon)</li>
-<li>pattern (line)</li>
-<li>gap (line)</li>
-<li>outlinewidth (labels)</li>
-<li>shadowsize, background-shadow-size (labels)</li>
-<li>buffer around labels (collision)</li>
-<li>minfeaturesize, mindistance (labels)</li>
+<li><p>offsets (line, point, polygon)</p></li>
+<li><p>pattern (line)</p></li>
+<li><p>gap (line)</p></li>
+<li><p>outlinewidth (labels)</p></li>
+<li><p>shadowsize, background-shadow-size (labels)</p></li>
+<li><p>buffer around labels (collision)</p></li>
+<li><p>minfeaturesize, mindistance (labels)</p></li>
 </ul>
 <p>The case of outlinewidth for line styles is a bit different: it ignores
 the scalefactor so that we get a fixed outline width no matter what we use
@@ -268,17 +272,17 @@ to the DEFRESOLUTION setting.</p>
 <div class="section" id="files-impacted">
 <h2>Files Impacted<a class="headerlink" href="#files-impacted" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>mapserver.h: new defresolution member in mapObj</li>
-<li>mapfile.c, maplexer.l, etc: new DEFRESOLUTION mapfile keyword</li>
-<li>mapdraw.c: adjust scalefactor as needed in msPrepareImage()</li>
-<li>mapscript/php3/php_mapscript.c: expose new defresolution member</li>
+<li><p>mapserver.h: new defresolution member in mapObj</p></li>
+<li><p>mapfile.c, maplexer.l, etc: new DEFRESOLUTION mapfile keyword</p></li>
+<li><p>mapdraw.c: adjust scalefactor as needed in msPrepareImage()</p></li>
+<li><p>mapscript/php3/php_mapscript.c: expose new defresolution member</p></li>
 </ul>
 </div>
 <div class="section" id="ticket-id">
 <h2>Ticket Id<a class="headerlink" href="#ticket-id" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/2948">https://github.com/mapserver/mapserver/issues/2948</a></li>
-<li><a class="reference external" href="https://github.com/mapserver/mapserver/issues/3153">https://github.com/mapserver/mapserver/issues/3153</a></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/2948">https://github.com/mapserver/mapserver/issues/2948</a></p></li>
+<li><p><a class="reference external" href="https://github.com/mapserver/mapserver/issues/3153">https://github.com/mapserver/mapserver/issues/3153</a></p></li>
 </ul>
 </div>
 <div class="section" id="voting-history">
@@ -299,8 +303,6 @@ to the DEFRESOLUTION setting.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -343,19 +345,19 @@ to the DEFRESOLUTION setting.</p>
              >index</a></li>
         <li class="right" >
           <a href="ms-rfc-56.html" title="MS RFC 56: Tighten control of access to mapfiles and templates"
-             >next</a> |</li>
+             >التالي</a> |</li>
         <li class="right" >
           <a href="ms-rfc-54.html" title="MS RFC 54: Rendering Interface API"
-             >previous</a> |</li>
+             >السابق</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Request for Comments</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Last updated on 2019-03-29.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+        &#169; <a href="../../copyright.html"> حقوق النشر </a> 2019, Open Source Geospatial Foundation
+      Last updated on 2019-04-09.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
 </html>

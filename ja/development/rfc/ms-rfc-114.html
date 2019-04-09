@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 114: Faster retrieval of shape count &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="このドキュメントについて" href="../../about.html" />
     <link rel="index" title="索引" href="../../genindex.html" />
@@ -138,24 +139,26 @@
             
   <div class="section" id="ms-rfc-114-faster-retrieval-of-shape-count">
 <span id="rfc114"></span><h1>MS RFC 114: Faster retrieval of shape count<a class="headerlink" href="#ms-rfc-114-faster-retrieval-of-shape-count" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2016/02</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Even Rouault</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:even&#46;rouault&#37;&#52;&#48;spatialys&#46;com">even<span>&#46;</span>rouault<span>&#64;</span>spatialys<span>&#46;</span>com</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">MapServer 7.2</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Funding:</th><td class="field-body">Meteorological Service of Canada</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2016/02</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Even Rouault</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:even&#46;rouault&#37;&#52;&#48;spatialys&#46;com">even<span>&#46;</span>rouault<span>&#64;</span>spatialys<span>&#46;</span>com</a></p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>MapServer 7.2</p>
+</dd>
+<dt class="field-even">Funding</dt>
+<dd class="field-even"><p>Meteorological Service of Canada</p>
+</dd>
+</dl>
 <div class="section" id="motivation">
 <h2>1. Motivation<a class="headerlink" href="#motivation" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>The WFS protocol has a resultType=hits query to return only the number
@@ -234,19 +237,19 @@ have SQL semantics and implement LayerTranslateFilter(): Oracle, MSSQL Spatial</
 <div class="section" id="affected-files">
 <h3>3.1 Affected files<a class="headerlink" href="#affected-files" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
-<li>mapquery.c: to use msLayerGetFeatureCount() in msQueryByRect() and msQueryByFilter()</li>
-<li>maplayer.c: defines msLayerGetFeatureCount() and LayerDefaultGetFeatureCount()</li>
-<li>mapwfs.c: to take into account &quot;wfs_maxfeatures_ignore_for_resulttype_hits&quot;</li>
-<li>mappostgis.c: implement LayerGetFeatureCount()</li>
-<li>other providers: add comment that LayerGetFeatureCount uses the default implementation</li>
+<li><p>mapquery.c: to use msLayerGetFeatureCount() in msQueryByRect() and msQueryByFilter()</p></li>
+<li><p>maplayer.c: defines msLayerGetFeatureCount() and LayerDefaultGetFeatureCount()</p></li>
+<li><p>mapwfs.c: to take into account &quot;wfs_maxfeatures_ignore_for_resulttype_hits&quot;</p></li>
+<li><p>mappostgis.c: implement LayerGetFeatureCount()</p></li>
+<li><p>other providers: add comment that LayerGetFeatureCount uses the default implementation</p></li>
 </ul>
 </div>
 <div class="section" id="tracking-issue">
 <h3>3.2 Tracking Issue<a class="headerlink" href="#tracking-issue" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
-<li>code: <a class="reference external" href="https://github.com/rouault/mapserver/tree/wfs_fast_hits">https://github.com/rouault/mapserver/tree/wfs_fast_hits</a></li>
-<li>tests: 4 new test cases have been added (<a class="reference external" href="https://github.com/mapserver/msautotest/commit/05e8264ce737a795d81f1a87614fa5c87399de91">https://github.com/mapserver/msautotest/commit/05e8264ce737a795d81f1a87614fa5c87399de91</a>)
-to test the behaviour of resultType=hits with filters, and already existing WFS tests pass.</li>
+<li><p>code: <a class="reference external" href="https://github.com/rouault/mapserver/tree/wfs_fast_hits">https://github.com/rouault/mapserver/tree/wfs_fast_hits</a></p></li>
+<li><p>tests: 4 new test cases have been added (<a class="reference external" href="https://github.com/mapserver/msautotest/commit/05e8264ce737a795d81f1a87614fa5c87399de91">https://github.com/mapserver/msautotest/commit/05e8264ce737a795d81f1a87614fa5c87399de91</a>)
+to test the behaviour of resultType=hits with filters, and already existing WFS tests pass.</p></li>
 </ul>
 </div>
 <div class="section" id="documentation">
@@ -273,8 +276,6 @@ to test the behaviour of resultType=hits with filters, and already existing WFS 
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="検索" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -332,8 +333,8 @@ to test the behaviour of resultType=hits with filters, and already existing WFS 
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      最終更新: 2019-03-29
-      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6 で生成しました。
+      最終更新: 2019-04-09
+      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0 で生成しました。
     </div>
   </body>
 </html>

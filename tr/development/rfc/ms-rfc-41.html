@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="tr">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>MS RFC 41: Support of WCS 1.1.x Protocol &#8212; MapServer 7.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/translations.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Bu belgeler hakkında" href="../../about.html" />
     <link rel="index" title="Dizin" href="../../genindex.html" />
@@ -138,22 +139,23 @@
             
   <div class="section" id="ms-rfc-41-support-of-wcs-1-1-x-protocol">
 <span id="rfc41"></span><h1>MS RFC 41: Support of WCS 1.1.x Protocol<a class="headerlink" href="#ms-rfc-41-support-of-wcs-1-1-x-protocol" title="Bu başlığın kalıcı bağlantısı">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Date:</th><td class="field-body">2008/04/09</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Frank Warmerdam</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:warmerdam&#37;&#52;&#48;pobox&#46;com">warmerdam<span>&#64;</span>pobox<span>&#46;</span>com</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Status:</th><td class="field-body">Adopted</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">5.2</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2008/04/09</p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Frank Warmerdam</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:warmerdam&#37;&#52;&#48;pobox&#46;com">warmerdam<span>&#64;</span>pobox<span>&#46;</span>com</a></p>
+</dd>
+<dt class="field-even">Status</dt>
+<dd class="field-even"><p>Adopted</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>5.2</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
 <p>It is proposed to extend MapServer to support the WCS 1.1 protocol. MapServer
@@ -180,10 +182,10 @@ for instance).</p>
 <div class="section" id="wcs-1-1-protocol-limitations">
 <h2>WCS 1.1 Protocol Limitations<a class="headerlink" href="#wcs-1-1-protocol-limitations" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
 <ul class="simple">
-<li>Only one &lt;Field&gt; may be associated with the Range of Coverage when
-served through MapServer.</li>
-<li>Only two types of Axis will be supported, a “Bands” axis,
-and a “Time” axis.</li>
+<li><p>Only one &lt;Field&gt; may be associated with the Range of Coverage when
+served through MapServer.</p></li>
+<li><p>Only two types of Axis will be supported, a “Bands” axis,
+and a “Time” axis.</p></li>
 </ul>
 </div>
 <div class="section" id="metadata-mapping">
@@ -218,18 +220,18 @@ the <a class="reference external" href="urn:ogc:def:crs:EPSG::4326">urn:ogc:def:
 ordering instead of the conventional long,lat.</p>
 <p>In order to implement these requirements, several changes are planned:</p>
 <ul class="simple">
-<li>msLoadProjectionString() will be updated to expand URNs in the
-EPSG and OGC name spaces.</li>
-<li>msLoadProjectionString() will add the “+epsgaxis=ne” parameter for URNs for
-GCS codes in the EPSG name space.</li>
-<li>New msAxisNormalizePoints() and msAxisDenormalizePoints() will be added for
+<li><p>msLoadProjectionString() will be updated to expand URNs in the
+EPSG and OGC name spaces.</p></li>
+<li><p>msLoadProjectionString() will add the “+epsgaxis=ne” parameter for URNs for
+GCS codes in the EPSG name space.</p></li>
+<li><p>New msAxisNormalizePoints() and msAxisDenormalizePoints() will be added for
 converting between normalized (easting,northing) axis orientation and
 EPSG preferred (denormalized) axis orientation (sometimes northing,easting).
-These functions will scan the p-&gt;args[] list for the +epsgaxis=ne to decide.</li>
-<li>msOWSCommonBoundingBox() will be modified to use these axis denormalization
-function to denormalize axis ordering for EPSG GCS URNs.</li>
-<li>the WCS 1.1 GetCoverage call will use msAxisNormalizePoints() to fix up
-orientation of request axes when needed.</li>
+These functions will scan the p-&gt;args[] list for the +epsgaxis=ne to decide.</p></li>
+<li><p>msOWSCommonBoundingBox() will be modified to use these axis denormalization
+function to denormalize axis ordering for EPSG GCS URNs.</p></li>
+<li><p>the WCS 1.1 GetCoverage call will use msAxisNormalizePoints() to fix up
+orientation of request axes when needed.</p></li>
 </ul>
 </div>
 <div class="section" id="mapscript">
@@ -280,8 +282,6 @@ assistance with WCS 1.1 validation from other contributors would be welcome.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Git" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -339,8 +339,8 @@ assistance with WCS 1.1 validation from other contributors would be welcome.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Son güncelleme: 2019-03-29.
-      <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6 ile oluşturulmuştur.
+      Son güncelleme: 2019-04-09.
+      <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0 ile oluşturulmuştur.
     </div>
   </body>
 </html>
