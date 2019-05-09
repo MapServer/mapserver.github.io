@@ -706,27 +706,27 @@ example of using ASP to filter MapServer requests. Using ASP in a
 production WMS server will likely require additional ASP especially
 in the area of error handling and setting timeouts.*</p>
 </div>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;%</span>
-  <span class="no">Server</span><span class="o">.</span><span class="n">ScriptTimeout</span> <span class="o">=</span> <span class="mi">360</span>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;%</span>
+  <span class="nv">Server</span>.<span class="nv">ScriptTimeout</span> <span class="o">=</span> <span class="mi">360</span>
 
-  <span class="no">Select</span> <span class="no">Case</span> <span class="no">Request</span><span class="o">.</span><span class="n">ServerVariables</span><span class="p">(</span><span class="s2">&quot;REQUEST_METHOD&quot;</span><span class="p">)</span>
-    <span class="no">Case</span> <span class="s2">&quot;GET&quot;</span>  <span class="n">strRequest</span> <span class="o">=</span> <span class="no">Request</span><span class="o">.</span><span class="n">QueryString</span>
-    <span class="no">Case</span> <span class="s2">&quot;POST&quot;</span> <span class="n">strRequest</span> <span class="o">=</span> <span class="no">Request</span><span class="o">.</span><span class="n">Form</span>
-  <span class="no">End</span> <span class="no">Select</span>
+  <span class="nv">Select</span> <span class="nv">Case</span> <span class="nv">Request</span>.<span class="nv">ServerVariables</span><span class="ss">(</span><span class="s2">&quot;</span><span class="s">REQUEST_METHOD</span><span class="s2">&quot;</span><span class="ss">)</span>
+    <span class="nv">Case</span> <span class="s2">&quot;</span><span class="s">GET</span><span class="s2">&quot;</span>  <span class="nv">strRequest</span> <span class="o">=</span> <span class="nv">Request</span>.<span class="nv">QueryString</span>
+    <span class="nv">Case</span> <span class="s2">&quot;</span><span class="s">POST</span><span class="s2">&quot;</span> <span class="nv">strRequest</span> <span class="o">=</span> <span class="nv">Request</span>.<span class="nv">Form</span>
+  <span class="k">End</span> <span class="nv">Select</span>
 
-  <span class="n">strURL</span> <span class="o">=</span> <span class="s2">&quot;http://myserver/cgi-bin/mapserv.exe?</span>
-<span class="s2">            map=C:\Inetpub\wwwroot\workshop\itasca.map&amp;&quot;</span> <span class="o">&amp;</span> <span class="n">strRequest</span>
+  <span class="nv">strURL</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">http://myserver/cgi-bin/mapserv.exe?</span>
+            <span class="nv">map</span><span class="o">=</span><span class="nv">C</span>:\<span class="nv">Inetpub</span>\<span class="nv">wwwroot</span>\<span class="nv">workshop</span>\<span class="nv">itasca</span>.<span class="nv">map</span><span class="o">&amp;</span><span class="s2">&quot;</span><span class="s"> &amp; strRequest</span>
 
-  <span class="no">Dim</span> <span class="n">objHTTP</span>
-  <span class="no">Set</span> <span class="n">objHTTP</span> <span class="o">=</span> <span class="no">Server</span><span class="o">.</span><span class="n">CreateObject</span><span class="p">(</span><span class="s2">&quot;MSXML2.ServerXMLHTTP&quot;</span><span class="p">)</span>
-  <span class="n">objHTTP</span><span class="o">.</span><span class="n">open</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">strURL</span><span class="p">,</span> <span class="kp">false</span>
-  <span class="n">objHTTP</span><span class="o">.</span><span class="n">send</span> <span class="s2">&quot;&quot;</span>
+  <span class="nv">Dim</span> <span class="nv">objHTTP</span>
+  <span class="nv">Set</span> <span class="nv">objHTTP</span> <span class="o">=</span> <span class="nv">Server</span>.<span class="nv">CreateObject</span><span class="ss">(</span><span class="s2">&quot;</span><span class="s">MSXML2.ServerXMLHTTP</span><span class="s2">&quot;</span><span class="ss">)</span>
+  <span class="nv">objHTTP</span>.<span class="nv">open</span> <span class="s2">&quot;</span><span class="s">GET</span><span class="s2">&quot;</span>, <span class="nv">strURL</span>, <span class="nv">false</span>
+  <span class="nv">objHTTP</span>.<span class="k">send</span> <span class="s2">&quot;&quot;</span>
 
-  <span class="no">Response</span><span class="o">.</span><span class="n">ContentType</span> <span class="o">=</span> <span class="n">objHTTP</span><span class="o">.</span><span class="n">getResponseHeader</span><span class="p">(</span><span class="s2">&quot;content-type&quot;</span><span class="p">)</span>
-  <span class="no">Response</span><span class="o">.</span><span class="n">BinaryWrite</span> <span class="n">objHTTP</span><span class="o">.</span><span class="n">responseBody</span>
+  <span class="nv">Response</span>.<span class="nv">ContentType</span> <span class="o">=</span> <span class="nv">objHTTP</span>.<span class="nv">getResponseHeader</span><span class="ss">(</span><span class="s2">&quot;</span><span class="s">content-type</span><span class="s2">&quot;</span><span class="ss">)</span>
+  <span class="nv">Response</span>.<span class="nv">BinaryWrite</span> <span class="nv">objHTTP</span>.<span class="nv">responseBody</span>
 
-  <span class="no">Set</span> <span class="n">objHTTP</span> <span class="o">=</span> <span class="no">Nothing</span>
-<span class="cp">%&gt;</span><span class="x"></span>
+  <span class="nv">Set</span> <span class="nv">objHTTP</span> <span class="o">=</span> <span class="nv">Nothing</span>
+<span class="o">%&gt;</span>
 </pre></div>
 </div>
 </div>
@@ -2075,7 +2075,7 @@ example:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Last updated on 2019-05-01.
+      Last updated on 2019-05-09.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
