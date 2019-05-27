@@ -120,7 +120,7 @@
 <dd class="field-even"><p>jmckenna at gatewaygeomatics.com</p>
 </dd>
 <dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2019-05-25</p>
+<dd class="field-odd"><p>2019-05-27</p>
 </dd>
 </dl>
 <div class="contents topic" id="table-of-contents">
@@ -233,18 +233,23 @@ as an Apache module (See the <a class="reference internal" href="#php-install-ex
 see the <a class="reference internal" href="unix.html#unix"><span class="std std-ref">Compiling on Unix</span></a> HowTo.</p>
 <ul>
 <li><p>The main MapServer configure script will automatically setup the main makefile
-to compile php_mapscript.so if you pass the <em>–with-php=DIR</em> argument to the configure script.</p>
+to compile php_mapscript.so if you pass the <em>–WITH-PHP=DIR</em> argument to the configure script.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>As of MapServer 7.4.0, you can pass the <em>–with-phpng=DIR</em> argument for the
+<p>As of MapServer 7.4.0, you can pass the <em>–WITH-PHPNG=DIR</em> argument for the
 new PHP 7 support through the <a class="reference internal" href="../mapscript/mapscript.html#swig"><span class="std std-ref">SWIG API</span></a>.</p>
 </div>
 </li>
 <li><p>Copy the php_mapscript.so library to your PHP extensions directory, and then
 use the dl() function to load the module at the beginning of your PHP scripts.
 See also the PHP function <a class="reference external" href="http://www.php.net/manual/en/function.extension-loaded.php">extension_loaded()</a> to check whether an extension is
-already loaded.</p></li>
-<li><p>The file <em>mapscript/php3/examples/phpinfo_mapscript.phtml</em> will test that the
+already loaded.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The dl() function was deprecated as of PHP 5.3.</p>
+</div>
+</li>
+<li><p>The file <em>mapscript/php/examples/phpinfo_mapscript.phtml</em> will test that the
 php_mapscript module is properly installed and can be loaded.</p></li>
 <li><p>If you get an error from PHP complaining that it cannot load the library, then
 make sure that you recompiled and reinstalled PHP with support for dynamic
@@ -265,7 +270,7 @@ README.WIN32 file in the MapServer source (good luck!).</p></li>
 </div>
 <div class="section" id="installing-php-mapscript">
 <span id="index-5"></span><h3>Installing PHP/MapScript<a class="headerlink" href="#installing-php-mapscript" title="Permalink to this headline">¶</a></h3>
-<p>Simply copy the file php4_mapscript.dll to your PHP4 extensions directory
+<p>Simply copy the file php_mapscript.dll to your PHP extensions directory
 (pathto/php/extensions)</p>
 <p>Using phpinfo()</p>
 <p>To verify that PHP and PHP/MapScript were installed properly, create a ‘.php’ file
@@ -311,7 +316,7 @@ for MS4W, which are located on the <a class="reference external" href="https://m
 <ol class="arabic">
 <li><p>Download the <a class="reference external" href="http://httpd.apache.org/">Apache Web Server</a> and extract it to the root of a directory
 (eg. D:/Apache).</p></li>
-<li><p>Download <a class="reference external" href="http://www.php.net/">PHP4</a> and extract it to your Apache folder (eg. D:/Apache/PHP4).</p></li>
+<li><p>Download <a class="reference external" href="http://www.php.net/">PHP</a> and extract it to your Apache folder (eg. D:/Apache/PHP).</p></li>
 <li><p>Create a temp directory to store MapServer created GIFs. NOTE: This directory
 is specified in the IMAGEPATH parameter of the WEB Object in the <a class="reference internal" href="../mapfile/index.html#mapfile"><span class="std std-ref">Mapfile</span></a>
 reference.
@@ -324,25 +329,25 @@ other folder you require (for this example we will use the <em>msapps</em> folde
 <span class="n">Alias</span>   <span class="o">/</span><span class="n">msapps</span><span class="o">/</span>   <span class="s2">&quot;path/to/msapps/&quot;</span>
 </pre></div>
 </div>
-<p>In the <em>ScriptAlias</em> section of this file, add an alias for the PHP4 folder.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ScriptAlias</span>    <span class="o">/</span><span class="n">cgi</span><span class="o">-</span><span class="n">php4</span><span class="o">/</span>     <span class="s2">&quot;pathto/apache/php4/&quot;</span>
+<p>In the <em>ScriptAlias</em> section of this file, add an alias for the PHP folder.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ScriptAlias</span>    <span class="o">/</span><span class="n">cgi</span><span class="o">-</span><span class="n">php</span><span class="o">/</span>     <span class="s2">&quot;pathto/apache/php/&quot;</span>
 </pre></div>
 </div>
-<p>In the <em>AddType</em> section of this file, add a type for php4 files.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AddType</span> <span class="n">application</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">httpd</span><span class="o">-</span><span class="n">php4</span>   <span class="o">.</span><span class="n">php</span>
+<p>In the <em>AddType</em> section of this file, add a type for php files.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AddType</span> <span class="n">application</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">httpd</span><span class="o">-</span><span class="n">php</span>   <span class="o">.</span><span class="n">php</span>
 </pre></div>
 </div>
 <p>In the <em>Action</em> section of this file, add an action for the php.exe file.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Action</span> <span class="n">application</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">httpd</span><span class="o">-</span><span class="n">php4</span>    <span class="s2">&quot;/cgi-php4/php.exe&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Action</span> <span class="n">application</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">httpd</span><span class="o">-</span><span class="n">php</span>    <span class="s2">&quot;/cgi-php/php.exe&quot;</span>
 </pre></div>
 </div>
 </li>
-<li><p>Copy the file <em>php4.ini-dist</em> located in your Apache/php4 directory and
+<li><p>Copy the file <em>php.ini-dist</em> located in your Apache/php directory and
 paste it into your WindowsNT folder (eg. c:/winnt), and then rename this
 file to <em>php.ini</em> in your WindowsNT folder.</p></li>
 <li><p>If you want specific extensions loaded by default, open the <em>php.ini</em> file
 in a text viewer and uncomment the appropriate extension.</p></li>
-<li><p>Place the file php_mapscript.dll into your Apache/php4/extensions folder.</p></li>
+<li><p>Place the file php_mapscript.dll into your Apache/php/extensions folder.</p></li>
 </ol>
 <p><strong>Installation Using Microsoft’s IIS</strong></p>
 <p>(please see the <a class="reference internal" href="iis.html#iis"><span class="std std-ref">IIS Setup for MapServer</span></a> document for uptodate steps)</p>
@@ -360,7 +365,7 @@ select New/Virtual directory). For this example we will call the directory
 property sheets (by right clicking and selecting properties) and then click
 on the Virtual directory tab.</p></li>
 <li><p>Click on the Configuration button and then click the App Mapping tab.</p></li>
-<li><p>Click Add and in the Executable box type: <em>path/to/php4/php.exe %s %s</em>. You
+<li><p>Click Add and in the Executable box type: <em>path/to/php/php.exe %s %s</em>. You
 MUST have the <em>%s %s</em> on the end, PHP will not function properly if you fail
 to do this. In the Extension box, type the file name extension to be associated
 with your PHP scripts. Usual extensions needed to be associated are phtml and php.
@@ -390,7 +395,8 @@ Read/Write Access.</p></li>
 <dd class="field-odd"><p><strong>Is there any documentation available?</strong></p>
 </dd>
 <dt class="field-even">A</dt>
-<dd class="field-even"><p>The main reference document is the <a class="reference internal" href="../mapscript/php/index.html#php-mapscript"><span class="std std-ref">PHP MapScript reference</span></a>, which describes all of the current classes,
+<dd class="field-even"><p>The main reference document is the <a class="reference internal" href="../mapscript/mapscript.html#swig"><span class="std std-ref">SWIG API</span></a> (or the legacy
+<a class="reference internal" href="../mapscript/php/index.html#php-mapscript"><span class="std std-ref">PHP MapScript reference</span></a>), which describes all of the current classes,
 properties and methods associated with the PHP/MapScript module.</p>
 <p>To get a more complete description of each class and the meaning of
 their member variables, see the <a class="reference internal" href="../mapscript/index.html#mapscript"><span class="std std-ref">MapScript reference</span></a>
@@ -405,13 +411,16 @@ notes and some php code snippets.</p>
 <dd class="field-odd"><p><strong>Where can I find sample scripts?</strong></p>
 </dd>
 <dt class="field-even">A</dt>
-<dd class="field-even"><p>Some examples are included in directory <em>mapserver/mapscript/php3/examples/</em>
+<dd class="field-even"><p>Some examples are included in directory <em>mapserver/mapscript/php/examples/</em>
 in the MapServer source distribution. A good one to get started is
 <em>test_draw_map.phtml</em>: it’s a very simple script that just draws a map,
 legend and scalebar in an HTML page.</p>
 <p>A good intermediate example is the <a class="reference internal" href="../mapscript/php/by_example.html#php-example"><span class="std std-ref">PHP MapScript By Example guide</span></a>
 (note that this document was created for an earlier MapServer version
 but the code might be still useful).</p>
+<p>As many users rely on <a class="reference external" href="https://ms4w.com/">MS4W</a> for MapScript, you can also
+see user-contributed PHP 7 scripts through the SWIG API, on the
+<a class="reference external" href="https://ms4w.com/trac/">MS4W wiki</a>.</p>
 <p>The original example is the “Gmap demo”, download the whole source and
 data files from the <a class="reference external" href="http://www.maptools.org/dl/">MapTools.org download page</a>.</p>
 </dd>
@@ -431,9 +440,9 @@ data files from the <a class="reference external" href="http://www.maptools.org/
 </pre></div>
 </div>
 <p>Make sure you replace the php_mapscript.so with the name under which you
-installed it, it could be php_mapscript_46.so on Unix, or php_mapscript_46.dll
+installed it, it could be php_mapscript_74.so on Unix, or php_mapscript_74.dll
 on Windows</p>
-<p>You can then try the second test page <em>mapserver/mapscript/php3/examples/test_draw_map.phtml</em>.
+<p>You can then try the second test page <em>mapserver/mapscript/php/examples/test_draw_map.phtml</em>.
 This page simply opens a MapServer .map file and inserts its map, legend,
 and scalebar in an HTML page. Modify the page to access one of your own
 MapServer .map files, and if you get the expected result, then everything
@@ -448,7 +457,7 @@ shown as it would it Notepad.</strong></p>
 </dd>
 <dt class="field-even">A</dt>
 <dd class="field-even"><p>The problem is that your PHP installation does not recognize “.phtml”
-as a PHP file extension. Assuming you’re using PHP4 under Apache then you
+as a PHP file extension. Assuming you’re using PHP under Apache then you
 need to add the following line with the other PHP-related AddType
 lines in the httpd.conf:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AddType</span> <span class="n">application</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">httpd</span><span class="o">-</span><span class="n">php</span> <span class="o">.</span><span class="n">phtml</span>
@@ -522,6 +531,7 @@ you’re running on. On Linux it is “-rdynamic”, and on *BSD it is “-expor
 <dt class="field-even">A</dt>
 <dd class="field-even"><p>The best combinations are:</p>
 <ul class="simple">
+<li><p>MapScript 7.4.0 with PHP 7.0 and up (through the new <a class="reference internal" href="../mapscript/mapscript.html#swig"><span class="std std-ref">SWIG API</span></a>)</p></li>
 <li><p>MapScript 4.10 with PHP 5.2.1 and up</p></li>
 <li><p>MapScript 4.10 with PHP 4.4.6 and up</p></li>
 </ul>
@@ -606,7 +616,7 @@ you’re running on. On Linux it is “-rdynamic”, and on *BSD it is “-expor
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Last updated on 2019-05-25.
+      Last updated on 2019-05-27.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
     </div>
   </body>
