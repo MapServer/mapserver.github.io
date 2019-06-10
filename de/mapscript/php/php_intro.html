@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="de">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction &#8212; MapServer 7.4.0 documentation</title>
+    <title>PHP MapScript &#8212; MapServer 7.4.0 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
@@ -138,19 +138,35 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="introduction">
-<span id="php-mapscriptintro"></span><h1>Introduction<a class="headerlink" href="#introduction" title="Link zu dieser Überschrift">¶</a></h1>
+  <div class="section" id="php-mapscript">
+<span id="php-mapscriptintro"></span><h1>PHP MapScript<a class="headerlink" href="#php-mapscript" title="Link zu dieser Überschrift">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>Jeff McKenna</p>
+</dd>
+<dt class="field-even">Contact</dt>
+<dd class="field-even"><p>jmckenna at gatewaygeomatics.com</p>
+</dd>
+<dt class="field-odd">Last updated</dt>
+<dd class="field-odd"><p>2019-05-25</p>
+</dd>
+</dl>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link zu dieser Überschrift">¶</a></h2>
 <p>This is a <a class="reference external" href="http://www.php.net/">PHP</a> module that makes MapServer’s
 MapScript functionalities available in a PHP Dynamically Loadable
 Library. In simple terms, this module will allow you to use the
 powerful PHP scripting language to dynamically create and modify map
 images in MapServer.</p>
 <div class="section" id="versions-supported">
-<h2>Versions Supported<a class="headerlink" href="#versions-supported" title="Link zu dieser Überschrift">¶</a></h2>
-<p>PHP 5.2.0 or more recent is required; since MapServer 6.0, support for
-PHP 4, PHP 5.0 and PHP 5.1 have been dropped. PHP MapScript was
-originally developed for PHP 3.0.14, and after MapServer 3.5 support
-for PHP 3 was dropped.</p>
+<h3>Versions Supported<a class="headerlink" href="#versions-supported" title="Link zu dieser Überschrift">¶</a></h3>
+<p>PHP 5.2.0 or more recent is required; As of MapServer 7.4.0, PHP 7
+is available through the <a class="reference internal" href="../mapscript.html#swig"><span class="std std-ref">SWIG API</span></a>, and all existing MapServer
+users are encouraged to update their scripts for the new SWIG syntax;
+see the <a class="reference internal" href="../../MIGRATION_GUIDE.html#migration"><span class="std std-ref">MapServer Migration Guide</span></a> for example syntax.</p>
+<p>Support for PHP 4, PHP 5.0 and PHP 5.1 was dropped as of MapServer 6.0.
+PHP MapScript was originally developed for PHP 3.0.14, and after
+MapServer 3.5 support for PHP 3 was dropped.</p>
 <p>The module has been tested and used on Linux, Solaris, *BSD, and Windows.</p>
 <blockquote>
 <div><div class="admonition note">
@@ -161,13 +177,20 @@ to the <a class="reference internal" href="index-5.6.html#php5-6"><span class="s
 <div class="admonition note">
 <p class="admonition-title">Bemerkung</p>
 <p>If you are migrating your existing application that is
-based on MapServer 5.6 or older, to MapServer 6.0 or beyond,
+based on MapServer 5.6 or older, to MapServer 7.4 or beyond,
 please read the <a class="reference internal" href="migration_guide.html#php-migration-guide"><span class="std std-ref">PHP MapScript Migration Guide</span></a> for important changes.</p>
 </div>
 </div></blockquote>
 </div>
+<div class="section" id="windows-binaries">
+<h3>Windows Binaries<a class="headerlink" href="#windows-binaries" title="Link zu dieser Überschrift">¶</a></h3>
+<p>PHP 7+ mapscript is included in <a class="reference external" href="https://ms4w.com/">MS4W</a>, the popular
+installer maintained by Gateway Geomatics.  You can also
+see user-contributed PHP 7 scripts through the SWIG API, on the
+<a class="reference external" href="https://ms4w.com/trac/">MS4W wiki</a>.</p>
+</div>
 <div class="section" id="how-to-get-more-information-on-php-mapscript">
-<h2>How to Get More Information on PHP MapScript<a class="headerlink" href="#how-to-get-more-information-on-php-mapscript" title="Link zu dieser Überschrift">¶</a></h2>
+<h3>How to Get More Information on PHP MapScript<a class="headerlink" href="#how-to-get-more-information-on-php-mapscript" title="Link zu dieser Überschrift">¶</a></h3>
 <ul class="simple">
 <li><p>For installation questions regarding the PHP MapScript module, see
 <a class="reference internal" href="../../installation/php.html#php-install"><span class="std std-ref">PHP MapScript Installation</span></a>.</p></li>
@@ -181,7 +204,7 @@ this site.</p></li>
 </ul>
 </div>
 <div class="section" id="memory-management">
-<h2>Memory Management<a class="headerlink" href="#memory-management" title="Link zu dieser Überschrift">¶</a></h2>
+<h3>Memory Management<a class="headerlink" href="#memory-management" title="Link zu dieser Überschrift">¶</a></h3>
 <p>Normally, you should not have to worry about the memory management
 because php has a garbage collector and will free resources for
 you. If you write only small scripts that don’t do a lot of
@@ -193,8 +216,9 @@ the script executes many tasks. To do so, you’ll have to call the
 variables. The purpose of the free methods is to break the circular
 references between an object and its properties to allow the zend
 engine to free the resources.</p>
-<p>Here’s an example of a script that doesn’t free things during the
-execution:</p>
+<p>Here’s an example of a script (using the legacy syntax, not the
+<a class="reference internal" href="../mapscript.html#swig"><span class="std std-ref">SWIG API</span></a> syntax) that doesn’t free things
+during the execution:</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">$map = new mapObj(&quot;mapfile.map&quot;);</span>
 <span class="x">$of = $map-&gt;outputformat;</span>
 <span class="x">echo $map-&gt;extent-&gt;minx.&quot; - &quot;.$map-&gt;extent-&gt;miny.&quot; - &quot;.</span>
@@ -220,6 +244,7 @@ execution:</p>
 <span class="x">// the map object is immediately freed after the unset (before the</span>
 <span class="x">// end of the script)</span>
 </pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -253,10 +278,14 @@ execution:</p>
 </p>
   <h3>Current Table Of Contents</h3>
   <ul>
-<li><a class="reference internal" href="#">Introduction</a><ul>
+<li><a class="reference internal" href="#">PHP MapScript</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a><ul>
 <li><a class="reference internal" href="#versions-supported">Versions Supported</a></li>
+<li><a class="reference internal" href="#windows-binaries">Windows Binaries</a></li>
 <li><a class="reference internal" href="#how-to-get-more-information-on-php-mapscript">How to Get More Information on PHP MapScript</a></li>
 <li><a class="reference internal" href="#memory-management">Memory Management</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -285,7 +314,7 @@ execution:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Zuletzt aktualisiert am 2019-05-22.
+      Zuletzt aktualisiert am 2019-06-10.
       Mit <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0 erstellt.
     </div>
   </body>
