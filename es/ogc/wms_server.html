@@ -147,7 +147,7 @@
 <dd class="field-even"><p>jmckenna at gatewaygeomatics.com</p>
 </dd>
 <dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2017-05-24</p>
+<dd class="field-odd"><p>2019-06-15</p>
 </dd>
 </dl>
 <div class="contents topic" id="table-of-contents">
@@ -345,7 +345,7 @@ them).</p>
 <li><p><strong>Map PROJECTION and wms_srs metadata:</strong></p>
 <p>WMS servers have to advertise the projection in which they are able
 to serve data using EPSG projection codes (see <a class="reference external" href="http://www.epsg.org/">The EPSG web page</a>
-for more background on EPSG codes). Recent versions of the PROJ4
+for more background on EPSG codes). Recent versions of the PROJ
 library come with a table of EPSG initialization codes and allow
 users to define a projection like this:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">PROJECTION</span>
@@ -353,7 +353,7 @@ users to define a projection like this:</p>
 <span class="k">END</span>
 </pre></div>
 </div>
-<p>(Note that «epsg» has to be in lowercase when used in the PROJ4
+<p>(Note that «epsg» has to be in lowercase when used in the PROJ
 “init” directive.)</p>
 <p>If the <a class="reference internal" href="../mapfile/map.html#map"><span class="std std-ref">MAP</span></a> <a class="reference internal" href="../mapfile/projection.html#projection"><span class="std std-ref">PROJECTION</span></a> block is provided in the format
 «init=epsg:xxxx» then MapServer will also use this information to
@@ -367,7 +367,7 @@ is not required in this case).  However, it is often impossible to
 find an EPSG code to match the projection of your data. In those
 cases, the «wms_srs» metadata is used to list one or more EPSG codes
 that the data can be served in, and the PROJECTION object contains
-the real PROJ4 definition of the data’s projection.</p>
+the real PROJ definition of the data’s projection.</p>
 <p>Here is an example of a server whose data is in an Lambert Conformal
 Conic projection (42304). It’s capabilities output will advertize
 EPSG:4269 and EPSG:4326 projections (lat/lon), but the PROJECTION
@@ -734,25 +734,25 @@ production WMS server will likely require additional ASP especially
 in the area of error handling and setting timeouts.*</p>
 </div>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;%</span>
-  <span class="nv">Server</span>.<span class="nv">ScriptTimeout</span> <span class="o">=</span> <span class="mi">360</span>
+  <span class="n">Server</span><span class="p">.</span><span class="n">ScriptTimeout</span> <span class="o">=</span> <span class="mi">360</span>
 
-  <span class="nv">Select</span> <span class="nv">Case</span> <span class="nv">Request</span>.<span class="nv">ServerVariables</span><span class="ss">(</span><span class="s2">&quot;</span><span class="s">REQUEST_METHOD</span><span class="s2">&quot;</span><span class="ss">)</span>
-    <span class="nv">Case</span> <span class="s2">&quot;</span><span class="s">GET</span><span class="s2">&quot;</span>  <span class="nv">strRequest</span> <span class="o">=</span> <span class="nv">Request</span>.<span class="nv">QueryString</span>
-    <span class="nv">Case</span> <span class="s2">&quot;</span><span class="s">POST</span><span class="s2">&quot;</span> <span class="nv">strRequest</span> <span class="o">=</span> <span class="nv">Request</span>.<span class="nv">Form</span>
-  <span class="k">End</span> <span class="nv">Select</span>
+  <span class="k">Select</span> <span class="k">Case</span> <span class="n">Request</span><span class="p">.</span><span class="n">ServerVariables</span><span class="p">(</span><span class="ss">&quot;REQUEST_METHOD&quot;</span><span class="p">)</span>
+    <span class="k">Case</span> <span class="ss">&quot;GET&quot;</span>  <span class="n">strRequest</span> <span class="o">=</span> <span class="n">Request</span><span class="p">.</span><span class="n">QueryString</span>
+    <span class="k">Case</span> <span class="ss">&quot;POST&quot;</span> <span class="n">strRequest</span> <span class="o">=</span> <span class="n">Request</span><span class="p">.</span><span class="n">Form</span>
+  <span class="k">End</span> <span class="k">Select</span>
 
-  <span class="nv">strURL</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">http://myserver/cgi-bin/mapserv.exe?</span>
-            <span class="nv">map</span><span class="o">=</span><span class="nv">C</span>:\<span class="nv">Inetpub</span>\<span class="nv">wwwroot</span>\<span class="nv">workshop</span>\<span class="nv">itasca</span>.<span class="nv">map</span><span class="o">&amp;</span><span class="s2">&quot;</span><span class="s"> &amp; strRequest</span>
+  <span class="n">strURL</span> <span class="o">=</span> <span class="ss">&quot;http://myserver/cgi-bin/mapserv.exe?</span>
+<span class="ss">            map=C:\Inetpub\wwwroot\workshop\itasca.map&amp;&quot;</span> <span class="o">&amp;</span> <span class="n">strRequest</span>
 
-  <span class="nv">Dim</span> <span class="nv">objHTTP</span>
-  <span class="nv">Set</span> <span class="nv">objHTTP</span> <span class="o">=</span> <span class="nv">Server</span>.<span class="nv">CreateObject</span><span class="ss">(</span><span class="s2">&quot;</span><span class="s">MSXML2.ServerXMLHTTP</span><span class="s2">&quot;</span><span class="ss">)</span>
-  <span class="nv">objHTTP</span>.<span class="nv">open</span> <span class="s2">&quot;</span><span class="s">GET</span><span class="s2">&quot;</span>, <span class="nv">strURL</span>, <span class="nv">false</span>
-  <span class="nv">objHTTP</span>.<span class="k">send</span> <span class="s2">&quot;&quot;</span>
+  <span class="n">Dim</span> <span class="n">objHTTP</span>
+  <span class="k">Set</span> <span class="n">objHTTP</span> <span class="o">=</span> <span class="n">Server</span><span class="p">.</span><span class="n">CreateObject</span><span class="p">(</span><span class="ss">&quot;MSXML2.ServerXMLHTTP&quot;</span><span class="p">)</span>
+  <span class="n">objHTTP</span><span class="p">.</span><span class="k">open</span> <span class="ss">&quot;GET&quot;</span><span class="p">,</span> <span class="n">strURL</span><span class="p">,</span> <span class="k">false</span>
+  <span class="n">objHTTP</span><span class="p">.</span><span class="n">send</span> <span class="ss">&quot;&quot;</span>
 
-  <span class="nv">Response</span>.<span class="nv">ContentType</span> <span class="o">=</span> <span class="nv">objHTTP</span>.<span class="nv">getResponseHeader</span><span class="ss">(</span><span class="s2">&quot;</span><span class="s">content-type</span><span class="s2">&quot;</span><span class="ss">)</span>
-  <span class="nv">Response</span>.<span class="nv">BinaryWrite</span> <span class="nv">objHTTP</span>.<span class="nv">responseBody</span>
+  <span class="n">Response</span><span class="p">.</span><span class="n">ContentType</span> <span class="o">=</span> <span class="n">objHTTP</span><span class="p">.</span><span class="n">getResponseHeader</span><span class="p">(</span><span class="ss">&quot;content-type&quot;</span><span class="p">)</span>
+  <span class="n">Response</span><span class="p">.</span><span class="n">BinaryWrite</span> <span class="n">objHTTP</span><span class="p">.</span><span class="n">responseBody</span>
 
-  <span class="nv">Set</span> <span class="nv">objHTTP</span> <span class="o">=</span> <span class="nv">Nothing</span>
+  <span class="k">Set</span> <span class="n">objHTTP</span> <span class="o">=</span> <span class="k">Nothing</span>
 <span class="o">%&gt;</span>
 </pre></div>
 </div>
@@ -1923,7 +1923,7 @@ will simply get the XML exception from the cascaded server.</p>
 </dd>
 <dt class="field-even">A</dt>
 <dd class="field-even"><p>If you know the parameters of your data’s projection, then you can
-browse the «epsg» file that comes with PROJ4 and look for a
+browse the «epsg» file that comes with PROJ and look for a
 projection definition that matches your data’s projection. It’s a
 simple text file and the EPSG code is inside brackets (&lt;…&gt;) at
 the beginning of every line.</p>
@@ -1940,7 +1940,7 @@ file in /MS4W/proj/nad/.</p>
 system list, errno: ..»</strong></p>
 </dd>
 <dt class="field-even">A</dt>
-<dd class="field-even"><p>That’s likely PROJ4 complaining that it cannot find the «epsg»
+<dd class="field-even"><p>That’s likely PROJ complaining that it cannot find the «epsg»
 projection definition file. Make sure you have installed PROJ
 4.4.3 or more recent and that the «epsg» file is installed at the
 right location. On Unix it should be under /usr/local/share/proj/,
@@ -1949,7 +1949,7 @@ and on Windows PROJ looks for it under C:/PROJ/ or C:/PROJ/NAD
 <a class="reference internal" href="../errors.html#errors"><span class="std std-ref">error documentation</span></a> to see if your exact error is
 discussed.</p>
 <p>If you don’t have the «epsg» file then you can get it as part of
-the PROJ4 distribution at <a class="reference external" href="http://trac.osgeo.org/proj/">http://trac.osgeo.org/proj/</a> or you
+the PROJ distribution at <a class="reference external" href="https://proj.org/">https://proj.org/</a> or you
 can download it at <a class="reference external" href="http://www.maptools.org/dl/proj4-epsg.zip">http://www.maptools.org/dl/proj4-epsg.zip</a>.</p>
 </dd>
 </dl>
@@ -2002,10 +2002,10 @@ example:</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-  <h3>Búsqueda rápida</h3>
+  <h3 id="searchlabel">Búsqueda rápida</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Ir a" />
     </form>
     </div>
@@ -2102,8 +2102,8 @@ example:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Derechos de autor</a> 2019, Open Source Geospatial Foundation.
-      Actualizado por última vez en 2019-06-10.
-      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
+      Actualizado por última vez en 2019-07-12.
+      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>
