@@ -141,7 +141,7 @@
 <span id="rtf124"></span><h1>MS RFC 124: Improving SLD Support in MapServer<a class="headerlink" href="#ms-rfc-124-improving-sld-support-in-mapserver" title="Ссылка на этот заголовок">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2019-06-26</p>
+<dd class="field-odd"><p>2019-07-24</p>
 </dd>
 <dt class="field-even">Author</dt>
 <dd class="field-even"><p>Jérome Boué</p>
@@ -368,14 +368,10 @@ possible to the actual styles being applied.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><dl class="simple">
-<dt><em>SYMBOL</em> (<code class="docutils literal notranslate"><span class="pre">&lt;PointSymbolizer&gt;</span></code>):</dt><dd><ul class="simple">
-<li><p>Both color and outline color are generated, including opacity (can
-be specified in input SLD)</p></li>
-<li><p><em>ANGLE</em>, <em>OFFSET</em> and global <em>OPACITY</em> are generated</p></li>
-</ul>
-</dd>
-</dl>
+<tr class="row-even"><td><p><em>SYMBOL</em> (<code class="docutils literal notranslate"><span class="pre">&lt;PointSymbolizer&gt;</span></code>):</p>
+<p>Both color and outline color are generated, including opacity (can
+be specified in input SLD).</p>
+<p><em>ANGLE</em>, <em>OFFSET</em> and global <em>OPACITY</em> are generated.</p>
 </td>
 <td><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>LAYER
   TYPE POINT
@@ -419,12 +415,8 @@ END
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><dl class="simple">
-<dt><em>POLYGON</em> (<code class="docutils literal notranslate"><span class="pre">&lt;PolygonSymbolizer&gt;</span></code>):</dt><dd><ul class="simple">
-<li><p>Outline opacity is generated</p></li>
-</ul>
-</dd>
-</dl>
+<tr class="row-odd"><td><p><em>POLYGON</em> (<code class="docutils literal notranslate"><span class="pre">&lt;PolygonSymbolizer&gt;</span></code>):</p>
+<p>Outline opacity is generated.</p>
 </td>
 <td><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>LAYER
   TYPE POLYGON
@@ -455,12 +447,8 @@ END
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><dl class="simple">
-<dt><em>LABEL</em> (<code class="docutils literal notranslate"><span class="pre">&lt;TextSymbolizer&gt;</span></code>):</dt><dd><ul class="simple">
-<li><p>Outline color, aka Halo, is generated</p></li>
-</ul>
-</dd>
-</dl>
+<tr class="row-even"><td><p><em>LABEL</em> (<code class="docutils literal notranslate"><span class="pre">&lt;TextSymbolizer&gt;</span></code>):</p>
+<p>Outline color, aka Halo, is generated.</p>
 </td>
 <td><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>LAYER
   CLASS
@@ -521,10 +509,62 @@ END
 </div>
 <div class="section" id="style-layering">
 <h3>3. Style layering<a class="headerlink" href="#style-layering" title="Ссылка на этот заголовок">¶</a></h3>
-<div class="admonition note">
-<p class="admonition-title">Примечание</p>
-<p>Work in progress</p>
-</div>
+<p>Mapserver is designed to use only the first applicable class inside a layer for
+the rendering of a feature (see <a class="reference internal" href="../../mapfile/layer.html#layer-class"><span class="std std-ref">CLASS description in LAYER page</span></a>).</p>
+<p>On the other hand, SLD/SE defines a policy named «<em>painters model</em>» in which
+all applicable rules (SLD equivalent of classes) are used for the rendering of
+a feature (see <a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=16700">OpenGIS Symbology Encoding Implementation Specification</a>, p.7).</p>
+<p>Here is a comparison example of both renderings. The same stylesheet is written
+in MapFile and in SLD and applied on a sketch of France regions. Stylesheet
+specification is:</p>
+<ul class="simple">
+<li><p>Class #1: Polygons are filled with green color</p></li>
+<li><p>Class #2: Polygons with 3 to 5 edges are filled with red color</p></li>
+<li><p>Class #3: Polygons with exactly 4 edges are filled with blue color</p></li>
+</ul>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text"><em>Example of MapFile vs. SLD Style rendering policies</em></span><a class="headerlink" href="#id1" title="Постоянная ссылка на таблицу">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Mapfile</p></th>
+<th class="head"><p>SLD</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Only the first applicable class is used for rendering</p></td>
+<td><p>All applicable classes are used for rendering, each on top of the
+previous ones</p></td>
+</tr>
+<tr class="row-odd"><td><img alt="../../_images/stylefirst.png" src="../../_images/stylefirst.png" />
+</td>
+<td><img alt="../../_images/stylepainter.png" src="../../_images/stylepainter.png" />
+</td>
+</tr>
+</tbody>
+</table>
+<p>In order to handle both rendering modes in their respective contexts, a new
+field named <code class="docutils literal notranslate"><span class="pre">rendermode</span></code> is added to <code class="docutils literal notranslate"><span class="pre">layerObj</span></code> data structure. This is
+used in <code class="docutils literal notranslate"><span class="pre">msDrawVectorLayer()</span></code> function in <code class="docutils literal notranslate"><span class="pre">mapdraw.c</span></code> file. The two
+possible values for this field are:</p>
+<dl class="simple">
+<dt>MS_FIRST_CLASS</dt><dd><p>Default rendering mode, set on layers defined in a MapFile. In this mode,
+<code class="docutils literal notranslate"><span class="pre">msDrawVectorLayer()</span></code> fetches the first applicable class for each shape
+and uses only that class for rendering.</p>
+</dd>
+<dt>MS_PAINTERS_MODEL</dt><dd><p>SLD rendering mode, set on layers defined in a SLD document. In this mode,
+<code class="docutils literal notranslate"><span class="pre">msDrawVectorLayer()</span></code> iterates over all applicable classes for each shape
+and uses them one after the other for rendering. Moreover, as
+<code class="docutils literal notranslate"><span class="pre">msDrawShape()</span></code> changes shape coordinates values and as shapes are
+potentially drawn multiple times, shapes must be saved before calls to
+<code class="docutils literal notranslate"><span class="pre">msDrawShape()</span></code> and restored after.</p>
+</dd>
+</dl>
+<p>As for arithmetic expressions, offering choice of rendering mode in MapFiles,
+e.g., by adding a <em>RENDERMODE</em> parameter in <em>LAYER</em> section, would not be
+technically difficult.</p>
 </div>
 <div class="section" id="mark-or-externalgraphic-in-linesymbolizer">
 <h3>4. Mark or ExternalGraphic in LineSymbolizer<a class="headerlink" href="#mark-or-externalgraphic-in-linesymbolizer" title="Ссылка на этот заголовок">¶</a></h3>
@@ -550,7 +590,8 @@ END
 </div>
 <div class="section" id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Ссылка на этот заголовок">¶</a></h2>
-<p>The  <code class="docutils literal notranslate"><span class="pre">msautotest/sld</span></code> suite will be created and populated with test cases focusing on these new or improved features.</p>
+<p>The  <code class="docutils literal notranslate"><span class="pre">msautotest/sld</span></code> suite will be created and populated with test cases
+focusing on these new or improved features.</p>
 <p>Moreover the <code class="docutils literal notranslate"><span class="pre">msautotest/{gdal,misc,query,renderers,wxs}</span></code> test suites will be
 run during development in order to make sure that no regression occurs.</p>
 </div>
@@ -569,12 +610,14 @@ support without changing any other existing behaviour.</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">mapcopy.c</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mapdraw.c</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">mapfile.c</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">maplayer.c</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">mapogcsld.c</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">mapogcsld.h</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">mapserver.h</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">maputil.c</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mapwms.c</span></code></p></li>
 <li><p>…</p></li>
 </ul>
 </div></blockquote>
@@ -582,6 +625,10 @@ support without changing any other existing behaviour.</p>
 <p class="admonition-title">Примечание</p>
 <p>Work in progress</p>
 </div>
+</div>
+<div class="section" id="credits">
+<h2>Credits<a class="headerlink" href="#credits" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Thanks to funding from the French Ministry of Defence.</p>
 </div>
 <div class="section" id="voting-history">
 <h2>Voting history<a class="headerlink" href="#voting-history" title="Ссылка на этот заголовок">¶</a></h2>
@@ -632,6 +679,7 @@ support without changing any other existing behaviour.</p>
 <li><a class="reference internal" href="#documentation">Documentation</a></li>
 <li><a class="reference internal" href="#backwards-compatibility-issues">Backwards compatibility issues</a></li>
 <li><a class="reference internal" href="#affected-files">Affected Files</a></li>
+<li><a class="reference internal" href="#credits">Credits</a></li>
 <li><a class="reference internal" href="#voting-history">Voting history</a></li>
 </ul>
 </li>
@@ -660,7 +708,7 @@ support without changing any other existing behaviour.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Обновлено: 2019-07-20.
+      Обновлено: 2019-07-24.
       Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
