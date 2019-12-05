@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="it">
   <head>
     <meta charset="utf-8" />
-    <title>MS RFC 124: Improving SLD Support in MapServer &#8212; MapServer 7.4.1 documentation</title>
+    <title>MS RFC 124: Improving SLD Support in MapServer &#8212; MapServer 7.4.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
@@ -20,7 +20,7 @@
     <link rel="index" title="Indice" href="../../genindex.html" />
     <link rel="search" title="Cerca" href="../../search.html" />
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="next" title="GitHub" href="../git.html" />
+    <link rel="next" title="MS RFC 125: Support for CONNECTIONOPTIONS in mapfiles" href="ms-rfc-125.html" />
     <link rel="prev" title="MS RFC 123: Support for MapML output in MapServer" href="ms-rfc-123.html" /> 
   </head><body>
 
@@ -120,7 +120,7 @@
           <a href="../../genindex.html" title="Indice generale"
              accesskey="I">indice</a></li>
         <li class="right" >
-          <a href="../git.html" title="GitHub"
+          <a href="ms-rfc-125.html" title="MS RFC 125: Support for CONNECTIONOPTIONS in mapfiles"
              accesskey="N">successivo</a> |</li>
         <li class="right" >
           <a href="ms-rfc-123.html" title="MS RFC 123: Support for MapML output in MapServer"
@@ -138,10 +138,10 @@
           <div class="body" role="main">
             
   <div class="section" id="ms-rfc-124-improving-sld-support-in-mapserver">
-<span id="rtf124"></span><h1>MS RFC 124: Improving SLD Support in MapServer<a class="headerlink" href="#ms-rfc-124-improving-sld-support-in-mapserver" title="Link a questa intestazione">¶</a></h1>
+<span id="rfc124"></span><h1>MS RFC 124: Improving SLD Support in MapServer<a class="headerlink" href="#ms-rfc-124-improving-sld-support-in-mapserver" title="Link a questa intestazione">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2019-07-24</p>
+<dd class="field-odd"><p>2019-10-01</p>
 </dd>
 <dt class="field-even">Author</dt>
 <dd class="field-even"><p>Jérome Boué</p>
@@ -153,15 +153,9 @@
 <dd class="field-even"><p>Draft</p>
 </dd>
 <dt class="field-odd">Version</dt>
-<dd class="field-odd"><p>TBD</p>
+<dd class="field-odd"><p>(Targeting MapServer 8.0)</p>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>The present document is still a work in progress. Sections will be added
-over time when they are ready to be published. This aims at collecting
-comments and advices as early as possible.</p>
-</div>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link a questa intestazione">¶</a></h2>
 <p>The current implementation of SLD/SE in MapServer has many drawbacks. This RFC
@@ -185,14 +179,12 @@ SLD doesn’t handle &lt;Mark&gt; or &lt;ExternalGraphic&gt; elements in a
 of SLD doesn’t handle both &lt;LineSymbolizer&gt; and &lt;PolygonSymbolizer&gt; in the
 same &lt;Rule&gt; element (which is more expressive than both &lt;Fill&gt; and &lt;Stroke&gt;
 in the same &lt;PolygonSymbolizer&gt;).</p></li>
-<li><p><strong>UserLayer</strong>: MapServer implementation of SLD doesn’t handle &lt;UserLayer&gt;
-element.</p></li>
 </ol>
 <p>The next sections of this RFC develop a description of each issue and the
 proposed solution.</p>
 </div>
-<div class="section" id="technical-solution">
-<h2>Technical solution<a class="headerlink" href="#technical-solution" title="Link a questa intestazione">¶</a></h2>
+<div class="section" id="proposed-solution">
+<h2>Proposed solution<a class="headerlink" href="#proposed-solution" title="Link a questa intestazione">¶</a></h2>
 <div class="section" id="literal-constants-variables-and-arithmetic-expressions">
 <h3>1. Literal constants, variables and arithmetic expressions<a class="headerlink" href="#literal-constants-variables-and-arithmetic-expressions" title="Link a questa intestazione">¶</a></h3>
 <p>Currently, MapServer only supports raw constants in &lt;CssParameter&gt; or
@@ -368,7 +360,7 @@ possible to the actual styles being applied.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><em>SYMBOL</em> (<code class="docutils literal notranslate"><span class="pre">&lt;PointSymbolizer&gt;</span></code>):</p>
+<tr class="row-even"><td><p><em>SYMBOL</em> (&lt;PointSymbolizer&gt;):</p>
 <p>Both color and outline color are generated, including opacity (can
 be specified in input SLD).</p>
 <p><em>ANGLE</em>, <em>OFFSET</em> and global <em>OPACITY</em> are generated.</p>
@@ -415,7 +407,7 @@ END
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><em>POLYGON</em> (<code class="docutils literal notranslate"><span class="pre">&lt;PolygonSymbolizer&gt;</span></code>):</p>
+<tr class="row-odd"><td><p><em>POLYGON</em> (&lt;PolygonSymbolizer&gt;):</p>
 <p>Outline opacity is generated.</p>
 </td>
 <td><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>LAYER
@@ -447,7 +439,7 @@ END
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><em>LABEL</em> (<code class="docutils literal notranslate"><span class="pre">&lt;TextSymbolizer&gt;</span></code>):</p>
+<tr class="row-even"><td><p><em>LABEL</em> (&lt;TextSymbolizer&gt;):</p>
 <p>Outline color, aka Halo, is generated.</p>
 </td>
 <td><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>LAYER
@@ -538,9 +530,9 @@ specification is:</p>
 <td><p>All applicable classes are used for rendering, each on top of the
 previous ones</p></td>
 </tr>
-<tr class="row-odd"><td><img alt="../../_images/stylefirst.png" src="../../_images/stylefirst.png" />
+<tr class="row-odd"><td><img alt="../../_images/stylefirst.png" class="align-center" src="../../_images/stylefirst.png" />
 </td>
-<td><img alt="../../_images/stylepainter.png" src="../../_images/stylepainter.png" />
+<td><img alt="../../_images/stylepainter.png" class="align-center" src="../../_images/stylepainter.png" />
 </td>
 </tr>
 </tbody>
@@ -568,24 +560,160 @@ technically difficult.</p>
 </div>
 <div class="section" id="mark-or-externalgraphic-in-linesymbolizer">
 <h3>4. Mark or ExternalGraphic in LineSymbolizer<a class="headerlink" href="#mark-or-externalgraphic-in-linesymbolizer" title="Link a questa intestazione">¶</a></h3>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Work in progress</p>
+<p>Current implementation of SLD/SE in MapServer fails at rendering symbols
+(&lt;Mark&gt; or &lt;ExternalGraphic&gt; tags) on lines (&lt;LineSymbolizer&gt; tag). As an
+illustration, let’s draw a blue line representing the Danube river with
+alterning circles (implemented by &lt;Mark&gt; tag) and boats (implemented by
+&lt;ExternalGraphic&gt; tag) on it. Below, the first picture is produced with a
+MapFile and the second one with a SLD document.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><th class="stub"><p>MapFile</p>
+<p>(correct rendering)</p>
+</th>
+<td><a class="reference internal image-reference" href="../../_images/danube-mapfile.png"><img alt="../../_images/danube-mapfile.png" src="../../_images/danube-mapfile.png" style="width: 576.0px; height: 240.0px;" /></a>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p>SLD</p>
+<p>(incorrect rendering)</p>
+</th>
+<td><a class="reference internal image-reference" href="../../_images/danube-sld-bug.png"><img alt="../../_images/danube-sld-bug.png" src="../../_images/danube-sld-bug.png" style="width: 576.0px; height: 240.0px;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+<p>A source code inspection shows:</p>
+<ul>
+<li><p>&lt;ExternalGraphic&gt; parameter has to be validated against authorized patterns
+(see <a class="reference external" href="https://github.com/mapserver/mapserver/blob/branch-7-4/mapogcsld.c#L2140-L2145">mapogcsld.c L2140-L2145</a>).
+This involves setting <code class="docutils literal notranslate"><span class="pre">&quot;sld_external_graphic&quot;</span></code> attribute in
+<a class="reference internal" href="../../mapfile/validation.html#validation"><span class="std std-ref">VALIDATION</span></a> block of MapFile’s <em>WEB</em> section, e.g.:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">WEB</span>
+  <span class="k">VALIDATION</span>
+    <span class="s">&quot;sld_external_graphic&quot;</span> <span class="s">&quot;^.*/sld/data/.*&quot;</span>
+  <span class="k">END</span>
+  <span class="nx">[...]</span>
+<span class="k">END</span>
+</pre></div>
 </div>
+</li>
+<li><p>Current implementation of &lt;Mark&gt; fails at rendering symbols without &lt;Fill&gt;
+specification: &lt;Stroke&gt; color is always assigned to <em>OUTLINECOLOR</em>
+variable (see <a class="reference external" href="https://github.com/mapserver/mapserver/blob/branch-7-4/mapogcsld.c#L1697-L1703">mapogcsld.c L1697-L1703</a>).
+When &lt;Fill&gt; tag is not present, it should be assigned to <em>COLOR</em> variable.</p></li>
+</ul>
+<p>The proposed solution consists in a documentation update (in <a class="reference internal" href="../../ogc/sld.html#sld"><span class="std std-ref">SLD</span></a>
+document) for the first issue and a bug fix for the second one.</p>
 </div>
 <div class="section" id="linesymbolizer-and-polygonsymbolizer-in-rule">
 <h3>5. LineSymbolizer and PolygonSymbolizer in Rule<a class="headerlink" href="#linesymbolizer-and-polygonsymbolizer-in-rule" title="Link a questa intestazione">¶</a></h3>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Work in progress</p>
+<p>Current implementation of SLD/SE in MapServer doesn’t expect a mix of
+&lt;LineSymbolizer&gt; and &lt;PolygonSymbolizer&gt; in the same &lt;Rule&gt;, and
+therefore produces an incorrect rendering in that case. As an illustration,
+let’s draw a blue polygon with a yellow outline by using two SLD variants.</p>
+<ul class="simple">
+<li><p>The first one is a single &lt;PolygonSymbolizer&gt; containing both
+&lt;Stroke&gt; section for the outline and &lt;Fill&gt; section for the inner
+area.</p></li>
+<li><p>The second one is a &lt;LineSymbolizer&gt; containing a &lt;Stroke&gt; section
+for the outline followed by a &lt;PolygonSymbolizer&gt; containing a &lt;Fill&gt;
+section for the inner area.</p></li>
+</ul>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text"><em>Illustration of incorrect rendering of LineSymbolizer and
+             PolygonSymbolizer in Rule</em></span><a class="headerlink" href="#id2" title="Link a questa tabella">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>&lt;Stroke&gt; and &lt;Fill&gt; inside &lt;PolygonSymbolizer&gt;</p></th>
+<th class="head"><p>&lt;LineSymbolizer&gt; and &lt;PolygonSymbolizer&gt; inside &lt;Rule&gt;</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;FeatureTypeStyle&gt;</span>
+  <span class="nt">&lt;Rule&gt;</span>
+    <span class="nt">&lt;PolygonSymbolizer&gt;</span>
+
+      <span class="nt">&lt;Stroke&gt;</span>
+        <span class="nt">&lt;SvgParameter</span> <span class="na">name=</span><span class="s">&quot;stroke&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;Literal&gt;</span>#FFFF00<span class="nt">&lt;/Literal&gt;</span>
+        <span class="nt">&lt;/SvgParameter&gt;</span>
+      <span class="nt">&lt;/Stroke&gt;</span>
+
+
+
+      <span class="nt">&lt;Fill&gt;</span>
+        <span class="nt">&lt;SvgParameter</span> <span class="na">name=</span><span class="s">&quot;fill&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;Literal&gt;</span>#0000FF<span class="nt">&lt;/Literal&gt;</span>
+        <span class="nt">&lt;/SvgParameter&gt;</span>
+      <span class="nt">&lt;/Fill&gt;</span>
+
+    <span class="nt">&lt;/PolygonSymbolizer&gt;</span>
+  <span class="nt">&lt;/Rule&gt;</span>
+<span class="nt">&lt;/FeatureTypeStyle&gt;</span>
+</pre></div>
 </div>
+</td>
+<td><div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;FeatureTypeStyle&gt;</span>
+  <span class="nt">&lt;Rule&gt;</span>
+
+    <span class="nt">&lt;LineSymbolizer&gt;</span>
+      <span class="nt">&lt;Stroke&gt;</span>
+        <span class="nt">&lt;SvgParameter</span> <span class="na">name=</span><span class="s">&quot;stroke&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;Literal&gt;</span>#FFFF00<span class="nt">&lt;/Literal&gt;</span>
+        <span class="nt">&lt;/SvgParameter&gt;</span>
+      <span class="nt">&lt;/Stroke&gt;</span>
+    <span class="nt">&lt;/LineSymbolizer&gt;</span>
+
+    <span class="nt">&lt;PolygonSymbolizer&gt;</span>
+      <span class="nt">&lt;Fill&gt;</span>
+        <span class="nt">&lt;SvgParameter</span> <span class="na">name=</span><span class="s">&quot;fill&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;Literal&gt;</span>#0000FF<span class="nt">&lt;/Literal&gt;</span>
+        <span class="nt">&lt;/SvgParameter&gt;</span>
+      <span class="nt">&lt;/Fill&gt;</span>
+    <span class="nt">&lt;/PolygonSymbolizer&gt;</span>
+
+  <span class="nt">&lt;/Rule&gt;</span>
+<span class="nt">&lt;/FeatureTypeStyle&gt;</span>
+</pre></div>
 </div>
-<div class="section" id="userlayer">
-<h3>6. UserLayer<a class="headerlink" href="#userlayer" title="Link a questa intestazione">¶</a></h3>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Work in progress</p>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="figure align-center" id="id3">
+<img alt="../../_images/stylesinsymb.png" src="../../_images/stylesinsymb.png" />
+<p class="caption"><span class="caption-text"><em>Correct rendering</em></span><a class="headerlink" href="#id3" title="Link a questa immagine">¶</a></p>
 </div>
+</td>
+<td><div class="figure align-center" id="id4">
+<img alt="../../_images/symbinrule.png" src="../../_images/symbinrule.png" />
+<p class="caption"><span class="caption-text"><em>Incorrect rendering</em></span><a class="headerlink" href="#id4" title="Link a questa immagine">¶</a></p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>A <a class="reference external" href="https://github.com/mapserver/mapserver/blob/branch-7-4/mapogcsld.c#L971-L1014">source code inspection</a>
+shows that all SLD/SE tags are taken into account. The proposed solution
+consists in a simple bug fix aimed at feeding <code class="docutils literal notranslate"><span class="pre">mapObj</span></code> data structure the
+same way for both cases.</p>
+<p>In the current implementation, a new <em>STYLE</em> is generated for each &lt;Stroke&gt;
+or &lt;Fill&gt; tag. But in the first case, &lt;Fill&gt; tags are handled before
+&lt;Stroke&gt; tags, whereas in the second case, &lt;LineSymbolizer&gt; tags, which
+contain only &lt;Stroke&gt; are handled before &lt;PolygonSymbolizer&gt; tags, able
+to contain both &lt;Stroke&gt; and &lt;Fill&gt; tags.</p>
+<p>Moreover &lt;LineSymbolizer&gt;&lt;Stroke&gt; color is assigned to  <em>COLOR</em> variable,
+whereas &lt;PolygonSymbolizer&gt;&lt;Stroke&gt; outline color is assigned to
+<em>OUTLINECOLOR</em> variable.</p>
+<p>The proposed solution consists on one hand to handle &lt;PolygonSymbolizer&gt;
+tags before &lt;LineSymbolizer&gt; tags, and on the second hand to move <em>COLOR</em>
+value to <em>OUTLINECOLOR</em> for styles defined by &lt;LineSymbolizer&gt; but
+applicable to polygon layers.</p>
 </div>
 </div>
 <div class="section" id="testing">
@@ -618,13 +746,8 @@ support without changing any other existing behaviour.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">mapserver.h</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">maputil.c</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">mapwms.c</span></code></p></li>
-<li><p>…</p></li>
 </ul>
 </div></blockquote>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Work in progress</p>
-</div>
 </div>
 <div class="section" id="credits">
 <h2>Credits<a class="headerlink" href="#credits" title="Link a questa intestazione">¶</a></h2>
@@ -666,13 +789,12 @@ support without changing any other existing behaviour.</p>
   <ul>
 <li><a class="reference internal" href="#">MS RFC 124: Improving SLD Support in MapServer</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
-<li><a class="reference internal" href="#technical-solution">Technical solution</a><ul>
+<li><a class="reference internal" href="#proposed-solution">Proposed solution</a><ul>
 <li><a class="reference internal" href="#literal-constants-variables-and-arithmetic-expressions">1. Literal constants, variables and arithmetic expressions</a></li>
 <li><a class="reference internal" href="#wms-getstyles-request">2. WMS <em>GetStyles</em> request</a></li>
 <li><a class="reference internal" href="#style-layering">3. Style layering</a></li>
 <li><a class="reference internal" href="#mark-or-externalgraphic-in-linesymbolizer">4. Mark or ExternalGraphic in LineSymbolizer</a></li>
 <li><a class="reference internal" href="#linesymbolizer-and-polygonsymbolizer-in-rule">5. LineSymbolizer and PolygonSymbolizer in Rule</a></li>
-<li><a class="reference internal" href="#userlayer">6. UserLayer</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#testing">Testing</a></li>
@@ -696,7 +818,7 @@ support without changing any other existing behaviour.</p>
           <a href="../../genindex.html" title="Indice generale"
              >indice</a></li>
         <li class="right" >
-          <a href="../git.html" title="GitHub"
+          <a href="ms-rfc-125.html" title="MS RFC 125: Support for CONNECTIONOPTIONS in mapfiles"
              >successivo</a> |</li>
         <li class="right" >
           <a href="ms-rfc-123.html" title="MS RFC 123: Support for MapML output in MapServer"
@@ -708,8 +830,8 @@ support without changing any other existing behaviour.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Ultimo aggiornamento 2019-07-24.
-      Creato con <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Ultimo aggiornamento 2019-12-05.
+      Creato con <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
     </div>
   </body>
 </html>

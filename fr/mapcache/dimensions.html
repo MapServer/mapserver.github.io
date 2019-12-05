@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
     <meta charset="utf-8" />
-    <title>Dimensions d’un jeu de tuiles &#8212; MapServer 7.4.1 documentation</title>
+    <title>Tileset Dimensions &#8212; MapServer 7.4.2 documentation</title>
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -21,7 +21,7 @@
     <link rel="search" title="Recherche" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="next" title="HTTP Requests" href="http.html" />
-    <link rel="prev" title="Formats d’image" href="formats.html" /> 
+    <link rel="prev" title="Image Formats" href="formats.html" /> 
   </head><body>
 
 <table width="100%" style="width: 100%; background-color: white;">
@@ -123,10 +123,10 @@
           <a href="http.html" title="HTTP Requests"
              accesskey="N">suivant</a> |</li>
         <li class="right" >
-          <a href="formats.html" title="Formats d’image"
+          <a href="formats.html" title="Image Formats"
              accesskey="P">précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.4.1 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.4.2 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapCache 1.8.0</a> &#187;</li> 
       </ul>
     </div>
@@ -138,7 +138,7 @@
           <div class="body" role="main">
             
   <div class="section" id="tileset-dimensions">
-<span id="mapcache-dimensions"></span><h1>Dimensions d’un jeu de tuiles<a class="headerlink" href="#tileset-dimensions" title="Lien permanent vers ce titre">¶</a></h1>
+<span id="mapcache-dimensions"></span><h1>Tileset Dimensions<a class="headerlink" href="#tileset-dimensions" title="Lien permanent vers ce titre">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Author</dt>
 <dd class="field-odd"><p>Thomas Bonfort</p>
@@ -164,45 +164,59 @@
 </dl>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Les couches WMS dans MapServer peuvent supporter les dimensions, voir <a class="reference internal" href="../ogc/wms_dimension.html#wms-dimension"><span class="std std-ref">WMS Dimension</span></a> pour les détails. MapCache supporte également les dimensions pour les jeux de tuiles.</p>
-<p>Stocker des caches de tuiles distincts pour différentes dimensions est utile dans un certain nombre de situations comme créer des caches pour différentes limites spatiales, altitudes ou périodes de temps. Cela fournit aussi un mécanisme pour changer de Mapfile selon une valeur de dimension donnée.</p>
-<p>MapCache utilise les dimensions pour:</p>
+<p>WMS layers in MapServer can support dimensions, see <a class="reference internal" href="../ogc/wms_dimension.html#wms-dimension"><span class="std std-ref">WMS Dimension</span></a> for details.
+MapCache also supports dimensions for tilesets.</p>
+<p>Storing separate tile caches for different dimensions has several practical use cases such as creating caches for different
+spatial boundaries, elevations, or time periods. It also provides a mechanism for dynamically switching Mapfiles based on a dimension value.</p>
+<p>MapCache uses Dimensions to:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>créer la structure de dossiers des caches disque et SQLite qui utilisent la variable de substitution <code class="docutils literal notranslate"><span class="pre">{dim}</span></code> dans le <em>template</em> de leur configuration, voir <em>Template Structure</em> dans <a class="reference internal" href="caches.html#mapcache-cache-disk"><span class="std std-ref">Caches disque</span></a> et <em>Using Multiple SQLite Database Files</em> dans <a class="reference internal" href="caches.html#mapcache-cache-sqlite"><span class="std std-ref">Caches SQLite</span></a>.</p></li>
-<li><p>créer le schéma de données des caches SQLite qui utilisent la variable de substitution <code class="docutils literal notranslate"><span class="pre">:dim</span></code>, voir <em>Custom Schema</em> dans <a class="reference internal" href="caches.html#mapcache-cache-sqlite"><span class="std std-ref">Caches SQLite</span></a>.</p></li>
-<li><p>construire les requêtes à destination des sources WMS: toute dimension spécifiée pour un jeu de tuile est transmise à sa source WMS lorsqu’un défaut de cache survient.</p></li>
+<li><p>create the directory structure of disk and SQLite caches, using the
+template structure with <code class="docutils literal notranslate"><span class="pre">{dim}</span></code> replacement entry, see
+<em>Template Structure</em> in <a class="reference internal" href="caches.html#mapcache-cache-disk"><span class="std std-ref">Disk Caches</span></a> and
+<em>Using Multiple SQLite Database Files</em> in <a class="reference internal" href="caches.html#mapcache-cache-sqlite"><span class="std std-ref">SQLite Caches</span></a>.</p></li>
+<li><p>create the database structure of SQLite caches, using custom schema with
+<code class="docutils literal notranslate"><span class="pre">:dim</span></code> replacement entry, see <em>Custom Schema</em> in
+<a class="reference internal" href="caches.html#mapcache-cache-sqlite"><span class="std std-ref">SQLite Caches</span></a>.</p></li>
+<li><p>build requests to WMS sources: any dimensions specified for a tileset will
+be forwarded on to their WMS source whenever a cache miss occurs.</p></li>
 </ul>
 </div></blockquote>
 </div>
 <div class="section" id="enabling-dimension-support-in-mapcache">
-<h2>Activation des dimensions dans MapCache<a class="headerlink" href="#enabling-dimension-support-in-mapcache" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Les dimensions sont activées dans le fichier de configuration au niveau du <a class="reference internal" href="config.html#mapcache-config-tileset"><span class="std std-ref">Jeu de tuiles</span></a>. Chaque jeu de tuile peut définir ses propres dimensions à l’aide d’une section <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code> qui inclut un ou plusieurs éléments <code class="docutils literal notranslate"><span class="pre">&lt;dimension&gt;</span></code>.</p>
+<h2>Enabling Dimension Support in MapCache<a class="headerlink" href="#enabling-dimension-support-in-mapcache" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Dimensions are enabled in the configuration file at the
+<a class="reference internal" href="config.html#mapcache-config-tileset"><span class="std std-ref">Tileset</span></a> level. Each tileset may define its own
+dimensions with a <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code> section which includes one or several
+<code class="docutils literal notranslate"><span class="pre">&lt;dimension&gt;</span></code> elements.</p>
 <div class="section" id="dimension-attributes">
-<h3>Attributs de dimension<a class="headerlink" href="#dimension-attributes" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Plusieurs attributs sont définis pour l’élément <code class="docutils literal notranslate"><span class="pre">&lt;dimension&gt;</span></code>.</p>
+<h3>Dimension Attributes<a class="headerlink" href="#dimension-attributes" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Several attributes are defined for the <code class="docutils literal notranslate"><span class="pre">&lt;dimension&gt;</span></code> element.</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> (required): The name by which the dimension is referred to in a WMS
 request (minus the <code class="docutils literal notranslate"><span class="pre">dim_</span></code> prefix as specified in
 <a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=1081&amp;version=1&amp;format=pdf">WMS 1.1.1 Specification</a>).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">default</span></code> (requis): La valeur par défaut de la dimension lorsqu’aucune valeur n’est fournie explicitement dans la requête WMS.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">default</span></code> (required): The default value for the dimension if none is
+explicitly provided in the WMS request.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span></code> (required): MapCache defines several ways for specifying a
 dimension: <code class="docutils literal notranslate"><span class="pre">values</span></code>, <code class="docutils literal notranslate"><span class="pre">regex</span></code>, <code class="docutils literal notranslate"><span class="pre">sqlite</span></code>, <code class="docutils literal notranslate"><span class="pre">postgresql</span></code>,
 <code class="docutils literal notranslate"><span class="pre">elasticsearch</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code>. They are described in the following
 sections.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">unit</span></code> (optionnel): unité physique de la dimension. Cette information n’est utilisée que dans la réponse à une requête GetCapabilities.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unit</span></code> (optional): dimension unit. This information is used only in the
+GetCapabilities response.</p></li>
 </ul>
 </div></blockquote>
 </div>
 <div class="section" id="dimension-types">
-<h3>Types de dimensions<a class="headerlink" href="#dimension-types" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Dimension Types<a class="headerlink" href="#dimension-types" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Several types of dimensions are supported by MapCache: Values, Regex, SQLite,
 PostgreSQL, ElasticSearch and Time. They can be classified into two groups
 depending on how dimension values are defined:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>Dimensions de premier niveau: <code class="docutils literal notranslate"><span class="pre">values</span></code> et <code class="docutils literal notranslate"><span class="pre">regex</span></code>. Les valeurs de la dimension sont spécifiées statiquement dans le fichier de configuration.</p></li>
+<li><p>First level dimension types: Values and Regex. Dimensions values are
+statically specified in the configuration file.</p></li>
 <li><p>Second level dimensions types: SQLite, PostgreSQL, ElasticSearch and Time.
 Dimensions values are stored in a dynamic backend (SQLite file, PostgreSQL
 database or ElasticSearch index) so that an update in the dimension values
@@ -212,12 +226,13 @@ does not involve a server restart.</p></li>
 </div>
 </div>
 <div class="section" id="first-level-dimensions">
-<h2>Dimensions de premier niveau<a class="headerlink" href="#first-level-dimensions" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Les dimensions de premier niveau définissent leurs valeurs dans le fichier de configuration.</p>
+<h2>First Level Dimensions<a class="headerlink" href="#first-level-dimensions" title="Lien permanent vers ce titre">¶</a></h2>
+<p>First level dimensions define values in the configuration file.</p>
 <div class="section" id="values-dimensions">
-<h3>Dimensions de type <code class="docutils literal notranslate"><span class="pre">values</span></code><a class="headerlink" href="#values-dimensions" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Une dimension de type <code class="docutils literal notranslate"><span class="pre">values</span></code> donne la liste de toutes ses valeurs possibles. Le nom de la dimension est utilisée comme clé dans une requête WMS ou WMTS, par exemple <code class="docutils literal notranslate"><span class="pre">&amp;DIM1=foobarbaz</span></code>.</p>
-<p>Lorsqu’un client ne fournit pas de valeur explicite pour la dimension, alors la valeur par défaut est prise en compte (c’est-à-dire <code class="docutils literal notranslate"><span class="pre">foobar</span></code> dans cet exemple).</p>
+<h3>Values Dimensions<a class="headerlink" href="#values-dimensions" title="Lien permanent vers ce titre">¶</a></h3>
+<p>A Values type dimension lists all possible dimension values. The name of the dimension is used as the key in a query string when accessing
+through a WMS or WMTS service, for example <code class="docutils literal notranslate"><span class="pre">&amp;DIM1=foobarbaz</span></code>.</p>
+<p>If a client does not provide the dimension as a key value pair the default will be used (in this example <code class="docutils literal notranslate"><span class="pre">foobar</span></code>).</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;tileset</span> <span class="na">name=</span><span class="s">&quot;LayerName&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;source&gt;</span>LayerSource<span class="nt">&lt;/source&gt;</span>
     <span class="nt">&lt;cache&gt;</span>sqlite<span class="nt">&lt;/cache&gt;</span>
@@ -238,10 +253,14 @@ does not involve a server restart.</p></li>
 </div>
 </div>
 <div class="section" id="regex-dimensions">
-<h3>Dimensions de type <code class="docutils literal notranslate"><span class="pre">regex</span></code><a class="headerlink" href="#regex-dimensions" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Une alternative à une liste de valeurs en dur, est l’utilisation d’expressions régulières.</p>
-<p>L’exemple suivant crée une dimension MAPFILE, afin d’utiliser le même jeu de tuiles MapCache avec différents Mapfiles MapServer. MapCache n’a pas besoin de connaître les noms des Mapfiles, qui peuvent alors être créés après le démarrage de MapCache.</p>
-<p>Lorsqu’un utilisateur passe <code class="docutils literal notranslate"><span class="pre">MAPFILE=/path/to/mapfile</span></code>, MapCache vérifie que la chaîne <code class="docutils literal notranslate"><span class="pre">/path/to/mapfile</span></code> répond à l’expression régulière (PCRE) définie dans le fichier de configuration. Dans cet exemple, l’expression régulière valide un nom composé de caractères alphanumériques séparés par des barres obliques (/) et se terminant par « .map » ( [a-zA-Z0-9./]*.map$ ), mais échoue en présence de deux points consécutifs (..) afin d’empêcher toute traversée du système de fichiers.</p>
+<h3>Regex Dimensions<a class="headerlink" href="#regex-dimensions" title="Lien permanent vers ce titre">¶</a></h3>
+<p>An alternative to the hard-coded list of values is to use regular expressions.</p>
+<p>The following example creates a MAPFILE dimension, for using the same MapCache tileset with different MapServer
+Mapfiles. The name of the Mapfiles need not be known to MapCache, and can therefore be created even after MapCache has been started.</p>
+<p>When a user passes a <code class="docutils literal notranslate"><span class="pre">MAPFILE=/path/to/mapfile</span></code>, the string <code class="docutils literal notranslate"><span class="pre">/path/to/mapfile</span></code> is validated against
+the supplied (PCRE) regular expression. The one in this example allows a name composed of alphanumeric characters
+separated by slashes (/) and finishing with « .map » ( [a-zA-Z0-9./]*.map$ ) , but will fail if there
+are two consecutive dots (..) in the path, to prevent file-system traversal.</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;regex&quot;</span> <span class="na">name=</span><span class="s">&quot;MAPFILE&quot;</span> <span class="na">default=</span><span class="s">&quot;/path/to/mapfile.map&quot;</span><span class="nt">&gt;</span>
         <span class="nt">&lt;regex&gt;</span>^(?!.*\.\.)[a-zA-Z0-9\./]*\.map$<span class="nt">&lt;/regex&gt;</span>
 <span class="nt">&lt;/dimension&gt;</span>
@@ -250,23 +269,30 @@ does not involve a server restart.</p></li>
 </div>
 </div>
 <div class="section" id="second-level-dimensions">
-<h2>Dimensions de deuxième niveau<a class="headerlink" href="#second-level-dimensions" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Second Level Dimensions<a class="headerlink" href="#second-level-dimensions" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Second level dimensions store values in a dynamic back-end, a SQLite file, a
 PostgreSQL database or an ElasticSearch index. This allows for adding new
 dimension values without modifying MapCache configuration file, which otherwise
 would need to restart the server.</p>
 <div class="section" id="sqlite-dimensions">
-<h3>Dimensions de type <code class="docutils literal notranslate"><span class="pre">sqlite</span></code><a class="headerlink" href="#sqlite-dimensions" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Dans une dimension de type <code class="docutils literal notranslate"><span class="pre">sqlite</span></code> les valeurs de dimension sont stockées dans un fichier SQLite. De plus, chaque valeur référence une liste de valeurs internes, dites de sous-dimension, qui sont utilisées pour formuler les requêtes au cache.</p>
-<p>Par exemple, soit une dimension « sensor » dont les valeurs possibles représentent divers satellites d’observation de la Terre. Une requête WMS avec cette dimension peut contenir: <code class="docutils literal notranslate"><span class="pre">...&amp;dim_sensor=spot&amp;...</span></code> Dans cet exemple, chaque capteur référence plusieurs types de données selon une sous-dimension interne nommée « product ». Un exemple du contenu de la dimension « sensor » est représenté sur la table suivante:</p>
+<h3>SQLite Dimensions<a class="headerlink" href="#sqlite-dimensions" title="Lien permanent vers ce titre">¶</a></h3>
+<p>In a SQLite dimension, dimension values are stored in a SQLite file. Moreover,
+each value references a list of internal, or sub-dimension values which are
+used to query cache.</p>
+<p>For example, let’s define a « sensor » dimension whose allowed values represent
+various Earth observation spacecrafts. A WMS request with that dimension may
+contain, e.g.: <code class="docutils literal notranslate"><span class="pre">...&amp;dim_sensor=spot&amp;...</span></code> In this example, each sensor
+references several data along an internal « product » sub-dimension. An example
+of the « sensor » dimension back-end contents is represented in the following
+table:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 43%" />
 <col style="width: 57%" />
 </colgroup>
 <thead>
-<tr class="row-odd"><th class="head"><p>Dimension « sensor »</p></th>
-<th class="head"><p>Sous-dimension « product »</p></th>
+<tr class="row-odd"><th class="head"><p>Sensor dimension</p></th>
+<th class="head"><p>Product sub-dimension</p></th>
 </tr>
 </thead>
 <tbody>
@@ -287,8 +313,12 @@ would need to restart the server.</p>
 </tr>
 </tbody>
 </table>
-<p>La requête WMS se passe au niveau de la dimension « sensor ». La requête sur le cache a lieu au niveau de la sous-dimension « product ». Dans le cas d’un défaut de cache, les valeurs de la sous-dimension « product » sont utilisées pour formuler une requête à la source de données.</p>
-<p>Une requête à une dimension de type <code class="docutils literal notranslate"><span class="pre">sqlite</span></code> peut alors renvoyer plusieurs valeurs de sous-dimensions, chacune faisant référence à des tuiles distinctes. Assembler ces tuiles est décrit dans la section <a class="reference internal" href="#tile-assembly-policies">Tile Assembly Policies</a> plus loin.</p>
+<p>The WMS request occurs at the « sensor » dimension level. The cache query is
+performed at the « product » sub-dimension level. In case of a cache miss, the
+« product » sub-dimension values are used to query the data source.</p>
+<p>Querying the back-end may then result in returning multiple sub-dimension
+values, each of which referencing distinct tiles. Assembling these tiles is
+described in <a class="reference internal" href="#tile-assembly-policies">Tile Assembly Policies</a> section below.</p>
 <p>A SQLite dimension is configured by specifying three elements:</p>
 <blockquote>
 <div><ul class="simple">
@@ -329,6 +359,8 @@ for a given dimension value, e.g. <strong>spot-img1</strong> and <strong>spot-im
 <span class="nt">&lt;/dimension&gt;</span>
 </pre></div>
 </div>
+<p>As illustrated in this example with <code class="docutils literal notranslate"><span class="pre">:dim</span></code> placeholder, queries can contain
+template entries. See <a class="reference internal" href="#templating-dimension-queries">Templating dimension queries</a> section below.</p>
 </div>
 <div class="section" id="postgresql-dimensions">
 <h3>PostgreSQL Dimensions<a class="headerlink" href="#postgresql-dimensions" title="Lien permanent vers ce titre">¶</a></h3>
@@ -375,6 +407,8 @@ for a given dimension value, e.g. <strong>spot-img1</strong> and <strong>spot-im
 <span class="nt">&lt;/dimension&gt;</span>
 </pre></div>
 </div>
+<p>As illustrated in this example with <code class="docutils literal notranslate"><span class="pre">:dim</span></code> placeholder, queries can contain
+template entries. See <a class="reference internal" href="#templating-dimension-queries">Templating dimension queries</a> section below.</p>
 </div>
 <div class="section" id="elasticsearch-dimensions">
 <h3>ElasticSearch Dimensions<a class="headerlink" href="#elasticsearch-dimensions" title="Lien permanent vers ce titre">¶</a></h3>
@@ -509,9 +543,11 @@ actual sub-dimension values from the raw ElasticSearch response to the
 <span class="nt">&lt;/dimension&gt;</span>
 </pre></div>
 </div>
+<p>As illustrated in this example with <code class="docutils literal notranslate"><span class="pre">:dim</span></code> placeholder, queries can contain
+template entries. See <a class="reference internal" href="#templating-dimension-queries">Templating dimension queries</a> section below.</p>
 </div>
 <div class="section" id="time-dimensions">
-<h3>Dimensions de type <code class="docutils literal notranslate"><span class="pre">time</span></code><a class="headerlink" href="#time-dimensions" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Time Dimensions<a class="headerlink" href="#time-dimensions" title="Lien permanent vers ce titre">¶</a></h3>
 <p>MapCache supports WMTS and WMS requests that include a TIME parameter, for both
 timestamps and time intervals.  See <a class="reference internal" href="../development/rfc/ms-rfc-96.html#rfc96"><span class="std std-ref">MS RFC 96: Time Dimension Support in
 MapCache Tilesets</span></a> initial proposal for further details.</p>
@@ -519,8 +555,12 @@ MapCache Tilesets</span></a> initial proposal for further details.</p>
 elements must be provided:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;dbfile&gt;</span></code>: Emplacement du fichier SQLite qui sert de support à la dimension de type <code class="docutils literal notranslate"><span class="pre">time</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;query&gt;</span></code>: Requête SQL qui renvoie la liste des valeurs de dates disponibles dans un intervalle de temps donné. Dans cette requête, la date de début et la date de fin sont représentées par les variables de substitution <code class="docutils literal notranslate"><span class="pre">:start_timestamp</span></code> et <code class="docutils literal notranslate"><span class="pre">:end_time_stamp</span></code>. Les valeurs renvoyées doivent être au format de date <code class="docutils literal notranslate"><span class="pre">yyyy-mm-ddThh:mm:ssZ</span></code>, tel que spécifié dans la <a class="reference external" href="https://tools.ietf.org/html/rfc3339">RFC 3339</a> mais restreint à l’UTC.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;dbfile&gt;</span></code>: Location of the SQLite file implementing the time dimension</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;query&gt;</span></code>: SQL query returning the list of available timestamp values
+within a given time interval. In that query, start time and end time are
+represented by the respective placeholders <code class="docutils literal notranslate"><span class="pre">:start_timestamp</span></code> and
+<code class="docutils literal notranslate"><span class="pre">:end_time_stamp</span></code>. Returned values shall be in <code class="docutils literal notranslate"><span class="pre">yyyy-mm-ddThh:mm:ssZ</span></code>
+time format, as specified in <a class="reference external" href="https://tools.ietf.org/html/rfc3339">RFC 3339</a>, but restricted to UTC.</p></li>
 </ul>
 </div></blockquote>
 <p>From MapCache 1.8 on, dynamic back-ends for Time dimensions can be PostgreSQL
@@ -532,7 +572,9 @@ dimension with an implicit SQLite back-end. Example in the following section
 highlights differences.</p>
 <p>Time values in the dynamic back-end are expressed in Unix time, i.e. the number
 of seconds that have elapsed since January 1, 1970 (midnight UTC).</p>
-<p>Une requête temporelle avec un intervalle peut renvoyer plusieurs valeurs de dates, chacune faisant référence à des tuiles distinctes. Assembler ces tuiles est décrit dans la section <a class="reference internal" href="#tile-assembly-policies">Tile Assembly Policies</a> plus loin.</p>
+<p>Querying the back-end with an interval may result in returning multiple
+timestamp values, each of which referencing distinct tiles. Assembling these
+tiles is described in <a class="reference internal" href="#tile-assembly-policies">Tile Assembly Policies</a> section below.</p>
 <div class="section" id="configuring-a-time-dimension-using-a-default-sqlite-back-end">
 <h4>Configuring a Time Dimension using a default SQLite back-end<a class="headerlink" href="#configuring-a-time-dimension-using-a-default-sqlite-back-end" title="Lien permanent vers ce titre">¶</a></h4>
 <table class="docutils align-default">
@@ -690,15 +732,33 @@ of seconds that have elapsed since January 1, 1970 (midnight UTC).</p>
 </div>
 </div>
 </div>
+<div class="section" id="templating-dimension-queries">
+<h3>Templating dimension queries<a class="headerlink" href="#templating-dimension-queries" title="Lien permanent vers ce titre">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;list_query&gt;</span></code> can contain template entries that
+will be replaced at runtime by correct values. Valid template entries are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">:dim</span></code> Dimension value as provided in incoming HTTP request</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:tileset</span></code> Tileset name</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:gridsrs</span></code> Grid SRS</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:minx</span></code>, <code class="docutils literal notranslate"><span class="pre">:miny</span></code>, <code class="docutils literal notranslate"><span class="pre">:maxx</span></code>, <code class="docutils literal notranslate"><span class="pre">:maxy</span></code> Parameters for rectangular extent</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:start_timestamp</span></code>, <code class="docutils literal notranslate"><span class="pre">:end_timestamp</span></code> Parameters for time interval</p></li>
+</ul>
+</div>
 <div class="section" id="tile-assembly-policies">
-<h3>Politiques d’assemblage des tuiles<a class="headerlink" href="#tile-assembly-policies" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Lorsque plusieurs valeurs de temps ou de sous-dimensions sont renvoyées suite à une requête à une dimension de deuxième niveau, la tuile résultante est un assemblage de toutes les tuiles simples associées à chaque valeur. La façon dont ces tuiles sont assemblées est définie avec l’élément <code class="docutils literal notranslate"><span class="pre">&lt;assembly_type&gt;</span></code> de la section <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code>. Seulement deux valeurs sont prises en charge par MapCache:</p>
+<h3>Tile Assembly Policies<a class="headerlink" href="#tile-assembly-policies" title="Lien permanent vers ce titre">¶</a></h3>
+<p>When several time or sub-dimension values are returned from a dimension
+back-end query, the resulting tile is an assembly of all simple tiles matching
+each value. The way simple tiles are assembled is set with the
+<code class="docutils literal notranslate"><span class="pre">&lt;assembly_type&gt;</span></code> tag of the <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code> element. Currently only two
+values are implemented in MapCache:</p>
 <blockquote>
 <div><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">none</span></code>: Aucun assemblage n’est réalisé, la tuile résultante est la première tuile récupérée du cache. C’est la valeur par défaut.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">stack</span></code>: Chaque pixel de la tuile résultante est rempli avec le premier pixel opaque trouvé dans toutes les tuiles dans leur ordre de récupération, par exemple:</p>
-<table class="docutils align-default" id="type-d-assemblage-stack">
-<caption><span class="caption-text">Type d’assemblage: <code class="docutils literal notranslate"><span class="pre">stack</span></code></span><a class="headerlink" href="#type-d-assemblage-stack" title="Lien permanent vers ce tableau">¶</a></caption>
+<li><p><code class="docutils literal notranslate"><span class="pre">none</span></code>: No assembly is performed, the resulting tile is the first
+retrieved simple tile. This is the default value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stack</span></code>: Every pixel of the resulting tile is filled with the first
+opaque pixel found in all simple tiles in their retrieval order, e.g.:</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Assembly type: <code class="docutils literal notranslate"><span class="pre">stack</span></code></span><a class="headerlink" href="#id1" title="Lien permanent vers ce tableau">¶</a></caption>
 <colgroup>
 <col style="width: 33%" />
 <col style="width: 33%" />
@@ -712,17 +772,21 @@ of seconds that have elapsed since January 1, 1970 (midnight UTC).</p>
 <td><a class="reference internal image-reference" href="../_images/mapcache-assembly-stack-3.png"><img alt="../_images/mapcache-assembly-stack-3.png" src="../_images/mapcache-assembly-stack-3.png" style="width: 149.0px; height: 125.0px;" /></a>
 </td>
 </tr>
-<tr class="row-even"><td><p>Produit 1</p></td>
-<td><p>Produit 2</p></td>
-<td><p>Assemblage <code class="docutils literal notranslate"><span class="pre">stack</span></code> des produits 1 et 2</p></td>
+<tr class="row-even"><td><p>Product #1</p></td>
+<td><p>Product #2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">stack</span></code> assembly of Products #1 &amp; #2</p></td>
 </tr>
 </tbody>
 </table>
 </li>
 </ul>
 </div></blockquote>
-<p>Il est possible de choisir si la tuile résultante doit être stockée dans le cache ou non, via l’élément <code class="docutils literal notranslate"><span class="pre">&lt;store_assemblies&gt;</span></code> de la section <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code>. Les deux valeurs possibles sont <code class="docutils literal notranslate"><span class="pre">true</span></code> et <code class="docutils literal notranslate"><span class="pre">false</span></code>. La valeur par défaut est <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
-<p>L’élément <code class="docutils literal notranslate"><span class="pre">&lt;subdimensions_read_only&gt;</span></code> de la section <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code> indique si la source de données doit être interrogée en cas de défaut de cache. Les deux valeurs possibles sont <code class="docutils literal notranslate"><span class="pre">true</span></code> et <code class="docutils literal notranslate"><span class="pre">false</span></code>. La valeur par défaut est <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>The resulting tile may or may not be cached depending on the value of the
+<code class="docutils literal notranslate"><span class="pre">&lt;store_assemblies&gt;</span></code> tag of the <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code> element. The two possible
+values are <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">false</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&lt;subdimensions_read_only&gt;</span></code> tag of the <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code> element indicates
+whether data source shall be queried in case of cache miss. The two possible
+values are <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">false</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;dimensions&gt;</span>
     <span class="nt">&lt;assembly_type&gt;</span>stack<span class="nt">&lt;/assembly_type&gt;</span>
     <span class="nt">&lt;store_assemblies&gt;</span>true<span class="nt">&lt;/store_assemblies&gt;</span>
@@ -734,16 +798,19 @@ of seconds that have elapsed since January 1, 1970 (midnight UTC).</p>
 </div>
 </div>
 <div class="section" id="storing-dimensions">
-<h2>Stockage des dimensions<a class="headerlink" href="#storing-dimensions" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Dans un cache de type disque, les tuiles sont stockées dans une structure de dossier ressemblant à <code class="docutils literal notranslate"><span class="pre">base/gridname/DIM1/value/xx/xx/xx/xx/xx/xx.png</span></code> (où DIM1 est la valeur de dimension).</p>
-<p>L’ordre des éléments <code class="docutils literal notranslate"><span class="pre">&lt;dimension&gt;</span></code> à l’intérieur de la section <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code> est important car il est utilisé pour créer la structure de répertoires pour le cache de type disque. Si l’ordre est modifié, toutes les tuiles qui ont été déjà stockées dans le cache sont invalidées (elles deviennent inaccessibles à MapCache mais ne sont pas détruites).</p>
-<p>Les « templates » peuvent être utilisés pour adapter la structure des dossiers, par exemple:</p>
+<h2>Storing Dimensions<a class="headerlink" href="#storing-dimensions" title="Lien permanent vers ce titre">¶</a></h2>
+<p>When using a disk based cache tiles will be stored in a folder structure similar to
+<code class="docutils literal notranslate"><span class="pre">base/gridname/DIM1/value/xx/xx/xx/xx/xx/xx.png</span></code> (where DIM1 is the dimension value).</p>
+<p>The order of the <code class="docutils literal notranslate"><span class="pre">&lt;dimension&gt;</span></code> tags inside the <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code> tag  is important as it is used
+to create the directory structure for the disk cache. If you change the order of these
+values, any tiles that have been previously cached are invalidated (they will be unavailable to MapCache but not deleted).</p>
+<p>Templates can be used to change the folder structure for example:</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tmpl&quot;</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;template&gt;</span>/tmp/template-test/{tileset}#{grid}#{dim}/{z}/{x}/{y}.{ext}<span class="nt">&lt;/template&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
-<p>Les « templates » peuvent aussi être utilisés pour adapter le nom d’un fichier SQLite, par exemple:</p>
+<p>Templates can also be used to change Sqlite database names e.g.</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- the following will create databases named TilesetName-#DimensionValue.db --&gt;</span>
 <span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
    <span class="nt">&lt;dbfile&gt;</span>{tileset}-{dim}.db<span class="nt">&lt;/dbfile&gt;</span>
@@ -753,9 +820,11 @@ of seconds that have elapsed since January 1, 1970 (midnight UTC).</p>
 </div>
 </div>
 <div class="section" id="accessing-tile-caches-with-dimensions">
-<h2>Accès à un cache de tuiles à l’aide des dimensions<a class="headerlink" href="#accessing-tile-caches-with-dimensions" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Pour obtenir une tuile avec une dimension spécifique, il suffit d’ajouter le nom de la dimension et sa valeur à la requête, par exemple: <code class="docutils literal notranslate"><span class="pre">&amp;DIM1=value</span></code></p>
-<p>Seuls les clients WMS et WMTS supportent le passage des dimensions à MapCache. Les autres services de tuiles, tels que gmaps (GoogleMaps), tms et KML ne supportent pas les dimensions. Toutefois, WMTS permet l’accès à une tuile selon un schéma d’adressage x,y,z, ce qui ouvre la possibilité à des clients de tuiles (par exemple une couche OpenLayers <code class="docutils literal notranslate"><span class="pre">ol.source.XYZ</span></code>) d’accéder à un jeu de tuiles avec dimensions grâce à une réécriture d’URL sur le serveur web.</p>
+<h2>Accessing Tile Caches with Dimensions<a class="headerlink" href="#accessing-tile-caches-with-dimensions" title="Lien permanent vers ce titre">¶</a></h2>
+<p>To retrieve a tile with a specific dimension, add the dimension name and value to the request query string e.g. <code class="docutils literal notranslate"><span class="pre">&amp;DIM1=value</span></code></p>
+<p>Only WMS and WMTS clients support passing dimensions to MapCache. Other tile services such as gmaps (GoogleMaps), tms, and KML
+do not support dimensions. WMTS however does allow access using a x,y,z addressing scheme, so by using URL rewriting on the web server
+tile-based clients (for example an OpenLayers <code class="docutils literal notranslate"><span class="pre">ol.source.XYZ</span></code> layer) can load a dimension-based tileset.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># a URL such as the following</span>
 <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">servername</span><span class="o">/</span><span class="n">tiles</span><span class="o">/</span><span class="mi">13</span><span class="o">/</span><span class="mi">3914</span><span class="o">/</span><span class="mf">2687.</span><span class="n">png</span>
 <span class="c1"># can be rewritten into a WMTS request - note WMTS uses {z}/{y}/{x} rather than {z}/{x}/{y}</span>
@@ -765,8 +834,8 @@ of seconds that have elapsed since January 1, 1970 (midnight UTC).</p>
 </div>
 </div>
 <div class="section" id="seeding-tile-caches-with-dimensions">
-<h2>Alimenter un cache de tuiles à l’aide des dimensions<a class="headerlink" href="#seeding-tile-caches-with-dimensions" title="Lien permanent vers ce titre">¶</a></h2>
-<p><a class="reference internal" href="seed.html#mapcache-seed"><span class="std std-ref">L’outil d’alimentation de MapCache</span></a> autorise d’alimenter des dimensions spécifiques avec la syntaxe suivante:</p>
+<h2>Seeding Tile Caches with Dimensions<a class="headerlink" href="#seeding-tile-caches-with-dimensions" title="Lien permanent vers ce titre">¶</a></h2>
+<p>The <a class="reference internal" href="seed.html#mapcache-seed"><span class="std std-ref">MapCache seeding tool</span></a> allows specific dimensions to be seeded with the following syntax:</p>
 <div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>mapcache_seed -c mapcache_config.xml -t tileset1 -e -1187000,6695000,-605000,7450000 -z 7,10 --dimension DIMENSION_NAME=DIMENSION_VALUE
 </pre></div>
 </div>
@@ -802,33 +871,34 @@ of seconds that have elapsed since January 1, 1970 (midnight UTC).</p>
 </p>
   <h3>Current Table Of Contents</h3>
   <ul>
-<li><a class="reference internal" href="#">Dimensions d’un jeu de tuiles</a><ul>
+<li><a class="reference internal" href="#">Tileset Dimensions</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#enabling-dimension-support-in-mapcache">Activation des dimensions dans MapCache</a><ul>
-<li><a class="reference internal" href="#dimension-attributes">Attributs de dimension</a></li>
-<li><a class="reference internal" href="#dimension-types">Types de dimensions</a></li>
+<li><a class="reference internal" href="#enabling-dimension-support-in-mapcache">Enabling Dimension Support in MapCache</a><ul>
+<li><a class="reference internal" href="#dimension-attributes">Dimension Attributes</a></li>
+<li><a class="reference internal" href="#dimension-types">Dimension Types</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#first-level-dimensions">Dimensions de premier niveau</a><ul>
-<li><a class="reference internal" href="#values-dimensions">Dimensions de type <code class="docutils literal notranslate"><span class="pre">values</span></code></a></li>
-<li><a class="reference internal" href="#regex-dimensions">Dimensions de type <code class="docutils literal notranslate"><span class="pre">regex</span></code></a></li>
+<li><a class="reference internal" href="#first-level-dimensions">First Level Dimensions</a><ul>
+<li><a class="reference internal" href="#values-dimensions">Values Dimensions</a></li>
+<li><a class="reference internal" href="#regex-dimensions">Regex Dimensions</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#second-level-dimensions">Dimensions de deuxième niveau</a><ul>
-<li><a class="reference internal" href="#sqlite-dimensions">Dimensions de type <code class="docutils literal notranslate"><span class="pre">sqlite</span></code></a></li>
+<li><a class="reference internal" href="#second-level-dimensions">Second Level Dimensions</a><ul>
+<li><a class="reference internal" href="#sqlite-dimensions">SQLite Dimensions</a></li>
 <li><a class="reference internal" href="#postgresql-dimensions">PostgreSQL Dimensions</a></li>
 <li><a class="reference internal" href="#elasticsearch-dimensions">ElasticSearch Dimensions</a></li>
-<li><a class="reference internal" href="#time-dimensions">Dimensions de type <code class="docutils literal notranslate"><span class="pre">time</span></code></a><ul>
+<li><a class="reference internal" href="#time-dimensions">Time Dimensions</a><ul>
 <li><a class="reference internal" href="#configuring-a-time-dimension-using-a-default-sqlite-back-end">Configuring a Time Dimension using a default SQLite back-end</a></li>
 <li><a class="reference internal" href="#configuring-a-time-dimension-using-an-explicit-back-end">Configuring a Time dimension using an explicit back-end</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#tile-assembly-policies">Politiques d’assemblage des tuiles</a></li>
+<li><a class="reference internal" href="#templating-dimension-queries">Templating dimension queries</a></li>
+<li><a class="reference internal" href="#tile-assembly-policies">Tile Assembly Policies</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#storing-dimensions">Stockage des dimensions</a></li>
-<li><a class="reference internal" href="#accessing-tile-caches-with-dimensions">Accès à un cache de tuiles à l’aide des dimensions</a></li>
-<li><a class="reference internal" href="#seeding-tile-caches-with-dimensions">Alimenter un cache de tuiles à l’aide des dimensions</a></li>
+<li><a class="reference internal" href="#storing-dimensions">Storing Dimensions</a></li>
+<li><a class="reference internal" href="#accessing-tile-caches-with-dimensions">Accessing Tile Caches with Dimensions</a></li>
+<li><a class="reference internal" href="#seeding-tile-caches-with-dimensions">Seeding Tile Caches with Dimensions</a></li>
 </ul>
 </li>
 </ul>
@@ -847,17 +917,17 @@ of seconds that have elapsed since January 1, 1970 (midnight UTC).</p>
           <a href="http.html" title="HTTP Requests"
              >suivant</a> |</li>
         <li class="right" >
-          <a href="formats.html" title="Formats d’image"
+          <a href="formats.html" title="Image Formats"
              >précédent</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.4.1 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.4.2 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >MapCache 1.8.0</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Mis à jour le 2019-07-24.
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Mis à jour le 2019-12-05.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
     </div>
   </body>
 </html>
