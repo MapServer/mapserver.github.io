@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
   <head>
     <meta charset="utf-8" />
-    <title>Compiling on Unix &#8212; MapServer 7.4.2 documentation</title>
+    <title>Compiling on Unix &#8212; MapServer 7.4.3 documentation</title>
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -126,7 +126,7 @@
           <a href="index.html" title="Installation"
              accesskey="P">назад</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.4.2 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.4.3 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Installation</a> &#187;</li> 
       </ul>
     </div>
@@ -159,7 +159,7 @@
 <dd class="field-even"><p>jmckenna at gatewaygeomatics.com</p>
 </dd>
 <dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2019-11-21</p>
+<dd class="field-odd"><p>2019-12-13</p>
 </dd>
 </dl>
 <div class="contents topic" id="table-of-contents">
@@ -201,9 +201,14 @@ additional information.</p>
 <div class="section" id="required-external-libraries">
 <h3>Required External Libraries<a class="headerlink" href="#required-external-libraries" title="Ссылка на этот заголовок">¶</a></h3>
 <ul>
+<li><p><a class="reference external" href="https://gdal.org/">GDAL</a>: the GDAL library allows MapServer to read a variety of geospatial
+raster formats (GDAL) and vector formats (OGR).  It can be downloaded at
+<a class="reference external" href="https://gdal.org/">https://gdal.org/</a>.  (some platforms refer to this library as <cite>libgdal-dev</cite>)</p></li>
+<li><p><a class="reference external" href="https://proj.org">PROJ</a>: PROJ provides projection support for MapServer.
+Version 4.4.6 or greater is required.</p></li>
 <li><p><a class="reference external" href="http://www.libpng.org/pub/png/libpng.html">libpng</a>: libpng should be on your system by default.  Versions
 back to 1.2.7 should work.</p></li>
-<li><p><a class="reference external" href="http://www.freetype.org/">freetype</a>: Version 2.x or above is required.</p></li>
+<li><p><a class="reference external" href="http://www.freetype.org/">FreeType</a>: Version 2.x or above is required.</p></li>
 <li><p><a class="reference external" href="http://www.ijg.org/">libjpeg</a>: libjpeg allows MapServer to render
 images in JPEG format.  A sufficient version should be installed by
 default on your system (probably version 6b from 1998).</p>
@@ -222,13 +227,8 @@ directly by mapserver, it’s a mandatory dependency of libpng.</p></li>
 <div class="section" id="highly-recommended-libraries">
 <h3>Highly Recommended Libraries<a class="headerlink" href="#highly-recommended-libraries" title="Ссылка на этот заголовок">¶</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://proj.org">libproj</a>: libproj provides projection support for MapServer.
-Version 4.4.6 or greater is required.</p></li>
 <li><p><a class="reference external" href="http://curl.haxx.se/libcurl/">libcurl</a>: libcurl is the foundation of OGC (WFS/WMS/WCS) client
 and server support.  Version 7.10 or greater is required.</p></li>
-<li><p><a class="reference external" href="https://gdal.org/">OGR</a>: OGR provides access to a lot of vector formats.</p></li>
-<li><p><a class="reference external" href="https://gdal.org/">GDAL</a>: GDAL provides access to a lot of
-raster formats.</p></li>
 </ul>
 </div>
 <div class="section" id="optional-external-libraries">
@@ -268,7 +268,7 @@ On Ubuntu, that would be:</p>
 <li><p><a class="reference external" href="http://cairographics.org/">Cairo (SVG, PDF) support</a>: This library is required to produce PDF
 and SVG outputs.  If you’re on an ubuntu system, it can be installed
 with «apt-get install -y libcairo2-dev»</p></li>
-<li><p><a class="reference external" href="https://mapserver.org/output/kml_output.html">KML support</a>: This renderer is has no external dependency.</p></li>
+<li><p><a class="reference internal" href="../output/kml_output.html#kml-output"><span class="std std-ref">KML support</span></a>: This renderer is has no external dependency.</p></li>
 </ul>
 <span class="target" id="index-1"></span><ul id="index-2">
 <li><p><a class="reference external" href="http://freedesktop.org/wiki/Software/HarfBuzz">HarfBuzz</a>: Support complex script shaping (to simplify: the tool
@@ -290,7 +290,7 @@ languages that actually require shaping).  Requires <a class="reference external
 <div class="section" id="optional-features">
 <h3>Optional Features<a class="headerlink" href="#optional-features" title="Ссылка на этот заголовок">¶</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://mapserver.org/development/rfc/ms-rfc-73.html">Cairo SVG parser support</a>: The WITH_SVGCAIRO option is part of a
+<li><p><a class="reference internal" href="../development/rfc/ms-rfc-73.html#rfc73"><span class="std std-ref">Cairo SVG parser support</span></a>: The WITH_SVGCAIRO option is part of a
 proposal to improve SVG support.  Using this feature requires
 installing the libsvg-cairo library available here:
 <a class="reference external" href="http://cairographics.org/snapshots/">http://cairographics.org/snapshots/</a> .  You will need to compile and
@@ -352,8 +352,8 @@ request it.</p>
 <h3>WFS support<a class="headerlink" href="#wfs-support" title="Ссылка на этот заголовок">¶</a></h3>
 <div class="section" id="wfs-server">
 <h4>WFS Server<a class="headerlink" href="#wfs-server" title="Ссылка на этот заголовок">¶</a></h4>
-<p>Support for <cite>WFS server</cite> is enabled by default. OGR and PROJ.4 support
-is required.</p>
+<p>Support for <cite>WFS server</cite> is enabled by default. GDAL (actually OGR) and PROJ support
+are required.</p>
 <p>To verify that this feature is enabled, check the configure output
 for:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span>   <span class="o">*</span> <span class="n">WFS</span> <span class="n">SERVER</span><span class="p">:</span> <span class="n">ENABLED</span>
@@ -371,7 +371,7 @@ MapServer reads it’s data from a remote server’s WFS output and
 renders it into a map, just like it would when reading data from a
 shapefile.</p>
 <p>In order to enable this feature, you will need to make sure you have
-OGR (built with Xerces support) and PROJ.4 support, and pass the
+GDAL (actually OGR) built with Xerces support and PROJ support, and pass the
 WITH_CLIENT_WFS option to your configure script.  MapServer will
 automatically look for libcurl, which is also required.</p>
 <p>To verify that this feature is enabled, check the configure output
@@ -466,11 +466,11 @@ recommended libraries are installed before attempting to compile MapServer.
 This will make your life much less complicated ;).  Here is the order that I
 usually use:</p>
 <ol class="arabic">
-<li><p>Compile GDAL/OGR.  Describing how to compile GDAL/OGR is beyond the scope
+<li><p>Compile GDAL.  Describing how to compile GDAL is beyond the scope
 of this document.  If you have requirements for lots of different formats,
 make sure to install those libraries first.  I often find that building
-up a GDAL/OGR library often takes as long as compiling MapServer itself!</p></li>
-<li><p>Compile PROJ.4.  PROJ.4 is a straight-forward configure/make/make install
+up a GDAL library often takes as long as compiling MapServer itself!</p></li>
+<li><p>Compile PROJ.  PROJ (formerly <cite>PROJ.4</cite>) is a straight-forward configure/make/make install
 library.</p></li>
 <li><p>Compile libcurl.  libcurl is a straight-forward configure/make/make
 install library.  This library is only used along with other
@@ -765,14 +765,14 @@ with MapServer.</p>
           <a href="index.html" title="Installation"
              >назад</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.4.2 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.4.3 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Installation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2019, Open Source Geospatial Foundation.
-      Обновлено: 2019-12-05.
-      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+      Обновлено: 2019-12-16.
+      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.0.
     </div>
   </body>
 </html>
