@@ -769,6 +769,33 @@ values are <code class="docutils literal notranslate"><span class="pre">true</sp
 </pre></div>
 </div>
 </div>
+<div class="section" id="tile-fetching-policies">
+<h3>Tile Fetching Policies<a class="headerlink" href="#tile-fetching-policies" title="Permalink to this headline">¶</a></h3>
+<p>MapCache can be configured to fetch all subtiles to assemble either within a
+single thread or with as many threads as subtiles to fetch. This is set with
+the <code class="docutils literal notranslate"><span class="pre">&lt;assembly_threaded_fetching&gt;</span></code> tag of the <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code> element. This
+tag has an optional <code class="docutils literal notranslate"><span class="pre">maxzoom</span></code> attribute to specify that multi-threaded
+fetching should be disabled from a given zoom level.</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;dimensions&gt;</span>
+    <span class="nt">&lt;assembly_threaded_fetching</span> <span class="na">maxzoom=</span><span class="s">&quot;5&quot;</span><span class="nt">&gt;</span>true<span class="nt">&lt;/assembly_threaded_fetching&gt;</span>
+    <span class="c">&lt;!-- ... --&gt;</span>
+    <span class="nt">&lt;dimension</span> <span class="nt">&gt;</span>...<span class="nt">&lt;/dimension&gt;</span>
+<span class="nt">&lt;/dimensions&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="querying-dimensions-at-map-level">
+<h3>Querying Dimensions at map level<a class="headerlink" href="#querying-dimensions-at-map-level" title="Permalink to this headline">¶</a></h3>
+<p>By default, MapCache runs <code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code> of second level dimensions for
+every requested tile of a map. When this involves slow remote PostgreSQL or
+ElasticSearch servers, it may be desirable to send the query only once for the
+whole map. A configuration option at the <code class="docutils literal notranslate"><span class="pre">&lt;dimension&gt;</span></code> level exists to enable
+this behaviour:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;dimension&gt;</span>
+   <span class="nt">&lt;wms_querybymap&gt;</span>true<span class="nt">&lt;/wms_querybymap&gt;</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="storing-dimensions">
 <h2>Storing Dimensions<a class="headerlink" href="#storing-dimensions" title="Permalink to this headline">¶</a></h2>
@@ -867,6 +894,8 @@ tile-based clients (for example an OpenLayers <code class="docutils literal notr
 </li>
 <li><a class="reference internal" href="#templating-dimension-queries">Templating dimension queries</a></li>
 <li><a class="reference internal" href="#tile-assembly-policies">Tile Assembly Policies</a></li>
+<li><a class="reference internal" href="#tile-fetching-policies">Tile Fetching Policies</a></li>
+<li><a class="reference internal" href="#querying-dimensions-at-map-level">Querying Dimensions at map level</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#storing-dimensions">Storing Dimensions</a></li>
@@ -899,7 +928,7 @@ tile-based clients (for example an OpenLayers <code class="docutils literal notr
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2020, Open Source Geospatial Foundation.
-      Last updated on 2020-01-20.
+      Last updated on 2020-01-27.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
