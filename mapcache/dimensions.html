@@ -543,8 +543,10 @@ attribute within a SQLite, PostgreSQL or ElasticSearch dimension configuration.<
 <p>Still, MapCache keeps an (almost) backward compatible configuration of Time
 dimension with an implicit SQLite back-end. Example in the following section
 highlights differences.</p>
-<p>Time values in the dynamic back-end are expressed in Unix time, i.e. the number
-of seconds that have elapsed since January 1, 1970 (midnight UTC).</p>
+<p>Time values used to query the dynamic back-end are expressed in Unix time,
+i.e. the number of seconds that have elapsed since January 1, 1970
+(midnight UTC). Returned times should be MapServer compatible strings
+(see the <a class="reference internal" href="../ogc/wms_time.html#wms-time"><span class="std std-ref">WMS Time documentation</span></a> for details).</p>
 <p>Querying the back-end with an interval may result in returning multiple
 timestamp values, each of which referencing distinct tiles. Assembling these
 tiles is described in <a class="reference internal" href="#tile-assembly-policies">Tile Assembly Policies</a> section below.</p>
@@ -595,7 +597,7 @@ tiles is described in <a class="reference internal" href="#tile-assembly-policie
             AND ts <span class="ni">&amp;lt;</span>= datetime(:end_timestamp,&quot;unixepoch&quot;)
        ORDER BY ts DESC
 <span class="hll">    <span class="nt">&lt;/validate_query&gt;</span>
-</span><span class="hll">    <span class="nt">&lt;list_query&gt;</span>SELECT ts FROM time<span class="nt">&lt;/list_query&gt;</span>
+</span><span class="hll">    <span class="nt">&lt;list_query&gt;</span>SELECT strftime(&quot;%Y-%m-%dT%H:%M:%SZ&quot;, ts) FROM time<span class="nt">&lt;/list_query&gt;</span>
 </span><span class="nt">&lt;/dimension&gt;</span>
 </pre></div>
 </div>
@@ -620,7 +622,7 @@ tiles is described in <a class="reference internal" href="#tile-assembly-policie
 <span class="c"> --&gt;</span>
 <span class="hll"> <span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;d1&quot;</span> <span class="na">time=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
 </span>   <span class="nt">&lt;dbfile&gt;</span>/data/times.sqlite<span class="nt">&lt;/dbfile&gt;</span>
-   <span class="nt">&lt;list_query&gt;</span>SELECT ts FROM timedim<span class="nt">&lt;/list_query&gt;</span>
+   <span class="nt">&lt;list_query&gt;</span>SELECT strftime(&quot;%Y-%m-%dT%H:%M:%SZ&quot;, ts) FROM timedim<span class="nt">&lt;/list_query&gt;</span>
    <span class="nt">&lt;validate_query&gt;</span>
         SELECT strftime(&quot;%Y-%m-%dT%H:%M:%SZ&quot;,ts) FROM timedim
          WHERE ts <span class="ni">&amp;gt;</span>= datetime(:start_timestamp,&quot;unixepoch&quot;)
@@ -643,7 +645,7 @@ tiles is described in <a class="reference internal" href="#tile-assembly-policie
 </span>   <span class="nt">&lt;connection&gt;</span>
      host=localhost user=mapcache password=mapcache dbname=times port=5433
    <span class="nt">&lt;/connection&gt;</span>
-   <span class="nt">&lt;list_query&gt;</span>SELECT ts FROM timedim<span class="nt">&lt;/list_query&gt;</span>
+   <span class="nt">&lt;list_query&gt;</span>SELECT to_char(ts, &#39;YYYY-MM-DD&quot;T&quot;HH24:MI:SS&quot;Z&quot;&#39;) FROM timedim<span class="nt">&lt;/list_query&gt;</span>
    <span class="nt">&lt;validate_query&gt;</span>
         SELECT to_char(ts,&#39;YYYY-MM-DD&quot;T&quot;HH24:MI:SS&quot;Z&quot;&#39;) FROM timedim
          WHERE ts <span class="ni">&amp;gt;</span>= to_timestamp(:start_timestamp)
