@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="Over deze documenten" href="../about.html" />
@@ -439,6 +439,55 @@ each template key with “_fmt”, e.g.:</p>
 <p class="admonition-title">Notitie</p>
 <p>If not specified, the default behavior is to use “%d” for formatting.</p>
 </div>
+</div>
+<div class="section" id="using-multiple-pyramids-in-multiple-sqlite-database-files-z-top">
+<h3>Using Multiple pyramids in multiple SQLite database files (Z-top)<a class="headerlink" href="#using-multiple-pyramids-in-multiple-sqlite-database-files-z-top" title="Permalink naar deze titel">¶</a></h3>
+<p>Another way of structuring SQLite caches consists in organizing them in
+multiple pyramids: one single pyramid on lowest zoom levels, then as many
+pyramids as tiles at a given zoom level, e.g. 8, refered to as <em>top zoom
+level</em>. Each of these pyramids starts with one tile at that top zoom level,
+then four tiles at next zoom level and so on. Of course the top zoom level
+value is configurable.</p>
+<p>The main advantage of this structure is when a user wants to work offline with
+only a subset of the World: Only two (relatively small) SQLite files have to be
+copied.</p>
+<p>Following is a figure illustrating this cache structure.</p>
+<a class="reference internal image-reference" href="../_images/mapcache-ztop1.png"><img alt="../_images/mapcache-ztop1.png" class="align-center" src="../_images/mapcache-ztop1.png" style="width: 523.0px; height: 559.0px;" /></a>
+<p>From a configuration point of view, a multi-SQLite cache of class <em>ztop</em> is
+specified with a <code class="docutils literal notranslate"><span class="pre">&lt;top&gt;</span></code> tag defining the top zoom level. Templates keys are
+needed to determine SQLite files to use.</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- multi-pyramid, multi-SQLite, starting at zoom level 8 --&gt;</span>
+<span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;z8&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+<span class="hll">  <span class="nt">&lt;top&gt;</span>8<span class="nt">&lt;/top&gt;</span>
+</span><span class="hll">  <span class="nt">&lt;dbfile</span> <span class="na">top_fmt=</span><span class="s">&quot;%02d&quot;</span><span class="nt">&gt;</span>/path/to/z{top}-{top_x}-{top_y}.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
+</span><span class="nt">&lt;/cache&gt;</span>
+
+<span class="c">&lt;!-- single cache from zoom levels 0 to 7 --&gt;</span>
+<span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;z1-7&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;dbfile&gt;</span>/path/to/z0-0-0.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+
+<span class="c">&lt;!-- Composite cache made of all caches to address all zoom levels --&gt;</span>
+<span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;zfull&quot;</span> <span class="na">type=</span><span class="s">&quot;composite&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;cache</span> <span class="na">min-zoom=</span><span class="s">&quot;0&quot;</span> <span class="na">max-zoom=</span><span class="s">&quot;7&quot;</span><span class="nt">&gt;</span>z1-7<span class="nt">&lt;/cache&gt;</span>
+  <span class="nt">&lt;cache</span> <span class="na">min-zoom=</span><span class="s">&quot;8&quot;</span><span class="nt">&gt;</span>z8<span class="nt">&lt;/cache&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+<p>The following template keys are available:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">{top}</span></code> is replaced by the top zoom level.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{top_x}</span></code> is replaced by the x value of the tile index at top zoom level,
+starting from left</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{top_y}</span></code> is replaced by the y value of the tile index at top zoom level,
+starting from bottom</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{inv_top_x}</span></code> is replaced by the x value of the tile index at top zoom level,
+starting from right</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{inv_top_y}</span></code> is replaced by the y value of the tile index at top zoom level,
+starting from top</p></li>
+</ul>
+<p>The following formatting attributes are available: <code class="docutils literal notranslate"><span class="pre">top_fmt</span></code>, <code class="docutils literal notranslate"><span class="pre">top_x_fmt</span></code>,
+<code class="docutils literal notranslate"><span class="pre">top_y_fmt</span></code>, <code class="docutils literal notranslate"><span class="pre">inv_top_x_fmt</span></code>, <code class="docutils literal notranslate"><span class="pre">inv_top_y_fmt</span></code>. They default to <code class="docutils literal notranslate"><span class="pre">&quot;%d&quot;</span></code>.</p>
 </div>
 </div>
 <div class="section" id="mbtiles-caches">
@@ -928,7 +977,7 @@ populate the fast memcache cache e.g. on restarts.</p>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
 <a href="../about.html" title="About">About</a><br>
 <a href="../products.html" title="Products">Products</a><br>
@@ -957,6 +1006,7 @@ populate the fast memcache cache e.g. on restarts.</p>
 <li><a class="reference internal" href="#custom-schema">Custom Schema</a></li>
 <li><a class="reference internal" href="#blank-tile-detection">Blank Tile Detection</a></li>
 <li><a class="reference internal" href="#using-multiple-sqlite-database-files">Using Multiple SQLite Database Files</a></li>
+<li><a class="reference internal" href="#using-multiple-pyramids-in-multiple-sqlite-database-files-z-top">Using Multiple pyramids in multiple SQLite database files (Z-top)</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#mbtiles-caches">MBTiles Caches</a></li>
@@ -1013,8 +1063,8 @@ populate the fast memcache cache e.g. on restarts.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2020, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2020-01-06.
-      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+      Laatste aanpassing op 2020-02-24.
+      Aangemaakt met <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.3.
     </div>
   </body>
 </html>

@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
     
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="Tentang dokumen ini" href="../about.html" />
@@ -186,20 +186,26 @@ defining where the request should be forwarded to.</p>
 <p>The rules apply to the key-value pair parameters received in the incoming request,
 and are added with the &lt;param&gt; keyword:</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;forwarding_rule</span> <span class="na">name=</span><span class="s">&quot;first rule&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;SERVICE&quot;</span> <span class="na">type=</span><span class="s">&quot;values&quot;</span><span class="nt">&gt;</span>WFS,WCS<span class="nt">&lt;/param&gt;</span>
-  <span class="c">&lt;!-- ... !&gt;</span>
-<span class="c">&lt;forwarding_rule&gt;</span>
+  <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;SERVICE&quot;</span> <span class="na">type=</span><span class="s">&quot;values&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;value&gt;</span>WFS<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;value&gt;</span>WCS<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;/param&gt;</span>
+  <span class="c">&lt;!-- ... --&gt;</span>
+<span class="nt">&lt;forwarding_rule&gt;</span>
 </pre></div>
 </div>
-<p>The &quot;type&quot; attribute is the same as what is allowed for <a class="reference internal" href="dimensions.html#mapcache-dimensions"><span class="std std-ref">dimensions</span></a>, i.e. allowed values are &quot;values&quot;, &quot;regex&quot;, and
-&quot;intervals&quot;. In the previous example, the rule would match any incoming
-request having ...&amp;SERVICE=WFS&amp;... or ...&amp;SERVICE=WCS&amp;... in its request
-parameters.</p>
+<p>The &quot;type&quot; attribute is the same as what is allowed for <a class="reference internal" href="dimensions.html#mapcache-dimensions"><span class="std std-ref">first level
+dimensions</span></a>, i.e. allowed values are &quot;values&quot; and
+&quot;regex&quot;. In the previous example, the rule would match any incoming request
+having ...&amp;SERVICE=WFS&amp;... or ...&amp;SERVICE=WCS&amp;... in its request parameters.</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;forwarding_rule</span> <span class="na">name=</span><span class="s">&quot;first rule&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;SERVICE&quot;</span> <span class="na">type=</span><span class="s">&quot;values&quot;</span><span class="nt">&gt;</span>WFS,WCS<span class="nt">&lt;/param&gt;</span>
-  <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;LAYERS&quot;</span> <span class="na">type=</span><span class="s">&quot;values&quot;</span><span class="nt">&gt;</span>somelayername<span class="nt">&lt;/param&gt;</span>
-  <span class="c">&lt;!-- ... !&gt;</span>
-<span class="c">&lt;forwarding_rule&gt;</span>
+  <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;SERVICE&quot;</span> <span class="na">type=</span><span class="s">&quot;values&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;value&gt;</span>WFS<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;value&gt;</span>WCS<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;/param&gt;</span>
+  <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;LAYERS&quot;</span> <span class="na">type=</span><span class="s">&quot;values&quot;</span><span class="nt">&gt;&lt;value&gt;</span>somelayername<span class="nt">&lt;/value&gt;&lt;/param&gt;</span>
+  <span class="c">&lt;!-- ... --&gt;</span>
+<span class="nt">&lt;forwarding_rule&gt;</span>
 </pre></div>
 </div>
 <p>Multiple rules can be used if the filtering has to be done on multiple
@@ -220,11 +226,11 @@ client.</p>
 <p>Once a &lt;forwarding_rule&gt; matches, its &lt;http&gt; child will be used to proxy the
 request to another server.</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;forwarding_rule</span> <span class="na">name=</span><span class="s">&quot;first rule&quot;</span><span class="nt">&gt;</span>
-  <span class="c">&lt;!-- ... !&gt;</span>
-<span class="c">  &lt;http&gt;</span>
-<span class="c">     &lt;url&gt;http://wmsserver/ogc.cgi?&lt;/url&gt;</span>
-<span class="c">  &lt;/http&gt;</span>
-<span class="c">&lt;forwarding_rule&gt;</span>
+  <span class="c">&lt;!-- ... --&gt;</span>
+  <span class="nt">&lt;http&gt;</span>
+     <span class="nt">&lt;url&gt;</span>http://wmsserver/ogc.cgi?<span class="nt">&lt;/url&gt;</span>
+  <span class="nt">&lt;/http&gt;</span>
+<span class="nt">&lt;forwarding_rule&gt;</span>
 </pre></div>
 </div>
 <div class="admonition seealso">
@@ -249,7 +255,7 @@ request to another server.</p>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
 <p>
 <a href="../about.html" title="About">About</a><br>
 <a href="../products.html" title="Products">Products</a><br>
@@ -293,8 +299,8 @@ request to another server.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Hak cipta</a> 2020, Open Source Geospatial Foundation.
-      Terakhir diperbarui pada 2020-01-06.
-      Dibuat menggunakan <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+      Terakhir diperbarui pada 2020-02-24.
+      Dibuat menggunakan <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.3.
     </div>
   </body>
 </html>
