@@ -159,14 +159,19 @@
 <p>Since MapML is mostly a mechanism to refer to OGC services (WMS, WFS and tile services), the MapML implementation automatically leverages existing WMS and WFS mapfile configuration parameters for the map and layers being served.</p>
 <p>In particular, the following mapfile configuration parameters will impact the MapML output and behaviours:</p>
 <ul class="simple">
-<li><p>ows_enable_requests: Either use “*” or add “GetMapML” to the list of requests to enable &lt;mapml&gt; output for specific layers (or at the map level for all layers)</p></li>
-<li><p>wms_getfeatureinfo_formatlist: add “text/mapml” to the list to enable WMS GetFeatureInfo in text/mapml format for a specific layer (or at the map level for all layers)</p></li>
-<li><p>wfs_getfeature_formatlist: add “text/mapml” to the list to enable WFS GetFeature in text/mapml format for a specific layer (or at the map level for all layers)</p></li>
-<li><p>ows_srs: the list of SRS codes specified in the ows_srs (or wms_srs/wfs_srs) metadata controls the MapML projection codes that will be enabled for &lt;mapml&gt; output
-- EPSG:3857 enables MapML PROJECTION OSMTILE
-- EPSG:3978 enables MapML PROJECTION CBMTILE
-- EPSG:5936 enables MapML PROJECTION APSTILE
-- EPSG:4326 and CRS:84 enable MapML PROJECTION WGS84</p></li>
+<li><p><strong>ows_enable_requests</strong>: Either use “*” or add “GetMapML” to the list of requests to enable &lt;mapml&gt; output for specific layers (or at the map level for all layers)</p></li>
+<li><p><strong>wms_getfeatureinfo_formatlist</strong>: add “text/mapml” to the list to enable WMS GetFeatureInfo in text/mapml format for a specific layer (or at the map level for all layers)</p></li>
+<li><p><strong>wfs_getfeature_formatlist</strong>: add “text/mapml” to the list to enable WFS GetFeature in text/mapml format for a specific layer (or at the map level for all layers)</p></li>
+<li><dl class="simple">
+<dt><strong>ows_srs</strong>: the list of SRS codes specified in the ows_srs (or wms_srs/wfs_srs) metadata controls the MapML projection codes that will be enabled for &lt;mapml&gt; output</dt><dd><ul>
+<li><p>EPSG:3857 enables MapML PROJECTION OSMTILE</p></li>
+<li><p>EPSG:3978 enables MapML PROJECTION CBMTILE</p></li>
+<li><p>EPSG:5936 enables MapML PROJECTION APSTILE</p></li>
+<li><p>EPSG:4326 and CRS:84 enable MapML PROJECTION WGS84</p></li>
+</ul>
+</dd>
+</dl>
+</li>
 </ul>
 </div>
 <div class="section" id="the-vendor-specific-getmapml-request">
@@ -271,7 +276,7 @@
 <div class="section" id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this headline">¶</a></h2>
 <p>Most of the MapML support code will live in mapml.c, with hooks calling it from mapwms.c and mapwfs.c.</p>
-<p>The text/mapml feature collection output format in response to GetFeatureinfo/GetFeature requests will be generated via a new OGR &lt;mapml&gt; output driver.</p>
+<p>The text/mapml feature collection output format in response to WMS GetFeatureinfo and WFS GetFeature requests will be generated via a new OGR &lt;mapml&gt; output driver.</p>
 </div>
 <div class="section" id="limitations-caveats">
 <h2>4. Limitations / caveats<a class="headerlink" href="#limitations-caveats" title="Permalink to this headline">¶</a></h2>
