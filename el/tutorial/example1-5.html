@@ -131,9 +131,9 @@
 <span id="example1-5"></span><h1>Example 1.5<a class="headerlink" href="#example-1-5" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h1>
 <div class="section" id="adding-a-raster-layer">
 <h2>Adding a Raster Layer<a class="headerlink" href="#adding-a-raster-layer" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
-<img alt="https://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-5.map&amp;layer=states&amp;layer=states_line&amp;layer=states_label&amp;layer=modis&amp;mode=map" src="https://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-5.map&amp;layer=states&amp;layer=states_line&amp;layer=states_label&amp;layer=modis&amp;mode=map" />
-<p>In addition to vector data support (point, lines, polygons, and
-annotations), MapServer can also display raster data. Through the use
+<img alt="https://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-5.map&amp;layer=states&amp;layer=states_line&amp;layer=modis&amp;mode=map" src="https://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-5.map&amp;layer=states&amp;layer=states_line&amp;layer=modis&amp;mode=map" />
+<p>In addition to vector data support (point, lines, polygons),
+MapServer can also display raster data. Through the use
 of GDAL library, MapServer can input and output multiple raster
 formats. Whereas in versions prior to 4.x raster input is limited to
 single layer, grayscale or indexed color images, recent MapServer
@@ -145,7 +145,7 @@ multispectral data.</p>
 <p>There might be a noticeable performance hit when using RGB and
 multispectral images.</p>
 </div>
-<p>Because MapServer 5.x uses AGG or GD version 2.0.x to generate output
+<p>Because MapServer uses AGG to generate output
 images, it supports RGB (24-bit or true color) output as well. So,
 along with 8-bit (indexed color or grayscale) PNG8, you can now also
 use PNG (true color) for output. This example uses PNG as
@@ -163,12 +163,12 @@ that’s another topic. If you want to know more about it, look at the
 <p>This is what the mapfile looks like: <a class="reference internal" href="example1-5-map.html#example1-5-map"><span class="std std-ref">Example1-5.map</span></a></p>
 <p>The mapfile structure, by objects, looks like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                             <span class="n">MAP</span>
-             <span class="n">LAYER</span> <span class="c1">#1-------------LAYER #2----|----LAYER #3--------LAYER #4</span>
-          <span class="p">(</span><span class="n">states_poly</span><span class="p">)</span>           <span class="p">(</span><span class="n">modis</span><span class="p">)</span>       <span class="p">(</span><span class="n">states_line</span><span class="p">)</span>   <span class="p">(</span><span class="n">states_label</span><span class="p">)</span>
-             <span class="o">|</span>                                     <span class="o">|</span>               <span class="o">|</span>
-<span class="p">(</span><span class="n">land</span><span class="p">)</span> <span class="n">CLASS</span><span class="o">-|-</span><span class="n">CLASS</span> <span class="p">(</span><span class="n">water</span><span class="p">)</span>                       <span class="o">|-</span><span class="n">CLASS</span>         <span class="o">|-</span><span class="n">CLASS</span>
-          <span class="o">|</span>     <span class="o">|</span>                                     <span class="o">|</span>               <span class="o">|</span>
-    <span class="n">STYLE</span><span class="o">-|</span>     <span class="o">|-</span><span class="n">STYLE</span>                               <span class="o">|-</span><span class="n">STYLE</span>   <span class="n">STYLE</span><span class="o">-|-</span><span class="n">LABEL</span>
+             <span class="n">LAYER</span> <span class="c1">#1-------------LAYER #2----|----LAYER #3</span>
+          <span class="p">(</span><span class="n">states_poly</span><span class="p">)</span>           <span class="p">(</span><span class="n">modis</span><span class="p">)</span>       <span class="p">(</span><span class="n">states_line</span><span class="p">)</span>
+             <span class="o">|</span>                                        <span class="o">|</span>
+<span class="p">(</span><span class="n">land</span><span class="p">)</span> <span class="n">CLASS</span><span class="o">-|</span>                                        <span class="o">|-</span><span class="n">CLASS</span>
+          <span class="o">|</span>                                               <span class="o">|</span>
+    <span class="n">STYLE</span><span class="o">-|-</span><span class="n">LABEL</span>                                         <span class="o">|-</span><span class="n">STYLE</span>
 </pre></div>
 </div>
 <p>When you look at the mapfile, you’ll see that the new LAYER object is added below
@@ -211,7 +211,7 @@ rasters in MapServer, please read the <a class="reference internal" href="../inp
 </dd>
 <dt><strong>TYPE RASTER</strong></dt><dd><p>When using raster data (images) we use the value RASTER for the
 parameter TYPE, as opposed to the POLYGON, LINE, and POINT values
-for vector data and ANNOTATION for label IDs.</p>
+for vector data and its labels.</p>
 </dd>
 <dt><strong>PROCESSING «BANDS=1,2,3»</strong></dt><dd><p>This LAYER object parameter was added in MapServer 4.x. The
 <a class="reference internal" href="../mapfile/layer.html#layer"><span class="std std-ref">PROCESSING</span></a> keyword has many values but in this case
@@ -306,7 +306,7 @@ image, replace the following lines in the mapfile:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a>2020, Open Source Geospatial Foundation
-      Τελευταία ενημέρωση στις 2020-02-24.
+      Τελευταία ενημέρωση στις 2020-03-14.
       Δημιουργήθηκε με το <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.3.
     </div>
   </body>

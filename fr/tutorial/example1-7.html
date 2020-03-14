@@ -131,7 +131,7 @@
 <span id="example1-7"></span><h1>Example 1.7<a class="headerlink" href="#example-1-7" title="Lien permanent vers ce titre">¶</a></h1>
 <div class="section" id="adding-ogc-wms-layers">
 <h2>Adding OGC WMS Layers<a class="headerlink" href="#adding-ogc-wms-layers" title="Lien permanent vers ce titre">¶</a></h2>
-<img alt="https://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-7.map&amp;layers=states+states_label+modis_jpl&amp;mode=map" src="https://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-7.map&amp;layers=states+states_label+modis_jpl&amp;mode=map" />
+<img alt="https://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-7.map&amp;layers=states+modis_nasa&amp;mode=map" src="https://demo.mapserver.org/cgi-bin/mapserv?map=/osgeo/mapserver/tutorial/htdocs/example1-7.map&amp;layers=states+modis_nasa&amp;mode=map" />
 <p>Another exciting feature of MapServer is its ability to use layers from other
 map servers. In this case, a MapServer application becomes a WMS (or WFS)
 client. MapServer can also share (or serve up) the layers in the mapfile to
@@ -143,10 +143,10 @@ simple terms, is that WMS uses web raster formats (PNG, GIF, JPEG) to share
 layers while WFS uses GML, the Geography Markup Language. A third OGC
 interoperability specification is the Web Coverage Services specification or
 WCS.  MapServer supports WCS at the server level only. To find more information
-about WMS, WFS, and WCS go the the <a class="reference external" href="http://www.opengeospatial.org">OGC’s web site</a> and look for the <a class="reference external" href="http://www.opengeospatial.org/specs/?page=specs">OGC Implementation
-Specifications</a> or <a class="reference external" href="http://www.opengeospatial.org/specs/?page=abstract">OGC
+about WMS, WFS, and WCS go the the <a class="reference external" href="https://www.ogc.org">OGC’s web site</a> and look for the <a class="reference external" href="http://www.ogc.org/docs/is">OGC Implementation
+Specifications</a> or <a class="reference external" href="http://www.ogc.org/docs/as">OGC
 Abstract Specifications</a>.
-The MapServer web site also has <a class="reference internal" href="../documentation.html#documentation"><span class="std std-ref">documentation</span></a> and <a class="reference external" href="https://github.com/mapserver/mapserver/wiki">WIKI pages</a> for these specifications.</p>
+The MapServer web site also has <a class="reference internal" href="../ogc/index.html#ogc"><span class="std std-ref">documentation</span></a> and <a class="reference external" href="https://github.com/mapserver/mapserver/wiki">WIKI pages</a> for these specifications.</p>
 <p>This example shows you how to add a WMS layer in your mapfile.</p>
 <div class="section" id="the-mapfile">
 <h3>The MapFile<a class="headerlink" href="#the-mapfile" title="Lien permanent vers ce titre">¶</a></h3>
@@ -155,9 +155,9 @@ The MapServer web site also has <a class="reference internal" href="../documenta
 <h4>LAYER Object and WMS Parameters<a class="headerlink" href="#layer-object-and-wms-parameters" title="Lien permanent vers ce titre">¶</a></h4>
 <p>Let’s have a look at the WMS layer:</p>
 <dl>
-<dt><strong>LAYER # MODIS WMS map from JPL</strong></dt><dd><p>Marks the start of the WMS LAYER object.</p>
+<dt><strong>LAYER # MODIS WMS map from NASA</strong></dt><dd><p>Marks the start of the WMS LAYER object.</p>
 </dd>
-<dt><strong>NAME modis_jpl</strong></dt><dd><p>The LAYER identifier.</p>
+<dt><strong>NAME modis_nasa</strong></dt><dd><p>The LAYER identifier.</p>
 </dd>
 <dt><strong>TYPE RASTER</strong></dt><dd><p>Since this the WMS layer is an image, we use RASTER as LAYER TYPE.</p>
 </dd>
@@ -174,7 +174,7 @@ define connection types that are external. WMS is an external
 data layer, coming from another map server.</p>
 </div>
 </dd>
-<dt><strong>CONNECTION « http://mapus.jpl.nasa.gov/wms.cgi? »</strong></dt><dd><p>The connection string that allows us to <em>get</em> the data from another
+<dt><strong>CONNECTION « https://neo.sci.gsfc.nasa.gov/wms/wms? »</strong></dt><dd><p>The connection string that allows us to <em>get</em> the data from another
 server. In the case of WMS connections, this is a URL.  If we were
 using a PostGIS database, it would be an SQL statement.  Please
 note that the string has to be in a single line in your mapfile.</p>
@@ -186,10 +186,10 @@ WMS server.</p>
 </dd>
 <dt><strong>« wms_srs » « epsg:4326 »</strong></dt><dd><p>The WMS projection.  Sometimes the WMS server supports more than
 one projection.  If this is the case you might want to request the
-map in your output projection (epsg:2163).  Unfortunately, the JPL
+map in your output projection (epsg:2163).  Unfortunately, the NASA
 server doesn’t support this projection.</p>
 </dd>
-<dt><strong>« wms_name » « modis »</strong></dt><dd><p>The WMS layer name. This is like adding the parameter « layers=modis ».</p>
+<dt><strong>« wms_name » « MOD_143D_RR »</strong></dt><dd><p>The WMS layer name. This is like adding the parameter « layers=modis ».</p>
 </dd>
 <dt><strong>« wms_server_version » « 1.1.1 »</strong></dt><dd><p>The WMS version the server complies to.  For more options, see
 <a class="reference internal" href="../ogc/ogc_support.html#ogc-support"><span class="std std-ref">MapServer  OGC Specification support</span></a>.</p>
@@ -215,7 +215,7 @@ this: « /home/apache/htdocs/tmp/ » or « C:/Inetpub/wwwroot/tmp/ ».)</p>
 </dd>
 <dt><strong>IMAGEURL “/tmp/”</strong></dt><dd><p>This is how IMAGEPATH will appear relative to the web server’s root
 directory. If we have to type the full URL for this, it will be
-« <a class="reference external" href="http://terrasip.gis.umn.edu/tmp/">http://terrasip.gis.umn.edu/tmp/</a> ». Make sure that the path
+« <a class="reference external" href="https://demo.mapserver.org/ms_tmp/">https://demo.mapserver.org/ms_tmp/</a> ». Make sure that the path
 includes a slash (/) at the end.</p>
 </dd>
 </dl>
@@ -297,7 +297,7 @@ standard, both as a <a class="reference internal" href="../ogc/wfs_server.html#w
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2020, Open Source Geospatial Foundation.
-      Mis à jour le 2020-02-24.
+      Mis à jour le 2020-03-14.
       Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.3.
     </div>
   </body>
