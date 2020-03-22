@@ -131,7 +131,7 @@
 <span id="migration"></span><h1><a class="toc-backref" href="#table-of-contents">MapServer Migration Guide</a><a class="headerlink" href="#mapserver-migration-guide" title="Enlazar permanentemente con este título">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2019-11-21</p>
+<dd class="field-odd"><p>2020-03-22</p>
 </dd>
 </dl>
 <div class="contents topic" id="table-of-contents">
@@ -139,16 +139,42 @@
 <ul class="simple">
 <li><p><a class="reference internal" href="#mapserver-migration-guide" id="id3">MapServer Migration Guide</a></p>
 <ul>
-<li><p><a class="reference internal" href="#mapserver-7-2-to-7-4-migration" id="id4">MapServer 7.2 to 7.4 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-7-0-to-7-2-migration" id="id5">MapServer 7.0 to 7.2 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-6-4-to-7-0-migration" id="id6">MapServer 6.4 to 7.0 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-6-2-to-6-4-migration" id="id7">MapServer 6.2 to 6.4 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-6-0-to-6-2-migration" id="id8">MapServer 6.0 to 6.2 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-5-6-to-6-0-migration" id="id9">MapServer 5.6 to 6.0 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-5-4-to-5-6-migration" id="id10">MapServer 5.4 to 5.6 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-5-2-to-5-4-migration" id="id11">MapServer 5.2 to 5.4 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-4-10-to-5-0-migration" id="id12">MapServer 4.10 to 5.0 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-7-6-to-7-4-migration" id="id4">MapServer 7.6 to 7.4 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-7-2-to-7-4-migration" id="id5">MapServer 7.2 to 7.4 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-7-0-to-7-2-migration" id="id6">MapServer 7.0 to 7.2 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-6-4-to-7-0-migration" id="id7">MapServer 6.4 to 7.0 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-6-2-to-6-4-migration" id="id8">MapServer 6.2 to 6.4 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-6-0-to-6-2-migration" id="id9">MapServer 6.0 to 6.2 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-5-6-to-6-0-migration" id="id10">MapServer 5.6 to 6.0 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-5-4-to-5-6-migration" id="id11">MapServer 5.4 to 5.6 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-5-2-to-5-4-migration" id="id12">MapServer 5.2 to 5.4 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-4-10-to-5-0-migration" id="id13">MapServer 4.10 to 5.0 Migration</a></p></li>
 </ul>
+</li>
+</ul>
+</div>
+<div class="section" id="mapserver-7-6-to-7-4-migration">
+<h2><a class="toc-backref" href="#table-of-contents">MapServer 7.6 to 7.4 Migration</a><a class="headerlink" href="#mapserver-7-6-to-7-4-migration" title="Enlazar permanentemente con este título">¶</a></h2>
+<ul>
+<li><p>PointZM data support (X,Y,Z,M coordinates) is now enabled by default</p></li>
+<li><p>the PROJ 6 API is now supported.  Read about the many changes in PROJ since
+the <a class="reference external" href="https://proj.org/news.html#id147">PROJ 6.0 release</a>.  Note that older
+PROJ versions such as 5.2.0 will still work with MapServer.</p></li>
+<li><p>CONNECTIONOPTIONS parameter has been added in the mapfile LAYER, to take
+advantage of GDAL/OGR driver options. (see <a class="reference internal" href="development/rfc/ms-rfc-125.html#rfc125"><span class="std std-ref">RFC 125</span></a>) such as:</p>
+<blockquote>
+<div><div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+        <span class="k">NAME</span> <span class="s">&quot;test&quot;</span>
+        <span class="k">CONNECTIONTYPE</span> <span class="nb">OGR</span>
+        <span class="k">CONNECTION</span> <span class="s">&quot;./data/nested_attrs.geojson&quot;</span>
+        <span class="k">CONNECTIONOPTIONS</span>
+                <span class="s">&quot;FLATTEN_NESTED_ATTRIBUTES&quot;</span> <span class="s">&quot;YES&quot;</span>
+        <span class="k">END</span>
+        <span class="nx">[...]</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+</div></blockquote>
 </li>
 </ul>
 </div>
@@ -1062,6 +1088,7 @@ and RGBA will likely only be supported with AGG</p>
   <h3>Current Table Of Contents</h3>
   <ul>
 <li><a class="reference internal" href="#">MapServer Migration Guide</a><ul>
+<li><a class="reference internal" href="#mapserver-7-6-to-7-4-migration">MapServer 7.6 to 7.4 Migration</a></li>
 <li><a class="reference internal" href="#mapserver-7-2-to-7-4-migration">MapServer 7.2 to 7.4 Migration</a></li>
 <li><a class="reference internal" href="#mapserver-7-0-to-7-2-migration">MapServer 7.0 to 7.2 Migration</a></li>
 <li><a class="reference internal" href="#mapserver-6-4-to-7-0-migration">MapServer 6.4 to 7.0 Migration</a></li>
