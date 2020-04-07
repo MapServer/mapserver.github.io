@@ -298,7 +298,7 @@ comments for the required parameters.</p>
   <span class="k">END</span>
 
   <span class="k">PROJECTION</span>
-    <span class="s">&quot;init=epsg:42304&quot;</span>
+    <span class="s">&quot;init=epsg:3978&quot;</span>
   <span class="k">END</span>
 
 
@@ -313,7 +313,7 @@ comments for the required parameters.</p>
     <span class="k">STATUS</span> <span class="nb">ON</span>
     <span class="k">DATA</span> <span class="err">bath_mapserver</span><span class="p">.</span><span class="err">tif</span>
     <span class="k">PROJECTION</span>
-      <span class="s">&quot;init=epsg:42304&quot;</span>
+      <span class="s">&quot;init=epsg:3978&quot;</span>
     <span class="k">END</span>
   <span class="k">END</span>
 <span class="k">END</span> <span class="c"># Map File</span>
@@ -437,7 +437,7 @@ express coverage responses.</p>
 would look like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mapserv?map=mywcs.map&amp;SERVICE=WCS
   &amp;VERSION=1.0.0&amp;REQUEST=GetCoverage&amp;coverage=bathymetry
-  &amp;CRS=EPSG:42304&amp;BBOX=-2200000,-712631,3072800,3840000&amp;WIDTH=3199
+  &amp;CRS=EPSG:3978&amp;BBOX=-2200000,-712631,3072800,3840000&amp;WIDTH=3199
   &amp;HEIGHT=2833&amp;FORMAT=GTiff
 </pre></div>
 </div>
@@ -1165,26 +1165,55 @@ by the service provider.</p></li>
 <li><p><em>Description:</em> (Optional) The file format MIME type of the metadata
 record (e.g.  « text/plain »). The web metadata wcs_metadatalink_type
 and wcs_metadatalink_href must also be specified.</p></li>
+<li><p>To output several metadata links, use <code class="docutils literal notranslate"><span class="pre">wcs_metadatalink_list</span></code></p></li>
 </ul>
 <p id="index-31"><strong>wcs_metadatalink_href</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) The URL to the server’s metadata. The web
 metadata wcs_metadatalink_format and wcs_metadatalink_type must also
 be specified.</p></li>
+<li><p>To output several metadata links, use <code class="docutils literal notranslate"><span class="pre">wcs_metadatalink_list</span></code></p></li>
 </ul>
-<p id="index-32"><strong>wcs_metadatalink_type</strong></p>
+<p id="index-32"><strong>wcs_metadatalink_list</strong></p>
+<ul>
+<li><p><em>Description:</em> (Optional) Space-separated list of parts of metadata keys,
+to be able to specify several metadata links. If the value of wcs_metadatalink_list
+is « foo bar », then wcs_metadatalink_foo_href, wcs_metadatalink_foo_format,
+wcs_metadatalink_foo_type, wcs_metadatalink_bar_href, wcs_metadatalink_bar_format,
+wcs_metadatalink_bar_type will be queried with the semantics of the
+wcs_metadatalink_href, wcs_metadatalink_format and wcs_metadatalink_type items.</p>
+<p>Example:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;wcs_metadatalink_list&quot;</span> <span class="s">&quot;xml html&quot;</span>
+
+<span class="s">&quot;wcs_metadatalink_xml_format&quot;</span> <span class="s">&quot;text/xml&quot;</span>
+<span class="s">&quot;wcs_metadatalink_xml_type&quot;</span> <span class="s">&quot;TC211&quot;</span>
+<span class="s">&quot;wcs_metadatalink_xml_href&quot;</span> <span class="s">&quot;http://example.com/testXML&quot;</span>
+
+<span class="s">&quot;wcs_metadatalink_html_format&quot;</span> <span class="s">&quot;text/html&quot;</span>
+<span class="s">&quot;wcs_metadatalink_html_type&quot;</span> <span class="s">&quot;TC211&quot;</span>
+<span class="s">&quot;wcs_metadatalink_html_href&quot;</span> <span class="s">&quot;http://example.com/testHTML&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><div class="versionadded">
+<p><span class="versionmodified added">Nouveau dans la version 8.0.</span></p>
+</div>
+</li>
+</ul>
+<p id="index-33"><strong>wcs_metadatalink_type</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) The standard to which the metadata
 complies. Currently only two types are valid: « TC211 » which refers
 to [ISO 19115], and « FGDC » which refers to [FGDC-STD-001-1988]. The
 web metadata wcs_metadatalink_format and wcs_metadatalink_href must
 also be specified.</p></li>
+<li><p>To output several metadata links, use <code class="docutils literal notranslate"><span class="pre">wcs_metadatalink_list</span></code></p></li>
 </ul>
-<p id="index-33"><strong>wcs_name</strong></p>
+<p id="index-34"><strong>wcs_name</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) A name for the server.</p></li>
 </ul>
-<span class="target" id="index-34"></span><span class="target" id="index-35"></span><span class="target" id="index-36"></span><span class="target" id="index-37"></span><span class="target" id="index-38"></span><span class="target" id="index-39"></span><span class="target" id="index-40"></span><span class="target" id="index-41"></span><span class="target" id="index-42"></span><span class="target" id="index-43"></span><span class="target" id="index-44"></span><p id="index-45"><strong>wcs_responsibleparty_address_administrativearea,
+<span class="target" id="index-35"></span><span class="target" id="index-36"></span><span class="target" id="index-37"></span><span class="target" id="index-38"></span><span class="target" id="index-39"></span><span class="target" id="index-40"></span><span class="target" id="index-41"></span><span class="target" id="index-42"></span><span class="target" id="index-43"></span><span class="target" id="index-44"></span><span class="target" id="index-45"></span><p id="index-46"><strong>wcs_responsibleparty_address_administrativearea,
 wcs_responsibleparty_address_city,
 wcs_responsibleparty_address_country,
 wcs_responsibleparty_address_deliverypoint,
@@ -1200,7 +1229,7 @@ wcs_responsibleparty_phone_voice, wcs_responsibleparty_postionname</strong></p>
 then all twelve metadata items are required.  You can also use the
 address* metadata instead.</p></li>
 </ul>
-<p id="index-46"><strong>wcs_service_onlineresource</strong></p>
+<p id="index-47"><strong>wcs_service_onlineresource</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) Top-level onlineresource URL. MapServer
 uses the onlineresource metadata (if provided) in the following
@@ -1213,7 +1242,7 @@ onlineresource section of this document)</p></li>
 </ol>
 </li>
 </ul>
-<p id="index-47"><strong>wcs_languages</strong></p>
+<p id="index-48"><strong>wcs_languages</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) A comma-separated list of supported languages. For
 details please refer to the section <a class="reference internal" href="inspire_dl.html#inspire-dl-multi-language-support"><span class="std std-ref">Multi-language support for certain capabilities fields</span></a>
@@ -1221,25 +1250,25 @@ in the INSPIRE Download Service documentation.</p></li>
 </ul>
 </div>
 <div class="section" id="layer-object-metadata">
-<span id="index-48"></span><h3>Layer Object Metadata<a class="headerlink" href="#layer-object-metadata" title="Lien permanent vers ce titre">¶</a></h3>
-<dl class="simple" id="index-49">
+<span id="index-49"></span><h3>Layer Object Metadata<a class="headerlink" href="#layer-object-metadata" title="Lien permanent vers ce titre">¶</a></h3>
+<dl class="simple" id="index-50">
 <dt><strong>ows_allowed_ip_list</strong></dt><dd><p>Same as ows_allowed_ip_list in the Web Object.</p>
 </dd>
 </dl>
-<dl class="simple" id="index-50">
+<dl class="simple" id="index-51">
 <dt><strong>ows_denied_ip_list</strong></dt><dd><p>Same as ows_denied_ip_list in the Web Object.</p>
 </dd>
 </dl>
-<p id="index-51"><strong>wcs_abstract</strong></p>
+<p id="index-52"><strong>wcs_abstract</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) A brief description of the service, maps
 to ows:Abstract (WCS 1.1+ only).</p></li>
 </ul>
-<p id="index-52"><strong>wcs_description</strong></p>
+<p id="index-53"><strong>wcs_description</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) A description of the layer.</p></li>
 </ul>
-<p id="index-53"><strong>wcs_enable_request</strong> (or <strong>ows_enable_request</strong>)</p>
+<p id="index-54"><strong>wcs_enable_request</strong> (or <strong>ows_enable_request</strong>)</p>
 <ul>
 <li><p><em>Description:</em> Space separated list of requests to enable.
 The default is none.
@@ -1258,38 +1287,38 @@ A « ! » in front of a request will disable the request.
 </div>
 </li>
 </ul>
-<p id="index-54"><strong>wcs_extent</strong></p>
+<p id="index-55"><strong>wcs_extent</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) Bounding box of layer, which must be
 provided for tiled data.  Comma-delimited, in the format of:
 minx,miny,maxx,maxy</p></li>
 </ul>
-<p id="index-55"><strong>wcs_formats</strong></p>
+<p id="index-56"><strong>wcs_formats</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) The formats which may be requested for
 this layer, separated by a space. (e.g. « GTiff MrSID »)</p></li>
 </ul>
-<p id="index-56"><strong>wcs_keywords</strong></p>
+<p id="index-57"><strong>wcs_keywords</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) Short words for catalog searching.</p></li>
 </ul>
-<p id="index-57"><strong>wcs_label</strong></p>
+<p id="index-58"><strong>wcs_label</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Required) A human-readable label for the layer.</p></li>
 </ul>
-<p id="index-58"><strong>wcs_metadatalink_format</strong></p>
+<p id="index-59"><strong>wcs_metadatalink_format</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) The file format MIME type of the metadata
 record (e.g.  « text/plain »). The web metadata wcs_metadatalink_type
 and wcs_metadatalink_href must also be specified.</p></li>
 </ul>
-<p id="index-59"><strong>wcs_metadatalink_href</strong></p>
+<p id="index-60"><strong>wcs_metadatalink_href</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) The URL to the layer’s metadata. The web
 metadata wcs_metadatalink_format and wcs_metadatalink_type must also
 be specified.</p></li>
 </ul>
-<p id="index-60"><strong>wcs_metadatalink_type</strong></p>
+<p id="index-61"><strong>wcs_metadatalink_type</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) The standard to which the metadata
 complies. Currently only two types are valid: « TC211 » which refers
@@ -1297,16 +1326,16 @@ to [ISO 19115], and « FGDC » which refers to [FGDC-STD-001-1988]. The
 web metadata wcs_metadatalink_format and wcs_metadatalink_href must
 also be specified.</p></li>
 </ul>
-<p id="index-61"><strong>wcs_name</strong></p>
+<p id="index-62"><strong>wcs_name</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) A name for the layer.</p></li>
 </ul>
-<p id="index-62"><strong>wcs_nativeformat</strong></p>
+<p id="index-63"><strong>wcs_nativeformat</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) The current format of the served raster
 layer. (e.g. « GTiff ») (used for WCS 1.0)</p></li>
 </ul>
-<p id="index-63"><strong>wcs_native_format</strong></p>
+<p id="index-64"><strong>wcs_native_format</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) The mime-type of the current format of the
 served raster layer (e.g. « image/tiff »).  This field is used when
@@ -1315,7 +1344,7 @@ wcs_extent and wcs_size/wcs_resolution are set).  When set, WCS 2.0
 GetCoverage requests will use this format when no other format is
 specified (the format parameter is optional then).</p></li>
 </ul>
-<p id="index-64"><strong>wcs_outputformat_{OUTPUTFORMATNAME}_creationoption_{OPTIONNAME}</strong></p>
+<p id="index-65"><strong>wcs_outputformat_{OUTPUTFORMATNAME}_creationoption_{OPTIONNAME}</strong></p>
 <ul>
 <li><p><em>Description:</em> (Optional) (added in MapServer 7.2.0) To provide
 creation options in a (GDAL) output format specific and layer specific way.
@@ -1347,7 +1376,7 @@ generated by adding the name « bands » to the rangeset_axes list.  If
 found MapServer will automatically generate metadata for the image
 bands.  You may of course extend that basic support using the naming
 conventions below.</p>
-<p id="index-65"><strong>wcs_rangeset_axes</strong></p>
+<p id="index-66"><strong>wcs_rangeset_axes</strong></p>
 <ul>
 <li><p><em>Description:</em> (Optional) Delimited list of defined range sets.  If
 defined, you can also use the following nine metadata items, where
@@ -1366,33 +1395,33 @@ defined, you can also use the following nine metadata items, where
 </div></blockquote>
 </li>
 </ul>
-<p id="index-66"><strong>wcs_rangeset_description</strong></p>
+<p id="index-67"><strong>wcs_rangeset_description</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional, for DescribeCoverage request) Rangeset description (WCS 1.0 only)</p></li>
 </ul>
-<p id="index-67"><strong>wcs_rangeset_label</strong></p>
+<p id="index-68"><strong>wcs_rangeset_label</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Required, for DescribeCoverage request) Rangeset label (WCS 1.x only)</p></li>
 </ul>
-<p id="index-68"><strong>wcs_rangeset_name</strong></p>
+<p id="index-69"><strong>wcs_rangeset_name</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Required, for DescribeCoverage request) Rangeset name (WCS 1.x only)</p></li>
 </ul>
-<p id="index-69"><strong>wcs_rangeset_nullvalue</strong></p>
+<p id="index-70"><strong>wcs_rangeset_nullvalue</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional, for DescribeCoverage request) Rangeset single null value (WCS 1.x only)</p></li>
 </ul>
-<p id="index-70"><strong>wcs_srs</strong></p>
+<p id="index-71"><strong>wcs_srs</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) Spatial reference system of the layer, in
-the form of: EPSG:code (e.g. EPSG:42304)</p></li>
+the form of: EPSG:code (e.g. EPSG:3978)</p></li>
 </ul>
-<p id="index-71"><strong>wcs_timeitem</strong></p>
+<p id="index-72"><strong>wcs_timeitem</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) The attribute in the spatio/temporal index
 that contains time values.</p></li>
 </ul>
-<p id="index-72"><strong>wcs_timeposition</strong></p>
+<p id="index-73"><strong>wcs_timeposition</strong></p>
 <ul class="simple">
 <li><p><em>Description:</em> (Optional) A list of the start and end time of a
 given coverage (i.e. « 2000-11-11T11:11:11Z,2001-11-11T11:11:11Z »),
@@ -1614,8 +1643,8 @@ Service of Canada.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2020, Open Source Geospatial Foundation.
-      Mis à jour le 2020-04-06.
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+      Mis à jour le 2020-04-07.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.
     </div>
   </body>
 </html>

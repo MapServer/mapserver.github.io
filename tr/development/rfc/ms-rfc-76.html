@@ -19,7 +19,7 @@
     <link rel="author" title="Bu belgeler hakkında" href="../../about.html" />
     <link rel="index" title="Dizin" href="../../genindex.html" />
     <link rel="search" title="Ara" href="../../search.html" />
-    <link rel="copyright" title="Copyright" href="../../copyright.html" />
+    <link rel="copyright" title="Telif hakkı" href="../../copyright.html" />
     <link rel="next" title="MS RFC 77: Support for Multiple Label Objects Within a Class" href="ms-rfc-77.html" />
     <link rel="prev" title="MS RFC 75: INSPIRE view service support" href="ms-rfc-75.html" /> 
   </head><body>
@@ -138,7 +138,7 @@
           <div class="body" role="main">
             
   <div class="section" id="ms-rfc-76-adding-license-metadata-to-output-images">
-<span id="rfc76"></span><h1>MS RFC 76: Adding License Metadata to Output Images<a class="headerlink" href="#ms-rfc-76-adding-license-metadata-to-output-images" title="Bu başlığın kalıcı bağlantısı">¶</a></h1>
+<span id="rfc76"></span><h1>MS RFC 76: Adding License Metadata to Output Images<a class="headerlink" href="#ms-rfc-76-adding-license-metadata-to-output-images" title="Bu başlık için kalıcı bağlantı">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
 <dd class="field-odd"><p>2011/06/22</p>
@@ -158,16 +158,16 @@
 </dl>
 <p>Description: This RFC proposes allowing XML metadata information to be embedded in MapServer output images. The use case is for any organization producing maps that wishes to embed licensing and authorship information directly in the output images.</p>
 <div class="section" id="overview">
-<h2>1. Overview<a class="headerlink" href="#overview" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
+<h2>1. Overview<a class="headerlink" href="#overview" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>XMP is the “extensible metadata platform” <a class="footnote-reference brackets" href="#id13" id="id1">1</a> which allows the embedding of metadata information across a wide range of document and image formats: PNG, GIF, JPEG, PDF, etc. XMP was originally developed by Adobe <a class="footnote-reference brackets" href="#id14" id="id2">2</a> and is supported across their product line. It is now being increasingly included in other standards for metadata embedding and supported by tools for viewing image information (e.g. exiftools). Creative Commons has standards for using XMP to embed commons licensing <a class="footnote-reference brackets" href="#id15" id="id3">3</a> in images and other document, including a specific Creative Commons schema.</p>
 <p>One of the challenges of advertising licensing and terms of use in WMS and other web mapping services is that the terms are usually advertised separately from the actual content. So a WMS service might specify terms in the Capabilities document, but the images themselves will be unmarked. Embedding license URLs inside the images themselves using a standard markup allows organizations to be unambiguous about the conditions attached to their content.</p>
 <p>The goal of this change is to allow users the option of embedding XMP metadata in their MapServer output using an Open Source XMP utility library.</p>
 </div>
 <div class="section" id="proposed-technical-change">
-<h2>2. Proposed Technical Change<a class="headerlink" href="#proposed-technical-change" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
+<h2>2. Proposed Technical Change<a class="headerlink" href="#proposed-technical-change" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 </div>
 <div class="section" id="driver-support">
-<h2>2.1. Driver Support<a class="headerlink" href="#driver-support" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
+<h2>2.1. Driver Support<a class="headerlink" href="#driver-support" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>libexempi <a class="footnote-reference brackets" href="#id16" id="id4">4</a> provides a standard C interface for reading and writing XMP content from multiple image formats. One limitation of libexempi (and all other XMP libraries we investigated) is that it only works on existing files. That means that any image that is going to be tagged with metadata must be written to the disk first. Fortunately the GDAL image driver already writes a temporary file to disk for every request, so we propose that XMP support be available only when using the GDAL output format driver.</p>
 <p>For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">OUTPUTFORMAT</span>
@@ -182,7 +182,7 @@
 <p>The XMP metadata embedding code will be called in msSaveImageGDAL just before the temporary file is streamed back to the client.</p>
 </div>
 <div class="section" id="map-file-configuration">
-<h2>2.2. Map File Configuration<a class="headerlink" href="#map-file-configuration" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
+<h2>2.2. Map File Configuration<a class="headerlink" href="#map-file-configuration" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>Metadata information is written per-image, so will be stored in the METADATA block of the WEB object in the MAP file.</p>
 <p>The metadata key for each tag will have the form “xmp_&lt;namespace&gt;_&lt;tag&gt;”, so for example: “xmp_dc_Title”, for the Dublin Core title.</p>
 <p>Eight namespaces will be supported by default:</p>
@@ -236,14 +236,14 @@
 </div>
 </div>
 <div class="section" id="build-configuration">
-<h2>2.3. Build Configuration<a class="headerlink" href="#build-configuration" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
+<h2>2.3. Build Configuration<a class="headerlink" href="#build-configuration" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>XMP metadata support will require the presence of the libexempi library. The library must be requested or pointed to directly to using the –with-exempi=[yes|no|path] configuration option in the ./configure script.  If –with-exempi is not used, XMP metadata support will not be enabled.</p>
 </div>
 <div class="section" id="implementation-details">
-<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
+<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 </div>
 <div class="section" id="files-affected">
-<h2>3.1. Files Affected<a class="headerlink" href="#files-affected" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
+<h2>3.1. Files Affected<a class="headerlink" href="#files-affected" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>The following files will be modified for this RFC:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Makefile</span><span class="o">.</span><span class="ow">in</span>
 <span class="n">Makefile</span><span class="o">.</span><span class="n">vc</span>
@@ -255,19 +255,19 @@
 </div>
 </div>
 <div class="section" id="bug-id">
-<h2>3.2. Bug ID<a class="headerlink" href="#bug-id" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
+<h2>3.2. Bug ID<a class="headerlink" href="#bug-id" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>The ticket for RFC 76 (containing proof-of-concept code) can be found here (Bug <a class="reference external" href="https://github.com/mapserver/mapserver/issues/3932">3932</a>).</p>
 </div>
 <div class="section" id="documentation">
-<h2>3.3. Documentation<a class="headerlink" href="#documentation" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
+<h2>3.3. Documentation<a class="headerlink" href="#documentation" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>Documentation for this feature will be added to the appropriate map file documentation (metadata keywords) and a separate howto document will be created explaining XMP metadata.</p>
 </div>
 <div class="section" id="enhancements">
-<h2>4. Enhancements<a class="headerlink" href="#enhancements" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
+<h2>4. Enhancements<a class="headerlink" href="#enhancements" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>The ability to use the XMP facility across output drivers would be desirable, but that requires intercepting the image before it is streamed to the user and writing it to disk to allow the exempi library to alter the metadata. For GDAL, the write-to-disk step is already part of the output sequence. Other drivers stream their output direct to stdout.</p>
 </div>
 <div class="section" id="voting-history">
-<h2>5. Voting history<a class="headerlink" href="#voting-history" title="Bu başlığın kalıcı bağlantısı">¶</a></h2>
+<h2>5. Voting history<a class="headerlink" href="#voting-history" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   <span class="n">Steve</span> <span class="n">Lime</span>
 <span class="o">+</span><span class="mi">1</span> <span class="n">Daniel</span> <span class="n">Morissette</span>
 <span class="o">+</span><span class="mi">1</span> <span class="n">Frank</span> <span class="n">Warmerdam</span>
@@ -392,9 +392,9 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Copyright</a> 2020, Open Source Geospatial Foundation.
-      Son güncelleme: 2020-04-06.
-      <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4 ile oluşturulmuştur.
+        &#169; <a href="../../copyright.html">Telif hakkı</a> 2020, Open Source Geospatial Foundation.
+      Son güncelleme: 2020-04-07.
+      <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0 kullanılarak oluşturuldu.
     </div>
   </body>
 </html>
