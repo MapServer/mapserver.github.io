@@ -140,10 +140,24 @@
   <div class="section" id="label">
 <span id="index-0"></span><span id="id1"></span><h1>LABEL<a class="headerlink" href="#label" title="Permalink to this headline">¶</a></h1>
 <dl id="index-1">
-<dt>ALIGN [left|center|right]</dt><dd><p>Specifies text alignment for multiline labels (see <a class="reference internal" href="#wrap">WRAP</a>) Note
+<dt>ALIGN [left|center|right|attribute]</dt><dd><p>Specifies text alignment for multiline labels (see <a class="reference internal" href="#wrap">WRAP</a>) Note
 that the alignment algorithm is far from precise, so don't expect
 fabulous results (especially for <em>right</em> alignment) if you're not
 using a fixed width font.</p>
+<p>[attribute] was added in version 7.6. If an attribute is used,
+it is expected to be:</p>
+<ul class="simple">
+<li><p>of type <em>string</em> and should be one of the following: <em>left</em>, <em>center</em>, <em>right</em>.</p></li>
+<li><p>of type <em>integer</em> and should be [1,2,3] which means:</p>
+<ul>
+<li><p>1 = &quot;left&quot;</p></li>
+<li><p>2 = &quot;center&quot;</p></li>
+<li><p>3 = &quot;right&quot;</p></li>
+</ul>
+</li>
+</ul>
+<p>if the [attribute] is of type <em>integer</em> as described above, the label
+generation will be much faster, since string comparison is avoided.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 5.4.</span></p>
 </div>
@@ -414,10 +428,12 @@ See <a class="reference internal" href="layer.html#layer"><span class="std std-r
 </dd>
 </dl>
 <dl id="index-18">
-<dt>OFFSET [x][y]</dt><dd><p>Offset values for labels, relative to the lower left hand corner of the
+<dt>OFFSET [x|attribute_x][y|attribute_y]</dt><dd><p>Offset values for labels, relative to the lower left hand corner of the
 label and the label point. Given in pixels. In the case of rotated text
 specify the values as if all labels are horizontal and any rotation will
 be compensated for.</p>
+<p>[attribute_x] and [attribute_y] were added in version 7.6. If an attribute
+is used, it must be of type <em>integer</em>.</p>
 <p>When used with FOLLOW angle, two additional options are available to
 render the label parallel to the original feature:</p>
 <ul class="simple">
@@ -493,8 +509,8 @@ is true and <cite>PARTIALS</cite> is false, <cite>FORCE</cite> takes precedence,
 partial labels are drawn.</p>
 </dd>
 </dl>
-<dl class="simple" id="index-22">
-<dt>POSITION [ul|uc|ur|cl|cc|cr|ll|lc|lr|auto]</dt><dd><p>Position of the label relative to the labeling point (layers
+<dl id="index-22">
+<dt>POSITION [ul|uc|ur|cl|cc|cr|ll|lc|lr|auto|attribute]</dt><dd><p>Position of the label relative to the labeling point (layers
 only). First letter is &quot;Y&quot; position, second letter is &quot;X&quot;
 position. &quot;Auto&quot; tells MapServer to calculate a label position
 that will not interfere with other labels. With points, MapServer
@@ -506,6 +522,8 @@ that have already been drawn. If all positions cause a conflict,
 then the label is not drawn (Unless the label's <a class="reference internal" href="#force">FORCE</a> a parameter
 is set to &quot;true&quot;). &quot;Auto&quot; placement is only available with cached
 labels.</p>
+<p>When used with attribute, it must be of type <em>string</em> and use one
+of the following: <em>ul|uc|ur|cl|cc|cr|ll|lc|lr|auto</em>.</p>
 </dd>
 </dl>
 <dl id="index-23">
@@ -738,7 +756,7 @@ for conditional line wrapping after a given number of characters.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html"> حقوق النشر </a> 2020, Open Source Geospatial Foundation
-      Last updated on 2020-04-10.
+      Last updated on 2020-04-24.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
     </div>
   </body>
