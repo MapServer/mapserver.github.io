@@ -131,7 +131,7 @@
 <span id="migration"></span><h1><a class="toc-backref" href="#table-of-contents">MapServer Migration Guide</a><a class="headerlink" href="#mapserver-migration-guide" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2020-03-22</p>
+<dd class="field-odd"><p>2020-05-04</p>
 </dd>
 </dl>
 <div class="contents topic" id="table-of-contents">
@@ -204,6 +204,34 @@ to enable a 'painters model' where all classes for a layer are drawn at once wit
 <p>RFC 124 (SLD improvements) has been implemented except PR#5832:
 <a class="reference external" href="https://github.com/mapserver/mapserver/pull/5832">SLD: Improve WMS GetStyles request</a>.</p>
 </div>
+</li>
+<li><p>WMS client layers can be set to essential, with the new <cite>wms_essential</cite> metadata item,
+which will cause MapServer to fail and report an error (normally MapServer would just
+ignore that layer).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><cite>wms_essential</cite> relates to a failed CONNECTION for your WMS layer, meaning that
+it will not handle incorrect remote layer names or image formats requested.</p>
+</div>
+<p>Here is an example of the new <cite>wms_essential</cite> parameter:</p>
+<blockquote>
+<div><div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;country_bounds&quot;</span>
+  <span class="k">TYPE</span> <span class="nb">RASTER</span>
+  <span class="k">STATUS</span> <span class="nb">ON</span>
+  <span class="k">CONNECTION</span> <span class="s">&quot;https://demo.mapserver.org/cgi-bin/wms?&quot;</span>
+  <span class="k">CONNECTIONTYPE</span> <span class="nb">WMS</span>
+  <span class="k">METADATA</span>
+    <span class="s">&quot;wms_srs&quot;</span>             <span class="s">&quot;EPSG:4326&quot;</span>
+    <span class="s">&quot;wms_name&quot;</span>            <span class="s">&quot;country_bounds2&quot;</span>
+    <span class="s">&quot;wms_server_version&quot;</span>  <span class="s">&quot;1.1.1&quot;</span>
+    <span class="s">&quot;wms_format&quot;</span>          <span class="s">&quot;image/png&quot;</span>
+    <span class="s">&quot;wms_essential&quot;</span>       <span class="s">&quot;1&quot;</span>
+  <span class="k">END</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+</div></blockquote>
 </li>
 </ul>
 </div>
