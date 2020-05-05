@@ -195,7 +195,7 @@ extended to support the notion of timestamps for a given tileset:</p>
 tileset.  The actual population of this database is not managed by mapcache,
 and is left to the server administrator whenever a new timestamp is added to
 the source data.</p></li>
-<li><p>Given an incoming request with a specified <code class="docutils literal notranslate"><span class="pre">TIME=xxx</span></code> component, MapCache
+<li><p>Given an incoming request with a specified <cite>TIME=xxx</cite> component, MapCache
 must be able to query the said database to extract the individual timestamp
 entries. Once the timestamps have been extracted, processing consists in
 vertically assembling the tiles corresponding to the individual timestamps in
@@ -209,24 +209,24 @@ requests. Other specifications do not provision the usage of dimensions.</p>
 <div class="section" id="example">
 <h3>2.1 Example<a class="headerlink" href="#example" title="Link zu dieser Überschrift">¶</a></h3>
 <p>Suppose that the database given for a tileset contains the timestamps
-<code class="docutils literal notranslate"><span class="pre">2011-12-15</span></code>, <code class="docutils literal notranslate"><span class="pre">2012-01-15</span></code>, and <code class="docutils literal notranslate"><span class="pre">2012-02-15</span></code>, i.e. there are three
+<cite>2011-12-15</cite>, <cite>2012-01-15</cite>, and <cite>2012-02-15</cite>, i.e. there are three
 different datasets that where captured on the 15th of December, January and
 February.</p>
-<p>For a request containing the time dimension <code class="docutils literal notranslate"><span class="pre">TIME=2012</span></code>, these are the steps
+<p>For a request containing the time dimension <cite>TIME=2012</cite>, these are the steps
 that are accomplished:</p>
 <ul class="simple">
-<li><p>The database is queried for timestamps that span <code class="docutils literal notranslate"><span class="pre">2012-01-01</span></code> to
-<code class="docutils literal notranslate"><span class="pre">2012-12-31</span></code>. The database returns the two valid timestamps <code class="docutils literal notranslate"><span class="pre">2012-01-15</span></code>
-and <code class="docutils literal notranslate"><span class="pre">2012-02-15</span></code></p></li>
+<li><p>The database is queried for timestamps that span <cite>2012-01-01</cite> to
+<cite>2012-12-31</cite>. The database returns the two valid timestamps <cite>2012-01-15</cite>
+and <cite>2012-02-15</cite></p></li>
 <li><p>Mapcache creates a request that will ask for the vertical merging of the
-tileset with two different <code class="docutils literal notranslate"><span class="pre">TIME</span></code> dimensions</p></li>
-<li><p>Mapcache queries the cache for the tile with the <code class="docutils literal notranslate"><span class="pre">2012-01-15</span></code> dimension. If
+tileset with two different <cite>TIME</cite> dimensions</p></li>
+<li><p>Mapcache queries the cache for the tile with the <cite>2012-01-15</cite> dimension. If
 the tile is not found in the cache, the &lt;source&gt; renders the given metatile
-having been passed a <code class="docutils literal notranslate"><span class="pre">TIME=2012-01-15</span></code> URL parameter.</p></li>
-<li><p>Mapcache queries the cache for the tile with the <code class="docutils literal notranslate"><span class="pre">2012-02-15</span></code> dimension.</p></li>
+having been passed a <cite>TIME=2012-01-15</cite> URL parameter.</p></li>
+<li><p>Mapcache queries the cache for the tile with the <cite>2012-02-15</cite> dimension.</p></li>
 <li><p>Mapcache assembles these two tiles</p></li>
 <li><p>Mapcache returns a single tile to the client, consisting of the vertical
-assembly of the two tiles, and therefore containing the data of the <code class="docutils literal notranslate"><span class="pre">2012</span></code>
+assembly of the two tiles, and therefore containing the data of the <cite>2012</cite>
 time series.</p></li>
 </ul>
 </div>
@@ -245,8 +245,8 @@ provided sqlite database, it is up to the mapcache administrator to:</p>
 <li><p>Provide the path to the sqlite file that should be used for a given tileset</p></li>
 <li><p>Provide the sqlite query that should be run in order to obtain the individual
 timestamps given a time interval. Mapcache will use this query on the sqlite
-database, after having binded one or more of the <code class="docutils literal notranslate"><span class="pre">:tileset</span></code>,
-<code class="docutils literal notranslate"><span class="pre">:start_timestamp</span></code>, <code class="docutils literal notranslate"><span class="pre">:end_timestamp</span></code> values given the current request.</p></li>
+database, after having binded one or more of the <cite>:tileset</cite>,
+<cite>:start_timestamp</cite>, <cite>:end_timestamp</cite> values given the current request.</p></li>
 </ul>
 <p>An example configuration entry is provided here:</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;timedimension</span> <span class="na">type=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">default=</span><span class="s">&quot;2010&quot;</span><span class="nt">&gt;</span>
@@ -273,7 +273,7 @@ database, after having binded one or more of the <code class="docutils literal n
 <p>It is up to the mapcache administrator to provide a sqlite query that
 correctly interprets the start_time and end_time values, <strong>and</strong> that returns
 a timestamp in a textual form that can be directly interpreted by the
-tileset’s source WMS after having been passed in a <code class="docutils literal notranslate"><span class="pre">TIME=xxx</span></code> URL parameter
+tileset’s source WMS after having been passed in a <cite>TIME=xxx</cite> URL parameter
 in the GetMap request.</p>
 </div>
 </div>
@@ -304,7 +304,7 @@ timestamps of the following formats:</p>
 <div class="admonition warning">
 <p class="admonition-title">Warnung</p>
 <p>ISO8601:2000 allows time resolutions down to the millisecond, i.e.
-<code class="docutils literal notranslate"><span class="pre">ccyy-mm-ddThh:mm:ss.sssZ</span></code>.  These are not supported by mapcache at the
+<cite>ccyy-mm-ddThh:mm:ss.sssZ</cite>.  These are not supported by mapcache at the
 time being.</p>
 </div>
 <div class="admonition warning">
@@ -321,7 +321,7 @@ These are not supported by mapcache at the time being.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warnung</p>
 <p>The OGC WMS spec allows a resolution to be added to the end of a time
-interval, e.g.  <code class="docutils literal notranslate"><span class="pre">TIME=2012-01-01/2012-02-01/P1D</span></code>. It is ignored by mapcache
+interval, e.g.  <cite>TIME=2012-01-01/2012-02-01/P1D</cite>. It is ignored by mapcache
 as it does not make any sense in this current setup.</p>
 </div>
 <p>A new function will be added, using strptime, that will compute a time interval
@@ -447,7 +447,7 @@ computationally heavy as there will be numerous image tiles to fetch, decode and
 into the finally produced image.
 While this might lead to a denial of service on the mapcache server, it is considered
 normal behavior in order to supply correct results. Server administrators can mitigate
-this load by adding a <code class="docutils literal notranslate"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">ttt</span> <span class="pre">LIMIT</span> <span class="pre">xxx</span></code> clause in their sqlite queries, at the
+this load by adding a <cite>ORDER BY ttt LIMIT xxx</cite> clause in their sqlite queries, at the
 cost of responses that will be missing entries.</p>
 </div>
 <div class="section" id="bug-id">

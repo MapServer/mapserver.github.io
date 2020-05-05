@@ -327,12 +327,12 @@ expressions, e.g.:</p>
 </tbody>
 </table>
 <p>Adding arithmetic expression support to style and label properties involves the
-creation of a new field array, named <code class="docutils literal notranslate"><span class="pre">exprBindings[]</span></code>, in <code class="docutils literal notranslate"><span class="pre">styleObj</span></code> and
-<code class="docutils literal notranslate"><span class="pre">labelObj</span></code> data structures. This field array stores expression strings
+creation of a new field array, named <cite>exprBindings[]</cite>, in <cite>styleObj</cite> and
+<cite>labelObj</cite> data structures. This field array stores expression strings
 converted from SLD syntax to MapFile syntax. It is handled in a way similar to
-existing <code class="docutils literal notranslate"><span class="pre">bindings[]</span></code> field array, used to store attribute names.</p>
+existing <cite>bindings[]</cite> field array, used to store attribute names.</p>
 <p>In addition, a new function is created to parse SLD arithmetic expressions and
-perform syntax conversion: <code class="docutils literal notranslate"><span class="pre">msSLDParseOgcExpression()</span></code>.</p>
+perform syntax conversion: <cite>msSLDParseOgcExpression()</cite>.</p>
 <p>A by-product effect is that adding support for arithmetic expressions in
 MapFile styles would be effortless.</p>
 </div>
@@ -538,20 +538,20 @@ previous ones</p></td>
 </tbody>
 </table>
 <p>In order to handle both rendering modes in their respective contexts, a new
-field named <code class="docutils literal notranslate"><span class="pre">rendermode</span></code> is added to <code class="docutils literal notranslate"><span class="pre">layerObj</span></code> data structure. This is
-used in <code class="docutils literal notranslate"><span class="pre">msDrawVectorLayer()</span></code> function in <code class="docutils literal notranslate"><span class="pre">mapdraw.c</span></code> file. The two
+field named <cite>rendermode</cite> is added to <cite>layerObj</cite> data structure. This is
+used in <cite>msDrawVectorLayer()</cite> function in <cite>mapdraw.c</cite> file. The two
 possible values for this field are:</p>
 <dl class="simple">
 <dt>MS_FIRST_CLASS</dt><dd><p>Default rendering mode, set on layers defined in a MapFile. In this mode,
-<code class="docutils literal notranslate"><span class="pre">msDrawVectorLayer()</span></code> fetches the first applicable class for each shape
+<cite>msDrawVectorLayer()</cite> fetches the first applicable class for each shape
 and uses only that class for rendering.</p>
 </dd>
 <dt>MS_PAINTERS_MODEL</dt><dd><p>SLD rendering mode, set on layers defined in a SLD document. In this mode,
-<code class="docutils literal notranslate"><span class="pre">msDrawVectorLayer()</span></code> iterates over all applicable classes for each shape
+<cite>msDrawVectorLayer()</cite> iterates over all applicable classes for each shape
 and uses them one after the other for rendering. Moreover, as
-<code class="docutils literal notranslate"><span class="pre">msDrawShape()</span></code> changes shape coordinates values and as shapes are
+<cite>msDrawShape()</cite> changes shape coordinates values and as shapes are
 potentially drawn multiple times, shapes must be saved before calls to
-<code class="docutils literal notranslate"><span class="pre">msDrawShape()</span></code> and restored after.</p>
+<cite>msDrawShape()</cite> and restored after.</p>
 </dd>
 </dl>
 <p>As for arithmetic expressions, offering choice of rendering mode in MapFiles,
@@ -590,7 +590,7 @@ MapFile and the second one with a SLD document.</p>
 <ul>
 <li><p>&lt;ExternalGraphic&gt; parameter has to be validated against authorized patterns
 (see <a class="reference external" href="https://github.com/mapserver/mapserver/blob/branch-7-4/mapogcsld.c#L2140-L2145">mapogcsld.c L2140-L2145</a>).
-This involves setting <code class="docutils literal notranslate"><span class="pre">&quot;sld_external_graphic&quot;</span></code> attribute in
+This involves setting <cite>«sld_external_graphic»</cite> attribute in
 <a class="reference internal" href="../../mapfile/validation.html#validation"><span class="std std-ref">VALIDATION</span></a> block of MapFile’s <em>WEB</em> section, e.g.:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">WEB</span>
   <span class="k">VALIDATION</span>
@@ -700,7 +700,7 @@ section for the inner area.</p></li>
 </table>
 <p>A <a class="reference external" href="https://github.com/mapserver/mapserver/blob/branch-7-4/mapogcsld.c#L971-L1014">source code inspection</a>
 shows that all SLD/SE tags are taken into account. The proposed solution
-consists in a simple bug fix aimed at feeding <code class="docutils literal notranslate"><span class="pre">mapObj</span></code> data structure the
+consists in a simple bug fix aimed at feeding <cite>mapObj</cite> data structure the
 same way for both cases.</p>
 <p>In the current implementation, a new <em>STYLE</em> is generated for each &lt;Stroke&gt;
 or &lt;Fill&gt; tag. But in the first case, &lt;Fill&gt; tags are handled before
@@ -718,9 +718,9 @@ applicable to polygon layers.</p>
 </div>
 <div class="section" id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Link a questa intestazione">¶</a></h2>
-<p>The  <code class="docutils literal notranslate"><span class="pre">msautotest/sld</span></code> suite will be created and populated with test cases
+<p>The  <cite>msautotest/sld</cite> suite will be created and populated with test cases
 focusing on these new or improved features.</p>
-<p>Moreover the <code class="docutils literal notranslate"><span class="pre">msautotest/{gdal,misc,query,renderers,wxs}</span></code> test suites will be
+<p>Moreover the <cite>msautotest/{gdal,misc,query,renderers,wxs}</cite> test suites will be
 run during development in order to make sure that no regression occurs.</p>
 </div>
 <div class="section" id="documentation">
@@ -737,15 +737,15 @@ support without changing any other existing behaviour.</p>
 <h2>Affected Files<a class="headerlink" href="#affected-files" title="Link a questa intestazione">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">mapcopy.c</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">mapdraw.c</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">mapfile.c</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">maplayer.c</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">mapogcsld.c</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">mapogcsld.h</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">mapserver.h</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">maputil.c</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">mapwms.c</span></code></p></li>
+<li><p><cite>mapcopy.c</cite></p></li>
+<li><p><cite>mapdraw.c</cite></p></li>
+<li><p><cite>mapfile.c</cite></p></li>
+<li><p><cite>maplayer.c</cite></p></li>
+<li><p><cite>mapogcsld.c</cite></p></li>
+<li><p><cite>mapogcsld.h</cite></p></li>
+<li><p><cite>mapserver.h</cite></p></li>
+<li><p><cite>maputil.c</cite></p></li>
+<li><p><cite>mapwms.c</cite></p></li>
 </ul>
 </div></blockquote>
 </div>

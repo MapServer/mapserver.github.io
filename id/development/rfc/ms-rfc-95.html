@@ -162,7 +162,7 @@
 when doing class filtering. The context relates to when there's the need to
 apply a given <a class="reference internal" href="../../mapfile/class.html#class"><span class="std std-ref">CLASS</span></a> to multiple attribute values.</p>
 <p>Currently, to apply a single class to multiple values of an attribute, you can
-either use regular expressions, or use the <code class="docutils literal notranslate"><span class="pre">IN</span></code> operator, like this:</p>
+either use regular expressions, or use the <cite>IN</cite> operator, like this:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="p">...</span>
   <span class="k">CLASSITEM</span> <span class="s">&quot;type&quot;</span>
@@ -180,7 +180,7 @@ or by using quite a few mallocs when going through the IN parser operation.</p>
 <div class="section" id="proposed-solution">
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Link permanen untuk headline ini">¶</a></h2>
 <p>We can cut down on this overhead by adding a &quot;list&quot; expression type, denoted by
-the <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">}</span></code> delimiters, where the previous layer definition becomes:</p>
+the <cite>{ }</cite> delimiters, where the previous layer definition becomes:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="p">...</span>
   <span class="k">CLASSITEM</span> <span class="s">&quot;type&quot;</span>
@@ -192,7 +192,7 @@ the <code class="docutils literal notranslate"><span class="pre">{</span> <span 
 </pre></div>
 </div>
 <p>In that case, the expression parsing is a simple string lookup inside
-<code class="docutils literal notranslate"><span class="pre">msEvalExpression()</span></code> instead of having to go down into the system regex or the
+<cite>msEvalExpression()</cite> instead of having to go down into the system regex or the
 parser.</p>
 </div>
 <div class="section" id="implementation-details">
@@ -200,9 +200,9 @@ parser.</p>
 <p>The modifications to the code are fairly straightforward:</p>
 <ul class="simple">
 <li><p>Support for the {} delimiters in the lexer (maplexer.l)</p></li>
-<li><p>New expression type <code class="docutils literal notranslate"><span class="pre">MS_LIST</span></code> in mapserver.h</p></li>
+<li><p>New expression type <cite>MS_LIST</cite> in mapserver.h</p></li>
 <li><p>support for finding an attribute value in the given list in
-<code class="docutils literal notranslate"><span class="pre">msEvalExpression()</span></code> in maputil.c</p></li>
+<cite>msEvalExpression()</cite> in maputil.c</p></li>
 <li><p>Loading, saving and copying the expression in mapfile.c and mapcopy.c</p></li>
 </ul>
 </div>
@@ -210,9 +210,9 @@ parser.</p>
 <h2>4. Limitations<a class="headerlink" href="#limitations" title="Link permanen untuk headline ini">¶</a></h2>
 <ul class="simple">
 <li><p>setters and getters will not be initially added for mapscript (use
-<code class="docutils literal notranslate"><span class="pre">classObj.updateFromString(&quot;EXPRESSION</span> <span class="pre">{foo,bar,baz}&quot;)</span></code></p></li>
+<cite>classObj.updateFromString(&quot;EXPRESSION {foo,bar,baz}&quot;)</cite></p></li>
 <li><p>Quoting and escaping inside the list is not supported, i.e. attribute values
-cnanot contain the <code class="docutils literal notranslate"><span class="pre">'</span></code> , <code class="docutils literal notranslate"><span class="pre">&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">,</span></code> characters.</p></li>
+cnanot contain the <cite>'</cite> , <cite>&quot;</cite> or <cite>,</cite> characters.</p></li>
 </ul>
 </div>
 <div class="section" id="backwards-compatibility-issues">

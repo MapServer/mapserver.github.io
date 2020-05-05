@@ -157,19 +157,19 @@
 </dl>
 <div class="section" id="abstract-solution">
 <h2>Abstract Solution<a class="headerlink" href="#abstract-solution" title="Permalink naar deze titel">¶</a></h2>
-<p>Implement a virtual table structure for <code class="docutils literal notranslate"><span class="pre">layerObj</span></code>. This structure
+<p>Implement a virtual table structure for <cite>layerObj</cite>. This structure
 will contain function pointers for all layer specific operations.
 This structure will be populated when the layer is opened or first
 time accessed.  After that all back-end format specific layer
 operations will happen through this vtable which is cached in the
-<code class="docutils literal notranslate"><span class="pre">layerObj</span></code> struct.</p>
+<cite>layerObj</cite> struct.</p>
 </div>
 <div class="section" id="technical-solution">
 <h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Permalink naar deze titel">¶</a></h2>
 <p>All file names and numbers are against released MapServer 4.6.0 source
 code.</p>
 <ol class="arabic">
-<li><p>Add new field to the <code class="docutils literal notranslate"><span class="pre">layerObj</span></code>. It will be pointer to the vtable,
+<li><p>Add new field to the <cite>layerObj</cite>. It will be pointer to the vtable,
 which will contain function pointers for this layer.</p></li>
 <li><p>Add the virtual table architecture</p>
 <p>The vtable will be initialized when the layer is accessed at the
@@ -177,7 +177,7 @@ first time.
 The vtable will be populated with dummies when it is created and
 these dummies will implement feasible default actions if there is
 any (e.g. do nothing) or return error by default.</p>
-<p>2.1. Standard functions which are found currently from <code class="docutils literal notranslate"><span class="pre">maplayer.c</span></code></p>
+<p>2.1. Standard functions which are found currently from <cite>maplayer.c</cite></p>
 <blockquote>
 <div><p>2.1.1. InitItemInfo</p>
 <blockquote>
@@ -205,8 +205,8 @@ the generic layer arg for LayerOpen function:</p>
                    <span class="n">rectObj</span> <span class="o">*</span><span class="n">defaultBBOX</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>However, these are called from <code class="docutils literal notranslate"><span class="pre">msLayerOpen</span></code> with
-<code class="docutils literal notranslate"><span class="pre">NULL</span></code> args, so I think that proposed interface for
+<p>However, these are called from <cite>msLayerOpen</cite> with
+<cite>NULL</cite> args, so I think that proposed interface for
 this virtual table function should be fine.</p>
 </div></blockquote>
 <p>2.1.4. IsOpen</p>
@@ -273,19 +273,19 @@ connection pooling by its own.  If layer doesn’t use
 any connection pooling, this function should be
 implemented as no-op. Caller should first call layer’s
 “close” function, and finally at the very end
-<code class="docutils literal notranslate"><span class="pre">CloseConnection</span></code>.</p>
+<cite>CloseConnection</cite>.</p>
 <p>The signature of function is</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerCloseConnection</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>And the main place where this function will be called,
-is <code class="docutils literal notranslate"><span class="pre">mapfile.c:</span> <span class="pre">4822</span></code></p>
+is <cite>mapfile.c: 4822</cite></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">msCloseConnections</span><span class="p">(</span><span class="n">mapObj</span> <span class="o">*</span><span class="nb">map</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This function is needed because e.g. <code class="docutils literal notranslate"><span class="pre">POSTGIS</span></code> is
+<p>This function is needed because e.g. <cite>POSTGIS</cite> is
 implementing this usage pattern at the moment
-<code class="docutils literal notranslate"><span class="pre">maplayer.c:599</span></code></p>
+<cite>maplayer.c:599</cite></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">void</span> <span class="n">msLayerClose</span><span class="p">(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">)</span>
  <span class="o">...</span>
 <span class="o">/*</span>
@@ -300,9 +300,9 @@ implementing this usage pattern at the moment
 <blockquote>
 <div><p>This function is used to create a time filter for
 layer. At the moment we have three special cases
-(<code class="docutils literal notranslate"><span class="pre">maplayer.c:</span> <span class="pre">1635</span></code>):</p>
+(<cite>maplayer.c: 1635</cite>):</p>
 <ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">POSTGIS</span></code> with it’s own function</p></li>
+<li><p><cite>POSTGIS</cite> with it’s own function</p></li>
 <li><p>Layers with backticks delimited expressions</p></li>
 <li><p>Layers without backticks</p></li>
 </ol>
@@ -313,9 +313,9 @@ layer. At the moment we have three special cases
                    <span class="n">const</span> <span class="nb">bool</span> <span class="n">bBackTicks</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>And the actual layer’s <code class="docutils literal notranslate"><span class="pre">SetTimeFilter</span></code> could use the
+<p>And the actual layer’s <cite>SetTimeFilter</cite> could use the
 above, or implement something totally different as
-<code class="docutils literal notranslate"><span class="pre">POSTGIS</span></code> is doing at the moment.</p>
+<cite>POSTGIS</cite> is doing at the moment.</p>
 <p>The signature for layer’s vtable function is</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerSetTimeFilter</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">lp</span><span class="p">,</span>
                           <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">timestring</span><span class="p">,</span>
@@ -326,23 +326,23 @@ above, or implement something totally different as
 </div></blockquote>
 <p>2.3. Extra functions to add to the vtable</p>
 <blockquote>
-<div><p>2.3.1. FLTApplyFilterToLayer (<code class="docutils literal notranslate"><span class="pre">mapogcfilter.c:</span> <span class="pre">1084</span></code>)</p>
+<div><p>2.3.1. FLTApplyFilterToLayer (<cite>mapogcfilter.c: 1084</cite>)</p>
 <blockquote>
 <div><p>This is the main filter interface for layers.  We will
 provide two helper functions, one for “SQL” case and
 the another for “non-SQL” case, and set all layers,
-except <code class="docutils literal notranslate"><span class="pre">POSTGIS</span></code>, <code class="docutils literal notranslate"><span class="pre">ORACLESPATIAL</span></code> and <code class="docutils literal notranslate"><span class="pre">OGR</span></code> to
+except <cite>POSTGIS</cite>, <cite>ORACLESPATIAL</cite> and <cite>OGR</cite> to
 call directly this “non-SQL” version of this helper
 function (else-branch of if).</p>
-<p><code class="docutils literal notranslate"><span class="pre">ORACLESPATIAL</span></code>, <code class="docutils literal notranslate"><span class="pre">POSTGIS</span></code> and <code class="docutils literal notranslate"><span class="pre">OGR</span></code> could use
+<p><cite>ORACLESPATIAL</cite>, <cite>POSTGIS</cite> and <cite>OGR</cite> could use
 “SQL” version of the helper function (actual if-branch)
 if the conditions for this are met, otherwise they will
 use Non-SQL version of the function.</p>
 </div></blockquote>
 <p>2.3.2. layerObj-&gt;items allocation</p>
 <blockquote>
-<div><p>There will be vtable function for allocation <code class="docutils literal notranslate"><span class="pre">items</span></code> and
-initialization for <code class="docutils literal notranslate"><span class="pre">numitems</span></code>. If layer has some
+<div><p>There will be vtable function for allocation <cite>items</cite> and
+initialization for <cite>numitems</cite>. If layer has some
 special needs for these objects it can override default
 function.</p>
 <p>The signature for function will be:</p>
@@ -352,10 +352,10 @@ function.</p>
 <p>which does the allocation and set numitems to correct
 value.</p>
 </div></blockquote>
-<p>2.3.3. msCheckConnection (<code class="docutils literal notranslate"><span class="pre">mapfile.c:</span> <span class="pre">4779</span></code>)</p>
+<p>2.3.3. msCheckConnection (<cite>mapfile.c: 4779</cite>)</p>
 <blockquote>
 <div><p>This API is deprecated. It is called only from
-<code class="docutils literal notranslate"><span class="pre">msMYGISLayerOpen</span></code>.  We will not provide this
+<cite>msMYGISLayerOpen</cite>.  We will not provide this
 functionality through vtable.</p>
 </div></blockquote>
 </div></blockquote>
@@ -378,15 +378,15 @@ layer is accessed at the first time.</p>
 <blockquote>
 <div><p>To change the connection type of layer, it has to be
 done by function interface. Accessing directly
-<code class="docutils literal notranslate"><span class="pre">connectiontype</span></code> field is not supported anymore.</p>
+<cite>connectiontype</cite> field is not supported anymore.</p>
 <p>To change the connectiontype and to connect to the new
 layer, there will be following interface function</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">msConnectLayer</span><span class="p">(</span><span class="nb">int</span> <span class="n">connectiontype</span><span class="p">,</span>
                    <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">library_str</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>where <code class="docutils literal notranslate"><span class="pre">connectiontype</span></code> is the type of new layer, and
-<code class="docutils literal notranslate"><span class="pre">library_str</span></code> is the name of library which will
+<p>where <cite>connectiontype</cite> is the type of new layer, and
+<cite>library_str</cite> is the name of library which will
 prodive functionality for this new layer.  For internal
 layer types this second argument is ignored.</p>
 </div></blockquote>
@@ -394,7 +394,7 @@ layer types this second argument is ignored.</p>
 </li>
 <li><p>Remove unwanted interfaces</p>
 <p>Frank Warmerdam proposed <a class="reference internal" href="#fw1" id="id1"><span>[FW1]</span></a> that we remove all layer specific
-interface functions from <code class="docutils literal notranslate"><span class="pre">map.h</span></code>.</p>
+interface functions from <cite>map.h</cite>.</p>
 <blockquote>
 <div><p>I see each “built-in” module such as mapsde.c providing a
 registration function such as “msSDEInitializeLayerVirtualTable”
@@ -404,10 +404,10 @@ appear in map.h any more.</p>
 <dl class="citation">
 <dt class="label" id="fw1"><span class="brackets"><a class="fn-backref" href="#id1">FW1</a></span></dt>
 <dd><div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">Frank</span> <span class="pre">Warmerdam</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">mapserver-dev:</span></code></div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">Message-Id:</span> <span class="pre">&lt;smtpd.490f.4303f2ee.d8246.1&#64;mtaout-c.tc.umn.edu&gt;</span></code></div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">Date:</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">Wed,</span> <span class="pre">17</span> <span class="pre">Aug</span> <span class="pre">2005</span> <span class="pre">22:31:09</span> <span class="pre">-0400</span></code></div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">Subject:</span>&#160;&#160;&#160; <span class="pre">Re:</span> <span class="pre">MapServer</span>&#160; <span class="pre">Plug-in</span> <span class="pre">Infastructure:</span> <span class="pre">RFC</span> <span class="pre">and</span> <span class="pre">PATCH</span></code></div>
+<div class="line"><cite>Frank Warmerdam on the mapserver-dev:</cite></div>
+<div class="line"><cite>Message-Id: &lt;smtpd.490f.4303f2ee.d8246.1&#64;mtaout-c.tc.umn.edu&gt;</cite></div>
+<div class="line"><cite>Date:       Wed, 17 Aug 2005 22:31:09 -0400</cite></div>
+<div class="line"><cite>Subject:    Re: MapServer  Plug-in Infastructure: RFC and PATCH</cite></div>
 </div>
 </dd>
 </dl>
@@ -418,36 +418,36 @@ appear in map.h any more.</p>
 <h2>Files and objects affected<a class="headerlink" href="#files-and-objects-affected" title="Permalink naar deze titel">¶</a></h2>
 <p>This proposal will affect at least following files and objects:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">map.h</span></code></p>
+<li><p><cite>map.h</cite></p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">layerObj</span></code> will contain new fields. There will be a new
-object <code class="docutils literal notranslate"><span class="pre">vtableObj</span></code> in the <code class="docutils literal notranslate"><span class="pre">map.h</span></code>.</p></li>
+<li><p><cite>layerObj</cite> will contain new fields. There will be a new
+object <cite>vtableObj</cite> in the <cite>map.h</cite>.</p></li>
 </ul>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">maplayer.c</span></code></p>
+<li><p><cite>maplayer.c</cite></p>
 <ul>
-<li><p>Various changes, layer specific <code class="docutils literal notranslate"><span class="pre">switch</span></code>-statements will go
+<li><p>Various changes, layer specific <cite>switch</cite>-statements will go
 away, vtable handling and layers vtable initialization will be
 added.</p></li>
 </ul>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">mapfile.c</span></code></p>
+<li><p><cite>mapfile.c</cite></p>
 <ul>
-<li><p>Cleaning of  <code class="docutils literal notranslate"><span class="pre">msCheckConnection</span></code></p></li>
-<li><p>Vtable for <code class="docutils literal notranslate"><span class="pre">msCloseConnection</span></code></p></li>
+<li><p>Cleaning of  <cite>msCheckConnection</cite></p></li>
+<li><p>Vtable for <cite>msCloseConnection</cite></p></li>
 </ul>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">mapogcfilter.c</span></code></p>
+<li><p><cite>mapogcfilter.c</cite></p>
 <ul>
-<li><p>Remove layer-logic from <code class="docutils literal notranslate"><span class="pre">FLTApplyFilterToLayer</span></code></p></li>
+<li><p>Remove layer-logic from <cite>FLTApplyFilterToLayer</cite></p></li>
 </ul>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">mapXXX.c</span></code>, where <code class="docutils literal notranslate"><span class="pre">XXX</span></code> is the name of layer.</p>
+<li><p><cite>mapXXX.c</cite>, where <cite>XXX</cite> is the name of layer.</p>
 <ul>
 <li><p>Add new initialization function</p></li>
 <li><p>Add all new interface functions</p></li>
 <li><p>Fix existing interface functions, if needed / add wrappers for
-<code class="docutils literal notranslate"><span class="pre">msOGRLayerOpen</span></code> and <code class="docutils literal notranslate"><span class="pre">msWFSLayerOpen</span></code>.</p></li>
+<cite>msOGRLayerOpen</cite> and <cite>msWFSLayerOpen</cite>.</p></li>
 </ul>
 </li>
 </ul>
@@ -456,10 +456,10 @@ added.</p></li>
 <h2>Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink naar deze titel">¶</a></h2>
 <p>This is binary and source code level backward incompatible change. The
 proposal will remove some previously public functions, and add new
-field(s) to the <code class="docutils literal notranslate"><span class="pre">layerObj</span></code> struct.</p>
+field(s) to the <cite>layerObj</cite> struct.</p>
 <p>This proposal is not MapScript backward compatible, it will break
-scripts which change directly <code class="docutils literal notranslate"><span class="pre">connectiontype</span></code> field in
-<code class="docutils literal notranslate"><span class="pre">layerObj</span></code>.</p>
+scripts which change directly <cite>connectiontype</cite> field in
+<cite>layerObj</cite>.</p>
 <p>The proposal is MAP-file backward compatible.</p>
 </div>
 <div class="section" id="implementation-issues">
@@ -472,7 +472,7 @@ architecture which works at the moment and is based on ideas
 presented in this proposal.  So there is some real life experience
 that this architecture change is feasible thing to do.</p></li>
 <li><p>I also like to note that this proposal won’t remove all layer
-specific code from MapServer e.g. <code class="docutils literal notranslate"><span class="pre">WMF</span></code>, <code class="docutils literal notranslate"><span class="pre">WMS</span></code> and <code class="docutils literal notranslate"><span class="pre">GRATICULE</span></code>
+specific code from MapServer e.g. <cite>WMF</cite>, <cite>WMS</cite> and <cite>GRATICULE</cite>
 are used as special cases from place to place.</p></li>
 </ul>
 </div>
@@ -496,7 +496,7 @@ have at least two different routes to go:</p>
 <li><p>expose it as a struct, layers will fill vtable pointers by
 accessing directly struct’s field.</p></li>
 <li><p>expose it as a complete opaque type, vtable pointers will be set
-by accessing functions <code class="docutils literal notranslate"><span class="pre">setLayerOpenFP</span></code>, <code class="docutils literal notranslate"><span class="pre">setLayerCloseFP</span></code> and
+by accessing functions <cite>setLayerOpenFP</cite>, <cite>setLayerCloseFP</cite> and
 so on.</p></li>
 </ul>
 <p>The advance of second option is that this way we could easily add

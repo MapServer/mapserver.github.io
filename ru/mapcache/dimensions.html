@@ -172,11 +172,11 @@ spatial boundaries, elevations, or time periods. It also provides a mechanism fo
 <blockquote>
 <div><ul class="simple">
 <li><p>create the directory structure of disk and SQLite caches, using the
-template structure with <code class="docutils literal notranslate"><span class="pre">{dim}</span></code> replacement entry, see
+template structure with <cite>{dim}</cite> replacement entry, see
 <em>Template Structure</em> in <a class="reference internal" href="caches.html#mapcache-cache-disk"><span class="std std-ref">Disk Caches</span></a> and
 <em>Using Multiple SQLite Database Files</em> in <a class="reference internal" href="caches.html#mapcache-cache-sqlite"><span class="std std-ref">SQLite Caches</span></a>.</p></li>
 <li><p>create the database structure of SQLite caches, using custom schema with
-<code class="docutils literal notranslate"><span class="pre">:dim</span></code> replacement entry, see <em>Custom Schema</em> in
+<cite>:dim</cite> replacement entry, see <em>Custom Schema</em> in
 <a class="reference internal" href="caches.html#mapcache-cache-sqlite"><span class="std std-ref">SQLite Caches</span></a>.</p></li>
 <li><p>build requests to WMS sources: any dimensions specified for a tileset will
 be forwarded on to their WMS source whenever a cache miss occurs.</p></li>
@@ -187,23 +187,23 @@ be forwarded on to their WMS source whenever a cache miss occurs.</p></li>
 <h2>Enabling Dimension Support in MapCache<a class="headerlink" href="#enabling-dimension-support-in-mapcache" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Dimensions are enabled in the configuration file at the
 <a class="reference internal" href="config.html#mapcache-config-tileset"><span class="std std-ref">Tileset</span></a> level. Each tileset may define its own
-dimensions with a <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code> section which includes one or several
-<code class="docutils literal notranslate"><span class="pre">&lt;dimension&gt;</span></code> elements.</p>
+dimensions with a <cite>&lt;dimensions&gt;</cite> section which includes one or several
+<cite>&lt;dimension&gt;</cite> elements.</p>
 <div class="section" id="dimension-attributes">
 <h3>Dimension Attributes<a class="headerlink" href="#dimension-attributes" title="Ссылка на этот заголовок">¶</a></h3>
-<p>Several attributes are defined for the <code class="docutils literal notranslate"><span class="pre">&lt;dimension&gt;</span></code> element.</p>
+<p>Several attributes are defined for the <cite>&lt;dimension&gt;</cite> element.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> (required): The name by which the dimension is referred to in a WMS
-request (minus the <code class="docutils literal notranslate"><span class="pre">dim_</span></code> prefix as specified in
+<li><p><cite>name</cite> (required): The name by which the dimension is referred to in a WMS
+request (minus the <cite>dim_</cite> prefix as specified in
 <a class="reference external" href="http://portal.opengeospatial.org/files/?artifact_id=1081&amp;version=1&amp;format=pdf">WMS 1.1.1 Specification</a>).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">default</span></code> (required): The default value for the dimension if none is
+<li><p><cite>default</cite> (required): The default value for the dimension if none is
 explicitly provided in the WMS request.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code> (required): MapCache defines several ways for specifying a
-dimension: <code class="docutils literal notranslate"><span class="pre">values</span></code>, <code class="docutils literal notranslate"><span class="pre">regex</span></code>, <code class="docutils literal notranslate"><span class="pre">sqlite</span></code>, <code class="docutils literal notranslate"><span class="pre">postgresql</span></code>,
-<code class="docutils literal notranslate"><span class="pre">elasticsearch</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code>. They are described in the following
+<li><p><cite>type</cite> (required): MapCache defines several ways for specifying a
+dimension: <cite>values</cite>, <cite>regex</cite>, <cite>sqlite</cite>, <cite>postgresql</cite>,
+<cite>elasticsearch</cite> and <cite>time</cite>. They are described in the following
 sections.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">unit</span></code> (optional): dimension unit. This information is used only in the
+<li><p><cite>unit</cite> (optional): dimension unit. This information is used only in the
 GetCapabilities response.</p></li>
 </ul>
 </div></blockquote>
@@ -231,8 +231,8 @@ does not involve a server restart.</p></li>
 <div class="section" id="values-dimensions">
 <h3>Values Dimensions<a class="headerlink" href="#values-dimensions" title="Ссылка на этот заголовок">¶</a></h3>
 <p>A Values type dimension lists all possible dimension values. The name of the dimension is used as the key in a query string when accessing
-through a WMS or WMTS service, for example <code class="docutils literal notranslate"><span class="pre">&amp;DIM1=foobarbaz</span></code>.</p>
-<p>If a client does not provide the dimension as a key value pair the default will be used (in this example <code class="docutils literal notranslate"><span class="pre">foobar</span></code>).</p>
+through a WMS or WMTS service, for example <cite>&amp;DIM1=foobarbaz</cite>.</p>
+<p>If a client does not provide the dimension as a key value pair the default will be used (in this example <cite>foobar</cite>).</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;tileset</span> <span class="na">name=</span><span class="s">&quot;LayerName&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;source&gt;</span>LayerSource<span class="nt">&lt;/source&gt;</span>
     <span class="nt">&lt;cache&gt;</span>sqlite<span class="nt">&lt;/cache&gt;</span>
@@ -257,7 +257,7 @@ through a WMS or WMTS service, for example <code class="docutils literal notrans
 <p>An alternative to the hard-coded list of values is to use regular expressions.</p>
 <p>The following example creates a MAPFILE dimension, for using the same MapCache tileset with different MapServer
 Mapfiles. The name of the Mapfiles need not be known to MapCache, and can therefore be created even after MapCache has been started.</p>
-<p>When a user passes a <code class="docutils literal notranslate"><span class="pre">MAPFILE=/path/to/mapfile</span></code>, the string <code class="docutils literal notranslate"><span class="pre">/path/to/mapfile</span></code> is validated against
+<p>When a user passes a <cite>MAPFILE=/path/to/mapfile</cite>, the string <cite>/path/to/mapfile</cite> is validated against
 the supplied (PCRE) regular expression. The one in this example allows a name composed of alphanumeric characters
 separated by slashes (/) and finishing with «.map» ( [a-zA-Z0-9./]*.map$ ) , but will fail if there
 are two consecutive dots (..) in the path, to prevent file-system traversal.</p>
@@ -281,7 +281,7 @@ each value references a list of internal, or sub-dimension values which are
 used to query cache.</p>
 <p>For example, let’s define a «sensor» dimension whose allowed values represent
 various Earth observation spacecrafts. A WMS request with that dimension may
-contain, e.g.: <code class="docutils literal notranslate"><span class="pre">...&amp;dim_sensor=spot&amp;...</span></code> In this example, each sensor
+contain, e.g.: <cite>…&amp;dim_sensor=spot&amp;…</cite> In this example, each sensor
 references several data along an internal «product» sub-dimension. An example
 of the «sensor» dimension back-end contents is represented in the following
 table:</p>
@@ -322,11 +322,11 @@ described in <a class="reference internal" href="#tile-assembly-policies">Tile A
 <p>A SQLite dimension is configured by specifying three elements:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;dbfile&gt;</span></code>: Location of the SQLite file implementing the dimension</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;list_query&gt;</span></code>: SQL query returning all sub-dimension values for the
+<li><p><cite>&lt;dbfile&gt;</cite>: Location of the SQLite file implementing the dimension</p></li>
+<li><p><cite>&lt;list_query&gt;</cite>: SQL query returning all sub-dimension values for the
 dimension, e.g. <strong>spot-img1</strong>, <strong>spot-img2</strong>, <strong>phr-img1</strong>, <strong>phr-img2</strong>
 and  <strong>phr-img3</strong> in the «sensor» dimension example.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code>: SQL query returning the list of sub-dimension values
+<li><p><cite>&lt;validate_query&gt;</cite>: SQL query returning the list of sub-dimension values
 for a given dimension value, e.g. <strong>spot-img1</strong> and <strong>spot-img2</strong> for the
 <strong>spot</strong> dimension value in the «sensor» dimension example.</p></li>
 </ul>
@@ -359,7 +359,7 @@ for a given dimension value, e.g. <strong>spot-img1</strong> and <strong>spot-im
 <span class="nt">&lt;/dimension&gt;</span>
 </pre></div>
 </div>
-<p>As illustrated in this example with <code class="docutils literal notranslate"><span class="pre">:dim</span></code> placeholder, queries can contain
+<p>As illustrated in this example with <cite>:dim</cite> placeholder, queries can contain
 template entries. See <a class="reference internal" href="#templating-dimension-queries">Templating dimension queries</a> section below.</p>
 </div>
 <div class="section" id="postgresql-dimensions">
@@ -371,13 +371,13 @@ a PostgreSQL database, and in the way they are configured. A PostgreSQL
 dimension is configured by specifying three elements:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;connection&gt;</span></code>: Connection information of the PostgreSQL database
+<li><p><cite>&lt;connection&gt;</cite>: Connection information of the PostgreSQL database
 implementing the dimension, as expected by the <a class="reference external" href="https://www.postgresql.org/docs/current/static/libpq-connect.html#id-1.7.3.8.2.12.2.1.2">PQconnectdb()</a>
 function of the libpq - C library.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;list_query&gt;</span></code>: SQL query returning all sub-dimension values for the
+<li><p><cite>&lt;list_query&gt;</cite>: SQL query returning all sub-dimension values for the
 dimension, e.g. <strong>spot-img1</strong>, <strong>spot-img2</strong>, <strong>phr-img1</strong>, <strong>phr-img2</strong>
 and  <strong>phr-img3</strong> in the «sensor» dimension example.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code>: SQL query returning the list of sub-dimension values
+<li><p><cite>&lt;validate_query&gt;</cite>: SQL query returning the list of sub-dimension values
 for a given dimension value, e.g. <strong>spot-img1</strong> and <strong>spot-img2</strong> for the
 <strong>spot</strong> dimension value in the «sensor» dimension example.</p></li>
 </ul>
@@ -407,7 +407,7 @@ for a given dimension value, e.g. <strong>spot-img1</strong> and <strong>spot-im
 <span class="nt">&lt;/dimension&gt;</span>
 </pre></div>
 </div>
-<p>As illustrated in this example with <code class="docutils literal notranslate"><span class="pre">:dim</span></code> placeholder, queries can contain
+<p>As illustrated in this example with <cite>:dim</cite> placeholder, queries can contain
 template entries. See <a class="reference internal" href="#templating-dimension-queries">Templating dimension queries</a> section below.</p>
 </div>
 <div class="section" id="elasticsearch-dimensions">
@@ -416,9 +416,9 @@ template entries. See <a class="reference internal" href="#templating-dimension-
 particular, the sub-dimension feature described in the section above is also
 available with ElasticSearch dimensions. ElasticSearch main difference with
 SQLite and PostgreSQL is its query language, Query-DSL, based on JSON instead
-of SQL. Therefore, <code class="docutils literal notranslate"><span class="pre">&lt;list_query&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code> elements shall
+of SQL. Therefore, <cite>&lt;list_query&gt;</cite> and <cite>&lt;validate_query&gt;</cite> elements shall
 contain queries expressed in that language. Inserting JSON data in XML
-configuration may need to encapsulate it in a <code class="docutils literal notranslate"><span class="pre">&lt;![CDATA[</span> <span class="pre">...</span> <span class="pre">]]&gt;</span></code> element.</p>
+configuration may need to encapsulate it in a <cite>&lt;![CDATA[ … ]]&gt;</cite> element.</p>
 <p>In addition, the complex structure of ElasticSearch responses, also expressed
 in JSON, raises the need for extraction instructions to get sub-dimension
 values from query responses.</p>
@@ -452,9 +452,9 @@ values from query responses.</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="s2">&quot;phr_img1&quot;</span><span class="p">,</span> <span class="s2">&quot;phr_img2&quot;</span><span class="p">,</span> <span class="s2">&quot;phr_img3&quot;</span> <span class="p">]</span>
 </pre></div>
 </div>
-<p>This list is obtained by extracting the <code class="docutils literal notranslate"><span class="pre">aggregations</span></code> item from the outer
-dictionary, then <code class="docutils literal notranslate"><span class="pre">distinct_product</span></code> , then <code class="docutils literal notranslate"><span class="pre">buckets</span></code>. Finally the <code class="docutils literal notranslate"><span class="pre">key</span></code>
-item is to be extracted from each dictionary of the <code class="docutils literal notranslate"><span class="pre">bucket</span></code> list. The
+<p>This list is obtained by extracting the <cite>aggregations</cite> item from the outer
+dictionary, then <cite>distinct_product</cite> , then <cite>buckets</cite>. Finally the <cite>key</cite>
+item is to be extracted from each dictionary of the <cite>bucket</cite> list. The
 extraction instructions take the form of a path-like list of keywords to be
 used to extract sub-dimension values from JSON response provided by
 ElasticSearch:</p>
@@ -462,35 +462,35 @@ ElasticSearch:</p>
 </pre></div>
 </div>
 <p>This is specified in the MapCache configuration file by way of new XML
-elements, namely  <code class="docutils literal notranslate"><span class="pre">&lt;list_response&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;validate_response&gt;</span></code>, containing
-extraction instructions respectively for <code class="docutils literal notranslate"><span class="pre">&lt;list_query&gt;</span></code> and
-<code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code> queries.</p>
+elements, namely  <cite>&lt;list_response&gt;</cite> and <cite>&lt;validate_response&gt;</cite>, containing
+extraction instructions respectively for <cite>&lt;list_query&gt;</cite> and
+<cite>&lt;validate_query&gt;</cite> queries.</p>
 <p>An ElasticSearch dimensions is defined by specifying five elements:</p>
 <blockquote>
 <div><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;http&gt;</span></code>: Connection information of the ElasticSearch index implementing
+<li><p><cite>&lt;http&gt;</cite>: Connection information of the ElasticSearch index implementing
 the dimension. This element contains two sub-elements:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;url&gt;</span></code>: Search URL of the ElasticSearch index</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;headers&gt;</span></code>: HTTP headers needed to access the ElasticSearch index.
+<li><p><cite>&lt;url&gt;</cite>: Search URL of the ElasticSearch index</p></li>
+<li><p><cite>&lt;headers&gt;</cite>: HTTP headers needed to access the ElasticSearch index.
 It must contain the tag:
-<code class="docutils literal notranslate"><span class="pre">&lt;Content-Type&gt;application/json&lt;/Content-Type&gt;</span></code>.</p></li>
+<cite>&lt;Content-Type&gt;application/json&lt;/Content-Type&gt;</cite>.</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;list_query&gt;</span></code>: <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html">Query DSL</a> query for getting all sub-dimension values
+<li><p><cite>&lt;list_query&gt;</cite>: <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html">Query DSL</a> query for getting all sub-dimension values
 for the dimension. This query is expressed in JSON format and may need to
-be escaped in a <code class="docutils literal notranslate"><span class="pre">&lt;![CDATA[</span> <span class="pre">...</span> <span class="pre">]]&gt;</span></code> tag.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code>: <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html">Query DSL</a> query for getting the list of
+be escaped in a <cite>&lt;![CDATA[ … ]]&gt;</cite> tag.</p></li>
+<li><p><cite>&lt;validate_query&gt;</cite>: <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html">Query DSL</a> query for getting the list of
 sub-dimension values for a given dimension value. This query is expressed
-in JSON format and may need to be escaped in a <code class="docutils literal notranslate"><span class="pre">&lt;![CDATA[</span> <span class="pre">...</span> <span class="pre">]]&gt;</span></code> tag.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;list_response&gt;</span></code>: List of successive keywords needed to extract actual
+in JSON format and may need to be escaped in a <cite>&lt;![CDATA[ … ]]&gt;</cite> tag.</p></li>
+<li><p><cite>&lt;list_response&gt;</cite>: List of successive keywords needed to extract actual
 sub-dimension values from the raw ElasticSearch response to the
-<code class="docutils literal notranslate"><span class="pre">&lt;list_query&gt;</span></code> query.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;validate_response&gt;</span></code>: List of successive keywords needed to extract
+<cite>&lt;list_query&gt;</cite> query.</p></li>
+<li><p><cite>&lt;validate_response&gt;</cite>: List of successive keywords needed to extract
 actual sub-dimension values from the raw ElasticSearch response to the
-<code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code> query.</p></li>
+<cite>&lt;validate_query&gt;</cite> query.</p></li>
 </ul>
 </div></blockquote>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- &quot;elasticsearch&quot; dimension</span>
@@ -543,7 +543,7 @@ actual sub-dimension values from the raw ElasticSearch response to the
 <span class="nt">&lt;/dimension&gt;</span>
 </pre></div>
 </div>
-<p>As illustrated in this example with <code class="docutils literal notranslate"><span class="pre">:dim</span></code> placeholder, queries can contain
+<p>As illustrated in this example with <cite>:dim</cite> placeholder, queries can contain
 template entries. See <a class="reference internal" href="#templating-dimension-queries">Templating dimension queries</a> section below.</p>
 </div>
 <div class="section" id="time-dimensions">
@@ -555,17 +555,17 @@ MapCache Tilesets</span></a> initial proposal for further details.</p>
 elements must be provided:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;dbfile&gt;</span></code>: Location of the SQLite file implementing the time dimension</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;query&gt;</span></code>: SQL query returning the list of available timestamp values
+<li><p><cite>&lt;dbfile&gt;</cite>: Location of the SQLite file implementing the time dimension</p></li>
+<li><p><cite>&lt;query&gt;</cite>: SQL query returning the list of available timestamp values
 within a given time interval. In that query, start time and end time are
-represented by the respective placeholders <code class="docutils literal notranslate"><span class="pre">:start_timestamp</span></code> and
-<code class="docutils literal notranslate"><span class="pre">:end_time_stamp</span></code>. Returned values shall be in <code class="docutils literal notranslate"><span class="pre">yyyy-mm-ddThh:mm:ssZ</span></code>
+represented by the respective placeholders <cite>:start_timestamp</cite> and
+<cite>:end_time_stamp</cite>. Returned values shall be in <cite>yyyy-mm-ddThh:mm:ssZ</cite>
 time format, as specified in <a class="reference external" href="https://tools.ietf.org/html/rfc3339">RFC 3339</a>, but restricted to UTC.</p></li>
 </ul>
 </div></blockquote>
 <p>From MapCache 1.8 on, dynamic back-ends for Time dimensions can be PostgreSQL
 databases or ElasticSearch indices in addition to SQLite files. Configuring a
-Time dimension with a specific back-end is made by setting a <code class="docutils literal notranslate"><span class="pre">time=&quot;true&quot;</span></code>
+Time dimension with a specific back-end is made by setting a <cite>time=»true»</cite>
 attribute within a SQLite, PostgreSQL or ElasticSearch dimension configuration.</p>
 <p>Still, MapCache keeps an (almost) backward compatible configuration of Time
 dimension with an implicit SQLite back-end. Example in the following section
@@ -736,14 +736,14 @@ tiles is described in <a class="reference internal" href="#tile-assembly-policie
 </div>
 <div class="section" id="templating-dimension-queries">
 <h3>Templating dimension queries<a class="headerlink" href="#templating-dimension-queries" title="Ссылка на этот заголовок">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;list_query&gt;</span></code> can contain template entries that
+<p><cite>&lt;validate_query&gt;</cite> and <cite>&lt;list_query&gt;</cite> can contain template entries that
 will be replaced at runtime by correct values. Valid template entries are:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">:dim</span></code> Dimension value as provided in incoming HTTP request</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">:tileset</span></code> Tileset name</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">:gridsrs</span></code> Grid SRS</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">:minx</span></code>, <code class="docutils literal notranslate"><span class="pre">:miny</span></code>, <code class="docutils literal notranslate"><span class="pre">:maxx</span></code>, <code class="docutils literal notranslate"><span class="pre">:maxy</span></code> Parameters for rectangular extent</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">:start_timestamp</span></code>, <code class="docutils literal notranslate"><span class="pre">:end_timestamp</span></code> Parameters for time interval</p></li>
+<li><p><cite>:dim</cite> Dimension value as provided in incoming HTTP request</p></li>
+<li><p><cite>:tileset</cite> Tileset name</p></li>
+<li><p><cite>:gridsrs</cite> Grid SRS</p></li>
+<li><p><cite>:minx</cite>, <cite>:miny</cite>, <cite>:maxx</cite>, <cite>:maxy</cite> Parameters for rectangular extent</p></li>
+<li><p><cite>:start_timestamp</cite>, <cite>:end_timestamp</cite> Parameters for time interval</p></li>
 </ul>
 </div>
 <div class="section" id="tile-assembly-policies">
@@ -751,16 +751,16 @@ will be replaced at runtime by correct values. Valid template entries are:</p>
 <p>When several time or sub-dimension values are returned from a dimension
 back-end query, the resulting tile is an assembly of all simple tiles matching
 each value. The way simple tiles are assembled is set with the
-<code class="docutils literal notranslate"><span class="pre">&lt;assembly_type&gt;</span></code> tag of the <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code> element. Currently only two
+<cite>&lt;assembly_type&gt;</cite> tag of the <cite>&lt;dimensions&gt;</cite> element. Currently only two
 values are implemented in MapCache:</p>
 <blockquote>
 <div><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">none</span></code>: No assembly is performed, the resulting tile is the first
+<li><p><cite>none</cite>: No assembly is performed, the resulting tile is the first
 retrieved simple tile. This is the default value.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">stack</span></code>: Every pixel of the resulting tile is filled with the first
+<li><p><cite>stack</cite>: Every pixel of the resulting tile is filled with the first
 opaque pixel found in all simple tiles in their retrieval order, e.g.:</p>
 <table class="docutils align-default" id="id1">
-<caption><span class="caption-text">Assembly type: <code class="docutils literal notranslate"><span class="pre">stack</span></code></span><a class="headerlink" href="#id1" title="Постоянная ссылка на таблицу">¶</a></caption>
+<caption><span class="caption-text">Assembly type: <cite>stack</cite></span><a class="headerlink" href="#id1" title="Постоянная ссылка на таблицу">¶</a></caption>
 <colgroup>
 <col style="width: 33%" />
 <col style="width: 33%" />
@@ -776,7 +776,7 @@ opaque pixel found in all simple tiles in their retrieval order, e.g.:</p>
 </tr>
 <tr class="row-even"><td><p>Product #1</p></td>
 <td><p>Product #2</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">stack</span></code> assembly of Products #1 &amp; #2</p></td>
+<td><p><cite>stack</cite> assembly of Products #1 &amp; #2</p></td>
 </tr>
 </tbody>
 </table>
@@ -784,11 +784,11 @@ opaque pixel found in all simple tiles in their retrieval order, e.g.:</p>
 </ul>
 </div></blockquote>
 <p>The resulting tile may or may not be cached depending on the value of the
-<code class="docutils literal notranslate"><span class="pre">&lt;store_assemblies&gt;</span></code> tag of the <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code> element. The two possible
-values are <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">false</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">&lt;subdimensions_read_only&gt;</span></code> tag of the <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code> element indicates
+<cite>&lt;store_assemblies&gt;</cite> tag of the <cite>&lt;dimensions&gt;</cite> element. The two possible
+values are <cite>true</cite> and <cite>false</cite>. Default is <cite>true</cite>.</p>
+<p>The <cite>&lt;subdimensions_read_only&gt;</cite> tag of the <cite>&lt;dimensions&gt;</cite> element indicates
 whether data source shall be queried in case of cache miss. The two possible
-values are <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">false</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+values are <cite>true</cite> and <cite>false</cite>. Default is <cite>false</cite>.</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;dimensions&gt;</span>
     <span class="nt">&lt;assembly_type&gt;</span>stack<span class="nt">&lt;/assembly_type&gt;</span>
     <span class="nt">&lt;store_assemblies&gt;</span>true<span class="nt">&lt;/store_assemblies&gt;</span>
@@ -802,8 +802,8 @@ values are <code class="docutils literal notranslate"><span class="pre">true</sp
 <h3>Tile Fetching Policies<a class="headerlink" href="#tile-fetching-policies" title="Ссылка на этот заголовок">¶</a></h3>
 <p>MapCache can be configured to fetch all subtiles to assemble either within a
 single thread or with as many threads as subtiles to fetch. This is set with
-the <code class="docutils literal notranslate"><span class="pre">&lt;assembly_threaded_fetching&gt;</span></code> tag of the <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code> element. This
-tag has an optional <code class="docutils literal notranslate"><span class="pre">maxzoom</span></code> attribute to specify that multi-threaded
+the <cite>&lt;assembly_threaded_fetching&gt;</cite> tag of the <cite>&lt;dimensions&gt;</cite> element. This
+tag has an optional <cite>maxzoom</cite> attribute to specify that multi-threaded
 fetching should be disabled from a given zoom level.</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;dimensions&gt;</span>
     <span class="nt">&lt;assembly_threaded_fetching</span> <span class="na">maxzoom=</span><span class="s">&quot;5&quot;</span><span class="nt">&gt;</span>true<span class="nt">&lt;/assembly_threaded_fetching&gt;</span>
@@ -815,10 +815,10 @@ fetching should be disabled from a given zoom level.</p>
 </div>
 <div class="section" id="querying-dimensions-at-map-level">
 <h3>Querying Dimensions at map level<a class="headerlink" href="#querying-dimensions-at-map-level" title="Ссылка на этот заголовок">¶</a></h3>
-<p>By default, MapCache runs <code class="docutils literal notranslate"><span class="pre">&lt;validate_query&gt;</span></code> of second level dimensions for
+<p>By default, MapCache runs <cite>&lt;validate_query&gt;</cite> of second level dimensions for
 every requested tile of a map. When this involves slow remote PostgreSQL or
 ElasticSearch servers, it may be desirable to send the query only once for the
-whole map. A configuration option at the <code class="docutils literal notranslate"><span class="pre">&lt;dimension&gt;</span></code> level exists to enable
+whole map. A configuration option at the <cite>&lt;dimension&gt;</cite> level exists to enable
 this behaviour:</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;dimension&gt;</span>
    <span class="nt">&lt;wms_querybymap&gt;</span>true<span class="nt">&lt;/wms_querybymap&gt;</span>
@@ -829,8 +829,8 @@ this behaviour:</p>
 <div class="section" id="storing-dimensions">
 <h2>Storing Dimensions<a class="headerlink" href="#storing-dimensions" title="Ссылка на этот заголовок">¶</a></h2>
 <p>When using a disk based cache tiles will be stored in a folder structure similar to
-<code class="docutils literal notranslate"><span class="pre">base/gridname/DIM1/value/xx/xx/xx/xx/xx/xx.png</span></code> (where DIM1 is the dimension value).</p>
-<p>The order of the <code class="docutils literal notranslate"><span class="pre">&lt;dimension&gt;</span></code> tags inside the <code class="docutils literal notranslate"><span class="pre">&lt;dimensions&gt;</span></code> tag  is important as it is used
+<cite>base/gridname/DIM1/value/xx/xx/xx/xx/xx/xx.png</cite> (where DIM1 is the dimension value).</p>
+<p>The order of the <cite>&lt;dimension&gt;</cite> tags inside the <cite>&lt;dimensions&gt;</cite> tag  is important as it is used
 to create the directory structure for the disk cache. If you change the order of these
 values, any tiles that have been previously cached are invalidated (they will be unavailable to MapCache but not deleted).</p>
 <p>Templates can be used to change the folder structure for example:</p>
@@ -850,10 +850,10 @@ values, any tiles that have been previously cached are invalidated (they will be
 </div>
 <div class="section" id="accessing-tile-caches-with-dimensions">
 <h2>Accessing Tile Caches with Dimensions<a class="headerlink" href="#accessing-tile-caches-with-dimensions" title="Ссылка на этот заголовок">¶</a></h2>
-<p>To retrieve a tile with a specific dimension, add the dimension name and value to the request query string e.g. <code class="docutils literal notranslate"><span class="pre">&amp;DIM1=value</span></code></p>
+<p>To retrieve a tile with a specific dimension, add the dimension name and value to the request query string e.g. <cite>&amp;DIM1=value</cite></p>
 <p>Only WMS and WMTS clients support passing dimensions to MapCache. Other tile services such as gmaps (GoogleMaps), tms, and KML
 do not support dimensions. WMTS however does allow access using a x,y,z addressing scheme, so by using URL rewriting on the web server
-tile-based clients (for example an OpenLayers <code class="docutils literal notranslate"><span class="pre">ol.source.XYZ</span></code> layer) can load a dimension-based tileset.</p>
+tile-based clients (for example an OpenLayers <cite>ol.source.XYZ</cite> layer) can load a dimension-based tileset.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># a URL such as the following</span>
 <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">servername</span><span class="o">/</span><span class="n">tiles</span><span class="o">/</span><span class="mi">13</span><span class="o">/</span><span class="mi">3914</span><span class="o">/</span><span class="mf">2687.</span><span class="n">png</span>
 <span class="c1"># can be rewritten into a WMTS request - note WMTS uses {z}/{y}/{x} rather than {z}/{x}/{y}</span>

@@ -171,23 +171,23 @@ bind it to the running MapServer by layer’s virtual table.</p>
 <div class="section" id="technical-solution">
 <h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Lien permanent vers ce titre">¶</a></h2>
 <ul>
-<li><p>New <code class="docutils literal notranslate"><span class="pre">CONFIG</span></code> option <code class="docutils literal notranslate"><span class="pre">MS_PLUGIN_DIR</span></code> which, if set, tells the base
+<li><p>New <cite>CONFIG</cite> option <cite>MS_PLUGIN_DIR</cite> which, if set, tells the base
 path for plugins</p></li>
-<li><p>New MAP-file keyword <code class="docutils literal notranslate"><span class="pre">PLUGIN</span></code> with string argument.  This
+<li><p>New MAP-file keyword <cite>PLUGIN</cite> with string argument.  This
 keywords tells which library dynamically to load for this layer.</p>
 <p>The plugins are loaded based on the following algorithm:</p>
 <ul class="simple">
-<li><p>If plugin string is missing <code class="docutils literal notranslate"><span class="pre">.so</span></code> or <code class="docutils literal notranslate"><span class="pre">.dll</span></code> extension, append
+<li><p>If plugin string is missing <cite>.so</cite> or <cite>.dll</cite> extension, append
 it to the plugin string</p></li>
-<li><p>If <code class="docutils literal notranslate"><span class="pre">MS_PLUGIN_DIR</span></code> is set and plugin string is not an absolute
-path, prefix plugin string with <code class="docutils literal notranslate"><span class="pre">MS_PLUGIN_DIR</span></code></p></li>
+<li><p>If <cite>MS_PLUGIN_DIR</cite> is set and plugin string is not an absolute
+path, prefix plugin string with <cite>MS_PLUGIN_DIR</cite></p></li>
 <li><p>otherwise use plugin string directly</p></li>
 </ul>
 <p>In general, the dynamic library loader will use system paths to seek
 appropriate plugin to load, if the path is not absolute.</p>
 </li>
-<li><p>New connection type <code class="docutils literal notranslate"><span class="pre">PLUGIN</span></code></p></li>
-<li><p>New field <code class="docutils literal notranslate"><span class="pre">char*</span> <span class="pre">plugin_library</span></code> in layerObj structure, this is
+<li><p>New connection type <cite>PLUGIN</cite></p></li>
+<li><p>New field <cite>char* plugin_library</cite> in layerObj structure, this is
 the name of library to load for this layer.</p></li>
 <li><p>Function to get virtual table for requested layer. If the library
 isn’t already loaded, it will be loaded  on demand.</p>
@@ -195,8 +195,8 @@ isn’t already loaded, it will be loaded  on demand.</p>
 <span class="n">getCustomLayerVirtualTable</span><span class="p">(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>where <code class="docutils literal notranslate"><span class="pre">layerVTableObj</span></code> is the virtual table and layer is a custom
-layer. In case of error, function will return <code class="docutils literal notranslate"><span class="pre">NULL</span></code>.</p>
+<p>where <cite>layerVTableObj</cite> is the virtual table and layer is a custom
+layer. In case of error, function will return <cite>NULL</cite>.</p>
 </li>
 <li><p>Function to get a function pointer from dynamic loaded library. This
 function will also load the library.</p>
@@ -205,7 +205,7 @@ function will also load the library.</p>
 </pre></div>
 </div>
 <p>This is implemented by GDAL project, and I have planned to use their
-implementation of this (<code class="docutils literal notranslate"><span class="pre">CPLGetSymbol</span></code>).</p>
+implementation of this (<cite>CPLGetSymbol</cite>).</p>
 </li>
 <li><p>Cache structure for already loaded libraries. This cache structure
 will consist of a full name/path of the library (provided by user
@@ -216,19 +216,19 @@ the maximum number of different custom layers for MapServer which
 could be loaded at the same time.  This cache implementation is
 internal, so if it has to be make dynamically allocated, it is
 possible to do later without breaking interface.</p></li>
-<li><p>New lock item (<code class="docutils literal notranslate"><span class="pre">TLOCK_LAYER_VTABLE</span></code>) to protect library cache structure.</p></li>
+<li><p>New lock item (<cite>TLOCK_LAYER_VTABLE</cite>) to protect library cache structure.</p></li>
 </ul>
 </div>
 <div class="section" id="files-and-objects-affected">
 <h2>Files and objects affected<a class="headerlink" href="#files-and-objects-affected" title="Lien permanent vers ce titre">¶</a></h2>
 <p>This proposal will affect at least following files and objects:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">map.h</span></code></p>
+<li><p><cite>map.h</cite></p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">layerObj</span></code> will contain a new field, <code class="docutils literal notranslate"><span class="pre">char</span> <span class="pre">*plugin_library</span></code>.</p></li>
+<li><p><cite>layerObj</cite> will contain a new field, <cite>char *plugin_library</cite>.</p></li>
 </ul>
 </li>
-<li><p>New lock token <code class="docutils literal notranslate"><span class="pre">TLOCK_LAYER_VTABLE</span></code></p></li>
+<li><p>New lock token <cite>TLOCK_LAYER_VTABLE</cite></p></li>
 <li><p>New files and objects for custom layer handling.</p></li>
 </ul>
 </div>
@@ -260,19 +260,19 @@ was +3 and after amending RFC, got +4 (3 non-voting members).</p>
 <div class="section" id="working-notes">
 <h2>Working Notes<a class="headerlink" href="#working-notes" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Plugin library has to implement function
-<code class="docutils literal notranslate"><span class="pre">PluginInitializeVirtualTable</span></code></p>
+<cite>PluginInitializeVirtualTable</cite></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">pfnPluginInitVTable</span><span class="p">)(</span><span class="n">layerVTableObj</span> <span class="o">*</span><span class="p">,</span>
                            <span class="n">layerObj</span> <span class="o">*</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>which is called during library loading.  This function is responsible
-to populate <code class="docutils literal notranslate"><span class="pre">layerVTableObj</span> <span class="pre">*</span></code> virtual table.  If this function
-leaves some function pointers to <code class="docutils literal notranslate"><span class="pre">NULL</span></code> in this virtual table, then
+to populate <cite>layerVTableObj *</cite> virtual table.  If this function
+leaves some function pointers to <cite>NULL</cite> in this virtual table, then
 default actions are used for these missing functions.  The defaults
-are visible in function <code class="docutils literal notranslate"><span class="pre">maplayer.c:</span> <span class="pre">populateVirtualTable(...)</span></code>.
-The function must not populate directly <code class="docutils literal notranslate"><span class="pre">layerObj-&gt;vtable</span></code>, it have
-to use <code class="docutils literal notranslate"><span class="pre">layerVTableObj</span> <span class="pre">*</span></code> argument for this.  The MapServer is
-holding <code class="docutils literal notranslate"><span class="pre">TLOCK_LAYER_VTABLE</span></code> lock during this function call.</p>
+are visible in function <cite>maplayer.c: populateVirtualTable(…)</cite>.
+The function must not populate directly <cite>layerObj-&gt;vtable</cite>, it have
+to use <cite>layerVTableObj *</cite> argument for this.  The MapServer is
+holding <cite>TLOCK_LAYER_VTABLE</cite> lock during this function call.</p>
 </div>
 </div>
 
