@@ -308,7 +308,7 @@ See <cite>EXPRESSION</cite> in <a class="reference internal" href="class.html#cl
 <dl class="simple" id="mapfile-label-font">
 <dt>FONT [name|attribute]</dt><dd><ul class="simple">
 <li><p>Font alias (as defined in the FONTSET) to use for labeling.</p></li>
-<li><p>[<em>Attribute</em>] was introduced in version 5.6 to specfify the font
+<li><p>[<em>Attribute</em>] was introduced in version 5.6 to specify the font
 alias.</p></li>
 <li><p>May contain a comma-separated list of up to MS_MAX_LABEL_FONTS
 (usually 5) font aliases used as fallback fonts in renderers
@@ -319,11 +319,15 @@ See <a class="reference internal" href="../development/rfc/ms-rfc-98.html#rfc98"
 </ul>
 </dd>
 </dl>
-<span id="mapfile-label-force"></span><dl class="simple" id="force">
-<dt>FORCE [true|false]</dt><dd><p>Forces labels for a particular class on, regardless of collisions.
+<span id="mapfile-label-force"></span><dl id="force">
+<dt>FORCE [true|false|group]</dt><dd><p>Forces labels for a particular class on, regardless of collisions.
 Available only for cached labels.  Default is false.  If <cite>FORCE</cite>
 is true and <cite>PARTIALS</cite> is false, <cite>FORCE</cite> takes precedence, and
 partial labels are drawn.</p>
+<p>The GROUP parameter, added in version 6.2, determines if the label
+is allowed to intersect other labels from the same feature. Multiple STYLE blocks
+can be used to render graphic symbols instead of
+or alongside text. See <a class="reference internal" href="../development/announce/6-2.html#announce-6-2-force-group"><span class="std std-ref">Complex Multi Label/Symbol Symbology</span></a>.</p>
 </dd>
 </dl>
 <span id="mapfile-label-maxlength"></span><dl id="maxlength">
@@ -601,7 +605,7 @@ semi-translucent magenta, the following is used:</p>
 </dd>
 </dl>
 <span id="mapfile-label-size"></span><dl id="size">
-<dt>SIZE [integer]|[tiny|small|medium|large|giant]|[attribute]</dt><dd><ul>
+<dt>SIZE [integer]|[tiny|small|medium|large|giant]|[attribute]|[expression]</dt><dd><ul>
 <li><p>Text size. Use a number to give the size in pixels of your
 TrueType font based label, or any of the other 5 listed keywords
 for bitmap fonts.</p>
@@ -626,6 +630,19 @@ record, your LABEL object might contain:</p>
 </pre></div>
 </div>
 <p>The associated RFC document for this feature is <a class="reference internal" href="../development/rfc/ms-rfc-19.html#rfc19"><span class="std std-ref">MS RFC 19: Style &amp; Label attribute binding</span></a>.</p>
+</li>
+<li><p>[expression] was added in version 7.6 to allow arithmetic expressions
+returning an integer value as part of <a class="reference internal" href="../development/rfc/ms-rfc-124.html#rfc124"><span class="std std-ref">MS RFC 124: Improving SLD Support in MapServer</span></a>. Attributes can be used
+as part of this expression:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LABEL</span>
+  <span class="k">TEXT</span> <span class="s">&quot;[name]&quot;</span>
+  <span class="k">COLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
+  <span class="k">TYPE</span> <span class="nb">TRUETYPE</span>
+  <span class="k">FONT</span> <span class="err">vera</span><span class="p">-</span><span class="err">bold</span>
+  <span class="k">SIZE</span> <span class="p">((</span> <span class="nx">[s12]</span> <span class="o">*</span> <span class="nx">[s12]</span> <span class="p">)</span> <span class="p">-</span> <span class="mi">132</span> <span class="p">)</span>
+<span class="k">END</span>
+</pre></div>
+</div>
 </li>
 </ul>
 <div class="admonition note">
@@ -760,8 +777,8 @@ for conditional line wrapping after a given number of characters.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2020, Open Source Geospatial Foundation.
-      Обновлено: 2020-06-14.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
+      Обновлено: 2020-07-20.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
     </div>
   </body>
 </html>
