@@ -147,16 +147,17 @@
 <span id="index-0"></span><span id="id1"></span><h1>Contour<a class="headerlink" href="#contour" title="Ссылка на этот заголовок">¶</a></h1>
 <div class="section" id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Ссылка на этот заголовок">¶</a></h2>
-<p>MapServer can compute and render a contour layer on the fly from a
-raster source.  The raster source is one band of raster data, which
+<p>MapServer (since version 6.4) can compute and render a contour layer on the
+fly from a raster source.  The raster source is one band of raster data, which
 represents a digital elevation model (DEM).  More info about DEMs at:
 <a class="reference external" href="http://en.wikipedia.org/wiki/Digital_elevation_model">http://en.wikipedia.org/wiki/Digital_elevation_model</a></p>
 </div>
 <div class="section" id="how-it-works">
 <h2>2. How it works<a class="headerlink" href="#how-it-works" title="Ссылка на этот заголовок">¶</a></h2>
-<p id="index-1">CONNECTIONTYPE CONTOUR. The new type is a hybrid layer, which has a raster data
-source as input and vector features as output. Initially, only the line
-representation of those vector features will be supported.</p>
+<p id="index-1">CONNECTIONTYPE CONTOUR. The new (to MapServer 6.4) type is a hybrid layer, which
+has a raster data source as input and vector features as output. Initially,
+only the line representation of those vector features will be supported. More
+detailed information about the original implementation can be found in <a class="reference internal" href="../../development/rfc/ms-rfc-85.html#rfc85"><span class="std std-ref">RFC 85</span></a>.</p>
 <p>Since the internal layer is of type vector, queries will be supported and
 operate on the vectors (not on the raw raster source). In the future we might
 see a need to add a query mode that queries the raster source, but this is not
@@ -191,8 +192,18 @@ is done by adding an optional «miscaledenom,maxscaledenom:» prefix to the
 value or list of values. See the example below.</p>
 </div></blockquote>
 </div></blockquote>
+<div class="admonition warning">
+<p class="admonition-title">Предупреждение</p>
+<p>If you only set a single CONTOUR_INTERVAL for all scale ranges, MapServer
+will likely crash at outer scale ranges (first example below).  More recent
+GDAL versions (such as 3.2.0) will output an error message such as:
+<em>«Input values and/or interval settings would lead to too many levels»</em>. To
+avoid this, set multiple CONTOUR_INTERVAL lines to handle various scale ranges
+(see the working Copernicus DEM example below, with output map images).</p>
+</div>
 <p>Example of a simple layer definition:</p>
-<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span> <span class="k">NAME</span> <span class="s">&quot;my_contour_layer&quot;</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;my_contour_layer&quot;</span>
   <span class="k">TYPE</span> <span class="nb">LINE</span>
   <span class="k">STATUS</span> <span class="nb">DEFAULT</span>
   <span class="k">CONNECTIONTYPE</span> <span class="nb">CONTOUR</span>
@@ -206,10 +217,12 @@ value or list of values. See the example below.</p>
       <span class="k">COLOR</span> <span class="mi">255</span> <span class="mi">0</span> <span class="mi">0</span>
     <span class="k">END</span>
   <span class="k">END</span>
+<span class="k">END</span> <span class="c">#layer</span>
 </pre></div>
 </div>
 <p>Example of a layer definition with scale-dependent contour ranges:</p>
-<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span> <span class="k">NAME</span> <span class="s">&quot;my_contour_layer&quot;</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;my_contour_layer&quot;</span>
   <span class="k">TYPE</span> <span class="nb">LINE</span>
   <span class="k">STATUS</span> <span class="nb">DEFAULT</span>
   <span class="k">CONNECTIONTYPE</span> <span class="nb">CONTOUR</span>
@@ -229,10 +242,12 @@ value or list of values. See the example below.</p>
       <span class="p">...</span>
     <span class="k">END</span>
   <span class="k">END</span>
+<span class="k">END</span> <span class="c">#layer</span>
 </pre></div>
 </div>
 <p>Example of a layer definition with a tile index and WMS TIME support:</p>
-<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span> <span class="k">NAME</span> <span class="s">&quot;my_contour_layer&quot;</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;my_contour_layer&quot;</span>
   <span class="k">TYPE</span> <span class="nb">LINE</span>
   <span class="k">STATUS</span> <span class="nb">OFF</span>
   <span class="k">CONNECTIONTYPE</span> <span class="nb">CONTOUR</span>
@@ -257,6 +272,32 @@ value or list of values. See the example below.</p>
 <span class="k">END</span> <span class="c"># LAYER</span>
 </pre></div>
 </div>
+<p>Example of a layer definition with scale-dependent contour ranges &amp; Copernicus EU DEM data:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;dem-contours&quot;</span>
+  <span class="k">TYPE</span> <span class="nb">LINE</span>
+  <span class="k">STATUS</span> <span class="nb">ON</span>
+  <span class="k">CONNECTIONTYPE</span> <span class="nb">CONTOUR</span>
+  <span class="k">DATA</span> <span class="s">&quot;eu_dem_v11_E40N20_clip.TIF&quot;</span>
+  <span class="k">PROCESSING</span> <span class="s">&quot;BANDS=1&quot;</span>
+  <span class="k">PROCESSING</span> <span class="s">&quot;CONTOUR_ITEM=Band_1&quot;</span>
+  <span class="k">PROCESSING</span> <span class="s">&quot;CONTOUR_INTERVAL=0,25000:5&quot;</span> <span class="c"># interval of 5 for scales of 25000 or less</span>
+  <span class="k">PROCESSING</span> <span class="s">&quot;CONTOUR_INTERVAL=25000,500000:10&quot;</span> <span class="c"># interval of 10 for scales in the 25000 to 500000 range</span>
+  <span class="k">PROCESSING</span> <span class="s">&quot;CONTOUR_LEVELS=500000,0:10,25,50,100,200,300,400,500,600,700,800,900,1000&quot;</span> <span class="c"># explicit list of levels for scales of 500000 and up</span>
+  <span class="k">CLASS</span>
+    <span class="k">NAME</span> <span class="s">&quot;Contours&quot;</span>
+    <span class="k">STYLE</span>
+      <span class="k">WIDTH</span> <span class="mi">1</span>
+      <span class="k">COLOR</span> <span class="mi">139</span> <span class="mi">69</span> <span class="mi">19</span>
+    <span class="k">END</span>
+  <span class="k">END</span>
+<span class="k">END</span> <span class="c"># layer</span>
+</pre></div>
+</div>
+<p><strong>Figure: contours zoomed-out to coastline (Corsica island) generated from Copernicus EU DEM</strong></p>
+<img alt="../../_images/contour-coastline.png" class="no-scaled-link" src="../../_images/contour-coastline.png" style="width: 600px; height: 400px;" />
+<p><strong>Figure: contours zoomed-in (Corsica island) generated from Copernicus EU DEM</strong></p>
+<img alt="../../_images/contour.png" class="no-scaled-link" src="../../_images/contour.png" style="width: 600px; height: 400px;" />
 </div>
 <div class="section" id="data-cellsize">
 <h2>2.1 Data cellsize<a class="headerlink" href="#data-cellsize" title="Ссылка на этот заголовок">¶</a></h2>
@@ -354,8 +395,8 @@ data cellsize to produce smooth contours at all scales:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2020, Open Source Geospatial Foundation.
-      Обновлено: 2020-11-03.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.3.0.
+      Обновлено: 2020-12-03.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
     </div>
   </body>
 </html>
