@@ -188,6 +188,11 @@ and let MapServer piece the mosaic together on the fly.</p>
 for GDAL data sources (rasters) and <a class="reference external" href="https://gdal.org/programs/ogrtindex.html">ogrtindex</a>
 for OGR data sources (vectors). You just run them, specifying
 the index file to create and the list of data sources to add to the index.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is also the <a class="reference internal" href="../utilities/tile4ms.html#tile4ms"><span class="std std-ref">tile4ms</span></a> utility, but it only handles shapefile
+mosaic/indexing.</p>
+</div>
 <p id="index-1">For example, to make a mosaic of several GeoTIFFs, creating an index file
 named <em>tileindex-tif.shp</em>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gdaltindex</span> <span class="n">tileindex</span><span class="o">-</span><span class="n">tif</span><span class="o">.</span><span class="n">shp</span> <span class="n">folder</span><span class="o">/*.</span><span class="n">tif</span>
@@ -196,6 +201,19 @@ named <em>tileindex-tif.shp</em>:</p>
 <p id="index-2">And to make a mosaic of vectors, creating an index file
 named <em>tileindex-tiger.shp</em>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ogrtindex</span> <span class="n">tileindex</span><span class="o">-</span><span class="n">tiger</span><span class="o">.</span><span class="n">shp</span> <span class="n">tiger</span><span class="o">/</span><span class="n">CA</span><span class="o">/*.</span><span class="n">shp</span> <span class="n">tiger</span><span class="o">/</span><span class="n">NV</span><span class="o">/*.</span><span class="n">shp</span>
+</pre></div>
+</div>
+<p>If your data files are in different subfolders, you can use the <em>–optfile</em>
+switch for <a class="reference external" href="https://gdal.org/programs/vector_common_options.html#cmdoption-optfile">vectors</a>
+or <a class="reference external" href="https://gdal.org/programs/raster_common_options.html#raster-common-options-optfile">rasters</a>
+to pass a file list to ogrtindex/gdaltindex, such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#windows (create a file listing all .tif in subfolders)</span>
+<span class="nb">dir</span> <span class="o">/</span><span class="n">s</span><span class="o">/</span><span class="n">b</span> <span class="o">*.</span><span class="n">tif</span> <span class="o">&gt;</span> <span class="n">tif_list</span><span class="o">.</span><span class="n">txt</span>
+<span class="c1">#unix</span>
+<span class="n">find</span> <span class="o">.</span> <span class="o">-</span><span class="n">name</span> <span class="s2">&quot;*.tif&quot;</span> <span class="o">&gt;</span> <span class="n">tif_list</span><span class="o">.</span><span class="n">txt</span>
+
+<span class="c1">#call gdaltindex with the --optfile switch</span>
+<span class="n">gdaltindex</span> <span class="n">gdaltindex</span><span class="o">-</span><span class="n">dirs</span><span class="o">.</span><span class="n">shp</span> <span class="o">--</span><span class="n">optfile</span> <span class="n">tif_list</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -412,6 +430,10 @@ the SHAPEPATH, as shown below:</p></li>
 </pre></div>
 </div>
 <img alt="../_images/tileindex-lakes.png" class="no-scaled-link" src="../_images/tileindex-lakes.png" style="width: 600px; height: 400px;" />
+<p>When you view the layer in a MapServer application, you will notice
+that when you are zoomed into a small area of the state (such as
+a single county) only the necessary lake shapefiles are loaded,
+which speeds up the application.</p>
 </li>
 </ol>
 </div>
@@ -510,6 +532,10 @@ the SHAPEPATH, as shown below:</p></li>
 </pre></div>
 </div>
 <img alt="../_images/tileindex-mrsid.png" class="no-scaled-link" src="../_images/tileindex-mrsid.png" style="width: 600px; height: 400px;" />
+<p>When you view the layer in a MapServer application, you will notice
+that when you are zoomed into a small area of the state
+(such as a single county) only the necessary MrSID images are loaded,
+which speeds up the application.</p>
 </li>
 </ol>
 </div>
@@ -582,7 +608,7 @@ the SHAPEPATH, as shown below:</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Mis à jour le 2021-03-24.
+      Mis à jour le 2021-03-27.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.3.
     </div>
   </body>
