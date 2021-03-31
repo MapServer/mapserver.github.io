@@ -221,6 +221,17 @@ mapfiles to the <em>/opt/mapserver</em> directory and subdirectories:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SetEnv</span> <span class="n">MS_MAP_PATTERN</span> <span class="s2">&quot;^\/opt\/mapserver\/([^\.][_A-Za-z0-9\-\.]+\/</span><span class="si">{1}</span><span class="s2">)*([_A-Za-z0-9\-\.]+\.(map))$&quot;</span>
 </pre></div>
 </div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>During testing during this documentation process, the above MS_MAP_PATTERN failed
+on an old Debian Wheezy server, on a valid path such as <em>MAP=/opt/mapserver/ogc-demos/wms.map</em>
+(the dash in the 'ogr-demos' folder caused much grief) even though the dash
+was escaped in the provided character set of the expression.</p>
+<p>Therefore those running older regex libs should use the following instead, which
+puts the dash at the beginning of the character set of the expression, avoiding the
+escaping issue:</p>
+<p>SetEnv MS_MAP_PATTERN &quot;^/osgeo/mapserver/([^.][-_A-Za-z0-9.]+/{1})*([-_A-Za-z0-9.]+.(map))$&quot;</p>
+</div>
 </li>
 <li><p><em>Windows Apache/MS4W users</em> can set the following expression in the Apache
 conf file, to limit the possible MAP= paths to the common
@@ -232,6 +243,10 @@ directory traversing:</p>
 </div>
 </li>
 </ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The online tool <a class="reference external" href="https://regexr.com/">RegExr</a> is great for testing regular expressions.</p>
+</div>
 </li>
 <li><p><strong>Nginx</strong> - <a class="reference external" href="http://nginx.org/en/docs/ngx_core_module.html#env">http://nginx.org/en/docs/ngx_core_module.html#env</a></p></li>
 <li><p><strong>IIS</strong> - <a class="reference external" href="https://docs.microsoft.com/en-us/iis/configuration/system.applicationhost/applicationpools/add/environmentvariables/">https://docs.microsoft.com/en-us/iis/configuration/system.applicationhost/applicationpools/add/environmentvariables/</a></p></li>
@@ -300,7 +315,7 @@ directory traversing:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html"> حقوق النشر </a> 2021, Open Source Geospatial Foundation
-      Last updated on 2021-03-30.
+      Last updated on 2021-03-31.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.3.
     </div>
   </body>
