@@ -4,12 +4,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 123: Support for MapML output in MapServer &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -114,7 +115,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-123-support-for-mapml-output-in-mapserver">
+  <section id="ms-rfc-123-support-for-mapml-output-in-mapserver">
 <span id="rfc123"></span><h1>MS RFC 123: Support for MapML output in MapServer<a class="headerlink" href="#ms-rfc-123-support-for-mapml-output-in-mapserver" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Author</dt>
@@ -133,21 +134,21 @@
 <dd class="field-odd"><p>MapServer 8.0</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>A common way to deploy web mapping sites in 2019 is to embed JavaScript code in a web page using OpenLayers or Leaflet as the navigation interface.  Those JavaScript libraries can interact with OGC WMS and Tile Services (as well as other OGC service types) if provided with the correct configuration via JavaScript code.  In other words, the map contents, the list of layers, SRS, zoom levels, extents, etc, are specified as JavaScript statements and then rendered by a JavaScript library in a “custom” way that the web browser itself does not “understand”.</p>
 <p>The W3C Maps for HTML Community Group is working to define a (new) “map” HTML element that would be used to define map contents in a web page and would be directly supported and rendered by web browsers in a standardized way. All this is done by building on existing standards such as WMS, WFS and Tile Services. In addition to standardizing the encoding and access to map elements in web browsers, this encoding also aims to make the map contents more easily discoverable and indexable by search bots on the Web.</p>
 <p>A draft specification is available through the working group, and the goal of this RFC is to provide a reference implementation to test the draft spec in real life use cases and promote its more widespread usage.  A similar reference implementation is also available for GeoServer, and we will aim to align this implementation with the GeoServer implementation when possible.</p>
 <p>This project is supported by funding from Natural Resources Canada.</p>
-</div>
-<div class="section" id="proposed-solution">
+</section>
+<section id="proposed-solution">
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Permalink to this headline">¶</a></h2>
 <p>This RFC proposes the implementation of MapML output in MapServer which consists in two parts:</p>
 <ol class="arabic simple">
 <li><p>Enabling generation of a &lt;mapml&gt; document for a given layer in a mapfile. This will be implemented as a vendor-specific REQUEST=GetMapML extension.</p></li>
 <li><p>Enabling text/mapml as a new INFO_FORMAT for WMS GetFeatureInfo requests, and as a new feature encoding format for WFS GetFeature requests.</p></li>
 </ol>
-<div class="section" id="building-enabling-the-mapml-option">
+<section id="building-enabling-the-mapml-option">
 <h3>2.1 Building/enabling the MapML option<a class="headerlink" href="#building-enabling-the-mapml-option" title="Permalink to this headline">¶</a></h3>
 <p>MapML support will be enabled by default if WMS support is enabled. It can be disabled at compile time using the following CMake options:</p>
 <blockquote>
@@ -155,8 +156,8 @@
 </div></blockquote>
 <p>There are no additional dependencies required for basic MapML support.</p>
 <p>If the (optional) OGR MapML driver is available then it will be used for enhanced text/mapml output in WMS GetFeatureInfo and WFS GetFeature responses (see section 4.3 below).</p>
-</div>
-<div class="section" id="mapfile-configuration-parameters">
+</section>
+<section id="mapfile-configuration-parameters">
 <h3>2.2 MapFile configuration parameters<a class="headerlink" href="#mapfile-configuration-parameters" title="Permalink to this headline">¶</a></h3>
 <p>Since MapML is mostly a mechanism to refer to OGC services (WMS, WFS and tile services), the MapML implementation automatically leverages existing WMS and WFS mapfile configuration parameters for the map and layers being served.</p>
 <p>In particular, the following mapfile configuration parameters will impact the MapML output and behaviours:</p>
@@ -181,8 +182,8 @@
 <li><p><strong>mapml_wms_image_format</strong>: can be used to specify the preferred image format to use for a given WMS layer (e.g. image/png, image/jpeg)</p></li>
 <li><p>TBD: other metadata entries may be added as needed during the final implementation.</p></li>
 </ul>
-</div>
-<div class="section" id="the-vendor-specific-getmapml-request">
+</section>
+<section id="the-vendor-specific-getmapml-request">
 <h3>2.4 The Vendor-specific GetMapML Request<a class="headerlink" href="#the-vendor-specific-getmapml-request" title="Permalink to this headline">¶</a></h3>
 <p>A new vendor-specific “REQUEST=GetMapML” has been added to MapServer to request a &lt;mapml&gt; document for a specified service type (WMS, WFS) and map/layer/style/projection combination. A valid WMS mapfile is required and the request supports the following URL parameters:</p>
 <table class="docutils align-default">
@@ -242,8 +243,8 @@
 <p class="admonition-title">Note</p>
 <p>The MapML spec does not define a GetMapML request, so this is a vendor-specific extension, and it is worth noting that the behaviour proposed in this RFC for the GetMapML request is slightly different from the approach which was discussed in OGC Testbed 13 (<a class="reference external" href="https://docs.ogc.org/per/17-019.html#_wms_to_serve_mapml">https://docs.ogc.org/per/17-019.html#_wms_to_serve_mapml</a>) which expected the client viewer to go back to the server for each zoom/pan operation to evaluate the new extents and return a static set of image or tile URLs for each operation. The URL template approach is simpler to implement for the server and will result in a better user experience in the viewer.</p>
 </div>
-</div>
-<div class="section" id="updates-to-getcapabilities">
+</section>
+<section id="updates-to-getcapabilities">
 <h3>2.5 Updates to GetCapabilities<a class="headerlink" href="#updates-to-getcapabilities" title="Permalink to this headline">¶</a></h3>
 <dl class="simple">
 <dt>If MapML is enabled in the mapfile then:</dt><dd><ul class="simple">
@@ -252,8 +253,8 @@
 </ul>
 </dd>
 </dl>
-</div>
-<div class="section" id="mapml-usage-example">
+</section>
+<section id="mapml-usage-example">
 <h3>2.6 MapML usage example<a class="headerlink" href="#mapml-usage-example" title="Permalink to this headline">¶</a></h3>
 <p>In a typical use case, a web developer includes a &lt;mm-map&gt; HTML element in a web page as follows (this example uses the Leaflet polyfill viewer):</p>
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
@@ -333,49 +334,49 @@
 <span class="p">&lt;/</span><span class="nt">mapml</span><span class="p">&gt;</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="implementation-details">
+</section>
+</section>
+<section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this headline">¶</a></h2>
 <p>Most of the MapML support code will live in mapml.c, with hooks calling it from mapwms.c and mapwfs.c.</p>
 <p>A set of msautotests will be added to test the new features.</p>
-</div>
-<div class="section" id="limitations-caveats">
+</section>
+<section id="limitations-caveats">
 <h2>4. Limitations / caveats<a class="headerlink" href="#limitations-caveats" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="mapml-viewer-polyfill">
+<section id="mapml-viewer-polyfill">
 <h3>4.1 MapML Viewer Polyfill<a class="headerlink" href="#mapml-viewer-polyfill" title="Permalink to this headline">¶</a></h3>
 <p>Since there is no direct support for MapML in web browsers at this time, the use of a MapML polyfill (based on Leaflet) is required in order to use MapML in web pages.  More details will be provided in the docs for this feature.</p>
-</div>
-<div class="section" id="experimental-spec">
+</section>
+<section id="experimental-spec">
 <h3>4.2 Experimental spec<a class="headerlink" href="#experimental-spec" title="Permalink to this headline">¶</a></h3>
 <p>This reference implementation should be considered experimental since the MapML spec itself is still a work in progress by the W3C Maps for HTML Community Group. The spec is likely to change over time until an official version is adopted and this should be kept in mind when deploying services.</p>
 <p>You are also encouraged to get involved and provide feedback by joining the Maps for HTML Community Group at <a class="reference external" href="https://www.w3.org/community/maps4html/">https://www.w3.org/community/maps4html/</a></p>
 <p>Most of the implementation is in a single mapml.c source file, so if this extension ever becomes unused or unsupported then it can be removed from the source base in a future release relatively easily.</p>
-</div>
-<div class="section" id="wms-getfeatureinfo-and-wfs-getfeature-output">
+</section>
+<section id="wms-getfeatureinfo-and-wfs-getfeature-output">
 <h3>4.3 WMS GetFeatureInfo and WFS GetFeature output<a class="headerlink" href="#wms-getfeatureinfo-and-wfs-getfeature-output" title="Permalink to this headline">¶</a></h3>
 <p>In the initial implementation, WMS GetFeatureInfo queries will only produce a basic attribute table response without the geometry, suitable for use in a popup over a map for instance.</p>
 <p>In a second phase of work, an OGR &lt;mapml&gt; driver will be implemented and once it is available then MapServer will be upgraded to use this OGR driver for the text/mapml feature collection output format in response to WMS GetFeatureinfo and WFS GetFeature requests.  This will introduce a dependency on this OGR driver for full feature collection support but the rest of the MapML code can still work without the driver if not available.</p>
-</div>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+</section>
+<section id="backwards-compatibility-issues">
 <h2>5. Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this headline">¶</a></h2>
 <p>None anticipated as this is a new feature.</p>
-</div>
-<div class="section" id="security-implications">
+</section>
+<section id="security-implications">
 <h2>6. Security implications<a class="headerlink" href="#security-implications" title="Permalink to this headline">¶</a></h2>
 <p>None anticipated at the moment.</p>
-</div>
-<div class="section" id="performance-implications">
+</section>
+<section id="performance-implications">
 <h2>7. Performance implications<a class="headerlink" href="#performance-implications" title="Permalink to this headline">¶</a></h2>
 <p>No impacts on core performance are anticipated.</p>
-</div>
-<div class="section" id="documentation-needs">
+</section>
+<section id="documentation-needs">
 <h2>8. Documentation needs<a class="headerlink" href="#documentation-needs" title="Permalink to this headline">¶</a></h2>
 <p>A new documentation page will be added outlining the various MapML output configuration scenarios and parameters (in the style of the OGC WMS Server page for instance).</p>
 <p>A step by step example will also be provided including instructions to deploy the Leaflet viewer polyfill on a server and how to use it in a webpage.</p>
-</div>
-<div class="section" id="ticket-id-and-references">
+</section>
+<section id="ticket-id-and-references">
 <h2>9. Ticket ID and references<a class="headerlink" href="#ticket-id-and-references" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>MapServer Ticket: <a class="reference external" href="https://github.com/MapServer/MapServer/issues/6024">https://github.com/MapServer/MapServer/issues/6024</a></p></li>
@@ -387,12 +388,12 @@
 <li><p>GeoServer MapML Support Docs: <a class="reference external" href="https://docs.geoserver.org/latest/en/user/community/mapml/index.html">https://docs.geoserver.org/latest/en/user/community/mapml/index.html</a></p></li>
 <li><p>OGC Testbed-13 MapML ER: <a class="reference external" href="https://docs.ogc.org/per/17-019.html">https://docs.ogc.org/per/17-019.html</a></p></li>
 </ul>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>10. Voting history<a class="headerlink" href="#voting-history" title="Permalink to this headline">¶</a></h2>
 <p>Adopted with +1 from PSC members EvenR, SethG, JeromeB, MichaelS, JukkaR, TomK, JeffM, SteveL, DanielM.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -476,7 +477,7 @@
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
       Last updated on 2021-05-10.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

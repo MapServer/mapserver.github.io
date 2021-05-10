@@ -4,12 +4,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Mapfile Manipulation &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -114,7 +115,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <span class="target" id="index-0"></span><div class="section" id="mapfile-manipulation">
+  <span class="target" id="index-0"></span><section id="mapfile-manipulation">
 <h1><a class="toc-backref" href="#contents">Mapfile Manipulation</a><a class="headerlink" href="#mapfile-manipulation" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Author</dt>
@@ -135,31 +136,31 @@
 </li>
 </ul>
 </div>
-<div class="section" id="introduction">
+<section id="introduction">
 <h2><a class="toc-backref" href="#contents">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The MapScript HowTo docs are intended to complement the API reference with
 examples of usage for specific subjects.  All examples in this document refer
 to the mapfile and testing layers distributed with MapServer 4.2+ and found
 under mapserver/tests.</p>
-<div class="section" id="pseudocode">
+<section id="pseudocode">
 <h3>Pseudocode<a class="headerlink" href="#pseudocode" title="Permalink to this headline">¶</a></h3>
 <p>All examples will use a pseudocode that is consistent with the language
 independent API reference.  Each line is a statement. For object attributes
 and methods we use the dot, ‘.’, operator.  Creation and deletion of objects
 will be indicated by ‘new’ and ‘del’ keywords.  Other than that, the
 pseudocode looks a lot like Python.</p>
-</div>
-</div>
-<div class="section" id="mapfile-overview">
+</section>
+</section>
+<section id="mapfile-overview">
 <h2><a class="toc-backref" href="#contents">Mapfile Overview</a><a class="headerlink" href="#mapfile-overview" title="Permalink to this headline">¶</a></h2>
 <p>By “Mapfile” here, I mean all the elements that can occur in (nearly)
 arbitrary numbers within a MapScript mapObj: Layers, Classes, and Styles.
 MapServer 4.4 has greatly improved capability to manipulate these objects.</p>
-</div>
-<div class="section" id="the-mapobj-class">
+</section>
+<section id="the-mapobj-class">
 <span id="index-1"></span><h2><a class="toc-backref" href="#contents">The mapObj Class</a><a class="headerlink" href="#the-mapobj-class" title="Permalink to this headline">¶</a></h2>
 <p>An instance of mapObj is a parent for zero to many layerObj children.</p>
-<div class="section" id="new-instances">
+<section id="new-instances">
 <h3>New instances<a class="headerlink" href="#new-instances" title="Permalink to this headline">¶</a></h3>
 <p>The mapfile path argument to the mapscript.mapObj constructor is now optional</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">empty_map</span> <span class="o">=</span> <span class="n">new</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">mapObj</span>
@@ -170,8 +171,8 @@ mapfile on disk in the usual manner:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">test_map</span> <span class="o">=</span> <span class="n">new</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">mapObj</span><span class="p">(</span><span class="s1">&#39;tests/test.map&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="cloning">
+</section>
+<section id="cloning">
 <span id="index-2"></span><h3>Cloning<a class="headerlink" href="#cloning" title="Permalink to this headline">¶</a></h3>
 <p>An independent copy, less result and label caches, of a mapObj can be produced
 by the new mapObj.clone() method:</p>
@@ -183,8 +184,8 @@ by the new mapObj.clone() method:</p>
 <p>the Java MapScript module implements a “cloneMap” method to avoid
 conflict with the clone method of Java’s Object class.</p>
 </div>
-</div>
-<div class="section" id="saving">
+</section>
+<section id="saving">
 <span id="index-3"></span><h3>Saving<a class="headerlink" href="#saving" title="Permalink to this headline">¶</a></h3>
 <p>A mapObj can be saved to disk using the save method:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">clone_map</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;clone.map&#39;</span><span class="p">)</span>
@@ -192,13 +193,13 @@ conflict with the clone method of Java’s Object class.</p>
 </div>
 <p>Frankly, the msSaveMap() function which is the foundation for mapObj::save
 is incomplete.  Your mileage may vary.</p>
-</div>
-</div>
-<div class="section" id="children-of-mapobj">
+</section>
+</section>
+<section id="children-of-mapobj">
 <h2><a class="toc-backref" href="#contents">Children of mapObj</a><a class="headerlink" href="#children-of-mapobj" title="Permalink to this headline">¶</a></h2>
 <p>There is a common parent/child object API for Layers, Classes, and Styles in
 MapServer 4.4.</p>
-<div class="section" id="referencing-a-child">
+<section id="referencing-a-child">
 <h3>Referencing a Child<a class="headerlink" href="#referencing-a-child" title="Permalink to this headline">¶</a></h3>
 <p>References to Layer, Class, and Style children are obtained by “getChild”-like
 methods of their parent:</p>
@@ -211,8 +212,8 @@ methods of their parent:</p>
 reference counting, and you are certain to run into trouble if you try to use
 these references after the parent mapObj has been deleted and freed from
 memory.</p>
-</div>
-<div class="section" id="cloning-a-child">
+</section>
+<section id="cloning-a-child">
 <span id="index-4"></span><h3>Cloning a Child<a class="headerlink" href="#cloning-a-child" title="Permalink to this headline">¶</a></h3>
 <p>A completely independent Layer, Class, or Style can be created using the clone
 method of layerObj, classObj, and styleObj:</p>
@@ -220,8 +221,8 @@ method of layerObj, classObj, and styleObj:</p>
 </pre></div>
 </div>
 <p>This instance has no parent, and is self-owned.</p>
-</div>
-<div class="section" id="new-children">
+</section>
+<section id="new-children">
 <h3>New Children<a class="headerlink" href="#new-children" title="Permalink to this headline">¶</a></h3>
 <p>Uninitialized instances of layerObj, classObj, or styleObj can be created
 with the new constructors:</p>
@@ -240,8 +241,8 @@ parent which returns the index at which the child was inserted:</p>
 <p>The insert* methods create a completely new copy of the object and store it
 in the parent with all ownership taken on by the parent.</p>
 <p>see the API reference for more details.</p>
-</div>
-<div class="section" id="backwards-compatibility">
+</section>
+<section id="backwards-compatibility">
 <h3>Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="Permalink to this headline">¶</a></h3>
 <p>The old style child object constructors with the parent object as a single
 argument:</p>
@@ -251,8 +252,8 @@ argument:</p>
 </pre></div>
 </div>
 <p>remain in MapServer 4.4.</p>
-</div>
-<div class="section" id="removing-children">
+</section>
+<section id="removing-children">
 <h3>Removing Children<a class="headerlink" href="#removing-children" title="Permalink to this headline">¶</a></h3>
 <p>Child objects can be removed with “removeChild”-like methods of parents, which
 return independent copies of the removed object:</p>
@@ -263,13 +264,13 @@ return independent copies of the removed object:</p>
 <span class="n">removed_layer</span> <span class="o">=</span> <span class="n">test_map</span><span class="o">.</span><span class="n">removeLayer</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="metadata">
+</section>
+</section>
+<section id="metadata">
 <h2><a class="toc-backref" href="#contents">Metadata</a><a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h2>
 <p>Map, Layer, and Class metadata are the other arbitrarily numbered elements
 (well, up to the built-in limit of 41) of a mapfile.</p>
-<div class="section" id="new-api">
+<section id="new-api">
 <h3>New API<a class="headerlink" href="#new-api" title="Permalink to this headline">¶</a></h3>
 <p>In MapServer 4.4, the metadata attributes of mapObj.web, layerObj, and classObj
 are instances of hashTableObj, a class which functions like a limited
@@ -289,14 +290,14 @@ dictionary</p>
 </pre></div>
 </div>
 <p>See the API Reference (mapscript.txt) for more details.</p>
-</div>
-<div class="section" id="backwards-compatibility-for-metadata">
+</section>
+<section id="backwards-compatibility-for-metadata">
 <h3>Backwards Compatibility for Metadata<a class="headerlink" href="#backwards-compatibility-for-metadata" title="Permalink to this headline">¶</a></h3>
 <p>The old getMetaData and setMetaData methods of mapObj, layerObj, and classObj
 remain for use by older programs.</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -382,7 +383,7 @@ remain for use by older programs.</p>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
       Last updated on 2021-05-10.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>
