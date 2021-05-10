@@ -4,12 +4,13 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 103: Layer Level Character Encoding Handling &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-103-layer-level-character-encoding-handling">
+  <section id="ms-rfc-103-layer-level-character-encoding-handling">
 <span id="rfc103"></span><h1>MS RFC 103: Layer Level Character Encoding Handling<a class="headerlink" href="#ms-rfc-103-layer-level-character-encoding-handling" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -160,7 +161,7 @@
 <dd class="field-odd"><p>MapServer 7.0</p>
 </dd>
 </dl>
-<div class="section" id="the-current-situation">
+<section id="the-current-situation">
 <h2>1. The Current Situation<a class="headerlink" href="#the-current-situation" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>MapServer has no knowledge of the character encoding of a datasource, which has
 multiple implications:</p>
@@ -177,7 +178,7 @@ documents (getcapabilities, getfeature, etc...)</p></li>
 <li><p>For rendering, we ass-hatedly specify the encoding at the LABEL level to transform
 label texts to UTF8, given that our renderers only supported that.</p></li>
 </ul>
-<div class="section" id="related-issues">
+<section id="related-issues">
 <h3>1.1 Related Issues<a class="headerlink" href="#related-issues" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/4028">https://github.com/MapServer/MapServer/issues/4028</a></p></li>
@@ -186,15 +187,15 @@ label texts to UTF8, given that our renderers only supported that.</p></li>
 <li><p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/4255">https://github.com/MapServer/MapServer/issues/4255</a></p></li>
 <li><p><a class="reference external" href="https://github.com/MapServer/MapServer/pull/4454">https://github.com/MapServer/MapServer/pull/4454</a></p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="layer-level-encoding">
+</section>
+</section>
+<section id="layer-level-encoding">
 <h2>2. Layer Level Encoding<a class="headerlink" href="#layer-level-encoding" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>This RFC proposes to add an ENCODING keyword at the LAYER level. Layer datasources
 that have an ENCODING set, and different than UTF8, will have its attributes converted
 to UTF8 in the GetShape and GetNextShape vtable wrappers.</p>
-</div>
-<div class="section" id="implications">
+</section>
+<section id="implications">
 <h2>2.1 Implications<a class="headerlink" href="#implications" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <ul class="simple">
 <li><p>The core of MapServer can forget about handling encodings, and will treat all strings
@@ -204,8 +205,8 @@ UTF8.</p></li>
 <li><p>There will be no need to specify encoding metadata entries in the mapfile in order to
 produce somewhat correct ogc documents.</p></li>
 </ul>
-</div>
-<div class="section" id="backwards-compatibility">
+</section>
+<section id="backwards-compatibility">
 <h2>2.2 Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>This RFC has some notable backwards incompatibility issues for users who were treating
 non UTF8 or ASCII datasets:</p>
@@ -220,18 +221,18 @@ LABEL one when loading a mapfile.</p></li>
 </ul>
 <p>It should be noted however that these incompatibilities can and should be seen
 as a way to fix MapServer's flawed handling of these encoded datasources.</p>
-</div>
-<div class="section" id="performance-implications">
+</section>
+<section id="performance-implications">
 <h2>2.3 Performance Implications<a class="headerlink" href="#performance-implications" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>None or barely noticeable:</p>
 <ul class="simple">
 <li><p>For UTF8 and ASCII datasources: none expected</p></li>
 <li><p>For other datasources: the overhead of the iconv calls should be marginal.</p></li>
 </ul>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<div class="section" id="affected-files">
+<section id="affected-files">
 <h3>3.1 Affected files<a class="headerlink" href="#affected-files" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>mapfile.c : Layer level handling of the ENCODING keyword, possibly treating
@@ -241,13 +242,13 @@ msLayerGetShape() and msLayerGetNextShape()</p></li>
 <li><p>TBD: removal of encoding workarounds and modification of header/preamble printing
 to announce utf8.</p></li>
 </ul>
-</div>
-<div class="section" id="tracking-issue">
+</section>
+<section id="tracking-issue">
 <h3>3.2 Tracking Issue<a class="headerlink" href="#tracking-issue" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>TBD</p>
-</div>
-</div>
-<div class="section" id="discussion">
+</section>
+</section>
+<section id="discussion">
 <h2>4. Discussion<a class="headerlink" href="#discussion" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>While a more general treatment of this issue might also include handling the
 encoding of the actual mapfile (to avoid forcing UTF8 as a mandatory mapfile
@@ -256,12 +257,12 @@ encoding), this solution is not proposed, as:</p>
 <li><p>this adds substantial complexity throughout the codebase</p></li>
 <li><p>UTF8 is the widely recommended encoding to use nowadays</p></li>
 </ul>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>5. Voting History<a class="headerlink" href="#voting-history" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>+1 from ThomasB, MikeS, DanielM, SteveW, PericlesN, SteveL, TamasS and StephanM</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -337,8 +338,8 @@ encoding), this solution is not proposed, as:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      最終更新: 2021-04-30
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      最終更新: 2021-05-10
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

@@ -4,12 +4,13 @@
 <html lang="de">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 98: Label/Text Rendering Overhaul &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-98-label-text-rendering-overhaul">
+  <section id="ms-rfc-98-label-text-rendering-overhaul">
 <span id="rfc98"></span><h1>MS RFC 98: Label/Text Rendering Overhaul<a class="headerlink" href="#ms-rfc-98-label-text-rendering-overhaul" title="Link zu dieser Überschrift">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -160,9 +161,9 @@
 <dd class="field-odd"><p>MapServer 7.0</p>
 </dd>
 </dl>
-<div class="section" id="the-current-situation">
+<section id="the-current-situation">
 <h2>1. The current situation<a class="headerlink" href="#the-current-situation" title="Link zu dieser Überschrift">¶</a></h2>
-<div class="section" id="text-rendering-pipeline">
+<section id="text-rendering-pipeline">
 <h3>1.1 Text rendering pipeline<a class="headerlink" href="#text-rendering-pipeline" title="Link zu dieser Überschrift">¶</a></h3>
 <p>When a feature needs to be labelled, the following (simplified) steps are undertaken:</p>
 <ul>
@@ -190,8 +191,8 @@ of using precise offsets per line</p></li>
 <li><p>the string is then passed to the renderers as-is, who are responsible for the whole
 laying out of each glyph</p></li>
 </ul>
-</div>
-<div class="section" id="limitations">
+</section>
+<section id="limitations">
 <h3>1.2 Limitations<a class="headerlink" href="#limitations" title="Link zu dieser Überschrift">¶</a></h3>
 <p>While the current situation is simple to understand, and works reasonable well for latin
 languages, it has a number of shortcomings that this RFC aims to resolve:</p>
@@ -215,9 +216,9 @@ text languages.</p></li>
 (center, right) is imprecise, as implementation for these would need to be added
 to each individual renderer.</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="proposed-overhaul">
+</section>
+</section>
+<section id="proposed-overhaul">
 <h2>2. Proposed Overhaul<a class="headerlink" href="#proposed-overhaul" title="Link zu dieser Überschrift">¶</a></h2>
 <p>For the big picture, see <a class="reference external" href="http://behdad.org/text/">the state of text rendering</a>.</p>
 <p>In short, instead of passing a string of text and a starting position to the renderers,
@@ -226,12 +227,12 @@ along with their precise positioning, very similarly to what we do currently whe
 rendering <cite>FOLLOW</cite> labels, as is already outlined in <a class="reference external" href="https://github.com/MapServer/MapServer/issues/3611">bug 3611</a> . The actual shaping and layout
 happens in a single mapserver function, and the renderers just dumbly place glyphs where
 they are told to.</p>
-<div class="section" id="architecture-implications">
+<section id="architecture-implications">
 <h3>2.1 Architecture Implications<a class="headerlink" href="#architecture-implications" title="Link zu dieser Überschrift">¶</a></h3>
 <p>Architecturaly, this modification is significant, as the whole label rendering chain
 needs to be refactored in order to take a list of positioned glyphs into account instead
 of just plain text strings.</p>
-<div class="section" id="dependencies">
+<section id="dependencies">
 <h4>2.1.1 Dependencies<a class="headerlink" href="#dependencies" title="Link zu dieser Überschrift">¶</a></h4>
 <ul class="simple">
 <li><p>Freetype becomes a central mapserver dependency, as we need the information about glyph
@@ -253,8 +254,8 @@ want to replace our own hashtable implementation with this one some day.</p></li
 <p>Note that the Fribidi and Harfbuzz dependencies will remain optional and can be
 disablable at compile time for those only treating latin scripts. Harfbuzz and Fribidi will
 need to be enabled or disabled together.</p>
-</div>
-<div class="section" id="font-and-glyph-cache">
+</section>
+<section id="font-and-glyph-cache">
 <h4>2.1.2 Font and Glyph cache<a class="headerlink" href="#font-and-glyph-cache" title="Link zu dieser Überschrift">¶</a></h4>
 <p>(fontcache.c)
 A global (thread protected if needed) glyph and font cache will
@@ -268,8 +269,8 @@ The fontcache contains caches for:</p>
 <li><p>font faces (i.e. the representation of of a truetype file)</p></li>
 <li><p>glyphs (i.e. the metrics of an individual glyph at a given size)</p></li>
 </ul>
-</div>
-<div class="section" id="transforming-a-string-of-text-into-a-list-of-positioned-glyphs">
+</section>
+<section id="transforming-a-string-of-text-into-a-list-of-positioned-glyphs">
 <h4>2.1.2 Transforming a string of text into a list of positioned glyphs<a class="headerlink" href="#transforming-a-string-of-text-into-a-list-of-positioned-glyphs" title="Link zu dieser Überschrift">¶</a></h4>
 <p>This step will be added to mapserver, and consists in coordinating the outputs from freetype,
 the bidi algorithm, harfbuzz, line-breaking, text alignment, and in the future text and line
@@ -356,8 +357,8 @@ to the right of run 2)</p></li>
 now stops defaulting to LEFT, so right-to-left runs will be right
 aligned instead of left as is now.</p></li>
 </ul>
-</div>
-<div class="section" id="handling-glyphs-at-rendering-phase">
+</section>
+<section id="handling-glyphs-at-rendering-phase">
 <h4>2.1.3 Handling glyphs at rendering phase<a class="headerlink" href="#handling-glyphs-at-rendering-phase" title="Link zu dieser Überschrift">¶</a></h4>
 <p>The labelcache and the renderers will need to be updated to work with a list of glyphs.
 Changes here are extensive but should remain conceptually simple. Individual renderers are
@@ -400,9 +401,9 @@ maps, c.f. <a class="reference external" href="https://plus.google.com/u/0/11827
 (e.g. rendering time goes from 800 to 1 second for 500.000 labels)</p>
 </li>
 </ul>
-</div>
-</div>
-<div class="section" id="backwards-compatibility">
+</section>
+</section>
+<section id="backwards-compatibility">
 <h3>2.2 Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="Link zu dieser Überschrift">¶</a></h3>
 <ul class="simple">
 <li><p>At a high (mapfile) level, none expected.</p></li>
@@ -410,8 +411,8 @@ maps, c.f. <a class="reference external" href="https://plus.google.com/u/0/11827
 <li><p>Some subtle but widespread changes in character placement.</p></li>
 <li><p><a class="reference internal" href="ms-rfc-99.html#rfc99"><span class="std std-ref">MS RFC 99: Remove support for GD renderer</span></a> is a collateral of most of these changes</p></li>
 </ul>
-</div>
-<div class="section" id="performance-implications">
+</section>
+<section id="performance-implications">
 <h3>2.3 Performance Implications<a class="headerlink" href="#performance-implications" title="Link zu dieser Überschrift">¶</a></h3>
 <p>Potentially numerous:</p>
 <ul class="simple">
@@ -421,20 +422,20 @@ actually be able to speed up latin text rendering marginally.</p></li>
 <li><p>For other scripts, the cost of going through harfbuzz <strong>will</strong> come with a performance
 penalty.</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="miscellaneous">
+</section>
+</section>
+<section id="miscellaneous">
 <h2>3. Miscellaneous<a class="headerlink" href="#miscellaneous" title="Link zu dieser Überschrift">¶</a></h2>
-<div class="section" id="issue-tracking-id">
+<section id="issue-tracking-id">
 <h3>3.1 Issue Tracking ID<a class="headerlink" href="#issue-tracking-id" title="Link zu dieser Überschrift">¶</a></h3>
 <p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/4673">https://github.com/MapServer/MapServer/issues/4673</a></p>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h3>3.2 Voting History<a class="headerlink" href="#voting-history" title="Link zu dieser Überschrift">¶</a></h3>
 <p>+1 from MikeS, StephanM, TomK, JeffM, SteveW, SteveL and ThomasB</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -517,8 +518,8 @@ penalty.</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Zuletzt aktualisiert am 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Zuletzt aktualisiert am 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

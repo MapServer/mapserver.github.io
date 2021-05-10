@@ -4,12 +4,13 @@
 <html lang="ru">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 85: Vector Contour Rendering (CONNECTIONTYPE CONTOUR) &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-85-vector-contour-rendering-connectiontype-contour">
+  <section id="ms-rfc-85-vector-contour-rendering-connectiontype-contour">
 <span id="rfc85"></span><h1>MS RFC 85: Vector Contour Rendering (CONNECTIONTYPE CONTOUR)<a class="headerlink" href="#ms-rfc-85-vector-contour-rendering-connectiontype-contour" title="Ссылка на этот заголовок">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -160,7 +161,7 @@
 <dd class="field-odd"><p>MapServer 6.4</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Ссылка на этот заголовок">¶</a></h2>
 <p>This is a proposal to add the ability to compute and render contour layers on
 the fly in MapServer from a raster source. The source is one band of raster
@@ -170,8 +171,8 @@ data, which represents a digital elevation model (DEM). More info about DEMs at:
 requires an extra processing step with gdal_contour to pre-generate the contours
 from the raster source. Plus this also implies some overhead for the
 gdal_contour files management, etc.</p>
-</div>
-<div class="section" id="the-proposed-solution">
+</section>
+<section id="the-proposed-solution">
 <h2>2. The proposed solution<a class="headerlink" href="#the-proposed-solution" title="Ссылка на этот заголовок">¶</a></h2>
 <p>This RFC proposes the addition of a new type of layer in MapServer:
 CONNECTIONTYPE CONTOUR. The new type is a hybrid layer, which has a raster data
@@ -251,8 +252,8 @@ value or list of values. See the example below.</p>
 <span class="k">END</span> <span class="c">#layer</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Internally, a CONTOUR layer will have its own renderer/driver code. It’s an
 hybrid layer because it reads the raster source and creates a vector dataset from
@@ -271,8 +272,8 @@ GDAL functions, an OGR dataset is stored in the internal layer structure.</p></l
 </div></blockquote>
 <p>More info about GDAlContourGenerate algorithm at:
 <a class="reference external" href="https://gdal.org/api/gdal_alg.html#_CPPv419GDALContourGenerate15GDALRasterBandHddiPdidPvii16GDALProgressFuncPv">https://gdal.org/api/gdal_alg.html#_CPPv419GDALContourGenerate15GDALRasterBandHddiPdidPvii16GDALProgressFuncPv</a></p>
-</div>
-<div class="section" id="ogr-input-driver">
+</section>
+<section id="ogr-input-driver">
 <h2>3.1 OGR Input driver<a class="headerlink" href="#ogr-input-driver" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Once the raster source will be processed with gdal raster/contour functions, a
 OGR DataSource will be stored internally using the «Memory» driver. Since
@@ -283,8 +284,8 @@ used internally to render/query the vector features.</p>
 created. The msOGRLayerOpen() function will try to open the dataset. In this
 case, our datasource is already opened. To solve this minor issue, the
 connection pooling API will be used.</p>
-</div>
-<div class="section" id="resample-and-reprojection">
+</section>
+<section id="resample-and-reprojection">
 <h2>3.2 Resample and Reprojection<a class="headerlink" href="#resample-and-reprojection" title="Ссылка на этот заголовок">¶</a></h2>
 <p>The raster resample and layer reprojection will be supported. It will be
 done in one of the two ways:</p>
@@ -294,19 +295,19 @@ done in one of the two ways:</p>
 <li><p>In MapServer, like any other vector layer. (reprojection)</p></li>
 </ul>
 </div></blockquote>
-</div>
-<div class="section" id="labeling">
+</section>
+<section id="labeling">
 <h2>3.3 Labeling<a class="headerlink" href="#labeling" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Since the layer is a line vector layer internally, the labeling is not affected
 and will be rendered as normal.</p>
-</div>
-<div class="section" id="tile-boundaries">
+</section>
+<section id="tile-boundaries">
 <h2>3.4 Tile boundaries<a class="headerlink" href="#tile-boundaries" title="Ссылка на этот заголовок">¶</a></h2>
 <p>After some review of the GDALContourGenerate algorithm, it has been determined
 that the tile boundaries of the line should match properly. So this shouldn’t be
 an issue but will have to be tested.</p>
-</div>
-<div class="section" id="files-affected">
+</section>
+<section id="files-affected">
 <h2>3.5 Files affected<a class="headerlink" href="#files-affected" title="Ссылка на этот заголовок">¶</a></h2>
 <p>The following files will be modified/created by this RFC:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapserver</span><span class="o">.</span><span class="n">h</span><span class="o">/</span><span class="n">mapfile</span><span class="o">.</span><span class="n">c</span> <span class="p">(</span><span class="n">Connection</span> <span class="nb">type</span> <span class="n">CONTOUR</span> <span class="n">support</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">mapfile</span><span class="p">)</span>
@@ -315,32 +316,32 @@ an issue but will have to be tested.</p>
 <span class="n">maplexer</span><span class="o">.</span><span class="n">l</span> <span class="p">(</span><span class="n">add</span> <span class="n">additional</span> <span class="n">CONTOUR</span> <span class="n">keyword</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="mapscript">
+</section>
+<section id="mapscript">
 <h2>3.6 MapScript<a class="headerlink" href="#mapscript" title="Ссылка на этот заголовок">¶</a></h2>
 <p>No issue for any MapScript bindings. The CONTOUR layer is handled/rendered internally as
 any other layer.</p>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>3.7 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Ссылка на этот заголовок">¶</a></h2>
 <p>This change provides a new functionality with no backwards compatibility issues being considered.</p>
-</div>
-<div class="section" id="tests">
+</section>
+<section id="tests">
 <h2>4. Tests<a class="headerlink" href="#tests" title="Ссылка на этот заголовок">¶</a></h2>
 <p>msautotest will be modified to add some tests related to that new layer type
 rendering and queries.</p>
-</div>
-<div class="section" id="bug-id">
+</section>
+<section id="bug-id">
 <h2>5. Bug ID<a class="headerlink" href="#bug-id" title="Ссылка на этот заголовок">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/4613">https://github.com/MapServer/MapServer/issues/4613</a></p></li>
 </ul>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>6. Voting history<a class="headerlink" href="#voting-history" title="Ссылка на этот заголовок">¶</a></h2>
 <p>+1 from Perry, Tamas, Daniel, Steve, Thomas, Jeff, Tom, Michael and Stephen</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -414,8 +415,8 @@ rendering and queries.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Обновлено: 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Обновлено: 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

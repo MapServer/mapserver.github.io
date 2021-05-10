@@ -4,12 +4,13 @@
 <html lang="id">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 118: Support Vendor-Specific OGC FILTER parameter in WMS requests &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-118-support-vendor-specific-ogc-filter-parameter-in-wms-requests">
+  <section id="ms-rfc-118-support-vendor-specific-ogc-filter-parameter-in-wms-requests">
 <span id="rfc118"></span><h1>MS RFC 118: Support Vendor-Specific OGC FILTER parameter in WMS requests<a class="headerlink" href="#ms-rfc-118-support-vendor-specific-ogc-filter-parameter-in-wms-requests" title="Link permanen untuk headline ini">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -163,7 +164,7 @@
 <dd class="field-even"><p>MapServer 7.2</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Link permanen untuk headline ini">¶</a></h2>
 <p>It is common practice for JS client applications to let the users make selections or apply filters on the client side that should be reflected on the map that is rendered by a WMS GetMap request.</p>
 <p>At the moment, there is no simple way to pass a filter to a WMS GetMap request, so JS application developers have to resort to one of the following methods/hacks:</p>
@@ -173,17 +174,17 @@
 <li><p>Create temporary mapfiles on the server side: hey, we are in 2017!</p></li>
 </ul>
 <p>The OpenLayers3 code already makes it possible for JS devs to build and pass an OGC filter in a WMS GetMap request the same way as for WFS GetFeature requests, and GeoServer already supports this as a vendor-specific parameter, so this RFC proposes to support the same vendor-specific FILTER parameter in MapServer.</p>
-</div>
-<div class="section" id="proposed-solution">
+</section>
+<section id="proposed-solution">
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Link permanen untuk headline ini">¶</a></h2>
 <p>This RFC proposes the implementation of a vendor-specific FILTER parameter in the MapServer WMS server interface that operates like the WFS GetFeature FILTER parameter.</p>
-</div>
-<div class="section" id="the-wms-filter-parameter">
+</section>
+<section id="the-wms-filter-parameter">
 <h2>2.1 The WMS FILTER parameter<a class="headerlink" href="#the-wms-filter-parameter" title="Link permanen untuk headline ini">¶</a></h2>
 <p>The WMS FILTER parameter will be supported in both GetMap and GetFeatureInfo requests. The syntax and format is the same that is currently supported by the WFS GetFeature FILTER parameter. As for any GET HTTP request parameters, the value will have to be properly URL encoded.</p>
 <p>If more than one layer is specified in the LAYERS parameter then a separate FILTER must be specified for each layer.  In this case the list is enclosed in parentheses: ( ).</p>
-</div>
-<div class="section" id="examples">
+</section>
+<section id="examples">
 <h2>2.2 Examples<a class="headerlink" href="#examples" title="Link permanen untuk headline ini">¶</a></h2>
 <p>Simple PropertyIsEqualTo on a single layer:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/cgi-bin/mapserv?map=...
@@ -221,48 +222,48 @@
 &amp;...
 </pre></div>
 </div>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Link permanen untuk headline ini">¶</a></h2>
 <p>The internal WFS GetFeature FILTER handling code is closely tied to the WFS interface. It will have to be made generic in order to be usable by both the WFS and WMS interfaces.</p>
 <p>Tests will be added to msautotest for the new feature.</p>
-</div>
-<div class="section" id="limitations">
+</section>
+<section id="limitations">
 <h2>4. Limitations<a class="headerlink" href="#limitations" title="Link permanen untuk headline ini">¶</a></h2>
 <p>This will only be implemented for GET requests, and will be subject to the limitation in URL length of the HTTP servers. The exact limit of GET URL length depends on the server configuration.</p>
 <p>The use of FILTER in WMS requires previous knowledge of the geometry and attribute column names that would normally be obtained with a WFS DescribeFeatureType.  While this is not strictly required for the FILTER to work on their own in the GetMap request, access to DescribeFeatureType can be provided by enabling the WFS interface on the corresponding layers.</p>
 <p>Since rendering of the filtered layers is done via the QUERYMAP mechanism, the MASK, OPACITY and COMPOSITE settings are ignored since they are not implemented for QUERYMAPs. (This could be considered a QUERYMAP bug but is out of scope for this RFC)</p>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>5. Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link permanen untuk headline ini">¶</a></h2>
 <p>None anticipated.</p>
-</div>
-<div class="section" id="security-implications">
+</section>
+<section id="security-implications">
 <h2>6. Security implications<a class="headerlink" href="#security-implications" title="Link permanen untuk headline ini">¶</a></h2>
 <p>None anticipated. If anything, this will generally improve the security of servers which will no longer have to rely on %variable% embedded in their data statements.</p>
-</div>
-<div class="section" id="performance-implications">
+</section>
+<section id="performance-implications">
 <h2>7. Performance implications<a class="headerlink" href="#performance-implications" title="Link permanen untuk headline ini">¶</a></h2>
 <p>No impacts on core performance are anticipated.</p>
-</div>
-<div class="section" id="documentation-needs">
+</section>
+<section id="documentation-needs">
 <h2>8. Documentation needs<a class="headerlink" href="#documentation-needs" title="Link permanen untuk headline ini">¶</a></h2>
 <p>Documentation for this vendor-specific parameter will be added to the relevant section of the WMS Server documentation:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://mapserver.org/ogc/wms_server.html#vendor-specific-wms-parameters">https://mapserver.org/ogc/wms_server.html#vendor-specific-wms-parameters</a></p></li>
 </ul>
-</div>
-<div class="section" id="bug-id-and-references">
+</section>
+<section id="bug-id-and-references">
 <h2>9. Bug ID and references<a class="headerlink" href="#bug-id-and-references" title="Link permanen untuk headline ini">¶</a></h2>
 <ul class="simple">
 <li><p>GeoServer FILTER parameter: <a class="reference external" href="http://docs.geoserver.org/latest/en/user/services/wms/vendor.html#filter">http://docs.geoserver.org/latest/en/user/services/wms/vendor.html#filter</a></p></li>
 </ul>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>10. Voting history<a class="headerlink" href="#voting-history" title="Link permanen untuk headline ini">¶</a></h2>
 <p>+1 from TomK, SteveL, JukkaR, SteveW, MichaelS, StephanM, JeffM and DanielM.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -335,8 +336,8 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Hak cipta</a> 2021, Open Source Geospatial Foundation.
-      Terakhir diperbarui pada 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Terakhir diperbarui pada 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

@@ -4,12 +4,13 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 54: Rendering Interface API &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-54-rendering-interface-api">
+  <section id="ms-rfc-54-rendering-interface-api">
 <span id="rfc54"></span><h1>MS RFC 54: Rendering Interface API<a class="headerlink" href="#ms-rfc-54-rendering-interface-api" title="Lien permanent vers ce titre">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -160,7 +161,7 @@
 <dd class="field-odd"><p>MapServer 6.0</p>
 </dd>
 </dl>
-<div class="section" id="purpose">
+<section id="purpose">
 <h2>Purpose<a class="headerlink" href="#purpose" title="Lien permanent vers ce titre">¶</a></h2>
 <p>This RFC proposes the refactoring of MapServer’s rendering backends, following
 an approach similar to the vtable architecture used by the input drivers.</p>
@@ -188,8 +189,8 @@ probably isn’t something we want to do as we  would be losing some
 performance induced by the switching from GD’s internal pixel representation
 to the generic one used by this API.</p>
 </div>
-</div>
-<div class="section" id="low-level-rendering-api">
+</section>
+<section id="low-level-rendering-api">
 <h2>Low Level Rendering API<a class="headerlink" href="#low-level-rendering-api" title="Lien permanent vers ce titre">¶</a></h2>
 <p>A new <em>renderObj</em> structure is defined and is attached to each outputformat
 depending on which driver is configured. A renderObj contains function pointers
@@ -226,14 +227,14 @@ renderObj function pointers point to the low-level functions</p></li>
 <span class="p">}</span>
 </pre></div>
 </div>
-<div class="section" id="configuration-parameters">
+<section id="configuration-parameters">
 <h3>Configuration parameters<a class="headerlink" href="#configuration-parameters" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Each renderer can inform the higher level calling code of what functionality it
 supports or implements. This will primarily allow us to support vector and
 raster renderers. More details on each configuration parameter will be given
 when appropriate in the rest of this document.</p>
-</div>
-<div class="section" id="image-creation-functions">
+</section>
+<section id="image-creation-functions">
 <h3>Image Creation Functions<a class="headerlink" href="#image-creation-functions" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Each renderer must provide a function to create a new image. MapServer’s
 imageObj structure will have an additional void* member that will be used by
@@ -249,13 +250,13 @@ need.</p>
 outputFormatObj passed to it. (This would be used eg by the PDF renderer for page
 layout options).</p>
 </div>
-</div>
-<div class="section" id="raster-handling-functions">
+</section>
+<section id="raster-handling-functions">
 <h3>Raster Handling Functions<a class="headerlink" href="#raster-handling-functions" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Raster handling will follow different code paths depending on whether the
 underlying renderer is already natively a raster renderer (eg. PNG, JPEG) , or if
 it is a vector one (eg. PDF, SVG).</p>
-<div class="section" id="raster-buffer-structure">
+<section id="raster-buffer-structure">
 <h4>Raster Buffer Structure<a class="headerlink" href="#raster-buffer-structure" title="Lien permanent vers ce titre">¶</a></h4>
 <p>A new structure defining a raster object in memory is defined, and is used to
 replace the current code that uses a gdImage as a common format.</p>
@@ -287,8 +288,8 @@ raster array.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">initializeRasterBuffer</span><span class="p">)(</span><span class="n">rasterBufferObj</span> <span class="o">*</span><span class="n">buffer</span><span class="p">,</span> <span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="handling-raster-layers">
+</section>
+<section id="handling-raster-layers">
 <h4>Handling Raster Layers<a class="headerlink" href="#handling-raster-layers" title="Lien permanent vers ce titre">¶</a></h4>
 <p>Depending on the renderer’s capabilities, there are two possibilities here,
 that are determined by the <em>supports_pixel_buffer</em> parameter:</p>
@@ -311,9 +312,9 @@ that will allow the higher level code to merge the created raster:</p>
 </div>
 </li>
 </ul>
-</div>
-</div>
-<div class="section" id="image-saving-functions">
+</section>
+</section>
+<section id="image-saving-functions">
 <h3>Image Saving Functions<a class="headerlink" href="#image-saving-functions" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Similarly to raster layers, there are two code paths for saving a created image
 to a stream or to a buffer, depending also on the <em>supports_pixel_buffer</em>
@@ -332,10 +333,10 @@ provide a function for writing itself to a given stream:</p>
 </li>
 </ul>
 <p>TODO: exporting to a buffer for mapscript getBytes()</p>
-</div>
-<div class="section" id="low-level-functions-to-be-implemented-by-a-renderer">
+</section>
+<section id="low-level-functions-to-be-implemented-by-a-renderer">
 <h3>Low Level Functions to be Implemented by a renderer<a class="headerlink" href="#low-level-functions-to-be-implemented-by-a-renderer" title="Lien permanent vers ce titre">¶</a></h3>
-<div class="section" id="polygons">
+<section id="polygons">
 <h4>Polygons<a class="headerlink" href="#polygons" title="Lien permanent vers ce titre">¶</a></h4>
 <ul class="simple">
 <li><p>solid filled: The simplest case, needs only be passed a color</p></li>
@@ -348,8 +349,8 @@ the spacing between markers inside the polygon)</p></li>
 <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderPolygonTiled</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="n">shapeObj</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">tile</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="lines">
+</section>
+<section id="lines">
 <h4>Lines<a class="headerlink" href="#lines" title="Lien permanent vers ce titre">¶</a></h4>
 <ul class="simple">
 <li><p>simple stroke: is passed a pattern (dashes) and line style (caps, joins)</p></li>
@@ -359,8 +360,8 @@ the spacing between markers inside the polygon)</p></li>
 <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderLineTiled</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="n">shapeObj</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">tile</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="markers">
+</section>
+<section id="markers">
 <h4>Markers<a class="headerlink" href="#markers" title="Lien permanent vers ce titre">¶</a></h4>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderVectorSymbol</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span>
             <span class="n">symbolObj</span> <span class="o">*</span><span class="n">symbol</span><span class="p">,</span> <span class="n">symbolStyleObj</span> <span class="o">*</span><span class="n">style</span><span class="p">);</span>
@@ -378,8 +379,8 @@ the spacing between markers inside the polygon)</p></li>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">renderTile</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">tile</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span> <span class="kt">double</span> <span class="n">angle</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="labels-and-text">
+</section>
+<section id="labels-and-text">
 <h4>Labels and Text<a class="headerlink" href="#labels-and-text" title="Lien permanent vers ce titre">¶</a></h4>
 <ul>
 <li><p>label size calculation: If passed an « advances pointer », also calculates individual
@@ -399,8 +400,8 @@ advances for each glyphs (for anlge foloow text)</p>
 </div>
 </li>
 </ul>
-</div>
-<div class="section" id="tiles-and-caches">
+</section>
+<section id="tiles-and-caches">
 <h4>Tiles and Caches<a class="headerlink" href="#tiles-and-caches" title="Lien permanent vers ce titre">¶</a></h4>
 <p>For some symbols and renderer combinations, it might be benficial to use a cache so
 as not to have to render a complicated symbol over and over again. This behavior would
@@ -410,8 +411,8 @@ as there would be too many cache misses and no real gain.</p>
 a simple imageObj created by normally by the renderer suffice ? Second solution is much
 simpler as we’d use the same functions for rendering a symbol than for rendering a tile.
 First solution is more flexible, as the renderer can cache anything.</p>
-</div>
-<div class="section" id="miscellaneous-functions">
+</section>
+<section id="miscellaneous-functions">
 <h4>Miscellaneous functions<a class="headerlink" href="#miscellaneous-functions" title="Lien permanent vers ce titre">¶</a></h4>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">transformShape</span><span class="p">)(</span><span class="n">shapeObj</span> <span class="o">*</span><span class="n">shape</span><span class="p">,</span> <span class="n">rectObj</span> <span class="n">extend</span><span class="p">,</span> <span class="kt">double</span> <span class="n">cellsize</span><span class="p">);</span>
 </pre></div>
@@ -421,8 +422,8 @@ First solution is more flexible, as the renderer can cache anything.</p>
 <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">closeNewLayer</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">img</span><span class="p">,</span> <span class="kt">double</span> <span class="n">opacity</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="cleanup-functions">
+</section>
+<section id="cleanup-functions">
 <h4>Cleanup functions<a class="headerlink" href="#cleanup-functions" title="Lien permanent vers ce titre">¶</a></h4>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">freeImage</span><span class="p">)(</span><span class="n">imageObj</span> <span class="o">*</span><span class="n">image</span><span class="p">);</span>
 <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">freeSymbol</span><span class="p">)(</span><span class="n">symbolObj</span> <span class="o">*</span><span class="n">symbol</span><span class="p">);</span>
@@ -435,16 +436,16 @@ First solution is more flexible, as the renderer can cache anything.</p>
 pointer to the symbolObj and shapeObj objects where a renderer can store a private
 cache containing an implementation specific representation of the object.</p>
 </div>
-</div>
-</div>
-</div>
-<div class="section" id="high-level-usage-of-the-rendering-api">
+</section>
+</section>
+</section>
+<section id="high-level-usage-of-the-rendering-api">
 <h2>High Level Usage of the rendering API<a class="headerlink" href="#high-level-usage-of-the-rendering-api" title="Lien permanent vers ce titre">¶</a></h2>
-<div class="section" id="image-creation">
+<section id="image-creation">
 <h3>Image Creation<a class="headerlink" href="#image-creation" title="Lien permanent vers ce titre">¶</a></h3>
 <p>nothing special. just pass on to the renderer.</p>
-</div>
-<div class="section" id="image-saving">
+</section>
+<section id="image-saving">
 <h3>Image Saving<a class="headerlink" href="#image-saving" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Depending on whether the renderer can export a raster buffer or not:</p>
 <ul class="simple">
@@ -452,8 +453,8 @@ cache containing an implementation specific representation of the object.</p>
 and pass the buffer to the MapServer’s saving functions</p></li>
 <li><p>unsupported: call the renderer’s saving function</p></li>
 </ul>
-</div>
-<div class="section" id="raster-layers">
+</section>
+<section id="raster-layers">
 <h3>Raster Layers<a class="headerlink" href="#raster-layers" title="Lien permanent vers ce titre">¶</a></h3>
 <p>MapServer’s Raster layer handling will be modified so that it can write to a
 rasterBufferObj and not only to a gdImage.</p>
@@ -475,8 +476,8 @@ rasterBufferObj and not only to a gdImage.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="symbol-cache-and-marker-rendering">
+</section>
+<section id="symbol-cache-and-marker-rendering">
 <h3>Symbol Cache and Marker Rendering<a class="headerlink" href="#symbol-cache-and-marker-rendering" title="Lien permanent vers ce titre">¶</a></h3>
 <p>A symbol cache similar to the actual mapgd.c imagecache will be implemented in
 mapimagecache.c .</p>
@@ -512,8 +513,8 @@ depending on the format.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="line-rendering">
+</section>
+<section id="line-rendering">
 <h3>Line Rendering<a class="headerlink" href="#line-rendering" title="Lien permanent vers ce titre">¶</a></h3>
 <ul>
 <li><p>simple stroke: call the renderer directly</p></li>
@@ -537,8 +538,8 @@ produce poor results.</p></li>
 </div></blockquote>
 </li>
 </ul>
-</div>
-<div class="section" id="polygon-rendering">
+</section>
+<section id="polygon-rendering">
 <h3>Polygon Rendering<a class="headerlink" href="#polygon-rendering" title="Lien permanent vers ce titre">¶</a></h3>
 <ul class="simple">
 <li><p>simple fill</p></li>
@@ -553,8 +554,8 @@ produce poor results.</p></li>
 - compute the lines corresponding to the hatch
 - use the renderer’s simple stroking function</p></li>
 </ul>
-</div>
-<div class="section" id="text-rendering">
+</section>
+<section id="text-rendering">
 <h3>Text Rendering<a class="headerlink" href="#text-rendering" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Nothing special to add here, except that the basic preliminary tests (if the
 font is defined, or if the string to render is NULL) and the lookup of the
@@ -565,9 +566,9 @@ before calling the renderer drawing function.</p>
 <p>Raster fonts will not be supported (at least in a first phase) by this
 rendering API. Only truetype fonts are implemented.</p>
 </div>
-</div>
-</div>
-<div class="section" id="image-i-o">
+</section>
+</section>
+<section id="image-i-o">
 <h2>Image I/O<a class="headerlink" href="#image-i-o" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Currently all image I/O is done through the GD library. To raise this dependency,
 the RFC proposes to have mapserver implement image loading and saving by directly
@@ -611,10 +612,10 @@ to GD loading and convert the created gdImage to a rasterBuffer. This can be add
 in a second phase as it is lower priority, and does not induce a major architectural
 change.</p>
 </div>
-</div>
-<div class="section" id="miscellaneous">
+</section>
+<section id="miscellaneous">
 <h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Lien permanent vers ce titre">¶</a></h2>
-<div class="section" id="drawing-some-layers-as-rasters-in-vector-renderers">
+<section id="drawing-some-layers-as-rasters-in-vector-renderers">
 <h3>Drawing some layers as rasters in vector renderers<a class="headerlink" href="#drawing-some-layers-as-rasters-in-vector-renderers" title="Lien permanent vers ce titre">¶</a></h3>
 <p>The current pdf (and SVG?) renderers have the option of switching over to GD for
 some layers, that are then incorporated as a raster image in the final map rather
@@ -628,8 +629,8 @@ that it will be passed will be in the native format of the delegated renderer,
 and may not be in the exact same format it would have created with a call to
 initializeRasterBuffer.</p>
 </div>
-</div>
-<div class="section" id="legend">
+</section>
+<section id="legend">
 <h3>Legend<a class="headerlink" href="#legend" title="Lien permanent vers ce titre">¶</a></h3>
 <p>The legend rendering code will have to be refactored, as it currently produces a
 gdImage. Legend rendering will be handled like a normal imageObj.</p>
@@ -644,17 +645,17 @@ legend support)</p>
 a pixmap symbol to the main map rendering. This is incompatible with the vector
 renderers, as the imageObj they have created isn’t an array of pixels.</p>
 </div>
-</div>
-<div class="section" id="scalebar">
+</section>
+<section id="scalebar">
 <h3>Scalebar<a class="headerlink" href="#scalebar" title="Lien permanent vers ce titre">¶</a></h3>
 <p>TBD</p>
-</div>
-<div class="section" id="reference-map">
+</section>
+<section id="reference-map">
 <h3>Reference Map<a class="headerlink" href="#reference-map" title="Lien permanent vers ce titre">¶</a></h3>
 <p>TBD. Should we even still be supporting this ?</p>
-</div>
-</div>
-<div class="section" id="affected-files">
+</section>
+</section>
+<section id="affected-files">
 <h2>Affected Files<a class="headerlink" href="#affected-files" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
 <li><p>maprendering.c , mapimageio.c, mapcairo.c (added)</p></li>
@@ -664,16 +665,16 @@ renderers, as the imageObj they have created isn’t an array of pixels.</p>
 <li><p>mapserver.h</p></li>
 <li><p>…. lots more</p></li>
 </ul>
-</div>
-<div class="section" id="documentation">
+</section>
+<section id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Lien permanent vers ce titre">¶</a></h2>
 <p>No end documentation needed aside from the migration guide.</p>
-</div>
-<div class="section" id="mapscript">
+</section>
+<section id="mapscript">
 <h2>Mapscript<a class="headerlink" href="#mapscript" title="Lien permanent vers ce titre">¶</a></h2>
 <p>TBD</p>
-</div>
-<div class="section" id="backwards-incompatibility">
+</section>
+<section id="backwards-incompatibility">
 <h2>Backwards Incompatibility<a class="headerlink" href="#backwards-incompatibility" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Symbology should be better behaved between renderers, but does imply some backwards
 incompatible changes in how some symbols can be rendered (although this can probably
@@ -686,14 +687,14 @@ of the line. A dotted line will therefore be defined as PATTERN 1 1 END whatever
 width of the line.</p></li>
 <li><p>More to come ?</p></li>
 </ul>
-</div>
-<div class="section" id="comments-from-review-period">
+</section>
+<section id="comments-from-review-period">
 <h2>Comments from Review period<a class="headerlink" href="#comments-from-review-period" title="Lien permanent vers ce titre">¶</a></h2>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>Voting History<a class="headerlink" href="#voting-history" title="Lien permanent vers ce titre">¶</a></h2>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -800,8 +801,8 @@ width of the line.</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Mis à jour le 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Mis à jour le 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

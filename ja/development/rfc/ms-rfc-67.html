@@ -4,12 +4,13 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 67: Enable/Disable Layers in OGC Web Services &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-67-enable-disable-layers-in-ogc-web-services">
+  <section id="ms-rfc-67-enable-disable-layers-in-ogc-web-services">
 <span id="rfc67"></span><h1>MS RFC 67:  Enable/Disable Layers in OGC Web Services<a class="headerlink" href="#ms-rfc-67-enable-disable-layers-in-ogc-web-services" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -166,7 +167,7 @@
 <dd class="field-odd"><p>MapServer 6.0</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>At the moment, it is not possible to hide/disable a layer in OGC Web
 Services. Everybody recognizes the need to be able to hide layers from a
@@ -174,8 +175,8 @@ given mapfile from some or all OGC Web Service (OWS) requests.</p>
 <p>This is a proposal to add the ability to enable/disable layers in OGC Web Services in
 MapServer.</p>
 <p>There was also a discussion on this topic in the wiki at <a class="reference external" href="http://trac.osgeo.org/mapserver/wiki/HidingLayersInOGCWebServices">http://trac.osgeo.org/mapserver/wiki/HidingLayersInOGCWebServices</a></p>
-</div>
-<div class="section" id="use-cases">
+</section>
+<section id="use-cases">
 <h2>Use Cases<a class="headerlink" href="#use-cases" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Here are some use cases to demonstrate the need of hiding layers:</p>
 <ul class="simple">
@@ -186,8 +187,8 @@ MapServer.</p>
 <li><p>Not about hiding a full layer, but setting the ability to say that one wants a certain layer to return the geometry as gml in a wms-getfeatureinfo-response (at this moment it is never returned)</p></li>
 <li><p>Handle wms_group_layers as real layers (relevant for INSPIRE), but move the rendering part into hidden layers in order to avoid redundant style configurations in the group layer and the sub layer.</p></li>
 </ul>
-</div>
-<div class="section" id="proposed-solution">
+</section>
+<section id="proposed-solution">
 <h2>Proposed Solution<a class="headerlink" href="#proposed-solution" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>The main concern was to minimalize user's changes in their
 mapfiles. It seems that the easier way to go would be to use metadata,
@@ -235,8 +236,8 @@ requests list:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ows_enable_request</span> <span class="s2">&quot;!*&quot;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="inheritance">
+</section>
+<section id="inheritance">
 <h2>Inheritance<a class="headerlink" href="#inheritance" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>A particularity of the proposed solution is the inheritance of settings between the
 map and the layer level. The settings at the map level apply to all layers
@@ -249,14 +250,14 @@ unless they are overridden at the layer level. Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wfs_enable_request</span> <span class="s2">&quot;!GetFeature&quot;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="implementation-notes">
+</section>
+<section id="implementation-notes">
 <h2>Implementation notes<a class="headerlink" href="#implementation-notes" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <ul class="simple">
 <li><p>Don't forget to also update the list of supported operations in the GetCapabilities (e.g. don't write out GetFeatureInfo as an operation if &quot;wms_enable_request&quot; &quot;!GetFeatureInfo&quot;)</p></li>
 </ul>
-</div>
-<div class="section" id="improved-handling-of-wms-layer-group-as-real-layers">
+</section>
+<section id="improved-handling-of-wms-layer-group-as-real-layers">
 <h2>Improved handling of wms_layer_group as real layers<a class="headerlink" href="#improved-handling-of-wms-layer-group-as-real-layers" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>The current behavior of the wms_layer_group is to provide hierarchy of layers and expose it
 through the capabilities document. The parent layers do not contain a &lt;Name&gt; tag, thus are not
@@ -272,8 +273,8 @@ INSPIRE requirements.</p>
 <p>This section of the RFC was not implemented and will be done as part of
 future INSPIRE related enhancements, likely in 6.2.</p>
 </div>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>All OWS services will be disabled by default. This implies that all users
 will have to modify their mapfiles and add the following line to get their
@@ -281,8 +282,8 @@ ogc services working as before.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ows_enable_request</span> <span class="s2">&quot;*&quot;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="tickets">
+</section>
+<section id="tickets">
 <h2>Tickets<a class="headerlink" href="#tickets" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Main ticket:</p>
 <ul class="simple">
@@ -297,12 +298,12 @@ ogc services working as before.</p>
 <li><p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/3608">https://github.com/MapServer/MapServer/issues/3608</a> : INSPIRE related support</p></li>
 <li><p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/3830">https://github.com/MapServer/MapServer/issues/3830</a> : DUMP keyword is made obsolete by RFC 67</p></li>
 </ul>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>Voting history<a class="headerlink" href="#voting-history" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Adopted on 2010-02-25 with +1 from FrankW, PericlesN SteveW, DanielM, AssefaY, JeffM, TamasS</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -372,8 +373,8 @@ ogc services working as before.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      最終更新: 2021-04-30
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      最終更新: 2021-05-10
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

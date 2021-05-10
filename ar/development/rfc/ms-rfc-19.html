@@ -4,12 +4,13 @@
 <html lang="ar">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 19: Style &amp; Label attribute binding &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -18,8 +19,8 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="copyright" title="Copyright" href="../../copyright.html" />
+    <link rel="search" title="بحث" href="../../search.html" />
+    <link rel="copyright" title="الحقوق" href="../../copyright.html" />
     <link rel="next" title="MS RFC 21: MapServer Raster Color Correction" href="ms-rfc-21.html" />
     <link rel="prev" title="MS RFC 18: Encryption of passwords in mapfiles" href="ms-rfc-18.html" /> 
   </head><body>
@@ -120,8 +121,8 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
+          <a href="../../genindex.html" title="الفهرس العام"
+             accesskey="I">الفهرس</a></li>
         <li class="right" >
           <a href="ms-rfc-21.html" title="MS RFC 21: MapServer Raster Color Correction"
              accesskey="N">التالي</a> |</li>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-19-style-label-attribute-binding">
+  <section id="ms-rfc-19-style-label-attribute-binding">
 <span id="rfc19"></span><h1>MS RFC 19: Style &amp; Label attribute binding<a class="headerlink" href="#ms-rfc-19-style-label-attribute-binding" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -166,7 +167,7 @@ cumbersome to add new bindings which leads to unnecessarily complex
 structures and code that is difficult to maintain. This RFC presents ideas to
 bring a bit of order to that chaos and make expansion of this capability
 easier to achieve.</p>
-<div class="section" id="c-structural-changes">
+<section id="c-structural-changes">
 <h2>C Structural Changes<a class="headerlink" href="#c-structural-changes" title="Permalink to this headline">¶</a></h2>
 <p>A new structure called attributeBindingObj would be added:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">typedef</span> <span class="n">struct</span> <span class="p">{</span>
@@ -190,8 +191,8 @@ styleObj's and labelObj's would each take on 2 new members:</p>
 <span class="n">attributeBindingObj</span> <span class="n">bindings</span><span class="p">[</span><span class="n">MS_STYLE_BINDING_LENGTH</span><span class="p">];</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="mapfile-mapscript-changes">
+</section>
+<section id="mapfile-mapscript-changes">
 <h2>Mapfile/MapScript Changes<a class="headerlink" href="#mapfile-mapscript-changes" title="Permalink to this headline">¶</a></h2>
 <p>Options like SIZEITEM and ANGLEITEM would go away. Instead a more
 logical syntax such as:</p>
@@ -214,8 +215,8 @@ $style-&gt;setBinding($mapscript::MS_STYLE_BINDING_SIZE, &#39;mySizeItem&#39;);
 $style-&gt;deleteBinding($mapscript::MS_STYLE_BINDING_COLOR);
 </pre></div>
 </div>
-</div>
-<div class="section" id="files-affected">
+</section>
+<section id="files-affected">
 <h2>Files Affected<a class="headerlink" href="#files-affected" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>map.h =&gt; structure changes, enum and define additions</p></li>
@@ -246,31 +247,31 @@ to define a new raw type (similar to MS_STRING) called MS_BINDING</p></li>
 <li><p>mapscript/swiginc/style.i =&gt; add setBinding and deleteBinding methods
 (similar for PHP/MapScript)</p></li>
 </ul>
-</div>
-<div class="section" id="testing">
+</section>
+<section id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Python suite: need tests to set and delete bindings</p></li>
 <li><p>MsAutoTest suite: a mapfile testing various bindings would be
 developed (DNR tests have one example for labels)</p></li>
 </ul>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this headline">¶</a></h2>
 <p>This does affect a number of parameters, however they are lightly used so
 this is probably worth the risk. The primary risk is breaking mapfiles as
 opposed to scripts. Given that this will definitely break some stuff I
 think it is most appropriate as a 5.0 change.</p>
-</div>
-<div class="section" id="bug-id">
+</section>
+<section id="bug-id">
 <h2>Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/2100">2100</a></p>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>Voting history<a class="headerlink" href="#voting-history" title="Permalink to this headline">¶</a></h2>
 <p>+1 Lime, Morissette, Woodbridge</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -280,7 +281,7 @@ think it is most appropriate as a 5.0 change.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3 id="searchlabel">البحث السريع</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" aria-labelledby="searchlabel" />
@@ -322,8 +323,8 @@ think it is most appropriate as a 5.0 change.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
+          <a href="../../genindex.html" title="الفهرس العام"
+             >الفهرس</a></li>
         <li class="right" >
           <a href="ms-rfc-21.html" title="MS RFC 21: MapServer Raster Color Correction"
              >التالي</a> |</li>
@@ -338,8 +339,8 @@ think it is most appropriate as a 5.0 change.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html"> حقوق النشر </a> 2021, Open Source Geospatial Foundation
-      Last updated on 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Last updated on 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

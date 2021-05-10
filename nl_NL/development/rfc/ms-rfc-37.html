@@ -4,12 +4,13 @@
 <html lang="nl_NL">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 37: MapServer Spatial Reference Improvements and Additions &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -140,7 +141,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-37-mapserver-spatial-reference-improvements-and-additions">
+  <section id="ms-rfc-37-mapserver-spatial-reference-improvements-and-additions">
 <span id="rfc37"></span><h1>MS RFC 37: MapServer Spatial Reference Improvements and Additions<a class="headerlink" href="#ms-rfc-37-mapserver-spatial-reference-improvements-and-additions" title="Permalink naar deze titel">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Author</dt>
@@ -159,15 +160,15 @@
 <dd class="field-odd"><p>Draft</p>
 </dd>
 </dl>
-<div class="section" id="purpose">
+<section id="purpose">
 <h2>Purpose<a class="headerlink" href="#purpose" title="Permalink naar deze titel">¶</a></h2>
 <p>To provide MapServer with the ability to set its PROJECTION information from
 directly from the datasource itself, in an
 attempt to lessen the burden related to dealing with coordinate system
 information on users.  These improvements will be optionally available and
 not interfere with previous PROJECTION definition methods.</p>
-</div>
-<div class="section" id="the-history-of-spatial-references-in-mapserver">
+</section>
+<section id="the-history-of-spatial-references-in-mapserver">
 <h2>The History of Spatial References in MapServer<a class="headerlink" href="#the-history-of-spatial-references-in-mapserver" title="Permalink naar deze titel">¶</a></h2>
 <p>MapServer’s spatial reference support is quite anemic by many standards.
 While most of the data sources MapServer interacts with support describing
@@ -176,7 +177,7 @@ the information on the floor or completely ignored it.</p>
 <p>MapServer’s reprojection machinery keys off the fact that a LAYER’s
 PROJECTION is different than the MAP’s.  When this is the case, MapServer
 reprojects the LAYER’s data to the MAP’s spatial reference during a map draw.</p>
-<div class="section" id="definition">
+<section id="definition">
 <h3>Definition<a class="headerlink" href="#definition" title="Permalink naar deze titel">¶</a></h3>
 <p>MapServer has historically used two different approaches for defining the
 spatial reference of its data – EPSG/ESRI codes in the form:</p>
@@ -208,8 +209,8 @@ not widely advertised or regularized:</p>
 <span class="n">END</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="performance-observations">
+</section>
+<section id="performance-observations">
 <h3>Performance Observations<a class="headerlink" href="#performance-observations" title="Permalink naar deze titel">¶</a></h3>
 <p>MapServer’s current spatial reference story is focussed on two things –
 simple description and ensuring that unnecessary data reprojection doesn’t
@@ -227,8 +228,8 @@ match the given identifier and returning the PROJ.4 definition.</p>
 <p>This penalty was lessened in early 2009 by the addition of a caching
 mechanism in PROJ.4 that allows subsequent lookups to be fast.</p>
 </div>
-</div>
-<div class="section" id="usability">
+</section>
+<section id="usability">
 <h3>Usability<a class="headerlink" href="#usability" title="Permalink naar deze titel">¶</a></h3>
 <p>The usability of these two mechanism can be a nightmare for users.  First,
 most of the spatial reference descriptions that people work with are of the
@@ -243,9 +244,9 @@ spatial reference for each and every layer in a mapfile on every map draw
 from a website.  spatialreference.org (and <a class="reference external" href="https://epsg.io/">https://epsg.io/</a>) does provide some conversion utilities
 to allow a user to paste in WKT and have it return MapServer PROJECTION blocks,
 but this approach still foists pain and misery on the users.</p>
-</div>
-</div>
-<div class="section" id="specification-features">
+</section>
+</section>
+<section id="specification-features">
 <h2>Specification Features<a class="headerlink" href="#specification-features" title="Permalink naar deze titel">¶</a></h2>
 <p>MapServer will continue to behave as before, and the user can opt-in for
 AUTO projection support by using the AUTO keyword in a projection object as
@@ -258,8 +259,8 @@ so:</p>
 <span class="n">END</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink naar deze titel">¶</a></h2>
 <p>It is important that MapServer’s previous spatial reference definition
 behavior be preserved.  First, drastically changing the PROJECTION definitions
@@ -273,7 +274,7 @@ from their native projection description type (ESRI WKT, OGC WKT, PROJ.4, etc)
 into PROJ.4 for setting on the projectionObj.</p></li>
 <li><p>PROJECTION will support an explicit AUTO keyword</p></li>
 </ol>
-<div class="section" id="virtual-table-method">
+<section id="virtual-table-method">
 <h3>Virtual Table Method<a class="headerlink" href="#virtual-table-method" title="Permalink naar deze titel">¶</a></h3>
 <p>To support AUTO projection definitions,
 drivers need to have the ability to return spatial reference information.
@@ -284,8 +285,8 @@ virtual table member is proposed:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerGetAutoProjection</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">,</span> <span class="n">projectionObj</span> <span class="o">*</span><span class="n">projection</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="additional-methods">
+</section>
+<section id="additional-methods">
 <h3>Additional methods<a class="headerlink" href="#additional-methods" title="Permalink naar deze titel">¶</a></h3>
 <p>The msOGCWKT2ProjectionObj method already exists, but a few more would be
 added to allow drivers that implement LayerGetAutoProjection to generate
@@ -294,8 +295,8 @@ a projectionObj.</p>
 <li><p>msESRIWKT2ProjectionObj</p></li>
 <li><p>msOGCWKT2ProjectionObj</p></li>
 </ul>
-</div>
-<div class="section" id="driver-specific-implementations">
+</section>
+<section id="driver-specific-implementations">
 <h3>Driver-specific implementations<a class="headerlink" href="#driver-specific-implementations" title="Permalink naar deze titel">¶</a></h3>
 <p>The following drivers will have implementations provided to support TYPE AUTO
 spatial reference definitions:</p>
@@ -306,9 +307,9 @@ spatial reference definitions:</p>
 <li><p>ArcSDE</p></li>
 <li><p>PostGIS</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="files-affected">
+</section>
+</section>
+<section id="files-affected">
 <h2>Files Affected<a class="headerlink" href="#files-affected" title="Permalink naar deze titel">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapserver</span><span class="o">.</span><span class="n">h</span>
 <span class="n">mapfile</span><span class="o">.</span><span class="n">c</span>
@@ -325,19 +326,19 @@ spatial reference definitions:</p>
 <span class="o">.</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="backward-compatibility-issues">
+</section>
+<section id="backward-compatibility-issues">
 <h2>Backward Compatibility Issues<a class="headerlink" href="#backward-compatibility-issues" title="Permalink naar deze titel">¶</a></h2>
 <p>All work described in this RFC will provide optional capabilities to MapServer
 and no backward compatibility issues are expected.</p>
-</div>
-<div class="section" id="documentation">
+</section>
+<section id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink naar deze titel">¶</a></h2>
 <p>This RFC will stand as primary documentation for the feature until such time
 as the methods and practices described in this document are integrated into
 the regular MapServer documentation framework.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -415,8 +416,8 @@ the regular MapServer documentation framework.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Laatste aanpassing op 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

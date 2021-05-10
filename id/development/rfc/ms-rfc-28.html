@@ -4,12 +4,13 @@
 <html lang="id">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 28: Redesign of LOG/DEBUG output mechanisms &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-28-redesign-of-log-debug-output-mechanisms">
+  <section id="ms-rfc-28-redesign-of-log-debug-output-mechanisms">
 <span id="rfc28"></span><h1>MS RFC 28: Redesign of LOG/DEBUG output mechanisms<a class="headerlink" href="#ms-rfc-28-redesign-of-log-debug-output-mechanisms" title="Link permanen untuk headline ini">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -163,15 +164,15 @@
 <dd class="field-even"><p>MapServer 5.0</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link permanen untuk headline ini">¶</a></h2>
 <p>MapServer 4.10 and older used to have multiple LOG/DEBUG output mechanisms
 that did not play well together. In order to improve the usability of the
 software this RFC proposes a new LOG/DEBUG output mechanism with more
 control on the output location (logfile or stderr) and that works under
 all supported web servers.</p>
-</div>
-<div class="section" id="inventory-of-existing-mechanisms">
+</section>
+<section id="inventory-of-existing-mechanisms">
 <h2>Inventory of existing mechanisms<a class="headerlink" href="#inventory-of-existing-mechanisms" title="Link permanen untuk headline ini">¶</a></h2>
 <p>MapServer 4.10 and older support the following LOG/DEBUG systems:</p>
 <ul>
@@ -198,8 +199,8 @@ where stderr output goes to stdout and the msDebug() output corrupt
 MapServer's output.</p>
 </li>
 </ul>
-</div>
-<div class="section" id="questions">
+</section>
+<section id="questions">
 <h2>Questions<a class="headerlink" href="#questions" title="Link permanen untuk headline ini">¶</a></h2>
 <ul>
 <li><p>Q: Is the mapserv-specific LOG option really used by anyone? Do we need to
@@ -209,8 +210,8 @@ mechanisms described in this RFC.</p>
 <p>A: The LOG option will be left untouched by this RFC.</p>
 </li>
 </ul>
-</div>
-<div class="section" id="technical-solution">
+</section>
+<section id="technical-solution">
 <h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Link permanen untuk headline ini">¶</a></h2>
 <p>We will essentially merge the MS_ERRORFILE and DEBUG/msDebug() mechanisms.
 The variable MS_ERRORFILE will specify the location of the output, with
@@ -228,8 +229,8 @@ when the second mapfile is read).</p>
 <p>Note: the output file handle will be global in the context of the current
 request only and not global across threads, this will be done using the same
 mechanism currently used by msGetErrorObj() in maperror.c.</p>
-</div>
-<div class="section" id="setting-ms-errorfile">
+</section>
+<section id="setting-ms-errorfile">
 <h2>Setting MS_ERRORFILE<a class="headerlink" href="#setting-ms-errorfile" title="Link permanen untuk headline ini">¶</a></h2>
 <p>The variable MS_ERRORFILE will specify the location of the output, with
 possible values being either a file path on disk, or one of the following
@@ -258,8 +259,8 @@ is also set, then the CONFIG directive takes precedence.</p>
 <p>If MS_ERRORFILE is not set then error/debug logging is disabled. During
 parsing of a mapfile, error/debug logging may become available only <em>after</em>
 the MS_ERRORFILE directive has been parsed.</p>
-</div>
-<div class="section" id="debug-levels">
+</section>
+<section id="debug-levels">
 <h2>DEBUG levels<a class="headerlink" href="#debug-levels" title="Link permanen untuk headline ini">¶</a></h2>
 <p>The current DEBUG ON/OFF mechanism, at the layer and map level will be
 extended to support multiple debug levels as follows. The default is
@@ -292,8 +293,8 @@ such as WMS connection URLs being called, database connection calls, etc.</p>
 the developers than to the users.</p>
 </li>
 </ul>
-</div>
-<div class="section" id="the-ms-debuglevel-environment-variable">
+</section>
+<section id="the-ms-debuglevel-environment-variable">
 <h2>The MS_DEBUGLEVEL environment variable<a class="headerlink" href="#the-ms-debuglevel-environment-variable" title="Link permanen untuk headline ini">¶</a></h2>
 <p>Debug level can also be set using the (optional) MS_DEBUGLEVEL environment
 variable.</p>
@@ -307,8 +308,8 @@ precedence over the value of the environment variable.</p>
 <p>This option is mostly useful when tuning applications by enabling timing/debug
 output before the map is loaded, to capture the full process initialization
 and map loading time, for instance.</p>
-</div>
-<div class="section" id="mapscript-implications">
+</section>
+<section id="mapscript-implications">
 <h2>MapScript Implications<a class="headerlink" href="#mapscript-implications" title="Link permanen untuk headline ini">¶</a></h2>
 <p>No direct implication. Setting MS_ERRORFILE will enable debug output in
 MapScript as well.</p>
@@ -316,8 +317,8 @@ MapScript as well.</p>
 scripting environments and we do not plan to make any special efforts to
 support those special cases as part of this RFC. However, logging to a file
 on disk will work with all MapScript flavours.</p>
-</div>
-<div class="section" id="files-affected">
+</section>
+<section id="files-affected">
 <h2>Files affected<a class="headerlink" href="#files-affected" title="Link permanen untuk headline ini">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">map</span><span class="o">.</span><span class="n">h</span>
 <span class="n">mapfile</span><span class="o">.</span><span class="n">c</span>
@@ -326,8 +327,8 @@ on disk will work with all MapScript flavours.</p>
 </div>
 <p>Several source files with msDebug() calls in them may also need to be
 edited to adjust the debug level at which the various msDebug() calls kick in.</p>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link permanen untuk headline ini">¶</a></h2>
 <ul class="simple">
 <li><p>The MapServer 4.x and older MS_ERRORFILE continues to work as before by
@@ -336,8 +337,8 @@ default</p></li>
 msDebug() output from previous versions of MapServer may require a higher
 debug level in order to be enabled.</p></li>
 </ul>
-</div>
-<div class="section" id="bug-id">
+</section>
+<section id="bug-id">
 <h2>Bug ID<a class="headerlink" href="#bug-id" title="Link permanen untuk headline ini">¶</a></h2>
 <ul class="simple">
 <li><p>709: <a class="reference external" href="https://github.com/MapServer/MapServer/issues/709">https://github.com/MapServer/MapServer/issues/709</a></p></li>
@@ -345,13 +346,13 @@ debug level in order to be enabled.</p></li>
 <li><p>1783: <a class="reference external" href="https://github.com/MapServer/MapServer/issues/1783">https://github.com/MapServer/MapServer/issues/1783</a></p></li>
 <li><p>2124: <a class="reference external" href="https://github.com/MapServer/MapServer/issues/2124">https://github.com/MapServer/MapServer/issues/2124</a></p></li>
 </ul>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>Voting history<a class="headerlink" href="#voting-history" title="Link permanen untuk headline ini">¶</a></h2>
 <p>Vote completed on 2007-06-29:</p>
 <p>+1 from DanielM, TomK, FrankW, TamasS, JeffM, SteveL and AssefaY.</p>
-</div>
-<div class="section" id="questions-comments-from-the-review-period">
+</section>
+<section id="questions-comments-from-the-review-period">
 <h2>Questions/Comments from the review period<a class="headerlink" href="#questions-comments-from-the-review-period" title="Link permanen untuk headline ini">¶</a></h2>
 <ul>
 <li><p>Q: Can we catch the output of OGR/GDAL's CPLDebug calls, perhaps when
@@ -359,8 +360,8 @@ the map-level debug level is &gt;= 3?</p>
 <p>A: Frank suggests that we keep this for a later phase.</p>
 </li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -434,8 +435,8 @@ the map-level debug level is &gt;= 3?</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Hak cipta</a> 2021, Open Source Geospatial Foundation.
-      Terakhir diperbarui pada 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Terakhir diperbarui pada 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

@@ -4,12 +4,13 @@
 <html lang="ar">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 107: Support for the edge of pixel (OGC) extent model in MapServer &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -18,8 +19,8 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="copyright" title="Copyright" href="../../copyright.html" />
+    <link rel="search" title="بحث" href="../../search.html" />
+    <link rel="copyright" title="الحقوق" href="../../copyright.html" />
     <link rel="next" title="MS RFC 108: Dynamic Heatmap (Kernel Density Estimation) Layers" href="ms-rfc-108.html" />
     <link rel="prev" title="MS RFC 106: Support of Geomtransform JavaScript Plugin" href="ms-rfc-106.html" /> 
   </head><body>
@@ -120,8 +121,8 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
+          <a href="../../genindex.html" title="الفهرس العام"
+             accesskey="I">الفهرس</a></li>
         <li class="right" >
           <a href="ms-rfc-108.html" title="MS RFC 108: Dynamic Heatmap (Kernel Density Estimation) Layers"
              accesskey="N">التالي</a> |</li>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-107-support-for-the-edge-of-pixel-ogc-extent-model-in-mapserver">
+  <section id="ms-rfc-107-support-for-the-edge-of-pixel-ogc-extent-model-in-mapserver">
 <span id="rfc107"></span><h1>MS RFC 107: Support for the edge of pixel (OGC) extent model in MapServer<a class="headerlink" href="#ms-rfc-107-support-for-the-edge-of-pixel-ogc-extent-model-in-mapserver" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -163,7 +164,7 @@
 <p>This RFC is related to <a class="reference internal" href="ms-rfc-25.html#rfc25"><span class="std std-ref">MS RFC 25</span></a> which addresses the same issue,
 but we now intend to keep the current edge-of-pixel extent model as well by using
 a different implementation proposal.</p>
-<div class="section" id="overview">
+<section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>According to <a class="reference internal" href="ms-rfc-25.html#rfc25"><span class="std std-ref">MS RFC 25</span></a>
 &quot;MapServer uses different pixel and extent model than defined by OGC
@@ -202,8 +203,8 @@ which results in different scales and incorrect width/height adjustments
 they would normally expect.</p>
 <p>In this RFC I'm about to provide support for both the OGC extent model and to
 the current model which can be selected by a new parameter added to the mapfile.</p>
-</div>
-<div class="section" id="proposed-solution">
+</section>
+<section id="proposed-solution">
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Permalink to this headline">¶</a></h2>
 <p>The key point of the implementation is to replace the '1' constant values in the
 extent/scale calculations with a new pixeladjustment parameter. This parameter can be
@@ -222,8 +223,8 @@ the implementation fairly straightforward not requiring to add quite some
 'if' conditions in the codebase.</p>
 <p>Regarding to the performance, calculating with the new pixeladjustment parameter
 in the formula instead of the constant 1 should not result in perceptible degradation.</p>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this headline">¶</a></h2>
 <p>The core of this implementation will change the cellsize calculation macro by adding
 the new parameter (in mapfile.h) as follows:</p>
@@ -296,14 +297,14 @@ the new parameter (in mapfile.h) as follows:</p>
 <p>Most of the further implementation will imply to change of all occurrences of
 msAdjustExtent, msCalculateScale and MS_CELLSIZE to provide this new parameter from
 the map object. See the following subchapters for the details.</p>
-<div class="section" id="adding-pixeladjustment">
+<section id="adding-pixeladjustment">
 <h3>3.1 Adding PIXELADJUSTMENT<a class="headerlink" href="#adding-pixeladjustment" title="Permalink to this headline">¶</a></h3>
 <p>A new integer parameter will be added to mapObj (in mapserver.h) and we
 will also modify the lexer (maplexer.l, maplexer.c) to recognize this new setting.
 The mapfile reader and writer (in mapfile.c, mapfile.h) will be modified to read/write this
 new value and initialize the default value of PIXELADJUSTMENT to 1.</p>
-</div>
-<div class="section" id="modify-the-wms-half-of-pixel-adjustment-code">
+</section>
+<section id="modify-the-wms-half-of-pixel-adjustment-code">
 <h3>3.2 Modify the WMS half of pixel adjustment code<a class="headerlink" href="#modify-the-wms-half-of-pixel-adjustment-code" title="Permalink to this headline">¶</a></h3>
 <p>The OGC adjustment code (mentioned above) should now be changed to:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">maxx</span> <span class="o">-</span> <span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">minx</span><span class="p">)</span> <span class="o">/</span> <span class="n">map</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">;</span>
@@ -315,14 +316,14 @@ new value and initialize the default value of PIXELADJUSTMENT to 1.</p>
 <span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">maxy</span> <span class="o">-=</span> <span class="n">dy</span><span class="o">*</span><span class="mf">0.5</span><span class="o">*</span><span class="n">map</span><span class="o">-&gt;</span><span class="n">pixeladjustment</span><span class="p">;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="provide-pixeladjustment-parameter-for-msadjustextent-and-mscalculatescale-and-ms-cellsize">
+</section>
+<section id="provide-pixeladjustment-parameter-for-msadjustextent-and-mscalculatescale-and-ms-cellsize">
 <h3>3.3 Provide pixeladjustment parameter for msAdjustExtent and msCalculateScale and MS_CELLSIZE<a class="headerlink" href="#provide-pixeladjustment-parameter-for-msadjustextent-and-mscalculatescale-and-ms-cellsize" title="Permalink to this headline">¶</a></h3>
 <p>We enumerate all occurrences of these functions and provide the new parameter
 from mapObj-&gt;pixeladjustment or mapServObj-&gt;map-&gt;pixeladjustment.
 For the list of all files affected in this change please refer to chapter 4.</p>
-</div>
-<div class="section" id="modify-the-calculation-of-the-search-rectangle">
+</section>
+<section id="modify-the-calculation-of-the-search-rectangle">
 <h3>3.4 Modify the calculation of the search rectangle<a class="headerlink" href="#modify-the-calculation-of-the-search-rectangle" title="Permalink to this headline">¶</a></h3>
 <p>We should modify the code in some places when searching for the shapes
 to utilize the pixeladjustment parameters like:</p>
@@ -336,8 +337,8 @@ to utilize the pixeladjustment parameters like:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="modify-msmapcomputegeotransform">
+</section>
+<section id="modify-msmapcomputegeotransform">
 <h3>3.5 Modify msMapComputeGeotransform<a class="headerlink" href="#modify-msmapcomputegeotransform" title="Permalink to this headline">¶</a></h3>
 <p>The calclulation should be modified as (in mapobject.c):</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">map</span><span class="o">-&gt;</span><span class="n">gt</span><span class="p">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span>
@@ -356,8 +357,8 @@ to utilize the pixeladjustment parameters like:</p>
                           <span class="o">-</span> <span class="p">(</span><span class="n">map</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">map</span><span class="o">-&gt;</span><span class="n">gt</span><span class="p">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="mapscript-related-changes">
+</section>
+<section id="mapscript-related-changes">
 <h3>3.6 Mapscript related changes<a class="headerlink" href="#mapscript-related-changes" title="Permalink to this headline">¶</a></h3>
 <p>We also have a couple of places in the mapscript code where the calls of
 msAdjustExtent and msCalculateScale should be updated (see chapter 4 for the details).
@@ -367,9 +368,9 @@ We also have to modify the signature of the 'fit' function for the rect object a
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="files-affected">
+</section>
+</section>
+<section id="files-affected">
 <h2>4. Files affected<a class="headerlink" href="#files-affected" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>mapchart.c: Modify the calculation of the search rectangle (see 3.4)</p></li>
@@ -401,22 +402,22 @@ We also have to modify the signature of the 'fit' function for the rect object a
 <li><p>mapscript/php/map.c: Modify the calls of msAdjustExtent and msCalculateScale (see 3.6)</p></li>
 <li><p>mapscript/php/mapscript_i.c: Modify the calls of msCalculateScale, modify the signature of 'fit' (see 3.6)</p></li>
 </ul>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>5. Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this headline">¶</a></h2>
 <p>The default value of PIXELADJUSTMENT will keep the current behaviour with regards
 the the calculation, but we need to modify the signature of the mapscript
 function: 'fit'.</p>
-</div>
-<div class="section" id="bug-id">
+</section>
+<section id="bug-id">
 <h2>6. Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this headline">¶</a></h2>
 <p>TBD</p>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>7. Voting history<a class="headerlink" href="#voting-history" title="Permalink to this headline">¶</a></h2>
 <p>TBD</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -426,7 +427,7 @@ function: 'fit'.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3 id="searchlabel">البحث السريع</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" aria-labelledby="searchlabel" />
@@ -476,8 +477,8 @@ function: 'fit'.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
+          <a href="../../genindex.html" title="الفهرس العام"
+             >الفهرس</a></li>
         <li class="right" >
           <a href="ms-rfc-108.html" title="MS RFC 108: Dynamic Heatmap (Kernel Density Estimation) Layers"
              >التالي</a> |</li>
@@ -492,8 +493,8 @@ function: 'fit'.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html"> حقوق النشر </a> 2021, Open Source Geospatial Foundation
-      Last updated on 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Last updated on 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

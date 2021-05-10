@@ -4,12 +4,13 @@
 <html lang="it">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 92: Migrating from Autotools to CMake &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-92-migrating-from-autotools-to-cmake">
+  <section id="ms-rfc-92-migrating-from-autotools-to-cmake">
 <span id="rfc92"></span><h1>MS RFC 92: Migrating from Autotools to CMake<a class="headerlink" href="#ms-rfc-92-migrating-from-autotools-to-cmake" title="Link a questa intestazione">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -160,7 +161,7 @@
 <dd class="field-odd"><p>MapServer 6.4</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Link a questa intestazione">¶</a></h2>
 <p>Our current autoconf + Makefile setup has several limitations:</p>
 <ul class="simple">
@@ -181,14 +182,14 @@ the compiler command line, preventing the safe usage of our headers without the
 need to know exactly what defines should be added (thus the need for the
 mapserver-config and mapservervars hacks to be able to build mapscripts)</p></li>
 </ul>
-</div>
-<div class="section" id="proposed-solution">
+</section>
+<section id="proposed-solution">
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Link a questa intestazione">¶</a></h2>
 <p>Switch to cmake (<a class="reference external" href="http://www.cmake.org">http://www.cmake.org</a>) to replace our autoconf + Makefile.in
 setup. Cmake is aimed at building and installing c/c++ projects in a
 cross-platform way.</p>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Link a questa intestazione">¶</a></h2>
 <ul class="simple">
 <li><p>remove the current autotools/Makefile related files</p></li>
@@ -198,8 +199,8 @@ the defines that we are now passing on the command line (-DUSE_OGR or -DNEED_STR
 <li><p>store MapServer release information in the CMakefiles, and include that information
 in a generated mapserver-version.h</p></li>
 </ul>
-</div>
-<div class="section" id="files-affected">
+</section>
+<section id="files-affected">
 <h2>3.2 Files affected<a class="headerlink" href="#files-affected" title="Link a questa intestazione">¶</a></h2>
 <dl class="simple">
 <dt>Files removed:</dt><dd><ul class="simple">
@@ -216,13 +217,13 @@ in a generated mapserver-version.h</p></li>
 </ul>
 </dd>
 </dl>
-</div>
-<div class="section" id="mapscript">
+</section>
+<section id="mapscript">
 <h2>3.3 MapScript<a class="headerlink" href="#mapscript" title="Link a questa intestazione">¶</a></h2>
 <p>Mapscript building will be streamlined with the main build process, and usually
 requires the presence of SWIG.</p>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>3.4 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link a questa intestazione">¶</a></h2>
 <ul class="simple">
 <li><p>Current ./configure handling will not be supported.</p></li>
@@ -235,8 +236,8 @@ pointing to that location.</p></li>
 <li><p>Current win32 buildfiles would need to be updated as the NEED_STRXXX defines have
 been renamed in mapserver.h to HAVE_STRXXX</p></li>
 </ul>
-</div>
-<div class="section" id="tips-when-migrating-from-autotools-habits">
+</section>
+<section id="tips-when-migrating-from-autotools-habits">
 <h2>4. Tips when migrating from autotools habits<a class="headerlink" href="#tips-when-migrating-from-autotools-habits" title="Link a questa intestazione">¶</a></h2>
 <ul>
 <li><p>Cmake builds should preferably be run «out-of-source», i.e. in a separate
@@ -260,21 +261,21 @@ invocation (e.g. -DWITH_FRIBIDI=0 -DWITH_WFS=0)</p></li>
 <li><p>Dependencies that are installed outside of default locations can be referenced by
 adding -DCMAKE_PREFIX_PATH=/path/to/gdal-prefix;/path/to/libxml2-prefix</p></li>
 </ul>
-</div>
-<div class="section" id="performance-implications">
+</section>
+<section id="performance-implications">
 <h2>5. Performance implications<a class="headerlink" href="#performance-implications" title="Link a questa intestazione">¶</a></h2>
 <p>None</p>
-</div>
-<div class="section" id="bug-id">
+</section>
+<section id="bug-id">
 <h2>6. Bug ID<a class="headerlink" href="#bug-id" title="Link a questa intestazione">¶</a></h2>
 <p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/4617">https://github.com/MapServer/MapServer/issues/4617</a></p>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>7. Voting history<a class="headerlink" href="#voting-history" title="Link a questa intestazione">¶</a></h2>
 <p>+1 from ThomasB, MikeS, TomK, JeffM, DanielM, OlivierC,
 SteveL, SteveW and PerryN</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -345,8 +346,8 @@ SteveL, SteveW and PerryN</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Ultimo aggiornamento 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Ultimo aggiornamento 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

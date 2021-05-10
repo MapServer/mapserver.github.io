@@ -4,12 +4,13 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>By Example &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -142,7 +143,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="by-example">
+  <section id="by-example">
 <span id="php-example"></span><h1><a class="toc-backref" href="#id1">By Example</a><a class="headerlink" href="#by-example" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Author</dt>
@@ -177,7 +178,7 @@ the legacy MapScript support; for recent examples of PHP 7 mapscript,
 see the <a class="reference external" href="https://ms4w.com/trac/">MS4W wiki</a> as users have been
 contributing PHP 7 mapscript scripts there.</p>
 </div>
-<div class="section" id="introduction">
+<section id="introduction">
 <h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>The purpose of this document is to be a step by step explanation of
 the <a class="reference internal" href="phpmapscript.html#phpmapscriptapi"><span class="std std-ref">PHP MapScript API</span></a> with practical examples for each of them.  It
@@ -204,7 +205,7 @@ is, zooming and panning over shapefiles via a web browser.</p>
 <p>What follows are the questions you must answer affirmatively before
 accompanying me through the rest of this journey (I apologize for my
 maintainer's lack of literary taste).</p>
-<div class="section" id="do-you-have-running-somewhere">
+<section id="do-you-have-running-somewhere">
 <h3>Do you have running somewhere...<a class="headerlink" href="#do-you-have-running-somewhere" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>a web server capable of running PHP as a CGI (Apache will do)?</p></li>
@@ -212,8 +213,8 @@ maintainer's lack of literary taste).</p>
 recommend 4.3 onwards.</p></li>
 <li><p>PHP MapScript, version 4.0 or later? <a class="reference internal" href="../../installation/php.html#php-install"><span class="std std-ref">PHP MapScript Installation</span></a></p></li>
 </ul>
-</div>
-<div class="section" id="can-you">
+</section>
+<section id="can-you">
 <h3>Can you...<a class="headerlink" href="#can-you" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>code PHP or are willing to <a class="reference external" href="http://php.net/tut.php">learn how to</a>?</p></li>
@@ -222,8 +223,8 @@ plus)</p></li>
 <li><p>tell somebody what on earth is a <a class="reference external" href="http://shapelib.maptools.org/">shapefile</a> [or a <a class="reference external" href="http://postgis.net/">PostGIS</a>
 table]?</p></li>
 </ul>
-</div>
-<div class="section" id="outline-of-this-document">
+</section>
+<section id="outline-of-this-document">
 <h3>Outline of this Document<a class="headerlink" href="#outline-of-this-document" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>A general overview of MapScript, in a language independent way</p></li>
@@ -233,9 +234,9 @@ table]?</p></li>
 </ul>
 <p>You can also go to each part directly through my table of contents
 located at the top, if you wish to skip some sections.</p>
-</div>
-</div>
-<div class="section" id="mapscript-overview">
+</section>
+</section>
+<section id="mapscript-overview">
 <h2><a class="toc-backref" href="#id1">MapScript overview</a><a class="headerlink" href="#mapscript-overview" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Ok, now I'm at last arriving at a point I will enjoy. This overview
 intends to clear some common misconceptions beginners encounter when
@@ -293,79 +294,52 @@ map image) to MapScript and as a result get one or more file(s),
 typically standard image files such as a PNG or JPEG. So you can apply
 anything you've seen in any server side scripted web application,
 DHTML, Java applets, CSS, HTML templates, sessions, you name it.</p>
-</div>
-<div class="section" id="our-first-application">
+</section>
+<section id="our-first-application">
 <h2><a class="toc-backref" href="#id1">Our first application</a><a class="headerlink" href="#our-first-application" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>In this first example, I will tell you how to display a shapefile on a
 web page using a map file.</p>
-<div class="section" id="the-map-file">
+<section id="the-map-file">
 <h3>The Map File<a class="headerlink" href="#the-map-file" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Here's the map file:</p>
-<div class="highlight-mapfile notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="k">NAME</span> <span class="s">&quot;Europe in purple&quot;</span>
-    <span class="k">SIZE</span> <span class="mi">400</span> <span class="mi">400</span>
-    <span class="k">STATUS</span> <span class="nb">ON</span>
-    <span class="k">SYMBOLSET</span> <span class="s">&quot;/var/www/html/maps/symbols/symbols.sym&quot;</span>
-    <span class="k">EXTENT</span> <span class="p">-</span><span class="mi">5696501</span> <span class="mi">1923039</span> <span class="mi">5696501</span> <span class="mi">11022882</span>
-    <span class="k">UNITS</span> <span class="nb">METERS</span>
-    <span class="k">SHAPEPATH</span> <span class="s">&quot;/var/www/html/maps/data&quot;</span>
-
-    <span class="k">WEB</span>
-        <span class="k">IMAGEPATH</span> <span class="s">&quot;/var/www/html/maps/tmp/&quot;</span>
-        <span class="k">IMAGEURL</span> <span class="s">&quot;/tmp/&quot;</span>
-    <span class="k">END</span>
-
-    <span class="k">LAYER</span>
-        <span class="k">NAME</span> <span class="s">&quot;Europe&quot;</span>
-        <span class="k">TYPE</span> <span class="nb">POLYGON</span>
-        <span class="k">STATUS</span> <span class="nb">ON</span>
-        <span class="k">DATA</span> <span class="s">&quot;europe&quot;</span>
-        <span class="k">CLASS</span>
-            <span class="k">STYLE</span>
-                <span class="k">COLOR</span> <span class="mi">110</span> <span class="mi">50</span> <span class="mi">100</span>
-                <span class="k">OUTLINECOLOR</span> <span class="mi">200</span> <span class="mi">200</span> <span class="mi">200</span>
-                <span class="k">SYMBOL</span> <span class="mi">0</span>
-            <span class="k">END</span>
-        <span class="k">END</span>
-    <span class="k">END</span>
-
-    <span class="k">END</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>    <span class="k">NAME</span> <span class="s">&quot;Europe in purple&quot;</span>
+<span class="linenos"> 2</span>    <span class="k">SIZE</span> <span class="mi">400</span> <span class="mi">400</span>
+<span class="linenos"> 3</span>    <span class="k">STATUS</span> <span class="nb">ON</span>
+<span class="linenos"> 4</span>    <span class="k">SYMBOLSET</span> <span class="s">&quot;/var/www/html/maps/symbols/symbols.sym&quot;</span>
+<span class="linenos"> 5</span>    <span class="k">EXTENT</span> <span class="p">-</span><span class="mi">5696501</span> <span class="mi">1923039</span> <span class="mi">5696501</span> <span class="mi">11022882</span>
+<span class="linenos"> 6</span>    <span class="k">UNITS</span> <span class="nb">METERS</span>
+<span class="linenos"> 7</span>    <span class="k">SHAPEPATH</span> <span class="s">&quot;/var/www/html/maps/data&quot;</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span>    <span class="k">WEB</span>
+<span class="linenos">10</span>        <span class="k">IMAGEPATH</span> <span class="s">&quot;/var/www/html/maps/tmp/&quot;</span>
+<span class="linenos">11</span>        <span class="k">IMAGEURL</span> <span class="s">&quot;/tmp/&quot;</span>
+<span class="linenos">12</span>    <span class="k">END</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span>    <span class="k">LAYER</span>
+<span class="linenos">15</span>        <span class="k">NAME</span> <span class="s">&quot;Europe&quot;</span>
+<span class="linenos">16</span>        <span class="k">TYPE</span> <span class="nb">POLYGON</span>
+<span class="linenos">17</span>        <span class="k">STATUS</span> <span class="nb">ON</span>
+<span class="linenos">18</span>        <span class="k">DATA</span> <span class="s">&quot;europe&quot;</span>
+<span class="linenos">19</span>        <span class="k">CLASS</span>
+<span class="linenos">20</span>            <span class="k">STYLE</span>
+<span class="linenos">21</span>                <span class="k">COLOR</span> <span class="mi">110</span> <span class="mi">50</span> <span class="mi">100</span>
+<span class="linenos">22</span>                <span class="k">OUTLINECOLOR</span> <span class="mi">200</span> <span class="mi">200</span> <span class="mi">200</span>
+<span class="linenos">23</span>                <span class="k">SYMBOL</span> <span class="mi">0</span>
+<span class="linenos">24</span>            <span class="k">END</span>
+<span class="linenos">25</span>        <span class="k">END</span>
+<span class="linenos">26</span>    <span class="k">END</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span>    <span class="k">END</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 <p>Here I have shown a map with a single layer, where the europe.shp,
 europe.shx and europe.dbf files must be located in the subdirectory
 called data. The symbols are located in the symbols subdirectory. All
 this locations are relative from the place the map file is, but better
 safe than sorry, I guess. The web section is used to define where will
 the images be saved and in what URL will they be available.</p>
-</div>
-<div class="section" id="displaying-the-map-with-mapscript">
+</section>
+<section id="displaying-the-map-with-mapscript">
 <h3>Displaying the map with MapScript<a class="headerlink" href="#displaying-the-map-with-mapscript" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>To display a map the following MapScript objects and methods will be
 used:</p>
@@ -383,47 +357,28 @@ used:</p>
 <li><p>The saveWebImage method: string saveWebImage()</p></li>
 </ul>
 <p>The code looks like this:</p>
-<div class="highlight-php notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="x">    </span><span class="cp">&lt;?php</span>
-
-    <span class="nb">dl</span><span class="p">(</span><span class="s1">&#39;php_mapscript.so&#39;</span><span class="p">);</span>
-
-    <span class="nv">$map_path</span><span class="o">=</span><span class="s2">&quot;/var/www/html/ms/map_files/&quot;</span><span class="p">;</span>
-
-    <span class="nv">$map</span> <span class="o">=</span> <span class="nx">ms_newMapObj</span><span class="p">(</span><span class="nv">$map_path</span><span class="o">.</span><span class="s2">&quot;europe.map&quot;</span><span class="p">);</span>
-    <span class="nv">$image</span><span class="o">=</span><span class="nv">$map</span><span class="o">-&gt;</span><span class="na">draw</span><span class="p">();</span>
-    <span class="nv">$image_url</span><span class="o">=</span><span class="nv">$image</span><span class="o">-&gt;</span><span class="na">saveWebImage</span><span class="p">();</span>
-
-    <span class="cp">?&gt;</span><span class="x"></span>
-
-<span class="x">     &lt;HTML&gt;</span>
-<span class="x">      &lt;HEAD&gt;</span>
-<span class="x">          &lt;TITLE&gt;Example 1: Displaying a map&lt;/TITLE&gt;</span>
-<span class="x">      &lt;/HEAD&gt;</span>
-<span class="x">      &lt;BODY&gt;</span>
-<span class="x">          &lt;IMG SRC=</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$image_url</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"> &gt;</span>
-<span class="x">      &lt;/BODY&gt;</span>
-<span class="x">     &lt;/HTML&gt;</span>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="x">    </span><span class="cp">&lt;?php</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span>    <span class="nb">dl</span><span class="p">(</span><span class="s1">&#39;php_mapscript.so&#39;</span><span class="p">);</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span>    <span class="nv">$map_path</span><span class="o">=</span><span class="s2">&quot;/var/www/html/ms/map_files/&quot;</span><span class="p">;</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span>    <span class="nv">$map</span> <span class="o">=</span> <span class="nx">ms_newMapObj</span><span class="p">(</span><span class="nv">$map_path</span><span class="o">.</span><span class="s2">&quot;europe.map&quot;</span><span class="p">);</span>
+<span class="linenos"> 8</span>    <span class="nv">$image</span><span class="o">=</span><span class="nv">$map</span><span class="o">-&gt;</span><span class="na">draw</span><span class="p">();</span>
+<span class="linenos"> 9</span>    <span class="nv">$image_url</span><span class="o">=</span><span class="nv">$image</span><span class="o">-&gt;</span><span class="na">saveWebImage</span><span class="p">();</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="cp">?&gt;</span><span class="x"></span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="x">     &lt;HTML&gt;</span>
+<span class="linenos">14</span><span class="x">      &lt;HEAD&gt;</span>
+<span class="linenos">15</span><span class="x">          &lt;TITLE&gt;Example 1: Displaying a map&lt;/TITLE&gt;</span>
+<span class="linenos">16</span><span class="x">      &lt;/HEAD&gt;</span>
+<span class="linenos">17</span><span class="x">      &lt;BODY&gt;</span>
+<span class="linenos">18</span><span class="x">          &lt;IMG SRC=</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$image_url</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"> &gt;</span>
+<span class="linenos">19</span><span class="x">      &lt;/BODY&gt;</span>
+<span class="linenos">20</span><span class="x">     &lt;/HTML&gt;</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 <p>The code I will present through the rest of this document will follow
 the following rule:</p>
 <ul class="simple">
@@ -431,8 +386,8 @@ the following rule:</p>
 </ul>
 <p>This code will render an image corresponding to the shapefile europe and display
 it on a HTML page.</p>
-</div>
-<div class="section" id="code-explanation">
+</section>
+<section id="code-explanation">
 <h3>Code Explanation<a class="headerlink" href="#code-explanation" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>In line 2 it is loaded the MapScript extension (you may not need it if your
@@ -453,13 +408,13 @@ URL of the image will be the value stored in $image_url.</p></li>
 <p>You should test the application on your system, to check that it really works
 and to solve the problems that may arise on your particular configuration before
 moving on to the more complex examples.</p>
-</div>
-<div class="section" id="output">
+</section>
+<section id="output">
 <h3>Output<a class="headerlink" href="#output" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>The output (using the europe shapefile) should look like this:</p>
 <img alt="../../_images/phpmapscript-byexample-map.png" src="../../_images/phpmapscript-byexample-map.png" />
-</div>
-<div class="section" id="zooming-and-panning">
+</section>
+<section id="zooming-and-panning">
 <h3>Zooming and Panning<a class="headerlink" href="#zooming-and-panning" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Now I will tell you how to add zoom and pan capabilities to the code.</p>
 <p>Here goes the list of new methods and objects called.</p>
@@ -483,253 +438,133 @@ double y_coord);</p></li>
 double miny, double maxx, double maxy);</p></li>
 </ul>
 <p>The .map file remains the same as the one presented in the previous example.</p>
-</div>
-<div class="section" id="php-mapscript-code">
+</section>
+<section id="php-mapscript-code">
 <h3>PHP/MapScript Code<a class="headerlink" href="#php-mapscript-code" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Here I present the new code.</p>
-<div class="highlight-php notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">  1</span>
-<span class="normal">  2</span>
-<span class="normal">  3</span>
-<span class="normal">  4</span>
-<span class="normal">  5</span>
-<span class="normal">  6</span>
-<span class="normal">  7</span>
-<span class="normal">  8</span>
-<span class="normal">  9</span>
-<span class="normal"> 10</span>
-<span class="normal"> 11</span>
-<span class="normal"> 12</span>
-<span class="normal"> 13</span>
-<span class="normal"> 14</span>
-<span class="normal"> 15</span>
-<span class="normal"> 16</span>
-<span class="normal"> 17</span>
-<span class="normal"> 18</span>
-<span class="normal"> 19</span>
-<span class="normal"> 20</span>
-<span class="normal"> 21</span>
-<span class="normal"> 22</span>
-<span class="normal"> 23</span>
-<span class="normal"> 24</span>
-<span class="normal"> 25</span>
-<span class="normal"> 26</span>
-<span class="normal"> 27</span>
-<span class="normal"> 28</span>
-<span class="normal"> 29</span>
-<span class="normal"> 30</span>
-<span class="normal"> 31</span>
-<span class="normal"> 32</span>
-<span class="normal"> 33</span>
-<span class="normal"> 34</span>
-<span class="normal"> 35</span>
-<span class="normal"> 36</span>
-<span class="normal"> 37</span>
-<span class="normal"> 38</span>
-<span class="normal"> 39</span>
-<span class="normal"> 40</span>
-<span class="normal"> 41</span>
-<span class="normal"> 42</span>
-<span class="normal"> 43</span>
-<span class="normal"> 44</span>
-<span class="normal"> 45</span>
-<span class="normal"> 46</span>
-<span class="normal"> 47</span>
-<span class="normal"> 48</span>
-<span class="normal"> 49</span>
-<span class="normal"> 50</span>
-<span class="normal"> 51</span>
-<span class="normal"> 52</span>
-<span class="normal"> 53</span>
-<span class="normal"> 54</span>
-<span class="normal"> 55</span>
-<span class="normal"> 56</span>
-<span class="normal"> 57</span>
-<span class="normal"> 58</span>
-<span class="normal"> 59</span>
-<span class="normal"> 60</span>
-<span class="normal"> 61</span>
-<span class="normal"> 62</span>
-<span class="normal"> 63</span>
-<span class="normal"> 64</span>
-<span class="normal"> 65</span>
-<span class="normal"> 66</span>
-<span class="normal"> 67</span>
-<span class="normal"> 68</span>
-<span class="normal"> 69</span>
-<span class="normal"> 70</span>
-<span class="normal"> 71</span>
-<span class="normal"> 72</span>
-<span class="normal"> 73</span>
-<span class="normal"> 74</span>
-<span class="normal"> 75</span>
-<span class="normal"> 76</span>
-<span class="normal"> 77</span>
-<span class="normal"> 78</span>
-<span class="normal"> 79</span>
-<span class="normal"> 80</span>
-<span class="normal"> 81</span>
-<span class="normal"> 82</span>
-<span class="normal"> 83</span>
-<span class="normal"> 84</span>
-<span class="normal"> 85</span>
-<span class="normal"> 86</span>
-<span class="normal"> 87</span>
-<span class="normal"> 88</span>
-<span class="normal"> 89</span>
-<span class="normal"> 90</span>
-<span class="normal"> 91</span>
-<span class="normal"> 92</span>
-<span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span>
-<span class="normal">114</span>
-<span class="normal">115</span>
-<span class="normal">116</span>
-<span class="normal">117</span>
-<span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="x">    </span><span class="cp">&lt;?php</span>
-
-    <span class="nb">dl</span><span class="p">(</span><span class="s1">&#39;php_mapscript.so&#39;</span><span class="p">);</span>
-
-    <span class="c1">// Default values and configuration</span>
-
-    <span class="nv">$val_zsize</span><span class="o">=</span><span class="mi">3</span><span class="p">;</span>
-    <span class="nv">$check_pan</span><span class="o">=</span><span class="s2">&quot;CHECKED&quot;</span><span class="p">;</span>
-    <span class="nv">$map_path</span><span class="o">=</span><span class="s2">&quot;/var/www/html/ms/map_files/&quot;</span><span class="p">;</span>
-    <span class="nv">$map_file</span><span class="o">=</span><span class="s2">&quot;europe.map&quot;</span><span class="p">;</span>
-
-    <span class="nv">$map</span> <span class="o">=</span> <span class="nx">ms_newMapObj</span><span class="p">(</span><span class="nv">$map_path</span><span class="o">.</span><span class="nv">$map_file</span><span class="p">);</span>
-
-
-    <span class="k">if</span> <span class="p">(</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;mapa_x&quot;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;mapa_y&quot;</span><span class="p">])</span>
-          <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;full&quot;</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
-
-          <span class="nv">$extent_to_set</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;extent&quot;</span><span class="p">]);</span>
-
-          <span class="nv">$map</span><span class="o">-&gt;</span><span class="na">setextent</span><span class="p">(</span><span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                          <span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
-
-          <span class="nv">$my_point</span> <span class="o">=</span> <span class="nx">ms_newpointObj</span><span class="p">();</span>
-          <span class="nv">$my_point</span><span class="o">-&gt;</span><span class="na">setXY</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;mapa_x&quot;</span><span class="p">],</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;mapa_y&quot;</span><span class="p">]);</span>
-
-          <span class="nv">$my_extent</span> <span class="o">=</span> <span class="nx">ms_newrectObj</span><span class="p">();</span>
-
-          <span class="nv">$my_extent</span><span class="o">-&gt;</span><span class="na">setextent</span><span class="p">(</span><span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                                  <span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
-
-          <span class="nv">$zoom_factor</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;zoom&quot;</span><span class="p">]</span><span class="o">*</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;zsize&quot;</span><span class="p">];</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nv">$zoom_factor</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-                  <span class="nv">$zoom_factor</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-                  <span class="nv">$check_pan</span> <span class="o">=</span> <span class="s2">&quot;CHECKED&quot;</span><span class="p">;</span>
-                  <span class="nv">$check_zout</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-                  <span class="nv">$check_zin</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-          <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$zoom_factor</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-                  <span class="nv">$check_pan</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-                  <span class="nv">$check_zout</span> <span class="o">=</span> <span class="s2">&quot;CHECKED&quot;</span><span class="p">;</span>
-                  <span class="nv">$check_zin</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                  <span class="nv">$check_pan</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-                  <span class="nv">$check_zout</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-                  <span class="nv">$check_zin</span> <span class="o">=</span> <span class="s2">&quot;CHECKED&quot;</span><span class="p">;</span>
-          <span class="p">}</span>
-
-          <span class="nv">$val_zsize</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nv">$zoom_factor</span><span class="p">);</span>
-
-          <span class="nv">$map</span><span class="o">-&gt;</span><span class="na">zoompoint</span><span class="p">(</span><span class="nv">$zoom_factor</span><span class="p">,</span><span class="nv">$my_point</span><span class="p">,</span><span class="nv">$map</span><span class="o">-&gt;</span><span class="na">width</span><span class="p">,</span><span class="nv">$map</span><span class="o">-&gt;</span><span class="na">height</span><span class="p">,</span>
-                          <span class="nv">$my_extent</span><span class="p">);</span>
-
-     <span class="p">}</span>
-
-
-     <span class="nv">$image</span><span class="o">=</span><span class="nv">$map</span><span class="o">-&gt;</span><span class="na">draw</span><span class="p">();</span>
-     <span class="nv">$image_url</span><span class="o">=</span><span class="nv">$image</span><span class="o">-&gt;</span><span class="na">saveWebImage</span><span class="p">();</span>
-
-     <span class="nv">$extent_to_html</span> <span class="o">=</span> <span class="nv">$map</span><span class="o">-&gt;</span><span class="na">extent</span><span class="o">-&gt;</span><span class="na">minx</span><span class="o">.</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="nv">$map</span><span class="o">-&gt;</span><span class="na">extent</span><span class="o">-&gt;</span><span class="na">miny</span><span class="o">.</span><span class="s2">&quot; &quot;</span>
-                  <span class="o">.</span><span class="nv">$map</span><span class="o">-&gt;</span><span class="na">extent</span><span class="o">-&gt;</span><span class="na">maxx</span><span class="o">.</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="nv">$map</span><span class="o">-&gt;</span><span class="na">extent</span><span class="o">-&gt;</span><span class="na">maxy</span><span class="p">;</span>
-
-     <span class="cp">?&gt;</span><span class="x"></span>
-<span class="x">     &lt;HTML&gt;</span>
-<span class="x">     &lt;HEAD&gt;</span>
-<span class="x">     &lt;TITLE&gt;Map 2&lt;/TITLE&gt;</span>
-<span class="x">     &lt;/HEAD&gt;</span>
-<span class="x">     &lt;BODY&gt;</span>
-<span class="x">     &lt;CENTER&gt;</span>
-<span class="x">     &lt;FORM METHOD=POST ACTION=</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$HTTP_SERVER_VARS</span><span class="p">[</span><span class="s1">&#39;PHP_SELF&#39;</span><span class="p">]</span><span class="cp">?&gt;</span><span class="x">&gt;</span>
-<span class="x">     &lt;TABLE&gt;</span>
-<span class="x">     &lt;TR&gt;</span>
-<span class="x">          &lt;TD&gt;</span>
-<span class="x">                  &lt;INPUT TYPE=IMAGE NAME=&quot;mapa&quot; SRC=&quot;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$image_url</span><span class="cp">?&gt;</span><span class="x">&quot;&gt;</span>
-<span class="x">          &lt;/TD&gt;</span>
-<span class="x">     &lt;/TR&gt;</span>
-<span class="x">     &lt;TR&gt;</span>
-<span class="x">          &lt;TD&gt;</span>
-<span class="x">                  Pan</span>
-<span class="x">          &lt;/TD&gt;</span>
-<span class="x">          &lt;TD&gt;</span>
-<span class="x">                  &lt;INPUT TYPE=RADIO NAME=&quot;zoom&quot; VALUE=0 </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$check_pan</span><span class="cp">?&gt;</span><span class="x">&gt;</span>
-<span class="x">          &lt;/TD&gt;</span>
-<span class="x">     &lt;/TR&gt;</span>
-<span class="x">     &lt;TR&gt;</span>
-<span class="x">          &lt;TD&gt;</span>
-<span class="x">                  Zoom In</span>
-<span class="x">          &lt;/TD&gt;</span>
-<span class="x">          &lt;TD&gt;</span>
-<span class="x">                  &lt;INPUT TYPE=RADIO NAME=&quot;zoom&quot; VALUE=1 </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$check_zin</span><span class="cp">?&gt;</span><span class="x">&gt;</span>
-<span class="x">          &lt;/TD&gt;</span>
-<span class="x">     &lt;/TR&gt;</span>
-<span class="x">     &lt;TR&gt;</span>
-<span class="x">          &lt;TD&gt;</span>
-<span class="x">                  Zoom Out</span>
-<span class="x">          &lt;/TD&gt;</span>
-<span class="x">          &lt;TD&gt;</span>
-<span class="x">                  &lt;INPUT TYPE=RADIO NAME=&quot;zoom&quot; VALUE=-1 </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$check_zout</span><span class="cp">?&gt;</span><span class="x">&gt;</span>
-<span class="x">          &lt;/TD&gt;</span>
-<span class="x">     &lt;/TR&gt;</span>
-<span class="x">     &lt;TR&gt;</span>
-<span class="x">          &lt;TD&gt;</span>
-<span class="x">                  Zoom Size</span>
-<span class="x">          &lt;/TD&gt;</span>
-<span class="x">          &lt;TD&gt;</span>
-<span class="x">                  &lt;INPUT TYPE=TEXT NAME=&quot;zsize&quot; VALUE=&quot;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$val_zsize</span><span class="cp">?&gt;</span><span class="x">&quot;</span>
-<span class="x">                  SIZE=2&gt;</span>
-<span class="x">          &lt;/TD&gt;</span>
-<span class="x">     &lt;/TR&gt;</span>
-<span class="x">     &lt;TR&gt;</span>
-<span class="x">          &lt;TD&gt;</span>
-<span class="x">                  Full Extent</span>
-<span class="x">          &lt;/TD&gt;</span>
-<span class="x">          &lt;TD&gt;</span>
-<span class="x">                  &lt;INPUT TYPE=SUBMIT NAME=&quot;full&quot; VALUE=&quot;Go&quot;</span>
-<span class="x">                  SIZE=2&gt;</span>
-<span class="x">          &lt;/TD&gt;</span>
-<span class="x">     &lt;/TABLE&gt;</span>
-<span class="x">     &lt;INPUT TYPE=HIDDEN NAME=&quot;extent&quot; VALUE=&quot;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$extent_to_html</span><span class="cp">?&gt;</span><span class="x">&quot;&gt;</span>
-<span class="x">     &lt;/FORM&gt;</span>
-<span class="x">     &lt;/CENTER&gt;</span>
-<span class="x">     &lt;/BODY&gt;</span>
-<span class="x">     &lt;/HMTL&gt;</span>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="x">    </span><span class="cp">&lt;?php</span>
+<span class="linenos">  2</span>
+<span class="linenos">  3</span>    <span class="nb">dl</span><span class="p">(</span><span class="s1">&#39;php_mapscript.so&#39;</span><span class="p">);</span>
+<span class="linenos">  4</span>
+<span class="linenos">  5</span>    <span class="c1">// Default values and configuration</span>
+<span class="linenos">  6</span>
+<span class="linenos">  7</span>    <span class="nv">$val_zsize</span><span class="o">=</span><span class="mi">3</span><span class="p">;</span>
+<span class="linenos">  8</span>    <span class="nv">$check_pan</span><span class="o">=</span><span class="s2">&quot;CHECKED&quot;</span><span class="p">;</span>
+<span class="linenos">  9</span>    <span class="nv">$map_path</span><span class="o">=</span><span class="s2">&quot;/var/www/html/ms/map_files/&quot;</span><span class="p">;</span>
+<span class="linenos"> 10</span>    <span class="nv">$map_file</span><span class="o">=</span><span class="s2">&quot;europe.map&quot;</span><span class="p">;</span>
+<span class="linenos"> 11</span>
+<span class="linenos"> 12</span>    <span class="nv">$map</span> <span class="o">=</span> <span class="nx">ms_newMapObj</span><span class="p">(</span><span class="nv">$map_path</span><span class="o">.</span><span class="nv">$map_file</span><span class="p">);</span>
+<span class="linenos"> 13</span>
+<span class="linenos"> 14</span>
+<span class="linenos"> 15</span>    <span class="k">if</span> <span class="p">(</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;mapa_x&quot;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;mapa_y&quot;</span><span class="p">])</span>
+<span class="linenos"> 16</span>          <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;full&quot;</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
+<span class="linenos"> 17</span>
+<span class="linenos"> 18</span>          <span class="nv">$extent_to_set</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;extent&quot;</span><span class="p">]);</span>
+<span class="linenos"> 19</span>
+<span class="linenos"> 20</span>          <span class="nv">$map</span><span class="o">-&gt;</span><span class="na">setextent</span><span class="p">(</span><span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="linenos"> 21</span>                          <span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+<span class="linenos"> 22</span>
+<span class="linenos"> 23</span>          <span class="nv">$my_point</span> <span class="o">=</span> <span class="nx">ms_newpointObj</span><span class="p">();</span>
+<span class="linenos"> 24</span>          <span class="nv">$my_point</span><span class="o">-&gt;</span><span class="na">setXY</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;mapa_x&quot;</span><span class="p">],</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;mapa_y&quot;</span><span class="p">]);</span>
+<span class="linenos"> 25</span>
+<span class="linenos"> 26</span>          <span class="nv">$my_extent</span> <span class="o">=</span> <span class="nx">ms_newrectObj</span><span class="p">();</span>
+<span class="linenos"> 27</span>
+<span class="linenos"> 28</span>          <span class="nv">$my_extent</span><span class="o">-&gt;</span><span class="na">setextent</span><span class="p">(</span><span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="linenos"> 29</span>                                  <span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="nv">$extent_to_set</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+<span class="linenos"> 30</span>
+<span class="linenos"> 31</span>          <span class="nv">$zoom_factor</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;zoom&quot;</span><span class="p">]</span><span class="o">*</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&quot;zsize&quot;</span><span class="p">];</span>
+<span class="linenos"> 32</span>          <span class="k">if</span> <span class="p">(</span><span class="nv">$zoom_factor</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos"> 33</span>                  <span class="nv">$zoom_factor</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="linenos"> 34</span>                  <span class="nv">$check_pan</span> <span class="o">=</span> <span class="s2">&quot;CHECKED&quot;</span><span class="p">;</span>
+<span class="linenos"> 35</span>                  <span class="nv">$check_zout</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+<span class="linenos"> 36</span>                  <span class="nv">$check_zin</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+<span class="linenos"> 37</span>          <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$zoom_factor</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos"> 38</span>                  <span class="nv">$check_pan</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+<span class="linenos"> 39</span>                  <span class="nv">$check_zout</span> <span class="o">=</span> <span class="s2">&quot;CHECKED&quot;</span><span class="p">;</span>
+<span class="linenos"> 40</span>                  <span class="nv">$check_zin</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+<span class="linenos"> 41</span>          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+<span class="linenos"> 42</span>                  <span class="nv">$check_pan</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+<span class="linenos"> 43</span>                  <span class="nv">$check_zout</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+<span class="linenos"> 44</span>                  <span class="nv">$check_zin</span> <span class="o">=</span> <span class="s2">&quot;CHECKED&quot;</span><span class="p">;</span>
+<span class="linenos"> 45</span>          <span class="p">}</span>
+<span class="linenos"> 46</span>
+<span class="linenos"> 47</span>          <span class="nv">$val_zsize</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nv">$zoom_factor</span><span class="p">);</span>
+<span class="linenos"> 48</span>
+<span class="linenos"> 49</span>          <span class="nv">$map</span><span class="o">-&gt;</span><span class="na">zoompoint</span><span class="p">(</span><span class="nv">$zoom_factor</span><span class="p">,</span><span class="nv">$my_point</span><span class="p">,</span><span class="nv">$map</span><span class="o">-&gt;</span><span class="na">width</span><span class="p">,</span><span class="nv">$map</span><span class="o">-&gt;</span><span class="na">height</span><span class="p">,</span>
+<span class="linenos"> 50</span>                          <span class="nv">$my_extent</span><span class="p">);</span>
+<span class="linenos"> 51</span>
+<span class="linenos"> 52</span>     <span class="p">}</span>
+<span class="linenos"> 53</span>
+<span class="linenos"> 54</span>
+<span class="linenos"> 55</span>     <span class="nv">$image</span><span class="o">=</span><span class="nv">$map</span><span class="o">-&gt;</span><span class="na">draw</span><span class="p">();</span>
+<span class="linenos"> 56</span>     <span class="nv">$image_url</span><span class="o">=</span><span class="nv">$image</span><span class="o">-&gt;</span><span class="na">saveWebImage</span><span class="p">();</span>
+<span class="linenos"> 57</span>
+<span class="linenos"> 58</span>     <span class="nv">$extent_to_html</span> <span class="o">=</span> <span class="nv">$map</span><span class="o">-&gt;</span><span class="na">extent</span><span class="o">-&gt;</span><span class="na">minx</span><span class="o">.</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="nv">$map</span><span class="o">-&gt;</span><span class="na">extent</span><span class="o">-&gt;</span><span class="na">miny</span><span class="o">.</span><span class="s2">&quot; &quot;</span>
+<span class="linenos"> 59</span>                  <span class="o">.</span><span class="nv">$map</span><span class="o">-&gt;</span><span class="na">extent</span><span class="o">-&gt;</span><span class="na">maxx</span><span class="o">.</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="nv">$map</span><span class="o">-&gt;</span><span class="na">extent</span><span class="o">-&gt;</span><span class="na">maxy</span><span class="p">;</span>
+<span class="linenos"> 60</span>
+<span class="linenos"> 61</span>     <span class="cp">?&gt;</span><span class="x"></span>
+<span class="linenos"> 62</span><span class="x">     &lt;HTML&gt;</span>
+<span class="linenos"> 63</span><span class="x">     &lt;HEAD&gt;</span>
+<span class="linenos"> 64</span><span class="x">     &lt;TITLE&gt;Map 2&lt;/TITLE&gt;</span>
+<span class="linenos"> 65</span><span class="x">     &lt;/HEAD&gt;</span>
+<span class="linenos"> 66</span><span class="x">     &lt;BODY&gt;</span>
+<span class="linenos"> 67</span><span class="x">     &lt;CENTER&gt;</span>
+<span class="linenos"> 68</span><span class="x">     &lt;FORM METHOD=POST ACTION=</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$HTTP_SERVER_VARS</span><span class="p">[</span><span class="s1">&#39;PHP_SELF&#39;</span><span class="p">]</span><span class="cp">?&gt;</span><span class="x">&gt;</span>
+<span class="linenos"> 69</span><span class="x">     &lt;TABLE&gt;</span>
+<span class="linenos"> 70</span><span class="x">     &lt;TR&gt;</span>
+<span class="linenos"> 71</span><span class="x">          &lt;TD&gt;</span>
+<span class="linenos"> 72</span><span class="x">                  &lt;INPUT TYPE=IMAGE NAME=&quot;mapa&quot; SRC=&quot;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$image_url</span><span class="cp">?&gt;</span><span class="x">&quot;&gt;</span>
+<span class="linenos"> 73</span><span class="x">          &lt;/TD&gt;</span>
+<span class="linenos"> 74</span><span class="x">     &lt;/TR&gt;</span>
+<span class="linenos"> 75</span><span class="x">     &lt;TR&gt;</span>
+<span class="linenos"> 76</span><span class="x">          &lt;TD&gt;</span>
+<span class="linenos"> 77</span><span class="x">                  Pan</span>
+<span class="linenos"> 78</span><span class="x">          &lt;/TD&gt;</span>
+<span class="linenos"> 79</span><span class="x">          &lt;TD&gt;</span>
+<span class="linenos"> 80</span><span class="x">                  &lt;INPUT TYPE=RADIO NAME=&quot;zoom&quot; VALUE=0 </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$check_pan</span><span class="cp">?&gt;</span><span class="x">&gt;</span>
+<span class="linenos"> 81</span><span class="x">          &lt;/TD&gt;</span>
+<span class="linenos"> 82</span><span class="x">     &lt;/TR&gt;</span>
+<span class="linenos"> 83</span><span class="x">     &lt;TR&gt;</span>
+<span class="linenos"> 84</span><span class="x">          &lt;TD&gt;</span>
+<span class="linenos"> 85</span><span class="x">                  Zoom In</span>
+<span class="linenos"> 86</span><span class="x">          &lt;/TD&gt;</span>
+<span class="linenos"> 87</span><span class="x">          &lt;TD&gt;</span>
+<span class="linenos"> 88</span><span class="x">                  &lt;INPUT TYPE=RADIO NAME=&quot;zoom&quot; VALUE=1 </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$check_zin</span><span class="cp">?&gt;</span><span class="x">&gt;</span>
+<span class="linenos"> 89</span><span class="x">          &lt;/TD&gt;</span>
+<span class="linenos"> 90</span><span class="x">     &lt;/TR&gt;</span>
+<span class="linenos"> 91</span><span class="x">     &lt;TR&gt;</span>
+<span class="linenos"> 92</span><span class="x">          &lt;TD&gt;</span>
+<span class="linenos"> 93</span><span class="x">                  Zoom Out</span>
+<span class="linenos"> 94</span><span class="x">          &lt;/TD&gt;</span>
+<span class="linenos"> 95</span><span class="x">          &lt;TD&gt;</span>
+<span class="linenos"> 96</span><span class="x">                  &lt;INPUT TYPE=RADIO NAME=&quot;zoom&quot; VALUE=-1 </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$check_zout</span><span class="cp">?&gt;</span><span class="x">&gt;</span>
+<span class="linenos"> 97</span><span class="x">          &lt;/TD&gt;</span>
+<span class="linenos"> 98</span><span class="x">     &lt;/TR&gt;</span>
+<span class="linenos"> 99</span><span class="x">     &lt;TR&gt;</span>
+<span class="linenos">100</span><span class="x">          &lt;TD&gt;</span>
+<span class="linenos">101</span><span class="x">                  Zoom Size</span>
+<span class="linenos">102</span><span class="x">          &lt;/TD&gt;</span>
+<span class="linenos">103</span><span class="x">          &lt;TD&gt;</span>
+<span class="linenos">104</span><span class="x">                  &lt;INPUT TYPE=TEXT NAME=&quot;zsize&quot; VALUE=&quot;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$val_zsize</span><span class="cp">?&gt;</span><span class="x">&quot;</span>
+<span class="linenos">105</span><span class="x">                  SIZE=2&gt;</span>
+<span class="linenos">106</span><span class="x">          &lt;/TD&gt;</span>
+<span class="linenos">107</span><span class="x">     &lt;/TR&gt;</span>
+<span class="linenos">108</span><span class="x">     &lt;TR&gt;</span>
+<span class="linenos">109</span><span class="x">          &lt;TD&gt;</span>
+<span class="linenos">110</span><span class="x">                  Full Extent</span>
+<span class="linenos">111</span><span class="x">          &lt;/TD&gt;</span>
+<span class="linenos">112</span><span class="x">          &lt;TD&gt;</span>
+<span class="linenos">113</span><span class="x">                  &lt;INPUT TYPE=SUBMIT NAME=&quot;full&quot; VALUE=&quot;Go&quot;</span>
+<span class="linenos">114</span><span class="x">                  SIZE=2&gt;</span>
+<span class="linenos">115</span><span class="x">          &lt;/TD&gt;</span>
+<span class="linenos">116</span><span class="x">     &lt;/TABLE&gt;</span>
+<span class="linenos">117</span><span class="x">     &lt;INPUT TYPE=HIDDEN NAME=&quot;extent&quot; VALUE=&quot;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$extent_to_html</span><span class="cp">?&gt;</span><span class="x">&quot;&gt;</span>
+<span class="linenos">118</span><span class="x">     &lt;/FORM&gt;</span>
+<span class="linenos">119</span><span class="x">     &lt;/CENTER&gt;</span>
+<span class="linenos">120</span><span class="x">     &lt;/BODY&gt;</span>
+<span class="linenos">121</span><span class="x">     &lt;/HMTL&gt;</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 <p>This code will zoom out, zoom in, pan, and restore to full extent the
 image displayed in the previous example.</p>
 <p>It looks much more complicated than it really is, much of the lines
@@ -740,8 +575,8 @@ server by copying and pasting the code.</p>
 <p>Now it's time for you to play with it a little and look at the source
 in your browser to check how it changes.</p>
 <p>Done?, now let's start the explanation with the HTML part.</p>
-</div>
-<div class="section" id="code-explanation-html">
+</section>
+<section id="code-explanation-html">
 <h3>Code Explanation - HTML<a class="headerlink" href="#code-explanation-html" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Line 49 declares a form, and line 53 declares the image generated by
 MapScript to be part of that form, so when you click on it, the X and
@@ -750,8 +585,8 @@ other data for the PHP code to process.</p>
 <p>If you are familiar with HTML and PHP, the rest of the HTML code
 should be straightforward for you to understand with the exception of
 line 98, that will be explained in due time.</p>
-</div>
-<div class="section" id="code-explanation-php">
+</section>
+<section id="code-explanation-php">
 <h3>Code Explanation - PHP<a class="headerlink" href="#code-explanation-php" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Now look at the PHP code, it's almost the same code used in example 1,
 with the addition of lines 9 to 37. What do these lines do?</p>
@@ -815,9 +650,9 @@ image, and the extent.</p>
 accordingly to the operation performed (or, better put, the zoom
 factor). So then the image is drawn and the current extent saved
 (after the zooming) for use in the next iteration.</p>
-</div>
-</div>
-<div class="section" id="conclusions">
+</section>
+</section>
+<section id="conclusions">
 <h2><a class="toc-backref" href="#id1">Conclusions</a><a class="headerlink" href="#conclusions" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Well, it's time for me to go recharge my batteries. So I will use this
 last energy to share some final words. The examples I have managed to
@@ -840,8 +675,8 @@ thing here first, please drop a note to my maintainer.</p>
 original &quot;GMap demo&quot; (you can download the source <a class="reference external" href="http://dl.maptools.org/dl/">here</a>), or the
 <a class="reference external" href="http://www.maptools.org/">MapTools site</a> (for the older MapLab, Chameleon applications, which were
 built on PHPMapScript). Goodbye, and thanks for reading this far.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -922,8 +757,8 @@ built on PHPMapScript). Goodbye, and thanks for reading this far.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      最終更新: 2021-04-30
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      最終更新: 2021-05-10
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

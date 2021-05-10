@@ -4,12 +4,13 @@
 <html lang="it">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 17: Dynamic Allocation of layers, styles, classes and symbols &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-17-dynamic-allocation-of-layers-styles-classes-and-symbols">
+  <section id="ms-rfc-17-dynamic-allocation-of-layers-styles-classes-and-symbols">
 <span id="rfc17"></span><h1>MS RFC 17: Dynamic Allocation of layers, styles, classes and symbols<a class="headerlink" href="#ms-rfc-17-dynamic-allocation-of-layers-styles-classes-and-symbols" title="Link a questa intestazione">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -163,13 +164,13 @@
 <dd class="field-even"><p>MapServer 5.0</p>
 </dd>
 </dl>
-<div class="section" id="purpose">
+<section id="purpose">
 <h2>Purpose<a class="headerlink" href="#purpose" title="Link a questa intestazione">¶</a></h2>
 <p>Modify the MapServer core libraries so that lists of layers, classes
 and styles are dynamic, not fixed to compile limits MS_MAXCLASSES,
 MS_MAXSTYLES, MS_MAXLAYERS and MS_MAXSYMBOLS.</p>
-</div>
-<div class="section" id="ms-maxsymbols">
+</section>
+<section id="ms-maxsymbols">
 <h2>MS_MAXSYMBOLS<a class="headerlink" href="#ms-maxsymbols" title="Link a questa intestazione">¶</a></h2>
 <p>Change symbolSetObj so that this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">numsymbols</span><span class="p">;</span>
@@ -203,8 +204,8 @@ an array of just one symbol.</p></li>
 <li><p>There should be no swig MapScript changes required as it already uses
 msAppendSymbol().</p></li>
 </ul>
-</div>
-<div class="section" id="ms-maxlayers">
+</section>
+<section id="ms-maxlayers">
 <h2>MS_MAXLAYERS<a class="headerlink" href="#ms-maxlayers" title="Link a questa intestazione">¶</a></h2>
 <ul class="simple">
 <li><p>map.h: Since <a class="reference internal" href="ms-rfc-24.html#rfc24"><span class="std std-ref">MS RFC 24: Mapscript memory management</span></a> already converted the array of layers in a mapObj to
@@ -230,8 +231,8 @@ Answer: all layer manipulation
 is done by the layer constructor (when a not null mapObj is passed as only argument)
 or by msInsertLayer. Must modify the layer constructor as well.</p></li>
 </ul>
-</div>
-<div class="section" id="ms-maxclasses">
+</section>
+<section id="ms-maxclasses">
 <h2>MS_MAXCLASSES<a class="headerlink" href="#ms-maxclasses" title="Link a questa intestazione">¶</a></h2>
 <ul class="simple">
 <li><p>map.h: Add maxclasses field in layerObj (RFC-24 already converted the
@@ -246,8 +247,8 @@ to be dynamically sized and allocated on the heap.</p></li>
 and allocate class list accordingly.</p></li>
 <li><p>mapogcsld.c: modify to use msGrowLayerClasses() instead of checking limit.</p></li>
 </ul>
-</div>
-<div class="section" id="ms-maxstyles">
+</section>
+<section id="ms-maxstyles">
 <h2>MS_MAXSTYLES<a class="headerlink" href="#ms-maxstyles" title="Link a questa intestazione">¶</a></h2>
 <ul class="simple">
 <li><p>map.h: add maxstyles field to classObj (RFC-24 already converted the
@@ -258,8 +259,8 @@ initClass().  Use msGrowClassStyles() as apppriate.</p></li>
 <li><p>classobject.c: Use msGrowClassStyles() in msInsertStyle() and in the
 style constructor.</p></li>
 </ul>
-</div>
-<div class="section" id="files-and-objects-affected">
+</section>
+<section id="files-and-objects-affected">
 <h2>Files and objects affected<a class="headerlink" href="#files-and-objects-affected" title="Link a questa intestazione">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">map</span><span class="o">.</span><span class="n">h</span>
 <span class="n">mapfile</span><span class="o">.</span><span class="n">c</span>
@@ -275,29 +276,29 @@ style constructor.</p></li>
 <span class="n">mapscript</span><span class="o">/</span><span class="n">swiginc</span><span class="o">/</span><span class="n">style</span><span class="o">.</span><span class="n">i</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link a questa intestazione">¶</a></h2>
 <p>None.</p>
-</div>
-<div class="section" id="test-suite">
+</section>
+<section id="test-suite">
 <h2>Test suite<a class="headerlink" href="#test-suite" title="Link a questa intestazione">¶</a></h2>
 <p>Python unit test entries will be added to exceed the builtin maximums
 for all of layers, classes, styles and symbols.  An msautotest entry with
 a large number of classes will also be added.</p>
-</div>
-<div class="section" id="bug-id">
+</section>
+<section id="bug-id">
 <h2>Bug ID<a class="headerlink" href="#bug-id" title="Link a questa intestazione">¶</a></h2>
 <ul class="simple">
 <li><p>302: <a class="reference external" href="https://github.com/MapServer/MapServer/issues/302">https://github.com/MapServer/MapServer/issues/302</a></p></li>
 </ul>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>Voting history<a class="headerlink" href="#voting-history" title="Link a questa intestazione">¶</a></h2>
 <p>Vote completed on 2007-07-19:</p>
 <p>+1 from DanielM, SteveL, FrankW, SteveW, UmbertoN, TamasS, AssefaY</p>
-</div>
-<div class="section" id="comments-questions-from-the-review-period">
+</section>
+<section id="comments-questions-from-the-review-period">
 <h2>Comments/Questions from the review period<a class="headerlink" href="#comments-questions-from-the-review-period" title="Link a questa intestazione">¶</a></h2>
 <ul class="simple">
 <li><p>Has the following issue already been dealt with by RFC-24 since the code
@@ -345,8 +346,8 @@ twice. That array should also be allocated dynamically since I don’t
 think we will ever have MS_MAXLAYERS number of different plugin
 layers.</p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -418,8 +419,8 @@ layers.</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Ultimo aggiornamento 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Ultimo aggiornamento 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

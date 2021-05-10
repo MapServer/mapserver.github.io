@@ -4,12 +4,13 @@
 <html lang="sq">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>ESRI Shapefiles (SHP) &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -18,7 +19,7 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Mbi këto dokumente" href="../../about.html" />
     <link rel="index" title="Tregues" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="search" title="Kērko" href="../../search.html" />
     <link rel="copyright" title="Të drejta kopjimi" href="../../copyright.html" />
     <link rel="next" title="GML" href="gml.html" />
     <link rel="prev" title="ESRI Personal Geodatabase (MDB)" href="pgeo.html" /> 
@@ -142,11 +143,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="esri-shapefiles-shp">
+  <section id="esri-shapefiles-shp">
 <span id="shapefiles"></span><h1>ESRI Shapefiles (SHP)<a class="headerlink" href="#esri-shapefiles-shp" title="Permalidhje te ky titull">¶</a></h1>
-<p>Also known as ESRI ArcView Shapefiles or ESRI Shapefiles.  ESRI is the company
-that introduced this format.  ArcView was the first product to use shapefiles.</p>
-<div class="section" id="file-listing">
+<p>Also known as just ‹Shapefiles›, or ESRI ArcView Shapefiles.  Esri is the software
+company that introduced this format.  ArcView was the first product to use
+shapefiles.</p>
+<section id="file-listing">
 <h2>File listing<a class="headerlink" href="#file-listing" title="Permalidhje te ky titull">¶</a></h2>
 <p>Shapefiles are made up of a minimum of three similarly named files, with different suffixes:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Countries_area</span><span class="o">.</span><span class="n">dbf</span>
@@ -154,16 +156,17 @@ that introduced this format.  ArcView was the first product to use shapefiles.</
 <span class="n">Countries_area</span><span class="o">.</span><span class="n">shx</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="data-access-connection-method">
+</section>
+<section id="data-access-connection-method">
 <h2>Data Access / Connection Method<a class="headerlink" href="#data-access-connection-method" title="Permalidhje te ky titull">¶</a></h2>
 <p>Shapefile access is built directly into MapServer.  It is also available
 through OGR, but direct access without OGR is recommended and discussed here.
-The path to the shapefile is required.  No file extension should be specified.
-Shapefiles only hold one layer of data, therefore no distinction needs to be
-made.</p>
-</div>
-<div class="section" id="ogrinfo-examples">
+The path to the shapefile is required (relative to the SHAPEPATH).  Specifying
+the «.shp» extension is recommended. Shapefiles only hold one layer of data,
+therefore no distinction needs to be made (as is required for other OGR vector
+formats that can contain many layers).</p>
+</section>
+<section id="ogrinfo-examples">
 <h2>OGRINFO Examples<a class="headerlink" href="#ogrinfo-examples" title="Permalidhje te ky titull">¶</a></h2>
 <ul class="simple">
 <li><p>The directory can serve as a data source.</p></li>
@@ -173,6 +176,7 @@ same prefix as the shapefile.</p></li>
 </ul>
 <p>Using ogrinfo on a directory with multiple shapefiles:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; ogrinfo /data/shapefiles/
+
 INFO: Open of `/data/shapefiles/&#39;
 using driver `ESRI Shapefile&#39; successful.
 1: wpg_h2o (Line String)
@@ -183,6 +187,7 @@ using driver `ESRI Shapefile&#39; successful.
 </div>
 <p>Using ogrinfo on a single shapefile:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; ogrinfo /data/shapefiles/Countries_area.shp
+
 Had to open data source read-only.
 INFO: Open of `Countries_area.shp&#39;
 using driver `ESRI Shapefile&#39; successful.
@@ -191,6 +196,7 @@ using driver `ESRI Shapefile&#39; successful.
 </div>
 <p>Using ogrinfo to examine the structure of the file/layer:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; ogrinfo -summary /data/shapefiles/Countries_area.shp Countries_area
+
 Had to open data source read-only.
 INFO: Open of `Countries_area.shp&#39;
 using driver `ESRI Shapefile&#39; successful.
@@ -211,20 +217,23 @@ NA2DESC: String (45.0)
 </pre></div>
 </div>
 <p>Map File Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
-        <span class="n">NAME</span> <span class="n">my_shapefile</span>
-        <span class="n">TYPE</span> <span class="n">POLYGON</span>
-        <span class="n">DATA</span> <span class="n">countries_area</span>
-        <span class="n">STATUS</span> <span class="n">OFF</span>
-        <span class="n">CLASS</span>
-        <span class="n">NAME</span> <span class="s2">&quot;Countries&quot;</span>
-        <span class="n">OUTLINECOLOR</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
-        <span class="n">END</span>
-<span class="n">END</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;my_shapefile&quot;</span>
+  <span class="k">STATUS</span> <span class="nb">ON</span>
+  <span class="k">TYPE</span> <span class="nb">POLYGON</span>
+  <span class="k">DATA</span> <span class="s">&quot;countries_area.shp&quot;</span>
+  <span class="k">CLASS</span>
+    <span class="k">NAME</span> <span class="s">&quot;Countries&quot;</span>
+    <span class="k">STYLE</span>
+      <span class="k">OUTLINECOLOR</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+      <span class="k">COLOR</span> <span class="mi">150</span> <span class="mi">150</span> <span class="mi">150</span>
+    <span class="k">END</span> <span class="c">#style</span>
+  <span class="k">END</span> <span class="c">#class</span>
+<span class="k">END</span> <span class="c">#layer</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -238,7 +247,7 @@ NA2DESC: String (45.0)
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
+      <input type="submit" value="Shko" />
     </form>
     </div>
 </div>
@@ -289,8 +298,8 @@ NA2DESC: String (45.0)
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Të drejta kopjimi</a> 2021, Open Source Geospatial Foundation.
-      Përditësuar së fundi më 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Përditësuar së fundi më 2021-05-10.
+      Krijuar duke përdorur <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

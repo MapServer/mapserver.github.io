@@ -4,12 +4,13 @@
 <html lang="it">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 60: Labeling enhancement: ability to skip ANGLE FOLLOW labels with too much character overlap &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-60-labeling-enhancement-ability-to-skip-angle-follow-labels-with-too-much-character-overlap">
+  <section id="ms-rfc-60-labeling-enhancement-ability-to-skip-angle-follow-labels-with-too-much-character-overlap">
 <span id="rfc60"></span><h1>MS RFC 60: Labeling enhancement: ability to skip ANGLE FOLLOW labels with too much character overlap<a class="headerlink" href="#ms-rfc-60-labeling-enhancement-ability-to-skip-angle-follow-labels-with-too-much-character-overlap" title="Link a questa intestazione">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -163,7 +164,7 @@
 <dd class="field-even"><p>MapServer 6.0</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link a questa intestazione">¶</a></h2>
 <p>At the moment, ANGLE FOLLOW labels on very sharp curved lines can result
 in labels on which some characters overlap, resulting in either bad looking or
@@ -179,8 +180,8 @@ dealt with separately (i.e. in their own RFCs).</p>
 <p>This RFC deals specifically with skipping bad labels with too much character
 overlap and ticket <a class="reference external" href="https://github.com/MapServer/MapServer/issues/3523">#3523</a>
 has been created for it.</p>
-</div>
-<div class="section" id="background">
+</section>
+<section id="background">
 <h2>Background<a class="headerlink" href="#background" title="Link a questa intestazione">¶</a></h2>
 <p>This issue was found as part of the FOSS4G 2010 Benchmarking exercise where one
 of the layers to render was contours with labels. We’ve seen that MapServer
@@ -193,8 +194,8 @@ skipped those labels. This is the approach we propose to implement here.</p>
 bad labels and the second by GeoServer without the bad labels:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-wms.png">http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-wms.png</a></p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523/geoserver-wms.png">http://trac.osgeo.org/mapserver/attachment/ticket/3523/geoserver-wms.png</a></p>
-</div>
-<div class="section" id="experiments">
+</section>
+<section id="experiments">
 <h2>Experiments<a class="headerlink" href="#experiments" title="Link a questa intestazione">¶</a></h2>
 <p>We have found that it is of no use to test the character bboxes for
 overlap since most of them overlap in normal situations as we can see in
@@ -209,8 +210,8 @@ overlap larger than 22.5 degrees are skipped:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-label-with-fix.png">http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-label-with-fix.png</a></p>
 <p>Here is another example with a street map:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523/maxoverlapangle-2.png">http://trac.osgeo.org/mapserver/attachment/ticket/3523/maxoverlapangle-2.png</a></p>
-</div>
-<div class="section" id="technical-solution">
+</section>
+<section id="technical-solution">
 <h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Link a questa intestazione">¶</a></h2>
 <p>A new MAXOVERLAPANGLE keyword will be added to the LABEL object, whose
 value is the angle threshold to use in filtering out ANGLE FOLLOW labels in
@@ -222,8 +223,8 @@ depending on the type of data they are dealing with and their tolerance
 to bad overlap in labels.</p>
 <p>Setting MAXOVERLAPANGLE == 0 will completely disable filtering of labels
 based on this criteria, restoring the pre-6.0 behavior.</p>
-</div>
-<div class="section" id="usage-example">
+</section>
+<section id="usage-example">
 <h2>Usage example<a class="headerlink" href="#usage-example" title="Link a questa intestazione">¶</a></h2>
 <p>This feature is enabled by default with a default value of 22.5 degrees,
 so no mapfile changes are required to enable it.</p>
@@ -257,8 +258,8 @@ MINDISTANCE to produce maps with even more labels. Here is an example:</p>
 </div>
 <p>… and here is the resulting contour map with the above settings:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-collisions-repeatdistance-400-min-100.png">http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-collisions-repeatdistance-400-min-100.png</a></p>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link a questa intestazione">¶</a></h2>
 <p>This new feature will be enabled by default with a default MAXOVERLAPANGLE
 value of 22.5 degreees. Existing mapfiles will work without any change, but
@@ -267,8 +268,8 @@ with overlapping characters. It is always possible to come back to the old
 behavior (disabling filtering) using MAXOVERLAPANGLE 0 or to tune the value
 up or down to get better results.</p>
 <p>There is no other backwards compatibility issue.</p>
-</div>
-<div class="section" id="files-impacted">
+</section>
+<section id="files-impacted">
 <h2>Files Impacted<a class="headerlink" href="#files-impacted" title="Link a questa intestazione">¶</a></h2>
 <ul class="simple">
 <li><p>mapfile.c</p></li>
@@ -278,8 +279,8 @@ up or down to get better results.</p>
 <li><p>maplexer.l</p></li>
 <li><p>mapprimitive.c</p></li>
 </ul>
-</div>
-<div class="section" id="ticket-id">
+</section>
+<section id="ticket-id">
 <h2>Ticket Id<a class="headerlink" href="#ticket-id" title="Link a questa intestazione">¶</a></h2>
 <p>Main ticket:</p>
 <ul class="simple">
@@ -289,12 +290,12 @@ up or down to get better results.</p>
 <ul class="simple">
 <li><p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/2221">http://trac.osgeo.org/mapserver/attachment/ticket/2221</a></p></li>
 </ul>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>Voting History<a class="headerlink" href="#voting-history" title="Link a questa intestazione">¶</a></h2>
 <p>Adopted on 2010-09-23 with +1 from DanielM, SteveL, FrankW, TomK, PericlesN, ThomasB, SteveW, HowardB, AssefaY, JeffM and TamasS.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -364,8 +365,8 @@ up or down to get better results.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Ultimo aggiornamento 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Ultimo aggiornamento 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

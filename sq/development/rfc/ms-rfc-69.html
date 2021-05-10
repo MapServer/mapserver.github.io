@@ -4,12 +4,13 @@
 <html lang="sq">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 69: Support for clustering of features in point layers &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -18,7 +19,7 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Mbi këto dokumente" href="../../about.html" />
     <link rel="index" title="Tregues" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="search" title="Kērko" href="../../search.html" />
     <link rel="copyright" title="Të drejta kopjimi" href="../../copyright.html" />
     <link rel="next" title="MS RFC 70: Integration of TinyOWS in MapServer project" href="ms-rfc-70.html" />
     <link rel="prev" title="MS RFC 68: Support for combining features from multiple layers" href="ms-rfc-68.html" /> 
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-69-support-for-clustering-of-features-in-point-layers">
+  <section id="ms-rfc-69-support-for-clustering-of-features-in-point-layers">
 <span id="rfc69"></span><h1>MS RFC 69: Support for clustering of features in point layers<a class="headerlink" href="#ms-rfc-69-support-for-clustering-of-features-in-point-layers" title="Permalidhje te ky titull">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -162,7 +163,7 @@
 </dl>
 <p>Description: This RFC proposes an implementation for clustering multiple features
 from a layer to single (aggregated) features based on their relative positions.</p>
-<div class="section" id="overview">
+<section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Permalidhje te ky titull">¶</a></h2>
 <p>In order to make the maps perspicuous at a given view, we may require to limit
 the number of the features rendered at neighbouring locations which would normally
@@ -172,8 +173,8 @@ solution we should provide rendering the isolated symbols as is, but create new
 (clustered) features for those symbols that would overlap in a particular scale.
 According to the example at <a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3700/cluster.png">http://trac.osgeo.org/mapserver/attachment/ticket/3700/cluster.png</a>
 the number of the features forming the clusters are displayed in the labels for each clustered features.</p>
-</div>
-<div class="section" id="the-proposed-soution">
+</section>
+<section id="the-proposed-soution">
 <h2>3. The proposed soution<a class="headerlink" href="#the-proposed-soution" title="Permalidhje te ky titull">¶</a></h2>
 <p>This functionality will be implemented as a separate layer data provider (implemented in mapcluster.c)
 This provider will be used internally (being invoked in msLayerOpen).
@@ -248,8 +249,8 @@ following layer definition:</p>
   <span class="n">END</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="the-concept-of-the-implementation">
+</section>
+<section id="the-concept-of-the-implementation">
 <h2>3.1 The concept of the implementation<a class="headerlink" href="#the-concept-of-the-implementation" title="Permalidhje te ky titull">¶</a></h2>
 <p>In the proposed solution msLayerOpen will call the vtable method of the cluster layer provider
 instead of the original vtable method depending on the existence of the
@@ -294,8 +295,8 @@ clusters which are still exist in the quadtree.</p></li>
 <p>In LayerNextShape the features are served from the finalization list which is preserved until the layer is open.
 In LayerClose the vtable of the layer will be restored to the original methods
 (by calling msInitializeVirtualTable)</p>
-</div>
-<div class="section" id="handling-the-feature-attributes-items">
+</section>
+<section id="handling-the-feature-attributes-items">
 <h2>3.2 Handling the feature attributes (items)<a class="headerlink" href="#handling-the-feature-attributes-items" title="Permalidhje te ky titull">¶</a></h2>
 <p>The clustered layer itself will provide the following aggregate attributes:</p>
 <p>1) Cluster:FeatureCount - count of the features in the clustered shape
@@ -309,18 +310,18 @@ according to the user preference.</p>
 are equal for each shapes in the cluster. The other values are set to «Cluster:Empty». In the future
 we may probably extend this by implementing aggregate functions to define the attributes, like
 min([attributename]) or max([attributename])</p>
-</div>
-<div class="section" id="handling-classes-and-styles">
+</section>
+<section id="handling-classes-and-styles">
 <h2>3.3 Handling classes and styles<a class="headerlink" href="#handling-classes-and-styles" title="Permalidhje te ky titull">¶</a></h2>
 <p>We can define the symbology and labelling of the clustered layers in the same way as any other layer by specifying the classes and styles. STYLEITEM AUTO is not considered to be supported at this phase.</p>
-</div>
-<div class="section" id="query-processing">
+</section>
+<section id="query-processing">
 <h2>3.4 Query processing<a class="headerlink" href="#query-processing" title="Permalidhje te ky titull">¶</a></h2>
 <p>In the query operations the clustered features are retrieved as single shapes with the attribute set
 as specified in the ITEMS processing option. The clustered features are preserved until the layer
 is open, so the single pass query approach is provided by this driver.</p>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>4. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalidhje te ky titull">¶</a></h2>
 <p>In order to implement this enhancement the following changes should be made in the MapServer codebase:</p>
 <ol class="arabic simple">
@@ -331,8 +332,8 @@ is open, so the single pass query approach is provided by this driver.</p>
 and make msLayerWhichItems aware of the group and filter expressions</p></li>
 <li><p>Implement mapcluster.c containing the code of the cluster layer data provider</p></li>
 </ol>
-</div>
-<div class="section" id="files-affected">
+</section>
+<section id="files-affected">
 <h2>4.1 Files affected<a class="headerlink" href="#files-affected" title="Permalidhje te ky titull">¶</a></h2>
 <p>The following files will be modified/created by this RFC:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Makefile</span><span class="o">.</span><span class="n">vc</span>
@@ -345,25 +346,25 @@ and make msLayerWhichItems aware of the group and filter expressions</p></li>
 <span class="n">mapserver</span><span class="o">.</span><span class="n">h</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="mapscript-issues">
+</section>
+<section id="mapscript-issues">
 <h2>4.2 MapScript Issues<a class="headerlink" href="#mapscript-issues" title="Permalidhje te ky titull">¶</a></h2>
 <p>The new object (clusterObj) will be exposed to the mapscript interface.</p>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>4.3 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalidhje te ky titull">¶</a></h2>
 <p>This change provides a new functionality with no backwards compatibility issues being considered.</p>
-</div>
-<div class="section" id="bug-id">
+</section>
+<section id="bug-id">
 <h2>5. Bug ID<a class="headerlink" href="#bug-id" title="Permalidhje te ky titull">¶</a></h2>
 <p>The ticket for RFC-69 (containing implementation code) can be found here.</p>
 <p>Bug <a class="reference external" href="https://github.com/MapServer/MapServer/issues/3700">3700</a></p>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>6. Voting history<a class="headerlink" href="#voting-history" title="Permalidhje te ky titull">¶</a></h2>
 <p>+1 from SteveL, AssefaY, ThomasB and TamasS</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -377,7 +378,7 @@ and make msLayerWhichItems aware of the group and filter expressions</p></li>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
+      <input type="submit" value="Shko" />
     </form>
     </div>
 </div>
@@ -436,8 +437,8 @@ and make msLayerWhichItems aware of the group and filter expressions</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Të drejta kopjimi</a> 2021, Open Source Geospatial Foundation.
-      Përditësuar së fundi më 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Përditësuar së fundi më 2021-05-10.
+      Krijuar duke përdorur <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

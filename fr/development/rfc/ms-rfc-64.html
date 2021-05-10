@@ -4,12 +4,13 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 64 - MapServer Expression Parser Overhaul &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-64-mapserver-expression-parser-overhaul">
+  <section id="ms-rfc-64-mapserver-expression-parser-overhaul">
 <span id="rfc64"></span><h1>MS RFC 64 - MapServer Expression Parser Overhaul<a class="headerlink" href="#ms-rfc-64-mapserver-expression-parser-overhaul" title="Lien permanent vers ce titre">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -160,7 +161,7 @@
 <dd class="field-odd"><p>Adopted</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Lien permanent vers ce titre">¶</a></h2>
 <p>This is a draft RFC addressing 1) how the Bison/Yacc parser for logical expressions is implemented and 2) where in the MapServer code
 the  parser can be used. This RFC could have broader impacts on query processing depending on additional changes at the driver level,
@@ -170,8 +171,8 @@ specifically the RDBMS ones. Those changes don’t have to occur for this to be 
 <blockquote>
 <div><p><cite>http://svn.osgeo.org/mapserver/sandbox/sdlime/common-expressions/mapserver  &lt;http://svn.osgeo.org/mapserver/sandbox/sdlime/common-expressions/mapserver&gt;</cite></p>
 </div></blockquote>
-</div>
-<div class="section" id="existing-expression-parsing">
+</section>
+<section id="existing-expression-parsing">
 <h2>Existing Expression Parsing<a class="headerlink" href="#existing-expression-parsing" title="Lien permanent vers ce titre">¶</a></h2>
 <p>The existing logical expression handling in MapServer works like so:</p>
 <blockquote>
@@ -195,8 +196,8 @@ specifically the RDBMS ones. Those changes don’t have to occur for this to be 
 <li><p>have to perform the substitution and tokenize the resulting string for every feature</p></li>
 </ul>
 </div></blockquote>
-</div>
-<div class="section" id="proposed-technical-changes">
+</section>
+<section id="proposed-technical-changes">
 <h2>Proposed Technical Changes<a class="headerlink" href="#proposed-technical-changes" title="Lien permanent vers ce titre">¶</a></h2>
 <p>This RFC proposes a number of technical changes. The core change, however, involved updating the way logical expressions work.
 Additional features capitalize on this core change to bring additional capabilities to MapServer.</p>
@@ -308,8 +309,8 @@ extended to support the GEOS buffer operator. So you can write:</p>
 this transformation happens <strong>after</strong> the feature is converted from map to image coordinates, but the effect is still valuable and the buffer value is
 given in pixels. In the future we might consider implementing a GEOMTRANSFORM at the layer level so that the transformation is available to all
 classes and/or styles (and consequently in query modes too).</p>
-</div>
-<div class="section" id="expression-use-elsewhere">
+</section>
+<section id="expression-use-elsewhere">
 <h2>Expression Use Elsewhere<a class="headerlink" href="#expression-use-elsewhere" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Currently the logical expression syntax is also used with REQUIRES/LABELREQUIRES and with rasters. In the REQUIRES/LABELREQUIRES case the code
 would remain mostly « as is » we’d still do the substitutions bases on layer status, then explicitly tokenize and parse. Since this done at most once per
@@ -319,8 +320,8 @@ pass a pixel to the parser when evaluating the expression. This should be <stron
 converted to a string representation (and then back to a number), especially given the number of pixels often evaluated. Some interesting drawing
 effects are also possible if you could expose a pixel location to the GEOS operators. For example, one could create a mask showing only pixels within
 a particular geometry.</p>
-</div>
-<div class="section" id="query-impact">
+</section>
+<section id="query-impact">
 <h2>Query Impact<a class="headerlink" href="#query-impact" title="Lien permanent vers ce titre">¶</a></h2>
 <p>This is where things get interesting. I’m proposing adding a new query, msQueryByFilter() that would work off an expression string (this is working in
 the sandbox). The expression string would still have to be accompanied by an extent parameter. Drivers like shapefiles still need to first apply a bounding
@@ -330,8 +331,8 @@ allows the driver to say if it could process this common expression format nativ
 if the expression would need to be applied after msLayerNextShape() is called repeatedly. The shapefile and tiled shapefile drivers would work natively, as would any
 driver that uses msEvalExpression(). My hope is that the RDBMS drivers could somehow translate (via the tokens) an expression into their native SQL but if not,
 we would still be able to use those sources.</p>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Surprisingly few. The parser changes would all be transparent to the user. Truly handling TEXT expressions as expressions is a regression, albeit a positive
 one IMHO. I would also propose a few expression level changes especially around case-insensitive string and regex comparisons within logical expression. I
@@ -350,14 +351,14 @@ numerous associated enums, defines, etc… could go away.</p>
 <li><p>Spatial functions: <strong>fromtext</strong>, <strong>area</strong>, <strong>distance</strong>, <strong>buffer</strong></p></li>
 </ul>
 </div></blockquote>
-</div>
-<div class="section" id="security-issues">
+</section>
+<section id="security-issues">
 <h2>Security Issues<a class="headerlink" href="#security-issues" title="Lien permanent vers ce titre">¶</a></h2>
 <p>While the bulk of the work is in the bowels of MapServer any change of this magnitude could have unintended consequences. In this case I
 think the largest risks are buffer overflows associated with string operators in the parser and memory leaks. Care would need to be taken in
 developing a comprehensive set of test cases.</p>
-</div>
-<div class="section" id="todo-s">
+</section>
+<section id="todo-s">
 <h2>Todo’s<a class="headerlink" href="#todo-s" title="Lien permanent vers ce titre">¶</a></h2>
 <blockquote>
 <div><ol class="arabic simple">
@@ -370,20 +371,20 @@ developing a comprehensive set of test cases.</p>
 <li><p>Parser error handling, any errors have basically always been silently ignored.</p></li>
 </ol>
 </div></blockquote>
-</div>
-<div class="section" id="bug-id">
+</section>
+<section id="bug-id">
 <h2>Bug ID<a class="headerlink" href="#bug-id" title="Lien permanent vers ce titre">¶</a></h2>
 <blockquote>
 <div><p>#3613</p>
 </div></blockquote>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>Voting history<a class="headerlink" href="#voting-history" title="Lien permanent vers ce titre">¶</a></h2>
 <blockquote>
 <div><p>Passed on 12/1/2010 with a +1 from Steve L, Steve W, Perry, Assefa, Tamas.</p>
 </div></blockquote>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -454,8 +455,8 @@ developing a comprehensive set of test cases.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Mis à jour le 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Mis à jour le 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

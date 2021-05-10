@@ -4,12 +4,13 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>SDTS &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -142,10 +143,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="sdts">
+  <section id="sdts">
 <span id="id1"></span><h1>SDTS<a class="headerlink" href="#sdts" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<p>This is a United States Geological Survey (USGS) format. SDTS has a raster and a vector format.  The raster format is not supported in MapServer.  Only the vector formats are supported, including VTP and DLG files.</p>
-<div class="section" id="file-listing">
+<p>This is a United States Geological Survey (USGS) format. SDTS has a raster
+and a vector format.  The raster format is not supported in MapServer.
+Only the vector formats are supported, including VTP and DLG files.</p>
+<section id="file-listing">
 <h2>File listing<a class="headerlink" href="#file-listing" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <ul class="simple">
 <li><p>SDTS files are often organized into state-sized pieces.  For
@@ -168,23 +171,24 @@ including hydrography, transportation and administrative boundaries.</p></li>
 <span class="n">MDTRNO02</span><span class="o">.</span><span class="n">DDF</span>  <span class="n">MDTRPC03</span><span class="o">.</span><span class="n">DDF</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="data-access-connection-method">
+</section>
+<section id="data-access-connection-method">
 <h2>Data Access / Connection Method<a class="headerlink" href="#data-access-connection-method" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <ul class="simple">
-<li><p>SDTS access is available in MapServer through OGR.</p></li>
+<li><p>SDTS access is available in MapServer through OGR's <a class="reference external" href="https://gdal.org/drivers/vector/sdts.html#vector-sdts">SDTS driver</a>.</p></li>
 <li><p>The CONNECTIONTYPE OGR parameter must be used.</p></li>
-<li><p>The path (which can be relative) to the catalog file (????CATD.DDF) is required,
+<li><p>The path (which can be relative) to the catalog file (<em>____CATD.DDF</em>) is required,
 including file extension.</p></li>
 <li><p>There are multiple layers in the SDTS catalog, some
 of which are only attributes and have no geometries.</p></li>
 <li><p>The layer name is specified with the DATA parameter</p></li>
 </ul>
-</div>
-<div class="section" id="ogrinfo-examples">
+</section>
+<section id="ogrinfo-examples">
 <h2>OGRINFO Examples<a class="headerlink" href="#ogrinfo-examples" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Using ogrinfo on a catalog file (note that the first 7 layers do not have geometries):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; ogrinfo /data/sdts/MD/MDTRCATD.DDF
+
 Had to open data source read-only.
 INFO: Open of `MDTRCATD.DDF&#39;
 using driver `SDTS&#39; successful.
@@ -212,6 +216,7 @@ using driver `SDTS&#39; successful.
 </div>
 <p>Using ogrinfo to examine the structure of the file/layer:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    &gt; ogrinfo /data/sdts/MD/MDTRCATD.DDF LE01 -summary
+
     Had to open data source read-only.
     INFO: Open of `MDTRCATD.DDF&#39;
     using driver `SDTS&#39; successful.
@@ -248,24 +253,24 @@ UNIT[&quot;degree&quot;,0.0174532925199433]]
     ROUTE_TYPE: String (9.0)
 </pre></div>
 </div>
-<p>Map File Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
-  <span class="n">NAME</span> <span class="n">sdts_maryland</span>
-  <span class="n">TYPE</span> <span class="n">LINE</span>
-  <span class="n">CONNECTIONTYPE</span> <span class="n">OGR</span>
-  <span class="n">CONNECTION</span> <span class="s2">&quot;data/sdts/MD/MDTRCATD.DDF&quot;</span>
-  <span class="n">DATA</span> <span class="s2">&quot;LE01&quot;</span>
-  <span class="n">STATUS</span> <span class="n">DEFAULT</span>
-  <span class="n">CLASS</span>
-    <span class="n">STYLE</span>
-      <span class="n">COLOR</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
-    <span class="n">END</span>
-  <span class="n">END</span>
-<span class="n">END</span>
+<p>Mapfile Example:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;sdts_maryland&quot;</span>
+  <span class="k">TYPE</span> <span class="nb">LINE</span>
+  <span class="k">STATUS</span> <span class="nb">ON</span>
+  <span class="k">CONNECTIONTYPE</span> <span class="nb">OGR</span>
+  <span class="k">CONNECTION</span> <span class="s">&quot;data/sdts/MD/MDTRCATD.DDF&quot;</span>
+  <span class="k">DATA</span> <span class="s">&quot;LE01&quot;</span>
+  <span class="k">CLASS</span>
+    <span class="k">STYLE</span>
+      <span class="k">COLOR</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+    <span class="k">END</span> <span class="c">#style</span>
+  <span class="k">END</span> <span class="c">#class</span>
+<span class="k">END</span> <span class="c">#layer</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -330,8 +335,8 @@ UNIT[&quot;degree&quot;,0.0174532925199433]]
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      最終更新: 2021-04-30
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      最終更新: 2021-05-10
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

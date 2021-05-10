@@ -4,12 +4,13 @@
 <html lang="de">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 96: Time Dimension Support in MapCache Tilesets &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-96-time-dimension-support-in-mapcache-tilesets">
+  <section id="ms-rfc-96-time-dimension-support-in-mapcache-tilesets">
 <span id="rfc96"></span><h1>MS RFC 96: Time Dimension Support in MapCache Tilesets<a class="headerlink" href="#ms-rfc-96-time-dimension-support-in-mapcache-tilesets" title="Link zu dieser Überschrift">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -166,7 +167,7 @@
 <dd class="field-odd"><p>MapCache 1.2</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Link zu dieser Überschrift">¶</a></h2>
 <p>This RFC proposes to add time dimension support in MapCache. This
 allows MapCache to answer WMTS and WMS requests including in the
@@ -189,8 +190,8 @@ a given time interval:</p>
 <p>For service providers it is additionally important to be able to add
 new acquisitions to the cache as they become available at the
 configured source without the need to restart the web server.</p>
-</div>
-<div class="section" id="proposed-solution">
+</section>
+<section id="proposed-solution">
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Link zu dieser Überschrift">¶</a></h2>
 <p>To obtain the behavior detailed in the previous paragraph, MapCache needs to be
 extended to support the notion of timestamps for a given tileset:</p>
@@ -210,7 +211,7 @@ order to return a single composited tile to the client.</p></li>
 <p>This functionality will only be activated and usable for WMS and WMTS
 requests. Other specifications do not provision the usage of dimensions.</p>
 </div>
-<div class="section" id="example">
+<section id="example">
 <h3>2.1 Example<a class="headerlink" href="#example" title="Link zu dieser Überschrift">¶</a></h3>
 <p>Suppose that the database given for a tileset contains the timestamps
 <cite>2011-12-15</cite>, <cite>2012-01-15</cite>, and <cite>2012-02-15</cite>, i.e. there are three
@@ -233,8 +234,8 @@ having been passed a <cite>TIME=2012-01-15</cite> URL parameter.</p></li>
 assembly of the two tiles, and therefore containing the data of the <cite>2012</cite>
 time series.</p></li>
 </ul>
-</div>
-<div class="section" id="storing-and-retrieving-timestamp-entries">
+</section>
+<section id="storing-and-retrieving-timestamp-entries">
 <h3>2.2 Storing and Retrieving Timestamp entries<a class="headerlink" href="#storing-and-retrieving-timestamp-entries" title="Link zu dieser Überschrift">¶</a></h3>
 <p>While the available timestamps for a tileset could be supplied in the
 mapcache.xml configuration file, for the dynamic case where datasets are added
@@ -280,8 +281,8 @@ a timestamp in a textual form that can be directly interpreted by the
 tileset’s source WMS after having been passed in a <cite>TIME=xxx</cite> URL parameter
 in the GetMap request.</p>
 </div>
-</div>
-<div class="section" id="interpreting-time-formats">
+</section>
+<section id="interpreting-time-formats">
 <h3>2.3 Interpreting Time formats<a class="headerlink" href="#interpreting-time-formats" title="Link zu dieser Überschrift">¶</a></h3>
 <p>MapCache will accept requests with a TIME dimension that follows one of these
 two formats:</p>
@@ -357,8 +358,8 @@ dimension. MapCache will however interpret intervals in its KVP interface,
 but these cannot be supported by the REST interface (due to the presence
 of ‚/‘s which are ambiguous).</p>
 </div>
-</div>
-<div class="section" id="handling-incomplete-tilesets-for-a-given-timestamp">
+</section>
+<section id="handling-incomplete-tilesets-for-a-given-timestamp">
 <h3>2.4 Handling Incomplete Tilesets for a given Timestamp<a class="headerlink" href="#handling-incomplete-tilesets-for-a-given-timestamp" title="Link zu dieser Überschrift">¶</a></h3>
 <p>Though not strictly related to this RFC, the TIME dimension support in mapcache
 will support tilesets spanning different extents depending on the timestamp. If
@@ -370,11 +371,11 @@ time(stamp|interval), and spans a limited area on the globe. There is no need
 to seed|generate the tiles outside of the extents spanned by this run, however
 it is still possible to request a mosaic compositing all of the satellite runs
 for a given (larger) time interval.</p>
-</div>
-</div>
-<div class="section" id="implementation-details">
+</section>
+</section>
+<section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Link zu dieser Überschrift">¶</a></h2>
-<div class="section" id="id1">
+<section id="id1">
 <h3>3.1 Overview<a class="headerlink" href="#id1" title="Link zu dieser Überschrift">¶</a></h3>
 <p>A struct representing a TIME database will be added, and be sub-classed by a
 sqlite specific implementation.</p>
@@ -425,8 +426,8 @@ sqlite specific implementation.</p>
 <p>The structs present two public functions, one to get all valid values (in order
 to construct capabilities documents and demo interface), and another returning
 valid timestamps for a given interval.</p>
-</div>
-<div class="section" id="files-affected">
+</section>
+<section id="files-affected">
 <h3>3.2 Files affected<a class="headerlink" href="#files-affected" title="Link zu dieser Überschrift">¶</a></h3>
 <ul class="simple">
 <li><p>mapcache.h</p></li>
@@ -437,13 +438,13 @@ valid timestamps for a given interval.</p>
 <li><p>tileset.c (cloning and creation functions)</p></li>
 <li><p>mapcache_seed.c (timestamp specification when seeding)</p></li>
 </ul>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h3>3.3 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link zu dieser Überschrift">¶</a></h3>
 <p>None expected, new functionality</p>
-</div>
-</div>
-<div class="section" id="performance-implications">
+</section>
+</section>
+<section id="performance-implications">
 <h2>4. Performance implications<a class="headerlink" href="#performance-implications" title="Link zu dieser Überschrift">¶</a></h2>
 <p>When supplying a TIME range in the request URL that corresponds to a large number of
 time entries from the database, the corresponding operation in mapcache can become
@@ -453,19 +454,19 @@ While this might lead to a denial of service on the mapcache server, it is consi
 normal behavior in order to supply correct results. Server administrators can mitigate
 this load by adding a <cite>ORDER BY ttt LIMIT xxx</cite> clause in their sqlite queries, at the
 cost of responses that will be missing entries.</p>
-</div>
-<div class="section" id="bug-id">
+</section>
+<section id="bug-id">
 <h2>5. Bug ID<a class="headerlink" href="#bug-id" title="Link zu dieser Überschrift">¶</a></h2>
 <ul class="simple">
 <li><p>62: <a class="reference external" href="https://github.com/MapServer/mapcache/pull/62">pull62</a></p></li>
 </ul>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>6. Voting history<a class="headerlink" href="#voting-history" title="Link zu dieser Überschrift">¶</a></h2>
 <p>+1 from ThomasB, MikeS, TomK, JeffM, DanielM, SteveW, OlivierC, SteveL and
 PerryN</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -543,8 +544,8 @@ PerryN</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Zuletzt aktualisiert am 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Zuletzt aktualisiert am 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

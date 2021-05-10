@@ -4,12 +4,13 @@
 <html lang="el">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 126: Port to PROJ 6 API &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-126-port-to-proj-6-api">
+  <section id="ms-rfc-126-port-to-proj-6-api">
 <span id="rfc126"></span><h1>MS RFC 126: Port to PROJ 6 API<a class="headerlink" href="#ms-rfc-126-port-to-proj-6-api" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -163,7 +164,7 @@
 <dd class="field-even"><p>MapServer 8.0</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <p>Since March 1st 2019, <a class="reference external" href="https://proj.org/news.html">PROJ 6.0</a> has been released. This version deprecates
 the «traditional» API available in proj_api.h, in favor or the new API
@@ -173,8 +174,8 @@ will no longer be available.</p>
 <p>This RFC thus is about the changes needed in MapServer to use proj.h new API.
 Support for traditional proj_api.h is still kept for now, when MapServer is
 built against PROJ 4.x or PROJ 5.x.</p>
-</div>
-<div class="section" id="proposed-solution">
+</section>
+<section id="proposed-solution">
 <h2>Proposed solution<a class="headerlink" href="#proposed-solution" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <p>Most of the interface with PROJ is contained in mapproject.c, so most of
 the changes are done there, and the projectionObj object is the abstraction used
@@ -234,8 +235,8 @@ reprojectionObj can cache them.</p>
 <span class="kt">void</span> <span class="nf">msProjectionSetContext</span><span class="p">(</span><span class="n">projectionObj</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="n">projectionContext</span><span class="o">*</span> <span class="n">ctx</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="continuous-integration-changes">
+</section>
+<section id="continuous-integration-changes">
 <h2>Continuous integration changes<a class="headerlink" href="#continuous-integration-changes" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <p>The PHP 7.3 configurations is modified to use PROJ 6 API, whereas other targets still
 use the PROJ 4.x API.
@@ -253,8 +254,8 @@ since proj_api.h and proj.h use a slightly different algorithm for geographic to
 geocentric conversion)</p>
 <p>Vagrant is also modified to use PROJ 6.1.1, and it creates 2 builds:
 build_vagrant against the PROJ 4.x API, and build_vagrant_proj6 against the PROJ 6 API.</p>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>Implementation Details<a class="headerlink" href="#implementation-details" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <p>The following files are modified:</p>
 <ul class="simple">
@@ -312,17 +313,17 @@ build_vagrant against the PROJ 4.x API, and build_vagrant_proj6 against the PROJ
 <ul class="simple">
 <li><p>mapprojhack.c: merged into mapproject.c</p></li>
 </ul>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <p>None on the Mapfile syntax. There might be slight changes in coordinate
 reprojections due to PROJ changes.</p>
-</div>
-<div class="section" id="security-implications">
+</section>
+<section id="security-implications">
 <h2>Security implications<a class="headerlink" href="#security-implications" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <p>None.</p>
-</div>
-<div class="section" id="performance-implications">
+</section>
+<section id="performance-implications">
 <h2>Performance implications<a class="headerlink" href="#performance-implications" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <p>Using PROJ 6 API is slower, especially for single-time invocations of the
 MapServer CGI binary. This shows up in the runtime of msautotest, which consists
@@ -384,35 +385,35 @@ and with PROJ 6 API, 30 ms.</p>
 <p>This case is a bit extreme, in that the rendering is extremely fast, and thus
 coordinate operation setup is non neglectable. For use cases where the request
 takes longer, it is expected that the time difference is proportionnaly lower.</p>
-</div>
-<div class="section" id="mapscript-implications">
+</section>
+<section id="mapscript-implications">
 <h2>MapScript implications<a class="headerlink" href="#mapscript-implications" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <p>None.</p>
-</div>
-<div class="section" id="documentation-needs">
+</section>
+<section id="documentation-needs">
 <h2>Documentation needs<a class="headerlink" href="#documentation-needs" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <p>None in theory since there is no syntax change. However some words will be
 added to <a class="reference external" href="https://mapserver.org/mapfile/projection.html">https://mapserver.org/mapfile/projection.html</a> to recommand the use
 of the init=epsg:XXXX syntax instead of PROJ 4 CRS strings to benefit from
 the more accurate late-binding coordinate transformations.</p>
-</div>
-<div class="section" id="ticket-id-and-references">
+</section>
+<section id="ticket-id-and-references">
 <h2>Ticket ID and references<a class="headerlink" href="#ticket-id-and-references" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <ul class="simple">
 <li><p>Ticket: <a class="reference external" href="https://github.com/MapServer/MapServer/issues/5766">https://github.com/MapServer/MapServer/issues/5766</a></p></li>
 <li><p>Pull request available at: <a class="reference external" href="https://github.com/MapServer/MapServer/pull/5888">https://github.com/MapServer/MapServer/pull/5888</a></p></li>
 </ul>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>Voting history<a class="headerlink" href="#voting-history" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <p>+1 from PSC members Even Rouault, Mickael Smith,
 Seth Girvin, Daniel Morissette and Jukka Rahkonen.</p>
-</div>
-<div class="section" id="credits">
+</section>
+<section id="credits">
 <h2>Credits<a class="headerlink" href="#credits" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
 <p>Thanks to funding from the French Ministry of Defense.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -485,8 +486,8 @@ Seth Girvin, Daniel Morissette and Jukka Rahkonen.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a>2021, Open Source Geospatial Foundation
-      Τελευταία ενημέρωση στις 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Τελευταία ενημέρωση στις 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

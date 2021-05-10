@@ -4,12 +4,13 @@
 <html lang="it">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 80: Font Fallback Support &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-80-font-fallback-support">
+  <section id="ms-rfc-80-font-fallback-support">
 <span id="rfc80"></span><h1>MS RFC 80: Font Fallback Support<a class="headerlink" href="#ms-rfc-80-font-fallback-support" title="Link a questa intestazione">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -166,7 +167,7 @@
 <dd class="field-odd"><p>MapServer 6.2</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Link a questa intestazione">¶</a></h2>
 <p>This RFC proposes allowing for the definition of fallback fonts for labels, to
 be used when a glyph is not available in the initial font.</p>
@@ -183,18 +184,18 @@ only be used as «last resort» on a glyph-by-glyph basis.</p>
 «font1,font2,font3», where each font is listed in the fonts.lst as usual. If
 only one font is specified, this functionality has no effect. The same fontlist
 support is available for attribute binding.</p>
-</div>
-<div class="section" id="proposed-technical-change">
+</section>
+<section id="proposed-technical-change">
 <h2>2. Proposed Technical Change<a class="headerlink" href="#proposed-technical-change" title="Link a questa intestazione">¶</a></h2>
-</div>
-<div class="section" id="core-object-changes">
+</section>
+<section id="core-object-changes">
 <h2>2.1 Core Object Changes<a class="headerlink" href="#core-object-changes" title="Link a questa intestazione">¶</a></h2>
 <p>The Label Style Object would need to support multiple fonts. The proposed
 implementation uses a hard limit to the number of fonts, to avoid overhead. The
 number of fonts can be changed using the MS_MAX_LABEL_FONTS define, the
 suggested default is 5.</p>
-</div>
-<div class="section" id="label-rendering-changes">
+</section>
+<section id="label-rendering-changes">
 <h2>2.2 Label Rendering Changes<a class="headerlink" href="#label-rendering-changes" title="Link a questa intestazione">¶</a></h2>
 <p>The function pointer signature of GetTruetypeTextBBox needs to be changed to be
 able to receive multiple fonts and their count. This requires a change to every
@@ -202,14 +203,14 @@ renderer, as does the change of the labelStyleObj.</p>
 <p>Renderers supporting single-glyph operation like cairo and agg can use the font
 list passed in to implement the glyph fallback. Renderers operating on complete
 strings can use fonts[0] for no change in behavior.</p>
-</div>
-<div class="section" id="mapscript">
+</section>
+<section id="mapscript">
 <h2>2.3 MapScript<a class="headerlink" href="#mapscript" title="Link a questa intestazione">¶</a></h2>
 <p>The mapscript getters and setters are unchanged, but the semantics
 of the string passed to labelObj-&gt;setFont() is modified as it now
 expects a comma-separated list of fontset keys.</p>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Link a questa intestazione">¶</a></h2>
 <p>The proposed implementation adds font fallback support to the cairo and agg
 renderers.</p>
@@ -227,8 +228,8 @@ Renderers that do not (yet?) support multiple font fallbacks are slightly
 modified to use the first entry of the font array, while the other renderers
 use some specific code to detect missing characters and use the fallback
 fonts when needed.</p>
-</div>
-<div class="section" id="files-affected">
+</section>
+<section id="files-affected">
 <h2>3.1. Files Affected<a class="headerlink" href="#files-affected" title="Link a questa intestazione">¶</a></h2>
 <ul class="simple">
 <li><p>maplabel.c:</p></li>
@@ -268,19 +269,19 @@ in labelStyleObj</p></li>
 <li><p>maputil.c: only bind font from shape if it’s different</p></li>
 <li><p>mapdummyrenderer.c: getTruetypeTextBBox signature change</p></li>
 </ul>
-</div>
-<div class="section" id="bug-id">
+</section>
+<section id="bug-id">
 <h2>3.2 Bug ID<a class="headerlink" href="#bug-id" title="Link a questa intestazione">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/4114">https://github.com/MapServer/MapServer/issues/4114</a></p></li>
 </ul>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>4. Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link a questa intestazione">¶</a></h2>
 <p>None expected, unless existing fontset keys contained commas. I’m not
 sure this was valid syntax anyways, and was definitely bad practice.</p>
-</div>
-<div class="section" id="error-reporting">
+</section>
+<section id="error-reporting">
 <h2>5. Error reporting<a class="headerlink" href="#error-reporting" title="Link a questa intestazione">¶</a></h2>
 <p>The hard limit on the maximum number of fonts allowed is enforced in
 msFontsetLookupFonts() which will halt processing and return an error
@@ -288,18 +289,18 @@ message stating that the maximum number of fonts is set to
 MS_MAX_LABEL_FONTS. The renderers themselves will report the usual
 error message if one of the referenced fonts could not be loaded (due
 to an inaccessible or corrupt ttf file).</p>
-</div>
-<div class="section" id="example-usage">
+</section>
+<section id="example-usage">
 <h2>6. Example Usage<a class="headerlink" href="#example-usage" title="Link a questa intestazione">¶</a></h2>
 <ul class="simple">
 <li><p>see msautotest entry <a class="reference external" href="http://trac.osgeo.org/mapserver/changeset/12863">http://trac.osgeo.org/mapserver/changeset/12863</a></p></li>
 </ul>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>7. Voting history<a class="headerlink" href="#voting-history" title="Link a questa intestazione">¶</a></h2>
 <p>Passed with +1 from ThomasB, SteveW, MichaelS, SteveL, PerryN, DanielM</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -372,8 +373,8 @@ to an inaccessible or corrupt ttf file).</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Ultimo aggiornamento 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Ultimo aggiornamento 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

@@ -4,12 +4,13 @@
 <html lang="tr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 97: Dynamic creation of higher zoom levels tiles &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-97-dynamic-creation-of-higher-zoom-levels-tiles">
+  <section id="ms-rfc-97-dynamic-creation-of-higher-zoom-levels-tiles">
 <span id="rfc97"></span><h1>MS RFC 97: Dynamic creation of higher zoom levels tiles<a class="headerlink" href="#ms-rfc-97-dynamic-creation-of-higher-zoom-levels-tiles" title="Bu başlık için kalıcı bağlantı">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -160,7 +161,7 @@
 <dd class="field-odd"><p>MapCache 1.2</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>When tiling raster data, it is common for the native resolution of the original
 data to be somewhat/much lower than the resolutions of the higher zoom levels
@@ -183,8 +184,8 @@ cached level are still transparently available for an end user or when
 vertically merging multiple tiles, however they are dynamically upscaled from
 the maximum cached level instead of being cached on the mapcache instance
 (after having been requested once from the source WMS service).</p>
-</div>
-<div class="section" id="proposed-solution">
+</section>
+<section id="proposed-solution">
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>In order to be available for all tile operations, the <cite>mapcache_tileset_tile_get</cite>
 function will detect calls that are over the maximum cached level and fall back to
@@ -225,14 +226,14 @@ referenced by a tileset:</p>
 <span class="nt">&lt;/tileset&gt;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>Two new functions will be added, and will produce a tile’s image by either
 upscaling lower level tiles or directly querying the source wms. They will be
 called from the <cite>mapcache_tileset_tile_get()</cite> function when such a behavior
 has been requested in the configuration file.</p>
-<div class="section" id="files-affected">
+<section id="files-affected">
 <h3>3.1 Files affected<a class="headerlink" href="#files-affected" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <ul class="simple">
 <li><p>mapcache.h</p></li>
@@ -240,12 +241,12 @@ has been requested in the configuration file.</p>
 <li><p>tileset.c</p></li>
 <li><p>mapcache_seed.c</p></li>
 </ul>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h3>3.2 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <p>None expected, new functionality</p>
-</div>
-<div class="section" id="performance-implications">
+</section>
+<section id="performance-implications">
 <h3>3.3 Performance implications<a class="headerlink" href="#performance-implications" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <p>When upscaling tiles, each tile request will imply at least one image
 decompression and one image compression, along with bilinear resampling on the
@@ -254,8 +255,8 @@ slower than directly serving them from a cache.</p>
 <p>It should be possible to deactivate bilinear resampling for users wanting better
 performance at the cost of degraded output quality. This could be addressed in a
 later phase should that need arise.</p>
-</div>
-<div class="section" id="caveats">
+</section>
+<section id="caveats">
 <h3>3.4 Caveats<a class="headerlink" href="#caveats" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <ul class="simple">
 <li><p>Bilinear resampling fails inside pixman for extreme resampling scales (i.e.
@@ -267,19 +268,19 @@ color.</p></li>
 the max-cached-zoom tile. This is due to the fact that data from adjacent
 tiles would be needed in order to produce a seamless upscaled version.</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="bug-id">
+</section>
+</section>
+<section id="bug-id">
 <h2>5. Bug ID<a class="headerlink" href="#bug-id" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <ul class="simple">
 <li><p>63: <a class="reference external" href="https://github.com/MapServer/mapcache/pull/63">pull63</a></p></li>
 </ul>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>6. Voting history<a class="headerlink" href="#voting-history" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>+1 from ThomasB, StephanM, MikeS, TomK, JeffM, DanielM, PerryN and SteveW</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -351,8 +352,8 @@ tiles would be needed in order to produce a seamless upscaled version.</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Telif hakkı</a> 2021, Open Source Geospatial Foundation.
-      Son güncelleme: 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Son güncelleme: 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

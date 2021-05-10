@@ -4,12 +4,13 @@
 <html lang="ar">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 33: Removing msLayerWhichItems() from maplayer.c &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -18,8 +19,8 @@
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="copyright" title="Copyright" href="../../copyright.html" />
+    <link rel="search" title="بحث" href="../../search.html" />
+    <link rel="copyright" title="الحقوق" href="../../copyright.html" />
     <link rel="next" title="MS RFC 34: MapServer Release Manager and Release Process" href="ms-rfc-34.html" />
     <link rel="prev" title="MS RFC 32: Support for Anti-Grain Geometry (AGG) Rendering Engine" href="ms-rfc-32.html" /> 
   </head><body>
@@ -120,8 +121,8 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
+          <a href="../../genindex.html" title="الفهرس العام"
+             accesskey="I">الفهرس</a></li>
         <li class="right" >
           <a href="ms-rfc-34.html" title="MS RFC 34: MapServer Release Manager and Release Process"
              accesskey="N">التالي</a> |</li>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-33-removing-mslayerwhichitems-from-maplayer-c">
+  <section id="ms-rfc-33-removing-mslayerwhichitems-from-maplayer-c">
 <span id="rfc33"></span><h1>MS RFC 33: Removing msLayerWhichItems() from maplayer.c<a class="headerlink" href="#ms-rfc-33-removing-mslayerwhichitems-from-maplayer-c" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -163,7 +164,7 @@
 <dd class="field-even"><p>MapServer 5.0</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>The function msLayerWhichItems() is a function in maplayer.c that determines
 exactly which feature attributes need to be retrieved from a given data
@@ -180,8 +181,8 @@ we don't know ahead of time which attributes might be output.</p>
 <p>By removing msLayerWhichItems() and always retrieving all attributes a feature
 is a feature whether drawing, querying or outputting via a template so caching
 features now becomes practical.</p>
-</div>
-<div class="section" id="technical-solution">
+</section>
+<section id="technical-solution">
 <h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Permalink to this headline">¶</a></h2>
 <p>As mentioned earlier msLayerWhichItems() does a couple of things. Some of
 these functions would need to be retained somehow and are described below.</p>
@@ -217,13 +218,13 @@ processing. The code to do this exists as part of msLayerWhichItems() and
 would be retained under some other name.</p></li>
 </ol>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
+<p class="admonition-title">ملاحظة</p>
 <p>this RFC does not address single pass queries, but rather sets the
 stage for them. Subsequent drawing, query and template output processes would
 remain unaltered.</p>
 </div>
-</div>
-<div class="section" id="general-c-api-changes">
+</section>
+<section id="general-c-api-changes">
 <h2>General C API Changes<a class="headerlink" href="#general-c-api-changes" title="Permalink to this headline">¶</a></h2>
 <p>maplayer.c - msLayerWhichItems() goes away. msLayerOpen() now sets the
 layer-&gt;items array.</p>
@@ -231,8 +232,8 @@ layer-&gt;items array.</p>
 Same goes for the functions to assign a classObj to a feature.</p>
 <p>mapdraw.c - Layeritemindex and classitemindex must now be dynamically assigned
 values.</p>
-</div>
-<div class="section" id="input-driver-changes">
+</section>
+<section id="input-driver-changes">
 <h2>Input Driver Changes<a class="headerlink" href="#input-driver-changes" title="Permalink to this headline">¶</a></h2>
 <p>It is unclear how each driver made use of the output of msLayerWhichItems().
 It may be as easy as calling msLayerGetItems() instead of using
@@ -245,28 +246,28 @@ mapogr.cpp -
 mappostgis.c -
 maporaclespatial.c -
 mapmygis.c -</p>
-</div>
-<div class="section" id="mapscript">
+</section>
+<section id="mapscript">
 <h2>MapScript<a class="headerlink" href="#mapscript" title="Permalink to this headline">¶</a></h2>
 <p>No changes.</p>
-</div>
-<div class="section" id="mapfiles">
+</section>
+<section id="mapfiles">
 <h2>Mapfiles<a class="headerlink" href="#mapfiles" title="Permalink to this headline">¶</a></h2>
 <p>No changes anticipated.</p>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this headline">¶</a></h2>
 <p>None. This is a new feature.</p>
-</div>
-<div class="section" id="bug-id">
+</section>
+<section id="bug-id">
 <h2>Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this headline">¶</a></h2>
 <p>None assigned.</p>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>Voting History<a class="headerlink" href="#voting-history" title="Permalink to this headline">¶</a></h2>
 <p>None</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -276,7 +277,7 @@ mapmygis.c -</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3 id="searchlabel">البحث السريع</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" aria-labelledby="searchlabel" />
@@ -320,8 +321,8 @@ mapmygis.c -</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
+          <a href="../../genindex.html" title="الفهرس العام"
+             >الفهرس</a></li>
         <li class="right" >
           <a href="ms-rfc-34.html" title="MS RFC 34: MapServer Release Manager and Release Process"
              >التالي</a> |</li>
@@ -336,8 +337,8 @@ mapmygis.c -</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html"> حقوق النشر </a> 2021, Open Source Geospatial Foundation
-      Last updated on 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Last updated on 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

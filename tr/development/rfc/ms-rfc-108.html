@@ -4,12 +4,13 @@
 <html lang="tr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 108: Dynamic Heatmap (Kernel Density Estimation) Layers &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-108-dynamic-heatmap-kernel-density-estimation-layers">
+  <section id="ms-rfc-108-dynamic-heatmap-kernel-density-estimation-layers">
 <span id="rfc108"></span><h1>MS RFC 108: Dynamic Heatmap (Kernel Density Estimation) Layers<a class="headerlink" href="#ms-rfc-108-dynamic-heatmap-kernel-density-estimation-layers" title="Bu başlık için kalıcı bağlantı">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -169,7 +170,7 @@
 <dd class="field-even"><p>2014/02/13</p>
 </dd>
 </dl>
-<div class="section" id="motivation">
+<section id="motivation">
 <h2>1. Motivation<a class="headerlink" href="#motivation" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>Heatmaps are a popular method to represent sparse data on a regular raster
 grid, where each pixel on the grid is influenced inversely to its distance to
@@ -179,15 +180,17 @@ along with the intensity of an attribute. The “heatmap” term itself is used
 with varying meanings; in the context of this RFC, we will be using it to
 reference <a class="reference external" href="http://en.wikipedia.org/wiki/Multivariate_kernel_density_estimation">Kernel Density Estimation</a>
 maps.</p>
-<div class="figure align-center" id="id1">
+<figure class="align-center" id="id1">
 <img alt="../../_images/heatmap-wikipedia.png" src="../../_images/heatmap-wikipedia.png" />
-<p class="caption"><span class="caption-text">Example Kernel Density Estimation Map (image cc-by-sa wikipedia)</span><a class="headerlink" href="#id1" title="Bu resmin kalıcı bağlantısı">¶</a></p>
-</div>
+<figcaption>
+<p><span class="caption-text">Example Kernel Density Estimation Map (image cc-by-sa wikipedia)</span><a class="headerlink" href="#id1" title="Bu resmin kalıcı bağlantısı">¶</a></p>
+</figcaption>
+</figure>
 <p>This RFC proposes the addition of a vector to raster processing pipeline that
 will transform an input vector source into a 1-band 8-bit raster that can then
 be styled with mapserver’s native raster handling.</p>
-</div>
-<div class="section" id="proposed-addition">
+</section>
+<section id="proposed-addition">
 <h2>2. Proposed Addition<a class="headerlink" href="#proposed-addition" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>Adding a heatmap layer requires the following major changes to the mapserver
 library:</p>
@@ -211,7 +214,7 @@ for heatmap color ramps:</p>
 </ul>
 </li>
 </ul>
-<div class="section" id="vector-to-raster-operations">
+<section id="vector-to-raster-operations">
 <h3>2.1 Vector to raster operations<a class="headerlink" href="#vector-to-raster-operations" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <p>The vector to raster pipeline is called from inside mapserver’s high-level
 raster handling when handling a layer with <strong>CONNECTIONTYPE KERNELDENSITY</strong>.
@@ -234,14 +237,18 @@ filter to apply to the bitmap array once all features have been accumulated.
 Higher values result in increased cpu time needed to compute the filtered
 data.</p></li>
 </ul>
-<div class="figure align-center" id="id2">
+<figure class="align-center" id="id2">
 <img alt="../../_images/heatmap-hsl-10.png" src="../../_images/heatmap-hsl-10.png" />
-<p class="caption"><span class="caption-text">result with a radius set to 10 pixels</span><a class="headerlink" href="#id2" title="Bu resmin kalıcı bağlantısı">¶</a></p>
-</div>
-<div class="figure align-center" id="id3">
+<figcaption>
+<p><span class="caption-text">result with a radius set to 10 pixels</span><a class="headerlink" href="#id2" title="Bu resmin kalıcı bağlantısı">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id3">
 <img alt="../../_images/heatmap-hsl.png" src="../../_images/heatmap-hsl.png" />
-<p class="caption"><span class="caption-text">result with a radius set to 20 pixels</span><a class="headerlink" href="#id3" title="Bu resmin kalıcı bağlantısı">¶</a></p>
-</div>
+<figcaption>
+<p><span class="caption-text">result with a radius set to 20 pixels</span><a class="headerlink" href="#id3" title="Bu resmin kalıcı bağlantısı">¶</a></p>
+</figcaption>
+</figure>
 <ul class="simple">
 <li><p><strong>PROCESSING “KERNELDENSITY_COMPUTE_BORDERS=ON|OFF”</strong> : A kernel of radius
 “r” cannot be applied to “r” pixels along the borders of the image.  The
@@ -262,18 +269,22 @@ the resulting pixels span the full 0-255 range; determining that value is
 mostly a process of trial and error. Pixels that fall outside the 0-255 range
 will be clipped to 0 or 255.</p></li>
 </ul>
-<div class="figure align-center" id="id4">
+<figure class="align-center" id="id4">
 <img alt="../../_images/heatmap-hsl-fix-scale.png" src="../../_images/heatmap-hsl-fix-scale.png" />
-<p class="caption"><span class="caption-text">fixed scaling applied. compared to the previous images, the greater number
+<figcaption>
+<p><span class="caption-text">fixed scaling applied. compared to the previous images, the greater number
 of red areas results from the fact that the chosen scaling factor made a
 large number of pixels overshoot the 255 limit</span><a class="headerlink" href="#id4" title="Bu resmin kalıcı bağlantısı">¶</a></p>
-</div>
-<div class="figure align-center" id="id5">
+</figcaption>
+</figure>
+<figure class="align-center" id="id5">
 <img alt="../../_images/heatmap-hsl-fix-scale2.png" src="../../_images/heatmap-hsl-fix-scale2.png" />
-<p class="caption"><span class="caption-text">lower fixed scaling applied. no pixels have attained the 255 limit</span><a class="headerlink" href="#id5" title="Bu resmin kalıcı bağlantısı">¶</a></p>
-</div>
-</div>
-<div class="section" id="advanced-sample-weighting-and-filtering">
+<figcaption>
+<p><span class="caption-text">lower fixed scaling applied. no pixels have attained the 255 limit</span><a class="headerlink" href="#id5" title="Bu resmin kalıcı bağlantısı">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="advanced-sample-weighting-and-filtering">
 <h3>2.2 Advanced sample weighting and filtering<a class="headerlink" href="#advanced-sample-weighting-and-filtering" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <p>By default, each feature is assigned a weight of 1.0, and the resulting heatmap
 will represent the spatial density of the vector features. If this is not the
@@ -284,14 +295,16 @@ EXPRESSION and MIN/MAXSCALEDENOM apply; if a feature results in no matching
 CLASS and/or STYLE, it is ignored and discarded from the resulting heatmap. The
 examples at the end of this RFC give some examples as to how this can be
 achieved.</p>
-<div class="figure align-center" id="id6">
+<figure class="align-center" id="id6">
 <img alt="../../_images/heatmap-hsl-density.png" src="../../_images/heatmap-hsl-density.png" />
-<p class="caption"><span class="caption-text">heatmap representing pure feature density when sample weighting or filtering
+<figcaption>
+<p><span class="caption-text">heatmap representing pure feature density when sample weighting or filtering
 are not applied, the actual vector points are represented alongside. (Other
 examples in this RFC are rendered with attribute weighting on each sample)</span><a class="headerlink" href="#id6" title="Bu resmin kalıcı bağlantısı">¶</a></p>
-</div>
-</div>
-<div class="section" id="raster-color-ramping">
+</figcaption>
+</figure>
+</section>
+<section id="raster-color-ramping">
 <h3>2.3 Raster Color Ramping<a class="headerlink" href="#raster-color-ramping" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <p>The features added in <a class="reference internal" href="ms-rfc-6.html#rfc6"><span class="std std-ref">MS RFC 6: Color Range Mapping of Continuous Feature Values</span></a> for vector features, and since extended to
 support raster layers, will be extended in order to support more complex color
@@ -329,41 +342,43 @@ interpolates colors between stops in RGB space, which usually results in
 washed out colors. The interpolation can be done in HSL space which usually
 results in wanted output for heatmaps.</p></li>
 </ul>
-<div class="figure align-center" id="id7">
+<figure class="align-center" id="id7">
 <img alt="../../_images/heatmap-rgb.png" src="../../_images/heatmap-rgb.png" />
-<p class="caption"><span class="caption-text">washed out colors when interpolating in RGB space</span><a class="headerlink" href="#id7" title="Bu resmin kalıcı bağlantısı">¶</a></p>
-</div>
-</div>
-<div class="section" id="scaletoken-additions">
+<figcaption>
+<p><span class="caption-text">washed out colors when interpolating in RGB space</span><a class="headerlink" href="#id7" title="Bu resmin kalıcı bağlantısı">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="scaletoken-additions">
 <h3>2.4 Scaletoken Additions<a class="headerlink" href="#scaletoken-additions" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <p>In order to easily adapt kernel density parameters depending on the actual
 map scaledenom, the implementation of <a class="reference internal" href="ms-rfc-86.html#rfc86"><span class="std std-ref">MS RFC 86: Scale-dependant String Substitutions</span></a> will be extended to also
 replace tokens inside PROCESSING keys. See the examples at the end of this RFC
 to see how this can be used in the context of heatmaps.</p>
-</div>
-<div class="section" id="backwards-compatibility">
+</section>
+<section id="backwards-compatibility">
 <h3>2.5 Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <p>None expected. The behavior of the range support in RGB space is to extend the
 color interpolation outside the supplied DATARANGE (for DATARANGEs that do not
 span 0-255), whereas the behavior for HSL interpolation is to treat such values
 as NODATA. Given that this behavior hasn’t been officially formalized, it might
 be wanted to modify the RGB interpolation so it behaves identically.</p>
-</div>
-<div class="section" id="performance-implications">
+</section>
+<section id="performance-implications">
 <h3>2.6 Performance Implications<a class="headerlink" href="#performance-implications" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <p>The gaussian filter allocates two temporary float* bitmaps of the size of the
 requested image, optionally expanded in case border computation has been
 activated or not. For very large image requests this may result in large
 allocations. The cost of the gaussian filtering is also dependent on the
 chosen radius,</p>
-</div>
-<div class="section" id="compatibility-with-tiling">
+</section>
+<section id="compatibility-with-tiling">
 <h3>2.7 Compatibility with tiling<a class="headerlink" href="#compatibility-with-tiling" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <p>Options enabling tiling-compatible output have been added and must be used when
 tiling. Failure to do so <strong>will</strong> result in tiles that are not consistent from
 one another.</p>
-</div>
-<div class="section" id="example-mapfiles">
+</section>
+<section id="example-mapfiles">
 <h3>2.8 Example mapfiles<a class="headerlink" href="#example-mapfiles" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">map</span>
   <span class="k">size</span> <span class="mi">1000</span> <span class="mi">500</span>
@@ -483,11 +498,11 @@ source vector layer to apply a non default weight to each sample:</p>
 </div>
 </li>
 </ul>
-</div>
-</div>
-<div class="section" id="miscellaneous">
+</section>
+</section>
+<section id="miscellaneous">
 <h2>3. Miscellaneous<a class="headerlink" href="#miscellaneous" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
-<div class="section" id="comments-from-the-review-period">
+<section id="comments-from-the-review-period">
 <h3>3.1 Comments from the review period<a class="headerlink" href="#comments-from-the-review-period" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <ul class="simple">
 <li><p>It was suggested that the color ramp used in the raster layer be defined by a
@@ -507,18 +522,18 @@ scope of this RFC, and similar functionality can be achieved by using
 appropriate SCALETOKENS and/or weighing/filtering at the class-&gt;style-&gt;size
 level in the source vector layer.</p></li>
 </ul>
-</div>
-<div class="section" id="issue-tracking-id">
+</section>
+<section id="issue-tracking-id">
 <h3>3.2 Issue Tracking ID<a class="headerlink" href="#issue-tracking-id" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <p><a class="reference external" href="https://github.com/MapServer/MapServer/pull/4857">https://github.com/MapServer/MapServer/pull/4857</a></p>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h3>3.2 Voting History<a class="headerlink" href="#voting-history" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <p>+1 from ThomasB, TomK, DanielM, SteveW, TamaS, StephanM, MichaelS, PerryN,
 JeffM, SteveL and YewondwossenA</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -597,8 +612,8 @@ JeffM, SteveL and YewondwossenA</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Telif hakkı</a> 2021, Open Source Geospatial Foundation.
-      Son güncelleme: 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Son güncelleme: 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

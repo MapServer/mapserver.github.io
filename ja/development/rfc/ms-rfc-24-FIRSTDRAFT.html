@@ -4,12 +4,13 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 24: Mapscript memory management &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -131,7 +132,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-24-mapscript-memory-management">
+  <section id="ms-rfc-24-mapscript-memory-management">
 <span id="rfc24first"></span><h1>MS RFC 24: Mapscript memory management<a class="headerlink" href="#ms-rfc-24-mapscript-memory-management" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -153,11 +154,11 @@
 <dd class="field-even"><p>MapServer  5.0</p>
 </dd>
 </dl>
-<div class="section" id="warning">
+<section id="warning">
 <h2>0. Warning!<a class="headerlink" href="#warning" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><em>IMPORTANT: this is the first and obsolete version fo the rfc, which is kept here only for reference purposes and for a limited time.</em></p>
-</div>
-<div class="section" id="overview">
+</section>
+<section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Memory management in SWIG wrappers has a tradition of being difficult and error prone. The programmer of the wrapper has to deal with memory that can be allocated and then freed in two separate environments: the hosting language such as Java, C# or Perl and the wrapped native code.</p>
 <p>Most modern languages implement garbage collection, so that the developer does not have to care about memory management.
@@ -171,12 +172,12 @@ As soon as the other pointers are dereferenced the hosting language will crash b
 <p>MapServer  SWIG wrappers suffer from issues with garbage collections for example in dinamically adding layers to a map.</p>
 <p>The purpose of this RFC is to address these issues and provide a solution that can be implemented in time for the release of MapServer  5.0.</p>
 <p>This RFC does not address thread safety.</p>
-</div>
-<div class="section" id="problem-description">
+</section>
+<section id="problem-description">
 <h2>2. Problem description<a class="headerlink" href="#problem-description" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>This section gives an overview (along with examples) of errors in mapscript memory management. Most of the examples will be in Java, but they apply to all other mapscripts too.
 They can be reproduced against the latest CVS code of mapserver-HEAD as of 31st December 2006.</p>
-<div class="section" id="object-equality-identity">
+<section id="object-equality-identity">
 <h3>2.1 Object equality/identity<a class="headerlink" href="#object-equality-identity" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Consider the following Java mapscript code:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapObj</span> <span class="nb">map</span><span class="o">=</span><span class="n">new</span> <span class="n">mapObj</span><span class="p">(</span><span class="s2">&quot;my.map&quot;</span><span class="p">);</span>
@@ -203,8 +204,8 @@ They can be reproduced against the latest CVS code of mapserver-HEAD as of 31st 
 the layer when it is inserted into the map. The Java reference is not re-pointed
 to the new copy and is therefore 'disconnected' from the actual memory area.
 This currently happens for the most used insert methods (i.e. <em>insertClass</em>).</p>
-</div>
-<div class="section" id="early-garbage-collection">
+</section>
+<section id="early-garbage-collection">
 <h3>2.2 Early garbage collection<a class="headerlink" href="#early-garbage-collection" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Objects created through mapscript can be garbage-collected &quot;early&quot;, when there are live objects still referencing them.
 See this example in Java:</p>
@@ -241,8 +242,8 @@ $map1=$layer-&gt;{map}-&gt;draw();
 // perl interpreter segfault
 </pre></div>
 </div>
-</div>
-<div class="section" id="dynamically-populated-layers-classes-etc">
+</section>
+<section id="dynamically-populated-layers-classes-etc">
 <h3>2.3 Dynamically populated layers, classes, etc<a class="headerlink" href="#dynamically-populated-layers-classes-etc" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>See the following bug reports:</p>
 <p><a class="reference external" href="http://mapserver.gis.umn.edu/bugs/show_bug.cgi?id=1400">http://mapserver.gis.umn.edu/bugs/show_bug.cgi?id=1400</a></p>
@@ -250,9 +251,9 @@ $map1=$layer-&gt;{map}-&gt;draw();
 <p><a class="reference external" href="http://mapserver.gis.umn.edu/bugs/show_bug.cgi?id=1841">http://mapserver.gis.umn.edu/bugs/show_bug.cgi?id=1841</a></p>
 <p>Please note that this issue can be difficult to reproduce, credits go to Tamas
 for pointing it out.</p>
-</div>
-</div>
-<div class="section" id="proposed-implementation">
+</section>
+</section>
+<section id="proposed-implementation">
 <h2>3. Proposed implementation<a class="headerlink" href="#proposed-implementation" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>To solve the problems shown at items 2.1, 2.2 and 2.3 this RCF proposes that:</p>
 <ol class="arabic simple">
@@ -265,7 +266,7 @@ Examples will be given for Perl or Java because of the author familiarity with t
 <p>The three items above are described in more detail in the following subsections. Subsections 3.4 and 3.5 offer an implementation
 example for the layerObj class. Please note that in the following we limit the scope of our analysis to
 the classes/layer relationship.</p>
-<div class="section" id="add-references-to-the-mapscript-wrapper-object">
+<section id="add-references-to-the-mapscript-wrapper-object">
 <h3>3.1 Add references to the mapscript wrapper object<a class="headerlink" href="#add-references-to-the-mapscript-wrapper-object" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>The mapscript objects will be modified so that they keep a reference to
 the other mapscript objects added to them or they are added to, exactly like
@@ -281,8 +282,8 @@ as a result to getClass. By doing so the hosting language knows of the web of re
 between these objects and we solve the early garbage collection problem.</p>
 <p>The problem of object equality/identity is also resolved if we modify the getClass method to look first
 in the class array (the <em>cache</em>) and only after in the C data structures, as shown above.</p>
-</div>
-<div class="section" id="keep-cache-and-c-internal-structure-in-sync">
+</section>
+<section id="keep-cache-and-c-internal-structure-in-sync">
 <h3>3.2 Keep <em>cache</em> and C internal structure in sync<a class="headerlink" href="#keep-cache-and-c-internal-structure-in-sync" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>For the mechanism described at the previous item to work some functions in the mapscript objects and in the native code must
 be modified so that the mapscript objects and the C data structures stay in sync.</p>
@@ -293,13 +294,13 @@ The constructor will also need to be modified to store the reference to the mapO
 Eventually also the native code actually performing the copy-and-insert operation must be modified to
 only perform the insert operation (<em>layerobject.c</em>, line 52, function <em>msInsertClass</em>).</p>
 <p>The API will be kept backward compatible whenever possible.</p>
-</div>
-<div class="section" id="disown-memory-allocated-by-swig-for-objects-with-non-null-parents">
+</section>
+<section id="disown-memory-allocated-by-swig-for-objects-with-non-null-parents">
 <h3>3.3 Disown memory allocated by swig for objects with non-null parents<a class="headerlink" href="#disown-memory-allocated-by-swig-for-objects-with-non-null-parents" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>The patch suggested by Tamas (bug 1743) must be extended so that memory is disowned also when a layer is inserted
 into a map and ported to all mapscript languages.</p>
-</div>
-<div class="section" id="java-mapscript-code-example-for-layerobj">
+</section>
+<section id="java-mapscript-code-example-for-layerobj">
 <h3>3.4 JAVA: mapscript code example for layerObj<a class="headerlink" href="#java-mapscript-code-example-for-layerobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Code example for layerObj (<em>javamodule.i</em>):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/*
@@ -352,8 +353,8 @@ into a map and ported to all mapscript languages.</p>
 %}
 </pre></div>
 </div>
-</div>
-<div class="section" id="perl-mapscript-code-example-for-layerobj">
+</section>
+<section id="perl-mapscript-code-example-for-layerobj">
 <h3>3.5 PERL: mapscript code example for layerObj<a class="headerlink" href="#perl-mapscript-code-example-for-layerobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Code example for layerObj (<em>plmodule.i</em>):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>%feature(&quot;shadow&quot;) ~mapObj() %{
@@ -448,9 +449,9 @@ sub DESTROY {
 does not play well with Perl reference-count based GC and will cause memory leaks.
 To address this limitation Perl mapscript will only implement the layer-&gt;map or child-&gt;parent side of the
 <em>cache</em> as described in 4.3.</p>
-</div>
-</div>
-<div class="section" id="implementation-plan">
+</section>
+</section>
+<section id="implementation-plan">
 <h2>4. Implementation plan<a class="headerlink" href="#implementation-plan" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>It seems that for most mapscripts (java, csharp, perl and python) there
 is enough functionality in SWIG to implement the features described in this RFC.
@@ -459,7 +460,7 @@ As of Tcl I currently don't know if it's possible.</p>
 <p>The two following section describe in detail the required SWIG-mapscript
 features (injection of code and constructor customization).
 Each language gets then a specific section to deal with its own characteristics</p>
-<div class="section" id="checking-swig-mapscript-capabilities-javacode">
+<section id="checking-swig-mapscript-capabilities-javacode">
 <h3>4.1 Checking SWIG-Mapscript capabilities: %javacode<a class="headerlink" href="#checking-swig-mapscript-capabilities-javacode" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Swig provides the equivalent of <em>%javacode</em> for the following languages:</p>
 <ol class="arabic simple">
@@ -471,8 +472,8 @@ Each language gets then a specific section to deal with its own characteristics<
 </ol>
 <p>This swig construct will be used to inject in the wrapper the definition for
 the references described in 3.1 and the wrapper methods.</p>
-</div>
-<div class="section" id="checking-swig-mapscript-capabilities-constructor-customization">
+</section>
+<section id="checking-swig-mapscript-capabilities-constructor-customization">
 <h3>4.1 Checking SWIG-Mapscript capabilities: constructor customization<a class="headerlink" href="#checking-swig-mapscript-capabilities-constructor-customization" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>The %csconstruct used to wrap and customize the costructor of mapscript objects (item 3.3)
 is only available in csharp and java.
@@ -480,15 +481,15 @@ It should be possible to simulate its behaviour with <em>%pythonprepend</em> or 
 in python and with <em>%perlcode</em> or <em>%feature(&quot;shadow&quot;)</em> in perl.</p>
 <p>This swig construct will be used to disown memory allocated by SWIG when the object has
 a reference to a valid parent (bug 1743).</p>
-</div>
-<div class="section" id="java-and-c-sharp">
+</section>
+<section id="java-and-c-sharp">
 <h3>4.2 Java and C-Sharp<a class="headerlink" href="#java-and-c-sharp" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>SWIG-Java and SWIG-CSharp share a common ground and are therefore very similar.
 The names of SWIG-Java constructs can be roughly translated into their C-Sharp equivalents by changing the <em>java</em>
 prefix into <em>cs</em> (i.e. <em>javacode</em> in <em>cscode</em>, <em>javaconstruct</em> in <em>csconstruct</em> and <em>javaout</em> in <em>csout</em>).</p>
 <p>The implementation should follow exactly this RCF.</p>
-</div>
-<div class="section" id="perl">
+</section>
+<section id="perl">
 <h3>4.3 Perl<a class="headerlink" href="#perl" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>As in the example above most of the perl customization can be done
 with the use of the <em>shadow</em> construct.</p>
@@ -504,26 +505,26 @@ like the following two:</p>
 <span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;s/\*getMap = \*mapscriptc::layerObj_getMap/\*swig_map_get = \*mapscript::map_get/&quot;</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">pm</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="python">
+</section>
+<section id="python">
 <h3>4.4 Python<a class="headerlink" href="#python" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Python enjoys first-grade support in SWIG so the RFC should be implemented exactly
 as described.
 Differently from Perl Python's GC can find and free cycles of objects (<a class="reference external" href="http://arctrix.com/nas/python/gc/">http://arctrix.com/nas/python/gc/</a>).</p>
-</div>
-<div class="section" id="ruby">
+</section>
+<section id="ruby">
 <h3>4.5 Ruby<a class="headerlink" href="#ruby" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Needs investigation, probably we'll have to use rb_gc_* functions to mark objects
 and prevent their garbage collection or use <em>%trackobjects</em>.
 Ruby will not implement this RFC.</p>
-</div>
-<div class="section" id="tcl">
+</section>
+<section id="tcl">
 <h3>4.6 Tcl<a class="headerlink" href="#tcl" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Needs investigation and a Tcl expert.
 At the time of this writing Tcl will probably not implement this RFC.</p>
-</div>
-</div>
-<div class="section" id="implementation-checklist">
+</section>
+</section>
+<section id="implementation-checklist">
 <h2>5.1 Implementation checklist<a class="headerlink" href="#implementation-checklist" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>The following table will be used to track the implementation status of this RFC.
 There is a table for each mapscript object and when a language has implemented this RFC
@@ -536,7 +537,7 @@ marks:</p>
 <li><p>a plus sign (+) if object has been disowned</p></li>
 <li><p>a minus sign (-) if object has been owned</p></li>
 </ul>
-<div class="section" id="mapobj">
+<section id="mapobj">
 <h3>5.2 mapObj<a class="headerlink" href="#mapobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <table class="docutils align-default">
 <colgroup>
@@ -801,8 +802,8 @@ marks:</p>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="layerobj">
+</section>
+<section id="layerobj">
 <h3>5.3 layerObj<a class="headerlink" href="#layerobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <table class="docutils align-default">
 <colgroup>
@@ -947,8 +948,8 @@ marks:</p>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="classobj">
+</section>
+<section id="classobj">
 <h3>5.4 classObj<a class="headerlink" href="#classobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <table class="docutils align-default">
 <colgroup>
@@ -1053,8 +1054,8 @@ marks:</p>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="webobj">
+</section>
+<section id="webobj">
 <h3>5.5 webObj<a class="headerlink" href="#webobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <table class="docutils align-default">
 <colgroup>
@@ -1119,8 +1120,8 @@ marks:</p>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="styleobj">
+</section>
+<section id="styleobj">
 <h3>5.5 styleObj<a class="headerlink" href="#styleobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>For styleObjs it is enough to disown them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1243,8 +1244,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="labelobj">
+</section>
+<section id="labelobj">
 <h3>5.6 labelObj<a class="headerlink" href="#labelobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>For labelObjs it is enough to disown them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1359,8 +1360,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="hashtableobj">
+</section>
+<section id="hashtableobj">
 <h3>5.7 hashTableObj<a class="headerlink" href="#hashtableobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>For hashTableObjs it is enough to disown them when they are fetched from the container object (i.e. a layerObj).
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1395,8 +1396,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="colorobj">
+</section>
+<section id="colorobj">
 <h3>5.8 colorObj<a class="headerlink" href="#colorobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>For colorObjs it is enough to disown them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1431,8 +1432,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="imageobj">
+</section>
+<section id="imageobj">
 <h3>5.9 imageObj<a class="headerlink" href="#imageobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>For imageObjs it is enough to own them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1467,8 +1468,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="shapeobj">
+</section>
+<section id="shapeobj">
 <h3>5.10 shapeObj<a class="headerlink" href="#shapeobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>For shapeObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1615,8 +1616,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="lineobj">
+</section>
+<section id="lineobj">
 <h3>5.11 lineObj<a class="headerlink" href="#lineobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>For lineObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1683,8 +1684,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="pointobj">
+</section>
+<section id="pointobj">
 <h3>5.12 pointObj<a class="headerlink" href="#pointobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>For pointObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1727,8 +1728,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="symbolsetobj">
+</section>
+<section id="symbolsetobj">
 <h3>5.13 symbolsetObj<a class="headerlink" href="#symbolsetobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>For symbolsetObjs it is not necessary to add the reference pointing back to the map.</p>
 <table class="docutils align-default">
@@ -1818,8 +1819,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="symbolobj">
+</section>
+<section id="symbolobj">
 <h3>5.14 symbolObj<a class="headerlink" href="#symbolobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>For symbolObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1886,20 +1887,20 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div class="section" id="open-issues">
+</section>
+</section>
+<section id="open-issues">
 <h2>6. Open issues<a class="headerlink" href="#open-issues" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Fetching an object from a map and then adding it to another map is likely to cause a segfault.
 The solution would be to remove it from the first map and then add it the second or implement a
 check before updating the reference to its parent and bail out (throw and exception).</p>
-</div>
-<div class="section" id="status">
+</section>
+<section id="status">
 <h2>7. Status<a class="headerlink" href="#status" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>RFC opened for comments on Jan, the 10th 2007 with a post on mapserver-dev.
 RFC undergoing revision after discussion on mapserver-dev.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -1997,8 +1998,8 @@ RFC undergoing revision after discussion on mapserver-dev.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      最終更新: 2021-04-30
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      最終更新: 2021-05-10
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

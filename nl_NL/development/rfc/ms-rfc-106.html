@@ -4,12 +4,13 @@
 <html lang="nl_NL">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 106: Support of Geomtransform JavaScript Plugin &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -140,7 +141,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-106-support-of-geomtransform-javascript-plugin">
+  <section id="ms-rfc-106-support-of-geomtransform-javascript-plugin">
 <span id="rfc106"></span><h1>MS RFC 106: Support of Geomtransform JavaScript Plugin<a class="headerlink" href="#ms-rfc-106-support-of-geomtransform-javascript-plugin" title="Permalink naar deze titel">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -168,23 +169,23 @@ the not-so-short term as the functionality evolves. It is the evolution of the <
 <p class="admonition-title">Waarschuwing</p>
 <p>Refer to <a class="reference internal" href="../../mapfile/geomtransform.html#geomtransformjs"><span class="std std-ref">Javascript transformation</span></a> for the up-to-date documentation.</p>
 </div>
-<div class="section" id="overview">
+<section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Permalink naar deze titel">¶</a></h2>
 <p>Being able to style our features programmatically through javascript is a nice
 feature. This was added in <a class="reference internal" href="ms-rfc-102.html#rfc102"><span class="std std-ref">MS RFC 102: Support of Styleitem JavaScript Plugin</span></a>. It allows us to avoid writing many
 classes and styles in the mapfile. An additional use case of javascript could be
 the ability to modify the geometry of the feature based on the input geometry
 and/or its attributes.</p>
-</div>
-<div class="section" id="proposed-solution">
+</section>
+<section id="proposed-solution">
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Permalink naar deze titel">¶</a></h2>
 <p>This RFC proposes the addition of a GEOMTRANSFORM javascript plugin. It will
 allow us to modify the geometry programmatically through javascript. This is
 similar to the built-in geomtransform (buffer, centroid, etc.), but allows you
 to implement your own logic using javascript. Additionally, you will be able to modify
 a geometry based on its attributes values.</p>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink naar deze titel">¶</a></h2>
 <p>MapServer will have a new GEOMTRANSFORM keyword: <cite>javascript</cite>. This will point
 to a javascript file, which needs to return a new geometry. The following objects
@@ -197,7 +198,7 @@ will be exposed for the purpose:</p>
 <p>However, only a limited set of their properties will be available in JavaScript
 (for the moment). The geomtransform looks for a function named <cite>geomtransform</cite>
 and calls it.</p>
-<div class="section" id="internal-implementation-details">
+<section id="internal-implementation-details">
 <h3>3.1 Internal Implementation Details<a class="headerlink" href="#internal-implementation-details" title="Permalink naar deze titel">¶</a></h3>
 <ul class="simple">
 <li><p>New binding v8 file structure: will be in mapscript/v8.</p></li>
@@ -213,8 +214,8 @@ possible. This is also mandatory to create a new geometry.</p></li>
 geomtransform rather than coding in the global scope.</p></li>
 </ul>
 </div></blockquote>
-</div>
-<div class="section" id="mapfile-and-javascript-examples">
+</section>
+<section id="mapfile-and-javascript-examples">
 <h3>3.2 Mapfile and JavaScript Examples<a class="headerlink" href="#mapfile-and-javascript-examples" title="Permalink naar deze titel">¶</a></h3>
 <p>Here is an example of GEOMTRANSFORM javascript.</p>
 <p>mapfile:</p>
@@ -245,8 +246,8 @@ geomtransform rather than coding in the global scope.</p></li>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="modifying-the-geometry-in-styleitem-javascript">
+</section>
+<section id="modifying-the-geometry-in-styleitem-javascript">
 <h3>3.3 Modifying the geometry in Styleitem Javascript<a class="headerlink" href="#modifying-the-geometry-in-styleitem-javascript" title="Permalink naar deze titel">¶</a></h3>
 <p>You can use styleitem javascript in combination with the geomtransform
 javascript. However, this adds some overhead since two javascript scripts are
@@ -270,34 +271,34 @@ this method though. (ie. not sure if it is safe to return another type of geomet
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="files-affected">
+</section>
+<section id="files-affected">
 <h3>3.4 Files affected<a class="headerlink" href="#files-affected" title="Permalink naar deze titel">¶</a></h3>
 <ul class="simple">
 <li><p>mapv8.cpp: Generic implementation of the V8 support.</p></li>
 <li><p>mapscript/v8: New mapscript directory for the binding.</p></li>
 </ul>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h3>3.5 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink naar deze titel">¶</a></h3>
 <p>New functionality, but affects a little bit the <a class="reference internal" href="ms-rfc-102.html#rfc102"><span class="std std-ref">MS RFC 102: Support of Styleitem JavaScript Plugin</span></a> (We don’t return values in the global scope any more).</p>
-</div>
-<div class="section" id="mapscript-changes">
+</section>
+<section id="mapscript-changes">
 <h3>3.6 MapScript changes<a class="headerlink" href="#mapscript-changes" title="Permalink naar deze titel">¶</a></h3>
 <p>New mapscript bindings.</p>
-</div>
-</div>
-<div class="section" id="bug-id">
+</section>
+</section>
+<section id="bug-id">
 <h2>4. Bug ID<a class="headerlink" href="#bug-id" title="Permalink naar deze titel">¶</a></h2>
 <ul class="simple">
 <li><p>Pull request: <a class="reference external" href="https://github.com/MapServer/MapServer/pull/4827">https://github.com/MapServer/MapServer/pull/4827</a></p></li>
 </ul>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>5. Voting history<a class="headerlink" href="#voting-history" title="Permalink naar deze titel">¶</a></h2>
 <p>Passed with +1 from Stephen, Daniel, Thomas, Stephan, Tamas, Jeff, Mike, Assefa, Steve and Perry</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -371,8 +372,8 @@ this method though. (ie. not sure if it is safe to return another type of geomet
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Laatste aanpassing op 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

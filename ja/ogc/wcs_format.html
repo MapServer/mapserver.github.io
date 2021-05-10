@@ -4,12 +4,13 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>WCS Use Cases &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="wcs-use-cases">
+  <section id="wcs-use-cases">
 <span id="wcs-format"></span><span id="index-0"></span><h1><a class="toc-backref" href="#id1">WCS Use Cases</a><a class="headerlink" href="#wcs-use-cases" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Author</dt>
@@ -178,7 +179,7 @@
 NetCDF temporal/banded data through the MapServer WCS interface. Thanks go to
 Steve Lime and Frank Warmerdam for their assistance with these projects</p>
 <p>It also shows how to configure MapServer for GRIB2 output format.</p>
-<div class="section" id="landsat">
+<section id="landsat">
 <h2><a class="toc-backref" href="#id1">Landsat</a><a class="headerlink" href="#landsat" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>To serve Landsat imagery through the MapServer Web Coverage Service specify
 the <a class="reference internal" href="../mapfile/outputformat.html#outputformat"><span class="std std-ref">OUTPUTFORMAT</span></a> object. For format support install the GDAL library
@@ -227,8 +228,8 @@ MapFile) by creating a URL with the elements: - Your Server, MapServer
 Program, Location of MapFile, Type of Service (WCS), Request (GetCoverage),
 Coverage (Landsat7), BBOX (0,0,700005,1050000), CRS (EPSG:27700), ResX (75)
 ResY (75), Format (ECW).</p>
-</div>
-<div class="section" id="spot">
+</section>
+<section id="spot">
 <h2><a class="toc-backref" href="#id1">SPOT</a><a class="headerlink" href="#spot" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>SPOT imagery can be delivered through MapServer Web Coverage Service similarly
 to the Landsat example above. The main difference is that as SPOT is a
@@ -274,8 +275,8 @@ are:</p>
 <p>The following examples further demonstrate how WCS can be implemented and also
 how to create WCS containing layers with a temporal dimension (see NetCDF
 example).</p>
-</div>
-<div class="section" id="dem">
+</section>
+<section id="dem">
 <h2><a class="toc-backref" href="#id1">DEM</a><a class="headerlink" href="#dem" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>It is possible to deliver 16 bit DEM data through the MapServer Web Coverage
 Service.</p>
@@ -312,8 +313,8 @@ Service.</p>
 </div>
 <p>Performance gains can be made by using the gdaladdo utility described at
 <a class="reference external" href="https://gdal.org/programs/gdaladdo.html">https://gdal.org/programs/gdaladdo.html</a></p>
-</div>
-<div class="section" id="netcdf">
+</section>
+<section id="netcdf">
 <h2><a class="toc-backref" href="#id1">NetCDF</a><a class="headerlink" href="#netcdf" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Firstly GDAL doesn't support all versions of netCDF (there are a lot, it is a
 generic format), so for stability it may be necessary to convert the files
@@ -339,77 +340,43 @@ placed inline comments below. The script assumes that gdaltindex has already
 been run in this directory to create a tile index shape and dbf file. It
 assumes that the filenames of your data files have the date in the filename,
 for example myfileYYYYMMDDHH.tif</p>
-<div class="highlight-perl notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="c1">#!/usr/bin/perl</span>
-  <span class="k">use</span> <span class="nn">XBase</span><span class="p">;</span>
-  <span class="nb">opendir</span><span class="p">(</span><span class="n">DIR</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">);</span> <span class="c1"># open the current directory</span>
-  <span class="k">foreach</span> <span class="nv">$file</span> <span class="p">(</span><span class="nb">readdir</span><span class="p">(</span><span class="n">DIR</span><span class="p">))</span> <span class="p">{</span>
-    <span class="k">next</span> <span class="k">if</span> <span class="o">!</span><span class="p">(</span><span class="nv">$file</span> <span class="o">=~</span><span class="sr"> /\.dbf$/</span><span class="p">);</span> <span class="c1"># read the dbf file in this directory created by gdaltindex</span>
-    <span class="k">print</span> <span class="s">&quot;Working on $file...\n&quot;</span><span class="p">;</span>
-    <span class="nv">$tfile</span> <span class="o">=</span> <span class="s">&#39;temporary.dbf&#39;</span><span class="p">;</span>
-    <span class="nb">system</span><span class="p">(</span><span class="s">&quot;mv $file $tfile&quot;</span><span class="p">);</span>
-    <span class="nv">$oldtable</span> <span class="o">=</span> <span class="k">new</span> <span class="n">XBase</span> <span class="nv">$tfile</span> <span class="ow">or</span> <span class="nb">die</span> <span class="nn">XBase</span><span class="o">-&gt;</span><span class="n">errstr</span><span class="p">;</span>
-    <span class="k">print</span> <span class="nb">join</span><span class="p">(</span><span class="s">&quot;\t&quot;</span><span class="p">,</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_names</span><span class="p">)</span> <span class="o">.</span><span class="s">&quot;\n&quot;</span><span class="p">;</span>
-    <span class="k">print</span> <span class="nb">join</span><span class="p">(</span><span class="s">&quot;\t&quot;</span><span class="p">,</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_types</span><span class="p">)</span> <span class="o">.</span><span class="s">&quot;\n&quot;</span><span class="p">;</span>
-    <span class="k">print</span> <span class="nb">join</span><span class="p">(</span><span class="s">&quot;\t&quot;</span><span class="p">,</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_lengths</span><span class="p">)</span> <span class="o">.</span><span class="s">&quot;\n&quot;</span><span class="p">;</span>
-    <span class="k">print</span> <span class="nb">join</span><span class="p">(</span><span class="s">&quot;\t&quot;</span><span class="p">,</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_decimals</span><span class="p">)</span> <span class="o">.</span><span class="s">&quot;\n&quot;</span><span class="p">;</span>
-    <span class="nv">$newtable</span> <span class="o">=</span> <span class="nn">XBase</span><span class="o">-&gt;</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="nv">$file</span><span class="p">,</span>
-                  <span class="s">&quot;field_names&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_names</span><span class="p">,</span> <span class="s">&quot;IMGDATE&quot;</span><span class="p">],</span>  <span class="c1"># this is the FILTERITEM in the corresponding tile index layer within your mapfile</span>
-                  <span class="s">&quot;field_types&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_types</span><span class="p">,</span> <span class="s">&quot;C&quot;</span><span class="p">],</span>  <span class="c1"># character column type</span>
-                  <span class="s">&quot;field_lengths&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_lengths</span><span class="p">,</span> <span class="mi">13</span><span class="p">],</span> <span class="c1"># length of the date string</span>
-                  <span class="s">&quot;field_decimals&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_decimals</span><span class="p">,</span> <span class="nb">undef</span><span class="p">])</span> <span class="ow">or</span> <span class="nb">die</span> <span class="s">&quot;Error creating new table.&quot;</span><span class="p">;</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="mi">0</span> <span class="o">..</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">last_record</span><span class="p">)</span> <span class="p">{</span>
-    <span class="p">(</span><span class="nv">$deleted</span><span class="p">,</span> <span class="nv">@data</span><span class="p">)</span> <span class="o">=</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">get_record</span><span class="p">(</span><span class="nv">$_</span><span class="p">);</span>
-    <span class="k">print</span> <span class="s">&quot;  ...record $data[0]\n&quot;</span><span class="p">;</span>
-        <span class="c1"># extract the date</span>
-        <span class="nv">$year</span> <span class="o">=</span> <span class="nb">substr</span> <span class="nv">$data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">;</span>  <span class="c1"># year  is at position 8 in the filename string</span>
-        <span class="nv">$month</span> <span class="o">=</span> <span class="nb">substr</span> <span class="nv">$data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">;</span>  <span class="c1"># month is at position 12 in the filename string</span>
-        <span class="nv">$day</span> <span class="o">=</span> <span class="nb">substr</span> <span class="nv">$data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">2</span><span class="p">;</span> <span class="c1"># day is at position 14 in the filename string</span>
-        <span class="nv">$hour</span> <span class="o">=</span> <span class="nb">substr</span> <span class="nv">$data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">2</span><span class="p">;</span>  <span class="c1"># hour is at position 16 in the filename string</span>
-        <span class="nv">$date</span> <span class="o">=</span>  <span class="s">&quot;$year-$month-$day&quot;</span> <span class="o">.</span> <span class="s">&quot;T&quot;</span> <span class="o">.</span> <span class="s">&quot;$hour\n&quot;</span><span class="p">;</span> <span class="c1"># format is YYYY-MM-DDTHH, or any ISO format</span>
-     <span class="k">print</span> <span class="s">&quot;$date&quot;</span><span class="p">;</span>
-        <span class="nb">push</span> <span class="nv">@data</span><span class="p">,</span> <span class="s">&quot;$date&quot;</span><span class="p">;</span>
-    <span class="nv">$newtable</span><span class="o">-&gt;</span><span class="n">set_record</span><span class="p">(</span><span class="nv">$_</span><span class="p">,</span> <span class="nv">@data</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="nv">$newtable</span><span class="o">-&gt;</span><span class="nb">close</span><span class="p">();</span>
-    <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="nb">close</span><span class="p">();</span>
-    <span class="nb">unlink</span><span class="p">(</span><span class="nv">$tfile</span><span class="p">);</span>
-  <span class="p">}</span>
+<div class="highlight-perl notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>  <span class="c1">#!/usr/bin/perl</span>
+<span class="linenos"> 2</span>  <span class="k">use</span> <span class="nn">XBase</span><span class="p">;</span>
+<span class="linenos"> 3</span>  <span class="nb">opendir</span><span class="p">(</span><span class="n">DIR</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">);</span> <span class="c1"># open the current directory</span>
+<span class="linenos"> 4</span>  <span class="k">foreach</span> <span class="nv">$file</span> <span class="p">(</span><span class="nb">readdir</span><span class="p">(</span><span class="n">DIR</span><span class="p">))</span> <span class="p">{</span>
+<span class="linenos"> 5</span>    <span class="k">next</span> <span class="k">if</span> <span class="o">!</span><span class="p">(</span><span class="nv">$file</span> <span class="o">=~</span><span class="sr"> /\.dbf$/</span><span class="p">);</span> <span class="c1"># read the dbf file in this directory created by gdaltindex</span>
+<span class="linenos"> 6</span>    <span class="k">print</span> <span class="s">&quot;Working on $file...\n&quot;</span><span class="p">;</span>
+<span class="linenos"> 7</span>    <span class="nv">$tfile</span> <span class="o">=</span> <span class="s">&#39;temporary.dbf&#39;</span><span class="p">;</span>
+<span class="linenos"> 8</span>    <span class="nb">system</span><span class="p">(</span><span class="s">&quot;mv $file $tfile&quot;</span><span class="p">);</span>
+<span class="linenos"> 9</span>    <span class="nv">$oldtable</span> <span class="o">=</span> <span class="k">new</span> <span class="n">XBase</span> <span class="nv">$tfile</span> <span class="ow">or</span> <span class="nb">die</span> <span class="nn">XBase</span><span class="o">-&gt;</span><span class="n">errstr</span><span class="p">;</span>
+<span class="linenos">10</span>    <span class="k">print</span> <span class="nb">join</span><span class="p">(</span><span class="s">&quot;\t&quot;</span><span class="p">,</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_names</span><span class="p">)</span> <span class="o">.</span><span class="s">&quot;\n&quot;</span><span class="p">;</span>
+<span class="linenos">11</span>    <span class="k">print</span> <span class="nb">join</span><span class="p">(</span><span class="s">&quot;\t&quot;</span><span class="p">,</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_types</span><span class="p">)</span> <span class="o">.</span><span class="s">&quot;\n&quot;</span><span class="p">;</span>
+<span class="linenos">12</span>    <span class="k">print</span> <span class="nb">join</span><span class="p">(</span><span class="s">&quot;\t&quot;</span><span class="p">,</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_lengths</span><span class="p">)</span> <span class="o">.</span><span class="s">&quot;\n&quot;</span><span class="p">;</span>
+<span class="linenos">13</span>    <span class="k">print</span> <span class="nb">join</span><span class="p">(</span><span class="s">&quot;\t&quot;</span><span class="p">,</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_decimals</span><span class="p">)</span> <span class="o">.</span><span class="s">&quot;\n&quot;</span><span class="p">;</span>
+<span class="linenos">14</span>    <span class="nv">$newtable</span> <span class="o">=</span> <span class="nn">XBase</span><span class="o">-&gt;</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="nv">$file</span><span class="p">,</span>
+<span class="linenos">15</span>                  <span class="s">&quot;field_names&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_names</span><span class="p">,</span> <span class="s">&quot;IMGDATE&quot;</span><span class="p">],</span>  <span class="c1"># this is the FILTERITEM in the corresponding tile index layer within your mapfile</span>
+<span class="linenos">16</span>                  <span class="s">&quot;field_types&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_types</span><span class="p">,</span> <span class="s">&quot;C&quot;</span><span class="p">],</span>  <span class="c1"># character column type</span>
+<span class="linenos">17</span>                  <span class="s">&quot;field_lengths&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_lengths</span><span class="p">,</span> <span class="mi">13</span><span class="p">],</span> <span class="c1"># length of the date string</span>
+<span class="linenos">18</span>                  <span class="s">&quot;field_decimals&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">field_decimals</span><span class="p">,</span> <span class="nb">undef</span><span class="p">])</span> <span class="ow">or</span> <span class="nb">die</span> <span class="s">&quot;Error creating new table.&quot;</span><span class="p">;</span>
+<span class="linenos">19</span>    <span class="k">foreach</span> <span class="p">(</span><span class="mi">0</span> <span class="o">..</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">last_record</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">20</span>    <span class="p">(</span><span class="nv">$deleted</span><span class="p">,</span> <span class="nv">@data</span><span class="p">)</span> <span class="o">=</span> <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="n">get_record</span><span class="p">(</span><span class="nv">$_</span><span class="p">);</span>
+<span class="linenos">21</span>    <span class="k">print</span> <span class="s">&quot;  ...record $data[0]\n&quot;</span><span class="p">;</span>
+<span class="linenos">22</span>        <span class="c1"># extract the date</span>
+<span class="linenos">23</span>        <span class="nv">$year</span> <span class="o">=</span> <span class="nb">substr</span> <span class="nv">$data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">;</span>  <span class="c1"># year  is at position 8 in the filename string</span>
+<span class="linenos">24</span>        <span class="nv">$month</span> <span class="o">=</span> <span class="nb">substr</span> <span class="nv">$data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">;</span>  <span class="c1"># month is at position 12 in the filename string</span>
+<span class="linenos">25</span>        <span class="nv">$day</span> <span class="o">=</span> <span class="nb">substr</span> <span class="nv">$data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">2</span><span class="p">;</span> <span class="c1"># day is at position 14 in the filename string</span>
+<span class="linenos">26</span>        <span class="nv">$hour</span> <span class="o">=</span> <span class="nb">substr</span> <span class="nv">$data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">2</span><span class="p">;</span>  <span class="c1"># hour is at position 16 in the filename string</span>
+<span class="linenos">27</span>        <span class="nv">$date</span> <span class="o">=</span>  <span class="s">&quot;$year-$month-$day&quot;</span> <span class="o">.</span> <span class="s">&quot;T&quot;</span> <span class="o">.</span> <span class="s">&quot;$hour\n&quot;</span><span class="p">;</span> <span class="c1"># format is YYYY-MM-DDTHH, or any ISO format</span>
+<span class="linenos">28</span>     <span class="k">print</span> <span class="s">&quot;$date&quot;</span><span class="p">;</span>
+<span class="linenos">29</span>        <span class="nb">push</span> <span class="nv">@data</span><span class="p">,</span> <span class="s">&quot;$date&quot;</span><span class="p">;</span>
+<span class="linenos">30</span>    <span class="nv">$newtable</span><span class="o">-&gt;</span><span class="n">set_record</span><span class="p">(</span><span class="nv">$_</span><span class="p">,</span> <span class="nv">@data</span><span class="p">);</span>
+<span class="linenos">31</span>    <span class="p">}</span>
+<span class="linenos">32</span>    <span class="nv">$newtable</span><span class="o">-&gt;</span><span class="nb">close</span><span class="p">();</span>
+<span class="linenos">33</span>    <span class="nv">$oldtable</span><span class="o">-&gt;</span><span class="nb">close</span><span class="p">();</span>
+<span class="linenos">34</span>    <span class="nb">unlink</span><span class="p">(</span><span class="nv">$tfile</span><span class="p">);</span>
+<span class="linenos">35</span>  <span class="p">}</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 <p>If have used the perl script then skip to the layer definitions below, if you
 wish to code your own the description is here.</p>
 <p>The DBF file has to have the column 'location' that indicates the location of
@@ -489,8 +456,8 @@ order to use it for WCS:</p>
 </div>
 <p>If your image has a colortable and only one band, it will come out greyscale
 unless you set the IMAGEMODE to PC256 instead of BYTE.</p>
-</div>
-<div class="section" id="grib2-output-format">
+</section>
+<section id="grib2-output-format">
 <h2><a class="toc-backref" href="#id1">GRIB2 output format</a><a class="headerlink" href="#grib2-output-format" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>This requires MapServer 7.2.0 for format-specific and layer-specific
 creation options mechanism, as well as GDAL 2.3.0 for GRIB2 output support.</p>
@@ -566,8 +533,8 @@ provided in FORMATOPTION)</p>
 provided in 'wcs_outputformat_GRIB_creationoption_{OPTIONNAME}')</p>
 <p>Credit: Support for per-layer creation options has been funded by Meteorological
 Service of Canada.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -633,8 +600,8 @@ Service of Canada.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      最終更新: 2021-04-30
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      最終更新: 2021-05-10
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

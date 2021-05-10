@@ -4,12 +4,13 @@
 <html lang="nl_NL">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 117: PHP 7 MapScript Support Through SWIG &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -140,7 +141,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-117-php-7-mapscript-support-through-swig">
+  <section id="ms-rfc-117-php-7-mapscript-support-through-swig">
 <span id="rfc117"></span><h1>MS RFC 117: PHP 7 MapScript Support Through SWIG<a class="headerlink" href="#ms-rfc-117-php-7-mapscript-support-through-swig" title="Permalink naar deze titel">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Author</dt>
@@ -159,7 +160,7 @@
 <dd class="field-odd"><p>Draft</p>
 </dd>
 </dl>
-<div class="section" id="motivation">
+<section id="motivation">
 <h2>1. Motivation<a class="headerlink" href="#motivation" title="Permalink naar deze titel">¶</a></h2>
 <p>The PHP 7.0.0 release in December 2015 was a substantial change in the backend
 structure and caused a complete break in builds for MapServer’s PHP MapScript
@@ -181,10 +182,12 @@ improvements over PHP 5.6 including:</p>
 <li><p>and more, see the <a class="reference external" href="http://php.net/manual/en/migration70.php/">PHP 7 Migration Guide</a></p></li>
 </ul>
 </div></blockquote>
-<div class="figure align-left" id="id1">
+<figure class="align-left" id="id1">
 <img alt="PHP 7 comparison" class="no-scaled-link" src="../../_images/php7-graph.jpg" style="width: 588.0px; height: 367.5px;" />
-<p class="caption"><span class="caption-text"><em>source: digitalocean.com</em></span><a class="headerlink" href="#id1" title="Permallink naar deze afbeelding">¶</a></p>
-</div>
+<figcaption>
+<p><span class="caption-text"><em>source: digitalocean.com</em></span><a class="headerlink" href="#id1" title="Permallink naar deze afbeelding">¶</a></p>
+</figcaption>
+</figure>
 <p>MapServer’s several mapscripts (Java, Python, Csharp) use the <a class="reference external" href="http://www.swig.org/">SWIG</a>
 library (wrapper library used to convert code into other languages) to automatically
 generate the necessary mapscript code; the existing PHP MapScript extension
@@ -193,8 +196,8 @@ Steering Committee (PSC) has also discussed the possibility of leveraging SWIG f
 the longterm support of PHP MapScript.</p>
 <p>The SWIG team has recently added support for PHP 7 in their development sandbox,
 it passes all of SWIG’s test suite, and has been well received by the community.</p>
-</div>
-<div class="section" id="proposed-enhancement">
+</section>
+<section id="proposed-enhancement">
 <h2>2. Proposed enhancement<a class="headerlink" href="#proposed-enhancement" title="Permalink naar deze titel">¶</a></h2>
 <p>Remove the custom extension code for PHP from MapServer, and enable SWIG for
 generating the PHP MapScript extension, by using the latest SWIG development
@@ -202,8 +205,8 @@ version with MapServer’s wrapper <cite>mapscript.i</cite>.  SWIG would automat
 generate a PHP extension that contains most of MapServer’s constants, objects,
 and methods. Similar to MapServer’s other SWIG-based languages, any custom
 PHP classes or functions would be defined in the new file <cite>/mapscript/php/phpextend.i</cite></p>
-</div>
-<div class="section" id="backwards-compatibility">
+</section>
+<section id="backwards-compatibility">
 <h2>2.2 Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="Permalink naar deze titel">¶</a></h2>
 <p>This change should automatically support both the PHP 5 and 7 series.  At some point
 the SWIG team will remove support for PHP 5 (they are discussing this now), but
@@ -214,12 +217,12 @@ likely it would match the <a class="reference external" href="http://php.net/sup
 <li><p>All SWIG PHP code will live in its own directory: <strong>/mapscript/phpng/</strong></p></li>
 <li><p>The module will be named <strong>phpng_mapscript.so</strong> or <strong>phpng_mapscript.dl</strong></p></li>
 </ol>
-</div>
-<div class="section" id="performance-implications">
+</section>
+<section id="performance-implications">
 <h2>2.3 Performance Implications<a class="headerlink" href="#performance-implications" title="Permalink naar deze titel">¶</a></h2>
 <p>As mentioned above, this should give a huge performance boost.</p>
-</div>
-<div class="section" id="limitations">
+</section>
+<section id="limitations">
 <h2>2.4 Limitations<a class="headerlink" href="#limitations" title="Permalink naar deze titel">¶</a></h2>
 <ol class="arabic">
 <li><p>Packagers/packages relying on stable releases won’t be likely to include SWIG-dev,
@@ -281,10 +284,10 @@ such as:</p>
 </div>
 </li>
 </ol>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink naar deze titel">¶</a></h2>
-<div class="section" id="affected-files">
+<section id="affected-files">
 <h3>3.1 Affected files<a class="headerlink" href="#affected-files" title="Permalink naar deze titel">¶</a></h3>
 <ul class="simple">
 <li><p>mapscript.i: add reference to <cite>phpextend.i</cite></p></li>
@@ -312,8 +315,8 @@ such as:</p>
 </ul>
 </li>
 </ul>
-</div>
-<div class="section" id="tracking-issue">
+</section>
+<section id="tracking-issue">
 <h3>3.2 Tracking Issue<a class="headerlink" href="#tracking-issue" title="Permalink naar deze titel">¶</a></h3>
 <ul class="simple">
 <li><p>current status:</p>
@@ -333,8 +336,8 @@ a mapfile and saves the image file, on Windows</p></li>
 <li><p>tests: need to update all of the existing PHP tests in /msautotest/php/</p></li>
 <li><p>ticket: <a class="reference external" href="https://github.com/MapServer/MapServer/issues/5252">https://github.com/MapServer/MapServer/issues/5252</a></p></li>
 </ul>
-</div>
-<div class="section" id="documentation">
+</section>
+<section id="documentation">
 <h3>3.3 Documentation<a class="headerlink" href="#documentation" title="Permalink naar deze titel">¶</a></h3>
 <ul class="simple">
 <li><p>Any changes to existing functions, or custom ones, will be added into the
@@ -343,13 +346,13 @@ document</p></li>
 <li><p>the existing <a class="reference external" href="https://mapserver.org/mapscript/php/phpmapscript.html">PHP API</a>
 document would contain a note mentioning deprecated for version &gt;=7.2</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="voting-history">
+</section>
+</section>
+<section id="voting-history">
 <h2>4. Voting History<a class="headerlink" href="#voting-history" title="Permalink naar deze titel">¶</a></h2>
 <p>TBD</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -422,8 +425,8 @@ document would contain a note mentioning deprecated for version &gt;=7.2</p></li
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Laatste aanpassing op 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

@@ -4,12 +4,13 @@
 <html lang="ru">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 15: Support for thread neutral operation of MapServer/MapScript &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-15-support-for-thread-neutral-operation-of-mapserver-mapscript">
+  <section id="ms-rfc-15-support-for-thread-neutral-operation-of-mapserver-mapscript">
 <span id="rfc15"></span><h1>MS RFC 15: Support for thread neutral operation of MapServer/MapScript<a class="headerlink" href="#ms-rfc-15-support-for-thread-neutral-operation-of-mapserver-mapscript" title="Ссылка на этот заголовок">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -160,7 +161,7 @@
 <dd class="field-odd"><p>Not assigned yet</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Ссылка на этот заголовок">¶</a></h2>
 <p>By this time the core MapServer code has become widely used by many of the
 different application models. The extended usage of MapScript causes the
@@ -178,8 +179,8 @@ current approach uses process-wide locks to ensure the safe access to these
 variables causing performance degradation in multithreaded environments.
 Currently this behavior may be controlled by the USE_THREAD
 compilation switch.</p>
-</div>
-<div class="section" id="purpose">
+</section>
+<section id="purpose">
 <h2>2. Purpose<a class="headerlink" href="#purpose" title="Ссылка на этот заголовок">¶</a></h2>
 <p>The purpose of this change is to get a significant performance boost by
 removing «big locks» from the code. It would add a significant improvement of
@@ -188,8 +189,8 @@ simultaneously. This activity could bring in a more feasible support for
 some application models not really aimed at now like Microsoft ASP.NET. May
 result in higher clarity of the code by determining the code segments
 affected by multiple threads.</p>
-</div>
-<div class="section" id="general-principles-of-the-solution">
+</section>
+<section id="general-principles-of-the-solution">
 <h2>2. General principles of the solution<a class="headerlink" href="#general-principles-of-the-solution" title="Ссылка на этот заголовок">¶</a></h2>
 <p>This RFC is in a special situation since wide area of the code is to be
 reviewed and extensive developer support is needed. The proposal will reach
@@ -202,16 +203,16 @@ primary author Tamas Szekeres will be responsible to make the changes.</p>
 <p>The problems of the current implementation and the proposed changes will be
 enumerated later. To handle these issues the following options will be
 considered ordering by the expediency. The latter is the less expedient.</p>
-</div>
-<div class="section" id="not-changing-the-code-considering-as-safe-without-locks">
+</section>
+<section id="not-changing-the-code-considering-as-safe-without-locks">
 <h2>2.1 Not changing the code (Considering as safe without locks)<a class="headerlink" href="#not-changing-the-code-considering-as-safe-without-locks" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Some of the process-wide global variables store invariant data - like
 enumerations - having been initialized at compilation time. Since these
 variables can be simultaneously read by multiple threads there is nothing
 to be done and even the locks should be removed - if exist - ensuring the
 thread isolation to be realized. Might be redeclared as «static const».</p>
-</div>
-<div class="section" id="retaining-the-variable-but-reconsidering-the-initialization-code">
+</section>
+<section id="retaining-the-variable-but-reconsidering-the-initialization-code">
 <h2>2.2 Retaining the variable, but reconsidering the initialization code<a class="headerlink" href="#retaining-the-variable-but-reconsidering-the-initialization-code" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Some of the global variables store invariant data but the initial value is
 assigned at run time during the module initialization phase. In this situation
@@ -222,14 +223,14 @@ of the variables. Mapscript language bindings are encouraged to provide
 calling msSetup automatically at module startup. The current locking
 strategy should be reviewed and the locks should be restricted to the
 initialization code.</p>
-</div>
-<div class="section" id="rewriting-the-code-to-eliminate-the-need-of-the-global-variable">
+</section>
+<section id="rewriting-the-code-to-eliminate-the-need-of-the-global-variable">
 <h2>2.3 Rewriting the code to eliminate the need of the global variable<a class="headerlink" href="#rewriting-the-code-to-eliminate-the-need-of-the-global-variable" title="Ссылка на этот заголовок">¶</a></h2>
 <p>If the global variable could be eliminated by changing the code structure we
 will consider to make these changes. The locks related to these variables
 should be removed.</p>
-</div>
-<div class="section" id="using-thread-local-variable-instead-of-the-global-one">
+</section>
+<section id="using-thread-local-variable-instead-of-the-global-one">
 <h2>2.4 Using thread local variable instead of the global one<a class="headerlink" href="#using-thread-local-variable-instead-of-the-global-one" title="Ссылка на этот заголовок">¶</a></h2>
 <p>When the usage of the global variable cannot be eliminated easily we will
 consider to use thread local variables instead. To implement thread local
@@ -247,8 +248,8 @@ implementation does not allow delay loading of the dll containing variables
 declared with __declspec(thread).</p>
 <p>The second approach is applicable, however rewriting the existing code may be
 more difficult. GDAL has a sample implementation for it might be taken over.</p>
-</div>
-<div class="section" id="not-changing-the-code-marking-as-safe-with-locks-will-be-reconsidered-later">
+</section>
+<section id="not-changing-the-code-marking-as-safe-with-locks-will-be-reconsidered-later">
 <h2>2.5 Not changing the code (Marking as safe with locks, will be reconsidered later)<a class="headerlink" href="#not-changing-the-code-marking-as-safe-with-locks-will-be-reconsidered-later" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Some of the MapServer code and/or the related external libraries may not be
 modified easily and will be protected by locks in this phase of the
@@ -256,16 +257,16 @@ realization. These issues will be kept open and the solution for the thread
 isolation might be reconsidered later. The open issues will be enumerated and
 documented along with the MapServer source files and the thread safety FAQ</p>
 <p><a class="reference external" href="http://mapserver.gis.umn.edu/docs/faq/thread_safety">http://mapserver.gis.umn.edu/docs/faq/thread_safety</a></p>
-</div>
-<div class="section" id="not-changing-the-code-marking-as-unsafe-will-be-deprecated-and-unsupported">
+</section>
+<section id="not-changing-the-code-marking-as-unsafe-will-be-deprecated-and-unsupported">
 <h2>2.6 Not changing the code (Marking as unsafe, will be deprecated and unsupported)<a class="headerlink" href="#not-changing-the-code-marking-as-unsafe-will-be-deprecated-and-unsupported" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Having lack of support of portions of the existing code may keep from changing
 the code easily. These portions of the code will not be modified in this
 phase of the realization. These issues will be kept open and might be
 reconsidered later. The open issues will be enumerated and documented
 along with the MapServer source files and the thread safety FAQ.</p>
-</div>
-<div class="section" id="issues-of-the-mapserver-mapscript-code">
+</section>
+<section id="issues-of-the-mapserver-mapscript-code">
 <h2>3. Issues of the MapServer /Mapscript code<a class="headerlink" href="#issues-of-the-mapserver-mapscript-code" title="Ссылка на этот заголовок">¶</a></h2>
 <p>This chapter will enumerate the sections of the existing code should be
 reconsidered according to the options mentioned previously. The line
@@ -590,25 +591,25 @@ mapscript\csharp\csmodule.i(41):       static $moduleHelper the$moduleHelper = n
 </pre></div>
 </div>
 <p>TODO</p>
-</div>
-<div class="section" id="issues-of-the-related-libraries">
+</section>
+<section id="issues-of-the-related-libraries">
 <h2>3. Issues of the related libraries<a class="headerlink" href="#issues-of-the-related-libraries" title="Ссылка на этот заголовок">¶</a></h2>
 <p>TODO</p>
-</div>
-<div class="section" id="considerations-for-the-future-development">
+</section>
+<section id="considerations-for-the-future-development">
 <h2>4. Considerations for the future development<a class="headerlink" href="#considerations-for-the-future-development" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Developers should keep in mind that their code may be called by multiple
 threads simultaneously. Using process-wide global variables modified at run
 time will be discouraged in the future. If the usage is inevitable the
 variables should be protected by using mutual exclusion properly depending
 on the USE_THREAD constant.</p>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>5. Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Ссылка на этот заголовок">¶</a></h2>
 <p>This is binary and source code level backward incompatible change.
 The compatibility of the mapscript interface might be kept.</p>
-</div>
-<div class="section" id="bug-id">
+</section>
+<section id="bug-id">
 <h2>Bug ID<a class="headerlink" href="#bug-id" title="Ссылка на этот заголовок">¶</a></h2>
 <dl class="simple">
 <dt>The following bug is added as a primary source for collecting the developer</dt><dd><p>and user response. Nevertheless the MapServer users and developers list
@@ -617,12 +618,12 @@ primary author.</p>
 </dd>
 </dl>
 <p>Bug <a class="reference external" href="https://github.com/MapServer/MapServer/issues/1764">1764</a></p>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>Voting history<a class="headerlink" href="#voting-history" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Still not proposed for voting</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -698,8 +699,8 @@ primary author.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Обновлено: 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Обновлено: 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

@@ -4,12 +4,13 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 89: Layer Geomtransforms &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-89-layer-geomtransforms">
+  <section id="ms-rfc-89-layer-geomtransforms">
 <span id="rfc89"></span><h1>MS RFC 89: Layer Geomtransforms<a class="headerlink" href="#ms-rfc-89-layer-geomtransforms" title="Enlazar permanentemente con este título">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -160,7 +161,7 @@
 <dd class="field-odd"><p>MapServer 6.4</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>MapServer 6.0 introduced the concept of geometry expressions within a styleObj-geomtransform. For
 example, one could write:</p>
@@ -179,8 +180,8 @@ simplify our lines.</p>
 <p>This is a proposal to add a the ability to set a geomtransform at the layer
 level. For more information about the geomtransform implemented for the style
 object: see <a class="reference external" href="https://mapserver.org/development/rfc/ms-rfc-48.html">https://mapserver.org/development/rfc/ms-rfc-48.html</a>.</p>
-</div>
-<div class="section" id="the-proposed-solution">
+</section>
+<section id="the-proposed-solution">
 <h2>2. The proposed solution<a class="headerlink" href="#the-proposed-solution" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>This RFC proposes the addition of a new layer option: GEOMTRANSFORM. The
 functionality is mostly the same than the the style geomtransform, except that
@@ -207,15 +208,15 @@ bbox, start, end, vertices. All other parameters will be accepted (EXPRESSIONS).
 completely independent. Both can be used in your layer/class
 definitions and they will be applied properly.</p>
 </div>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>2.1 Implementation Details<a class="headerlink" href="#implementation-details" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Layer geomtransform would support all query requests. The logic of the
 geomtransform will be done in msLayerNextShape() and msLayerGetShape()
 functions. This would allow a user to interact with transformed
 features. ie. mapscript, WFS.</p>
-</div>
-<div class="section" id="unit-coordinates">
+</section>
+<section id="unit-coordinates">
 <h2>2.2 Unit Coordinates<a class="headerlink" href="#unit-coordinates" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>There is a particularity between STYLE and LAYER GEOMTRANSFORM. STYLE-level
 GEOMTRANSFORM receives a shape in pixel coordinates, whereas the LAYER-level
@@ -241,8 +242,8 @@ i.e. pixels at the STYLE-level and in ground units at the LAYER-level.</p>
 <p>It is also not possible at all to deal with values in ground units at the style
 level because we do not have information about map cellsize at that level in the
 code</p>
-</div>
-<div class="section" id="pixel-value-at-layer-level">
+</section>
+<section id="pixel-value-at-layer-level">
 <h2>2.3 Pixel value at Layer level<a class="headerlink" href="#pixel-value-at-layer-level" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>In cases where we want to pass a pixel value at the layer level, a
 [map_cellsize] variable will be available.</p>
@@ -259,13 +260,13 @@ code</p>
 has to be converted into the layer ground unit. If you choose to use [map_cellsize]
 in your GEOMTRANSFORM expression, you must explicitly set the UNITS option in
 the layer.</p>
-</div>
-<div class="section" id="vector-formats-supported">
+</section>
+<section id="vector-formats-supported">
 <h2>2.4 Vector formats supported<a class="headerlink" href="#vector-formats-supported" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>All vector formats will be supported. This also include all formats of OGR
 (CONNECTIONTYPE OGR).</p>
-</div>
-<div class="section" id="new-geomtransform-parameters">
+</section>
+<section id="new-geomtransform-parameters">
 <h2>3. New Geomtransform Parameters<a class="headerlink" href="#new-geomtransform-parameters" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>3 new parameters will be added as a geomtransform parameter:</p>
 <ul class="simple">
@@ -279,35 +280,35 @@ original shape and the red one the transformed shape):</p>
 <blockquote>
 <div><img alt="../../_images/simplifypt.png" src="../../_images/simplifypt.png" />
 </div></blockquote>
-</div>
-<div class="section" id="mapscript">
+</section>
+<section id="mapscript">
 <h2>4. MapScript<a class="headerlink" href="#mapscript" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>The ability to get/set the layer-level geomtransform will be added to
 mapscript. The geomtransform is handled internally and does not affect anything
 else.</p>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>5. Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>This change provides a new functionality with no backwards
 compatibility issues being considered.</p>
-</div>
-<div class="section" id="tests">
+</section>
+<section id="tests">
 <h2>6. Tests<a class="headerlink" href="#tests" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>msautotest will be modified to add some tests of this new functionality.</p>
-</div>
-<div class="section" id="bug-id">
+</section>
+<section id="bug-id">
 <h2>7. Bug ID<a class="headerlink" href="#bug-id" title="Enlazar permanentemente con este título">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
 <li><p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/4592">https://github.com/MapServer/MapServer/issues/4592</a></p></li>
 </ul>
 </div></blockquote>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>8. Voting history<a class="headerlink" href="#voting-history" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>+1 from Jeff, Olivier, Stephen, Michael, Umberto and Steve.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -380,8 +381,8 @@ compatibility issues being considered.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Derechos de autor</a> 2021, Open Source Geospatial Foundation.
-      Actualizado por última vez en 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Actualizado por última vez en 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

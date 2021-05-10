@@ -4,12 +4,13 @@
 <html lang="it">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 104: Replace BITMAP labels with embedded Truetype font &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-104-replace-bitmap-labels-with-embedded-truetype-font">
+  <section id="ms-rfc-104-replace-bitmap-labels-with-embedded-truetype-font">
 <span id="rfc104"></span><h1>MS RFC 104: Replace BITMAP labels with embedded Truetype font<a class="headerlink" href="#ms-rfc-104-replace-bitmap-labels-with-embedded-truetype-font" title="Link a questa intestazione">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -160,7 +161,7 @@
 <dd class="field-odd"><p>MapServer 7.0</p>
 </dd>
 </dl>
-<div class="section" id="the-current-situation">
+<section id="the-current-situation">
 <h2>1. The Current Situation<a class="headerlink" href="#the-current-situation" title="Link a questa intestazione">¶</a></h2>
 <p>MapServer supports embedded BITMAP fonts for the simple rendering
 of text without need for external font files or fontsets. These are
@@ -185,7 +186,7 @@ for rapid mapfile prototyping.</p></li>
 <li><p>They do not go through freetype for rendering and thus are extremely fast
 to render (which seems only fair given their limitations)</p></li>
 </ul>
-<div class="section" id="upcoming-evolution">
+<section id="upcoming-evolution">
 <h3>1.1 Upcoming Evolution<a class="headerlink" href="#upcoming-evolution" title="Link a questa intestazione">¶</a></h3>
 <p>With the arrival of <a class="reference internal" href="ms-rfc-98.html#rfc98"><span class="std std-ref">MS RFC 98: Label/Text Rendering Overhaul</span></a> and <a class="reference internal" href="ms-rfc-99.html#rfc99"><span class="std std-ref">MS RFC 99: Remove support for GD renderer</span></a>, maintaining the support
 for bitmap fonts requires quite a number of warts in the code. Given this and
@@ -194,16 +195,16 @@ the BITMAP font support throughout the MapServer codebase.</p>
 <p>To maintain the ability to rapidly prototype mapfiles and/or to not have to
 rely on external truetype fonts and fontsets, they will however be replaced
 by an embedded truetype font.</p>
-</div>
-</div>
-<div class="section" id="embedded-truetype-font">
+</section>
+</section>
+<section id="embedded-truetype-font">
 <h2>2. Embedded Truetype Font<a class="headerlink" href="#embedded-truetype-font" title="Link a questa intestazione">¶</a></h2>
 <p>A Truetype font will be encoded and included as a binary blob inside the
 mapserver library. It will be used whenever no specific font has been supplied
 by the mapfile user, or as a backwards compatibility fallback when bitmap
 fonts are requested.</p>
-</div>
-<div class="section" id="implications">
+</section>
+<section id="implications">
 <h2>2.1 Implications<a class="headerlink" href="#implications" title="Link a questa intestazione">¶</a></h2>
 <ul class="simple">
 <li><p>Embedded truetype fonts will be automatically supported by all renderers</p></li>
@@ -214,24 +215,24 @@ fonts are requested.</p>
 <li><p>Due to the graphic quality of the rendered text, image sizes will be slightly
 larger than with bitmap fonts (due to the antialiasing).</p></li>
 </ul>
-</div>
-<div class="section" id="backwards-compatibility">
+</section>
+<section id="backwards-compatibility">
 <h2>2.2 Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="Link a questa intestazione">¶</a></h2>
 <p>Rendered images when using embedded fonts will differ compared to the previous
 renderings with bitmap fonts. Aside from this point, no backwards incompatibility
 is to be expected: The bitmap keyword and label type will be ignored, and the
 TINY, SMALL, MEDIUM, LARGE and HUGE keyboard will be mapped to integer font
 sizes of matching visual height.</p>
-</div>
-<div class="section" id="performance-implications">
+</section>
+<section id="performance-implications">
 <h2>2.3 Performance Implications<a class="headerlink" href="#performance-implications" title="Link a questa intestazione">¶</a></h2>
 <p>Might be noticeable:</p>
 <ul class="simple">
 <li><p>Slower rendering of bitmap glyphs</p></li>
 <li><p>Larger image sizes</p></li>
 </ul>
-</div>
-<div class="section" id="future-improvements">
+</section>
+<section id="future-improvements">
 <h2>2.4 Future Improvements<a class="headerlink" href="#future-improvements" title="Link a questa intestazione">¶</a></h2>
 <p>These are not planned immediately, but could be investigated in the future
 depending on interest or funding:</p>
@@ -240,41 +241,41 @@ depending on interest or funding:</p>
 <li><p>Embedding multiple fonts</p></li>
 <li><p>Allowing aliased glyph rendering from freetype to minimize image size</p></li>
 </ul>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Link a questa intestazione">¶</a></h2>
-<div class="section" id="affected-files">
+<section id="affected-files">
 <h3>3.1 Affected files<a class="headerlink" href="#affected-files" title="Link a questa intestazione">¶</a></h3>
 <ul class="simple">
 <li><p>mapfile.c/h: parser, backwards compatibility</p></li>
 <li><p>mapagg.cpp, maplabel.c, textlayout.c, others…: bitmap support removal</p></li>
 </ul>
-</div>
-<div class="section" id="mapscript">
+</section>
+<section id="mapscript">
 <h3>3.2 MapScript<a class="headerlink" href="#mapscript" title="Link a questa intestazione">¶</a></h3>
 <p>Bitmap related functions could be extended to provide a warning the feature
 has been removed. No other changes should be required due to the transparent
 backwards compatibility handling.</p>
-</div>
-<div class="section" id="tracking-issue">
+</section>
+<section id="tracking-issue">
 <h3>3.3 Tracking Issue<a class="headerlink" href="#tracking-issue" title="Link a questa intestazione">¶</a></h3>
 <p>TBD</p>
-</div>
-</div>
-<div class="section" id="discussion">
+</section>
+</section>
+<section id="discussion">
 <h2>4. Discussion<a class="headerlink" href="#discussion" title="Link a questa intestazione">¶</a></h2>
 <p>The truetype file we embed shall have a licence that allows such usage,
 and a glyph coverage supporting most used languages while not being too large
 to limit memory consumption. Unless decided otherwise during the comment period,
 the chosen font will be the DejaVuSansCondensed.ttf truetype font commonly
 supplied with Linux distros.</p>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>5. Voting History<a class="headerlink" href="#voting-history" title="Link a questa intestazione">¶</a></h2>
 <p>+1 from SteveL, ThomasB, PericlesN, TamasS, TomK,
 StephanM, YewondwosssenA, MikeS, DanielM and StephenW</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -352,8 +353,8 @@ StephanM, YewondwosssenA, MikeS, DanielM and StephenW</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Ultimo aggiornamento 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Ultimo aggiornamento 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

@@ -4,12 +4,13 @@
 <html lang="id">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 119: Mapbox Vector Tile (MVT) Support &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-119-mapbox-vector-tile-mvt-support">
+  <section id="ms-rfc-119-mapbox-vector-tile-mvt-support">
 <span id="rfc119"></span><h1>MS RFC 119: Mapbox Vector Tile (MVT) Support<a class="headerlink" href="#ms-rfc-119-mapbox-vector-tile-mvt-support" title="Link permanen untuk headline ini">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -160,11 +161,11 @@
 <dd class="field-odd"><p>MapServer 7.2</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Link permanen untuk headline ini">¶</a></h2>
 <p>Mapbox vector tiles (MVT) represent an alternative to delivering tiled map data to the client. In contrast to raster tiles, vector tiles encode coordinate and attribute information across any number of geospatial layers. This allows for rich application development where geospatial data can be filtered and symbolized on the client without the need for extra server interactions. See the <a class="reference external" href="https://www.mapbox.com/vector-tiles/specification/">specification</a>.</p>
-</div>
-<div class="section" id="proposed-solution">
+</section>
+<section id="proposed-solution">
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Link permanen untuk headline ini">¶</a></h2>
 <p>This RFC proposes the implementation of the MVT specification (version 2.1) within MapServer and MapCache. Highlights include:</p>
 <ul class="simple">
@@ -172,12 +173,12 @@
 <li><p>MVT are implemented as a new output driver and can be used with mode=map, mode=tile or WMS actions</p></li>
 <li><p>the implementation introduces a new dependency on protobuf/protobuf-c</p></li>
 </ul>
-</div>
-<div class="section" id="new-and-updated-files">
+</section>
+<section id="new-and-updated-files">
 <h2>2.1 New and Updated Files<a class="headerlink" href="#new-and-updated-files" title="Link permanen untuk headline ini">¶</a></h2>
 <p>New and updated files are described here:</p>
-</div>
-<div class="section" id="mapserver">
+</section>
+<section id="mapserver">
 <h2>2.1.1 MapServer<a class="headerlink" href="#mapserver" title="Link permanen untuk headline ini">¶</a></h2>
 <ul class="simple">
 <li><p>mapmvt.c (new): MVT implementation code</p></li>
@@ -189,8 +190,8 @@
 <li><p>mapserver.h (updated): register MVT renderer and public function (e.g. msMVTWriteTile())</p></li>
 <li><p>CMakeLists.txt (updated): add protobuf/protobuf-c rules</p></li>
 </ul>
-</div>
-<div class="section" id="mapcache">
+</section>
+<section id="mapcache">
 <h2>2.1.2 MapCache<a class="headerlink" href="#mapcache" title="Link permanen untuk headline ini">¶</a></h2>
 <ul class="simple">
 <li><p>include/mapcache.h (updated): new definitions for raw image format</p></li>
@@ -203,11 +204,11 @@
 <li><p>lib/source_wms.c (updated): add raw image format support</p></li>
 <li><p>lib/tileset.c (updated): add raw image format support</p></li>
 </ul>
-</div>
-<div class="section" id="configuration-notes">
+</section>
+<section id="configuration-notes">
 <h2>2.2 Configuration Notes<a class="headerlink" href="#configuration-notes" title="Link permanen untuk headline ini">¶</a></h2>
-</div>
-<div class="section" id="id1">
+</section>
+<section id="id1">
 <h2>2.2.1 MapServer<a class="headerlink" href="#id1" title="Link permanen untuk headline ini">¶</a></h2>
 <ul class="simple">
 <li><p>configuration of attribute data uses <cite>gml_</cite> or <cite>ows_</cite> metadata elements</p></li>
@@ -216,8 +217,8 @@
 <li><p>the MVT output format supports an option called EDGE_BUFFER which defines the amount of overlap between tiles in map units (default is 10)</p></li>
 <li><p>the MVT output format supports an option called EXTENT which defines tile extent in coordinate units (default is 4096). Feature geometries are converted from map coordinates to tile coordinates using this value.</p></li>
 </ul>
-</div>
-<div class="section" id="id2">
+</section>
+<section id="id2">
 <h2>2.2.2 MapCache<a class="headerlink" href="#id2" title="Link permanen untuk headline ini">¶</a></h2>
 <p>Sample configuration follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;format name=&quot;MVT&quot; type=&quot;RAW&quot;&gt;
@@ -246,8 +247,8 @@
 &lt;/tileset&gt;
 </pre></div>
 </div>
-</div>
-<div class="section" id="sample-mapserver-requests">
+</section>
+<section id="sample-mapserver-requests">
 <h2>2.3 Sample MapServer Requests<a class="headerlink" href="#sample-mapserver-requests" title="Link permanen untuk headline ini">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/cgi-bin/mapserv?map=mvt.map&amp;mode=tile&amp;tilemode=gmap&amp;tile=1935+2856+13&amp;layers=all&amp;map.imagetype=mvt
 </pre></div>
@@ -256,48 +257,48 @@
 &amp;SRS=EPSG:3857&amp;BBOX=-10434562.049185,5909509.084589,-10429689.188632,5914381.945142&amp;WIDTH=256&amp;HEIGHT=256&amp;FORMAT=application/x-protobuf
 </pre></div>
 </div>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Link permanen untuk headline ini">¶</a></h2>
-</div>
-<div class="section" id="id3">
+</section>
+<section id="id3">
 <h2>3.1.1 MapServer<a class="headerlink" href="#id3" title="Link permanen untuk headline ini">¶</a></h2>
 <p>The implementation has three primary components. The MVT output driver, driver registration and calling the driver as appropriate when making a map, tile or WMS request, The implementation is non-invasive and has mimimal impact on the existing code base.</p>
-</div>
-<div class="section" id="id4">
+</section>
+<section id="id4">
 <h2>3.1.2 MapCache<a class="headerlink" href="#id4" title="Link permanen untuk headline ini">¶</a></h2>
 <p>The implementation implements a new raw image format. Basically we don't know anything about the format other that a file extension and mime-type. As a result features like metatile support and symbolic links for blank tiles are not supported. One bonus is that this image format can also be used for UTFGrids generated by MapServer - and presumably other sources.</p>
-</div>
-<div class="section" id="limitations">
+</section>
+<section id="limitations">
 <h2>4. Limitations<a class="headerlink" href="#limitations" title="Link permanen untuk headline ini">¶</a></h2>
-</div>
-<div class="section" id="id5">
+</section>
+<section id="id5">
 <h2>4.1.1 MapServer<a class="headerlink" href="#id5" title="Link permanen untuk headline ini">¶</a></h2>
 <p>The current implementation can only be used with mode=map, mode=tile and WMS requests. Rendering a query result (think QUERYMAP) is possible but is not implemented at this time. It is not clear what the use case is for that support.</p>
-</div>
-<div class="section" id="id6">
+</section>
+<section id="id6">
 <h2>4.1.2 MapCache<a class="headerlink" href="#id6" title="Link permanen untuk headline ini">¶</a></h2>
 <p>Only the WMS source was updated to handle the raw image format.</p>
 <p>Testing was done with disk and SQLite caches. The latter required no changes so it is possible that other caches will work out-of-the-box. The disk cache needed update to address blank tile handling.</p>
 <p>The WMS service does not support pass-through requests for raw image caches. It may be possible but seems like it would provide limited value.</p>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>5. Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link permanen untuk headline ini">¶</a></h2>
 <p>None anticipated, but as mentioned previously this does introduce new dependencies on the protobuf and protobuf-c libraries.</p>
-</div>
-<div class="section" id="security-implications">
+</section>
+<section id="security-implications">
 <h2>6. Security implications<a class="headerlink" href="#security-implications" title="Link permanen untuk headline ini">¶</a></h2>
 <p>None anticipated.</p>
-</div>
-<div class="section" id="performance-implications">
+</section>
+<section id="performance-implications">
 <h2>7. Performance implications<a class="headerlink" href="#performance-implications" title="Link permanen untuk headline ini">¶</a></h2>
 <p>No impacts on core performance are anticipated.</p>
-</div>
-<div class="section" id="documentation-needs">
+</section>
+<section id="documentation-needs">
 <h2>8. Documentation needs<a class="headerlink" href="#documentation-needs" title="Link permanen untuk headline ini">¶</a></h2>
 <p>The primary need will be in educating users on what do with MVT files. In reality that goes beyond the scope of MapServer but letting folks know what clients exist to render MVT tiles will be important. A number of clients exist at this point with the most prominent being Mapbox GL JS and OpenLayers 3.x.</p>
-</div>
-<div class="section" id="bug-id-and-references">
+</section>
+<section id="bug-id-and-references">
 <h2>9. Bug ID and references<a class="headerlink" href="#bug-id-and-references" title="Link permanen untuk headline ini">¶</a></h2>
 <ul class="simple">
 <li><p>MapServer <a class="reference external" href="https://github.com/MapServer/MapServer/pull/5376">pull request#5376</a></p></li>
@@ -307,12 +308,12 @@
 <li><p>loads of resources at <a class="reference external" href="https://openmaptiles.org/">openmaptiles.org</a></p></li>
 <li><p><a class="reference external" href="https://www.mapbox.com/mapbox-gl-js/api/">Mapbox GL JS</a></p></li>
 </ul>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>10. Voting history<a class="headerlink" href="#voting-history" title="Link permanen untuk headline ini">¶</a></h2>
 <p>No vote yet</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -394,8 +395,8 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Hak cipta</a> 2021, Open Source Geospatial Foundation.
-      Terakhir diperbarui pada 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Terakhir diperbarui pada 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

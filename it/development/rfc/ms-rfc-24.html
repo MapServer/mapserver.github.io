@@ -4,12 +4,13 @@
 <html lang="it">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 24: Mapscript memory management &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -131,7 +132,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-24-mapscript-memory-management">
+  <section id="ms-rfc-24-mapscript-memory-management">
 <span id="rfc24"></span><h1><a class="toc-backref" href="#table-of-contents">MS RFC 24: Mapscript memory management</a><a class="headerlink" href="#ms-rfc-24-mapscript-memory-management" title="Link a questa intestazione">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -180,7 +181,7 @@
 </li>
 </ul>
 </div>
-<div class="section" id="overview">
+<section id="overview">
 <h2><a class="toc-backref" href="#table-of-contents">Overview</a><a class="headerlink" href="#overview" title="Link a questa intestazione">¶</a></h2>
 <p>Memory management in SWIG wrappers has a tradition of being difficult and
 error prone. The programmer of the wrapper has to deal with memory that can
@@ -204,14 +205,14 @@ in dynamically adding layers to a map.</p>
 <p>The purpose of this RFC is to address these issues and provide a solution
 that can be implemented in time for the release of MapServer  5.0.</p>
 <p>This RFC does not address thread safety.</p>
-</div>
-<div class="section" id="problem-description">
+</section>
+<section id="problem-description">
 <h2><a class="toc-backref" href="#table-of-contents">Problem description</a><a class="headerlink" href="#problem-description" title="Link a questa intestazione">¶</a></h2>
 <p>This section gives an overview (along with examples) of errors in MapScript
 memory management. Most of the examples will be in Java, but they apply to
 all other MapScripts too. They can be reproduced against the latest CVS code
 of mapserver-HEAD as of 31st December 2006.</p>
-<div class="section" id="object-equality-identity">
+<section id="object-equality-identity">
 <h3>Object equality/identity<a class="headerlink" href="#object-equality-identity" title="Link a questa intestazione">¶</a></h3>
 <p>Consider the following Java MapScript code:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapObj</span> <span class="nb">map</span><span class="o">=</span><span class="n">new</span> <span class="n">mapObj</span><span class="p">(</span><span class="s2">&quot;my.map&quot;</span><span class="p">);</span>
@@ -238,8 +239,8 @@ of mapserver-HEAD as of 31st December 2006.</p>
 the layer when it is inserted into the map. The Java reference is not re-pointed
 to the new copy and is therefore “disconnected” from the actual memory area.
 This currently happens for the most used insert methods (i.e. <em>insertClass</em>).</p>
-</div>
-<div class="section" id="early-garbage-collection">
+</section>
+<section id="early-garbage-collection">
 <h3>Early garbage collection<a class="headerlink" href="#early-garbage-collection" title="Link a questa intestazione">¶</a></h3>
 <p>Objects created through MapScript can be garbage-collected «early», when there
 are live objects still referencing them.
@@ -277,8 +278,8 @@ $map1=$layer-&gt;{map}-&gt;draw();
 // perl interpreter segfault
 </pre></div>
 </div>
-</div>
-<div class="section" id="dynamically-populated-layers-classes-etc">
+</section>
+<section id="dynamically-populated-layers-classes-etc">
 <h3>Dynamically populated layers, classes, etc<a class="headerlink" href="#dynamically-populated-layers-classes-etc" title="Link a questa intestazione">¶</a></h3>
 <p>See the following bug reports:</p>
 <p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/1400">https://github.com/MapServer/MapServer/issues/1400</a></p>
@@ -286,9 +287,9 @@ $map1=$layer-&gt;{map}-&gt;draw();
 <p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/1841">https://github.com/MapServer/MapServer/issues/1841</a></p>
 <p>Please note that this issue can be difficult to reproduce, credits go to Tamas
 for pointing it out.</p>
-</div>
-</div>
-<div class="section" id="proposed-implementation">
+</section>
+</section>
+<section id="proposed-implementation">
 <h2><a class="toc-backref" href="#table-of-contents">Proposed implementation</a><a class="headerlink" href="#proposed-implementation" title="Link a questa intestazione">¶</a></h2>
 <p>To solve the problems shown at items 2.1, 2.2 and 2.3 this RFC proposes that:</p>
 <ol class="arabic simple">
@@ -316,7 +317,7 @@ the author familiarity with these languages.</p>
 Subsections 3.4 and 3.5 offer an implementation example for the layerObj
 class. Please note that in the following we limit the scope of our analysis to
 the classes/layer relationship.</p>
-<div class="section" id="implement-a-reference-counter">
+<section id="implement-a-reference-counter">
 <h3>Implement a reference counter<a class="headerlink" href="#implement-a-reference-counter" title="Link a questa intestazione">¶</a></h3>
 <p>The MapScript objects implementing this rfc will get a new <em>int</em> member
 called <em>refcount</em>.</p>
@@ -335,7 +336,7 @@ hash function must be chosen carefully.</p>
 <p><a class="reference external" href="http://en.wikipedia.org/wiki/Hash_table">http://en.wikipedia.org/wiki/Hash_table</a></p>
 <p>The example implementation proposed at the tracker <a class="reference external" href="https://github.com/MapServer/MapServer/issues/2032">bug #2032</a> adopts the
 first strategy.</p>
-<div class="section" id="refcounting-in-the-cgi">
+<section id="refcounting-in-the-cgi">
 <h4>3.1.1 RefCounting in the CGI<a class="headerlink" href="#refcounting-in-the-cgi" title="Link a questa intestazione">¶</a></h4>
 <p>The rfc should be modified to propose that the USE_MAPSCRIPT
 requirement is dropped on the following motivations:</p>
@@ -378,9 +379,9 @@ to build any MapScript (with the exception of php, maybe)</p></li>
 </div>
 <p>Votes count:</p>
 <p>+1: Umberto, Tamas and Daniel</p>
-</div>
-</div>
-<div class="section" id="add-references-to-the-mapscript-wrapper-object">
+</section>
+</section>
+<section id="add-references-to-the-mapscript-wrapper-object">
 <h3>Add references to the MapScript wrapper object<a class="headerlink" href="#add-references-to-the-mapscript-wrapper-object" title="Link a questa intestazione">¶</a></h3>
 <p>The MapScript objects will be modified so that they keep a reference to the
 other MapScript objects they are added to, like the C struct already does.
@@ -400,8 +401,8 @@ support object equality/identity.</p>
 <p>This item will be implemented in a second phase, after the basic refcounting
 is in place. Also the rfc proposes to implement a parent not-null check for
 the layer operations that use the parent map reference.</p>
-</div>
-<div class="section" id="change-arrays-of-structures-in-arrays-of-pointers">
+</section>
+<section id="change-arrays-of-structures-in-arrays-of-pointers">
 <h3>Change arrays of structures in arrays of pointers<a class="headerlink" href="#change-arrays-of-structures-in-arrays-of-pointers" title="Link a questa intestazione">¶</a></h3>
 <p>This change will occur at the C-level and is quite an undertaking. Initially
 and for the purpose of this RFC the size of the arrays will still be fixed as
@@ -434,8 +435,8 @@ the new feature</p></li>
 edited by hand. The same approach will be used with other arrays of
 structures (classes and styles).</p>
 <p>This item has been implemented for the classes without using the GET_CLASS macro.</p>
-</div>
-<div class="section" id="keep-parent-references-and-c-internal-structure-in-sync">
+</section>
+<section id="keep-parent-references-and-c-internal-structure-in-sync">
 <h3>Keep parent references and C internal structure in sync<a class="headerlink" href="#keep-parent-references-and-c-internal-structure-in-sync" title="Link a questa intestazione">¶</a></h3>
 <p>For the mechanism described at the previous item to work some functions
 in the MapScript objects and in the native code must be modified so that the
@@ -448,8 +449,8 @@ store the reference to the mapObj. Eventually also the native code actually
 performing the copy-and-insert operation must be modified to only perform
 the insert operation (<em>layerobject.c</em>, line 52, function <em>msInsertClass</em>).</p>
 <p>The MapScript API will be backward compatible.</p>
-</div>
-<div class="section" id="destructors-obey-the-reference-counter">
+</section>
+<section id="destructors-obey-the-reference-counter">
 <h3>Destructors obey the reference counter<a class="headerlink" href="#destructors-obey-the-reference-counter" title="Link a questa intestazione">¶</a></h3>
 <p>The various free* methods must check the counter before freeing memory.
 This will be implemented in the native code as in the following example:</p>
@@ -470,8 +471,8 @@ NULLify its pointer in the children</p></li>
 NULLify their pointers in the parent (we are evaluating whether this
 could ever happen once the parent reference is in place)</p></li>
 </ol>
-</div>
-<div class="section" id="always-give-object-ownership-to-swig">
+</section>
+<section id="always-give-object-ownership-to-swig">
 <h3>Always give object ownership to SWIG<a class="headerlink" href="#always-give-object-ownership-to-swig" title="Link a questa intestazione">¶</a></h3>
 <p>For the reference count to work all object ownership must be given to SWIG. This
 is quite different from how it is today. The change however is straightforward
@@ -485,8 +486,8 @@ csharp/csmodule.i:383:  if (parent_class != null) this.swigCMemOwn = false;$exco
 </pre></div>
 </div>
 <p>or drop the constructor customization altogether.</p>
-</div>
-<div class="section" id="java-mapscript-code-example-for-layerobj">
+</section>
+<section id="java-mapscript-code-example-for-layerobj">
 <h3>JAVA: MapScript code example for layerObj<a class="headerlink" href="#java-mapscript-code-example-for-layerobj" title="Link a questa intestazione">¶</a></h3>
 <p>Tamas has proposed a more object oriented approach to this problem, which can
 be adopted for those languages that support OOrientation.</p>
@@ -524,8 +525,8 @@ be adopted for those languages that support OOrientation.</p>
 %}
 </pre></div>
 </div>
-</div>
-<div class="section" id="perl-mapscript-code-example-for-layerobj">
+</section>
+<section id="perl-mapscript-code-example-for-layerobj">
 <h3>PERL: MapScript code example for layerObj<a class="headerlink" href="#perl-mapscript-code-example-for-layerobj" title="Link a questa intestazione">¶</a></h3>
 <p>Code example for layerObj (<em>plmodule.i</em>):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>%feature(&quot;shadow&quot;) layerObj(mapObj *map)
@@ -577,9 +578,9 @@ sub DESTROY {
 %}
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="implementation-plan">
+</section>
+</section>
+<section id="implementation-plan">
 <h2><a class="toc-backref" href="#table-of-contents">Implementation plan</a><a class="headerlink" href="#implementation-plan" title="Link a questa intestazione">¶</a></h2>
 <p>It seems that for most MapScripts (java, csharp, perl and python) there
 is enough functionality in SWIG to implement the features described in this RFC.
@@ -588,7 +589,7 @@ For ruby we’ll probably have to go a different route and implement the
 <p>The two following section describe in detail the required SWIG-MapScript
 features (injection of code and constructor customization).
 Each language gets then a specific section to deal with its own characteristics</p>
-<div class="section" id="checking-swig-mapscript-capabilities-javacode">
+<section id="checking-swig-mapscript-capabilities-javacode">
 <h3>Checking SWIG-Mapscript capabilities: %javacode<a class="headerlink" href="#checking-swig-mapscript-capabilities-javacode" title="Link a questa intestazione">¶</a></h3>
 <p>Swig provides the equivalent of <em>%javacode</em> for the following languages:</p>
 <ol class="arabic simple">
@@ -600,8 +601,8 @@ Each language gets then a specific section to deal with its own characteristics<
 </ol>
 <p>This swig construct will be used to inject in the wrapper the definition for
 the references described in 3.2 and the wrapper methods.</p>
-</div>
-<div class="section" id="checking-swig-mapscript-capabilities-constructor-customization">
+</section>
+<section id="checking-swig-mapscript-capabilities-constructor-customization">
 <h3>Checking SWIG-MapScript capabilities: constructor customization<a class="headerlink" href="#checking-swig-mapscript-capabilities-constructor-customization" title="Link a questa intestazione">¶</a></h3>
 <p>The %csconstruct used to wrap and customize the costructor of MapScript
 objects (item 3.3) is only available in csharp and java.
@@ -609,8 +610,8 @@ It should be possible to simulate its behavior with
 <em>%pythonprepend</em> or <em>%pythonprepend</em> in python and with
 <em>%perlcode</em> or <em>%feature(«shadow»)</em> in perl.</p>
 <p>This swig construct will be used to populate parent backreferences.</p>
-</div>
-<div class="section" id="java-and-c-sharp">
+</section>
+<section id="java-and-c-sharp">
 <h3>Java and C-Sharp<a class="headerlink" href="#java-and-c-sharp" title="Link a questa intestazione">¶</a></h3>
 <p>SWIG-Java and SWIG-CSharp share a common ground and are therefore very similar.
 The names of SWIG-Java constructs can be roughly translated into their C-Sharp
@@ -623,37 +624,37 @@ made by Tamas in the last discussion thread.</p>
 <p>as of Jan 2008 Tamas decided to write his own implementation of
 <a class="reference internal" href="#rfc24"><span class="std std-ref">MS RFC 24: Mapscript memory management</span></a> for C#</p>
 </div>
-</div>
-<div class="section" id="perl">
+</section>
+<section id="perl">
 <h3>Perl<a class="headerlink" href="#perl" title="Link a questa intestazione">¶</a></h3>
 <p>As in the example above most of the perl customization can be done
 with the use of the <em>shadow</em> construct.</p>
 <p>The implementation will follow this RFC exactly.</p>
-</div>
-<div class="section" id="python">
+</section>
+<section id="python">
 <h3>Python<a class="headerlink" href="#python" title="Link a questa intestazione">¶</a></h3>
 <p>Python enjoys first-grade support in SWIG so the RFC should be implemented
 exactly as described.</p>
-</div>
-<div class="section" id="ruby">
+</section>
+<section id="ruby">
 <h3>Ruby<a class="headerlink" href="#ruby" title="Link a questa intestazione">¶</a></h3>
 <p>Needs investigation, probably we’ll have to use rb_gc_* functions to mark objects
 and prevent their garbage collection or use <em>%trackobjects</em>.
 Ruby will not implement this RFC as of item 3.2.</p>
-</div>
-<div class="section" id="tcl">
+</section>
+<section id="tcl">
 <h3>Tcl<a class="headerlink" href="#tcl" title="Link a questa intestazione">¶</a></h3>
 <p>Needs investigation and a Tcl expert.
 At the time of this writing Tcl will probably not implement this RFC
 as of item 3.2.</p>
-</div>
-<div class="section" id="php">
+</section>
+<section id="php">
 <h3>PHP<a class="headerlink" href="#php" title="Link a questa intestazione">¶</a></h3>
 <p>PHP MapScript does not rely on SWIG, but since most of the code is native it should be
 possible to adopt this RFC.</p>
-</div>
-</div>
-<div class="section" id="implementation-checklist">
+</section>
+</section>
+<section id="implementation-checklist">
 <h2><a class="toc-backref" href="#table-of-contents">Implementation checklist</a><a class="headerlink" href="#implementation-checklist" title="Link a questa intestazione">¶</a></h2>
 <p>The following table will be used to track the implementation status of this RFC.
 There is a table for each MapScript object and when a language has implemented
@@ -668,7 +669,7 @@ with one of the following marks:</p>
 <li><p>=1 if the reference counter has been reset to 1
 (under the CNT=Counter column)</p></li>
 </ul>
-<div class="section" id="mapobj">
+<section id="mapobj">
 <h3>mapObj<a class="headerlink" href="#mapobj" title="Link a questa intestazione">¶</a></h3>
 <table class="docutils align-default">
 <colgroup>
@@ -983,8 +984,8 @@ with one of the following marks:</p>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="layerobj">
+</section>
+<section id="layerobj">
 <h3>layerObj<a class="headerlink" href="#layerobj" title="Link a questa intestazione">¶</a></h3>
 <table class="docutils align-default">
 <colgroup>
@@ -1146,8 +1147,8 @@ with one of the following marks:</p>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="classobj">
+</section>
+<section id="classobj">
 <h3>classObj<a class="headerlink" href="#classobj" title="Link a questa intestazione">¶</a></h3>
 <table class="docutils align-default">
 <colgroup>
@@ -1264,8 +1265,8 @@ with one of the following marks:</p>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="webobj">
+</section>
+<section id="webobj">
 <h3>webObj<a class="headerlink" href="#webobj" title="Link a questa intestazione">¶</a></h3>
 <table class="docutils align-default">
 <colgroup>
@@ -1330,8 +1331,8 @@ with one of the following marks:</p>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="styleobj">
+</section>
+<section id="styleobj">
 <h3>styleObj<a class="headerlink" href="#styleobj" title="Link a questa intestazione">¶</a></h3>
 <p>For styleObjs it is enough to disown them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1468,8 +1469,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="labelobj">
+</section>
+<section id="labelobj">
 <h3>labelObj<a class="headerlink" href="#labelobj" title="Link a questa intestazione">¶</a></h3>
 <p>For labelObjs it is enough to disown them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1584,8 +1585,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="hashtableobj">
+</section>
+<section id="hashtableobj">
 <h3>hashTableObj<a class="headerlink" href="#hashtableobj" title="Link a questa intestazione">¶</a></h3>
 <p>For hashTableObjs it is enough to disown them when they are fetched from the container object (i.e. a layerObj).
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1620,8 +1621,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="colorobj">
+</section>
+<section id="colorobj">
 <h3>colorObj<a class="headerlink" href="#colorobj" title="Link a questa intestazione">¶</a></h3>
 <p>For colorObjs it is enough to disown them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1656,8 +1657,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="imageobj">
+</section>
+<section id="imageobj">
 <h3>imageObj<a class="headerlink" href="#imageobj" title="Link a questa intestazione">¶</a></h3>
 <p>For imageObjs it is enough to own them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1692,8 +1693,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="shapeobj">
+</section>
+<section id="shapeobj">
 <h3>shapeObj<a class="headerlink" href="#shapeobj" title="Link a questa intestazione">¶</a></h3>
 <p>For shapeObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1840,8 +1841,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="lineobj">
+</section>
+<section id="lineobj">
 <h3>lineObj<a class="headerlink" href="#lineobj" title="Link a questa intestazione">¶</a></h3>
 <p>For lineObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1908,8 +1909,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="pointobj">
+</section>
+<section id="pointobj">
 <h3>pointObj<a class="headerlink" href="#pointobj" title="Link a questa intestazione">¶</a></h3>
 <p>For pointObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -1952,8 +1953,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="symbolsetobj">
+</section>
+<section id="symbolsetobj">
 <h3>symbolsetObj<a class="headerlink" href="#symbolsetobj" title="Link a questa intestazione">¶</a></h3>
 <p>For symbolsetObjs it is not necessary to add the reference pointing back to the map.</p>
 <table class="docutils align-default">
@@ -2053,8 +2054,8 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="symbolobj">
+</section>
+<section id="symbolobj">
 <h3>symbolObj<a class="headerlink" href="#symbolobj" title="Link a questa intestazione">¶</a></h3>
 <p>For symbolObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
@@ -2128,13 +2129,13 @@ It is not necessary to add the reference pointing back to the container object.<
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div class="section" id="open-issues">
+</section>
+</section>
+<section id="open-issues">
 <h2><a class="toc-backref" href="#table-of-contents">Open issues</a><a class="headerlink" href="#open-issues" title="Link a questa intestazione">¶</a></h2>
 <p>The following issues should be discussed after this RFC has been
 adopted/implemented.</p>
-<div class="section" id="multiple-owners-for-an-object">
+<section id="multiple-owners-for-an-object">
 <h3>Multiple owners for an object<a class="headerlink" href="#multiple-owners-for-an-object" title="Link a questa intestazione">¶</a></h3>
 <p>It is the case of  layer that is added to more than one map. This should
 be prohibited because the layer has only one parent reference. On insertion
@@ -2143,17 +2144,17 @@ case raise a <em>errorObj</em> which will be transformed by the hosting language
 in an exception.</p>
 <p>Workaround: the user should instead clone the object and the add the clone
 to the second map.</p>
-</div>
-</div>
-<div class="section" id="api-compatibility">
+</section>
+</section>
+<section id="api-compatibility">
 <h2><a class="toc-backref" href="#table-of-contents">API Compatibility</a><a class="headerlink" href="#api-compatibility" title="Link a questa intestazione">¶</a></h2>
 <p>It is a top priority of this RFC to preserve the investment made by MapScript
 users by maintaining the API backwards compatible in both terms of method
 signatures and usage (i.e. order of invocation, types, return codes, etc).</p>
 <p>If there will be any exception to this rule it will have to be justified
 and be described under this section.</p>
-</div>
-<div class="section" id="status">
+</section>
+<section id="status">
 <h2><a class="toc-backref" href="#table-of-contents">Status</a><a class="headerlink" href="#status" title="Link a questa intestazione">¶</a></h2>
 <p>RFC opened for comments on Jan, the 10th 2007 with a post on mapserver-dev.</p>
 <p>RFC undergoing revision after discussion on mapserver-dev.</p>
@@ -2161,16 +2162,16 @@ and be described under this section.</p>
 <p>RFC adopted with voting closed on April 4, 2007:</p>
 <p>+1: Umberto, Pericles S. Nacionales, Howard Butler, Stephen Woodbridge</p>
 <p>+0: Frank Warmerdam</p>
-</div>
-<div class="section" id="activity">
+</section>
+<section id="activity">
 <h2><a class="toc-backref" href="#table-of-contents">Activity</a><a class="headerlink" href="#activity" title="Link a questa intestazione">¶</a></h2>
 <p>The <a class="reference external" href="https://github.com/MapServer/MapServer/issues/2032">bug #2032</a> will be used to track activity related to this RFC.</p>
 <p>2/20/2007: attached patch that converts map-&gt;layers in array of pointers with dynamic allocation (item 3.3)</p>
 <p>2/24/2007: vote proposed on mapserver-dev</p>
 <p>4/4/2007: RFC Adopted, undergoing implementation</p>
 <p>1/10/2008: RFC implementation completed</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -2279,8 +2280,8 @@ and be described under this section.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Ultimo aggiornamento 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Ultimo aggiornamento 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

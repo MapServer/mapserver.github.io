@@ -4,12 +4,13 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 8: Pluggable External Feature Layer Providers &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-8-pluggable-external-feature-layer-providers">
+  <section id="ms-rfc-8-pluggable-external-feature-layer-providers">
 <span id="rfc8"></span><h1>MS RFC 8: Pluggable External Feature Layer Providers<a class="headerlink" href="#ms-rfc-8-pluggable-external-feature-layer-providers" title="Enlazar permanentemente con este título">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -160,19 +161,19 @@
 <dd class="field-odd"><p>MapServer 4.8</p>
 </dd>
 </dl>
-<div class="section" id="purpose">
+<section id="purpose">
 <h2>Purpose<a class="headerlink" href="#purpose" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>The purpose of this proposal is provide a way to user actually plug-in
 external third party feature layer providers to the MapServer at run
 time.</p>
-</div>
-<div class="section" id="abstract-solution">
+</section>
+<section id="abstract-solution">
 <h2>Abstract Solution<a class="headerlink" href="#abstract-solution" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Provide a way to user to tell via map-file which library to load for
 layer, then load this library on demand and cache it for later use and
 bind it to the running MapServer by layer’s virtual table.</p>
-</div>
-<div class="section" id="technical-solution">
+</section>
+<section id="technical-solution">
 <h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Enlazar permanentemente con este título">¶</a></h2>
 <ul>
 <li><p>New <cite>CONFIG</cite> option <cite>MS_PLUGIN_DIR</cite> which, if set, tells the base
@@ -222,8 +223,8 @@ internal, so if it has to be make dynamically allocated, it is
 possible to do later without breaking interface.</p></li>
 <li><p>New lock item (<cite>TLOCK_LAYER_VTABLE</cite>) to protect library cache structure.</p></li>
 </ul>
-</div>
-<div class="section" id="files-and-objects-affected">
+</section>
+<section id="files-and-objects-affected">
 <h2>Files and objects affected<a class="headerlink" href="#files-and-objects-affected" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>This proposal will affect at least following files and objects:</p>
 <ul class="simple">
@@ -235,33 +236,33 @@ possible to do later without breaking interface.</p></li>
 <li><p>New lock token <cite>TLOCK_LAYER_VTABLE</cite></p></li>
 <li><p>New files and objects for custom layer handling.</p></li>
 </ul>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>This change is binary incompatible, but mapfile backward
 compatible.  It will add a new keyword which is unknown for old
 MapServers.</p>
-</div>
-<div class="section" id="implementation-issues">
+</section>
+<section id="implementation-issues">
 <h2>Implementation Issues<a class="headerlink" href="#implementation-issues" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>None</p>
-</div>
-<div class="section" id="bug-id">
+</section>
+<section id="bug-id">
 <h2>Bug ID<a class="headerlink" href="#bug-id" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Bug <a class="reference external" href="https://github.com/MapServer/MapServer/issues/1477">1477</a></p>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>Voting history<a class="headerlink" href="#voting-history" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Vote proposed by Jani Averbach on 10/26/2005, the initial result
 was +3 and after amending RFC, got +4 (3 non-voting members).</p>
 <p>Voting +1: Frank Warmerdam, Steve Lime, Yewondwossen Assefa, Daniel Morissette</p>
 <p>Proposal passed and will move forward.</p>
-</div>
-<div class="section" id="open-questions">
+</section>
+<section id="open-questions">
 <h2>Open questions<a class="headerlink" href="#open-questions" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>None</p>
-</div>
-<div class="section" id="working-notes">
+</section>
+<section id="working-notes">
 <h2>Working Notes<a class="headerlink" href="#working-notes" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Plugin library has to implement function
 <cite>PluginInitializeVirtualTable</cite></p>
@@ -277,8 +278,8 @@ are visible in function <cite>maplayer.c: populateVirtualTable(…)</cite>.
 The function must not populate directly <cite>layerObj-&gt;vtable</cite>, it have
 to use <cite>layerVTableObj *</cite> argument for this.  The MapServer is
 holding <cite>TLOCK_LAYER_VTABLE</cite> lock during this function call.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -349,8 +350,8 @@ holding <cite>TLOCK_LAYER_VTABLE</cite> lock during this function call.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Derechos de autor</a> 2021, Open Source Geospatial Foundation.
-      Actualizado por última vez en 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Actualizado por última vez en 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

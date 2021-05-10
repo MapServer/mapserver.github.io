@@ -4,12 +4,13 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 114: Faster retrieval of shape count &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-114-faster-retrieval-of-shape-count">
+  <section id="ms-rfc-114-faster-retrieval-of-shape-count">
 <span id="rfc114"></span><h1>MS RFC 114: Faster retrieval of shape count<a class="headerlink" href="#ms-rfc-114-faster-retrieval-of-shape-count" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -163,7 +164,7 @@
 <dd class="field-even"><p>Meteorological Service of Canada</p>
 </dd>
 </dl>
-<div class="section" id="motivation">
+<section id="motivation">
 <h2>1. Motivation<a class="headerlink" href="#motivation" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>The WFS protocol has a resultType=hits query to return only the number
 of features of the specified layer(s), taking into account an optional bounding
@@ -173,8 +174,8 @@ box and/or filter.</p>
 all individual matching features and counting them, as in a full GetFeature
 response, which is suboptimal in term of speed and bandwidth with the server
 instance in case of RDBMS data provider.</p>
-</div>
-<div class="section" id="proposed-enhancement">
+</section>
+<section id="proposed-enhancement">
 <h2>2. Proposed enhancement<a class="headerlink" href="#proposed-enhancement" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>A new virtual method is added to the vtable of MapServer layers</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">LayerGetShapeCount</span><span class="p">)(</span><span class="n">layerObj</span> <span class="o">*</span><span class="n">layer</span><span class="p">,</span> <span class="n">rectObj</span> <span class="n">rect</span><span class="p">,</span> <span class="n">projectionObj</span> <span class="o">*</span><span class="n">rectProjection</span><span class="p">);</span>
@@ -207,13 +208,13 @@ provider, this can be translated in the following query to do a fast BBOX filter
 followed by a more precision intersection for candidate records :
 (the_geometry &amp;&amp; the_bbox_in_layer_projection) AND
 ( NOT ST_Disjoint(ST_Transform(the_geometry, rectProjectionSRID), rectProjection) )</p>
-</div>
-<div class="section" id="backwards-compatibility">
+</section>
+<section id="backwards-compatibility">
 <h2>2.2 Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>This change has no backwards compatibility effect, keeping the same semantics
 as the current implementation.</p>
-</div>
-<div class="section" id="performance-implications">
+</section>
+<section id="performance-implications">
 <h2>2.3 Performance Implications<a class="headerlink" href="#performance-implications" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Should result in performance increase for drivers that can implement efficiently
 LayerGetShapeCount()</p>
@@ -229,16 +230,16 @@ then the default is &quot;true&quot;. Otherwise it is &quot;false&quot;.</p>
 <p>Note: of course, any client specified MAXFEATURES / COUNT parameter overrides those server
 side settings, while the number of features asked by the client is no greater than
 the server side limit.</p>
-</div>
-<div class="section" id="limitations">
+</section>
+<section id="limitations">
 <h2>2.4 Limitations<a class="headerlink" href="#limitations" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>A specialized implementation of LayerGetShapeCount() is only done in PostGIS
 driver for the scope of this work. Could be extended similarly to providers that
 have SQL semantics and implement LayerTranslateFilter(): Oracle, MSSQL Spatial</p>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<div class="section" id="affected-files">
+<section id="affected-files">
 <h3>3.1 Affected files<a class="headerlink" href="#affected-files" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>mapquery.c: to use msLayerGetFeatureCount() in msQueryByRect() and msQueryByFilter()</p></li>
@@ -247,26 +248,26 @@ have SQL semantics and implement LayerTranslateFilter(): Oracle, MSSQL Spatial</
 <li><p>mappostgis.c: implement LayerGetFeatureCount()</p></li>
 <li><p>other providers: add comment that LayerGetFeatureCount uses the default implementation</p></li>
 </ul>
-</div>
-<div class="section" id="tracking-issue">
+</section>
+<section id="tracking-issue">
 <h3>3.2 Tracking Issue<a class="headerlink" href="#tracking-issue" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>code: <a class="reference external" href="https://github.com/rouault/mapserver/tree/wfs_fast_hits">https://github.com/rouault/mapserver/tree/wfs_fast_hits</a></p></li>
 <li><p>tests: 4 new test cases have been added (<a class="reference external" href="https://github.com/MapServer/msautotest/commit/05e8264ce737a795d81f1a87614fa5c87399de91">https://github.com/MapServer/msautotest/commit/05e8264ce737a795d81f1a87614fa5c87399de91</a>)
 to test the behaviour of resultType=hits with filters, and already existing WFS tests pass.</p></li>
 </ul>
-</div>
-<div class="section" id="documentation">
+</section>
+<section id="documentation">
 <h3>3.3 Documentation<a class="headerlink" href="#documentation" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Documentation of the WFS server will be updated to document the
 &quot;wfs_maxfeatures_ignore_for_resulttype_hits&quot; metadata item.</p>
-</div>
-</div>
-<div class="section" id="voting-history">
+</section>
+</section>
+<section id="voting-history">
 <h2>4. Voting History<a class="headerlink" href="#voting-history" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>+1 from TomK, JeffM, MichaelS, StephenW, ThomasB, DanielM, SteveL, JukkaR, StephanM, PerryN and TamasS.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -339,8 +340,8 @@ to test the behaviour of resultType=hits with filters, and already existing WFS 
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      最終更新: 2021-04-30
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      最終更新: 2021-05-10
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

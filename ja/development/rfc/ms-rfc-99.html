@@ -4,12 +4,13 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 99: Remove support for GD renderer &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-99-remove-support-for-gd-renderer">
+  <section id="ms-rfc-99-remove-support-for-gd-renderer">
 <span id="rfc99"></span><h1>MS RFC 99: Remove support for GD renderer<a class="headerlink" href="#ms-rfc-99-remove-support-for-gd-renderer" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -160,7 +161,7 @@
 <dd class="field-odd"><p>MapServer 7.0</p>
 </dd>
 </dl>
-<div class="section" id="summary">
+<section id="summary">
 <h2>1. Summary<a class="headerlink" href="#summary" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Keeping support for the GD rendering library is preventing MapServer from
 moving onto a more feature-full and maintainable text/labeling pipeline. This RFC
@@ -168,7 +169,7 @@ proposes that we remove support for the GD renderer in the upcoming 7.0 release,
 unless there are some use-cases only covered by GD that have been overlooked,
 and/or someone is sufficiently interested to fund the high maintenance
 overhead.</p>
-<div class="section" id="history">
+<section id="history">
 <h3>1.1 History<a class="headerlink" href="#history" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>The GD library was initially the only renderer supported by MapServer for producing
@@ -186,8 +187,8 @@ used for some rendering tasks not supported by other renderers.</p></li>
 <li><p>In 2012, for the 6.2 release, support for GD became optional and could be disabled at
 compile time.</p></li>
 </ul>
-</div>
-<div class="section" id="current-gd-limitations">
+</section>
+<section id="current-gd-limitations">
 <h3>1.2 Current GD limitations<a class="headerlink" href="#current-gd-limitations" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>In the process of supporting advanced text/label rendering implied by the overhaul of
 <a class="reference internal" href="ms-rfc-98.html#rfc98"><span class="std std-ref">MS RFC 98: Label/Text Rendering Overhaul</span></a>, the limitations of the GD api have shown to be a showstopper for moving forwards.
@@ -197,16 +198,16 @@ to fit in with the <a class="reference internal" href="ms-rfc-98.html#rfc98"><sp
 complex text shaping).</p>
 <p>As a vector rasterizer, while being marginally faster, the GD rendering quality is far
 from what is expected from a map renderer.</p>
-</div>
-<div class="section" id="current-gd-strengths">
+</section>
+<section id="current-gd-strengths">
 <h3>1.3 Current GD strengths<a class="headerlink" href="#current-gd-strengths" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>GD image buffers have a lower memory overhead, given they work with 8bit pixels instead
 of 32bit ones.</p>
 <p>GD support rendering without anti-aliasing - good for vector area
 fills (avoids thin lines along the &quot;tile&quot; boundaries).</p>
-</div>
-</div>
-<div class="section" id="gd-support-removal">
+</section>
+</section>
+<section id="gd-support-removal">
 <h2>2. GD support removal<a class="headerlink" href="#gd-support-removal" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Aside from preventing <a class="reference internal" href="ms-rfc-98.html#rfc98"><span class="std std-ref">MS RFC 98: Label/Text Rendering Overhaul</span></a> to happen, support for GD is already himpering development
 due to the overhead required during maintenance and rendering enhancements. Current
@@ -214,7 +215,7 @@ activity on the issue tracker and mailing lists show that it is not being used a
 The major 7.0 release is a good time to remove GD support entirely, enabling us to move
 onto a maintainable and extensible text rendering pipeline, and allowing us to greatly
 simplify future maintenance.</p>
-<div class="section" id="backwards-compatibility">
+<section id="backwards-compatibility">
 <h3>2.1 Backwards compatibility<a class="headerlink" href="#backwards-compatibility" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>GD outputformats configured in mapfiles will silently be mapped to AGG/PNG8, i.e AGG
@@ -222,18 +223,18 @@ rendered images quantized down to 256 color pngs, as is done currently when GD s
 has beend disabled. The final resulting images will differ.</p></li>
 <li><p>Memory overhead for users still using the GD renderer will augment.</p></li>
 </ul>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h3>3. Voting History<a class="headerlink" href="#voting-history" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Passed with +1 from ThomasB, TomK, MikeS, StephanM, SteveW, PerryN,
 DanielM and JeffM</p>
-</div>
-<div class="section" id="tracking-issue">
+</section>
+<section id="tracking-issue">
 <h3>4. Tracking Issue<a class="headerlink" href="#tracking-issue" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>No specific issue was created for this RFC. Development was tracked inside <a class="reference internal" href="ms-rfc-98.html#rfc98"><span class="std std-ref">MS RFC 98: Label/Text Rendering Overhaul</span></a></p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -306,8 +307,8 @@ DanielM and JeffM</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      最終更新: 2021-04-30
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      最終更新: 2021-05-10
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

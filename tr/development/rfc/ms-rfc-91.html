@@ -4,12 +4,13 @@
 <html lang="tr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 91: Layer Filter Normalization &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-91-layer-filter-normalization">
+  <section id="ms-rfc-91-layer-filter-normalization">
 <span id="rfc91"></span><h1>MS RFC 91: Layer Filter Normalization<a class="headerlink" href="#ms-rfc-91-layer-filter-normalization" title="Bu başlık için kalıcı bağlantı">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -160,7 +161,7 @@
 <dd class="field-odd"><p>TBD</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>Layer filters are driver specific expressions that are used within MapServer in a couple of ways:</p>
 <blockquote>
@@ -186,23 +187,23 @@ a data source. This leads to a number of issues:</p>
 operations that rely on filters (by attribute, by operator) cache the existing filter before defining and applying a new one.
 While this limitation could be addressed independently it becomes a much more manageable task when using a
 standardized filter definition.</p>
-</div>
-<div class="section" id="proposed-solution">
+</section>
+<section id="proposed-solution">
 <h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>This SLA proposed standardizing filter definitions using the common expression syntax implemented as part of RFC XX.
 Driverscapable of handling complex expressions will translate MapServer expressions to an internal representation which
 should lead to <em>very</em> significant performance improvements. Drivers that don’t have that capability would apply filtering
 to features much the same way as the native MapServer shapefile and tiled shapefiles already do (via msXXXLayerNextShape())</p>
-</div>
-<div class="section" id="driver-filter-translation">
+</section>
+<section id="driver-filter-translation">
 <h2>2.1 Driver Filter Translation<a class="headerlink" href="#driver-filter-translation" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>Drivers that support complex expressions (e.g. PostGIS and Oracle Spatial) will need to implement a new layer API function
 (propose msXXXLayerTranslateFilter(layerObj *layer, expressionObj *filter, char *filteritem)) to translate both simple filters
 amd MapServer logical expressions to a native representation. MapServer logical exressions consist of a series of tokens that
 are processed from from left to right. It should be possible then to convert these tokens to a native representation of
 that the driver will handle independently of MapServer– typically some flavor of SQL.</p>
-</div>
-<div class="section" id="filter-merging">
+</section>
+<section id="filter-merging">
 <h2>2.2 Filter Merging<a class="headerlink" href="#filter-merging" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>Filter merging is the process of creating one expression from two and it will only be needed with MapServer query functions
 that utilize filters as part of their stock processing, specifically msQueryByFilter() and msQueryByAttributes(). If an existing
@@ -212,8 +213,8 @@ operation is will result in a filter expressed using the <em>common</em> syntax 
 <div><p>expressionObj *msMergeFilters(expressionObj *filter1, expressionObj *filter2)</p>
 </div></blockquote>
 <p>The resulting filter will then be translated to native representation if applicable later.</p>
-</div>
-<div class="section" id="filter-merging-examples">
+</section>
+<section id="filter-merging-examples">
 <h2>2.3 Filter Merging Examples<a class="headerlink" href="#filter-merging-examples" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>Case 1: FILTERITEM and FILTER “string” (or case-insensitive)</p>
 <blockquote>
@@ -229,27 +230,27 @@ operation is will result in a filter expressed using the <em>common</em> syntax 
 </div></blockquote>
 <p>In the case where the old filter is already native filter and the translation fails we will leave the old filter in place
 so the driver can at least process that portion and then fall back to MapServer for the new filter.</p>
-</div>
-<div class="section" id="query-function-simplification">
+</section>
+<section id="query-function-simplification">
 <h2>2.4 Query Function Simplification<a class="headerlink" href="#query-function-simplification" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>The msQueryByAttribute() function can be turned into an alias for the msQueryByFilter() function. They do basically the
 same thing: define a new filter and execute a query using it. This simplifies the code base. A few functional changes will
 need to be made within msQueryByFilter(), specifically handling the case when only 1 result is returned (mode=itemquery)
 but that is a simple check at the bottom of the result processing loop.</p>
 <p>This does not impact the CGi or MapScript APIs although we could choose to simplify those at a later date.</p>
-</div>
-<div class="section" id="future-enhancements">
+</section>
+<section id="future-enhancements">
 <h2>2.5 Future Enhancements<a class="headerlink" href="#future-enhancements" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>Work on this RFC indicates that the linked-list of tokens, while optimal for Bison/Yacc grammars, can be difficult to
 translate in some cases. For example, if a driver needs to add an argument to a function call: buffer([shape], 500) needs
 to translate to buffer(the_geom, 500, 1) if is difficult to know when to output the 1 in complex filter. It may be
 beneficial rewrite the token handling to use tree storage instead of a list. That change doesn’t affect the larger
 implementation approach, instead it offers an opportunity for more complete translations. Time will tell.</p>
-</div>
-<div class="section" id="implementation-details">
+</section>
+<section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
-</div>
-<div class="section" id="summary-of-current-behaviour-by-driver">
+</section>
+<section id="summary-of-current-behaviour-by-driver">
 <h2>3.1 Summary of Current Behaviour (by driver)<a class="headerlink" href="#summary-of-current-behaviour-by-driver" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <ul class="simple">
 <li><p>shapefile: supports FILTERITEM and FILTERs -&gt; string, regular, logical expression</p></li>
@@ -259,8 +260,8 @@ implementation approach, instead it offers an opportunity for more complete tran
 <li><p>SDE: supports FILTER -&gt; native SQL snippet</p></li>
 <li><p>MS SQL Server: supports FILTER -&gt; native SQL snippet</p></li>
 </ul>
-</div>
-<div class="section" id="id1">
+</section>
+<section id="id1">
 <h2>3.2 Overview<a class="headerlink" href="#id1" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <ul class="simple">
 <li><p>limited additions to logial expression syntax are recommended:</p>
@@ -273,8 +274,8 @@ implementation approach, instead it offers an opportunity for more complete tran
 <li><p>drivers that support complex expressions (e.g. PostGIS, Oracle, SDE, MS SQL Server, OGR) need to implement a translation
 function to construct a partial “WHERE” clause from a set of expression/filter tokens</p></li>
 </ul>
-</div>
-<div class="section" id="files-affected">
+</section>
+<section id="files-affected">
 <h2>3.2 Files affected<a class="headerlink" href="#files-affected" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>The following files will be modified by this RFC:</p>
 <ul class="simple">
@@ -311,41 +312,41 @@ executed if the filter’s native_string is NULL (this is checked in msEvalExpre
 </div>
 <p>msLayerSupportsCommonFilters(): This function can be removed from the layer API in favor of checking the filter-&gt;native_string
 after a call to msXXXLayerTranslateFilter().</p>
-</div>
-<div class="section" id="mapscript">
+</section>
+<section id="mapscript">
 <h2>3.3 MapScript<a class="headerlink" href="#mapscript" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>No changes necessary.</p>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>3.4 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>By respecting a pre-defined FILTER with attribute and OGC filter queries it’s possible that users could get confused and/or
 have to re-architect certain aspects of an application. For example, they may have actually already build filter merging into their
 process.</p>
-</div>
-<div class="section" id="security-implications">
+</section>
+<section id="security-implications">
 <h2>4. Security implications<a class="headerlink" href="#security-implications" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>This RFC should make things more robust in this regard by forcing expressions through multiple levels of translation. The process
 for WFS getFeature filters would be OGC Filter (XML) =&gt; MapServer common expression =&gt; native expression. All token conversion
 for attribute bindings, string and date literals will be escaped using whatever mechanism the driver provides. For example, PostGIS
 provides msPostGISEscapeSQLParam().</p>
-</div>
-<div class="section" id="performance-implications">
+</section>
+<section id="performance-implications">
 <h2>5. Performance implications<a class="headerlink" href="#performance-implications" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>The token replacement is only done in msLayerOpen(), the performance impact should be negligeable as this happens
 only once per rendered layer. Performance will improve greatly in some cases where operations are offloaded to the
 database - less network traffic, more efficient algorithms.</p>
 <p>With WFS-based dwithin/beyond operators we currently apply the distance values as buffers and then hand off to MapServer.
 The suggested changes would remove that step and improve performane in <em>all</em> cases.</p>
-</div>
-<div class="section" id="bug-id">
+</section>
+<section id="bug-id">
 <h2>6. Bug ID<a class="headerlink" href="#bug-id" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>#4974: <a class="reference external" href="https://github.com/MapServer/MapServer/issues/4974">https://github.com/MapServer/MapServer/issues/4974</a></p>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>7. Voting history<a class="headerlink" href="#voting-history" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>Passed on 8/19/2014 with +1’s from Steve L, Thomas B, Mike S, Stephan M, Daniel M, Perry N, Stephen W, Jeff M, Tom K, Tamas S</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -423,8 +424,8 @@ The suggested changes would remove that step and improve performane in <em>all</
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Telif hakkı</a> 2021, Open Source Geospatial Foundation.
-      Son güncelleme: 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Son güncelleme: 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>

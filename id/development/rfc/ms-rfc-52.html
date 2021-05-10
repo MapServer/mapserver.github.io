@@ -4,12 +4,13 @@
 <html lang="id">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>MS RFC 52: One-pass query processing &#8212; MapServer 7.6.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -141,7 +142,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ms-rfc-52-one-pass-query-processing">
+  <section id="ms-rfc-52-one-pass-query-processing">
 <h1>MS RFC 52: One-pass query processing<a class="headerlink" href="#ms-rfc-52-one-pass-query-processing" title="Link permanen untuk headline ini">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
@@ -163,7 +164,7 @@
 <dd class="field-even"><p>MapServer 6.0</p>
 </dd>
 </dl>
-<div class="section" id="overview">
+<section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link permanen untuk headline ini">¶</a></h2>
 <p>This RFC proposes change(s) to the current of query (by point, by box, by shape,
 etc...) processing in MapServer.</p>
@@ -174,8 +175,8 @@ drawing, or retrieval via MapScript. The obvious problem is the performance hit
 incurred from the second pass. The real pain is that the msLayerGetShape() function,
 as implemented, provides random access to the data which can be very expensive for
 certain drivers.</p>
-</div>
-<div class="section" id="technical-solution">
+</section>
+<section id="technical-solution">
 <h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Link permanen untuk headline ini">¶</a></h2>
 <p>There are a number of potential solutions:</p>
 <p>1. One could cache the returned shapes in memory. While this wouldn't result in
@@ -241,8 +242,8 @@ results. In some cases queries run orders of magnitude faster. One positive side
 effect is that primary keys need not be used to retrieve features from the result
 set. It is the drivers responsibility to provide data to uniquely identify a
 row in the result set.</p>
-</div>
-<div class="section" id="backwards-compatibility-issues">
+</section>
+<section id="backwards-compatibility-issues">
 <h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link permanen untuk headline ini">¶</a></h2>
 <p>This solution will most likely require changes to MapScript applications that
 process query results depending on types of data being processed. Those hitting
@@ -253,8 +254,8 @@ have to swith to using resultsGetShape() instead of getFeature()/getShape().</p>
 a set of results would be specific to dataset result handle it won't be
 possible to get back to a result once a layer is ultimately closed. A proposed
 solution to this problem is presented next.</p>
-</div>
-<div class="section" id="query-file-support">
+</section>
+<section id="query-file-support">
 <h2>Query File Support<a class="headerlink" href="#query-file-support" title="Link permanen untuk headline ini">¶</a></h2>
 <p>Query files have provided a means of saving the results of a query operation for
 use in subsequent map production. The series of indexes gathered during a query
@@ -288,8 +289,8 @@ function. The queryObj would be immutable.</p>
 disk. When read, the reconsituted queryObj could then be used to re-execute the
 appropriate query. The msSaveQuery() and msLoadQuery() function signatures would
 remain &quot;as is&quot; although the internals would change.</p>
-</div>
-<div class="section" id="files-impacted">
+</section>
+<section id="files-impacted">
 <h2>Files Impacted<a class="headerlink" href="#files-impacted" title="Link permanen untuk headline ini">¶</a></h2>
 <ul class="simple">
 <li><p>driver files: implement msXXXLayerResultsGetShape() function to shape fetching
@@ -309,8 +310,8 @@ to take a lone mapObj as input, add msInitQuery() and msFreeQuery() functions</p
 <li><p>others? (mapcopy.c for one)</p></li>
 </ul>
 <p>Although a number of files are impacted the changes in general are relatively simple.</p>
-</div>
-<div class="section" id="unknowns">
+</section>
+<section id="unknowns">
 <h2>Unknowns<a class="headerlink" href="#unknowns" title="Link permanen untuk headline ini">¶</a></h2>
 <p>To date only shapefiles, PostGIS and Oracle drivers have been tested with this new
 scheme, all with positive results. Even shapefiles showed a performance improvement
@@ -320,12 +321,12 @@ comment further.</p>
 <p>MapServer has supported a rather obscure query method called queryByIndex() as basically
 a wrapper to msLayerGetShape(). This change may render that method obsolete but more
 checking need be done.</p>
-</div>
-<div class="section" id="voting-history">
+</section>
+<section id="voting-history">
 <h2>Voting History<a class="headerlink" href="#voting-history" title="Link permanen untuk headline ini">¶</a></h2>
 <p>+1 from SteveL, DanielM, HowardB, PerryN, TamasS</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -393,8 +394,8 @@ checking need be done.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Hak cipta</a> 2021, Open Source Geospatial Foundation.
-      Terakhir diperbarui pada 2021-04-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Terakhir diperbarui pada 2021-05-10.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.1.
     </div>
   </body>
 </html>
