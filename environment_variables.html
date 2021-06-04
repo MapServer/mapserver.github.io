@@ -257,6 +257,34 @@ expression which is used to validate mapfile filename extensions.</p>
 </dd>
 </dl>
 <dl id="index-8">
+<dt>MS_MAP_BAD_PATTERN</dt><dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 7.6.3.</span></p>
+</div>
+<p>The <cite>MS_MAP_BAD_PATTERN</cite> environment variable can be used to specify a
+Regular Expression to catch &amp; not allow problematic character sequences
+in any mapfile paths passed to the mapserv CGI in the map=… URL parameter.
+If the value matches then an error is generated.  By default all
+MapServer installations (since 7.6.3) set a hardcoded value for
+<em>MS_MAP_BAD_PATTERN</em> of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[/\\]{2}|[/\\]?\\.+[/\\]|,
+</pre></div>
+</div>
+<p>which will therefore not allow “/../” or “//” in the map value.</p>
+<p>For Windows users, MS4W uses the PCRE regex library (which requires a
+slightly different regex syntax), so all future MS4W releases will
+contain the following default <em>MS_MAP_BAD_PATTERN</em> enabled
+(to not allow “/../” or “//” in the map value) :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[\/\\\\]{2}|[\/\\\\]?\.{2,}[\/\\\\]|,
+</pre></div>
+</div>
+<p>For more Windows information see <a class="reference external" href="https://ms4w.com/README_INSTALL.html#securing-your-ms4w-installation">Securing your MS4W Installation</a></p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="optimization/limit_mapfile_access.html#limit-mapfile-access"><span class="std std-ref">Limit Mapfile Access</span></a> &amp; Associated <a class="reference external" href="https://github.com/MapServer/MapServer/pull/6314">Pull Request</a> for the 7.6.3 release</p>
+</div>
+</dd>
+</dl>
+<dl id="index-9">
 <dt>MS_MAP_PATTERN</dt><dd><div class="versionadded">
 <p><span class="versionmodified added">New in version 5.4.</span></p>
 </div>
@@ -293,12 +321,12 @@ directory traversing:</p>
 </div>
 </dd>
 </dl>
-<dl class="simple" id="index-9">
+<dl class="simple" id="index-10">
 <dt>MS_MODE</dt><dd><p>Default value for the mode=… URL parameter. Setting mode=… in
 the URL takes precedence over the environment variable.</p>
 </dd>
 </dl>
-<dl id="index-10">
+<dl id="index-11">
 <dt>MS_OPENLAYERS_JS_URL</dt><dd><p>The URL to the OpenLayers javascript library (can be used when
 testing WMS services using imagetype application/openlayers),
 for instance:</p>
@@ -307,14 +335,14 @@ for instance:</p>
 </div>
 </dd>
 </dl>
-<dl id="index-11">
+<dl id="index-12">
 <dt>MS_TEMPPATH</dt><dd><p>Set the <a class="reference internal" href="mapfile/web.html#web"><span class="std std-ref">WEB</span></a> <cite>TEMPPATH</cite>.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 6.0.</span></p>
 </div>
 </dd>
 </dl>
-<dl id="index-12">
+<dl id="index-13">
 <dt>MS_XMLMAPFILE_XSLT</dt><dd><p>Used to enable XML Mapfile support.  Points to the location of the
 XSLT to use for the XML-&gt;text mapfile conversion.</p>
 <div class="admonition seealso">
@@ -323,7 +351,7 @@ XSLT to use for the XML-&gt;text mapfile conversion.</p>
 </div>
 </dd>
 </dl>
-<dl id="index-13">
+<dl id="index-14">
 <dt>PROJ_LIB</dt><dd><p>The <cite>PROJ_LIB</cite> environment variable or <cite>CONFIG</cite> directive can be
 used to specify the directory where the PROJ data files are located
 (including the “proj.db” file, or “epsg” file for older PROJ versions),
@@ -392,7 +420,7 @@ if they are not in the default directory where PROJ expects them.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Last updated on 2021-05-31.
+      Last updated on 2021-06-04.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
     </div>
   </body>
