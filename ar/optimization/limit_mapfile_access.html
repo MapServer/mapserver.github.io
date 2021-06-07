@@ -158,17 +158,22 @@
 <dd class="field-even"><p>jmckenna at gatewaygeomatics.com</p>
 </dd>
 <dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2021-03-31</p>
+<dd class="field-odd"><p>2021-06-03</p>
 </dd>
 </dl>
 <p>The MapServer CGI, by default, will happily attempt to process any mapfile it is
 asked to. While this might be desireable in a development environment, it is not
 acceptable for public-facing installations. MapServer supports the use of specific
-<strong>environment variables</strong>, set at the web server tier, to limit access. Use of
-these environment variables is not required but is <strong>strongly recommended</strong>.
-Future versions of MapServer will require use by default.</p>
-<p>Relevant environment variable support is available for versions: 5.4.0 and newer,
-5.2.2, and 4.10.4.</p>
+<strong>environment variables</strong>, set at the web server tier, to limit access. Since
+the MapServer 7.6.3 release, you are <strong>required</strong> to use (a combination of)
+these environment variables to secure your installation; for earlier MapServer
+versions these environment variables are <strong>strongly recommended</strong>.</p>
+<div class="admonition warning">
+<p class="admonition-title">تحذير</p>
+<p>The vulnerability <a class="reference external" href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-32062">CVE-2021-32062</a>
+was fixed through the MapServer 7.6.3 release, through requiring the use of
+the environment variables described in this MapServer document.</p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">ملاحظة</p>
 <p>Environment variables are only referenced by the MapServer CGI and are not
@@ -178,13 +183,49 @@ used by MapScript in any way.</p>
 <h2>Key Environment Variables<a class="headerlink" href="#key-environment-variables" title="Permalink to this headline">¶</a></h2>
 <div class="admonition seealso">
 <p class="admonition-title">شاهد أيضا</p>
-<p><a class="reference internal" href="../environment_variables.html#environment-variables"><span class="std std-ref">Environment Variables</span></a></p>
+<p><a class="reference internal" href="environment_variables.html#environment-variables"><span class="std std-ref">Environment Variables</span></a></p>
 </div>
 <div class="admonition seealso">
 <p class="admonition-title">شاهد أيضا</p>
 <p><a class="reference internal" href="../development/rfc/ms-rfc-56.html#rfc56"><span class="std std-ref">MS RFC 56: Tighten control of access to mapfiles and templates</span></a></p>
 </div>
+<div class="admonition seealso">
+<p class="admonition-title">شاهد أيضا</p>
+<p>Associated <a class="reference external" href="https://github.com/MapServer/MapServer/pull/6314">Pull Request</a> for the 7.6.3 release</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">نصيحة</p>
+<p>The online tools <a class="reference external" href="https://regexr.com/">RegExr</a> &amp; <a class="reference external" href="https://regex101.com/">RegEx101</a>
+are great for testing regular expressions.</p>
+</div>
+<p><strong>MS_MAP_BAD_PATTERN</strong></p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 7.6.3.</span></p>
+</div>
+<p>If set, this environment variable is interpreted as regular expression that is used
+to test the value of the CGI map parameter, by specifying which problematic
+character sequences to avoid. If the value matches then an error is
+generated.  By default all MapServer installations (since 7.6.3) set a
+hardcoded value for <em>MS_MAP_BAD_PATTERN</em> of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[/\\]{2}|[/\\]?\\.+[/\\]|,
+</pre></div>
+</div>
+<p>which will therefore not allow &quot;/../&quot; or &quot;//&quot; in the map value.</p>
+<div class="admonition note">
+<p class="admonition-title">ملاحظة</p>
+<p>For Windows users, MS4W uses the PCRE regex library (which requires a
+slightly different regex syntax), so all future MS4W releases will
+contain the following default <em>MS_MAP_BAD_PATTERN</em> enabled
+(to not allow &quot;/../&quot; or &quot;//&quot; in the map value) :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[\/\\\\]{2}|[\/\\\\]?\.{2,}[\/\\\\]|,
+</pre></div>
+</div>
+<p>For more information see <a class="reference external" href="https://ms4w.com/README_INSTALL.html#securing-your-ms4w-installation">Securing your MS4W Installation</a></p>
+</div>
 <p><strong>MS_MAP_NO_PATH</strong></p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 5.4.0.</span></p>
+</div>
 <p>If set, this environment variable limits values for the CGI map parameter to a
 curated (prepared) set of mapfiles explicitly defined by additional environment
 variables. This is the recommended way to secure mapfile access if at all possible.</p>
@@ -194,11 +235,14 @@ variables. This is the recommended way to secure mapfile access if at all possib
 setting MS_MAP_NO_PATH.</p>
 </div>
 <p><strong>MS_MAP_PATTERN</strong></p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 5.4.0.</span></p>
+</div>
 <p>If set, this environment variable is interpreted as regular expression that is used
 to test the value of the CGI map parameter. If the value does not match then
 an error is generated.</p>
 <p>Care must be taken to craft regular expressions that limit access to specific,
-trusted directories and limit path traversal:. See the <a class="reference internal" href="../environment_variables.html#environment-variables"><span class="std std-ref">Environment Variables</span></a>
+trusted directories and limit path traversal:. See the <a class="reference internal" href="environment_variables.html#environment-variables"><span class="std std-ref">Environment Variables</span></a>
 guide for examples.</p>
 <div class="admonition note">
 <p class="admonition-title">ملاحظة</p>
@@ -244,10 +288,6 @@ directory traversing:</p>
 </div>
 </li>
 </ul>
-<div class="admonition tip">
-<p class="admonition-title">نصيحة</p>
-<p>The online tool <a class="reference external" href="https://regexr.com/">RegExr</a> is great for testing regular expressions.</p>
-</div>
 </li>
 <li><p><strong>Nginx</strong> - <a class="reference external" href="http://nginx.org/en/docs/ngx_core_module.html#env">http://nginx.org/en/docs/ngx_core_module.html#env</a></p></li>
 <li><p><strong>IIS</strong> - <a class="reference external" href="https://docs.microsoft.com/en-us/iis/configuration/system.applicationhost/applicationpools/add/environmentvariables/">https://docs.microsoft.com/en-us/iis/configuration/system.applicationhost/applicationpools/add/environmentvariables/</a></p></li>
@@ -316,7 +356,7 @@ directory traversing:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html"> حقوق النشر </a> 2021, Open Source Geospatial Foundation
-      Last updated on 2021-05-21.
+      Last updated on 2021-06-07.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
     </div>
   </body>

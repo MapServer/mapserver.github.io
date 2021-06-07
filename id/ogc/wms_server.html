@@ -152,7 +152,7 @@
 <dd class="field-even"><p>jmckenna at gatewaygeomatics.com</p>
 </dd>
 <dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2021-05-17</p>
+<dd class="field-odd"><p>2021-06-03</p>
 </dd>
 </dl>
 <div class="contents topic" id="table-of-contents">
@@ -317,14 +317,13 @@ MapServer version <span class="m">7</span>.7-dev <span class="nv">OUTPUT</span><
 </div>
 <p>Example 2. On Windows:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>C:<span class="se">\m</span>s4w&gt; mapserv -v
-MapServer version <span class="m">7</span>.6.0-dev <span class="o">(</span>MS4W <span class="m">4</span>.0.3<span class="o">)</span> <span class="nv">OUTPUT</span><span class="o">=</span>PNG <span class="nv">OUTPUT</span><span class="o">=</span>JPEG
-<span class="nv">OUTPUT</span><span class="o">=</span>KML <span class="nv">SUPPORTS</span><span class="o">=</span>PROJ <span class="nv">SUPPORTS</span><span class="o">=</span>AGG <span class="nv">SUPPORTS</span><span class="o">=</span>FREETYPE
-<span class="nv">SUPPORTS</span><span class="o">=</span>CAIRO <span class="nv">SUPPORTS</span><span class="o">=</span>SVG_SYMBOLS <span class="nv">SUPPORTS</span><span class="o">=</span>SVGCAIRO
-<span class="nv">SUPPORTS</span><span class="o">=</span>ICONV <span class="nv">SUPPORTS</span><span class="o">=</span>FRIBIDI <span class="nv">SUPPORTS</span><span class="o">=</span>WMS_SERVER
-<span class="nv">SUPPORTS</span><span class="o">=</span>WMS_CLIENT <span class="nv">SUPPORTS</span><span class="o">=</span>WFS_SERVER <span class="nv">SUPPORTS</span><span class="o">=</span>WFS_CLIENT
-<span class="nv">SUPPORTS</span><span class="o">=</span>WCS_SERVER <span class="nv">SUPPORTS</span><span class="o">=</span>SOS_SERVER <span class="nv">SUPPORTS</span><span class="o">=</span>FASTCGI
-<span class="nv">SUPPORTS</span><span class="o">=</span>THREADS <span class="nv">SUPPORTS</span><span class="o">=</span>GEOS <span class="nv">SUPPORTS</span><span class="o">=</span>POINT_Z_M <span class="nv">SUPPORTS</span><span class="o">=</span>PBF
-<span class="nv">INPUT</span><span class="o">=</span>JPEG <span class="nv">INPUT</span><span class="o">=</span>POSTGIS <span class="nv">INPUT</span><span class="o">=</span>OGR <span class="nv">INPUT</span><span class="o">=</span>GDAL <span class="nv">INPUT</span><span class="o">=</span>SHAPEFILE
+MapServer version <span class="m">7</span>.7.0-dev <span class="o">(</span>MS4W <span class="m">4</span>.0.5<span class="o">)</span> <span class="nv">OUTPUT</span><span class="o">=</span>PNG <span class="nv">OUTPUT</span><span class="o">=</span>JPEG <span class="nv">OUTPUT</span><span class="o">=</span>KML
+<span class="nv">SUPPORTS</span><span class="o">=</span>PROJ <span class="nv">SUPPORTS</span><span class="o">=</span>AGG <span class="nv">SUPPORTS</span><span class="o">=</span>FREETYPE <span class="nv">SUPPORTS</span><span class="o">=</span>CAIRO
+<span class="nv">SUPPORTS</span><span class="o">=</span>SVG_SYMBOLS <span class="nv">SUPPORTS</span><span class="o">=</span>SVGCAIRO <span class="nv">SUPPORTS</span><span class="o">=</span>ICONV <span class="nv">SUPPORTS</span><span class="o">=</span>FRIBIDI
+<span class="nv">SUPPORTS</span><span class="o">=</span>WMS_SERVER <span class="nv">SUPPORTS</span><span class="o">=</span>WMS_CLIENT <span class="nv">SUPPORTS</span><span class="o">=</span>WFS_SERVER
+<span class="nv">SUPPORTS</span><span class="o">=</span>WFS_CLIENT <span class="nv">SUPPORTS</span><span class="o">=</span>WCS_SERVER <span class="nv">SUPPORTS</span><span class="o">=</span>SOS_SERVER
+<span class="nv">SUPPORTS</span><span class="o">=</span>FASTCGI <span class="nv">SUPPORTS</span><span class="o">=</span>THREADS <span class="nv">SUPPORTS</span><span class="o">=</span>GEOS <span class="nv">SUPPORTS</span><span class="o">=</span>POINT_Z_M
+<span class="nv">SUPPORTS</span><span class="o">=</span>PBF <span class="nv">INPUT</span><span class="o">=</span>JPEG <span class="nv">INPUT</span><span class="o">=</span>POSTGIS <span class="nv">INPUT</span><span class="o">=</span>OGR <span class="nv">INPUT</span><span class="o">=</span>GDAL <span class="nv">INPUT</span><span class="o">=</span>SHAPEFILE
 </pre></div>
 </div>
 </section>
@@ -392,8 +391,8 @@ them).</p>
 <li><p><strong>Map PROJECTION and wms_srs metadata:</strong></p>
 <p>WMS servers have to advertise the projection in which they are able
 to serve data using EPSG projection codes (see <a class="reference external" href="https://epsg.org/">The EPSG web page</a>
-for more background on EPSG codes). Recent versions of the PROJ
-library come with a table of EPSG initialization codes and allow
+for more background on EPSG codes). The <a class="reference external" href="https://proj.org/">PROJ</a>
+library come with a table of EPSG initialization codes and allows
 users to define a projection like this:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">PROJECTION</span>
    <span class="s">&quot;init=epsg:4269&quot;</span>
@@ -415,10 +414,10 @@ find an EPSG code to match the projection of your data. In those
 cases, the &quot;wms_srs&quot; metadata is used to list one or more EPSG codes
 that the data can be served in, and the PROJECTION object contains
 the real PROJ definition of the data's projection.</p>
-<p>Here is an example of a server whose data is in an Lambert Conformal
-Conic projection (3978). It's capabilities output will advertise
-EPSG:4269 and EPSG:4326 projections (lat/lon), but the PROJECTION
-object is set to the real projection that the data is in:</p>
+<p>Here is an example of a server whose data is in a Lambert Conformal
+Conic projection (3978). Its capabilities output will advertise
+EPSG:3857 (web mercator), EPSG:4269 and EPSG:4326 projections (lat/lon),
+but the PROJECTION object is set to the real projection that the data is in:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">NAME</span> <span class="s">&quot;DEMO&quot;</span>
 <span class="p">...</span>
 
@@ -426,8 +425,8 @@ object is set to the real projection that the data is in:</p>
   <span class="p">...</span>
   <span class="k">METADATA</span>
     <span class="s">&quot;wms_title&quot;</span>           <span class="s">&quot;WMS Demo Server&quot;</span>
-    <span class="s">&quot;wms_onlineresource&quot;</span>  <span class="s">&quot;http://my.host.com/cgi-bin/mapserv?map=wms.map&amp;&quot;</span>
-    <span class="s">&quot;wms_srs&quot;</span>             <span class="s">&quot;EPSG:4269 EPSG:4326&quot;</span>
+    <span class="s">&quot;wms_onlineresource&quot;</span>  <span class="s">&quot;http://my.host.com/cgi-bin/mapserv?map=/path/to/your-mapfile.map&quot;</span> <span class="c">#must change mapfile path</span>
+    <span class="s">&quot;wms_srs&quot;</span>             <span class="s">&quot;EPSG:3857 EPSG:4269 EPSG:4326&quot;</span>
   <span class="k">END</span>
 <span class="k">END</span>
 
@@ -476,7 +475,7 @@ complete HTTP URL including the <a class="reference external" href="http://">htt
 name, potentially a &quot;map=&quot; parameter, and terminated by &quot;?&quot; or
 &quot;&amp;&quot;.</p>
 <p>Here is a valid online resource URL:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mapserv?map=mywms.map&amp;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mapserv?map=/path/to/your-mapfile.map&quot; #must change mapfile path
 </pre></div>
 </div>
 <p>By creating a wrapper script on the server it is possible to hide
@@ -517,7 +516,7 @@ capabilities returned by our server to make sure nothing is missing.</p>
 <p>Using a web browser, access your server's online resource URL to which
 you add the parameters
 &quot;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetCapabilities&quot; to the end, e.g.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mapserv?map=mywms.map&amp;SERVICE=WMS&amp;VERSION=1.1.1
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mapserv?map=/path/to/your-mapfile.map&amp;SERVICE=WMS&amp;VERSION=1.1.1
                                                 &amp;REQUEST=GetCapabilities
 </pre></div>
 </div>
@@ -582,7 +581,9 @@ upper right) in SRS units.</p>
 gd / gdal libraries.</p>
 </div>
 <p>A valid example would therefore be:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mapserv?map=mywms.map&amp;SERVICE=WMS&amp;VERSION=1.1.1
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mapserv?
+     map=/path/to/your-mapfile.map
+     &amp;SERVICE=WMS&amp;VERSION=1.1.1
      &amp;REQUEST=GetMap&amp;LAYERS=prov_bound&amp;STYLES=&amp;SRS=EPSG:4326
      &amp;BBOX=-173.537,35.8775,-11.9603,83.8009&amp;WIDTH=400&amp;HEIGHT=300
      &amp;FORMAT=image/png
@@ -669,7 +670,7 @@ apply here.  See the <a class="reference internal" href="../cgi/index.html#cgi">
 specify a legend image for a CLASS. See the <a class="reference internal" href="../mapfile/index.html#mapfile"><span class="std std-ref">MapFile Reference
 doc</span></a> if necessary. Example Request</p>
 <p>An example request might look like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://127.0.0.1/cgi-bin/mapserv.exe?SERVICE=WMS&amp;VERSION=1.1.1&amp;layer=park&amp;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://127.0.0.1/cgi-bin/mapserv.exe?map=/path/to/your-mapfile.map&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;layer=park&amp;
 REQUEST=getlegendgraphic&amp;FORMAT=image/png
 </pre></div>
 </div>
@@ -690,7 +691,7 @@ normal legend rendering will occur.  For more information, please see <a class="
 metadata&quot; above, the following Online Resource URL is perfectly valid
 for a MapServer WMS according to section 6.2.2 or the WMS 1.1.1
 specification:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mapserv?map=mywms.map&amp;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mapserv?map=/path/to/your-mapfile.map
 </pre></div>
 </div>
 <p>However, some people will argue that the above URL contains mandatory
@@ -705,7 +706,7 @@ which is defined as an opaque string terminated by &quot;?&quot; or &quot;&amp;&
 call to the MapServer executable, by setting <em>MS_MAP_PATTERN</em> or
 <em>MS_MAP_NO_PATH</em> or hiding the <em>MAP=</em> parameter on public servers,
 as recommended in the document <a class="reference internal" href="../optimization/limit_mapfile_access.html#limit-mapfile-access"><span class="std std-ref">Limit Mapfile Access</span></a>. All possible
-environment variables to secure your server are listed in <a class="reference internal" href="../environment_variables.html#environment-variables"><span class="std std-ref">Environment Variables</span></a>.</p>
+environment variables to secure your server are listed in <a class="reference internal" href="../optimization/environment_variables.html#environment-variables"><span class="std std-ref">Environment Variables</span></a>.</p>
 </div>
 <p>But anyway, even if it's valid, the above URL is still ugly. And you
 might want to use a nicer URL for your WMS Online Resource URL. Here
@@ -1888,9 +1889,9 @@ will simply get the XML exception from the cascaded server.</p>
 <span class="linenos">12</span>    <span class="k">IMAGEPATH</span> <span class="s">&quot;/ms4w/tmp/ms_tmp/&quot;</span>
 <span class="linenos">13</span>    <span class="k">IMAGEURL</span> <span class="s">&quot;/ms_tmp/&quot;</span>
 <span class="linenos">14</span>    <span class="k">METADATA</span>
-<span class="linenos">15</span>      <span class="s">&quot;wms_title&quot;</span>          <span class="s">&quot;WMS Demo Server&quot;</span>  <span class="c">##required</span>
-<span class="linenos">16</span>      <span class="s">&quot;wms_onlineresource&quot;</span> <span class="s">&quot;http://yourpath/cgi-bin/mapserv.exe?&quot;</span>   <span class="c">##required</span>
-<span class="linenos">17</span>      <span class="s">&quot;wms_srs&quot;</span>            <span class="s">&quot;EPSG:3978 EPSG:4326 EPSG:4269 EPSG:3857&quot;</span>  <span class="c">##recommended</span>
+<span class="linenos">15</span>      <span class="s">&quot;wms_title&quot;</span>     <span class="s">&quot;WMS Demo Server&quot;</span>  <span class="c">##required</span>
+<span class="linenos">16</span>      <span class="s">&quot;wms_onlineresource&quot;</span> <span class="s">&quot;http://yourpath/cgi-bin/mapserv.exe?map=/path/to/your-mapfile.map&quot;</span>   <span class="c">##required (must change mapfile path)</span>
+<span class="linenos">17</span>      <span class="s">&quot;wms_srs&quot;</span>       <span class="s">&quot;EPSG:3978 EPSG:3857 EPSG:4269 EPSG:4326&quot;</span>  <span class="c">##recommended</span>
 <span class="linenos">18</span>      <span class="s">&quot;wms_enable_request&quot;</span> <span class="s">&quot;*&quot;</span>   <span class="c">##necessary</span>
 <span class="linenos">19</span>    <span class="k">END</span>
 <span class="linenos">20</span>  <span class="k">END</span> <span class="c"># Web</span>
@@ -2034,7 +2035,7 @@ example:</p>
   <span class="p">...</span>
   <span class="k">METADATA</span>
     <span class="s">&quot;wms_title&quot;</span>            <span class="s">&quot;WMS Demo Server&quot;</span>
-    <span class="s">&quot;wms_onlineresource&quot;</span>   <span class="s">&quot;http://my.host.com/cgi-bin/mapserv?map=wms.map&amp;&quot;</span>
+    <span class="s">&quot;wms_onlineresource&quot;</span>   <span class="s">&quot;http://my.host.com/cgi-bin/mapserv?map=/path/to/your-mapfile.map&quot;</span> <span class="c">#must change mapfile path</span>
     <span class="s">&quot;wms_srs&quot;</span>              <span class="s">&quot;AUTO:42001 AUTO:42002&quot;</span>
     <span class="s">&quot;wms_enable_request&quot;</span>   <span class="s">&quot;*&quot;</span>   <span class="c">##necessary</span>
   <span class="k">END</span> <span class="c"># METADATA</span>
@@ -2156,7 +2157,7 @@ example:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Hak cipta</a> 2021, Open Source Geospatial Foundation.
-      Terakhir diperbarui pada 2021-05-21.
+      Terakhir diperbarui pada 2021-06-07.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
     </div>
   </body>
