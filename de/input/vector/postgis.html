@@ -16,7 +16,7 @@
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
-    <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
+    <link rel="shortcut icon" href="../../_static/_static/mapserver.ico"/>
     <link rel="author" title="Über dieses Dokument" href="../../about.html" />
     <link rel="index" title="Stichwortverzeichnis" href="../../genindex.html" />
     <link rel="search" title="Suche" href="../../search.html" />
@@ -153,7 +153,7 @@
 <dd class="field-even"><p>jmckenna at gatewaygeomatics.com</p>
 </dd>
 <dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2021-05-05</p>
+<dd class="field-odd"><p>2021-07-09</p>
 </dd>
 </dl>
 <div class="contents topic" id="table-of-contents">
@@ -206,6 +206,26 @@ using unique [unique_key] using srid=[spatial_reference_id]“.  The
 features, but using them improves performance. If you want to make
 MapServer query calls to a PostGIS layer, your DATA parameter must
 include „using unique“. Omitting it will cause the query to fail.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tipp</p>
+<p>If you are trying to execute a query and receive the message
+<cite>„ERROR:  column oid does not exist at character…“</cite> it is likely
+that you are missing the <cite>using unique</cite> part in your DATA parameter.
+If you don’t specify a unique ID column, then MapServer will try to
+look for one (at the cost of executing a few more queries).  It is
+therefore best to <strong>always</strong> specify a unique ID column
+in your DATA statement.  If your table does not have a unique ID column,
+you can add one such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="n">mytable</span> <span class="n">ADD</span> <span class="n">COLUMN</span> <span class="n">unique_id</span> <span class="n">SERIAL</span> <span class="n">PRIMARY</span> <span class="n">KEY</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warnung</p>
+<p>OIDs were removed from PostgreSQL as of the PostgreSQL 12.0 release.
+It is recommended to specify a different unique ID column instead,
+in your layer’s DATA statement, of your mapfile.</p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Bemerkung</p>
 <p>Variable binding is supported by using <a class="reference internal" href="../../mapfile/layer.html#mapfile-layer-bindvals"><span class="std std-ref">BINDVALS</span></a>
@@ -532,7 +552,7 @@ MapServer LAYER to draw the curves (note that this is much slower however):</p>
   <h3 id="searchlabel">Schnellsuche</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Los" />
     </form>
     </div>
@@ -595,8 +615,8 @@ MapServer LAYER to draw the curves (note that this is much slower however):</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Zuletzt aktualisiert am 2021-06-11.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
+      Zuletzt aktualisiert am 2021-07-12.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.1.0.
     </div>
   </body>
 </html>

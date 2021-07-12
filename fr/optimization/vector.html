@@ -16,7 +16,7 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/translations.js"></script>
     
-    <link rel="shortcut icon" href="../_static/mapserver.ico"/>
+    <link rel="shortcut icon" href="../_static/_static/mapserver.ico"/>
     <link rel="author" title="À propos de ces documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Recherche" href="../search.html" />
@@ -155,7 +155,7 @@
 <dd class="field-odd"><p>HostGIS</p>
 </dd>
 <dt class="field-even">Last Updated</dt>
-<dd class="field-even"><p>2021-04-14</p>
+<dd class="field-even"><p>2021-07-09</p>
 </dd>
 </dl>
 <div class="contents topic" id="table-of-contents">
@@ -174,13 +174,14 @@
 <li><p><a class="reference internal" href="#postgis-notes" id="id10">PostGIS Notes</a></p>
 <ul>
 <li><p><a class="reference internal" href="#indexing-with-postgis" id="id11">Indexing with PostGIS</a></p></li>
-<li><p><a class="reference internal" href="#debugging-speed-issues-with-postgis" id="id12">Debugging speed issues with PostGIS</a></p></li>
+<li><p><a class="reference internal" href="#specifying-a-unique-id-column" id="id12">Specifying a Unique ID column</a></p></li>
+<li><p><a class="reference internal" href="#debugging-speed-issues-with-postgis" id="id13">Debugging speed issues with PostGIS</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#databases-in-general-postgis-oracle-spatialite-microsoft-sql-server-mysql" id="id13">Databases in General (PostGIS, Oracle, SpatiaLite, Microsoft SQL Server, MySQL)</a></p>
+<li><p><a class="reference internal" href="#databases-in-general-postgis-oracle-spatialite-microsoft-sql-server-mysql" id="id14">Databases in General (PostGIS, Oracle, SpatiaLite, Microsoft SQL Server, MySQL)</a></p>
 <ul>
-<li><p><a class="reference internal" href="#enable-connection-pooling" id="id14">Enable Connection Pooling</a></p></li>
-<li><p><a class="reference internal" href="#set-extent-at-the-layer-level-of-mapfile" id="id15">Set EXTENT at the LAYER level of mapfile</a></p></li>
+<li><p><a class="reference internal" href="#enable-connection-pooling" id="id15">Enable Connection Pooling</a></p></li>
+<li><p><a class="reference internal" href="#set-extent-at-the-layer-level-of-mapfile" id="id16">Set EXTENT at the LAYER level of mapfile</a></p></li>
 </ul>
 </li>
 </ul>
@@ -362,6 +363,10 @@ and have memory to throw at caching.</p>
 </section>
 <section id="postgis-notes">
 <span id="index-2"></span><h2><a class="toc-backref" href="#table-of-contents">PostGIS Notes</a><a class="headerlink" href="#postgis-notes" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="admonition seealso">
+<p class="admonition-title">Voir aussi</p>
+<p><a class="reference internal" href="../input/vector/postgis.html#input-postgis"><span class="std std-ref">PostGIS Input in MapServer</span></a></p>
+</div>
 <section id="indexing-with-postgis">
 <h3><a class="toc-backref" href="#table-of-contents">Indexing with PostGIS</a><a class="headerlink" href="#indexing-with-postgis" title="Lien permanent vers ce titre">¶</a></h3>
 <p>The single biggest boost to performance is indexing. Make sure that there’s a
@@ -386,6 +391,28 @@ itself, aside from the geospatial component. The easiest is to increase
 more memory for caching. It is worth the time to investigate the various options
 in the <a class="reference external" href="https://www.postgresql.org/docs/current/runtime-config-resource.html">Resource Consumption</a>
 section of the PostgreSQL documentation.</p>
+</section>
+<section id="specifying-a-unique-id-column">
+<span id="uniqueid-postgis"></span><h3><a class="toc-backref" href="#table-of-contents">Specifying a Unique ID column</a><a class="headerlink" href="#specifying-a-unique-id-column" title="Lien permanent vers ce titre">¶</a></h3>
+<p>To handle queries, MapServer requires a unique ID column, as part of your
+PostgreSQL table.  MapServer will try to guess the unique ID column, but that
+is costly as several more database queries have to be made; instead, you should
+always specify a unique ID column in your DATA statement of the layer, with the
+<em>using unique</em> syntax, such as:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">DATA</span> <span class="s">&quot;geom FROM mydata USING UNIQUE myid USING SRID=3857&quot;</span>
+</pre></div>
+</div>
+<p>If your table does not have a unique ID column, you can add one such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="n">mytable</span> <span class="n">ADD</span> <span class="n">COLUMN</span> <span class="n">unique_id</span> <span class="n">SERIAL</span> <span class="n">PRIMARY</span> <span class="n">KEY</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Avertissement</p>
+<p>In older PostgreSQL versions, a (dirty) trick was to use the existing <em>OID</em> as
+the unique ID, however OIDs were removed from PostgreSQL as of the PostgreSQL 12.0 release.
+So always specify an actual unique ID column instead, in your layer’s
+DATA statement, of your mapfile.</p>
+</div>
 </section>
 <section id="debugging-speed-issues-with-postgis">
 <span id="debugging-postgis"></span><h3><a class="toc-backref" href="#table-of-contents">Debugging speed issues with PostGIS</a><a class="headerlink" href="#debugging-speed-issues-with-postgis" title="Lien permanent vers ce titre">¶</a></h3>
@@ -561,7 +588,7 @@ spatial function to get the bounding box of a table, such as</p>
   <h3 id="searchlabel">Recherche rapide</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -591,6 +618,7 @@ spatial function to get the bounding box of a table, such as</p>
 <li><a class="reference internal" href="#shapefile-notes">Shapefile Notes</a></li>
 <li><a class="reference internal" href="#postgis-notes">PostGIS Notes</a><ul>
 <li><a class="reference internal" href="#indexing-with-postgis">Indexing with PostGIS</a></li>
+<li><a class="reference internal" href="#specifying-a-unique-id-column">Specifying a Unique ID column</a></li>
 <li><a class="reference internal" href="#debugging-speed-issues-with-postgis">Debugging speed issues with PostGIS</a></li>
 </ul>
 </li>
@@ -627,8 +655,8 @@ spatial function to get the bounding box of a table, such as</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Mis à jour le 2021-06-11.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
+      Mis à jour le 2021-07-12.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.1.0.
     </div>
   </body>
 </html>
