@@ -312,28 +312,28 @@ are written to it. To accomplish this for stdio handled through the FastCGI
 library, I had to do the following hack to libfcgi/fcgi_stdio.c within the
 fcgi-2.4.0 distribution.</p>
 <p>In FCGI_Accept() made he following change</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="p">(</span><span class="n">isCGI</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">FCGI_stdin</span><span class="o">-&gt;</span><span class="n">stdio_stream</span> <span class="o">=</span> <span class="n">stdin</span><span class="p">;</span>
-  <span class="n">FCGI_stdin</span><span class="o">-&gt;</span><span class="n">fcgx_stream</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-  <span class="n">FCGI_stdout</span><span class="o">-&gt;</span><span class="n">stdio_stream</span> <span class="o">=</span> <span class="n">stdout</span><span class="p">;</span>
-  <span class="n">FCGI_stdout</span><span class="o">-&gt;</span><span class="n">fcgx_stream</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-  <span class="n">FCGI_stderr</span><span class="o">-&gt;</span><span class="n">stdio_stream</span> <span class="o">=</span> <span class="n">stderr</span><span class="p">;</span>
-  <span class="n">FCGI_stderr</span><span class="o">-&gt;</span><span class="n">fcgx_stream</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="p">(</span><span class="n">isCGI</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">FCGI_stdin</span><span class="o">-&gt;</span><span class="n">stdio_stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stdin</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">FCGI_stdin</span><span class="o">-&gt;</span><span class="n">fcgx_stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">FCGI_stdout</span><span class="o">-&gt;</span><span class="n">stdio_stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stdout</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">FCGI_stdout</span><span class="o">-&gt;</span><span class="n">fcgx_stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">FCGI_stderr</span><span class="o">-&gt;</span><span class="n">stdio_stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stderr</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">FCGI_stderr</span><span class="o">-&gt;</span><span class="n">fcgx_stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
 
-  <span class="cm">/* FrankWarmerdam: added so that returning PNG and other binary data</span>
-<span class="cm">     will still work */</span>
+<span class="w">  </span><span class="cm">/* FrankWarmerdam: added so that returning PNG and other binary data</span>
+<span class="cm">     will still work */</span><span class="w"></span>
 <span class="cp">#ifdef _WIN32</span>
-  <span class="n">_setmode</span><span class="p">(</span> <span class="n">_fileno</span><span class="p">(</span><span class="n">stdout</span><span class="p">),</span> <span class="n">_O_BINARY</span><span class="p">);</span>
-  <span class="n">_setmode</span><span class="p">(</span> <span class="n">_fileno</span><span class="p">(</span><span class="n">stdin</span><span class="p">),</span> <span class="n">_O_BINARY</span><span class="p">);</span>
+<span class="w">  </span><span class="n">_setmode</span><span class="p">(</span><span class="w"> </span><span class="n">_fileno</span><span class="p">(</span><span class="n">stdout</span><span class="p">),</span><span class="w"> </span><span class="n">_O_BINARY</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">_setmode</span><span class="p">(</span><span class="w"> </span><span class="n">_fileno</span><span class="p">(</span><span class="n">stdin</span><span class="p">),</span><span class="w"> </span><span class="n">_O_BINARY</span><span class="p">);</span><span class="w"></span>
 <span class="cp">#endif</span>
 
-<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Also, add the following just before the FCGI_Accept() function</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifdef _WIN32</span>
-<span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;io.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;io.h&gt;</span><span class="cp"></span>
 <span class="cp">#endif</span>
 </pre></div>
 </div>
@@ -442,7 +442,7 @@ MSVCRT.DLL (or all using MSVCRTD.DLL) using the MS SDK Dependency Walker.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Last updated on 2021-07-31.
+      Last updated on 2021-08-27.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.1.2.
     </div>
   </body>
