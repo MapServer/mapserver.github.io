@@ -191,7 +191,7 @@ session configured with MapServer environment settings, and then type:</p>
 </ol>
 </section>
 <section id="configuring-with-iis">
-<h2><a class="toc-backref" href="#id3">Configuring with IIS</a><a class="headerlink" href="#configuring-with-iis" title="Permalink to this headline">¶</a></h2>
+<span id="iis-configuration"></span><h2><a class="toc-backref" href="#id3">Configuring with IIS</a><a class="headerlink" href="#configuring-with-iis" title="Permalink to this headline">¶</a></h2>
 <p>These steps assume IIS 7 or higher is installed on the development machine, and MapServer is using the default website
 location of <code class="docutils literal notranslate"><span class="pre">C:\Inetpub\wwwroot</span></code>. MapServer is installed as a <a class="reference internal" href="../optimization/fastcgi.html#fastcgi"><span class="std std-ref">FastCGI</span></a> application, which improves performance by allowing
 MapServer to share objects such as database connections between requests.</p>
@@ -229,7 +229,7 @@ notepad C:\Inetpub\wwwroot\mapserver\web.config
     <span class="nt">&lt;system.webServer&gt;</span>
         <span class="nt">&lt;handlers&gt;</span>
             <span class="nt">&lt;add</span> <span class="na">name=</span><span class="s">&quot;MapServerFastCgi&quot;</span> <span class="na">path=</span><span class="s">&quot;*&quot;</span> <span class="na">verb=</span><span class="s">&quot;*&quot;</span> <span class="na">type=</span><span class="s">&quot;&quot;</span> <span class="na">modules=</span><span class="s">&quot;FastCgiModule&quot;</span> <span class="na">scriptProcessor=</span><span class="s">&quot;C:\Mapserver\bin\mapserv.exe&quot;</span>
-            <span class="na">resourceType=</span><span class="s">&quot;Unspecified&quot;</span> <span class="na">requireAccess=</span><span class="s">&quot;Script&quot;</span> <span class="na">allowPathInfo=</span><span class="s">&quot;false&quot;</span> <span class="na">preCondition=</span><span class="s">&quot;&quot;</span>  <span class="nt">/&gt;</span>
+            <span class="na">resourceType=</span><span class="s">&quot;Unspecified&quot;</span> <span class="na">requireAccess=</span><span class="s">&quot;Script&quot;</span> <span class="na">allowPathInfo=</span><span class="s">&quot;true&quot;</span> <span class="na">preCondition=</span><span class="s">&quot;&quot;</span>  <span class="nt">/&gt;</span>
         <span class="nt">&lt;/handlers&gt;</span>
         <span class="nt">&lt;caching</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span> <span class="na">enableKernelCache=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
     <span class="nt">&lt;/system.webServer&gt;</span>
@@ -350,7 +350,7 @@ not be necessary.</p>
 </div>
 </section>
 <section id="further-configuration">
-<h2><a class="toc-backref" href="#id6">Further Configuration</a><a class="headerlink" href="#further-configuration" title="Permalink to this headline">¶</a></h2>
+<span id="iis-environ-settings"></span><h2><a class="toc-backref" href="#id6">Further Configuration</a><a class="headerlink" href="#further-configuration" title="Permalink to this headline">¶</a></h2>
 <p>MapServer makes use of <a class="reference internal" href="../optimization/environment_variables.html#environment-variables"><span class="std std-ref">Environment Variables</span></a> to create application-wide settings. When using IIS these need to be set
 as FastCGI environment settings, rather than standard system-wide environment variables. Each FastCGI application can be configured
 with different environment variables and can be modified by IIS Manager, or using the command line.</p>
@@ -474,6 +474,12 @@ The FastCGI executable could not be found
 </pre></div>
 </div>
 </li>
+<li><p>The following error is returned (from MapServer 8.0) if <code class="docutils literal notranslate"><span class="pre">allowPathInfo=&quot;false&quot;</span></code> is set in the <code class="docutils literal notranslate"><span class="pre">handlers</span></code> section
+for MapServer in the <code class="docutils literal notranslate"><span class="pre">web.config</span></code> file. This should be set to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>msLoadMap(): Regular expression error. MS_DEFAULT_MAPFILE_PATTERN validation failed.
+</pre></div>
+</div>
+</li>
 </ul>
 </section>
 </section>
@@ -548,7 +554,7 @@ The FastCGI executable could not be found
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Last updated on 2021-09-14.
+      Last updated on 2021-09-15.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
