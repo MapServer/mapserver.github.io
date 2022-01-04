@@ -203,30 +203,30 @@ structure that you define in advance. The &lt;template&gt; parameter takes a str
 argument where various template entries will be replaced at runtime by the correct
 value for each tile to store.</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tmpl&quot;</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span> <span class="na">layout=</span><span class="s">&quot;template&quot;</span><span class="nt">&gt;</span>
-   <span class="c">&lt;!-- template</span>
+   <span class="cm">&lt;!-- template</span>
 
-<span class="c">       string template that will be used to map a tile (by tileset, grid name, dimension,</span>
-<span class="c">       format, x, y, and z) to a filename on the filesystem</span>
-<span class="c">       the following replacements are performed:</span>
-<span class="c">       - {tileset} : the tileset name</span>
-<span class="c">       - {grid} : the grid name</span>
-<span class="c">       - {dim} : a string that concatenates the tile&#39;s dimension</span>
-<span class="c">       - {dim:dimname}: use the dimension value for dimname e.g. {dim:year} for year=2021 would</span>
-<span class="c">            use the string 2021</span>
-<span class="c">       - {ext} : the filename extension for the tile&#39;s image format</span>
-<span class="c">       - {x},{y},{z} : the tile x,y,z values</span>
-<span class="c">       - {inv_x}, {inv_y}, {inv_z} : inverted x,y,z values (inv_x = level-&gt;maxx - x - 1). This</span>
-<span class="c">            is mainly used to support grids where one axis is inverted (e.g. the google schema)</span>
-<span class="c">            and you want to create on offline cache.</span>
+<span class="cm">       string template that will be used to map a tile (by tileset, grid name, dimension,</span>
+<span class="cm">       format, x, y, and z) to a filename on the filesystem</span>
+<span class="cm">       the following replacements are performed:</span>
+<span class="cm">       - {tileset} : the tileset name</span>
+<span class="cm">       - {grid} : the grid name</span>
+<span class="cm">       - {dim} : a string that concatenates the tile&#39;s dimension</span>
+<span class="cm">       - {dim:dimname}: use the dimension value for dimname e.g. {dim:year} for year=2021 would</span>
+<span class="cm">            use the string 2021</span>
+<span class="cm">       - {ext} : the filename extension for the tile&#39;s image format</span>
+<span class="cm">       - {x},{y},{z} : the tile x,y,z values</span>
+<span class="cm">       - {inv_x}, {inv_y}, {inv_z} : inverted x,y,z values (inv_x = level-&gt;maxx - x - 1). This</span>
+<span class="cm">            is mainly used to support grids where one axis is inverted (e.g. the google schema)</span>
+<span class="cm">            and you want to create on offline cache.</span>
 
-<span class="c">      * Note that this type of cache does not support blank-tile detection and symlinking.</span>
+<span class="cm">      * Note that this type of cache does not support blank-tile detection and symlinking.</span>
 
-<span class="c">      * Warning: It is up to you to make sure that the template you chose creates a unique</span>
-<span class="c">        filename for your given tilesets. e.g. do not omit the {grid} parameter if your</span>
-<span class="c">        tilesets reference multiple grids. Failure to do so will result in filename</span>
-<span class="c">        collisions !</span>
+<span class="cm">      * Warning: It is up to you to make sure that the template you chose creates a unique</span>
+<span class="cm">        filename for your given tilesets. e.g. do not omit the {grid} parameter if your</span>
+<span class="cm">        tilesets reference multiple grids. Failure to do so will result in filename</span>
+<span class="cm">        collisions !</span>
 
-<span class="c">   --&gt;</span>
+<span class="cm">   --&gt;</span>
    <span class="nt">&lt;template&gt;</span>/tmp/template-test/{tileset}#{grid}#{dim}/{z}/{x}/{y}.{ext}<span class="nt">&lt;/template&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
@@ -249,18 +249,18 @@ possible to use multiple database files for tileset grids or dimensions.</p>
 reads, but may be a bit slower during concurrent writes if a high number of
 threads all try to insert new tiles concurrently.</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;bdb&quot;</span> <span class="na">type=</span><span class="s">&quot;bdb&quot;</span><span class="nt">&gt;</span>
-   <span class="c">&lt;!-- base (required)</span>
-<span class="c">      absolute filesystem path where the Berkeley DB database file is to be stored.</span>
-<span class="c">      this directory must exist, and be writable</span>
-<span class="c">   --&gt;</span>
+   <span class="cm">&lt;!-- base (required)</span>
+<span class="cm">      absolute filesystem path where the Berkeley DB database file is to be stored.</span>
+<span class="cm">      this directory must exist, and be writable</span>
+<span class="cm">   --&gt;</span>
    <span class="nt">&lt;base&gt;</span>/tmp/foo/<span class="nt">&lt;/base&gt;</span>
 
-   <span class="c">&lt;!-- key_template (optional)</span>
-<span class="c">      string template used to create the key for a tile entry in the database.</span>
-<span class="c">      defaults to the value below. you should include {tileset}, {grid} and {dim} here</span>
-<span class="c">      unless you know what you are doing, or you will end up with mixed tiles</span>
-<span class="c">   &lt;key_template&gt;{tileset}-{grid}-{dim}-{z}-{y}-{x}.{ext}&lt;/key_template&gt;</span>
-<span class="c">   --&gt;</span>
+   <span class="cm">&lt;!-- key_template (optional)</span>
+<span class="cm">      string template used to create the key for a tile entry in the database.</span>
+<span class="cm">      defaults to the value below. you should include {tileset}, {grid} and {dim} here</span>
+<span class="cm">      unless you know what you are doing, or you will end up with mixed tiles</span>
+<span class="cm">   &lt;key_template&gt;{tileset}-{grid}-{dim}-{z}-{y}-{x}.{ext}&lt;/key_template&gt;</span>
+<span class="cm">   --&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -279,17 +279,17 @@ insert new tiles concurrently.</p>
 <section id="default-schema">
 <h3>Default Schema<a class="headerlink" href="#default-schema" title="Permalink to this headline">¶</a></h3>
 <p>Tiles are stored in the configured SQLite file created by MapCache with</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">create</span> <span class="k">table</span> <span class="k">if</span> <span class="k">not</span> <span class="k">exists</span> <span class="n">tiles</span><span class="p">(</span>
-   <span class="n">tileset</span> <span class="nb">text</span><span class="p">,</span>
-   <span class="n">grid</span> <span class="nb">text</span><span class="p">,</span>
-   <span class="n">x</span> <span class="nb">integer</span><span class="p">,</span>
-   <span class="n">y</span> <span class="nb">integer</span><span class="p">,</span>
-   <span class="n">z</span> <span class="nb">integer</span><span class="p">,</span>
-   <span class="k">data</span> <span class="nb">blob</span><span class="p">,</span>
-   <span class="n">dim</span> <span class="nb">text</span><span class="p">,</span>
-   <span class="n">ctime</span> <span class="n">datetime</span><span class="p">,</span>
-   <span class="k">primary</span> <span class="k">key</span><span class="p">(</span><span class="n">tileset</span><span class="p">,</span><span class="n">grid</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">dim</span><span class="p">)</span>
-<span class="p">);</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">tiles</span><span class="p">(</span><span class="w"></span>
+<span class="w">   </span><span class="n">tileset</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="n">grid</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="n">x</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="n">y</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="n">z</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="k">data</span><span class="w"> </span><span class="nb">blob</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="n">dim</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="n">ctime</span><span class="w"> </span><span class="n">datetime</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">tileset</span><span class="p">,</span><span class="n">grid</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">dim</span><span class="p">)</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
@@ -307,7 +307,7 @@ defaults</p>
 </pre></div>
 </div>
 <p>&lt;pragma&gt; entries will result in a call to</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">PRAGMA</span> <span class="n">max_page_count</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">;</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">PRAGMA</span><span class="w"> </span><span class="n">max_page_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000000</span><span class="p">;</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -443,18 +443,18 @@ copied.</p>
 <p>From a configuration point of view, a multi-SQLite cache of class <em>ztop</em> is
 specified with a <cite>&lt;top&gt;</cite> tag defining the top zoom level. Templates keys are
 needed to determine SQLite files to use.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- multi-pyramid, multi-SQLite, starting at zoom level 8 --&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- multi-pyramid, multi-SQLite, starting at zoom level 8 --&gt;</span>
 <span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;z8&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
 <span class="hll">  <span class="nt">&lt;top&gt;</span>8<span class="nt">&lt;/top&gt;</span>
 </span><span class="hll">  <span class="nt">&lt;dbfile</span> <span class="na">top_fmt=</span><span class="s">&quot;%02d&quot;</span><span class="nt">&gt;</span>/path/to/z{top}-{top_x}-{top_y}.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
 </span><span class="nt">&lt;/cache&gt;</span>
 
-<span class="c">&lt;!-- single cache from zoom levels 0 to 7 --&gt;</span>
+<span class="cm">&lt;!-- single cache from zoom levels 0 to 7 --&gt;</span>
 <span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;z1-7&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;dbfile&gt;</span>/path/to/z0-0-0.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 
-<span class="c">&lt;!-- Composite cache made of all caches to address all zoom levels --&gt;</span>
+<span class="cm">&lt;!-- Composite cache made of all caches to address all zoom levels --&gt;</span>
 <span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;zfull&quot;</span> <span class="na">type=</span><span class="s">&quot;composite&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;cache</span> <span class="na">min-zoom=</span><span class="s">&quot;0&quot;</span> <span class="na">max-zoom=</span><span class="s">&quot;7&quot;</span><span class="nt">&gt;</span>z1-7<span class="nt">&lt;/cache&gt;</span>
   <span class="nt">&lt;cache</span> <span class="na">min-zoom=</span><span class="s">&quot;8&quot;</span><span class="nt">&gt;</span>z8<span class="nt">&lt;/cache&gt;</span>
@@ -486,28 +486,28 @@ table schema found in most downloadable MBTiles files, notably to enable storing
 blank (i.e. uniform) tiles without duplicating the encoded image data (in the
 same way the disk cache supports tile symlinking).</p>
 <p>The MBTiles schema is created with:</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">create</span> <span class="k">table</span> <span class="k">if</span> <span class="k">not</span> <span class="k">exists</span> <span class="n">images</span><span class="p">(</span>
-  <span class="n">tile_id</span> <span class="nb">text</span><span class="p">,</span>
-  <span class="n">tile_data</span> <span class="nb">blob</span><span class="p">,</span>
-  <span class="k">primary</span> <span class="k">key</span><span class="p">(</span><span class="n">tile_id</span><span class="p">));</span>
-<span class="k">create</span> <span class="k">table</span> <span class="k">if</span> <span class="k">not</span> <span class="k">exists</span> <span class="k">map</span> <span class="p">(</span>
-  <span class="n">zoom_level</span> <span class="nb">integer</span><span class="p">,</span>
-  <span class="n">tile_column</span> <span class="nb">integer</span><span class="p">,</span>
-  <span class="n">tile_row</span> <span class="nb">integer</span><span class="p">,</span>
-  <span class="n">tile_id</span> <span class="nb">text</span><span class="p">,</span>
-  <span class="k">foreign</span> <span class="k">key</span><span class="p">(</span><span class="n">tile_id</span><span class="p">)</span> <span class="k">references</span> <span class="n">images</span><span class="p">(</span><span class="n">tile_id</span><span class="p">),</span>
-  <span class="k">primary</span> <span class="k">key</span><span class="p">(</span><span class="n">tile_row</span><span class="p">,</span><span class="n">tile_column</span><span class="p">,</span><span class="n">zoom_level</span><span class="p">));</span>
-<span class="k">create</span> <span class="k">table</span> <span class="k">if</span> <span class="k">not</span> <span class="k">exists</span> <span class="n">metadata</span><span class="p">(</span>
-  <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
-  <span class="n">value</span> <span class="nb">text</span><span class="p">);</span> <span class="c1">-- not used or populated yet</span>
-<span class="k">create</span> <span class="k">view</span> <span class="k">if</span> <span class="k">not</span> <span class="k">exists</span> <span class="n">tiles</span>
-  <span class="k">as</span> <span class="k">select</span>
-     <span class="k">map</span><span class="p">.</span><span class="n">zoom_level</span> <span class="k">as</span> <span class="n">zoom_level</span><span class="p">,</span>
-     <span class="k">map</span><span class="p">.</span><span class="n">tile_column</span> <span class="k">as</span> <span class="n">tile_column</span><span class="p">,</span>
-     <span class="k">map</span><span class="p">.</span><span class="n">tile_row</span> <span class="k">as</span> <span class="n">tile_row</span><span class="p">,</span>
-     <span class="n">images</span><span class="p">.</span><span class="n">tile_data</span> <span class="k">as</span> <span class="n">tile_data</span>
-  <span class="k">from</span> <span class="k">map</span>
-     <span class="k">join</span> <span class="n">images</span> <span class="k">on</span> <span class="n">images</span><span class="p">.</span><span class="n">tile_id</span> <span class="o">=</span> <span class="k">map</span><span class="p">.</span><span class="n">tile_id</span><span class="p">;</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">images</span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="n">tile_id</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">tile_data</span><span class="w"> </span><span class="nb">blob</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">tile_id</span><span class="p">));</span><span class="w"></span>
+<span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="k">map</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="n">zoom_level</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">tile_column</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">tile_row</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">tile_id</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">foreign</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">tile_id</span><span class="p">)</span><span class="w"> </span><span class="k">references</span><span class="w"> </span><span class="n">images</span><span class="p">(</span><span class="n">tile_id</span><span class="p">),</span><span class="w"></span>
+<span class="w">  </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">tile_row</span><span class="p">,</span><span class="n">tile_column</span><span class="p">,</span><span class="n">zoom_level</span><span class="p">));</span><span class="w"></span>
+<span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">metadata</span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="n">name</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">value</span><span class="w"> </span><span class="nb">text</span><span class="p">);</span><span class="w"> </span><span class="c1">-- not used or populated yet</span>
+<span class="k">create</span><span class="w"> </span><span class="k">view</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">tiles</span><span class="w"></span>
+<span class="w">  </span><span class="k">as</span><span class="w"> </span><span class="k">select</span><span class="w"></span>
+<span class="w">     </span><span class="k">map</span><span class="p">.</span><span class="n">zoom_level</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">zoom_level</span><span class="p">,</span><span class="w"></span>
+<span class="w">     </span><span class="k">map</span><span class="p">.</span><span class="n">tile_column</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">tile_column</span><span class="p">,</span><span class="w"></span>
+<span class="w">     </span><span class="k">map</span><span class="p">.</span><span class="n">tile_row</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">tile_row</span><span class="p">,</span><span class="w"></span>
+<span class="w">     </span><span class="n">images</span><span class="p">.</span><span class="n">tile_data</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">tile_data</span><span class="w"></span>
+<span class="w">  </span><span class="k">from</span><span class="w"> </span><span class="k">map</span><span class="w"></span>
+<span class="w">     </span><span class="k">join</span><span class="w"> </span><span class="n">images</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">images</span><span class="p">.</span><span class="n">tile_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">map</span><span class="p">.</span><span class="n">tile_id</span><span class="p">;</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;mbtiles&quot;</span> <span class="na">type=</span><span class="s">&quot;mbtiles&quot;</span><span class="nt">&gt;</span>
@@ -1051,8 +1051,8 @@ populate the fast memcache cache e.g. on restarts.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Last updated on 2021-12-21.
+        &#169; <a href="../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
+      Last updated on 2022-01-04.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
     </div>
   </body>

@@ -264,28 +264,28 @@ module directory.  The process for activating a module is usually distro
 specific, but can be resumed by the following snippet that should be present in
 the Apache configuration file ( e.g. /usr/local/httpd/conf/httpd.conf or
 /etc/apache2/sites-available/default ):</p>
-<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nb">LoadModule</span> mapcache_module    modules/mod_mapcache.so
+<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nb">LoadModule</span><span class="w"> </span>mapcache_module<span class="w">    </span>modules/mod_mapcache.so<span class="w"></span>
 </pre></div>
 </div>
 <p>Next, a MapCache configuration is mapped to the server URL with the following
 snippet:</p>
 <p>For Apache &lt; 2.4:</p>
-<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span> <span class="s">mapcache_module</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;Directory</span> <span class="s">/path/to/directory</span><span class="nt">&gt;</span>
-      <span class="nb">Order</span> Allow,Deny
-      <span class="nb">Allow</span> from <span class="k">all</span>
-   <span class="nt">&lt;/Directory&gt;</span>
-   <span class="nb">MapCacheAlias</span> <span class="sx">/mapcache</span> <span class="s2">&quot;/path/to/directory/mapcache.xml&quot;</span>
-<span class="nt">&lt;/IfModule&gt;</span>
+<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span><span class="w"> </span><span class="s">mapcache_module</span><span class="nt">&gt;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">&lt;Directory</span><span class="w"> </span><span class="s">/path/to/directory</span><span class="nt">&gt;</span><span class="w"></span>
+<span class="w">      </span><span class="nb">Order</span><span class="w"> </span>Allow,Deny<span class="w"></span>
+<span class="w">      </span><span class="nb">Allow</span><span class="w"> </span>from<span class="w"> </span><span class="k">all</span><span class="w"></span>
+<span class="w">   </span><span class="nt">&lt;/Directory&gt;</span><span class="w"></span>
+<span class="w">   </span><span class="nb">MapCacheAlias</span><span class="w"> </span><span class="sx">/mapcache</span><span class="w"> </span><span class="s2">&quot;/path/to/directory/mapcache.xml&quot;</span><span class="w"></span>
+<span class="nt">&lt;/IfModule&gt;</span><span class="w"></span>
 </pre></div>
 </div>
 <p>For Apache &gt;= 2.4:</p>
-<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span> <span class="s">mapcache_module</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;Directory</span> <span class="s">/path/to/directory</span><span class="nt">&gt;</span>
-      <span class="nb">Require</span> <span class="k">all</span> granted
-   <span class="nt">&lt;/Directory&gt;</span>
-   <span class="nb">MapCacheAlias</span> <span class="sx">/mapcache</span> <span class="s2">&quot;/path/to/directory/mapcache.xml&quot;</span>
-<span class="nt">&lt;/IfModule&gt;</span>
+<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span><span class="w"> </span><span class="s">mapcache_module</span><span class="nt">&gt;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">&lt;Directory</span><span class="w"> </span><span class="s">/path/to/directory</span><span class="nt">&gt;</span><span class="w"></span>
+<span class="w">      </span><span class="nb">Require</span><span class="w"> </span><span class="k">all</span><span class="w"> </span>granted<span class="w"></span>
+<span class="w">   </span><span class="nt">&lt;/Directory&gt;</span><span class="w"></span>
+<span class="w">   </span><span class="nb">MapCacheAlias</span><span class="w"> </span><span class="sx">/mapcache</span><span class="w"> </span><span class="s2">&quot;/path/to/directory/mapcache.xml&quot;</span><span class="w"></span>
+<span class="nt">&lt;/IfModule&gt;</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Before you restart, copy the example mapcache.xml file to the location specified in your Apache configuration:</p>
@@ -349,47 +349,47 @@ to the <cite>mapcache.xml</cite> path. You will need to change this path to poin
 your own <cite>mapcache.xml</cite> in the MapCache source.</p>
 <p>The basic configuration without any proxying (which will return 404 errors on
 unseeded tile requests) is:</p>
-<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">location</span> <span class="p">~</span> <span class="sr">^/mapcache(?&lt;path_info&gt;/.*|$)</span> <span class="p">{</span>
-   <span class="kn">set</span> <span class="nv">$url_prefix</span> <span class="s">&quot;/mapcache&quot;</span><span class="p">;</span>
-   <span class="kn">mapcache</span> <span class="s">/usr/local/src/mapcache/mapcache.xml</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">location</span><span class="w"> </span><span class="p">~</span><span class="w"> </span><span class="sr">^/mapcache(?&lt;path_info&gt;/.*|$)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="kn">set</span><span class="w"> </span><span class="nv">$url_prefix</span><span class="w"> </span><span class="s">&quot;/mapcache&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="kn">mapcache</span><span class="w"> </span><span class="s">/usr/local/src/mapcache/mapcache.xml</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>If proxying unseeded tile requests to a MapCache instance running on an Apache
 server, we will proxy all 404 MapCache errors to a <cite>mapcache.apache.tld</cite>
 server listening on port 8080, configured to respond to MapCache requests on
 the <cite>/mapcache</cite> location.</p>
-<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">location</span> <span class="p">~</span> <span class="sr">^/mapcache(?&lt;path_info&gt;/.*|$)</span> <span class="p">{</span>
-   <span class="kn">set</span> <span class="nv">$url_prefix</span> <span class="s">&quot;/mapcache&quot;</span><span class="p">;</span>
-   <span class="kn">mapcache</span> <span class="s">/usr/local/src/mapcache/mapcache.xml</span><span class="p">;</span>
-   <span class="kn">error_page</span> <span class="mi">404</span> <span class="p">=</span> <span class="s">@apache_mapcache</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">location</span><span class="w"> </span><span class="p">~</span><span class="w"> </span><span class="sr">^/mapcache(?&lt;path_info&gt;/.*|$)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="kn">set</span><span class="w"> </span><span class="nv">$url_prefix</span><span class="w"> </span><span class="s">&quot;/mapcache&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="kn">mapcache</span><span class="w"> </span><span class="s">/usr/local/src/mapcache/mapcache.xml</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="kn">error_page</span><span class="w"> </span><span class="mi">404</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">@apache_mapcache</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="k">location</span> <span class="s">@apache_mapcache</span> <span class="p">{</span>
-   <span class="kn">proxy_pass</span> <span class="s">http://mapcache.apache.tld:8080</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="k">location</span><span class="w"> </span><span class="s">@apache_mapcache</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="kn">proxy_pass</span><span class="w"> </span><span class="s">http://mapcache.apache.tld:8080</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>If using FastCGI instances of MapCache, spawned with e.g. spawn-fcgi or
 supervisord on port 9001 (make sure to enable FastCGI when building MapCache,
 and to set the MAPCACHE_CONFIG_FILE environment variable before spawning):</p>
-<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">location</span> <span class="p">~</span> <span class="sr">^/mapcache(?&lt;path_info&gt;/.*|$)</span> <span class="p">{</span>
-   <span class="kn">set</span> <span class="nv">$url_prefix</span> <span class="s">&quot;/mapcache&quot;</span><span class="p">;</span>
-   <span class="kn">mapcache</span> <span class="s">/usr/local/src/mapcache/mapcache.xml</span><span class="p">;</span>
-   <span class="kn">error_page</span> <span class="mi">404</span> <span class="p">=</span> <span class="s">@fastcgi_mapcache</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">location</span><span class="w"> </span><span class="p">~</span><span class="w"> </span><span class="sr">^/mapcache(?&lt;path_info&gt;/.*|$)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="kn">set</span><span class="w"> </span><span class="nv">$url_prefix</span><span class="w"> </span><span class="s">&quot;/mapcache&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="kn">mapcache</span><span class="w"> </span><span class="s">/usr/local/src/mapcache/mapcache.xml</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="kn">error_page</span><span class="w"> </span><span class="mi">404</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">@fastcgi_mapcache</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="k">location</span> <span class="s">@fastcgi_mapcache</span> <span class="p">{</span>
-   <span class="kn">fastcgi_pass</span>   <span class="n">localhost</span><span class="p">:</span><span class="mi">9001</span><span class="p">;</span>
-   <span class="kn">fastcgi_param</span>  <span class="s">QUERY_STRING</span>     <span class="nv">$query_string</span><span class="p">;</span>
-   <span class="kn">fastcgi_param</span>  <span class="s">REQUEST_METHOD</span>   <span class="nv">$request_method</span><span class="p">;</span>
-   <span class="kn">fastcgi_param</span>  <span class="s">CONTENT_TYPE</span>     <span class="nv">$content_type</span><span class="p">;</span>
-   <span class="kn">fastcgi_param</span>  <span class="s">CONTENT_LENGTH</span>   <span class="nv">$content_length</span><span class="p">;</span>
-   <span class="kn">fastcgi_param</span>  <span class="s">PATH_INFO</span>        <span class="nv">$path_info</span><span class="p">;</span>
-   <span class="kn">fastcgi_param</span>  <span class="s">SERVER_NAME</span>      <span class="nv">$server_name</span><span class="p">;</span>
-   <span class="kn">fastcgi_param</span>  <span class="s">SERVER_PORT</span>      <span class="nv">$server_port</span><span class="p">;</span>
-   <span class="kn">fastcgi_param</span>  <span class="s">SCRIPT_NAME</span>      <span class="s">&quot;/mapcache&quot;</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="k">location</span><span class="w"> </span><span class="s">@fastcgi_mapcache</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="kn">fastcgi_pass</span><span class="w">   </span><span class="n">localhost</span><span class="p">:</span><span class="mi">9001</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="kn">fastcgi_param</span><span class="w">  </span><span class="s">QUERY_STRING</span><span class="w">     </span><span class="nv">$query_string</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="kn">fastcgi_param</span><span class="w">  </span><span class="s">REQUEST_METHOD</span><span class="w">   </span><span class="nv">$request_method</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="kn">fastcgi_param</span><span class="w">  </span><span class="s">CONTENT_TYPE</span><span class="w">     </span><span class="nv">$content_type</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="kn">fastcgi_param</span><span class="w">  </span><span class="s">CONTENT_LENGTH</span><span class="w">   </span><span class="nv">$content_length</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="kn">fastcgi_param</span><span class="w">  </span><span class="s">PATH_INFO</span><span class="w">        </span><span class="nv">$path_info</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="kn">fastcgi_param</span><span class="w">  </span><span class="s">SERVER_NAME</span><span class="w">      </span><span class="nv">$server_name</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="kn">fastcgi_param</span><span class="w">  </span><span class="s">SERVER_PORT</span><span class="w">      </span><span class="nv">$server_port</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="kn">fastcgi_param</span><span class="w">  </span><span class="s">SCRIPT_NAME</span><span class="w">      </span><span class="s">&quot;/mapcache&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Copy the relevant sections of <cite>nginx.conf</cite> from MapCache’s <cite>nginx</cite>
@@ -412,7 +412,7 @@ spawning the MapCache processes.</p>
 </div>
 <section id="apache-with-mod-cgi">
 <h4>Apache with mod_cgi<a class="headerlink" href="#apache-with-mod-cgi" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nb">SetEnv</span> <span class="s2">&quot;MAPCACHE_CONFIG_FILE&quot;</span> <span class="s2">&quot;/path/to/mapcache/mapcache.xml&quot;</span>
+<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nb">SetEnv</span><span class="w"> </span><span class="s2">&quot;MAPCACHE_CONFIG_FILE&quot;</span><span class="w"> </span><span class="s2">&quot;/path/to/mapcache/mapcache.xml&quot;</span><span class="w"></span>
 </pre></div>
 </div>
 <p>For Apache with mod_fcgid:</p>
@@ -424,17 +424,17 @@ spawning the MapCache processes.</p>
 under the fcgi-bin alias.</p>
 <p>With a working mod_fcgid Apache instance, the full httpd.conf snippet to activate
 MapCache could be:</p>
-<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span> <span class="s">mod_fcgid.c</span><span class="nt">&gt;</span>
-   <span class="nb">IPCCommTimeout</span> <span class="m">120</span>
-   <span class="nb">MaxProcessCount</span> <span class="m">10</span>
-   <span class="nb">FcgidInitialEnv</span> <span class="s2">&quot;MAPCACHE_CONFIG_FILE&quot;</span> <span class="s2">&quot;/path/to/mapcache/mapcache.xml&quot;</span>
-   <span class="nt">&lt;Location</span> <span class="s">/map.fcgi</span><span class="nt">&gt;</span>
-      <span class="nb">Order</span> Allow,Deny
-      <span class="nb">Allow</span> from <span class="k">all</span>
-      <span class="nb">SetHandler</span> fcgid-script
-   <span class="nt">&lt;/Location&gt;</span>
-   <span class="nb">ScriptAlias</span> <span class="sx">/map.fcgi</span> <span class="s2">&quot;/path/to/mapcache/src/mapcache&quot;</span>
-<span class="nt">&lt;/IfModule&gt;</span>
+<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span><span class="w"> </span><span class="s">mod_fcgid.c</span><span class="nt">&gt;</span><span class="w"></span>
+<span class="w">   </span><span class="nb">IPCCommTimeout</span><span class="w"> </span><span class="m">120</span><span class="w"></span>
+<span class="w">   </span><span class="nb">MaxProcessCount</span><span class="w"> </span><span class="m">10</span><span class="w"></span>
+<span class="w">   </span><span class="nb">FcgidInitialEnv</span><span class="w"> </span><span class="s2">&quot;MAPCACHE_CONFIG_FILE&quot;</span><span class="w"> </span><span class="s2">&quot;/path/to/mapcache/mapcache.xml&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">&lt;Location</span><span class="w"> </span><span class="s">/map.fcgi</span><span class="nt">&gt;</span><span class="w"></span>
+<span class="w">      </span><span class="nb">Order</span><span class="w"> </span>Allow,Deny<span class="w"></span>
+<span class="w">      </span><span class="nb">Allow</span><span class="w"> </span>from<span class="w"> </span><span class="k">all</span><span class="w"></span>
+<span class="w">      </span><span class="nb">SetHandler</span><span class="w"> </span>fcgid-script<span class="w"></span>
+<span class="w">   </span><span class="nt">&lt;/Location&gt;</span><span class="w"></span>
+<span class="w">   </span><span class="nb">ScriptAlias</span><span class="w"> </span><span class="sx">/map.fcgi</span><span class="w"> </span><span class="s2">&quot;/path/to/mapcache/src/mapcache&quot;</span><span class="w"></span>
+<span class="nt">&lt;/IfModule&gt;</span><span class="w"></span>
 </pre></div>
 </div>
 <p>The MapCache service would then be accessible at <a class="reference external" href="http://myserver/map.fcgi[/demo">http://myserver/map.fcgi[/demo</a>]</p>
@@ -753,19 +753,19 @@ to avoid any loading issues later on.</p>
 <h3><a class="toc-backref" href="#table-of-contents">Configure Your Installed Apache</a><a class="headerlink" href="#configure-your-installed-apache" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p>Modify your <em>httpd.conf</em> file to load the module:</p>
-<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nb">LoadModule</span> mapcache_module <span class="s2">&quot;D:/ms4w/Apache/cgi-bin/mod_mapcache.dll&quot;</span>
+<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nb">LoadModule</span><span class="w"> </span>mapcache_module<span class="w"> </span><span class="s2">&quot;D:/ms4w/Apache/cgi-bin/mod_mapcache.dll&quot;</span><span class="w"></span>
 </pre></div>
 </div>
 </li>
 <li><p>Next, configure your MapCache directory with the following
 snippet:</p>
-<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span> <span class="s">mapcache_module</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;Directory</span> <span class="s">&quot;D:/ms4w/apps/mapcache/&quot;</span><span class="nt">&gt;</span>
-      <span class="nb">Order</span> Allow,Deny
-      <span class="nb">Allow</span> from <span class="k">all</span>
-   <span class="nt">&lt;/Directory&gt;</span>
-   <span class="nb">MapCacheAlias</span> <span class="sx">/mapcache</span> <span class="s2">&quot;D:/ms4w/apps/mapcache/mapcache.xml&quot;</span>
-<span class="nt">&lt;/IfModule&gt;</span>
+<div class="highlight-apache notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span><span class="w"> </span><span class="s">mapcache_module</span><span class="nt">&gt;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">&lt;Directory</span><span class="w"> </span><span class="s">&quot;D:/ms4w/apps/mapcache/&quot;</span><span class="nt">&gt;</span><span class="w"></span>
+<span class="w">      </span><span class="nb">Order</span><span class="w"> </span>Allow,Deny<span class="w"></span>
+<span class="w">      </span><span class="nb">Allow</span><span class="w"> </span>from<span class="w"> </span><span class="k">all</span><span class="w"></span>
+<span class="w">   </span><span class="nt">&lt;/Directory&gt;</span><span class="w"></span>
+<span class="w">   </span><span class="nb">MapCacheAlias</span><span class="w"> </span><span class="sx">/mapcache</span><span class="w"> </span><span class="s2">&quot;D:/ms4w/apps/mapcache/mapcache.xml&quot;</span><span class="w"></span>
+<span class="nt">&lt;/IfModule&gt;</span><span class="w"></span>
 </pre></div>
 </div>
 </li>
@@ -900,8 +900,8 @@ D:/ms4w/tmp/ms_tmp/cache/).</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Last updated on 2021-12-21.
+        &#169; <a href="../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
+      Last updated on 2022-01-04.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
     </div>
   </body>
