@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>PostGIS/PostgreSQL &#8212; MapServer 7.6.3 documentation</title>
+    <title>PostGIS/PostgreSQL &#8212; MapServer 7.6.4 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
@@ -15,7 +15,7 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
     
-    <link rel="shortcut icon" href="../../_static/_static/mapserver.ico"/>
+    <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Over deze documenten" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Zoeken" href="../../search.html" />
@@ -129,7 +129,7 @@
           <a href="oracle.html" title="Oracle Spatial"
              accesskey="P">vorige</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../documentation.html" >MapServer 7.6.3 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../documentation.html" >MapServer 7.6.4 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../index.html" >Data Input</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Vector Data</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">PostGIS/PostgreSQL</a></li> 
@@ -152,7 +152,7 @@
 <dd class="field-even"><p>jmckenna at gatewaygeomatics.com</p>
 </dd>
 <dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2021-07-09</p>
+<dd class="field-odd"><p>2022-01-25</p>
 </dd>
 </dl>
 <div class="contents topic" id="table-of-contents">
@@ -164,15 +164,23 @@
 <li><p><a class="reference internal" href="#data-access-connection-method" id="id4">Data Access /Connection Method</a></p></li>
 <li><p><a class="reference internal" href="#ogrinfo-examples" id="id5">OGRINFO Examples</a></p></li>
 <li><p><a class="reference internal" href="#mapfile-example" id="id6">Mapfile Example</a></p></li>
-<li><p><a class="reference internal" href="#support-for-2-5d-geometries" id="id7">Support for 2.5D geometries</a></p></li>
-<li><p><a class="reference internal" href="#support-for-sql-mm-curves" id="id8">Support for SQL/MM Curves</a></p>
+<li><p><a class="reference internal" href="#postgis-raster-pgraster" id="id7">PostGIS Raster (PGRaster)</a></p>
 <ul>
-<li><p><a class="reference internal" href="#example-1-circularstring-in-mapserver" id="id9">Example#1: CircularString in MapServer</a></p></li>
-<li><p><a class="reference internal" href="#example-2-compoundcurve-in-mapserver" id="id10">Example#2: CompoundCurve in MapServer</a></p></li>
-<li><p><a class="reference internal" href="#example-3-curvepolygon-in-mapserver" id="id11">Example#3: CurvePolygon in MapServer</a></p></li>
-<li><p><a class="reference internal" href="#example-4-multicurve-in-mapserver" id="id12">Example#4: MultiCurve in MapServer</a></p></li>
-<li><p><a class="reference internal" href="#example-5-multisurface-in-mapserver" id="id13">Example#5: MultiSurface in MapServer</a></p></li>
-<li><p><a class="reference internal" href="#using-mapserver-6-0" id="id14">Using MapServer &lt; 6.0</a></p></li>
+<li><p><a class="reference internal" href="#load-raster-data" id="id8">Load Raster DATA</a></p></li>
+<li><p><a class="reference internal" href="#connect-with-gdalinfo" id="id9">Connect with GDALINFO</a></p></li>
+<li><p><a class="reference internal" href="#mapfile-layer" id="id10">Mapfile Layer</a></p></li>
+<li><p><a class="reference internal" href="#test-with-shp2img" id="id11">Test with shp2img</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#support-for-2-5d-geometries" id="id12">Support for 2.5D geometries</a></p></li>
+<li><p><a class="reference internal" href="#support-for-sql-mm-curves" id="id13">Support for SQL/MM Curves</a></p>
+<ul>
+<li><p><a class="reference internal" href="#example-1-circularstring-in-mapserver" id="id14">Example#1: CircularString in MapServer</a></p></li>
+<li><p><a class="reference internal" href="#example-2-compoundcurve-in-mapserver" id="id15">Example#2: CompoundCurve in MapServer</a></p></li>
+<li><p><a class="reference internal" href="#example-3-curvepolygon-in-mapserver" id="id16">Example#3: CurvePolygon in MapServer</a></p></li>
+<li><p><a class="reference internal" href="#example-4-multicurve-in-mapserver" id="id17">Example#4: MultiCurve in MapServer</a></p></li>
+<li><p><a class="reference internal" href="#example-5-multisurface-in-mapserver" id="id18">Example#5: MultiSurface in MapServer</a></p></li>
+<li><p><a class="reference internal" href="#using-mapserver-6-0" id="id19">Using MapServer &lt; 6.0</a></p></li>
 </ul>
 </li>
 </ul>
@@ -185,6 +193,20 @@
 Open Source <a class="reference external" href="https://www.postgresql.org/">PostgreSQL</a> database.</p>
 <p>The <a class="reference external" href="https://github.com/MapServer/MapServer/wiki/PostGIS">PostGIS wiki page</a>
 may include additional information.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Be sure that you have loaded the extension into your database:
+<em>CREATE EXTENSION postgis;</em></p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you have upgraded PostGIS, be sure to execute the following
+on your database: <em>SELECT postgis_extensions_upgrade();</em></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">Zie ook</p>
+<p><a class="reference internal" href="../../optimization/vector.html#vector-optimization"><span class="std std-ref">Vector Data Management &amp; Optimization</span></a></p>
+</div>
 </section>
 <section id="data-access-connection-method">
 <h2><a class="toc-backref" href="#table-of-contents">Data Access /Connection Method</a><a class="headerlink" href="#data-access-connection-method" title="Permalink naar deze titel">¶</a></h2>
@@ -287,11 +309,12 @@ from the database.</p>
 PostgreSQL driver, by using the ‘–formats’ command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">ogrinfo</span> <span class="o">--</span><span class="n">formats</span>
 
-  <span class="n">Loaded</span> <span class="n">OGR</span> <span class="n">Format</span> <span class="n">Drivers</span><span class="p">:</span>
+  <span class="n">Supported</span> <span class="n">formats</span><span class="p">:</span>
   <span class="o">...</span>
-  <span class="o">-&gt;</span> <span class="s2">&quot;PGeo&quot;</span> <span class="p">(</span><span class="n">readonly</span><span class="p">)</span>
-  <span class="o">-&gt;</span> <span class="s2">&quot;PostgreSQL&quot;</span> <span class="p">(</span><span class="n">read</span><span class="o">/</span><span class="n">write</span><span class="p">)</span>
-  <span class="o">-&gt;</span> <span class="s2">&quot;MySQL&quot;</span> <span class="p">(</span><span class="n">read</span><span class="o">/</span><span class="n">write</span><span class="p">)</span>
+    <span class="n">PGeo</span> <span class="o">-</span><span class="n">vector</span><span class="o">-</span> <span class="p">(</span><span class="n">ro</span><span class="p">):</span> <span class="n">ESRI</span> <span class="n">Personal</span> <span class="n">GeoDatabase</span>
+    <span class="n">MSSQLSpatial</span> <span class="o">-</span><span class="n">vector</span><span class="o">-</span> <span class="p">(</span><span class="n">rw</span><span class="o">+</span><span class="p">):</span> <span class="n">Microsoft</span> <span class="n">SQL</span> <span class="n">Server</span> <span class="n">Spatial</span> <span class="n">Database</span>
+    <span class="n">PostgreSQL</span> <span class="o">-</span><span class="n">vector</span><span class="o">-</span> <span class="p">(</span><span class="n">rw</span><span class="o">+</span><span class="p">):</span> <span class="n">PostgreSQL</span><span class="o">/</span><span class="n">PostGIS</span>
+    <span class="n">MySQL</span> <span class="o">-</span><span class="n">vector</span><span class="o">-</span> <span class="p">(</span><span class="n">rw</span><span class="o">+</span><span class="p">):</span> <span class="n">MySQL</span>
   <span class="o">...</span>
 </pre></div>
 </div>
@@ -301,29 +324,46 @@ PostgreSQL driver, by using the ‘–formats’ command:</p>
 your database to get a list of spatial tables:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;ogrinfo PG:&quot;host=127.0.0.1 user=postgres password=postgres dbname=canada port=5432&quot;
       using driver `PostgreSQL&#39; successful.
-      1: province (Multi Polygon)
+      1: province (Polygon)
 </pre></div>
 </div>
 <p>Now use ogrinfo to get information on the structure of the spatial table:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;ogrinfo PG:&quot;host=127.0.0.1 user=postgres password=postgres dbname=canada port=5432&quot;
-             province -summary
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;ogrinfo PG:&quot;host=127.0.0.1 user=postgres password=postgres dbname=canada port=5432&quot; province -summary
 
  INFO: Open of `PG:host=127.0.0.1 user=postgres password=postgres dbname=canada&#39;
     using driver `PostgreSQL&#39; successful.
 
   Layer name: province
-  Geometry: Multi Polygon
+  Geometry: Polygon
   Feature Count: 1068
   Extent: (-2340603.750000, -719746.062500) - (3009430.500000, 3836605.250000)
   Layer SRS WKT:
-  (unknown)
-  FID Column = gid
-  Geometry Column = the_geom
-  area: Real (0.0)
-  island: String (30.0)
-  island_e: String (30.0)
-  island_f: String (30.0)
-  name: String (30.0)
+  PROJCS[&quot;NAD83 / Canada Atlas Lambert&quot;,
+      GEOGCS[&quot;NAD83&quot;,
+          DATUM[&quot;North_American_Datum_1983&quot;,
+              SPHEROID[&quot;GRS 1980&quot;,6378137,298.257222101,
+                  AUTHORITY[&quot;EPSG&quot;,&quot;7019&quot;]],
+              TOWGS84[0,0,0,0,0,0,0],
+              AUTHORITY[&quot;EPSG&quot;,&quot;6269&quot;]],
+          PRIMEM[&quot;Greenwich&quot;,0,
+              AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],
+          UNIT[&quot;degree&quot;,0.0174532925199433,
+              AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],
+          AUTHORITY[&quot;EPSG&quot;,&quot;4269&quot;]],
+      PROJECTION[&quot;Lambert_Conformal_Conic_2SP&quot;],
+      PARAMETER[&quot;standard_parallel_1&quot;,49],
+      PARAMETER[&quot;standard_parallel_2&quot;,77],
+      PARAMETER[&quot;latitude_of_origin&quot;,49],
+      PARAMETER[&quot;central_meridian&quot;,-95],
+      PARAMETER[&quot;false_easting&quot;,0],
+      PARAMETER[&quot;false_northing&quot;,0],
+      UNIT[&quot;metre&quot;,1,
+          AUTHORITY[&quot;EPSG&quot;,&quot;9001&quot;]],
+      AXIS[&quot;Easting&quot;,EAST],
+      AXIS[&quot;Northing&quot;,NORTH],
+      AUTHORITY[&quot;EPSG&quot;,&quot;3978&quot;]]
+  FID Column = ogc_fid
+  Geometry Column = wkb_geometry
   ...
 </pre></div>
 </div>
@@ -335,16 +375,148 @@ your database to get a list of spatial tables:</p>
   <span class="k">STATUS</span> <span class="nb">ON</span>
   <span class="k">TYPE</span> <span class="nb">POLYGON</span>
   <span class="k">CONNECTIONTYPE</span> <span class="nb">POSTGIS</span>
-  <span class="k">CONNECTION</span> <span class="s">&quot;host=127.0.0.1 port=5432 dbname=canada user=postgres password=postgres&quot;</span>
-  <span class="k">DATA</span> <span class="s">&quot;the_geom from province&quot;</span>
+  <span class="k">CONNECTION</span> <span class="s">&quot;host=127.0.0.1 user=postgres password=postgres port=5432 dbname=canada&quot;</span>
+  <span class="k">DATA</span> <span class="s">&quot;wkb_geometry FROM province USING UNIQUE ogc_fid USING srid=3978&quot;</span>
   <span class="k">CLASS</span>
-     <span class="p">...</span>
+    <span class="k">NAME</span> <span class="s">&quot;Provincial Land&quot;</span>
+    <span class="k">STYLE</span>
+      <span class="k">COLOR</span> <span class="mi">240</span> <span class="mi">240</span> <span class="mi">240</span>
+      <span class="k">OUTLINECOLOR</span> <span class="mi">199</span> <span class="mi">199</span> <span class="mi">199</span>
+    <span class="k">END</span>
+  <span class="k">END</span>
+  <span class="k">PROJECTION</span> <span class="c">#source</span>
+    <span class="s">&quot;init=epsg:3978&quot;</span>
   <span class="k">END</span>
 <span class="k">END</span>
 </pre></div>
 </div>
 <p>For more info about PostGIS and MapServer see the PostGIS docs:
 <a class="reference external" href="https://postgis.net/documentation/">https://postgis.net/documentation/</a></p>
+</section>
+<section id="postgis-raster-pgraster">
+<h2><a class="toc-backref" href="#table-of-contents">PostGIS Raster (PGRaster)</a><a class="headerlink" href="#postgis-raster-pgraster" title="Permalink naar deze titel">¶</a></h2>
+<p>Since the PostGIS 2.0 release, PostGIS includes support for raster data,
+which can be accessed by MapServer (through GDAL).</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Be sure that you have loaded the extension into your database:
+<em>CREATE EXTENSION postgis_raster;</em></p>
+</div>
+<section id="load-raster-data">
+<h3><a class="toc-backref" href="#table-of-contents">Load Raster DATA</a><a class="headerlink" href="#load-raster-data" title="Permalink naar deze titel">¶</a></h3>
+<p>You must use <em>raster2pgsql</em> to load your raster data into PostGIS
+(see <a class="reference external" href="https://postgis.net/docs/using_raster_dataman.html">postgis.net</a> for usage), such
+as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">raster2pgsql</span> <span class="o">-</span><span class="n">s</span> <span class="mi">2961</span> <span class="o">-</span><span class="n">I</span> <span class="o">-</span><span class="n">C</span> <span class="o">-</span><span class="n">M</span> <span class="o">-</span><span class="n">F</span> <span class="o">-</span><span class="n">t</span> <span class="n">auto</span> <span class="o">-</span><span class="n">l</span> <span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">8</span> <span class="n">colorhillshade_dtm_1m_utm20_w_10_91</span><span class="o">.</span><span class="n">tif</span> <span class="n">lunenburg_colorhillshade</span> <span class="o">&gt;</span> <span class="n">raster</span><span class="o">.</span><span class="n">sql</span>
+<span class="n">psql</span> <span class="o">-</span><span class="n">U</span> <span class="n">postgres</span> <span class="o">-</span><span class="n">p</span> <span class="mi">5432</span> <span class="o">-</span><span class="n">d</span> <span class="n">mydb</span> <span class="o">-</span><span class="n">f</span> <span class="n">raster</span><span class="o">.</span><span class="n">sql</span>
+</pre></div>
+</div>
+<p>The above will create a new <em>lunenburg_colorhillshade</em> table from a GeoTIFF
+file.</p>
+<dl class="simple">
+<dt>Important points for display in MapServer:</dt><dd><ul class="simple">
+<li><p>be sure to set the <em>-t</em> switch to tile the raster</p></li>
+<li><p>be sure to set the <em>-I</em> switch to create a GiST index on the raster</p></li>
+<li><p>be sure to set the <em>-C</em> switch to apply raster constraints</p></li>
+<li><p>be sure to set the <em>-F</em> switch to add a column with the name of the raster file</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="connect-with-gdalinfo">
+<h3><a class="toc-backref" href="#table-of-contents">Connect with GDALINFO</a><a class="headerlink" href="#connect-with-gdalinfo" title="Permalink naar deze titel">¶</a></h3>
+<p>Use the <em>gdalinfo</em> utility to list the available raster tables in your
+database, such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gdalinfo</span> <span class="n">PG</span><span class="p">:</span><span class="s2">&quot;host=127.0.0.1 port=5432 user=postgres password=postgres dbname=mydb&quot;</span>
+</pre></div>
+</div>
+<p>which returns something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Driver</span><span class="p">:</span> <span class="n">PostGISRaster</span><span class="o">/</span><span class="n">PostGIS</span> <span class="n">Raster</span> <span class="n">driver</span>
+
+<span class="n">Subdatasets</span><span class="p">:</span>
+  <span class="o">...</span>
+    <span class="n">SUBDATASET_3_NAME</span><span class="o">=</span><span class="n">PG</span><span class="p">:</span><span class="n">host</span><span class="o">=</span><span class="mf">127.0.0.1</span> <span class="n">port</span><span class="o">=</span><span class="mi">5432</span> <span class="n">user</span><span class="o">=</span><span class="n">postgres</span> <span class="n">password</span><span class="o">=</span><span class="n">postgres</span> <span class="n">dbname</span><span class="o">=</span><span class="n">mydb</span>  <span class="n">schema</span><span class="o">=</span><span class="s1">&#39;public&#39;</span> <span class="n">table</span><span class="o">=</span><span class="s1">&#39;lunenburg_colorhillshade&#39;</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;rast&#39;</span>
+    <span class="n">SUBDATASET_3_DESC</span><span class="o">=</span><span class="n">PostGIS</span> <span class="n">Raster</span> <span class="n">table</span> <span class="n">at</span> <span class="n">public</span><span class="o">.</span><span class="n">lunenburg_colorhillshade</span> <span class="p">(</span><span class="n">rast</span><span class="p">)</span>
+  <span class="o">...</span>
+</pre></div>
+</div>
+<p>Next specify the <em>table</em> and <em>column</em>, with the <em>-nomd</em> switch, such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gdalinfo</span> <span class="n">PG</span><span class="p">:</span><span class="s2">&quot;host=127.0.0.1 port=5432 user=postgres password=postgres dbname=mydb table=lunenburg_colorhillshade column=rast&quot;</span> <span class="o">-</span><span class="n">nomd</span>
+</pre></div>
+</div>
+<p>which returns a summary of the raster, including its projection
+(<a class="reference external" href="https://epsg.io/2961">EPSG:2961</a>) :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Driver</span><span class="p">:</span> <span class="n">PostGISRaster</span><span class="o">/</span><span class="n">PostGIS</span> <span class="n">Raster</span> <span class="n">driver</span>
+<span class="n">Coordinate</span> <span class="n">System</span> <span class="ow">is</span><span class="p">:</span>
+<span class="n">PROJCS</span><span class="p">[</span><span class="s2">&quot;NAD83(CSRS) / UTM zone 20N&quot;</span><span class="p">,</span>
+    <span class="n">GEOGCS</span><span class="p">[</span><span class="s2">&quot;NAD83(CSRS)&quot;</span><span class="p">,</span>
+        <span class="n">DATUM</span><span class="p">[</span><span class="s2">&quot;NAD83_Canadian_Spatial_Reference_System&quot;</span><span class="p">,</span>
+            <span class="n">SPHEROID</span><span class="p">[</span><span class="s2">&quot;GRS 1980&quot;</span><span class="p">,</span><span class="mi">6378137</span><span class="p">,</span><span class="mf">298.257222101</span><span class="p">,</span>
+                <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="s2">&quot;7019&quot;</span><span class="p">]],</span>
+            <span class="n">TOWGS84</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="s2">&quot;6140&quot;</span><span class="p">]],</span>
+        <span class="n">PRIMEM</span><span class="p">[</span><span class="s2">&quot;Greenwich&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="s2">&quot;8901&quot;</span><span class="p">]],</span>
+        <span class="n">UNIT</span><span class="p">[</span><span class="s2">&quot;degree&quot;</span><span class="p">,</span><span class="mf">0.0174532925199433</span><span class="p">,</span>
+            <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="s2">&quot;9122&quot;</span><span class="p">]],</span>
+        <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="s2">&quot;4617&quot;</span><span class="p">]],</span>
+    <span class="n">PROJECTION</span><span class="p">[</span><span class="s2">&quot;Transverse_Mercator&quot;</span><span class="p">],</span>
+    <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;latitude_of_origin&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;central_meridian&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">63</span><span class="p">],</span>
+    <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;scale_factor&quot;</span><span class="p">,</span><span class="mf">0.9996</span><span class="p">],</span>
+    <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;false_easting&quot;</span><span class="p">,</span><span class="mi">500000</span><span class="p">],</span>
+    <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;false_northing&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">UNIT</span><span class="p">[</span><span class="s2">&quot;metre&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="s2">&quot;9001&quot;</span><span class="p">]],</span>
+    <span class="n">AXIS</span><span class="p">[</span><span class="s2">&quot;Easting&quot;</span><span class="p">,</span><span class="n">EAST</span><span class="p">],</span>
+    <span class="n">AXIS</span><span class="p">[</span><span class="s2">&quot;Northing&quot;</span><span class="p">,</span><span class="n">NORTH</span><span class="p">],</span>
+    <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="s2">&quot;2961&quot;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</section>
+<section id="mapfile-layer">
+<h3><a class="toc-backref" href="#table-of-contents">Mapfile Layer</a><a class="headerlink" href="#mapfile-layer" title="Permalink naar deze titel">¶</a></h3>
+<p>The mapfile layer is similar to other raster layers, but the PostGIS
+connection parameters are specified in the <em>DATA</em> parameter, such
+as:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;lunenburg_raster&quot;</span>
+  <span class="k">TYPE</span> <span class="nb">RASTER</span>
+  <span class="k">STATUS</span> <span class="nb">ON</span>
+  <span class="k">DATA</span> <span class="s">&quot;PG:host=127.0.0.1 port=5432 sslmode=disable user=postgres password=postgres dbname=mydb schema=public table=lunenburg_colorhillshade column=rast mode=2&quot;</span>
+  <span class="k">PROJECTION</span>
+    <span class="s">&quot;init=epsg:2961&quot;</span>
+  <span class="k">END</span>
+  <span class="k">CLASS</span>
+    <span class="k">NAME</span> <span class="s">&quot;Lunenburg&quot;</span>
+  <span class="k">END</span>
+  <span class="k">PROCESSING</span> <span class="s">&quot;CLOSE_CONNECTION=DEFER&quot;</span>
+<span class="k">END</span> <span class="c"># layer</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Notitie</p>
+<p>The parameter <em>mode=2</em> must be specified in the DATA connection string,
+for MapServer to load this properly, as the raster is tiled.  See
+the <a class="reference external" href="https://gdal.org/drivers/raster/postgisraster.html">PostGIS Raster Driver</a>
+page for more info.</p>
+</div>
+</section>
+<section id="test-with-shp2img">
+<h3><a class="toc-backref" href="#table-of-contents">Test with shp2img</a><a class="headerlink" href="#test-with-shp2img" title="Permalink naar deze titel">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">shp2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">postgis</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">ttt</span><span class="o">.</span><span class="n">png</span> <span class="o">-</span><span class="n">map_debug</span> <span class="mi">3</span>
+
+  <span class="n">msDrawMap</span><span class="p">():</span> <span class="n">rendering</span> <span class="n">using</span> <span class="n">outputformat</span> <span class="n">named</span> <span class="n">png</span> <span class="p">(</span><span class="n">AGG</span><span class="o">/</span><span class="n">PNG</span><span class="p">)</span><span class="o">.</span>
+  <span class="n">msDrawMap</span><span class="p">():</span> <span class="n">WMS</span><span class="o">/</span><span class="n">WFS</span> <span class="nb">set</span><span class="o">-</span><span class="n">up</span> <span class="ow">and</span> <span class="n">query</span><span class="p">,</span> <span class="mf">0.000</span><span class="n">s</span>
+  <span class="n">msDrawRasterLayerLow</span><span class="p">(</span><span class="n">lunenburg_raster</span><span class="p">):</span> <span class="n">entering</span><span class="o">.</span>
+  <span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">1</span> <span class="p">(</span><span class="n">lunenburg_raster</span><span class="p">),</span> <span class="mf">0.355</span><span class="n">s</span>
+  <span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Drawing</span> <span class="n">Label</span> <span class="n">Cache</span><span class="p">,</span> <span class="mf">0.000</span><span class="n">s</span>
+  <span class="n">msDrawMap</span><span class="p">()</span> <span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.356</span><span class="n">s</span>
+  <span class="n">msSaveImage</span><span class="p">(</span><span class="n">ttt</span><span class="o">.</span><span class="n">png</span><span class="p">)</span> <span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.004</span><span class="n">s</span>
+</pre></div>
+</div>
+<img alt="../../_images/pgraster.png" class="no-scaled-link" src="../../_images/pgraster.png" style="width: 400px; height: 300px;" />
+</section>
 </section>
 <section id="support-for-2-5d-geometries">
 <h2><a class="toc-backref" href="#table-of-contents">Support for 2.5D geometries</a><a class="headerlink" href="#support-for-2-5d-geometries" title="Permalink naar deze titel">¶</a></h2>
@@ -575,6 +747,13 @@ MapServer LAYER to draw the curves (note that this is much slower however):</p>
 <li><a class="reference internal" href="#data-access-connection-method">Data Access /Connection Method</a></li>
 <li><a class="reference internal" href="#ogrinfo-examples">OGRINFO Examples</a></li>
 <li><a class="reference internal" href="#mapfile-example">Mapfile Example</a></li>
+<li><a class="reference internal" href="#postgis-raster-pgraster">PostGIS Raster (PGRaster)</a><ul>
+<li><a class="reference internal" href="#load-raster-data">Load Raster DATA</a></li>
+<li><a class="reference internal" href="#connect-with-gdalinfo">Connect with GDALINFO</a></li>
+<li><a class="reference internal" href="#mapfile-layer">Mapfile Layer</a></li>
+<li><a class="reference internal" href="#test-with-shp2img">Test with shp2img</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#support-for-2-5d-geometries">Support for 2.5D geometries</a></li>
 <li><a class="reference internal" href="#support-for-sql-mm-curves">Support for SQL/MM Curves</a><ul>
 <li><a class="reference internal" href="#example-1-circularstring-in-mapserver">Example#1: CircularString in MapServer</a></li>
@@ -606,16 +785,16 @@ MapServer LAYER to draw the curves (note that this is much slower however):</p>
           <a href="oracle.html" title="Oracle Spatial"
              >vorige</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../documentation.html" >MapServer 7.6.3 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../documentation.html" >MapServer 7.6.4 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../index.html" >Data Input</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="index.html" >Vector Data</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">PostGIS/PostgreSQL</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2021-07-12.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.1.0.
+        &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
+      Laatste aanpassing op 2022-02-23.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

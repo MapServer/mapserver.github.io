@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>MS RFC 121: PostgreSQL and ElasticSearch Support in MapCache dimensions &#8212; MapServer 7.6.3 documentation</title>
+    <title>MS RFC 121: PostgreSQL and ElasticSearch Support in MapCache dimensions &#8212; MapServer 7.6.4 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
@@ -16,7 +16,7 @@
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
-    <link rel="shortcut icon" href="../../_static/_static/mapserver.ico"/>
+    <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Об этих документах" href="../../about.html" />
     <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
     <link rel="search" title="Поиск" href="../../search.html" />
@@ -177,20 +177,20 @@ dimension values) is replaced by a <cite>&lt;connection&gt;</cite> element which
 connection information to the PostgreSQL database containing dimension values.
 This element contains the string required by the <a class="reference external" href="https://www.postgresql.org/docs/current/static/libpq-connect.html#id-1.7.3.8.2.12.2.1.2">PQconnectdb()</a> function of
 the libpq - C library.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- PostgreSQL Dimension --&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- PostgreSQL Dimension --&gt;</span>
 <span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;postgresql&quot;</span> <span class="na">name=</span><span class="s">&quot;sensor&quot;</span> <span class="na">default=</span><span class="s">&quot;phr&quot;</span><span class="nt">&gt;</span>
 
-    <span class="c">&lt;!-- Access Point --&gt;</span>
+    <span class="cm">&lt;!-- Access Point --&gt;</span>
     <span class="nt">&lt;connection&gt;</span>
         host=localhost user=mapcache password=mapcache dbname=mapcache port=5433
     <span class="nt">&lt;/connection&gt;</span>
 
-    <span class="c">&lt;!-- All-values Query --&gt;</span>
+    <span class="cm">&lt;!-- All-values Query --&gt;</span>
     <span class="nt">&lt;list_query&gt;</span>
         SELECT distinct(product) FROM dim
     <span class="nt">&lt;/list_query&gt;</span>
 
-    <span class="c">&lt;!-- Selected-values Query --&gt;</span>
+    <span class="cm">&lt;!-- Selected-values Query --&gt;</span>
     <span class="nt">&lt;validate_query&gt;</span>
         SELECT product FROM dim
         WHERE sensor=:dim
@@ -211,33 +211,33 @@ Inserting JSON data in XML configuration may need to encapsulate it in a
 in JSON, raises the need for extraction instructions to get sub-dimension
 values from query responses.</p>
 <p>For example, let’s assume that this ElasticSearch query:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>   <span class="nt">&quot;size&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="nt">&quot;aggs&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;distinct_product&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;terms&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;product/keyword&quot;</span> <span class="p">}</span> <span class="p">}</span> <span class="p">},</span>
-    <span class="nt">&quot;query&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;term&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;sensor&quot;</span><span class="p">:</span> <span class="s2">&quot;phr&quot;</span> <span class="p">}</span> <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w">   </span><span class="nt">&quot;size&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;aggs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;distinct_product&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;terms&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;field&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;product/keyword&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;term&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;sensor&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;phr&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>returns this response:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>   <span class="nt">&quot;took&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="nt">&quot;timed_out&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-    <span class="nt">&quot;_shards&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;total&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nt">&quot;successful&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nt">&quot;skipped&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nt">&quot;failed&quot;</span><span class="p">:</span> <span class="mi">0</span> <span class="p">},</span>
-    <span class="nt">&quot;hits&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;total&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nt">&quot;max_score&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nt">&quot;hits&quot;</span><span class="p">:</span> <span class="p">[]</span> <span class="p">},</span>
-    <span class="nt">&quot;aggregations&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">&quot;distinct_product&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nt">&quot;doc_count_error_upper_bound&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="nt">&quot;sum_other_doc_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="nt">&quot;buckets&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span> <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;phr_img1&quot;</span><span class="p">,</span> <span class="nt">&quot;doc_count&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">},</span>
-                <span class="p">{</span> <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;phr_img2&quot;</span><span class="p">,</span> <span class="nt">&quot;doc_count&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">},</span>
-                <span class="p">{</span> <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;phr_img3&quot;</span><span class="p">,</span> <span class="nt">&quot;doc_count&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">}</span>
-            <span class="p">]</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w">   </span><span class="nt">&quot;took&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;timed_out&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;_shards&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;successful&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;skipped&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;failed&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;hits&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;max_score&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;hits&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;aggregations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;distinct_product&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;doc_count_error_upper_bound&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;sum_other_doc_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;buckets&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">                </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;phr_img1&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;doc_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">                </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;phr_img2&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;doc_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">                </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;phr_img3&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;doc_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="p">]</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>The expected sub-dimension values are then:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="s2">&quot;phr_img1&quot;</span><span class="p">,</span> <span class="s2">&quot;phr_img2&quot;</span><span class="p">,</span> <span class="s2">&quot;phr_img3&quot;</span> <span class="p">]</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="w"> </span><span class="s2">&quot;phr_img1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;phr_img2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;phr_img3&quot;</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
 </pre></div>
 </div>
 <p>This list is obtained by extracting the <cite>aggregations</cite> item from the outer
@@ -246,7 +246,7 @@ item is to be extracted from each dictionary of the <cite>bucket</cite> list. Th
 extraction instructions take the form of a path-like list of keywords to be
 used to extract sub-dimension values from JSON response provided by
 ElasticSearch:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="s2">&quot;aggregations&quot;</span><span class="p">,</span> <span class="s2">&quot;distinct_product&quot;</span><span class="p">,</span> <span class="s2">&quot;buckets&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span> <span class="p">]</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="w"> </span><span class="s2">&quot;aggregations&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;distinct_product&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;buckets&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;key&quot;</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
 </pre></div>
 </div>
 <p>This is specified in the MapCache configuration file by way of new XML
@@ -256,10 +256,10 @@ extraction instructions respectively for <cite>&lt;list_query&gt;</cite> and
 <p>Access point to an ElasticSearch index is configured with a <cite>&lt;http&gt;</cite> element
 in place of SQLite’s <cite>&lt;dbfile&gt;</cite> or PostgreSQL’s <cite>&lt;connection&gt;</cite>. In that
 <cite>&lt;http&gt;</cite> element, both <cite>&lt;url&gt;</cite> and <cite>&lt;Content-Type&gt;</cite> shall be specified.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- ElasticSearch Dimension --&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- ElasticSearch Dimension --&gt;</span>
 <span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;elasticsearch&quot;</span> <span class="na">name=</span><span class="s">&quot;sensor&quot;</span> <span class="na">default=</span><span class="s">&quot;phr&quot;</span><span class="nt">&gt;</span>
 
-    <span class="c">&lt;!-- Access Point --&gt;</span>
+    <span class="cm">&lt;!-- Access Point --&gt;</span>
     <span class="nt">&lt;http&gt;</span>
         <span class="nt">&lt;url&gt;</span>http://localhost:9200/sensor/_search<span class="nt">&lt;/url&gt;</span>
         <span class="nt">&lt;headers&gt;</span>
@@ -267,7 +267,7 @@ in place of SQLite’s <cite>&lt;dbfile&gt;</cite> or PostgreSQL’s <cite>&lt;c
         <span class="nt">&lt;/headers&gt;</span>
     <span class="nt">&lt;/http&gt;</span>
 
-    <span class="c">&lt;!-- All-values Query --&gt;</span>
+    <span class="cm">&lt;!-- All-values Query --&gt;</span>
     <span class="nt">&lt;list_query&gt;</span><span class="cp">&lt;![CDATA[</span>
 <span class="cp">        {   &quot;size&quot;: 0,</span>
 <span class="cp">            &quot;aggs&quot;: {</span>
@@ -276,12 +276,12 @@ in place of SQLite’s <cite>&lt;dbfile&gt;</cite> or PostgreSQL’s <cite>&lt;c
 <span class="cp">        }</span>
 <span class="cp">    ]]&gt;</span><span class="nt">&lt;/list_query&gt;</span>
 
-    <span class="c">&lt;!-- All-values Response Extration Instructions --&gt;</span>
+    <span class="cm">&lt;!-- All-values Response Extration Instructions --&gt;</span>
     <span class="nt">&lt;list_response&gt;</span>
         [ &quot;aggregations&quot;, &quot;products&quot;, &quot;buckets&quot;, &quot;key&quot; ]
     <span class="nt">&lt;/list_response&gt;</span>
 
-    <span class="c">&lt;!-- Selected-values Query --&gt;</span>
+    <span class="cm">&lt;!-- Selected-values Query --&gt;</span>
     <span class="nt">&lt;validate_query&gt;</span><span class="cp">&lt;![CDATA[</span>
 <span class="cp">        {   &quot;size&quot;: 0,</span>
 <span class="cp">            &quot;aggs&quot;: {</span>
@@ -291,7 +291,7 @@ in place of SQLite’s <cite>&lt;dbfile&gt;</cite> or PostgreSQL’s <cite>&lt;c
 <span class="cp">        }</span>
 <span class="cp">    ]]&gt;</span><span class="nt">&lt;/validate_query&gt;</span>
 
-    <span class="c">&lt;!-- Selected-values Response Extration Instructions --&gt;</span>
+    <span class="cm">&lt;!-- Selected-values Response Extration Instructions --&gt;</span>
     <span class="nt">&lt;validate_response&gt;</span>
         [ &quot;aggregations&quot;, &quot;products&quot;, &quot;buckets&quot;, &quot;key&quot; ]
     <span class="nt">&lt;/validate_response&gt;</span>
@@ -304,15 +304,15 @@ in place of SQLite’s <cite>&lt;dbfile&gt;</cite> or PostgreSQL’s <cite>&lt;c
 <h3>2.3. Time Dimensions<a class="headerlink" href="#time-dimensions" title="Ссылка на этот заголовок">¶</a></h3>
 <p>Time Dimensions currently use a SQLite back-end for storing allowed dimension
 values. Hereafter is an example of current Time Dimension configuration:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span> <span class="c">&lt;!-- &quot;time&quot; dimension, &quot;old-style&quot; definition</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span> <span class="cm">&lt;!-- &quot;time&quot; dimension, &quot;old-style&quot; definition</span>
 
-<span class="c">      This example defines a &quot;time&quot; dimension whose possible values are</span>
-<span class="c">      stored in the /data/times.sqlite SQLite file. The default value is</span>
-<span class="c">      &quot;d1&quot;.</span>
+<span class="cm">      This example defines a &quot;time&quot; dimension whose possible values are</span>
+<span class="cm">      stored in the /data/times.sqlite SQLite file. The default value is</span>
+<span class="cm">      &quot;d1&quot;.</span>
 
-<span class="c">      A WMS request with that dimension may contain, e.g.</span>
-<span class="c">      &quot;... &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
-<span class="c"> --&gt;</span>
+<span class="cm">      A WMS request with that dimension may contain, e.g.</span>
+<span class="cm">      &quot;... &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
+<span class="cm"> --&gt;</span>
 <span class="hll"> <span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;time&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;d1&quot;</span><span class="nt">&gt;</span>
 </span>   <span class="nt">&lt;dbfile&gt;</span>/data/times.sqlite<span class="nt">&lt;/dbfile&gt;</span>
    <span class="nt">&lt;query&gt;</span>
@@ -329,15 +329,15 @@ than SQLite, it may be relevant to make Time Dimensions back-end agnostic. In a
 configuration point of view this is achieved by adding a boolean <cite>time</cite>
 attribute to a dimension of any type among <cite>sqlite</cite>, <cite>postgresql</cite> or
 <cite>elasticsearch</cite>. Following are examples of such configurations.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span> <span class="c">&lt;!-- &quot;time&quot; dimension, &quot;new-style&quot; definition using a SQLite back-end</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span> <span class="cm">&lt;!-- &quot;time&quot; dimension, &quot;new-style&quot; definition using a SQLite back-end</span>
 
-<span class="c">      This example defines a &quot;time&quot; dimension whose possible values are</span>
-<span class="c">      stored in the /data/times.sqlite SQLite file. The default value is</span>
-<span class="c">      &quot;d1&quot;.</span>
+<span class="cm">      This example defines a &quot;time&quot; dimension whose possible values are</span>
+<span class="cm">      stored in the /data/times.sqlite SQLite file. The default value is</span>
+<span class="cm">      &quot;d1&quot;.</span>
 
-<span class="c">      A WMS request with that dimension may contain, e.g.</span>
-<span class="c">      &quot;... &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
-<span class="c"> --&gt;</span>
+<span class="cm">      A WMS request with that dimension may contain, e.g.</span>
+<span class="cm">      &quot;... &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
+<span class="cm"> --&gt;</span>
 <span class="hll"> <span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;d1&quot;</span> <span class="na">time=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
 </span>   <span class="nt">&lt;dbfile&gt;</span>/data/times.sqlite<span class="nt">&lt;/dbfile&gt;</span>
    <span class="nt">&lt;list_query&gt;</span>SELECT ts FROM timedim<span class="nt">&lt;/list_query&gt;</span>
@@ -350,15 +350,15 @@ attribute to a dimension of any type among <cite>sqlite</cite>, <cite>postgresql
  <span class="nt">&lt;/dimension&gt;</span>
 </pre></div>
 </div>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span> <span class="c">&lt;!-- &quot;time&quot; dimension, &quot;new-style&quot; definition using a PostgreSQL back-end</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span> <span class="cm">&lt;!-- &quot;time&quot; dimension, &quot;new-style&quot; definition using a PostgreSQL back-end</span>
 
-<span class="c">      This example defines a &quot;time&quot; dimension whose possible values are</span>
-<span class="c">      stored in the postgresql://mapcache:mapcache@localhost:5433/time</span>
-<span class="c">      PostgreSQL database. The default value is &quot;d1&quot;.</span>
+<span class="cm">      This example defines a &quot;time&quot; dimension whose possible values are</span>
+<span class="cm">      stored in the postgresql://mapcache:mapcache@localhost:5433/time</span>
+<span class="cm">      PostgreSQL database. The default value is &quot;d1&quot;.</span>
 
-<span class="c">      A WMS request with that dimension may contain, e.g.</span>
-<span class="c">      &quot;... &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
-<span class="c"> --&gt;</span>
+<span class="cm">      A WMS request with that dimension may contain, e.g.</span>
+<span class="cm">      &quot;... &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
+<span class="cm"> --&gt;</span>
 <span class="hll"> <span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;postgresql&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;d1&quot;</span> <span class="na">time=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
 </span>   <span class="nt">&lt;connection&gt;</span>
      host=localhost user=mapcache password=mapcache dbname=times port=5433
@@ -373,15 +373,15 @@ attribute to a dimension of any type among <cite>sqlite</cite>, <cite>postgresql
  <span class="nt">&lt;/dimension&gt;</span>
 </pre></div>
 </div>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span> <span class="c">&lt;!-- &quot;time&quot; dimension, &quot;new-style&quot; definition using an ElasticSearch back-end</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span> <span class="cm">&lt;!-- &quot;time&quot; dimension, &quot;new-style&quot; definition using an ElasticSearch back-end</span>
 
-<span class="c">      This example defines a &quot;time&quot; dimension whose possible values are</span>
-<span class="c">      stored in the http://localhost:9200/times ElasticSearch index. The</span>
-<span class="c">      default value is &quot;d1&quot;.</span>
+<span class="cm">      This example defines a &quot;time&quot; dimension whose possible values are</span>
+<span class="cm">      stored in the http://localhost:9200/times ElasticSearch index. The</span>
+<span class="cm">      default value is &quot;d1&quot;.</span>
 
-<span class="c">      A WMS request with that dimension may contain, e.g.</span>
-<span class="c">      &quot;... &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
-<span class="c"> --&gt;</span>
+<span class="cm">      A WMS request with that dimension may contain, e.g.</span>
+<span class="cm">      &quot;... &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
+<span class="cm"> --&gt;</span>
 <span class="hll"> <span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;elasticsearch&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;d1&quot;</span> <span class="na">time=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
 </span>   <span class="nt">&lt;http&gt;</span>
      <span class="nt">&lt;url&gt;</span>http://localhost:9200/times/_search<span class="nt">&lt;/url&gt;</span>
@@ -434,15 +434,15 @@ back-end. Following example highlights the differences:</p>
 <col style="width: 50%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- &quot;time&quot; dimension</span>
+<tr class="row-odd"><td><div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- &quot;time&quot; dimension</span>
 
-<span class="c">     This example defines a &quot;time&quot; dimension whose possible values</span>
-<span class="c">     are stored in the /data/times.sqlite SQLite file. The</span>
-<span class="c">     default value is &quot;2010&quot;.</span>
+<span class="cm">     This example defines a &quot;time&quot; dimension whose possible values</span>
+<span class="cm">     are stored in the /data/times.sqlite SQLite file. The</span>
+<span class="cm">     default value is &quot;2010&quot;.</span>
 
-<span class="c">     A WMS request with that dimension may contain, e.g.  &quot;...</span>
-<span class="c">     &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
-<span class="c">--&gt;</span>
+<span class="cm">     A WMS request with that dimension may contain, e.g.  &quot;...</span>
+<span class="cm">     &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
+<span class="cm">--&gt;</span>
 <span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;time&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;2010&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;dbfile&gt;</span>/data/times.sqlite<span class="nt">&lt;/dbfile&gt;</span>
 <span class="hll">    <span class="nt">&lt;query&gt;</span>
@@ -456,15 +456,15 @@ back-end. Following example highlights the differences:</p>
 </pre></div>
 </div>
 </td>
-<td><div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- &quot;time&quot; dimension</span>
+<td><div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- &quot;time&quot; dimension</span>
 
-<span class="c">     This example defines a &quot;time&quot; dimension whose possible values</span>
-<span class="c">     are stored in the /data/times.sqlite SQLite file. The</span>
-<span class="c">     default value is &quot;2010&quot;.</span>
+<span class="cm">     This example defines a &quot;time&quot; dimension whose possible values</span>
+<span class="cm">     are stored in the /data/times.sqlite SQLite file. The</span>
+<span class="cm">     default value is &quot;2010&quot;.</span>
 
-<span class="c">     A WMS request with that dimension may contain, e.g.  &quot;...</span>
-<span class="c">     &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
-<span class="c">--&gt;</span>
+<span class="cm">     A WMS request with that dimension may contain, e.g.  &quot;...</span>
+<span class="cm">     &amp;time=1999-08-11T11:03:07Z/2001-09-21T08:17:56Z&amp; ...&quot;</span>
+<span class="cm">--&gt;</span>
 <span class="nt">&lt;dimension</span> <span class="na">type=</span><span class="s">&quot;time&quot;</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span> <span class="na">default=</span><span class="s">&quot;2010&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;dbfile&gt;</span>/data/times.sqlite<span class="nt">&lt;/dbfile&gt;</span>
 <span class="hll">    <span class="nt">&lt;validate_query&gt;</span>
@@ -660,9 +660,9 @@ PostgreSQL dimension</p></td>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Copyright</a> 2021, Open Source Geospatial Foundation.
-      Обновлено: 2021-07-12.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.1.0.
+        &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
+      Обновлено: 2022-02-23.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

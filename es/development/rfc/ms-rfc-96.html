@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>MS RFC 96: Time Dimension Support in MapCache Tilesets &#8212; MapServer 7.6.3 documentation</title>
+    <title>MS RFC 96: Time Dimension Support in MapCache Tilesets &#8212; MapServer 7.6.4 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     
@@ -16,7 +16,7 @@
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
-    <link rel="shortcut icon" href="../../_static/_static/mapserver.ico"/>
+    <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Sobre este documento" href="../../about.html" />
     <link rel="index" title="Índice" href="../../genindex.html" />
     <link rel="search" title="Búsqueda" href="../../search.html" />
@@ -379,48 +379,48 @@ for a given (larger) time interval.</p>
 <h3>3.1 Overview<a class="headerlink" href="#id1" title="Enlazar permanentemente con este título">¶</a></h3>
 <p>A struct representing a TIME database will be added, and be sub-classed by a
 sqlite specific implementation.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">enum</span> <span class="p">{</span>
-  <span class="n">MAPCACHE_TIMEDIMENSION_ASSEMBLY_STACK</span><span class="p">,</span>
-  <span class="n">MAPCACHE_TIMEDIMENSION_ASSEMBLY_ANIMATE</span> <span class="cm">/* for future use */</span>
-<span class="p">}</span> <span class="n">mapcache_timedimension_assembly_type</span><span class="p">;</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">MAPCACHE_TIMEDIMENSION_ASSEMBLY_STACK</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">MAPCACHE_TIMEDIMENSION_ASSEMBLY_ANIMATE</span><span class="w"> </span><span class="cm">/* for future use */</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">mapcache_timedimension_assembly_type</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">typedef</span> <span class="k">enum</span> <span class="p">{</span>
-  <span class="n">MAPCACHE_TIMEDIMENSION_SOURCE_SQLITE</span>
-  <span class="cm">/* for future use */</span>
-<span class="p">}</span> <span class="n">mapcache_timedimension_source_type</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">MAPCACHE_TIMEDIMENSION_SOURCE_SQLITE</span><span class="w"></span>
+<span class="w">  </span><span class="cm">/* for future use */</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">mapcache_timedimension_source_type</span><span class="p">;</span><span class="w"></span>
 
-<span class="n">apr_array_header_t</span><span class="o">*</span> <span class="nf">mapcache_timedimension_get_entries_for_value</span><span class="p">(</span>
-  <span class="n">mapcache_context</span> <span class="o">*</span><span class="n">ctx</span><span class="p">,</span>
-  <span class="n">mapcache_timedimension</span> <span class="o">*</span><span class="n">timedimension</span><span class="p">,</span>
-  <span class="n">mapcache_tileset</span> <span class="o">*</span><span class="n">tileset</span><span class="p">,</span>
-  <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">value</span>
-<span class="p">);</span>
+<span class="n">apr_array_header_t</span><span class="o">*</span><span class="w"> </span><span class="nf">mapcache_timedimension_get_entries_for_value</span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="n">mapcache_context</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">mapcache_timedimension</span><span class="w"> </span><span class="o">*</span><span class="n">timedimension</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">mapcache_tileset</span><span class="w"> </span><span class="o">*</span><span class="n">tileset</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">value</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
 
-<span class="k">struct</span> <span class="nc">mapcache_timedimension</span> <span class="p">{</span>
-  <span class="n">mapcache_timedimension_assembly_type</span> <span class="n">assembly_type</span><span class="p">;</span> <span class="cm">/* for future use */</span>
-  <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">configuration_parse_xml</span><span class="p">)(</span>
-    <span class="n">mapcache_context</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span>
-    <span class="n">mapcache_timedimension</span> <span class="o">*</span><span class="n">dim</span><span class="p">,</span>
-    <span class="n">ezxml_t</span> <span class="n">node</span><span class="p">);</span>
-  <span class="n">apr_array_header_t</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="n">get_entries_for_interval</span><span class="p">)(</span>
-    <span class="n">mapcache_context</span> <span class="o">*</span><span class="n">ctx</span><span class="p">,</span>
-    <span class="n">mapcache_timedimension</span> <span class="o">*</span><span class="n">dim</span><span class="p">,</span>
-    <span class="n">mapcache_tileset</span> <span class="o">*</span><span class="n">tileset</span><span class="p">,</span>
-    <span class="kt">time_t</span> <span class="n">start</span><span class="p">,</span>
-    <span class="kt">time_t</span> <span class="n">end</span><span class="p">);</span>
-  <span class="n">apr_array_header_t</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="n">get_all_entries</span><span class="p">)(</span>
-    <span class="n">mapcache_context</span> <span class="o">*</span><span class="n">ctx</span><span class="p">,</span>
-    <span class="n">mapcache_timedimension</span> <span class="o">*</span><span class="n">dim</span><span class="p">,</span>
-    <span class="n">mapcache_tileset</span> <span class="o">*</span><span class="n">tileset</span><span class="p">);</span>
-  <span class="kt">char</span> <span class="o">*</span><span class="n">default_value</span><span class="p">;</span>
-  <span class="kt">char</span> <span class="o">*</span><span class="n">key</span><span class="p">;</span>
-<span class="p">};</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">mapcache_timedimension</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">mapcache_timedimension_assembly_type</span><span class="w"> </span><span class="n">assembly_type</span><span class="p">;</span><span class="w"> </span><span class="cm">/* for future use */</span><span class="w"></span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">configuration_parse_xml</span><span class="p">)(</span><span class="w"></span>
+<span class="w">    </span><span class="n">mapcache_context</span><span class="w"> </span><span class="o">*</span><span class="n">context</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">mapcache_timedimension</span><span class="w"> </span><span class="o">*</span><span class="n">dim</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">ezxml_t</span><span class="w"> </span><span class="n">node</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">apr_array_header_t</span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">get_entries_for_interval</span><span class="p">)(</span><span class="w"></span>
+<span class="w">    </span><span class="n">mapcache_context</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">mapcache_timedimension</span><span class="w"> </span><span class="o">*</span><span class="n">dim</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">mapcache_tileset</span><span class="w"> </span><span class="o">*</span><span class="n">tileset</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">time_t</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">time_t</span><span class="w"> </span><span class="n">end</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">apr_array_header_t</span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">get_all_entries</span><span class="p">)(</span><span class="w"></span>
+<span class="w">    </span><span class="n">mapcache_context</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">mapcache_timedimension</span><span class="w"> </span><span class="o">*</span><span class="n">dim</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">mapcache_tileset</span><span class="w"> </span><span class="o">*</span><span class="n">tileset</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">default_value</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">key</span><span class="p">;</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
 
-<span class="k">struct</span> <span class="nc">mapcache_timedimension_sqlite</span> <span class="p">{</span>
-  <span class="n">mapcache_timedimension</span> <span class="n">timedimension</span><span class="p">;</span>
-  <span class="kt">char</span> <span class="o">*</span><span class="n">dbfile</span><span class="p">;</span>
-  <span class="kt">char</span> <span class="o">*</span><span class="n">query</span><span class="p">;</span>
-<span class="p">};</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">mapcache_timedimension_sqlite</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">mapcache_timedimension</span><span class="w"> </span><span class="n">timedimension</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">dbfile</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">query</span><span class="p">;</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
 </pre></div>
 </div>
 <p>The structs present two public functions, one to get all valid values (in order
@@ -543,9 +543,9 @@ PerryN</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Derechos de autor</a> 2021, Open Source Geospatial Foundation.
-      Actualizado por última vez en 2021-07-12.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.1.0.
+        &#169; <a href="../../copyright.html">Derechos de autor</a> 2022, Open Source Geospatial Foundation.
+      Actualizado por última vez en 2022-02-23.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>
