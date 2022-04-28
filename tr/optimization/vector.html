@@ -155,7 +155,7 @@
 <dd class="field-odd"><p>HostGIS</p>
 </dd>
 <dt class="field-even">Last Updated</dt>
-<dd class="field-even"><p>2022-01-25</p>
+<dd class="field-even"><p>2022-04-26</p>
 </dd>
 </dl>
 <div class="contents topic" id="table-of-contents">
@@ -167,21 +167,29 @@
 <li><p><a class="reference internal" href="#spend-time-to-review-gdal-s-associated-driver-page-for-your-chosen-format" id="id3">Spend time to review GDAL’s associated driver page for your chosen format</a></p></li>
 <li><p><a class="reference internal" href="#connect-to-your-data-through-ogr-gdal" id="id4">Connect to your data through OGR/GDAL</a></p></li>
 <li><p><a class="reference internal" href="#learn-review-the-various-ogr-utilities-to-manage-your-vectors" id="id5">Learn &amp; Review the various OGR utilities to manage your vectors</a></p></li>
-<li><p><a class="reference internal" href="#index-your-data" id="id6">Index your data</a></p></li>
-<li><p><a class="reference internal" href="#splitting-your-data" id="id7">Splitting your data</a></p></li>
-<li><p><a class="reference internal" href="#handling-your-vector-layers-in-the-mapfile" id="id8">Handling your vector LAYERS in the mapfile</a></p></li>
-<li><p><a class="reference internal" href="#shapefile-notes" id="id9">Shapefile Notes</a></p></li>
-<li><p><a class="reference internal" href="#postgis-notes" id="id10">PostGIS Notes</a></p>
+<li><p><a class="reference internal" href="#index-your-data" id="id6">Index your data</a></p>
 <ul>
-<li><p><a class="reference internal" href="#indexing-with-postgis" id="id11">Indexing with PostGIS</a></p></li>
-<li><p><a class="reference internal" href="#specifying-a-unique-id-column" id="id12">Specifying a Unique ID column</a></p></li>
-<li><p><a class="reference internal" href="#debugging-speed-issues-with-postgis" id="id13">Debugging speed issues with PostGIS</a></p></li>
+<li><p><a class="reference internal" href="#tileindexing" id="id7">Tileindexing</a></p></li>
+<li><p><a class="reference internal" href="#add-a-spatial-index-to-your-data" id="id8">Add a Spatial Index to your data</a></p></li>
+<li><p><a class="reference internal" href="#add-an-attribute-index-to-your-data" id="id9">Add an Attribute Index to your data</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#databases-in-general-postgis-oracle-spatialite-microsoft-sql-server-mysql" id="id14">Databases in General (PostGIS, Oracle, SpatiaLite, Microsoft SQL Server, MySQL)</a></p>
+<li><p><a class="reference internal" href="#splitting-your-data" id="id10">Splitting your data</a></p></li>
+<li><p><a class="reference internal" href="#handling-your-vector-layers-in-the-mapfile" id="id11">Handling your vector LAYERS in the mapfile</a></p></li>
+<li><p><a class="reference internal" href="#shapefile-notes" id="id12">Shapefile Notes</a></p></li>
+<li><p><a class="reference internal" href="#postgis-notes" id="id13">PostGIS Notes</a></p>
 <ul>
-<li><p><a class="reference internal" href="#enable-connection-pooling" id="id15">Enable Connection Pooling</a></p></li>
-<li><p><a class="reference internal" href="#set-extent-at-the-layer-level-of-mapfile" id="id16">Set EXTENT at the LAYER level of mapfile</a></p></li>
+<li><p><a class="reference internal" href="#indexing-with-postgis" id="id14">Indexing with PostGIS</a></p></li>
+<li><p><a class="reference internal" href="#specifying-a-unique-id-column" id="id15">Specifying a Unique ID column</a></p></li>
+<li><p><a class="reference internal" href="#debugging-speed-issues-with-postgis" id="id16">Debugging speed issues with PostGIS</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#databases-in-general-postgis-oracle-spatialite-geopackage-microsoft-sql-server-mysql" id="id17">Databases in General (PostGIS, Oracle, SpatiaLite, GeoPackage, Microsoft SQL Server, MySQL)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#enable-connection-pooling" id="id18">Enable Connection Pooling</a></p></li>
+<li><p><a class="reference internal" href="#set-extent-at-the-layer-level-of-mapfile" id="id19">Set EXTENT at the LAYER level of mapfile</a></p></li>
+<li><p><a class="reference internal" href="#verify-that-your-table-has-a-spatial-index" id="id20">Verify that your table has a Spatial Index</a></p></li>
+<li><p><a class="reference internal" href="#for-wfs-services-prevent-using-default-full-extent" id="id21">For WFS services, prevent using default/full extent</a></p></li>
 </ul>
 </li>
 </ul>
@@ -192,13 +200,28 @@
 <h2><a class="toc-backref" href="#table-of-contents">Choose the right vector format for your needs</a><a class="headerlink" href="#choose-the-right-vector-format-for-your-needs" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <ul class="simple">
 <li><p>The best/optimal vector data source for MapServer in terms of speed-of-display
-is <a class="reference external" href="https://gdal.org/drivers/vector/shapefile.html#vector-shapefile">.shp</a>.</p></li>
-<li><p>For databases, MapServer displays <a class="reference external" href="https://gdal.org/drivers/vector/pg.html">PostGIS</a>
+is <a class="reference internal" href="../input/vector/shapefiles.html#shapefiles"><span class="std std-ref">Shapefile</span></a>.</p></li>
+<li><p>A recent format designed for vector performance, with similar map draw
+speed in MapServer as Shapefile, is <a class="reference internal" href="../input/vector/flatgeobuf.html#flatgeobuf"><span class="std std-ref">FlatGeobuf</span></a>, and is
+recommended for cloud performance.</p></li>
+<li><p>For databases, MapServer displays <a class="reference internal" href="../input/vector/postgis.html#input-postgis"><span class="std std-ref">PostGIS</span></a>
 layers very fast, and some custom tricks are included in the MapServer source
 specifically for PostGIS + MapServer draw speed.  PostGIS is therefore recommended.</p></li>
-<li><p><a class="reference external" href="https://gdal.org/drivers/vector/sqlite.html">SpatiaLite</a> is recommended
+<li><p><a class="reference internal" href="../input/vector/sqlite.html#sqlite"><span class="std std-ref">SpatiaLite</span></a> is recommended
 for those who require a portable format, and works very well with MapServer.</p></li>
+<li><p><a class="reference internal" href="../input/vector/geopackage.html#geopackage"><span class="std std-ref">GeoPackage</span></a> (“GPKG”) is also very popular for portability,
+and works very well with MapServer.</p></li>
 </ul>
+<p>Here are some rudimentary map draw speed results, with the upcoming
+MapServer 8.0 release code (running on Windows with <a class="reference external" href="https://ms4w.com">MS4W</a>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Shapefile</span>  <span class="mf">0.011</span><span class="n">s</span>
+<span class="n">FlatGeobuf</span> <span class="mf">0.014</span><span class="n">s</span>
+<span class="n">GeoPackage</span> <span class="mf">0.042</span><span class="n">s</span>
+<span class="n">SpatiaLite</span> <span class="mf">0.045</span><span class="n">s</span>
+<span class="n">PostGIS</span>    <span class="mf">0.053</span><span class="n">s</span>
+<span class="n">GeoJSON</span>    <span class="mf">0.089</span><span class="n">s</span>
+</pre></div>
+</div>
 </section>
 <section id="spend-time-to-review-gdal-s-associated-driver-page-for-your-chosen-format">
 <h2><a class="toc-backref" href="#table-of-contents">Spend time to review GDAL’s associated driver page for your chosen format</a><a class="headerlink" href="#spend-time-to-review-gdal-s-associated-driver-page-for-your-chosen-format" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
@@ -320,7 +343,35 @@ existing PostGIS database, and renames the new table to ‘roadways3857’) :</p
 <section id="index-your-data">
 <h2><a class="toc-backref" href="#table-of-contents">Index your data</a><a class="headerlink" href="#index-your-data" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <p>This of course is an important step for any vector layer, for fast display
-in MapServer.  See <a class="reference internal" href="tileindex.html#tileindex"><span class="std std-ref">Tile Indexes</span></a> for more detailed information.</p>
+in MapServer.  There are several types of indexes that you can enable to
+speed up the display of your vector data with MapServer:</p>
+<section id="tileindexing">
+<h3><a class="toc-backref" href="#table-of-contents">Tileindexing</a><a class="headerlink" href="#tileindexing" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
+<p>See <a class="reference internal" href="tileindex.html#tileindex"><span class="std std-ref">Tile Indexes</span></a> for more detailed information about
+on-the-fly mosaicing with MapServer.</p>
+</section>
+<section id="add-a-spatial-index-to-your-data">
+<h3><a class="toc-backref" href="#table-of-contents">Add a Spatial Index to your data</a><a class="headerlink" href="#add-a-spatial-index-to-your-data" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
+<p>Make sure that your geometry has a spatial index.</p>
+<ul class="simple">
+<li><p>Shapefile: see <a class="reference internal" href="../utilities/shptree.html#shptree"><span class="std std-ref">shptree</span></a></p></li>
+<li><p>See below for databases (and GPKG)</p></li>
+</ul>
+</section>
+<section id="add-an-attribute-index-to-your-data">
+<h3><a class="toc-backref" href="#table-of-contents">Add an Attribute Index to your data</a><a class="headerlink" href="#add-an-attribute-index-to-your-data" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
+<p>If you will be querying or filtering by a specific column in your
+data, you should setup an attribute index on your vector data.</p>
+<p>Shapefiles:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ogrinfo</span> <span class="o">-</span><span class="n">sql</span>  <span class="s2">&quot;CREATE INDEX ON province USING NAME_E&quot;</span> <span class="n">province</span><span class="o">.</span><span class="n">shp</span>
+</pre></div>
+</div>
+<p>2 files should be created with extensions: <em>.ind &amp; .idm</em></p>
+<p>GeoPackage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ogrinfo</span> <span class="o">-</span><span class="n">sql</span> <span class="s2">&quot;CREATE INDEX IDXnewindexname ON yourtable (yourcolumn)&quot;</span> <span class="n">file</span><span class="o">.</span><span class="n">gpkg</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="splitting-your-data">
 <h2><a class="toc-backref" href="#table-of-contents">Splitting your data</a><a class="headerlink" href="#splitting-your-data" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
@@ -347,7 +398,7 @@ document.</p>
 </section>
 <section id="shapefile-notes">
 <h2><a class="toc-backref" href="#table-of-contents">Shapefile Notes</a><a class="headerlink" href="#shapefile-notes" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
-<p>Use <a class="reference internal" href="../utilities/shptree.html#shptree"><span class="std std-ref">shptree</span></a> to generate a spatial index on your shapefile. This is
+<p>Use <a class="reference internal" href="../utilities/shptree.html#shptree"><span class="std std-ref">shptree</span></a> to generate a spatial index on your <a class="reference internal" href="../input/vector/shapefiles.html#shapefiles"><span class="std std-ref">shapefile</span></a>. This is
 quick and easy (“shptree foo.shp”) and generates a .qix file. MapServer will
 automagically detect an index and use it.</p>
 <div class="admonition note">
@@ -520,8 +571,8 @@ to focus your efforts on improving the indexing/settings of your PostGIS table.<
 </ul>
 </section>
 </section>
-<section id="databases-in-general-postgis-oracle-spatialite-microsoft-sql-server-mysql">
-<span id="index-3"></span><h2><a class="toc-backref" href="#table-of-contents">Databases in General (PostGIS, Oracle, SpatiaLite, Microsoft SQL Server, MySQL)</a><a class="headerlink" href="#databases-in-general-postgis-oracle-spatialite-microsoft-sql-server-mysql" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<section id="databases-in-general-postgis-oracle-spatialite-geopackage-microsoft-sql-server-mysql">
+<span id="index-3"></span><h2><a class="toc-backref" href="#table-of-contents">Databases in General (PostGIS, Oracle, SpatiaLite, GeoPackage, Microsoft SQL Server, MySQL)</a><a class="headerlink" href="#databases-in-general-postgis-oracle-spatialite-geopackage-microsoft-sql-server-mysql" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
 <section id="enable-connection-pooling">
 <h3><a class="toc-backref" href="#table-of-contents">Enable Connection Pooling</a><a class="headerlink" href="#enable-connection-pooling" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
 <p>By default, MapServer opens and closes a new database connection for each
@@ -579,6 +630,90 @@ spatial function to get the bounding box of a table, such as</p>
 </div>
 </div>
 </section>
+<section id="verify-that-your-table-has-a-spatial-index">
+<h3><a class="toc-backref" href="#table-of-contents">Verify that your table has a Spatial Index</a><a class="headerlink" href="#verify-that-your-table-has-a-spatial-index" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
+<section id="postgresql-postgis-example">
+<h4>PostgreSQL/PostGIS example<a class="headerlink" href="#postgresql-postgis-example" title="Bu başlık için kalıcı bağlantı">¶</a></h4>
+<p>Once connected through psql commandline, describe the table and
+look for an “Indexes” section, mentioning geometry, such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Indexes</span><span class="p">:</span>
+    <span class="s2">&quot;province_pkey&quot;</span> <span class="n">PRIMARY</span> <span class="n">KEY</span><span class="p">,</span> <span class="n">btree</span> <span class="p">(</span><span class="n">ogc_fid</span><span class="p">)</span>
+    <span class="s2">&quot;province_wkb_geometry_geom_idx&quot;</span> <span class="n">gist</span> <span class="p">(</span><span class="n">wkb_geometry</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="geopackage-example">
+<h4>GeoPackage example<a class="headerlink" href="#geopackage-example" title="Bu başlık için kalıcı bağlantı">¶</a></h4>
+<p>You can use <em>ogrinfo</em> to verify that your GPKG table’s geometry
+has a spatial index, which is very important for performance
+(look for <cite>HasSpatialIndex (Integer) = 1</cite> to confirm that the spatial
+index exists) :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ogrinfo</span> <span class="o">-</span><span class="n">sql</span> <span class="s2">&quot;SELECT HasSpatialIndex(&#39;countries&#39;, &#39;GEOMETRY&#39;)&quot;</span> <span class="n">countries</span><span class="o">.</span><span class="n">gpkg</span>
+
+  <span class="n">Layer</span> <span class="n">name</span><span class="p">:</span> <span class="n">SELECT</span>
+  <span class="n">Geometry</span><span class="p">:</span> <span class="n">Unknown</span> <span class="p">(</span><span class="nb">any</span><span class="p">)</span>
+  <span class="n">Feature</span> <span class="n">Count</span><span class="p">:</span> <span class="mi">1</span>
+  <span class="n">Layer</span> <span class="n">SRS</span> <span class="n">WKT</span><span class="p">:</span>
+  <span class="p">(</span><span class="n">unknown</span><span class="p">)</span>
+  <span class="n">HasSpatialIndex</span><span class="p">:</span> <span class="n">Integer</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+  <span class="n">OGRFeature</span><span class="p">(</span><span class="n">SELECT</span><span class="p">):</span><span class="mi">0</span>
+    <span class="n">HasSpatialIndex</span> <span class="p">(</span><span class="n">Integer</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>and then add a spatial index with ogrinfo :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ogrinfo</span> <span class="o">-</span><span class="n">sql</span> <span class="s2">&quot;SELECT CreateSpatialIndex(&#39;parcelle_graphique&#39;, &#39;geom&#39;)&quot;</span> <span class="n">PARCELLES_GRAPHIQUES</span><span class="o">.</span><span class="n">gpkg</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="for-wfs-services-prevent-using-default-full-extent">
+<h3><a class="toc-backref" href="#table-of-contents">For WFS services, prevent using default/full extent</a><a class="headerlink" href="#for-wfs-services-prevent-using-default-full-extent" title="Bu başlık için kalıcı bağlantı">¶</a></h3>
+<p>For your database connections, MapServer may (by default) use the full
+extents of your data while performing a query (which can cause slow responses
+&gt;30seconds).  You should likely set the following layer METADATA to
+disable this:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">METADATA</span>
+  <span class="s">&quot;wfs_use_default_extent_for_getfeature&quot;</span> <span class="s">&quot;false&quot;</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+<p>Here is a fully enhanced layer example:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;CLUS&quot;</span>
+  <span class="k">METADATA</span>
+    <span class="s">&quot;ows_title&quot;</span>                   <span class="s">&quot;CLUS&quot;</span>
+    <span class="s">&quot;ows_srs&quot;</span>                     <span class="s">&quot;EPSG:3857 EPSG:4326 EPSG:2154&quot;</span>
+    <span class="s">&quot;wfs_getfeature_formatlist&quot;</span>   <span class="s">&quot;geojson&quot;</span>
+    <span class="s">&quot;wfs_geomtype&quot;</span>                <span class="s">&quot;MultiPolygon&quot;</span>
+    <span class="s">&quot;gml_featureid&quot;</span>               <span class="s">&quot;fid&quot;</span>
+    <span class="s">&quot;gml_include_items&quot;</span>           <span class="s">&quot;all&quot;</span>
+    <span class="s">&quot;wfs_extent&quot;</span>                  <span class="s">&quot;115134 6049690 1242200 7108930&quot;</span> <span class="c">#set to improve performance for all DB layers</span>
+    <span class="s">&quot;wfs_use_default_extent_for_getfeature&quot;</span> <span class="s">&quot;false&quot;</span> <span class="c">#set to improve performance for all DB layers</span>
+    <span class="s">&quot;ows_enable_request&quot;</span>          <span class="s">&quot;*&quot;</span>
+  <span class="k">END</span> <span class="c">#metadata</span>
+  <span class="k">TYPE</span> <span class="nb">POLYGON</span>
+  <span class="k">CONNECTIONTYPE</span> <span class="nb">OGR</span>
+  <span class="k">CONNECTION</span> <span class="s">&quot;C:/ms4w/apps/RPG_2-0_GPKG_LAMB93_FR-2019/PARCELLES_GRAPHIQUES.gpkg&quot;</span>
+  <span class="k">DATA</span> <span class="s">&quot;parcelle_graphique&quot;</span>
+  <span class="k">EXTENT</span> <span class="mi">115134</span> <span class="mi">6049690</span> <span class="mi">1242200</span> <span class="mi">7108930</span> <span class="c">#set to improve performance for all DB layers</span>
+  <span class="k">PROCESSING</span> <span class="s">&quot;CLOSE_CONNECTION=DEFER&quot;</span> <span class="c">#set to improve performance for all DB layers</span>
+  <span class="k">STATUS</span> <span class="nb">ON</span>
+  <span class="k">PROJECTION</span>
+    <span class="s">&quot;init=epsg:2154&quot;</span>
+  <span class="k">END</span> <span class="c">#proj</span>
+  <span class="k">COMPOSITE</span>
+    <span class="k">OPACITY</span> <span class="mi">100</span>
+  <span class="k">END</span> <span class="c">#composite</span>
+  <span class="k">CLASS</span>
+    <span class="k">NAME</span> <span class="s">&quot;CLUS&quot;</span>
+    <span class="k">STYLE</span>
+      <span class="k">OUTLINECOLOR</span> <span class="mi">255</span> <span class="mi">0</span> <span class="mi">255</span>
+    <span class="k">END</span> <span class="c">#style</span>
+  <span class="k">END</span> <span class="c">#class</span>
+<span class="k">END</span> <span class="c">#layer</span>
+</pre></div>
+</div>
+</section>
 </section>
 </section>
 
@@ -617,7 +752,12 @@ spatial function to get the bounding box of a table, such as</p>
 <li><a class="reference internal" href="#spend-time-to-review-gdal-s-associated-driver-page-for-your-chosen-format">Spend time to review GDAL’s associated driver page for your chosen format</a></li>
 <li><a class="reference internal" href="#connect-to-your-data-through-ogr-gdal">Connect to your data through OGR/GDAL</a></li>
 <li><a class="reference internal" href="#learn-review-the-various-ogr-utilities-to-manage-your-vectors">Learn &amp; Review the various OGR utilities to manage your vectors</a></li>
-<li><a class="reference internal" href="#index-your-data">Index your data</a></li>
+<li><a class="reference internal" href="#index-your-data">Index your data</a><ul>
+<li><a class="reference internal" href="#tileindexing">Tileindexing</a></li>
+<li><a class="reference internal" href="#add-a-spatial-index-to-your-data">Add a Spatial Index to your data</a></li>
+<li><a class="reference internal" href="#add-an-attribute-index-to-your-data">Add an Attribute Index to your data</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#splitting-your-data">Splitting your data</a></li>
 <li><a class="reference internal" href="#handling-your-vector-layers-in-the-mapfile">Handling your vector LAYERS in the mapfile</a></li>
 <li><a class="reference internal" href="#shapefile-notes">Shapefile Notes</a></li>
@@ -627,9 +767,15 @@ spatial function to get the bounding box of a table, such as</p>
 <li><a class="reference internal" href="#debugging-speed-issues-with-postgis">Debugging speed issues with PostGIS</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#databases-in-general-postgis-oracle-spatialite-microsoft-sql-server-mysql">Databases in General (PostGIS, Oracle, SpatiaLite, Microsoft SQL Server, MySQL)</a><ul>
+<li><a class="reference internal" href="#databases-in-general-postgis-oracle-spatialite-geopackage-microsoft-sql-server-mysql">Databases in General (PostGIS, Oracle, SpatiaLite, GeoPackage, Microsoft SQL Server, MySQL)</a><ul>
 <li><a class="reference internal" href="#enable-connection-pooling">Enable Connection Pooling</a></li>
 <li><a class="reference internal" href="#set-extent-at-the-layer-level-of-mapfile">Set EXTENT at the LAYER level of mapfile</a></li>
+<li><a class="reference internal" href="#verify-that-your-table-has-a-spatial-index">Verify that your table has a Spatial Index</a><ul>
+<li><a class="reference internal" href="#postgresql-postgis-example">PostgreSQL/PostGIS example</a></li>
+<li><a class="reference internal" href="#geopackage-example">GeoPackage example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#for-wfs-services-prevent-using-default-full-extent">For WFS services, prevent using default/full extent</a></li>
 </ul>
 </li>
 </ul>
@@ -660,7 +806,7 @@ spatial function to get the bounding box of a table, such as</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Telif hakkı</a> 2022, Open Source Geospatial Foundation.
-      Son güncelleme: 2022-03-28.
+      Son güncelleme: 2022-04-28.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>

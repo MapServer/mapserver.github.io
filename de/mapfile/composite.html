@@ -146,8 +146,8 @@
 <span id="index-0"></span><span id="id1"></span><h1>COMPOSITE<a class="headerlink" href="#composite" title="Link zu dieser Überschrift">¶</a></h1>
 <section id="background">
 <h2>Background<a class="headerlink" href="#background" title="Link zu dieser Überschrift">¶</a></h2>
-<p>The <cite>COMPOSITE</cite> block is used to achieve blending effects with
-MapServer.</p>
+<p>Available since MapServer 7.0, the <cite>COMPOSITE</cite> block is used to achieve
+blending effects with MapServer.</p>
 <p>Some cartographic renderings benefit from the addition of advanced
 blending modes, as explained in detail in <a class="reference external" href="http://en.wikipedia.org/wiki/Blend_modes">Blend Modes</a>.  This
 functionality is essential for more pleasant renderings of raster
@@ -162,10 +162,23 @@ different kinds of overprinting effects.</p>
 </section>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link zu dieser Überschrift">¶</a></h2>
-<span id="mapfile-composite-opacity"></span><dl class="simple" id="opacity">
-<dt>OPACITY [integer]</dt><dd><p>Sets the opacity level (or the inability to see through the layer) of all
-classed pixels for a given layer.  A value of 100 is opaque and
-0 is fully transparent.</p>
+<dl id="mapfile-composite-compfilter">
+<dt>COMPFILTER [string]</dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Neu in Version 7.2.</span></p>
+</div>
+<p>Name of the compositing filter. The primary purpose is to enable soft shadow
+and blurring effects, although other usages can exist or could be added in
+the future. Several compfilters can be placed after another to create a combined
+effect. For example a blur and translate effect can be combined to make a
+soft shadow effect behind a feature.</p>
+<p>The currently available filters are:</p>
+<ul class="simple">
+<li><p>blur(integer)</p></li>
+<li><p>translate(integer,integer)</p></li>
+<li><p>grayscale()</p></li>
+<li><p>blacken()</p></li>
+<li><p>whiten()</p></li>
+</ul>
 </dd>
 </dl>
 <dl id="mapfile-composite-compop">
@@ -399,6 +412,12 @@ backends <em>and</em> when pixman support is not enabled, and will fall back to
 „src-over“ when this is not the case.</p>
 </dd>
 </dl>
+<span id="mapfile-composite-opacity"></span><dl class="simple" id="opacity">
+<dt>OPACITY [integer]</dt><dd><p>Sets the opacity level (or the inability to see through the layer) of all
+classed pixels for a given layer. Must be between 0 to 100. A value of 100 is opaque and
+0 is fully transparent.</p>
+</dd>
+</dl>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Link zu dieser Überschrift">¶</a></h2>
@@ -489,7 +508,7 @@ the value <cite>darken</cite>:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Zuletzt aktualisiert am 2022-03-28.
+      Zuletzt aktualisiert am 2022-04-28.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>

@@ -153,7 +153,7 @@
 <dd class="field-even"><p>jmckenna at gatewaygeomatics.com</p>
 </dd>
 <dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2021-05-06</p>
+<dd class="field-odd"><p>2022-04-25</p>
 </dd>
 </dl>
 <p>GeoPackage, also written as „GPKG“, is a standards-based wrapper for the
@@ -165,7 +165,7 @@ distributing both vector &amp; raster data, inside one compact file.</p>
 <h2>More Information<a class="headerlink" href="#more-information" title="Link zu dieser Überschrift">¶</a></h2>
 <p>More information about GPKG is available at:</p>
 <ul class="simple">
-<li><p>Official page: <a class="reference external" href="http://www.geopackage.org/">http://www.geopackage.org/</a></p></li>
+<li><p>Official page: <a class="reference external" href="https://www.geopackage.org/">https://www.geopackage.org/</a></p></li>
 <li><p>OGC’s GeoPackage Encoding Standard: <a class="reference external" href="https://www.ogc.org/standards/geopackage">https://www.ogc.org/standards/geopackage</a></p></li>
 </ul>
 </section>
@@ -209,7 +209,7 @@ recommended.</p>
 <p>First you should make sure that your local GDAL/OGR build contains both the
 „GPKG“ driver &amp; the „SQLite / Spatialite“ driver, by using the
 <em>–formats</em> command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">ogrinfo</span> <span class="o">--</span><span class="n">formats</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ogrinfo</span> <span class="o">--</span><span class="n">formats</span>
 
    <span class="n">Supported</span> <span class="n">Formats</span><span class="p">:</span>
         <span class="o">...</span>
@@ -221,7 +221,7 @@ recommended.</p>
 <p>Once you have confirmed that you have the GPKG driver you are ready
 to try an ogrinfo command on your database to get a list of spatial
 tables:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;ogrinfo countries.gpkg
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ogrinfo countries.gpkg
 
   INFO: Open of `countries.gpkg&#39;
         using driver `GPKG&#39; successful.
@@ -230,7 +230,7 @@ tables:</p>
 </div>
 <p>Now use ogrinfo to get information on the structure of the spatial
 ‚countries‘ table:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;ogrinfo countries.gpkg countries -summary
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ogrinfo countries.gpkg countries -summary
 
       INFO: Open of `countries.gpkg&#39;
             using driver `GPKG&#39; successful.
@@ -261,6 +261,33 @@ tables:</p>
       ...
 </pre></div>
 </div>
+<p>You can also use ogrinfo to verify that your GPKG table’s geometry
+has a spatial index, which is very important for performance
+(look for <cite>HasSpatialIndex (Integer) = 1</cite> to confirm that the spatial
+index exists) :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ogrinfo</span> <span class="o">-</span><span class="n">sql</span> <span class="s2">&quot;SELECT HasSpatialIndex(&#39;countries&#39;, &#39;GEOMETRY&#39;)&quot;</span> <span class="n">countries</span><span class="o">.</span><span class="n">gpkg</span>
+
+  <span class="n">Layer</span> <span class="n">name</span><span class="p">:</span> <span class="n">SELECT</span>
+  <span class="n">Geometry</span><span class="p">:</span> <span class="n">Unknown</span> <span class="p">(</span><span class="nb">any</span><span class="p">)</span>
+  <span class="n">Feature</span> <span class="n">Count</span><span class="p">:</span> <span class="mi">1</span>
+  <span class="n">Layer</span> <span class="n">SRS</span> <span class="n">WKT</span><span class="p">:</span>
+  <span class="p">(</span><span class="n">unknown</span><span class="p">)</span>
+  <span class="n">HasSpatialIndex</span><span class="p">:</span> <span class="n">Integer</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+  <span class="n">OGRFeature</span><span class="p">(</span><span class="n">SELECT</span><span class="p">):</span><span class="mi">0</span>
+    <span class="n">HasSpatialIndex</span> <span class="p">(</span><span class="n">Integer</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>If you need to create add a spatial index to your GPKG, you can also
+use ogrinfo :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ogrinfo</span> <span class="o">-</span><span class="n">sql</span> <span class="s2">&quot;SELECT CreateSpatialIndex(&#39;parcelle_graphique&#39;, &#39;geom&#39;)&quot;</span> <span class="n">PARCELLES_GRAPHIQUES</span><span class="o">.</span><span class="n">gpkg</span>
+</pre></div>
+</div>
+<p>If you are going to have MapServer filter or query a specific field in
+your GPKG, you should also consider adding an attribute index for that
+field:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ogrinfo</span> <span class="o">-</span><span class="n">sql</span> <span class="s2">&quot;CREATE INDEX IDXnewindexname ON yourtable (yourcolumn)&quot;</span> <span class="n">file</span><span class="o">.</span><span class="n">gpkg</span>
+</pre></div>
+</div>
 </section>
 <section id="step-2-add-the-layer-in-your-mapfile">
 <h2>Step 2: Add the layer in your mapfile<a class="headerlink" href="#step-2-add-the-layer-in-your-mapfile" title="Link zu dieser Überschrift">¶</a></h2>
@@ -274,6 +301,8 @@ CONNECTION, and DATA, as follows:</p>
   <span class="k">CONNECTIONTYPE</span> <span class="nb">OGR</span>
   <span class="k">CONNECTION</span> <span class="s">&quot;countries.gpkg&quot;</span>
   <span class="k">DATA</span> <span class="s">&quot;countries&quot;</span>            <span class="c"># the OGR layername, found through ogrinfo</span>
+  <span class="k">EXTENT</span> <span class="p">-</span><span class="mf">180.000000</span> <span class="p">-</span><span class="mf">90.000000</span> <span class="mf">180.000000</span> <span class="mf">83.645130</span> <span class="c"># for maximum performance</span>
+  <span class="k">PROCESSING</span> <span class="s">&quot;CLOSE_CONNECTION=DEFER&quot;</span> <span class="c"># for maximum performance</span>
   <span class="k">CLASS</span>
     <span class="k">NAME</span> <span class="s">&quot;World Countries&quot;</span>
     <span class="k">STYLE</span>
@@ -370,7 +399,7 @@ mapfile creates a valid map image, and also display draw times, such as:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Zuletzt aktualisiert am 2022-03-28.
+      Zuletzt aktualisiert am 2022-04-28.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
