@@ -411,6 +411,10 @@ are supported in MapServer 4.0 and newer.
     selected, they are treated as red, green and blue. If 4 are selected they
     are treated as red, green, blue and alpha (opacity).
 
+    Starting with MapServer 8, a GDAL mask band attached to the raster (that is
+    not an alpha band) will be automatically used for opacity rendering when BANDS
+    is specified, unless the `PROCESSING` "USE_MASK_BAND=NO" option is set.
+
     Example:
   
     ::
@@ -894,7 +898,7 @@ Note that overview building should be done after translating to a
 final format.  Overviews are lost in format conversions using
 gdal_translate.  Also, nothing special needs to be done to make
 MapServer use GDAL generated overviews.  They are automatically picked
-up by GDAL when mapserver requests a reduced resolution map.
+up by GDAL when MapServer requests a reduced resolution map.
 
 
 .. index::
@@ -922,10 +926,10 @@ flexible gdalwarp utility::
   gdalwarp -rc -tr 250 250 ortho_*.tif overview.tif
 
 In some cases the easiest way of generating an overview is to let
-MapServer do it using the shp2img utility.  For instance if the
+MapServer do it using the map2img utility.  For instance if the
 tileindex layer is called ''orthos'' we could do something like::
 
-  shp2img -m ortho.map -l orthos -o overview.png 
+  map2img -m ortho.map -l orthos -o overview.png 
 
 Note that the overview will be generated with the extents and size in
 the .map file, so it may be necessary to temporarily adjust the map

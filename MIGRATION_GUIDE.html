@@ -4,11 +4,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MapServer Migration Guide &#8212; MapServer 7.6.4 documentation</title>
+    <title>MapServer Migration Guide &#8212; MapServer 8.0.0-beta2 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/ribbon.css" />
     
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -24,6 +25,9 @@
     <link rel="next" title="Data Input" href="input/index.html" />
     <link rel="prev" title="Coverage Analyzer" href="mapcache/coverage.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -104,7 +108,7 @@
           <a href="mapcache/coverage.html" title="Coverage Analyzer"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="documentation.html" accesskey="U">MapServer 7.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="documentation.html" accesskey="U">MapServer 8.0.0-beta2 Documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">MapServer Migration Guide</a></li> 
       </ul>
     </div>
@@ -119,7 +123,7 @@
 <span id="migration"></span><h1><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer Migration Guide</a><a class="headerlink" href="#mapserver-migration-guide" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Last Updated<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2021-07-13</p>
+<dd class="field-odd"><p>2022-08-09</p>
 </dd>
 </dl>
 <nav class="contents" id="table-of-contents">
@@ -127,20 +131,94 @@
 <ul class="simple">
 <li><p><a class="reference internal" href="#mapserver-migration-guide" id="id3">MapServer Migration Guide</a></p>
 <ul>
-<li><p><a class="reference internal" href="#mapserver-7-4-to-7-6-migration" id="id4">MapServer 7.4 to 7.6 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-7-2-to-7-4-migration" id="id5">MapServer 7.2 to 7.4 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-7-0-to-7-2-migration" id="id6">MapServer 7.0 to 7.2 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-6-4-to-7-0-migration" id="id7">MapServer 6.4 to 7.0 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-6-2-to-6-4-migration" id="id8">MapServer 6.2 to 6.4 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-6-0-to-6-2-migration" id="id9">MapServer 6.0 to 6.2 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-5-6-to-6-0-migration" id="id10">MapServer 5.6 to 6.0 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-5-4-to-5-6-migration" id="id11">MapServer 5.4 to 5.6 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-5-2-to-5-4-migration" id="id12">MapServer 5.2 to 5.4 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-4-10-to-5-0-migration" id="id13">MapServer 4.10 to 5.0 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-7-6-to-8-0-migration" id="id4">MapServer 7.6 to 8.0 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-7-4-to-7-6-migration" id="id5">MapServer 7.4 to 7.6 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-7-2-to-7-4-migration" id="id6">MapServer 7.2 to 7.4 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-7-0-to-7-2-migration" id="id7">MapServer 7.0 to 7.2 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-6-4-to-7-0-migration" id="id8">MapServer 6.4 to 7.0 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-6-2-to-6-4-migration" id="id9">MapServer 6.2 to 6.4 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-6-0-to-6-2-migration" id="id10">MapServer 6.0 to 6.2 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-5-6-to-6-0-migration" id="id11">MapServer 5.6 to 6.0 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-5-4-to-5-6-migration" id="id12">MapServer 5.4 to 5.6 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-5-2-to-5-4-migration" id="id13">MapServer 5.2 to 5.4 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-4-10-to-5-0-migration" id="id14">MapServer 4.10 to 5.0 Migration</a></p></li>
 </ul>
 </li>
 </ul>
 </nav>
+<section id="mapserver-7-6-to-8-0-migration">
+<span id="migration-8-0"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 7.6 to 8.0 Migration</a><a class="headerlink" href="#mapserver-7-6-to-8-0-migration" title="Permalink to this heading">¶</a></h2>
+<ul>
+<li><p>The former <cite>shp2img</cite> commandline utility has been renamed to <a class="reference internal" href="utilities/map2img.html#map2img"><span class="std std-ref">map2img</span></a></p></li>
+<li><p>Every MapServer installation as of the 8.0.0 release will require a
+<a class="reference internal" href="mapfile/config.html#config"><span class="std std-ref">CONFIG</span></a> file.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For example, compiling from source on Ubuntu, by default MapServer will install
+a sample config file at <em>/usr/local/etc/mapserver-sample.conf</em>, and you must
+rename that file to <em>mapserver.conf</em>.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For MS4W users (version &gt;= 5), the config
+file can be found at <em>/ms4w/ms4w.conf</em></p>
+</div>
+</li>
+<li><p>old native PHP MapScript has been removed, in place of PHPNG (SWIG) MapScript.
+Follow the MapScript <a class="reference internal" href="mapscript/mapscript-api/index.html#swig"><span class="std std-ref">SWIG API</span></a> documentation.  Compiling SWIG <cite>master</cite>
+from <a class="reference external" href="https://github.com/swig/swig">GitHub</a> is recommended.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The MS4W community has produced many code examples of PHPNG (SWIG) MapScript:
+<a class="reference external" href="https://ms4w.com/trac/wiki/MigrationGuide5.x">https://ms4w.com/trac/wiki/MigrationGuide5.x</a></p>
+</div>
+</li>
+<li><p>several deprecrated mapfile parameters have been removed, and will throw an
+error if you still specify them now.  The following are specific examples
+to be aware of (but be sure to review the <a class="reference internal" href="development/rfc/ms-rfc-133.html#rfc133"><span class="std std-ref">full list</span></a>), taken from the
+MS4W <a class="reference external" href="https://ms4w.com/trac/wiki/MigrationGuide5.x">migration guide</a>:</p>
+<ul>
+<li><p><strong>DUMP TRUE</strong></p>
+<p>Instead, you can configure querying of your layer by using METADATA instead, such as:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">METADATA</span>
+    <span class="s">&quot;wms_title&quot;</span>         <span class="s">&quot;Populated Places&quot;</span>
+    <span class="s">&quot;wms_include_items&quot;</span> <span class="s">&quot;all&quot;</span>
+    <span class="s">&quot;gml_include_items&quot;</span> <span class="s">&quot;all&quot;</span>
+    <span class="s">&quot;gml_featureid&quot;</span>     <span class="s">&quot;ogc_fid&quot;</span>
+  <span class="k">END</span> <span class="c">#metadata</span>
+  <span class="p">...</span>
+<span class="k">END</span> <span class="c">#layer</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>OPACITY</strong> at the <strong>LAYER-level</strong></p>
+<p>Instead it must be inside a ​COMPOSITE object:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">COMPOSITE</span>
+    <span class="k">OPACITY</span> <span class="mi">40</span>
+  <span class="k">END</span> <span class="c">#composite</span>
+<span class="k">END</span> <span class="c">#layer</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>COLOR</strong> at the <strong>LAYER-level</strong></p>
+<p>Instead it must be inside a ​STYLE object:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">STYLE</span>
+    <span class="k">COLOR</span> <span class="mi">120</span> <span class="mi">120</span> <span class="mi">120</span>
+  <span class="k">END</span> <span class="c">#style</span>
+<span class="k">END</span> <span class="c">#layer</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 <section id="mapserver-7-4-to-7-6-migration">
 <span id="migration-7-6"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 7.4 to 7.6 Migration</a><a class="headerlink" href="#mapserver-7-4-to-7-6-migration" title="Permalink to this heading">¶</a></h2>
 <ul>
@@ -251,7 +329,7 @@ directory paths and filenames, such as:</p>
 <section id="mapserver-7-2-to-7-4-migration">
 <h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 7.2 to 7.4 Migration</a><a class="headerlink" href="#mapserver-7-2-to-7-4-migration" title="Permalink to this heading">¶</a></h2>
 <ul>
-<li><p>PHP 7 MapScript support: users are recommended to switch to MapServer’s new <a class="reference internal" href="mapscript/mapscript.html#swig"><span class="std std-ref">SWIG</span></a> API
+<li><p>PHP 7 MapScript support: users are recommended to switch to MapServer’s new <a class="reference internal" href="mapscript/mapscript-api/index.html#swig"><span class="std std-ref">SWIG</span></a> API
 support of PHP 7+ (reason for recommendation: as we saw with the breaking PHP 7 changes,
 managing PHP through SWIG will be easier on the MapServer maintainers in the long run.)
 Some important SWIG notes:</p>
@@ -259,7 +337,7 @@ Some important SWIG notes:</p>
 <li><p>you will require at least <a class="reference external" href="http://www.swig.org/download.html">SWIG-3.0.11</a>
 (but 4.0.0 is recommended).</p></li>
 <li><p>if you notice any missing functions that were available in the old native PHP MapScript API,
-first please check the <a class="reference internal" href="mapscript/mapscript.html#swig"><span class="std std-ref">SWIG API</span></a> reference document for an alternative function to use,
+first please check the <a class="reference internal" href="mapscript/mapscript-api/index.html#swig"><span class="std std-ref">SWIG API</span></a> reference document for an alternative function to use,
 and if there is nothing similar available then <a class="reference external" href="https://github.com/MapServer/MapServer/issues">file a ticket</a>
 for each function that you require.</p></li>
 <li><p>all of your PHP scripts (that leverage MapServer objects and functions) must now always
@@ -1159,6 +1237,7 @@ and RGBA will likely only be supported with AGG</p>
   <h3>Current Table Of Contents</h3>
   <ul>
 <li><a class="reference internal" href="#">MapServer Migration Guide</a><ul>
+<li><a class="reference internal" href="#mapserver-7-6-to-8-0-migration">MapServer 7.6 to 8.0 Migration</a></li>
 <li><a class="reference internal" href="#mapserver-7-4-to-7-6-migration">MapServer 7.4 to 7.6 Migration</a></li>
 <li><a class="reference internal" href="#mapserver-7-2-to-7-4-migration">MapServer 7.2 to 7.4 Migration</a></li>
 <li><a class="reference internal" href="#mapserver-7-0-to-7-2-migration">MapServer 7.0 to 7.2 Migration</a></li>
@@ -1236,14 +1315,14 @@ and RGBA will likely only be supported with AGG</p>
           <a href="mapcache/coverage.html" title="Coverage Analyzer"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="documentation.html" >MapServer 7.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="documentation.html" >MapServer 8.0.0-beta2 Documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">MapServer Migration Guide</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Last updated on 2022-06-19.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+      Last updated on 2022-08-15.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>
