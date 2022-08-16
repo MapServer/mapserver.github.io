@@ -124,8 +124,9 @@
 <span id="index-0"></span><span id="id1"></span><h1>CONFIG<a class="headerlink" href="#config" title="Permalink to this heading">¶</a></h1>
 <p>As of MapServer 8.0, MapServer has a required global configuration file, implemented through
 <a class="reference internal" href="../development/rfc/ms-rfc-135.html#rfc135"><span class="std std-ref">RFC 135</span></a>, which aims to make configuring MapServer both more secure
-and straight forward. The configuration file path can be set using the environment variable <code class="docutils literal notranslate"><span class="pre">MAPSERVER_CONFIG_FILE</span></code>.
-A default location can also be set at compile time, for different distributions.</p>
+and straight forward. The configuration file path can be set using the environment variable
+<code class="docutils literal notranslate"><span class="pre">MAPSERVER_CONFIG_FILE</span></code>. A default location can also be set at compile time,
+for different distributions.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>For example, compiling from source on Ubuntu, by default MapServer will install
@@ -146,26 +147,41 @@ file can be found at <em>/ms4w/ms4w.conf</em></p>
 <p>The commandline utility <a class="reference internal" href="../utilities/map2img.html#map2img"><span class="std std-ref">map2img</span></a> has a switch <em>-conf</em> to set the name of the
 config file.</p>
 </div>
-<p>The configuration file is loaded by the MapServer CGI at runtime and provides site-level configuration
-for all Mapfiles. The configuration file has 3 sections detailed below.</p>
+<p>The configuration file is loaded by the MapServer CGI at runtime and provides
+site-level configuration for all mapfiles. The configuration file has 3 sections
+detailed below.</p>
 <dl id="mapfile-config-env">
 <dt>ENV</dt><dd><p>This block allows for environment variables to be stored as name value pairs - see
-<a class="reference internal" href="../optimization/environment_variables.html#environment-variables"><span class="std std-ref">Environment Variables</span></a> page for all available options.
+the <a class="reference internal" href="../optimization/environment_variables.html#environment-variables"><span class="std std-ref">Environment Variables</span></a> page for all available options.
 Prior to the introduction of the configuration file support of environment variables varied
 between different platforms.</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="err">ENV</span>
-  <span class="err">MS_MAP_</span><span class="k">PATTERN</span> <span class="s">&quot;^/opt/mapserver&quot;</span> <span class="c">## required</span>
+  <span class="err">MS_MAP_</span><span class="k">PATTERN</span> <span class="s">&quot;^/opt/mapserver&quot;</span> <span class="c">## required when referencing mapfiles by path</span>
 <span class="k">END</span>
 </pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>As of the MapServer 8.0 release, there are 2 scenarios where you won’t have to
+specify <em>MS_MAP_PATTERN</em> :</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>If using a map alias (set in the <em>MAPS</em> section of this config file).</p></li>
+<li><p>If MS_MAP_PATTERN is set in the underlying environment - that is, by
+the Web server. MapServer will fall back to the environment variables
+if they exist for any of the <a class="reference internal" href="../optimization/environment_variables.html#environment-variables"><span class="std std-ref">MS* variables</span></a>.</p></li>
+</ol>
+</div></blockquote>
 </div>
 </dd>
 </dl>
 <dl id="mapfile-config-maps">
-<dt>MAPS</dt><dd><p>This block allows for keys values to be mapped to Mapfile paths. If the <code class="docutils literal notranslate"><span class="pre">MS_MAP_NO_PATH</span></code> environment
-variable is set then <strong>only</strong> these keys can be used in the <code class="docutils literal notranslate"><span class="pre">map=</span></code> CGI parameter.
-The use of keys also helps to simplify OGC API URLs, for example the key <code class="docutils literal notranslate"><span class="pre">itasca</span></code> can be
-used in the place of a Mapfile path in a URL for example: <a class="reference external" href="http://localhost/mapserver/itasca/ogcapi/collections">http://localhost/mapserver/itasca/ogcapi/collections</a>
-Keys are case-insensitive - “ITASCA” and “Itasca” are handled identically.</p>
+<dt>MAPS</dt><dd><p>This block allows for aliases to be mapped to mapfile paths. If the <code class="docutils literal notranslate"><span class="pre">MS_MAP_NO_PATH</span></code> environment
+variable is set then <strong>only</strong> these aliases can be used in the <code class="docutils literal notranslate"><span class="pre">map=</span></code> CGI parameter.
+The use of aliases also helps to simplify <a class="reference internal" href="../ogc/ogc_api.html#ogcapi"><span class="std std-ref">OGC API</span></a> URLs, for example the alias
+<code class="docutils literal notranslate"><span class="pre">itasca</span></code> can be used in the place of a mapfile path in a URL for example:
+<a class="reference external" href="http://localhost/mapserver/itasca/ogcapi/collections">http://localhost/mapserver/itasca/ogcapi/collections</a>
+Aliases are case-insensitive - “ITASCA” and “Itasca” are handled identically.</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="err">MAPS</span>
   <span class="err">ITASCA</span> <span class="s">&quot;/opt/mapserver/mapserver-demo/itasca.map&quot;</span>
   <span class="err">TEST_MAPFI</span><span class="ow">LE</span> <span class="s">&quot;/opt/mapserver/test/test.map&quot;</span>
@@ -175,8 +191,8 @@ Keys are case-insensitive - “ITASCA” and “Itasca” are handled identicall
 </dd>
 </dl>
 <dl id="mapfile-config-plugins">
-<dt>PLUGINS</dt><dd><p>This block allows for keys values to be mapped to plugin library paths. For example the <a class="reference internal" href="../input/vector/mssql.html#mssql-plugin"><span class="std std-ref">MS SQL Plugin</span></a>.
-This registry of plugins avoids possible unsafe libraries being loaded by a Mapfile.</p>
+<dt>PLUGINS</dt><dd><p>This block allows for keys to be mapped to plugin library paths. For example the <a class="reference internal" href="../input/vector/mssql.html#mssql-plugin"><span class="std std-ref">MS SQL Plugin</span></a>.
+This registry of plugins avoids possible unsafe libraries being loaded by a mapfile.</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="err">PLUGINS</span>
   <span class="s">&quot;mssql&quot;</span> <span class="s">&quot;C:\MapServer</span><span class="se">\b</span><span class="s">in\ms\plugins\mssql2008\msplugin_mssql2008.dll&quot;</span>
 <span class="k">END</span>
@@ -198,7 +214,7 @@ This registry of plugins avoids possible unsafe libraries being loaded by a Mapf
     <span class="c"># Limit Mapfile Access</span>
     <span class="c">#</span>
     <span class="c"># MS_MAP_NO_PATH &quot;1&quot;</span>
-    <span class="err">MS_MAP_</span><span class="k">PATTERN</span> <span class="s">&quot;^/opt/mapserver&quot;</span> <span class="c">## required</span>
+    <span class="err">MS_MAP_</span><span class="k">PATTERN</span> <span class="s">&quot;^/opt/mapserver&quot;</span> <span class="c">## required when referencing mapfiles by path</span>
     <span class="c"># MS_MAP_BAD_PATTERN &quot;[/\\]{2}|[/\\]?\\.+[/\\]|,&quot;</span>
 
     <span class="c">#</span>
@@ -301,7 +317,7 @@ This registry of plugins avoids possible unsafe libraries being loaded by a Mapf
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Last updated on 2022-08-15.
+      Last updated on 2022-08-16.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
