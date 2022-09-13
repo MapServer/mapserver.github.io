@@ -4,15 +4,17 @@
 <html lang="de">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 89: Layer Geomtransforms &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 89: Layer Geomtransforms &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 90: Enable/Disable Layers in OGC Web Services by IP Lists" href="ms-rfc-90.html" />
     <link rel="prev" title="MS RFC 88: Saving MapServer Objects to Strings" href="ms-rfc-88.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,26 +148,26 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-89-layer-geomtransforms">
-<span id="rfc89"></span><h1>MS RFC 89: Layer Geomtransforms<a class="headerlink" href="#ms-rfc-89-layer-geomtransforms" title="Link zu dieser Überschrift">¶</a></h1>
+<span id="rfc89"></span><h1>MS RFC 89: Layer Geomtransforms<a class="headerlink" href="#ms-rfc-89-layer-geomtransforms" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2013/02/05</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Alan Boudreault</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p>aboudreault at mapgears.com</p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Adopted and Implemented</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 6.4</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>1. Overview<a class="headerlink" href="#overview" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>1. Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>MapServer 6.0 introduced the concept of geometry expressions within a styleObj-geomtransform. For
 example, one could write:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">STYLE</span>
@@ -182,7 +187,7 @@ level. For more information about the geomtransform implemented for the style
 object: see <a class="reference external" href="https://mapserver.org/development/rfc/ms-rfc-48.html">https://mapserver.org/development/rfc/ms-rfc-48.html</a>.</p>
 </section>
 <section id="the-proposed-solution">
-<h2>2. The proposed solution<a class="headerlink" href="#the-proposed-solution" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>2. The proposed solution<a class="headerlink" href="#the-proposed-solution" title="Permalink to this heading">¶</a></h2>
 <p>This RFC proposes the addition of a new layer option: GEOMTRANSFORM. The
 functionality is mostly the same than the the style geomtransform, except that
 not <em>all</em> the parameters will be implemented. Unless we really see a need for
@@ -210,14 +215,14 @@ definitions and they will be applied properly.</p>
 </div>
 </section>
 <section id="implementation-details">
-<h2>2.1 Implementation Details<a class="headerlink" href="#implementation-details" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>2.1 Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this heading">¶</a></h2>
 <p>Layer geomtransform would support all query requests. The logic of the
 geomtransform will be done in msLayerNextShape() and msLayerGetShape()
 functions. This would allow a user to interact with transformed
 features. ie. mapscript, WFS.</p>
 </section>
 <section id="unit-coordinates">
-<h2>2.2 Unit Coordinates<a class="headerlink" href="#unit-coordinates" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>2.2 Unit Coordinates<a class="headerlink" href="#unit-coordinates" title="Permalink to this heading">¶</a></h2>
 <p>There is a particularity between STYLE and LAYER GEOMTRANSFORM. STYLE-level
 GEOMTRANSFORM receives a shape in pixel coordinates, whereas the LAYER-level
 GEOMTRANSFORM will receive the raw shape in ground coordinates (meters, degrees,
@@ -244,7 +249,7 @@ level because we do not have information about map cellsize at that level in the
 code</p>
 </section>
 <section id="pixel-value-at-layer-level">
-<h2>2.3 Pixel value at Layer level<a class="headerlink" href="#pixel-value-at-layer-level" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>2.3 Pixel value at Layer level<a class="headerlink" href="#pixel-value-at-layer-level" title="Permalink to this heading">¶</a></h2>
 <p>In cases where we want to pass a pixel value at the layer level, a
 [map_cellsize] variable will be available.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LAYER</span> <span class="n">NAME</span> <span class="s2">&quot;my_layer&quot;</span>
@@ -262,12 +267,12 @@ in your GEOMTRANSFORM expression, you must explicitly set the UNITS option in
 the layer.</p>
 </section>
 <section id="vector-formats-supported">
-<h2>2.4 Vector formats supported<a class="headerlink" href="#vector-formats-supported" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>2.4 Vector formats supported<a class="headerlink" href="#vector-formats-supported" title="Permalink to this heading">¶</a></h2>
 <p>All vector formats will be supported. This also include all formats of OGR
 (CONNECTIONTYPE OGR).</p>
 </section>
 <section id="new-geomtransform-parameters">
-<h2>3. New Geomtransform Parameters<a class="headerlink" href="#new-geomtransform-parameters" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>3. New Geomtransform Parameters<a class="headerlink" href="#new-geomtransform-parameters" title="Permalink to this heading">¶</a></h2>
 <p>3 new parameters will be added as a geomtransform parameter:</p>
 <ul class="simple">
 <li><p>simplify: Simplify using GEOS. More info: <a class="reference external" href="http://geos.refractions.net/ro/doxygen_docs/html/classgeos_1_1simplify_1_1DouglasPeuckerLineSimplifier.html">GEOS Simplify</a></p></li>
@@ -282,22 +287,22 @@ original shape and the red one the transformed shape):</p>
 </div></blockquote>
 </section>
 <section id="mapscript">
-<h2>4. MapScript<a class="headerlink" href="#mapscript" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>4. MapScript<a class="headerlink" href="#mapscript" title="Permalink to this heading">¶</a></h2>
 <p>The ability to get/set the layer-level geomtransform will be added to
 mapscript. The geomtransform is handled internally and does not affect anything
 else.</p>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>5. Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>5. Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h2>
 <p>This change provides a new functionality with no backwards
 compatibility issues being considered.</p>
 </section>
 <section id="tests">
-<h2>6. Tests<a class="headerlink" href="#tests" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>6. Tests<a class="headerlink" href="#tests" title="Permalink to this heading">¶</a></h2>
 <p>msautotest will be modified to add some tests of this new functionality.</p>
 </section>
 <section id="bug-id">
-<h2>7. Bug ID<a class="headerlink" href="#bug-id" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>7. Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this heading">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
 <li><p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/4592">https://github.com/MapServer/MapServer/issues/4592</a></p></li>
@@ -305,7 +310,7 @@ compatibility issues being considered.</p>
 </div></blockquote>
 </section>
 <section id="voting-history">
-<h2>8. Voting history<a class="headerlink" href="#voting-history" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>8. Voting history<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
 <p>+1 from Jeff, Olivier, Stephen, Michael, Umberto and Steve.</p>
 </section>
 </section>
@@ -326,7 +331,7 @@ compatibility issues being considered.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -381,8 +386,8 @@ compatibility issues being considered.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Zuletzt aktualisiert am 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Zuletzt aktualisiert am 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

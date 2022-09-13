@@ -4,15 +4,17 @@
 <html lang="tr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 85: Vector Contour Rendering (CONNECTIONTYPE CONTOUR) &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 85: Vector Contour Rendering (CONNECTIONTYPE CONTOUR) &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 86: Scale-dependant String Substitutions" href="ms-rfc-86.html" />
     <link rel="prev" title="MS RFC 84: Migrate project repository from svn to git" href="ms-rfc-84.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,26 +148,26 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-85-vector-contour-rendering-connectiontype-contour">
-<span id="rfc85"></span><h1>MS RFC 85: Vector Contour Rendering (CONNECTIONTYPE CONTOUR)<a class="headerlink" href="#ms-rfc-85-vector-contour-rendering-connectiontype-contour" title="Bu başlık için kalıcı bağlantı">¶</a></h1>
+<span id="rfc85"></span><h1>MS RFC 85: Vector Contour Rendering (CONNECTIONTYPE CONTOUR)<a class="headerlink" href="#ms-rfc-85-vector-contour-rendering-connectiontype-contour" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2012-09-18</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Alan Boudreault</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p>aboudreault at mapgears.com</p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Adopted</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 6.4</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>1. Overview<a class="headerlink" href="#overview" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>1. Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>This is a proposal to add the ability to compute and render contour layers on
 the fly in MapServer from a raster source. The source is one band of raster
 data, which represents a digital elevation model (DEM). More info about DEMs at:
@@ -173,7 +178,7 @@ from the raster source. Plus this also implies some overhead for the
 gdal_contour files management, etc.</p>
 </section>
 <section id="the-proposed-solution">
-<h2>2. The proposed solution<a class="headerlink" href="#the-proposed-solution" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>2. The proposed solution<a class="headerlink" href="#the-proposed-solution" title="Permalink to this heading">¶</a></h2>
 <p>This RFC proposes the addition of a new type of layer in MapServer:
 CONNECTIONTYPE CONTOUR. The new type is a hybrid layer, which has a raster data
 source as input and vector features as output. Initially, only the line
@@ -254,7 +259,7 @@ value or list of values. See the example below.</p>
 </div>
 </section>
 <section id="implementation-details">
-<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this heading">¶</a></h2>
 <p>Internally, a CONTOUR layer will have its own renderer/driver code. It’s an
 hybrid layer because it reads the raster source and creates a vector dataset from
 it. It uses the internal GDAL function GDALContourGenerate(). All other
@@ -274,7 +279,7 @@ GDAL functions, an OGR dataset is stored in the internal layer structure.</p></l
 <a class="reference external" href="https://gdal.org/api/gdal_alg.html#_CPPv419GDALContourGenerate15GDALRasterBandHddiPdidPvii16GDALProgressFuncPv">https://gdal.org/api/gdal_alg.html#_CPPv419GDALContourGenerate15GDALRasterBandHddiPdidPvii16GDALProgressFuncPv</a></p>
 </section>
 <section id="ogr-input-driver">
-<h2>3.1 OGR Input driver<a class="headerlink" href="#ogr-input-driver" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>3.1 OGR Input driver<a class="headerlink" href="#ogr-input-driver" title="Permalink to this heading">¶</a></h2>
 <p>Once the raster source will be processed with gdal raster/contour functions, a
 OGR DataSource will be stored internally using the “Memory” driver. Since
 mapserver has already an OGR input-driver, it will be used to avoid unnecessary
@@ -286,7 +291,7 @@ case, our datasource is already opened. To solve this minor issue, the
 connection pooling API will be used.</p>
 </section>
 <section id="resample-and-reprojection">
-<h2>3.2 Resample and Reprojection<a class="headerlink" href="#resample-and-reprojection" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>3.2 Resample and Reprojection<a class="headerlink" href="#resample-and-reprojection" title="Permalink to this heading">¶</a></h2>
 <p>The raster resample and layer reprojection will be supported. It will be
 done in one of the two ways:</p>
 <blockquote>
@@ -297,18 +302,18 @@ done in one of the two ways:</p>
 </div></blockquote>
 </section>
 <section id="labeling">
-<h2>3.3 Labeling<a class="headerlink" href="#labeling" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>3.3 Labeling<a class="headerlink" href="#labeling" title="Permalink to this heading">¶</a></h2>
 <p>Since the layer is a line vector layer internally, the labeling is not affected
 and will be rendered as normal.</p>
 </section>
 <section id="tile-boundaries">
-<h2>3.4 Tile boundaries<a class="headerlink" href="#tile-boundaries" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>3.4 Tile boundaries<a class="headerlink" href="#tile-boundaries" title="Permalink to this heading">¶</a></h2>
 <p>After some review of the GDALContourGenerate algorithm, it has been determined
 that the tile boundaries of the line should match properly. So this shouldn’t be
 an issue but will have to be tested.</p>
 </section>
 <section id="files-affected">
-<h2>3.5 Files affected<a class="headerlink" href="#files-affected" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>3.5 Files affected<a class="headerlink" href="#files-affected" title="Permalink to this heading">¶</a></h2>
 <p>The following files will be modified/created by this RFC:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapserver</span><span class="o">.</span><span class="n">h</span><span class="o">/</span><span class="n">mapfile</span><span class="o">.</span><span class="n">c</span> <span class="p">(</span><span class="n">Connection</span> <span class="nb">type</span> <span class="n">CONTOUR</span> <span class="n">support</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">mapfile</span><span class="p">)</span>
 <span class="n">mapcontour</span><span class="o">.</span><span class="n">c</span> <span class="p">(</span><span class="n">new</span> <span class="n">file</span> <span class="k">for</span> <span class="n">the</span> <span class="n">CONTOUR</span> <span class="n">renderer</span><span class="p">)</span>
@@ -318,27 +323,27 @@ an issue but will have to be tested.</p>
 </div>
 </section>
 <section id="mapscript">
-<h2>3.6 MapScript<a class="headerlink" href="#mapscript" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>3.6 MapScript<a class="headerlink" href="#mapscript" title="Permalink to this heading">¶</a></h2>
 <p>No issue for any MapScript bindings. The CONTOUR layer is handled/rendered internally as
 any other layer.</p>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>3.7 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>3.7 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h2>
 <p>This change provides a new functionality with no backwards compatibility issues being considered.</p>
 </section>
 <section id="tests">
-<h2>4. Tests<a class="headerlink" href="#tests" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>4. Tests<a class="headerlink" href="#tests" title="Permalink to this heading">¶</a></h2>
 <p>msautotest will be modified to add some tests related to that new layer type
 rendering and queries.</p>
 </section>
 <section id="bug-id">
-<h2>5. Bug ID<a class="headerlink" href="#bug-id" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>5. Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/4613">https://github.com/MapServer/MapServer/issues/4613</a></p></li>
 </ul>
 </section>
 <section id="voting-history">
-<h2>6. Voting history<a class="headerlink" href="#voting-history" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>6. Voting history<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
 <p>+1 from Perry, Tamas, Daniel, Steve, Thomas, Jeff, Tom, Michael and Stephen</p>
 </section>
 </section>
@@ -359,7 +364,7 @@ rendering and queries.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -415,8 +420,8 @@ rendering and queries.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Telif hakkı</a> 2022, Open Source Geospatial Foundation.
-      Son güncelleme: 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Son güncelleme: 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

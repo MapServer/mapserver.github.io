@@ -4,15 +4,17 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MapServer Migration Guide &#8212; MapServer 7.6.4 documentation</title>
+    <title>MapServer Migration Guide &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/ribbon.css" />
     
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="Data Input" href="input/index.html" />
     <link rel="prev" title="Coverage Analyzer" href="mapcache/coverage.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -130,7 +135,7 @@
           <a href="mapcache/coverage.html" title="Coverage Analyzer"
              accesskey="P">前へ</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="documentation.html" accesskey="U">MapServer 7.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="documentation.html" accesskey="U">MapServer 8.0.0 Documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">MapServer Migration Guide</a></li> 
       </ul>
     </div>
@@ -142,33 +147,122 @@
           <div class="body" role="main">
             
   <section id="mapserver-migration-guide">
-<span id="migration"></span><h1><a class="toc-backref" href="#table-of-contents">MapServer Migration Guide</a><a class="headerlink" href="#mapserver-migration-guide" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="migration"></span><h1><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer Migration Guide</a><a class="headerlink" href="#mapserver-migration-guide" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2021-07-13</p>
+<dt class="field-odd">Last Updated<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2022-09-12</p>
 </dd>
 </dl>
-<div class="contents topic" id="table-of-contents">
+<nav class="contents" id="table-of-contents">
 <p class="topic-title">Table of Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#mapserver-migration-guide" id="id3">MapServer Migration Guide</a></p>
 <ul>
-<li><p><a class="reference internal" href="#mapserver-7-4-to-7-6-migration" id="id4">MapServer 7.4 to 7.6 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-7-2-to-7-4-migration" id="id5">MapServer 7.2 to 7.4 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-7-0-to-7-2-migration" id="id6">MapServer 7.0 to 7.2 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-6-4-to-7-0-migration" id="id7">MapServer 6.4 to 7.0 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-6-2-to-6-4-migration" id="id8">MapServer 6.2 to 6.4 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-6-0-to-6-2-migration" id="id9">MapServer 6.0 to 6.2 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-5-6-to-6-0-migration" id="id10">MapServer 5.6 to 6.0 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-5-4-to-5-6-migration" id="id11">MapServer 5.4 to 5.6 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-5-2-to-5-4-migration" id="id12">MapServer 5.2 to 5.4 Migration</a></p></li>
-<li><p><a class="reference internal" href="#mapserver-4-10-to-5-0-migration" id="id13">MapServer 4.10 to 5.0 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-7-6-to-8-0-migration" id="id4">MapServer 7.6 to 8.0 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-7-4-to-7-6-migration" id="id5">MapServer 7.4 to 7.6 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-7-2-to-7-4-migration" id="id6">MapServer 7.2 to 7.4 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-7-0-to-7-2-migration" id="id7">MapServer 7.0 to 7.2 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-6-4-to-7-0-migration" id="id8">MapServer 6.4 to 7.0 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-6-2-to-6-4-migration" id="id9">MapServer 6.2 to 6.4 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-6-0-to-6-2-migration" id="id10">MapServer 6.0 to 6.2 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-5-6-to-6-0-migration" id="id11">MapServer 5.6 to 6.0 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-5-4-to-5-6-migration" id="id12">MapServer 5.4 to 5.6 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-5-2-to-5-4-migration" id="id13">MapServer 5.2 to 5.4 Migration</a></p></li>
+<li><p><a class="reference internal" href="#mapserver-4-10-to-5-0-migration" id="id14">MapServer 4.10 to 5.0 Migration</a></p></li>
 </ul>
 </li>
 </ul>
+</nav>
+<section id="mapserver-7-6-to-8-0-migration">
+<span id="migration-8-0"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 7.6 to 8.0 Migration</a><a class="headerlink" href="#mapserver-7-6-to-8-0-migration" title="この見出しへのパーマリンク">¶</a></h2>
+<ul>
+<li><p>The former <cite>shp2img</cite> commandline utility has been renamed to <a class="reference internal" href="utilities/map2img.html#map2img"><span class="std std-ref">map2img</span></a></p></li>
+<li><p>Every MapServer installation as of the 8.0.0 release will require a
+<a class="reference internal" href="mapfile/config.html#config"><span class="std std-ref">CONFIG</span></a> file.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For example, compiling from source on Ubuntu, by default MapServer will install
+a sample config file at <em>/usr/local/etc/mapserver-sample.conf</em>, and you must
+rename that file to <em>mapserver.conf</em>.</p>
 </div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For MS4W users (version &gt;= 5), the config
+file can be found at <em>/ms4w/ms4w.conf</em></p>
+</div>
+</li>
+<li><p>old native PHP MapScript has been removed, in place of PHPNG (SWIG) MapScript.
+Follow the MapScript <a class="reference internal" href="mapscript/mapscript-api/index.html#swig"><span class="std std-ref">SWIG API</span></a> documentation.  Compiling SWIG <cite>master</cite>
+from <a class="reference external" href="https://github.com/swig/swig">GitHub</a> is recommended.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The MS4W community has produced many code examples of PHPNG (SWIG) MapScript:
+<a class="reference external" href="https://ms4w.com/trac/wiki/MigrationGuide5.x">https://ms4w.com/trac/wiki/MigrationGuide5.x</a></p>
+</div>
+</li>
+<li><p>several deprecated mapfile parameters have been removed, and will throw an
+error if you still specify them now.  The following are specific examples
+to be aware of (but be sure to review the <a class="reference internal" href="development/rfc/ms-rfc-133.html#rfc133"><span class="std std-ref">full list</span></a>), taken from the
+MS4W <a class="reference external" href="https://ms4w.com/trac/wiki/MigrationGuide5.x">migration guide</a>:</p>
+<ul>
+<li><p><strong>DUMP TRUE</strong></p>
+<p>Instead, you can configure querying of your layer by using METADATA instead, such as:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">METADATA</span>
+    <span class="s">&quot;wms_title&quot;</span>         <span class="s">&quot;Populated Places&quot;</span>
+    <span class="s">&quot;wms_include_items&quot;</span> <span class="s">&quot;all&quot;</span>
+    <span class="s">&quot;gml_include_items&quot;</span> <span class="s">&quot;all&quot;</span>
+    <span class="s">&quot;gml_featureid&quot;</span>     <span class="s">&quot;ogc_fid&quot;</span>
+  <span class="k">END</span> <span class="c">#metadata</span>
+  <span class="p">...</span>
+<span class="k">END</span> <span class="c">#layer</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>OPACITY</strong> at the <strong>LAYER-level</strong></p>
+<p>Instead it must be inside a <a class="reference internal" href="mapfile/composite.html#composite"><span class="std std-ref">COMPOSITE</span></a> object:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">COMPOSITE</span>
+    <span class="k">OPACITY</span> <span class="mi">40</span>
+  <span class="k">END</span> <span class="c">#composite</span>
+<span class="k">END</span> <span class="c">#layer</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>COLOR</strong> at the <strong>CLASS-level</strong></p>
+<p>Instead it must be inside the class' <a class="reference internal" href="mapfile/style.html#style"><span class="std std-ref">STYLE</span></a> object:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">CLASS</span>
+    <span class="p">...</span>
+    <span class="k">STYLE</span>
+      <span class="k">COLOR</span> <span class="mi">120</span> <span class="mi">120</span> <span class="mi">120</span>
+    <span class="k">END</span> <span class="c">#style</span>
+  <span class="k">END</span> <span class="c">#class</span>
+<span class="k">END</span> <span class="c">#layer</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>Reminder: every mapfile <a class="reference internal" href="mapfile/layer.html#layer"><span class="std std-ref">LAYER</span></a> should include a <strong>NAME</strong> parameter.
+The NAME should <strong>not contain</strong> special characters, or spaces, or begin with
+a number.  This simple name is important for your downstream users (such as
+through OGC services).</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;mylayer&quot;</span> <span class="c">#strongly recommended</span>
+  <span class="k">GROUP</span> <span class="s">&quot;mygroup&quot;</span>
+  <span class="p">...</span>
+<span class="k">END</span> <span class="c">#layer</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
 <section id="mapserver-7-4-to-7-6-migration">
-<span id="migration-7-6"></span><h2><a class="toc-backref" href="#table-of-contents">MapServer 7.4 to 7.6 Migration</a><a class="headerlink" href="#mapserver-7-4-to-7-6-migration" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<span id="migration-7-6"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 7.4 to 7.6 Migration</a><a class="headerlink" href="#mapserver-7-4-to-7-6-migration" title="この見出しへのパーマリンク">¶</a></h2>
 <ul>
 <li><p>MapServer now requires at least CMake version 3.0 for compiling</p></li>
 <li><p>PointZM data support (X,Y,Z,M coordinates) is now enabled by default</p></li>
@@ -176,7 +270,7 @@
 the <a class="reference external" href="https://proj.org/news.html">PROJ 6.0 release</a>.  Note that older
 PROJ versions such as 5.2.0 will still work with MapServer.</p>
 <div class="admonition tip">
-<p class="admonition-title">ちなみに</p>
+<p class="admonition-title">Tip</p>
 <p>Here are the (as of 2021-07-13) optimal combinations of MapServer with GDAL &amp; PROJ:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MapServer</span> <span class="mf">7.6.4</span> <span class="o">+</span> <span class="n">GDAL</span> <span class="mf">2.4.4</span> <span class="o">+</span> <span class="n">PROJ</span> <span class="mf">5.2.0</span> <span class="p">(</span><span class="n">GDAL</span> <span class="mi">2</span> <span class="n">series</span><span class="p">)</span>
 <span class="n">MapServer</span> <span class="mf">7.6.4</span> <span class="o">+</span> <span class="n">GDAL</span> <span class="mf">3.3.1</span> <span class="o">+</span> <span class="n">PROJ</span> <span class="mf">8.1.0</span> <span class="p">(</span><span class="n">GDAL</span> <span class="mi">3</span> <span class="n">series</span><span class="p">)</span>
@@ -275,9 +369,9 @@ directory paths and filenames, such as:</p>
 </ul>
 </section>
 <section id="mapserver-7-2-to-7-4-migration">
-<h2><a class="toc-backref" href="#table-of-contents">MapServer 7.2 to 7.4 Migration</a><a class="headerlink" href="#mapserver-7-2-to-7-4-migration" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 7.2 to 7.4 Migration</a><a class="headerlink" href="#mapserver-7-2-to-7-4-migration" title="この見出しへのパーマリンク">¶</a></h2>
 <ul>
-<li><p>PHP 7 MapScript support: users are recommended to switch to MapServer's new <a class="reference internal" href="mapscript/mapscript.html#swig"><span class="std std-ref">SWIG</span></a> API
+<li><p>PHP 7 MapScript support: users are recommended to switch to MapServer's new <a class="reference internal" href="mapscript/mapscript-api/index.html#swig"><span class="std std-ref">SWIG</span></a> API
 support of PHP 7+ (reason for recommendation: as we saw with the breaking PHP 7 changes,
 managing PHP through SWIG will be easier on the MapServer maintainers in the long run.)
 Some important SWIG notes:</p>
@@ -285,7 +379,7 @@ Some important SWIG notes:</p>
 <li><p>you will require at least <a class="reference external" href="http://www.swig.org/download.html">SWIG-3.0.11</a>
 (but 4.0.0 is recommended).</p></li>
 <li><p>if you notice any missing functions that were available in the old native PHP MapScript API,
-first please check the <a class="reference internal" href="mapscript/mapscript.html#swig"><span class="std std-ref">SWIG API</span></a> reference document for an alternative function to use,
+first please check the <a class="reference internal" href="mapscript/mapscript-api/index.html#swig"><span class="std std-ref">SWIG API</span></a> reference document for an alternative function to use,
 and if there is nothing similar available then <a class="reference external" href="https://github.com/MapServer/MapServer/issues">file a ticket</a>
 for each function that you require.</p></li>
 <li><p>all of your PHP scripts (that leverage MapServer objects and functions) must now always
@@ -311,14 +405,14 @@ $oMap = ms_newMapObj(&quot;C:/ms4w/apps/phpmapscript/sample.map&quot;);
 </ul>
 </section>
 <section id="mapserver-7-0-to-7-2-migration">
-<h2><a class="toc-backref" href="#table-of-contents">MapServer 7.0 to 7.2 Migration</a><a class="headerlink" href="#mapserver-7-0-to-7-2-migration" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 7.0 to 7.2 Migration</a><a class="headerlink" href="#mapserver-7-0-to-7-2-migration" title="この見出しへのパーマリンク">¶</a></h2>
 <ul class="simple">
 <li><p>LABEL-&gt;PARTIALS now defaults to &quot;FALSE&quot; instead of &quot;TRUE&quot; which implies that
 by default labels that do not fully fit in the map image will be discarded.</p></li>
 </ul>
 </section>
 <section id="mapserver-6-4-to-7-0-migration">
-<h2><a class="toc-backref" href="#table-of-contents">MapServer 6.4 to 7.0 Migration</a><a class="headerlink" href="#mapserver-6-4-to-7-0-migration" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 6.4 to 7.0 Migration</a><a class="headerlink" href="#mapserver-6-4-to-7-0-migration" title="この見出しへのパーマリンク">¶</a></h2>
 <ul class="simple">
 <li><p>The predefined field names for the union and cluster layers have been changed.
 Colons in the field names have been replaced with underscores to avoid producing
@@ -344,7 +438,7 @@ using: 1) sub-selects in the DATA statement or 2) using the new NATIVE_FILTER pr
 <ul class="simple">
 <li><p>MapServer attribute queries (e.g. mode=item[n]query) <em>must</em> be specified using MapServer
 expression syntax (qstring and qitem (opt)). For RDBMS backends you no longer send SQL snippets,
-rather the underlying driver will attempt to translate the expression to native systax (e.g. SQL).
+rather the underlying driver will attempt to translate the expression to native syntax (e.g. SQL).
 If translation fails (or the driver doesn't support translation) then MapServer will evaluate
 the expression instead.</p></li>
 <li><p>Layer opacity is now deprecated a result of RFC 113 - Layer Compositing. The mapfile parser
@@ -402,7 +496,7 @@ or wrap characters.</p></li>
 </div>
 </section>
 <section id="mapserver-6-2-to-6-4-migration">
-<h2><a class="toc-backref" href="#table-of-contents">MapServer 6.2 to 6.4 Migration</a><a class="headerlink" href="#mapserver-6-2-to-6-4-migration" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 6.2 to 6.4 Migration</a><a class="headerlink" href="#mapserver-6-2-to-6-4-migration" title="この見出しへのパーマリンク">¶</a></h2>
 <ul class="simple">
 <li><p>The &quot;ows_extent&quot; layer metadata is not used anymore to obtain georeferencing
 information for unreferenced raster data. Please use the &quot;extent&quot; layer key
@@ -428,13 +522,13 @@ case-insensitive.</p></li>
 </ul>
 </section>
 <section id="mapserver-6-0-to-6-2-migration">
-<h2><a class="toc-backref" href="#table-of-contents">MapServer 6.0 to 6.2 Migration</a><a class="headerlink" href="#mapserver-6-0-to-6-2-migration" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 6.0 to 6.2 Migration</a><a class="headerlink" href="#mapserver-6-0-to-6-2-migration" title="この見出しへのパーマリンク">¶</a></h2>
 <p>This section documents the changes that must be made to MapServer
 applications when migrating from version 6.0.x (or earlier versions)
 to 6.2 (i.e. backwards incompatibilities), as well as information
 on some of the new features.</p>
 <section id="build-system-changes">
-<h3>Build system changes<a class="headerlink" href="#build-system-changes" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Build system changes<a class="headerlink" href="#build-system-changes" title="この見出しへのパーマリンク">¶</a></h3>
 <p>If you are building MapServer from source, then the following may be of interest to you:</p>
 <ul class="simple">
 <li><p>Use of libtool: In version 6.2, the Unix/Linux build scripts and Makefiles were converted to use libtool. One impact of this change is that the 'mapserv' file in the main source tree is a libtool wrapper script and not the actual binary. To use 'mapserv' you actually have to use 'make install' and then point to the installed binary. More info is available in the Compiling on Unix document at <a class="reference external" href="https://mapserver.org/installation/unix.html#installation">https://mapserver.org/installation/unix.html#installation</a></p></li>
@@ -442,7 +536,7 @@ on some of the new features.</p>
 </ul>
 </section>
 <section id="cgi-changes">
-<h3>CGI Changes<a class="headerlink" href="#cgi-changes" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>CGI Changes<a class="headerlink" href="#cgi-changes" title="この見出しへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>Changing MIN/MAXSCALE or MIN/MAXSCALEDENOM via URL is no longer supported.</p></li>
 <li><p>The syntax for changing a LABEL with CGI commands has changed along with the
@@ -453,7 +547,7 @@ Note that cgi label modifications are/were broken in 6.2.0 and fixed in 6.2.1</p
 </ul>
 </section>
 <section id="rendering-changes">
-<h3>Rendering changes<a class="headerlink" href="#rendering-changes" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Rendering changes<a class="headerlink" href="#rendering-changes" title="この見出しへのパーマリンク">¶</a></h3>
 <ul>
 <li><p>STYLE-&gt;GAP interpretation
 Starting in 6.2, STYLE-&gt;GAP specifies the gap between the symbols
@@ -492,13 +586,13 @@ instead.</p>
 </section>
 </section>
 <section id="mapserver-5-6-to-6-0-migration">
-<h2><a class="toc-backref" href="#table-of-contents">MapServer 5.6 to 6.0 Migration</a><a class="headerlink" href="#mapserver-5-6-to-6-0-migration" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 5.6 to 6.0 Migration</a><a class="headerlink" href="#mapserver-5-6-to-6-0-migration" title="この見出しへのパーマリンク">¶</a></h2>
 <p>This section documents the changes that must be made to MapServer
 applications when migrating from version 5.6.x (or earlier versions)
 to 6.0 (i.e. backwards incompatibilities), as well as information
 on some of the new features.</p>
 <section id="mapfile-changes-expression-parsing">
-<h3>Mapfile Changes - Expression Parsing<a class="headerlink" href="#mapfile-changes-expression-parsing" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Mapfile Changes - Expression Parsing<a class="headerlink" href="#mapfile-changes-expression-parsing" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Version 6.0 features an extensive reworking of the expression parsing capabilities.
 While this adds functionality it also introduces a couple of regressions:</p>
 <p>Logical Expressions</p>
@@ -521,7 +615,7 @@ the area value for display.</p>
 for more information.</p>
 </section>
 <section id="mapfile-changes-label-styles">
-<h3>Mapfile Changes - Label Styles<a class="headerlink" href="#mapfile-changes-label-styles" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Mapfile Changes - Label Styles<a class="headerlink" href="#mapfile-changes-label-styles" title="この見出しへのパーマリンク">¶</a></h3>
 <p>As the need for more and more control of label drawing increased it became apparent that
 we couldn't extend labelObj's endlessly. In 6.0 we introduce the idea of label styles, that
 is, a styleObj inside a labelObj. The styles can be used to add accompanying markers or
@@ -549,7 +643,7 @@ are no more. To draw a label &quot;box&quot; in 6.0 you'd do:</p>
 <p>More verbose but <em>much</em> more flexible in the long run.</p>
 </section>
 <section id="mapfile-changes-label-maxoverlapangle">
-<h3>Mapfile Changes - Label MAXOVERLAPANGLE<a class="headerlink" href="#mapfile-changes-label-maxoverlapangle" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Mapfile Changes - Label MAXOVERLAPANGLE<a class="headerlink" href="#mapfile-changes-label-maxoverlapangle" title="この見出しへのパーマリンク">¶</a></h3>
 <p><a class="reference internal" href="development/rfc/ms-rfc-60.html#rfc60"><span class="std std-ref">MS RFC 60: Labeling enhancement: ability to skip ANGLE FOLLOW labels with too much character overlap</span></a> introduced a new MAXOVERLAPANGLE keyword to filter out ANGLE
 FOLLOW labels in which characters overlap. This new option is enabled by
 default in 6.0 with a default value for MAXOVERLAPANGLE of 22.5 degrees.</p>
@@ -558,7 +652,7 @@ on pre-6.0 behavior which was to use hardcoded maxoverlapangle = 0.4*MS_PI
 (40% of 180 degrees = 72 degrees).</p>
 </section>
 <section id="core-changes-rendering-overhaul">
-<h3>Core Changes - Rendering Overhaul<a class="headerlink" href="#core-changes-rendering-overhaul" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Core Changes - Rendering Overhaul<a class="headerlink" href="#core-changes-rendering-overhaul" title="この見出しへのパーマリンク">¶</a></h3>
 <p>The rendering backends for MapServer have been refactored for version 6 to
 allow us to support all features across all rendering drivers (GD,AGG,PDF,SVG, etc...).</p>
 <ul class="simple">
@@ -585,7 +679,7 @@ to a single pixel in previous versions. Use an ellipse symbol instead.</p></li>
 </ul>
 </section>
 <section id="mapfile-changes-line-styling">
-<h3>Mapfile Changes - line styling<a class="headerlink" href="#mapfile-changes-line-styling" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Mapfile Changes - line styling<a class="headerlink" href="#mapfile-changes-line-styling" title="この見出しへのパーマリンク">¶</a></h3>
 <p>All line styling must now be specified in class STYLEs in the layer definition.</p>
 <p>The following parameters/keywords have been moved from SYMBOL
 to STYLE:</p>
@@ -600,7 +694,7 @@ ANGLE AUTO.  This will only work for the line ends, and not for
 dashes.</p>
 </section>
 <section id="id1">
-<h3>CGI Changes<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>CGI Changes<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Runtime substitution now <em>requires</em> a validation pattern be present before the
 substitution will take place (this had been optional). This can be done via
 a layer metadata tag as before or within layer or web VALIDATION blocks. See
@@ -614,7 +708,7 @@ of query results. For example:</p>
 </div></blockquote>
 </section>
 <section id="ogc-web-services">
-<h3>OGC Web Services<a class="headerlink" href="#ogc-web-services" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>OGC Web Services<a class="headerlink" href="#ogc-web-services" title="この見出しへのパーマリンク">¶</a></h3>
 <p>All OGC Web Services are now disabled by default. If you want to enable them as
 they were in MapServer 5.6 and older releases, add the following metadata in the
 MAP::WEB section:</p>
@@ -624,14 +718,14 @@ MAP::WEB section:</p>
 <p>See also: <a class="reference external" href="https://mapserver.org/development/rfc/ms-rfc-67.html">https://mapserver.org/development/rfc/ms-rfc-67.html</a></p>
 </section>
 <section id="mapfile-changes-wcs-metadata">
-<h3>Mapfile Changes - WCS Metadata<a class="headerlink" href="#mapfile-changes-wcs-metadata" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Mapfile Changes - WCS Metadata<a class="headerlink" href="#mapfile-changes-wcs-metadata" title="この見出しへのパーマリンク">¶</a></h3>
 <p>To avoid confusion only &quot;wcs_*&quot; and &quot;ows_*&quot; prefixed metadata entries
 are evaluated in OGC WCS services. Previous versions used &quot;wms_*&quot;
 prefixed entries as fallback which is dropped in version 6.0 in favor of
 forcing explicit decisions.</p>
 </section>
 <section id="mapfile-changes-ogc-requests-dump-parameter-removed">
-<h3>Mapfile Changes - OGC requests - DUMP parameter removed<a class="headerlink" href="#mapfile-changes-ogc-requests-dump-parameter-removed" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Mapfile Changes - OGC requests - DUMP parameter removed<a class="headerlink" href="#mapfile-changes-ogc-requests-dump-parameter-removed" title="この見出しへのパーマリンク">¶</a></h3>
 <p>The DUMP LAYER parameter has been removed.  To enable output of
 geometries in WMS getfeatureinfo requests - GML
 (INFO_FORMAT=application/vnd.ogc.gml), LAYER METADATA is used
@@ -645,7 +739,7 @@ instead:</p>
 </div>
 </section>
 <section id="mapfile-changes-ability-to-escape-single-double-quotes">
-<h3>Mapfile Changes - Ability to escape single/double quotes<a class="headerlink" href="#mapfile-changes-ability-to-escape-single-double-quotes" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Mapfile Changes - Ability to escape single/double quotes<a class="headerlink" href="#mapfile-changes-ability-to-escape-single-double-quotes" title="この見出しへのパーマリンク">¶</a></h3>
 <p>We can now escape single and double quotes in strings and logical
 expressions. Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NAME</span> <span class="s2">&quot;RO</span><span class="se">\&quot;</span><span class="s2">AD&quot;</span> <span class="c1"># double quote inside a a double quote delimited string</span>
@@ -664,7 +758,7 @@ quotes that ends with , you will have to escape the last backslash.</p>
 </div>
 </section>
 <section id="php-mapscript-changes">
-<h3>PHP MapScript Changes<a class="headerlink" href="#php-mapscript-changes" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>PHP MapScript Changes<a class="headerlink" href="#php-mapscript-changes" title="この見出しへのパーマリンク">¶</a></h3>
 <ul>
 <li><p>PHP 5.2.0 or more recent is required.</p></li>
 <li><p>PHP/MapScript now uses exceptions for error report. All errors are catchable.</p></li>
@@ -752,7 +846,7 @@ $myShape = new shapeObj(MS_SHAPE_LINE);</p>
 </ul>
 </section>
 <section id="mapscript-all-flavors">
-<h3>MapScript (All Flavors)<a class="headerlink" href="#mapscript-all-flavors" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>MapScript (All Flavors)<a class="headerlink" href="#mapscript-all-flavors" title="この見出しへのパーマリンク">¶</a></h3>
 <p>The layer query result handing has been re-worked (again) to address some issues introduced in
 the 5.4/5.6 versions. Gone are resultsGetShape and getFeature methods. You should now use a
 refactored getShape method to access layer shapes. That method takes a resultObj and returns
@@ -777,7 +871,7 @@ $layer-&gt;close();</p>
 <p>See <a class="reference external" href="https://mapserver.org/development/rfc/ms-rfc-65.html">https://mapserver.org/development/rfc/ms-rfc-65.html</a> for more information.</p>
 </section>
 <section id="outputformat">
-<h3>OUTPUTFORMAT<a class="headerlink" href="#outputformat" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>OUTPUTFORMAT<a class="headerlink" href="#outputformat" title="この見出しへのパーマリンク">¶</a></h3>
 <p>The OUTPUTFORMAT parameter validation when reading from the mapfile
 will now trigger an error on some problems that in the past were
 silently fixed up.  For instance using RGBA IMAGEMODE with JPEG format
@@ -799,7 +893,7 @@ reorganized:</p>
 </ul>
 </section>
 <section id="rasters">
-<h3>Rasters<a class="headerlink" href="#rasters" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Rasters<a class="headerlink" href="#rasters" title="この見出しへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>The support for rendering rasters without GDAL has been removed.  Now
 RASTER layers (or WMS layers) require that MapServer be built against
@@ -808,7 +902,7 @@ the GDAL library.</p></li>
 </ul>
 </section>
 <section id="deprecated-features">
-<h3>Deprecated features<a class="headerlink" href="#deprecated-features" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Deprecated features<a class="headerlink" href="#deprecated-features" title="この見出しへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>Support for Flash/SWF output has been removed as part of the rendering overhaul
 because it was no longer compatible with the new architecture.
@@ -821,13 +915,13 @@ days, going through OGR for instance.</p></li>
 </section>
 </section>
 <section id="mapserver-5-4-to-5-6-migration">
-<h2><a class="toc-backref" href="#table-of-contents">MapServer 5.4 to 5.6 Migration</a><a class="headerlink" href="#mapserver-5-4-to-5-6-migration" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 5.4 to 5.6 Migration</a><a class="headerlink" href="#mapserver-5-4-to-5-6-migration" title="この見出しへのパーマリンク">¶</a></h2>
 <p>This section documents the changes that must be made to MapServer
 applications when migrating from version 5.4.x (or earlier versions)
 to 5.6 (i.e. backwards incompatibilities), as well as information
 on some of the new features.</p>
 <section id="mapscript-changes-related-to-single-pass-queries">
-<h3>MapScript changes related to single pass queries<a class="headerlink" href="#mapscript-changes-related-to-single-pass-queries" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>MapScript changes related to single pass queries<a class="headerlink" href="#mapscript-changes-related-to-single-pass-queries" title="この見出しへのパーマリンク">¶</a></h3>
 <p>In RFC-52, MapServer was modified to perform queries using a single pass
 on the data instead of two passes. This is transparent for CGI applications,
 but MapScript scripts must be modified to use the layer.resultsGetShape()
@@ -837,7 +931,7 @@ method instead of layer.getShape().</p>
 in 5.6.0-beta1)</p>
 </section>
 <section id="wfs-1-1-axis-orientation">
-<h3>WFS 1.1 axis orientation<a class="headerlink" href="#wfs-1-1-axis-orientation" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>WFS 1.1 axis orientation<a class="headerlink" href="#wfs-1-1-axis-orientation" title="この見出しへのパーマリンク">¶</a></h3>
 <p>The axis order in previous versions of the WFS specifications was to always use
 easting (x or lon ) and northing (y or lat).  WFS 1.1 specifies that, depending
 on the particular SRS, the x axis may or may not be oriented West-to-East, and
@@ -848,7 +942,7 @@ returned to the server for the GetFeature request reflect the inverse axis order
 for EPSG codes between 4000 and 5000.</p>
 </section>
 <section id="change-of-mime-type-for-the-imagemap-outputformat">
-<h3>Change of mime-type for the imagemap outputformat<a class="headerlink" href="#change-of-mime-type-for-the-imagemap-outputformat" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Change of mime-type for the imagemap outputformat<a class="headerlink" href="#change-of-mime-type-for-the-imagemap-outputformat" title="この見出しへのパーマリンク">¶</a></h3>
 <p>RFC 36 added support for templated outptformats, but this new feature
 was not available for WMS GetFeatureInfo output (see ticket #3024).
 In MapServer 5.6 this has been resolved by implementing lookup of output
@@ -863,13 +957,13 @@ just in case.</p>
 </section>
 </section>
 <section id="mapserver-5-2-to-5-4-migration">
-<h2><a class="toc-backref" href="#table-of-contents">MapServer 5.2 to 5.4 Migration</a><a class="headerlink" href="#mapserver-5-2-to-5-4-migration" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 5.2 to 5.4 Migration</a><a class="headerlink" href="#mapserver-5-2-to-5-4-migration" title="この見出しへのパーマリンク">¶</a></h2>
 <p>This section documents the changes that must be made to MapServer
 applications when migrating from version 5.2. (or earlier versions)
 to 5.4 (i.e. backwards incompatibilities), as well as information
 on some of the new features.</p>
 <section id="new-requirements-for-mapfiles-symbolsets-and-templates">
-<h3>New requirements for mapfiles, symbolsets and templates<a class="headerlink" href="#new-requirements-for-mapfiles-symbolsets-and-templates" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>New requirements for mapfiles, symbolsets and templates<a class="headerlink" href="#new-requirements-for-mapfiles-symbolsets-and-templates" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Due to some potential security vulnerabilities that were uncovered in previous
 versions of MapServer, RFC-56 introduced a number of changes to tighten
 access control on mapfiles and templates and limit the risk of leaking
@@ -881,7 +975,7 @@ and were also backported to v5.2.2 and 4.10.4.</p>
 that did not contain them already.</p></li>
 <li><p>All MapServer templates must be updated to contain the &quot;MapServer Template&quot;
 magic string on the first line. This string can be embedded
-in a comment depending on the template formet and the whole line will
+in a comment depending on the template format and the whole line will
 be skipped in the output generation. e.g.</p>
 <ul>
 <li><p>In HTML: &lt;!-- MapServer Template --&gt;</p></li>
@@ -893,13 +987,13 @@ be skipped in the output generation. e.g.</p>
 </section>
 </section>
 <section id="mapserver-4-10-to-5-0-migration">
-<h2><a class="toc-backref" href="#table-of-contents">MapServer 4.10 to 5.0 Migration</a><a class="headerlink" href="#mapserver-4-10-to-5-0-migration" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 4.10 to 5.0 Migration</a><a class="headerlink" href="#mapserver-4-10-to-5-0-migration" title="この見出しへのパーマリンク">¶</a></h2>
 <p>This section documents the changes that must be made to MapServer
 applications when migrating from version 4.10.x (or earlier versions)
 to 5.x (i.e. backwards incompatibilities), as well as information
 on some of the new features.</p>
 <section id="mapfile-changes">
-<h3>Mapfile changes<a class="headerlink" href="#mapfile-changes" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Mapfile changes<a class="headerlink" href="#mapfile-changes" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Attribute Bindings: In an effort to stem the tide of keyword overload
 and add functionality MapServer 5.0 supports a new method of binding
 feature attributes to STYLE and LABEL properties. In the past keywords
@@ -937,7 +1031,7 @@ SYMBOLSCALE =&gt; SYMBOLSCALEDENOM, and so on. The mapfile parser still
 recognizes the older keywords but they are deprecated and should be avoided.</p>
 </section>
 <section id="symbol-file-changes">
-<h3>Symbol file changes<a class="headerlink" href="#symbol-file-changes" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Symbol file changes<a class="headerlink" href="#symbol-file-changes" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Symbol Style: STYLEs are used within a symbol definition to store dash
 patterns for line symbolization. However, there is potential confusion
 with the style object that is used within class definitions. To resolve
@@ -945,8 +1039,8 @@ that confusion the symbol STYLE parameter has been renamed PATTERN. The
 symbol file parser will still recognize the STYLE keyword but it is
 deprecated and should be avoided.</p>
 </section>
-<section id="styling-symbolgy-changes">
-<h3>Styling/Symbolgy changes<a class="headerlink" href="#styling-symbolgy-changes" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<section id="styling-symbology-changes">
+<h3>Styling/Symbology changes<a class="headerlink" href="#styling-symbology-changes" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Prior to MapsServer 5.0, if a pixmap symbol was used in style on a Line
 Layer, the symbol was used as a brush to draw the line. In MapServer 5.0,
 it is possible to draw the pixmap symbol along the line (Note that this
@@ -956,12 +1050,12 @@ file. The GAP represents the distance between the symbols. If the GAP is not
 given, the pixmap symbol will be used as a brush.</p>
 </section>
 <section id="agg-rendering-changes">
-<h3>AGG rendering changes<a class="headerlink" href="#agg-rendering-changes" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>see <a class="reference external" href="http://mapserver.gis.umn.edu/docs/howto/agg-rendering-specifics">the AGG rendering specifics</a> for the changes relating to the addition
-of the <a class="reference external" href="http://www.antigrain.com">Antigrain Geometry</a> rendering engine.</p>
+<h3>AGG rendering changes<a class="headerlink" href="#agg-rendering-changes" title="この見出しへのパーマリンク">¶</a></h3>
+<p>see <a class="reference external" href="https://www.mapserver.org/output/agg.html">the AGG rendering specifics</a> for the changes relating to the addition
+of the <a class="reference external" href="https://en.wikipedia.org/wiki/Anti-Grain_Geometry">Antigrain Geometry</a> rendering engine.</p>
 </section>
 <section id="url-configuration-changes">
-<h3>URL configuration changes<a class="headerlink" href="#url-configuration-changes" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>URL configuration changes<a class="headerlink" href="#url-configuration-changes" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Previous versions of the MapServer CGI program allowed certain parameters
 to be changed via a URL using a cumbersome syntax such as
 map_layer_0_class_0_color=255+0+0 which changes the color in one classObj.
@@ -992,7 +1086,7 @@ layerObj's and classObj's). The value is a snippet of a mapfile. You
 cannot create new objects other than inline features at this point.</p>
 </section>
 <section id="validation-patterns-for-mapserv-attribute-queries">
-<h3>Validation patterns for mapserv attribute queries<a class="headerlink" href="#validation-patterns-for-mapserv-attribute-queries" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Validation patterns for mapserv attribute queries<a class="headerlink" href="#validation-patterns-for-mapserv-attribute-queries" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Attribute queries (qstring) done via the mapserv CGI could theoretically
 be used for SQL injection.</p>
 <p>No exploit has been reported, but in order to mitigate the risk, a new
@@ -1008,7 +1102,7 @@ The  pattern for %myvar% is provided via a metadata called
 myvar_validation_pattern.</p>
 </section>
 <section id="swig-mapscript-python-perl-csharp-java-changes">
-<h3>SWIG MapScript (Python, Perl, CSharp, Java) changes<a class="headerlink" href="#swig-mapscript-python-perl-csharp-java-changes" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>SWIG MapScript (Python, Perl, CSharp, Java) changes<a class="headerlink" href="#swig-mapscript-python-perl-csharp-java-changes" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Layer Transparency: The layerObj transparency parameter is now called
 opacity. Scripts setting that value in code must be updated.</p>
 <p>Symbol Style: the symbolObj style parameter is now called pattern. MapScript
@@ -1021,7 +1115,7 @@ Given version x.y.z, it returns (x*0x10000 + y*0x100 + z). For instance, for
 v5.0.0 it will return 0x050000 (note the hexadecimal notation).</p>
 </section>
 <section id="csharp-related-changes">
-<h3>CSharp related changes<a class="headerlink" href="#csharp-related-changes" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>CSharp related changes<a class="headerlink" href="#csharp-related-changes" title="この見出しへのパーマリンク">¶</a></h3>
 <p>The MapScript C# classes are now placed into the OSGeo.MapServer namespace
 The scripts should use the fully qualified names of the classes or apply
 the</p>
@@ -1031,7 +1125,7 @@ the</p>
 <p>or the corresponding language equivalent.</p>
 </section>
 <section id="id2">
-<h3>PHP/MapScript changes<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>PHP/MapScript changes<a class="headerlink" href="#id2" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Layer Transparency: The layerObj transparency parameter is now called
 opacity. The old &quot;transparency&quot; name is deprecated and will be removed in
 a future release. Scripts getting/setting that value in code must be updated.</p>
@@ -1058,7 +1152,7 @@ Given version x.y.z, it returns (x*0x10000 + y*0x100 + z). For instance, for
 v5.0.0 it will return 0x050000 (note the hexadecimal notation).</p>
 </section>
 <section id="ogc-web-map-service-wms">
-<h3>OGC Web Map Service (WMS)<a class="headerlink" href="#ogc-web-map-service-wms" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>OGC Web Map Service (WMS)<a class="headerlink" href="#ogc-web-map-service-wms" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Required Parameters for GetMap and GetFeatureInfo: previously, MapServer
 did not check for the following parameters when responding to an OGC:WMS
 GetMap or GetFeatureInfo request:</p>
@@ -1082,10 +1176,10 @@ earlier) breaks something, people should fix their client anyway since
 if they change WMS vendor, they will have problems as well.</p>
 </section>
 <section id="ogc-web-feature-service-wfs">
-<h3>OGC Web Feature Service (WFS)<a class="headerlink" href="#ogc-web-feature-service-wfs" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>OGC Web Feature Service (WFS)<a class="headerlink" href="#ogc-web-feature-service-wfs" title="この見出しへのパーマリンク">¶</a></h3>
 </section>
 <section id="ogc-sensor-observation-service-sos">
-<h3>OGC Sensor Observation Service (SOS)<a class="headerlink" href="#ogc-sensor-observation-service-sos" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>OGC Sensor Observation Service (SOS)<a class="headerlink" href="#ogc-sensor-observation-service-sos" title="この見出しへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>The format of MAP/LAYER/METADATA/sos_describesensor_url
 has been changed such that users now must format the value
@@ -1106,7 +1200,7 @@ should be used to format the swe:component value.</p></li>
 </ul>
 </section>
 <section id="build-changes">
-<h3>Build Changes<a class="headerlink" href="#build-changes" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Build Changes<a class="headerlink" href="#build-changes" title="この見出しへのパーマリンク">¶</a></h3>
 <p>MapServer's main include file has been renamed from &quot;map.h&quot; to &quot;mapserver.h&quot;.</p>
 <p>A new mapserver-config script has been created with the following options:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">mapserver</span><span class="o">-</span><span class="n">config</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span>
@@ -1129,7 +1223,7 @@ support for WCS or Arc/Info coverages:</p>
 </div>
 </section>
 <section id="features-heading-for-deprecation">
-<h3>Features Heading for Deprecation<a class="headerlink" href="#features-heading-for-deprecation" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Features Heading for Deprecation<a class="headerlink" href="#features-heading-for-deprecation" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Some features present in MapServer are likely to be removed in a future
 release. Features might be headed for deprecation because:</p>
 <blockquote>
@@ -1170,7 +1264,7 @@ and RGBA will likely only be supported with AGG</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="about.html" title="About">About</a><br>
 <a href="products.html" title="Products">Products</a><br>
@@ -1185,6 +1279,7 @@ and RGBA will likely only be supported with AGG</p>
   <h3>Current Table Of Contents</h3>
   <ul>
 <li><a class="reference internal" href="#">MapServer Migration Guide</a><ul>
+<li><a class="reference internal" href="#mapserver-7-6-to-8-0-migration">MapServer 7.6 to 8.0 Migration</a></li>
 <li><a class="reference internal" href="#mapserver-7-4-to-7-6-migration">MapServer 7.4 to 7.6 Migration</a></li>
 <li><a class="reference internal" href="#mapserver-7-2-to-7-4-migration">MapServer 7.2 to 7.4 Migration</a></li>
 <li><a class="reference internal" href="#mapserver-7-0-to-7-2-migration">MapServer 7.0 to 7.2 Migration</a></li>
@@ -1227,7 +1322,7 @@ and RGBA will likely only be supported with AGG</p>
 <li><a class="reference internal" href="#mapserver-4-10-to-5-0-migration">MapServer 4.10 to 5.0 Migration</a><ul>
 <li><a class="reference internal" href="#mapfile-changes">Mapfile changes</a></li>
 <li><a class="reference internal" href="#symbol-file-changes">Symbol file changes</a></li>
-<li><a class="reference internal" href="#styling-symbolgy-changes">Styling/Symbolgy changes</a></li>
+<li><a class="reference internal" href="#styling-symbology-changes">Styling/Symbology changes</a></li>
 <li><a class="reference internal" href="#agg-rendering-changes">AGG rendering changes</a></li>
 <li><a class="reference internal" href="#url-configuration-changes">URL configuration changes</a></li>
 <li><a class="reference internal" href="#validation-patterns-for-mapserv-attribute-queries">Validation patterns for mapserv attribute queries</a></li>
@@ -1262,14 +1357,14 @@ and RGBA will likely only be supported with AGG</p>
           <a href="mapcache/coverage.html" title="Coverage Analyzer"
              >前へ</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="documentation.html" >MapServer 7.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="documentation.html" >MapServer 8.0.0 Documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">MapServer Migration Guide</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      最終更新: 2022-05-20
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      最終更新: 2022-09-13
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

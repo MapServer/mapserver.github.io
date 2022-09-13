@@ -4,15 +4,17 @@
 <html lang="nl_NL">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Debugging MapServer &#8212; MapServer 7.6.4 documentation</title>
+    <title>Debugging MapServer &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/ribbon.css" />
     
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     
     <link rel="shortcut icon" href="../_static/mapserver.ico"/>
@@ -23,6 +25,9 @@
     <link rel="next" title="Environment Variables" href="environment_variables.html" />
     <link rel="prev" title="Optimization" href="index.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -129,7 +134,7 @@
           <a href="index.html" title="Optimization"
              accesskey="P">vorige</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.0 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Optimization</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Debugging MapServer</a></li> 
       </ul>
@@ -142,19 +147,19 @@
           <div class="body" role="main">
             
   <section id="debugging-mapserver">
-<span id="debugging"></span><span id="index-0"></span><h1><a class="toc-backref" href="#table-of-contents">Debugging MapServer</a><a class="headerlink" href="#debugging-mapserver" title="Permalink naar deze titel">¶</a></h1>
+<span id="debugging"></span><span id="index-0"></span><h1><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Debugging MapServer</a><a class="headerlink" href="#debugging-mapserver" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Jeff McKenna</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p>jmckenna at gatewaygeomatics.com</p>
 </dd>
-<dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2021-04-16</p>
+<dt class="field-odd">Last Updated<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2022-08-15</p>
 </dd>
 </dl>
-<div class="contents topic" id="table-of-contents">
+<nav class="contents" id="table-of-contents">
 <p class="topic-title">Table of Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#debugging-mapserver" id="id1">Debugging MapServer</a></p>
@@ -185,15 +190,15 @@
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <section id="introduction">
-<h2><a class="toc-backref" href="#table-of-contents">Introduction</a><a class="headerlink" href="#introduction" title="Permalink naar deze titel">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
 <p>When developing an application for the Internet, you will inevitably
 across problems many problems in your environment.  The goal of this
 guide is to assist you with locating the problem with your MapServer
 application.</p>
 <section id="links-to-related-information">
-<h3><a class="toc-backref" href="#table-of-contents">Links to Related Information</a><a class="headerlink" href="#links-to-related-information" title="Permalink naar deze titel">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Links to Related Information</a><a class="headerlink" href="#links-to-related-information" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="../development/rfc/ms-rfc-28.html#rfc28"><span class="std std-ref">RFC 28: Redesign of LOG/DEBUG output mechanisms</span></a></p></li>
 <li><p><a class="reference internal" href="../errors.html#errors"><span class="std std-ref">MapServer Errors</span></a></p></li>
@@ -201,7 +206,7 @@ application.</p>
 </section>
 </section>
 <section id="steps-to-enable-mapserver-debugging">
-<h2><a class="toc-backref" href="#table-of-contents">Steps to Enable MapServer Debugging</a><a class="headerlink" href="#steps-to-enable-mapserver-debugging" title="Permalink naar deze titel">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Steps to Enable MapServer Debugging</a><a class="headerlink" href="#steps-to-enable-mapserver-debugging" title="Permalink to this heading">¶</a></h2>
 <p>Starting with MapServer 5.0, you are able to control the levels of
 debugging/logging information returned to you by MapServer, and also
 control the location of the output log file.</p>
@@ -209,7 +214,7 @@ control the location of the output log file.</p>
 MapServer code that generate information that may be useful in tuning
 and troubleshooting applications.</p>
 <section id="step-1-set-the-ms-errorfile-variable">
-<span id="index-1"></span><h3><a class="toc-backref" href="#table-of-contents">Step 1: Set the MS_ERRORFILE Variable</a><a class="headerlink" href="#step-1-set-the-ms-errorfile-variable" title="Permalink naar deze titel">¶</a></h3>
+<span id="index-1"></span><h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Step 1: Set the MS_ERRORFILE Variable</a><a class="headerlink" href="#step-1-set-the-ms-errorfile-variable" title="Permalink to this heading">¶</a></h3>
 <p>The <strong>MS_ERRORFILE</strong> variable is used to specify the output of debug
 messages from MapServer.  You can pass the following values to
 <strong>MS_ERRORFILE</strong>:</p>
@@ -240,7 +245,7 @@ SysInternals debugview to display the debug output.</p>
 </dd>
 </dl>
 <section id="through-the-mapfile">
-<h4>Through the Mapfile<a class="headerlink" href="#through-the-mapfile" title="Permalink naar deze titel">¶</a></h4>
+<h4>Through the Mapfile<a class="headerlink" href="#through-the-mapfile" title="Permalink to this heading">¶</a></h4>
 <p>The recommended way to set the <strong>MS_ERRORFILE</strong> variable is in your
 mapfile, within the <a class="reference internal" href="../mapfile/map.html#map"><span class="std std-ref">MAP</span></a> object, such as:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">MAP</span>
@@ -255,7 +260,7 @@ mapfile, within the <a class="reference internal" href="../mapfile/map.html#map"
 </div>
 </section>
 <section id="through-an-environment-variable">
-<h4>Through an Environment Variable<a class="headerlink" href="#through-an-environment-variable" title="Permalink naar deze titel">¶</a></h4>
+<h4>Through an Environment Variable<a class="headerlink" href="#through-an-environment-variable" title="Permalink to this heading">¶</a></h4>
 <p>You can also set the <strong>MS_ERRORFILE</strong> variable as an environment
 variable on your system.  Apache users can set the environment
 variable in Apache’s <em>httpd.conf</em> file, such as:</p>
@@ -274,7 +279,7 @@ precedence.</p>
 </section>
 </section>
 <section id="step-2-set-the-debug-level">
-<span id="index-2"></span><h3><a class="toc-backref" href="#table-of-contents">Step 2: Set the DEBUG Level</a><a class="headerlink" href="#step-2-set-the-debug-level" title="Permalink naar deze titel">¶</a></h3>
+<span id="index-2"></span><h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Step 2: Set the DEBUG Level</a><a class="headerlink" href="#step-2-set-the-debug-level" title="Permalink to this heading">¶</a></h3>
 <p>You can retrieve varying types of debug messages by setting the
 <em>DEBUG</em> parameter in the <a class="reference internal" href="../mapfile/index.html#mapfile"><span class="std std-ref">Mapfile</span></a>.  You can place the <em>DEBUG</em>
 parameter in any LAYER in the mapfile for layer-specific debug information,
@@ -282,7 +287,7 @@ or instead, set it once in the MAP object to get general debug information.
 Use the value of the <em>DEBUG</em> parameter to set the type of information
 returned, as follows:</p>
 <section id="debug-levels">
-<h4>DEBUG Levels<a class="headerlink" href="#debug-levels" title="Permalink naar deze titel">¶</a></h4>
+<h4>DEBUG Levels<a class="headerlink" href="#debug-levels" title="Permalink to this heading">¶</a></h4>
 <dl>
 <dt><strong>Level 0</strong></dt><dd><p>Errors only (DEBUG OFF, or DEBUG 0)</p>
 <p>In level 0, only msSetError() calls are logged to MS_ERORFILE. No
@@ -316,7 +321,7 @@ developers than to users.</p>
 </dl>
 </section>
 <section id="mapfile-example-map-level-debug">
-<h4>Mapfile Example: Map-Level Debug<a class="headerlink" href="#mapfile-example-map-level-debug" title="Permalink naar deze titel">¶</a></h4>
+<h4>Mapfile Example: Map-Level Debug<a class="headerlink" href="#mapfile-example-map-level-debug" title="Permalink to this heading">¶</a></h4>
 <p>The following example is the recommended method to set the <em>DEBUG</em> parameter
 for the map-level:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">MAP</span>
@@ -332,7 +337,7 @@ for the map-level:</p>
 </div>
 </section>
 <section id="mapfile-example-layer-level-debug">
-<span id="index-3"></span><h4>Mapfile Example: Layer-Level Debug<a class="headerlink" href="#mapfile-example-layer-level-debug" title="Permalink naar deze titel">¶</a></h4>
+<span id="index-3"></span><h4>Mapfile Example: Layer-Level Debug<a class="headerlink" href="#mapfile-example-layer-level-debug" title="Permalink to this heading">¶</a></h4>
 <p>The following example is the recommended method to set the <em>DEBUG</em> parameter
 for a layer:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">MAP</span>
@@ -348,7 +353,7 @@ for a layer:</p>
 </div>
 </section>
 <section id="the-ms-debuglevel-environment-variable">
-<span id="index-4"></span><h4>The MS_DEBUGLEVEL Environment Variable<a class="headerlink" href="#the-ms-debuglevel-environment-variable" title="Permalink naar deze titel">¶</a></h4>
+<span id="index-4"></span><h4>The MS_DEBUGLEVEL Environment Variable<a class="headerlink" href="#the-ms-debuglevel-environment-variable" title="Permalink to this heading">¶</a></h4>
 <p>Instead of setting the <em>DEBUG</em> Debug level in each of your mapfiles,
 you can also be set the level globally by using the <em>MS_DEBUGLEVEL</em>
 environment variable.</p>
@@ -383,7 +388,7 @@ environment variable.</p>
 </section>
 </section>
 <section id="step-3-turn-on-cpl-debug-optional">
-<span id="index-5"></span><h3><a class="toc-backref" href="#table-of-contents">Step 3: Turn on CPL_DEBUG (optional)</a><a class="headerlink" href="#step-3-turn-on-cpl-debug-optional" title="Permalink naar deze titel">¶</a></h3>
+<span id="index-5"></span><h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Step 3: Turn on CPL_DEBUG (optional)</a><a class="headerlink" href="#step-3-turn-on-cpl-debug-optional" title="Permalink to this heading">¶</a></h3>
 <p>MapServer relies on the <a class="reference external" href="https://gdal.org/">GDAL</a> library to
 access most data layers, so you may wish to turn on GDAL debugging, to
 hopefully get more information on how GDAL is accessing your data
@@ -426,7 +431,7 @@ The main GDAL site also has a <a class="reference external" href="https://gdal.o
 </div>
 </section>
 <section id="step-4-turn-on-proj-debug-optional">
-<span id="index-6"></span><h3><a class="toc-backref" href="#table-of-contents">Step 4: Turn on PROJ_DEBUG (optional)</a><a class="headerlink" href="#step-4-turn-on-proj-debug-optional" title="Permalink naar deze titel">¶</a></h3>
+<span id="index-6"></span><h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Step 4: Turn on PROJ_DEBUG (optional)</a><a class="headerlink" href="#step-4-turn-on-proj-debug-optional" title="Permalink to this heading">¶</a></h3>
 <p>MapServer relies on the <a class="reference external" href="https://proj.org/">PROJ</a>
 library to handle data projections, so you may wish to turn on PROJ
 debugging, to hopefully get more information back from the PROJ
@@ -456,36 +461,36 @@ such as:</p>
 </div>
 </section>
 <section id="step-5-test-your-mapfile">
-<h3><a class="toc-backref" href="#table-of-contents">Step 5: Test your Mapfile</a><a class="headerlink" href="#step-5-test-your-mapfile" title="Permalink naar deze titel">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Step 5: Test your Mapfile</a><a class="headerlink" href="#step-5-test-your-mapfile" title="Permalink to this heading">¶</a></h3>
 <p>Once you have set the <em>MS_ERRORFILE</em> and <em>DEBUG</em> level in your
 mapfile, you should now test your mapfile and read your generated log
 file.</p>
-<section id="using-shp2img">
-<span id="index-7"></span><h4>Using shp2img<a class="headerlink" href="#using-shp2img" title="Permalink naar deze titel">¶</a></h4>
+<section id="using-map2img">
+<span id="index-7"></span><h4>Using map2img<a class="headerlink" href="#using-map2img" title="Permalink to this heading">¶</a></h4>
 <p>The recommended way to test your mapfile is to use the MapServer
-commandline utility <a class="reference internal" href="../utilities/shp2img.html#shp2img"><span class="std std-ref">shp2img</span></a>, to verify that your mapfile
-creates a valid map image. <a class="reference internal" href="../utilities/shp2img.html#shp2img"><span class="std std-ref">shp2img</span></a> should be included in your
+commandline utility <a class="reference internal" href="../utilities/map2img.html#map2img"><span class="std std-ref">map2img</span></a>, to verify that your mapfile
+creates a valid map image. <a class="reference internal" href="../utilities/map2img.html#map2img"><span class="std std-ref">map2img</span></a> should be included in your
 MapServer installation (<a class="reference external" href="http://www.ms4w.com">MS4W</a> users
 need to execute <em>setenv.bat</em> before using the utility).</p>
-<p>You can set the <em>DEBUG</em> level by passing the <a class="reference internal" href="../utilities/shp2img.html#shp2img"><span class="std std-ref">shp2img</span></a> following
+<p>You can set the <em>DEBUG</em> level by passing the <a class="reference internal" href="../utilities/map2img.html#map2img"><span class="std std-ref">map2img</span></a> following
 parameters to your commandline call:</p>
 <div class="admonition note">
 <p class="admonition-title">Notitie</p>
 <p>If you have already set <em>MS_ERRORFILE</em> in your mapfile, you must
-comment this out in order to use these <a class="reference internal" href="../utilities/shp2img.html#shp2img"><span class="std std-ref">shp2img</span></a> options</p>
+comment this out in order to use these <a class="reference internal" href="../utilities/map2img.html#map2img"><span class="std std-ref">map2img</span></a> options</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Notitie</p>
-<p>When using <a class="reference internal" href="../utilities/shp2img.html#shp2img"><span class="std std-ref">shp2img</span></a> to debug, your layer’s STATUS should be
+<p>When using <a class="reference internal" href="../utilities/map2img.html#map2img"><span class="std std-ref">map2img</span></a> to debug, your layer’s STATUS should be
 set to ON or DEFAULT.  If the layer’s STATUS is set to OFF, you
-must additionally pass the layer name to <a class="reference internal" href="../utilities/shp2img.html#shp2img"><span class="std std-ref">shp2img</span></a> by using
+must additionally pass the layer name to <a class="reference internal" href="../utilities/map2img.html#map2img"><span class="std std-ref">map2img</span></a> by using
 the “<cite>-l layername</cite>” syntax</p>
 </div>
 <section id="all-debug">
-<h5>-all_debug<a class="headerlink" href="#all-debug" title="Permalink naar deze titel">¶</a></h5>
+<h5>-all_debug<a class="headerlink" href="#all-debug" title="Permalink to this heading">¶</a></h5>
 <p>Use this setting to set the debug level for the MAP object and all
 layers. <em>this is the recommended switch to use</em></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">shp2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">spain</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">test</span><span class="o">.</span><span class="n">png</span> <span class="o">-</span><span class="n">all_debug</span> <span class="mi">5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">map2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">spain</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">test</span><span class="o">.</span><span class="n">png</span> <span class="o">-</span><span class="n">all_debug</span> <span class="mi">5</span>
 
   <span class="n">msLoadMap</span><span class="p">():</span> <span class="mf">0.002</span><span class="n">s</span>
   <span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">0</span> <span class="p">(</span><span class="n">spain</span> <span class="n">provinces</span><span class="p">),</span> <span class="mf">0.012</span><span class="n">s</span>
@@ -506,14 +511,14 @@ layers. <em>this is the recommended switch to use</em></p>
   <span class="n">freeLayer</span><span class="p">():</span> <span class="n">freeing</span> <span class="n">layer</span> <span class="n">at</span> <span class="mi">030</span><span class="n">C3BC8</span><span class="o">.</span>
   <span class="n">freeLayer</span><span class="p">():</span> <span class="n">freeing</span> <span class="n">layer</span> <span class="n">at</span> <span class="mi">030</span><span class="n">C4948</span><span class="o">.</span>
   <span class="n">freeLayer</span><span class="p">():</span> <span class="n">freeing</span> <span class="n">layer</span> <span class="n">at</span> <span class="mi">030</span><span class="n">C7678</span><span class="o">.</span>
-  <span class="n">shp2img</span> <span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">1.567</span><span class="n">s</span>
+  <span class="n">map2img</span> <span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">1.567</span><span class="n">s</span>
 </pre></div>
 </div>
 </section>
 <section id="map-debug">
-<h5>-map_debug<a class="headerlink" href="#map-debug" title="Permalink naar deze titel">¶</a></h5>
+<h5>-map_debug<a class="headerlink" href="#map-debug" title="Permalink to this heading">¶</a></h5>
 <p>Use this setting to set the debug level for the MAP object only.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">shp2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">spain</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">test</span><span class="o">.</span><span class="n">png</span> <span class="o">-</span><span class="n">map_debug</span> <span class="mi">5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">map2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">spain</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">test</span><span class="o">.</span><span class="n">png</span> <span class="o">-</span><span class="n">map_debug</span> <span class="mi">5</span>
 
   <span class="n">msDrawMap</span><span class="p">():</span> <span class="n">Layer</span> <span class="mi">0</span> <span class="p">(</span><span class="n">spain</span> <span class="n">provinces</span><span class="p">),</span> <span class="mf">0.012</span><span class="n">s</span>
   <span class="n">msDrawRasterLayerLow</span><span class="p">(</span><span class="n">orthophoto</span><span class="p">):</span> <span class="n">entering</span><span class="o">.</span>
@@ -529,9 +534,9 @@ layers. <em>this is the recommended switch to use</em></p>
 </div>
 </section>
 <section id="layer-debug">
-<h5>-layer_debug<a class="headerlink" href="#layer-debug" title="Permalink naar deze titel">¶</a></h5>
+<h5>-layer_debug<a class="headerlink" href="#layer-debug" title="Permalink to this heading">¶</a></h5>
 <p>Use this setting to set the debug level for one layer object only.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">shp2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">spain</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">test</span><span class="o">.</span><span class="n">png</span> <span class="o">-</span><span class="n">layer_debug</span> <span class="n">orthophoto</span> <span class="mi">5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">map2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">spain</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">test</span><span class="o">.</span><span class="n">png</span> <span class="o">-</span><span class="n">layer_debug</span> <span class="n">orthophoto</span> <span class="mi">5</span>
 
   <span class="n">msDrawRasterLayerLow</span><span class="p">(</span><span class="n">orthophoto</span><span class="p">):</span> <span class="n">entering</span><span class="o">.</span>
   <span class="n">msDrawGDAL</span><span class="p">():</span> <span class="n">src</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3540</span><span class="p">,</span><span class="mi">2430</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="mi">188</span><span class="p">,</span><span class="mi">48</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span>
@@ -543,11 +548,11 @@ layers. <em>this is the recommended switch to use</em></p>
 </div>
 </section>
 <section id="set-cpl-debug">
-<h5>Set CPL_DEBUG<a class="headerlink" href="#set-cpl-debug" title="Permalink naar deze titel">¶</a></h5>
+<h5>Set CPL_DEBUG<a class="headerlink" href="#set-cpl-debug" title="Permalink to this heading">¶</a></h5>
 <p>At the commandline execute the following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">CPL_DEBUG</span><span class="o">=</span><span class="n">ON</span>
 
-<span class="n">shp2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">spain</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">test</span><span class="o">.</span><span class="n">png</span> <span class="o">-</span><span class="n">layer_debug</span> <span class="n">orthophoto</span> <span class="mi">5</span>
+<span class="n">map2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">spain</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">test</span><span class="o">.</span><span class="n">png</span> <span class="o">-</span><span class="n">layer_debug</span> <span class="n">orthophoto</span> <span class="mi">5</span>
 
   <span class="n">msDrawRasterLayerLow</span><span class="p">(</span><span class="n">orthophoto</span><span class="p">):</span> <span class="n">entering</span><span class="o">.</span>
   <span class="n">GDAL</span><span class="p">:</span> <span class="n">GDALOpen</span><span class="p">(</span><span class="n">D</span><span class="p">:</span>\<span class="n">ms4w</span>\<span class="n">apps</span>\<span class="n">spain</span>\<span class="nb">map</span><span class="o">/.</span>\<span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">ov172068_200904_c100u50x75c24n</span><span class="o">.</span><span class="n">jpg</span><span class="p">,</span> <span class="n">this</span><span class="o">=</span><span class="mi">0</span>
@@ -562,9 +567,9 @@ layers. <em>this is the recommended switch to use</em></p>
 </pre></div>
 </div>
 </section>
-<section id="reading-errors-returned-by-shp2img">
-<h5>Reading Errors Returned by shp2img<a class="headerlink" href="#reading-errors-returned-by-shp2img" title="Permalink naar deze titel">¶</a></h5>
-<p>If there is a problem with your mapfile, <a class="reference internal" href="../utilities/shp2img.html#shp2img"><span class="std std-ref">shp2img</span></a> should output
+<section id="reading-errors-returned-by-map2img">
+<h5>Reading Errors Returned by map2img<a class="headerlink" href="#reading-errors-returned-by-map2img" title="Permalink to this heading">¶</a></h5>
+<p>If there is a problem with your mapfile, <a class="reference internal" href="../utilities/map2img.html#map2img"><span class="std std-ref">map2img</span></a> should output
 the line number in your mapfile that is causing the trouble.  The
 following tells us that there is a problem on line 85 of my mapfile:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">getSymbol</span><span class="p">():</span> <span class="n">Symbol</span> <span class="n">definition</span> <span class="n">error</span><span class="o">.</span> <span class="n">Parsing</span> <span class="n">error</span> <span class="n">near</span> <span class="p">(</span><span class="n">truetype2</span><span class="p">):(</span><span class="n">line</span> <span class="mi">85</span><span class="p">)</span>
@@ -576,7 +581,7 @@ is useful.</p>
 </section>
 </section>
 <section id="using-mapserv-cgi">
-<h4>Using mapserv CGI<a class="headerlink" href="#using-mapserv-cgi" title="Permalink naar deze titel">¶</a></h4>
+<h4>Using mapserv CGI<a class="headerlink" href="#using-mapserv-cgi" title="Permalink to this heading">¶</a></h4>
 <p>Another handy way to test your mapfile is to call the mapserv CGI
 executable at the <a class="reference internal" href="../cgi/mapserv.html#mapserv"><span class="std std-ref">commandline</span></a>, such as the following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapserv</span> <span class="o">-</span><span class="n">nh</span> <span class="s2">&quot;QUERY_STRING=map=/ms4w/apps/spain/map/spain.map&amp;mode=map&quot;</span>
@@ -584,7 +589,7 @@ executable at the <a class="reference internal" href="../cgi/mapserv.html#mapser
 </div>
 </section>
 <section id="on-missing-data">
-<span id="index-8"></span><h4>ON_MISSING_DATA<a class="headerlink" href="#on-missing-data" title="Permalink naar deze titel">¶</a></h4>
+<span id="index-8"></span><h4>ON_MISSING_DATA<a class="headerlink" href="#on-missing-data" title="Permalink to this heading">¶</a></h4>
 <p>If you are using tile indexes to access your data, you should also be
 aware of the configuration settings added in MapServer 5.4 that allow
 you to tell MapServer how to handle missing data in tile indexes.
@@ -598,12 +603,12 @@ Please see the <em>CONFIG</em> parameter’s <em>ON_MISSING_DATA</em> setting in
 </section>
 </section>
 <section id="step-6-check-your-web-server-logs">
-<h3><a class="toc-backref" href="#table-of-contents">Step 6: Check your Web Server Logs</a><a class="headerlink" href="#step-6-check-your-web-server-logs" title="Permalink naar deze titel">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Step 6: Check your Web Server Logs</a><a class="headerlink" href="#step-6-check-your-web-server-logs" title="Permalink to this heading">¶</a></h3>
 <p>Once you have verified that there are no problems with you mapfile,
 next you should check your Web server log files, for any related
 information that may help you narrow down your problem.</p>
 <section id="apache">
-<h4>Apache<a class="headerlink" href="#apache" title="Permalink naar deze titel">¶</a></h4>
+<h4>Apache<a class="headerlink" href="#apache" title="Permalink to this heading">¶</a></h4>
 <p>Unix users will usually find Apache’s <em>error_log</em> file in a path
 similar to:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">apache2</span><span class="o">/</span>
@@ -620,7 +625,7 @@ will find Apache’s log files at:</p>
 </div>
 </section>
 <section id="microsoft-iis">
-<h4>Microsoft IIS<a class="headerlink" href="#microsoft-iis" title="Permalink naar deze titel">¶</a></h4>
+<h4>Microsoft IIS<a class="headerlink" href="#microsoft-iis" title="Permalink to this heading">¶</a></h4>
 <p>IIS log files can be located by:</p>
 <ol class="arabic">
 <li><p>Go to Start -&gt; Control Panel -&gt; Administrative Tools</p></li>
@@ -660,27 +665,27 @@ your mapfile:</p>
 </div>
 </section>
 <section id="cgi-error-the-specified-cgi-application-misbehaved-by-not-returning-a-complete-set-of-http-headers">
-<h4>CGI Error - The specified CGI application misbehaved by not returning a complete set of HTTP headers<a class="headerlink" href="#cgi-error-the-specified-cgi-application-misbehaved-by-not-returning-a-complete-set-of-http-headers" title="Permalink naar deze titel">¶</a></h4>
+<h4>CGI Error - The specified CGI application misbehaved by not returning a complete set of HTTP headers<a class="headerlink" href="#cgi-error-the-specified-cgi-application-misbehaved-by-not-returning-a-complete-set-of-http-headers" title="Permalink to this heading">¶</a></h4>
 <p>This error is often caused by missing DLL files.  You should try to
 execute “<em>mapserv -v</em> at the commandline, to make sure that MapServer
 loads properly.</p>
 </section>
 </section>
 <section id="step-7-verify-your-application-settings">
-<h3><a class="toc-backref" href="#table-of-contents">Step 7: Verify your Application Settings</a><a class="headerlink" href="#step-7-verify-your-application-settings" title="Permalink naar deze titel">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Step 7: Verify your Application Settings</a><a class="headerlink" href="#step-7-verify-your-application-settings" title="Permalink to this heading">¶</a></h3>
 <p>If you have verified that MapServer creates a valid map image through
-<a class="reference internal" href="../utilities/shp2img.html#shp2img"><span class="std std-ref">shp2img</span></a>, you’ve checked your MapServer log files, and there are
+<a class="reference internal" href="../utilities/map2img.html#map2img"><span class="std std-ref">map2img</span></a>, you’ve checked your MapServer log files, and there are
 no problems noted in your Web server logs, then you should focus your
 attention on possible application configuration problems.
 “Application” here means how you are displaying your map images on the
 Web page, such as with <a class="reference external" href="http://www.openlayers.org">OpenLayers</a>.</p>
 </section>
 <section id="step-8-use-qgis-to-test-your-ogc-services">
-<h3><a class="toc-backref" href="#table-of-contents">Step 8: Use QGIS to test your OGC services</a><a class="headerlink" href="#step-8-use-qgis-to-test-your-ogc-services" title="Permalink naar deze titel">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Step 8: Use QGIS to test your OGC services</a><a class="headerlink" href="#step-8-use-qgis-to-test-your-ogc-services" title="Permalink to this heading">¶</a></h3>
 <p>When configuring MapServer for OGC services (WMS, WFS, etc.) it sometimes
 happens that users of your services report map issues in a desktop GIS or
-online application, even though no errors, logs, or local shp2img tests
-give any hints; this is where the <a class="reference external" href="http://qgis.org">QGIS</a>
+online application, even though no errors, logs, or local map2img tests
+give any hints; this is where the <a class="reference external" href="https://qgis.org">QGIS</a>
 <em>Network Logger</em> can really help to get the exact problem request.  For
 steps on how to implement the network logger see
 <a class="reference external" href="https://github.com/mapserver/mapserver/wiki/Get-the-Raw-WMS-Request-Generated-by-QGIS">here</a>.</p>
@@ -692,7 +697,7 @@ then right-click on the request in the Network Logger and select
 </div>
 <img alt="../_images/qgis-network-logger2.png" class="no-scaled-link" src="../_images/qgis-network-logger2.png" style="width: 800px; height: 443px;" />
 <section id="php-mapscript">
-<span id="index-9"></span><h4>PHP MapScript<a class="headerlink" href="#php-mapscript" title="Permalink naar deze titel">¶</a></h4>
+<span id="index-9"></span><h4>PHP MapScript<a class="headerlink" href="#php-mapscript" title="Permalink to this heading">¶</a></h4>
 <p>If you are using PHP MapScript in your application, here are some
 important notes for debugging:</p>
 <p>1. Make sure your <em>php.ini</em> file is configured to show all errors, by
@@ -725,12 +730,12 @@ source.</p>
 </section>
 </section>
 <section id="debugging-mapserver-using-compiler-debugging-tools">
-<h2><a class="toc-backref" href="#table-of-contents">Debugging MapServer using Compiler Debugging Tools</a><a class="headerlink" href="#debugging-mapserver-using-compiler-debugging-tools" title="Permalink naar deze titel">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Debugging MapServer using Compiler Debugging Tools</a><a class="headerlink" href="#debugging-mapserver-using-compiler-debugging-tools" title="Permalink to this heading">¶</a></h2>
 <section id="running-mapserver-in-gdb-linux-unix">
-<span id="index-10"></span><h3><a class="toc-backref" href="#table-of-contents">Running MapServer in GDB (Linux/Unix)</a><a class="headerlink" href="#running-mapserver-in-gdb-linux-unix" title="Permalink naar deze titel">¶</a></h3>
+<span id="index-10"></span><h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Running MapServer in GDB (Linux/Unix)</a><a class="headerlink" href="#running-mapserver-in-gdb-linux-unix" title="Permalink to this heading">¶</a></h3>
 <p><em>Auteur van deze sectie: Frank Warmerdam</em></p>
 <section id="building-with-symbolic-debug-info">
-<h4>Building with Symbolic Debug Info<a class="headerlink" href="#building-with-symbolic-debug-info" title="Permalink naar deze titel">¶</a></h4>
+<h4>Building with Symbolic Debug Info<a class="headerlink" href="#building-with-symbolic-debug-info" title="Permalink to this heading">¶</a></h4>
 <p>It is not strictly necessary to build MapServer with debugging enabled
 in order to use <a class="reference external" href="http://www.gnu.org/software/gdb/">GDB</a> on linux,
 but it does ensure that more meaningful information is reported within
@@ -745,11 +750,11 @@ performance is important.</p>
 </div>
 </section>
 <section id="running-in-the-debugger">
-<h4>Running in the Debugger<a class="headerlink" href="#running-in-the-debugger" title="Permalink naar deze titel">¶</a></h4>
-<p>To run either mapserv or shp2img, give the name of the executable as an
+<h4>Running in the Debugger<a class="headerlink" href="#running-in-the-debugger" title="Permalink to this heading">¶</a></h4>
+<p>To run either mapserv or map2img, give the name of the executable as an
 argument to the “gdb” command.  If it is not in the path, you will need
 to provide the full path to the executable.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gdb</span> <span class="n">shp2img</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gdb</span> <span class="n">map2img</span>
 <span class="n">GNU</span> <span class="n">gdb</span> <span class="p">(</span><span class="n">GDB</span><span class="p">)</span> <span class="mf">7.0</span><span class="o">-</span><span class="n">ubuntu</span>
 <span class="n">Copyright</span> <span class="p">(</span><span class="n">C</span><span class="p">)</span> <span class="mi">2009</span> <span class="n">Free</span> <span class="n">Software</span> <span class="n">Foundation</span><span class="p">,</span> <span class="n">Inc</span><span class="o">.</span>
 <span class="n">License</span> <span class="n">GPLv3</span><span class="o">+</span><span class="p">:</span> <span class="n">GNU</span> <span class="n">GPL</span> <span class="n">version</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">later</span> <span class="o">&lt;</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">gnu</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">gpl</span><span class="o">.</span><span class="n">html</span><span class="o">&gt;</span>
@@ -759,15 +764,15 @@ to provide the full path to the executable.</p>
 <span class="n">This</span> <span class="n">GDB</span> <span class="n">was</span> <span class="n">configured</span> <span class="k">as</span> <span class="s2">&quot;x86_64-linux-gnu&quot;</span><span class="o">.</span>
 <span class="n">For</span> <span class="n">bug</span> <span class="n">reporting</span> <span class="n">instructions</span><span class="p">,</span> <span class="n">please</span> <span class="n">see</span><span class="p">:</span>
 <span class="o">&lt;</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">gnu</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">software</span><span class="o">/</span><span class="n">gdb</span><span class="o">/</span><span class="n">bugs</span><span class="o">/&gt;...</span>
-<span class="n">Reading</span> <span class="n">symbols</span> <span class="kn">from</span> <span class="o">/</span><span class="n">wrk</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">warmerda</span><span class="o">/</span><span class="n">mapserver</span><span class="o">/</span><span class="n">shp2img</span><span class="o">...</span><span class="n">done</span><span class="o">.</span>
+<span class="n">Reading</span> <span class="n">symbols</span> <span class="kn">from</span> <span class="o">/</span><span class="n">wrk</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">warmerda</span><span class="o">/</span><span class="n">mapserver</span><span class="o">/</span><span class="n">map2img</span><span class="o">...</span><span class="n">done</span><span class="o">.</span>
 <span class="p">(</span><span class="n">gdb</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Once you are at the “(gdb)” prompt you can use the run command with the
-arguments you would normally have passed to the mapserv or shp2img
+arguments you would normally have passed to the mapserv or map2img
 executable.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">gdb</span><span class="p">)</span> <span class="n">run</span> <span class="o">-</span><span class="n">m</span> <span class="n">test</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">out</span><span class="o">.</span><span class="n">png</span>
-<span class="n">Starting</span> <span class="n">program</span><span class="p">:</span> <span class="o">/</span><span class="n">wrk</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">warmerda</span><span class="o">/</span><span class="n">mapserver</span><span class="o">/</span><span class="n">shp2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">test</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">out</span><span class="o">.</span><span class="n">png</span>
+<span class="n">Starting</span> <span class="n">program</span><span class="p">:</span> <span class="o">/</span><span class="n">wrk</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">warmerda</span><span class="o">/</span><span class="n">mapserver</span><span class="o">/</span><span class="n">map2img</span> <span class="o">-</span><span class="n">m</span> <span class="n">test</span><span class="o">.</span><span class="n">map</span> <span class="o">-</span><span class="n">o</span> <span class="n">out</span><span class="o">.</span><span class="n">png</span>
 <span class="p">[</span><span class="n">Thread</span> <span class="n">debugging</span> <span class="n">using</span> <span class="n">libthread_db</span> <span class="n">enabled</span><span class="p">]</span>
 
 <span class="n">Program</span> <span class="n">received</span> <span class="n">signal</span> <span class="n">SIGSEGV</span><span class="p">,</span> <span class="n">Segmentation</span> <span class="n">fault</span><span class="o">.</span>
@@ -802,7 +807,7 @@ command.</p>
 <span class="c1">#6  0x0000000000486a48 in msDrawLayer (map=0x81e450, layer=0x839140,</span>
     <span class="n">image</span><span class="o">=</span><span class="mh">0x83af90</span><span class="p">)</span> <span class="n">at</span> <span class="n">mapdraw</span><span class="o">.</span><span class="n">c</span><span class="p">:</span><span class="mi">806</span>
 <span class="c1">#7  0x00000000004858fd in msDrawMap (map=0x81e450, querymap=0) at mapdraw.c:459</span>
-<span class="c1">#8  0x0000000000446410 in main (argc=5, argv=0x7fffffffd918) at shp2img.c:300</span>
+<span class="c1">#8  0x0000000000446410 in main (argc=5, argv=0x7fffffffd918) at map2img.c:300</span>
 <span class="p">(</span><span class="n">gdb</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -821,7 +826,7 @@ themselves.</p>
 </section>
 </section>
 <section id="debugging-older-versions-of-mapserver-before-5-0">
-<h2><a class="toc-backref" href="#table-of-contents">Debugging Older Versions of MapServer (before 5.0)</a><a class="headerlink" href="#debugging-older-versions-of-mapserver-before-5-0" title="Permalink naar deze titel">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Debugging Older Versions of MapServer (before 5.0)</a><a class="headerlink" href="#debugging-older-versions-of-mapserver-before-5-0" title="Permalink to this heading">¶</a></h2>
 <ol class="arabic">
 <li><p>Make sure that MapServer is compiled in debug mode (on unix this is
 enabled through <em>./configure –enable-debug</em>).</p>
@@ -908,7 +913,7 @@ ON</em> statements if using IIS on a production server.</p></li>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../about.html" title="About">About</a><br>
 <a href="../products.html" title="Products">Products</a><br>
@@ -943,12 +948,12 @@ ON</em> statements if using IIS on a production server.</p></li>
 <li><a class="reference internal" href="#step-3-turn-on-cpl-debug-optional">Step 3: Turn on CPL_DEBUG (optional)</a></li>
 <li><a class="reference internal" href="#step-4-turn-on-proj-debug-optional">Step 4: Turn on PROJ_DEBUG (optional)</a></li>
 <li><a class="reference internal" href="#step-5-test-your-mapfile">Step 5: Test your Mapfile</a><ul>
-<li><a class="reference internal" href="#using-shp2img">Using shp2img</a><ul>
+<li><a class="reference internal" href="#using-map2img">Using map2img</a><ul>
 <li><a class="reference internal" href="#all-debug">-all_debug</a></li>
 <li><a class="reference internal" href="#map-debug">-map_debug</a></li>
 <li><a class="reference internal" href="#layer-debug">-layer_debug</a></li>
 <li><a class="reference internal" href="#set-cpl-debug">Set CPL_DEBUG</a></li>
-<li><a class="reference internal" href="#reading-errors-returned-by-shp2img">Reading Errors Returned by shp2img</a></li>
+<li><a class="reference internal" href="#reading-errors-returned-by-map2img">Reading Errors Returned by map2img</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#using-mapserv-cgi">Using mapserv CGI</a></li>
@@ -998,15 +1003,15 @@ ON</em> statements if using IIS on a production server.</p></li>
           <a href="index.html" title="Optimization"
              >vorige</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.0 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Optimization</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Debugging MapServer</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Laatste aanpassing op 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

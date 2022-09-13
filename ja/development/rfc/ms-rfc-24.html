@@ -4,15 +4,17 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 24: Mapscript memory management &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 24: Mapscript memory management &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -22,6 +24,9 @@
     <link rel="search" title="検索" href="../../search.html" />
     <link rel="copyright" title="著作権" href="../../copyright.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -133,37 +138,37 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-24-mapscript-memory-management">
-<span id="rfc24"></span><h1><a class="toc-backref" href="#table-of-contents">MS RFC 24: Mapscript memory management</a><a class="headerlink" href="#ms-rfc-24-mapscript-memory-management" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="rfc24"></span><h1><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MS RFC 24: Mapscript memory management</a><a class="headerlink" href="#ms-rfc-24-mapscript-memory-management" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2006/12/3</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Umberto Nicoletti</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="mailto:umberto&#46;nicoletti&#37;&#52;&#48;gmail&#46;com">umberto<span>&#46;</span>nicoletti<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
 </dd>
-<dt class="field-even">Last Edited</dt>
+<dt class="field-even">Last Edited<span class="colon">:</span></dt>
 <dd class="field-even"><p>2006/12/31</p>
 </dd>
-<dt class="field-odd">Status</dt>
+<dt class="field-odd">Status<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Done</p>
 </dd>
-<dt class="field-even">Version</dt>
+<dt class="field-even">Version<span class="colon">:</span></dt>
 <dd class="field-even"><p>MapServer  5.0</p>
 </dd>
-<dt class="field-odd">Tracker</dt>
+<dt class="field-odd">Tracker<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/2032">https://github.com/MapServer/MapServer/issues/2032</a></p>
 </dd>
-<dt class="field-even">Tracker 3.2</dt>
+<dt class="field-even">Tracker 3.2<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/2442">https://github.com/MapServer/MapServer/issues/2442</a></p>
 </dd>
-<dt class="field-odd">Id</dt>
+<dt class="field-odd">Id<span class="colon">:</span></dt>
 <dd class="field-odd"><p>$Id$</p>
 </dd>
 </dl>
-<div class="contents topic" id="table-of-contents">
+<nav class="contents" id="table-of-contents">
 <p class="topic-title">Table of Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#ms-rfc-24-mapscript-memory-management" id="id1">MS RFC 24: Mapscript memory management</a></p>
@@ -180,9 +185,9 @@
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <section id="overview">
-<h2><a class="toc-backref" href="#table-of-contents">Overview</a><a class="headerlink" href="#overview" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="この見出しへのパーマリンク">¶</a></h2>
 <p>Memory management in SWIG wrappers has a tradition of being difficult and
 error prone. The programmer of the wrapper has to deal with memory that can
 be allocated and then freed in two separate environments: the hosting
@@ -207,13 +212,13 @@ that can be implemented in time for the release of MapServer  5.0.</p>
 <p>This RFC does not address thread safety.</p>
 </section>
 <section id="problem-description">
-<h2><a class="toc-backref" href="#table-of-contents">Problem description</a><a class="headerlink" href="#problem-description" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Problem description</a><a class="headerlink" href="#problem-description" title="この見出しへのパーマリンク">¶</a></h2>
 <p>This section gives an overview (along with examples) of errors in MapScript
 memory management. Most of the examples will be in Java, but they apply to
 all other MapScripts too. They can be reproduced against the latest CVS code
 of mapserver-HEAD as of 31st December 2006.</p>
 <section id="object-equality-identity">
-<h3>Object equality/identity<a class="headerlink" href="#object-equality-identity" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Object equality/identity<a class="headerlink" href="#object-equality-identity" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Consider the following Java MapScript code:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapObj</span> <span class="nb">map</span><span class="o">=</span><span class="n">new</span> <span class="n">mapObj</span><span class="p">(</span><span class="s2">&quot;my.map&quot;</span><span class="p">);</span>
 <span class="n">layerObj</span> <span class="n">layer</span><span class="o">=</span><span class="n">new</span> <span class="n">layerObj</span><span class="p">(</span><span class="n">null</span><span class="p">);</span>
@@ -241,7 +246,7 @@ to the new copy and is therefore 'disconnected' from the actual memory area.
 This currently happens for the most used insert methods (i.e. <em>insertClass</em>).</p>
 </section>
 <section id="early-garbage-collection">
-<h3>Early garbage collection<a class="headerlink" href="#early-garbage-collection" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Early garbage collection<a class="headerlink" href="#early-garbage-collection" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Objects created through MapScript can be garbage-collected &quot;early&quot;, when there
 are live objects still referencing them.
 See this example in Java:</p>
@@ -280,7 +285,7 @@ $map1=$layer-&gt;{map}-&gt;draw();
 </div>
 </section>
 <section id="dynamically-populated-layers-classes-etc">
-<h3>Dynamically populated layers, classes, etc<a class="headerlink" href="#dynamically-populated-layers-classes-etc" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Dynamically populated layers, classes, etc<a class="headerlink" href="#dynamically-populated-layers-classes-etc" title="この見出しへのパーマリンク">¶</a></h3>
 <p>See the following bug reports:</p>
 <p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/1400">https://github.com/MapServer/MapServer/issues/1400</a></p>
 <p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/1743">https://github.com/MapServer/MapServer/issues/1743</a></p>
@@ -290,7 +295,7 @@ for pointing it out.</p>
 </section>
 </section>
 <section id="proposed-implementation">
-<h2><a class="toc-backref" href="#table-of-contents">Proposed implementation</a><a class="headerlink" href="#proposed-implementation" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Proposed implementation</a><a class="headerlink" href="#proposed-implementation" title="この見出しへのパーマリンク">¶</a></h2>
 <p>To solve the problems shown at items 2.1, 2.2 and 2.3 this RFC proposes that:</p>
 <ol class="arabic simple">
 <li><p>a reference counter is added to each MapServer data structure that can be
@@ -318,7 +323,7 @@ Subsections 3.4 and 3.5 offer an implementation example for the layerObj
 class. Please note that in the following we limit the scope of our analysis to
 the classes/layer relationship.</p>
 <section id="implement-a-reference-counter">
-<h3>Implement a reference counter<a class="headerlink" href="#implement-a-reference-counter" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Implement a reference counter<a class="headerlink" href="#implement-a-reference-counter" title="この見出しへのパーマリンク">¶</a></h3>
 <p>The MapScript objects implementing this rfc will get a new <em>int</em> member
 called <em>refcount</em>.</p>
 <p>Mapscript will keep read-only access to the reference counter which is useful
@@ -337,7 +342,7 @@ hash function must be chosen carefully.</p>
 <p>The example implementation proposed at the tracker <a class="reference external" href="https://github.com/MapServer/MapServer/issues/2032">bug #2032</a> adopts the
 first strategy.</p>
 <section id="refcounting-in-the-cgi">
-<h4>3.1.1 RefCounting in the CGI<a class="headerlink" href="#refcounting-in-the-cgi" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<h4>3.1.1 RefCounting in the CGI<a class="headerlink" href="#refcounting-in-the-cgi" title="この見出しへのパーマリンク">¶</a></h4>
 <p>The rfc should be modified to propose that the USE_MAPSCRIPT
 requirement is dropped on the following motivations:</p>
 <ol class="loweralpha simple">
@@ -382,7 +387,7 @@ to build any MapScript (with the exception of php, maybe)</p></li>
 </section>
 </section>
 <section id="add-references-to-the-mapscript-wrapper-object">
-<h3>Add references to the MapScript wrapper object<a class="headerlink" href="#add-references-to-the-mapscript-wrapper-object" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Add references to the MapScript wrapper object<a class="headerlink" href="#add-references-to-the-mapscript-wrapper-object" title="この見出しへのパーマリンク">¶</a></h3>
 <p>The MapScript objects will be modified so that they keep a reference to the
 other MapScript objects they are added to, like the C struct already does.
 This object can be hereafter referred to as the <em>parent object</em>.</p>
@@ -403,7 +408,7 @@ is in place. Also the rfc proposes to implement a parent not-null check for
 the layer operations that use the parent map reference.</p>
 </section>
 <section id="change-arrays-of-structures-in-arrays-of-pointers">
-<h3>Change arrays of structures in arrays of pointers<a class="headerlink" href="#change-arrays-of-structures-in-arrays-of-pointers" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Change arrays of structures in arrays of pointers<a class="headerlink" href="#change-arrays-of-structures-in-arrays-of-pointers" title="この見出しへのパーマリンク">¶</a></h3>
 <p>This change will occur at the C-level and is quite an undertaking. Initially
 and for the purpose of this RFC the size of the arrays will still be fixed as
 it is now. The modification of the code will be made a way that future RFC
@@ -437,7 +442,7 @@ structures (classes and styles).</p>
 <p>This item has been implemented for the classes without using the GET_CLASS macro.</p>
 </section>
 <section id="keep-parent-references-and-c-internal-structure-in-sync">
-<h3>Keep parent references and C internal structure in sync<a class="headerlink" href="#keep-parent-references-and-c-internal-structure-in-sync" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Keep parent references and C internal structure in sync<a class="headerlink" href="#keep-parent-references-and-c-internal-structure-in-sync" title="この見出しへのパーマリンク">¶</a></h3>
 <p>For the mechanism described at the previous item to work some functions
 in the MapScript objects and in the native code must be modified so that the
 MapScript objects and the C data structures stay in sync.</p>
@@ -451,7 +456,7 @@ the insert operation (<em>layerobject.c</em>, line 52, function <em>msInsertClas
 <p>The MapScript API will be backward compatible.</p>
 </section>
 <section id="destructors-obey-the-reference-counter">
-<h3>Destructors obey the reference counter<a class="headerlink" href="#destructors-obey-the-reference-counter" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Destructors obey the reference counter<a class="headerlink" href="#destructors-obey-the-reference-counter" title="この見出しへのパーマリンク">¶</a></h3>
 <p>The various free* methods must check the counter before freeing memory.
 This will be implemented in the native code as in the following example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>void msFreeMap(mapObj *map) {
@@ -473,7 +478,7 @@ could ever happen once the parent reference is in place)</p></li>
 </ol>
 </section>
 <section id="always-give-object-ownership-to-swig">
-<h3>Always give object ownership to SWIG<a class="headerlink" href="#always-give-object-ownership-to-swig" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Always give object ownership to SWIG<a class="headerlink" href="#always-give-object-ownership-to-swig" title="この見出しへのパーマリンク">¶</a></h3>
 <p>For the reference count to work all object ownership must be given to SWIG. This
 is quite different from how it is today. The change however is straightforward
 because SWIG will acquire object ownership by default and is only a matter of
@@ -488,7 +493,7 @@ csharp/csmodule.i:383:  if (parent_class != null) this.swigCMemOwn = false;$exco
 <p>or drop the constructor customization altogether.</p>
 </section>
 <section id="java-mapscript-code-example-for-layerobj">
-<h3>JAVA: MapScript code example for layerObj<a class="headerlink" href="#java-mapscript-code-example-for-layerobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>JAVA: MapScript code example for layerObj<a class="headerlink" href="#java-mapscript-code-example-for-layerobj" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Tamas has proposed a more object oriented approach to this problem, which can
 be adopted for those languages that support OOrientation.</p>
 <p>Code example for layerObj (<em>javamodule.i</em>):</p>
@@ -527,7 +532,7 @@ be adopted for those languages that support OOrientation.</p>
 </div>
 </section>
 <section id="perl-mapscript-code-example-for-layerobj">
-<h3>PERL: MapScript code example for layerObj<a class="headerlink" href="#perl-mapscript-code-example-for-layerobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>PERL: MapScript code example for layerObj<a class="headerlink" href="#perl-mapscript-code-example-for-layerobj" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Code example for layerObj (<em>plmodule.i</em>):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>%feature(&quot;shadow&quot;) layerObj(mapObj *map)
 %{
@@ -581,7 +586,7 @@ sub DESTROY {
 </section>
 </section>
 <section id="implementation-plan">
-<h2><a class="toc-backref" href="#table-of-contents">Implementation plan</a><a class="headerlink" href="#implementation-plan" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Implementation plan</a><a class="headerlink" href="#implementation-plan" title="この見出しへのパーマリンク">¶</a></h2>
 <p>It seems that for most MapScripts (java, csharp, perl and python) there
 is enough functionality in SWIG to implement the features described in this RFC.
 For ruby we'll probably have to go a different route and implement the
@@ -590,7 +595,7 @@ For ruby we'll probably have to go a different route and implement the
 features (injection of code and constructor customization).
 Each language gets then a specific section to deal with its own characteristics</p>
 <section id="checking-swig-mapscript-capabilities-javacode">
-<h3>Checking SWIG-Mapscript capabilities: %javacode<a class="headerlink" href="#checking-swig-mapscript-capabilities-javacode" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Checking SWIG-Mapscript capabilities: %javacode<a class="headerlink" href="#checking-swig-mapscript-capabilities-javacode" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Swig provides the equivalent of <em>%javacode</em> for the following languages:</p>
 <ol class="arabic simple">
 <li><p>perl through %perlcode</p></li>
@@ -603,7 +608,7 @@ Each language gets then a specific section to deal with its own characteristics<
 the references described in 3.2 and the wrapper methods.</p>
 </section>
 <section id="checking-swig-mapscript-capabilities-constructor-customization">
-<h3>Checking SWIG-MapScript capabilities: constructor customization<a class="headerlink" href="#checking-swig-mapscript-capabilities-constructor-customization" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Checking SWIG-MapScript capabilities: constructor customization<a class="headerlink" href="#checking-swig-mapscript-capabilities-constructor-customization" title="この見出しへのパーマリンク">¶</a></h3>
 <p>The %csconstruct used to wrap and customize the costructor of MapScript
 objects (item 3.3) is only available in csharp and java.
 It should be possible to simulate its behavior with
@@ -612,7 +617,7 @@ It should be possible to simulate its behavior with
 <p>This swig construct will be used to populate parent backreferences.</p>
 </section>
 <section id="java-and-c-sharp">
-<h3>Java and C-Sharp<a class="headerlink" href="#java-and-c-sharp" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Java and C-Sharp<a class="headerlink" href="#java-and-c-sharp" title="この見出しへのパーマリンク">¶</a></h3>
 <p>SWIG-Java and SWIG-CSharp share a common ground and are therefore very similar.
 The names of SWIG-Java constructs can be roughly translated into their C-Sharp
 equivalents by changing the <em>java</em> prefix into <em>cs</em> (i.e. <em>javacode</em> in
@@ -626,36 +631,36 @@ made by Tamas in the last discussion thread.</p>
 </div>
 </section>
 <section id="perl">
-<h3>Perl<a class="headerlink" href="#perl" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Perl<a class="headerlink" href="#perl" title="この見出しへのパーマリンク">¶</a></h3>
 <p>As in the example above most of the perl customization can be done
 with the use of the <em>shadow</em> construct.</p>
 <p>The implementation will follow this RFC exactly.</p>
 </section>
 <section id="python">
-<h3>Python<a class="headerlink" href="#python" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Python<a class="headerlink" href="#python" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Python enjoys first-grade support in SWIG so the RFC should be implemented
 exactly as described.</p>
 </section>
 <section id="ruby">
-<h3>Ruby<a class="headerlink" href="#ruby" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Ruby<a class="headerlink" href="#ruby" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Needs investigation, probably we'll have to use rb_gc_* functions to mark objects
 and prevent their garbage collection or use <em>%trackobjects</em>.
 Ruby will not implement this RFC as of item 3.2.</p>
 </section>
 <section id="tcl">
-<h3>Tcl<a class="headerlink" href="#tcl" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Tcl<a class="headerlink" href="#tcl" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Needs investigation and a Tcl expert.
 At the time of this writing Tcl will probably not implement this RFC
 as of item 3.2.</p>
 </section>
 <section id="php">
-<h3>PHP<a class="headerlink" href="#php" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>PHP<a class="headerlink" href="#php" title="この見出しへのパーマリンク">¶</a></h3>
 <p>PHP MapScript does not rely on SWIG, but since most of the code is native it should be
 possible to adopt this RFC.</p>
 </section>
 </section>
 <section id="implementation-checklist">
-<h2><a class="toc-backref" href="#table-of-contents">Implementation checklist</a><a class="headerlink" href="#implementation-checklist" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Implementation checklist</a><a class="headerlink" href="#implementation-checklist" title="この見出しへのパーマリンク">¶</a></h2>
 <p>The following table will be used to track the implementation status of this RFC.
 There is a table for each MapScript object and when a language has implemented
 this RFC for a given object the maintainer will populate the relative cell
@@ -670,18 +675,8 @@ with one of the following marks:</p>
 (under the CNT=Counter column)</p></li>
 </ul>
 <section id="mapobj">
-<h3>mapObj<a class="headerlink" href="#mapobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>mapObj<a class="headerlink" href="#mapobj" title="この見出しへのパーマリンク">¶</a></h3>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 21%" />
-<col style="width: 7%" />
-<col style="width: 13%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 13%" />
-<col style="width: 10%" />
-<col style="width: 13%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>CNT</p></th>
@@ -986,18 +981,8 @@ with one of the following marks:</p>
 </table>
 </section>
 <section id="layerobj">
-<h3>layerObj<a class="headerlink" href="#layerobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>layerObj<a class="headerlink" href="#layerobj" title="この見出しへのパーマリンク">¶</a></h3>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 22%" />
-<col style="width: 7%" />
-<col style="width: 13%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 13%" />
-<col style="width: 10%" />
-<col style="width: 13%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>CNT</p></th>
@@ -1149,18 +1134,8 @@ with one of the following marks:</p>
 </table>
 </section>
 <section id="classobj">
-<h3>classObj<a class="headerlink" href="#classobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>classObj<a class="headerlink" href="#classobj" title="この見出しへのパーマリンク">¶</a></h3>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 22%" />
-<col style="width: 7%" />
-<col style="width: 13%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 13%" />
-<col style="width: 10%" />
-<col style="width: 13%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>CNT</p></th>
@@ -1267,17 +1242,8 @@ with one of the following marks:</p>
 </table>
 </section>
 <section id="webobj">
-<h3>webObj<a class="headerlink" href="#webobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>webObj<a class="headerlink" href="#webobj" title="この見出しへのパーマリンク">¶</a></h3>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 24%" />
-<col style="width: 14%" />
-<col style="width: 13%" />
-<col style="width: 13%" />
-<col style="width: 14%" />
-<col style="width: 10%" />
-<col style="width: 14%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>java</p></th>
@@ -1333,20 +1299,10 @@ with one of the following marks:</p>
 </table>
 </section>
 <section id="styleobj">
-<h3>styleObj<a class="headerlink" href="#styleobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>styleObj<a class="headerlink" href="#styleobj" title="この見出しへのパーマリンク">¶</a></h3>
 <p>For styleObjs it is enough to disown them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 22%" />
-<col style="width: 7%" />
-<col style="width: 13%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 13%" />
-<col style="width: 10%" />
-<col style="width: 13%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>CNT</p></th>
@@ -1471,19 +1427,10 @@ It is not necessary to add the reference pointing back to the container object.<
 </table>
 </section>
 <section id="labelobj">
-<h3>labelObj<a class="headerlink" href="#labelobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>labelObj<a class="headerlink" href="#labelobj" title="この見出しへのパーマリンク">¶</a></h3>
 <p>For labelObjs it is enough to disown them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 26%" />
-<col style="width: 13%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 13%" />
-<col style="width: 10%" />
-<col style="width: 13%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>java</p></th>
@@ -1587,19 +1534,10 @@ It is not necessary to add the reference pointing back to the container object.<
 </table>
 </section>
 <section id="hashtableobj">
-<h3>hashTableObj<a class="headerlink" href="#hashtableobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>hashTableObj<a class="headerlink" href="#hashtableobj" title="この見出しへのパーマリンク">¶</a></h3>
 <p>For hashTableObjs it is enough to disown them when they are fetched from the container object (i.e. a layerObj).
 It is not necessary to add the reference pointing back to the container object.</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 26%" />
-<col style="width: 13%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 13%" />
-<col style="width: 10%" />
-<col style="width: 13%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>java</p></th>
@@ -1623,19 +1561,10 @@ It is not necessary to add the reference pointing back to the container object.<
 </table>
 </section>
 <section id="colorobj">
-<h3>colorObj<a class="headerlink" href="#colorobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>colorObj<a class="headerlink" href="#colorobj" title="この見出しへのパーマリンク">¶</a></h3>
 <p>For colorObjs it is enough to disown them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 26%" />
-<col style="width: 13%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 13%" />
-<col style="width: 10%" />
-<col style="width: 13%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>java</p></th>
@@ -1659,19 +1588,10 @@ It is not necessary to add the reference pointing back to the container object.<
 </table>
 </section>
 <section id="imageobj">
-<h3>imageObj<a class="headerlink" href="#imageobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>imageObj<a class="headerlink" href="#imageobj" title="この見出しへのパーマリンク">¶</a></h3>
 <p>For imageObjs it is enough to own them when they are fetched from the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 26%" />
-<col style="width: 13%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 13%" />
-<col style="width: 10%" />
-<col style="width: 13%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>java</p></th>
@@ -1695,19 +1615,10 @@ It is not necessary to add the reference pointing back to the container object.<
 </table>
 </section>
 <section id="shapeobj">
-<h3>shapeObj<a class="headerlink" href="#shapeobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>shapeObj<a class="headerlink" href="#shapeobj" title="この見出しへのパーマリンク">¶</a></h3>
 <p>For shapeObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 26%" />
-<col style="width: 13%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 13%" />
-<col style="width: 10%" />
-<col style="width: 13%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>java</p></th>
@@ -1843,19 +1754,10 @@ It is not necessary to add the reference pointing back to the container object.<
 </table>
 </section>
 <section id="lineobj">
-<h3>lineObj<a class="headerlink" href="#lineobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>lineObj<a class="headerlink" href="#lineobj" title="この見出しへのパーマリンク">¶</a></h3>
 <p>For lineObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 26%" />
-<col style="width: 13%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 13%" />
-<col style="width: 10%" />
-<col style="width: 13%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>java</p></th>
@@ -1911,19 +1813,10 @@ It is not necessary to add the reference pointing back to the container object.<
 </table>
 </section>
 <section id="pointobj">
-<h3>pointObj<a class="headerlink" href="#pointobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>pointObj<a class="headerlink" href="#pointobj" title="この見出しへのパーマリンク">¶</a></h3>
 <p>For pointObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 26%" />
-<col style="width: 13%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 13%" />
-<col style="width: 10%" />
-<col style="width: 13%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>java</p></th>
@@ -1955,19 +1848,9 @@ It is not necessary to add the reference pointing back to the container object.<
 </table>
 </section>
 <section id="symbolsetobj">
-<h3>symbolsetObj<a class="headerlink" href="#symbolsetobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>symbolsetObj<a class="headerlink" href="#symbolsetobj" title="この見出しへのパーマリンク">¶</a></h3>
 <p>For symbolsetObjs it is not necessary to add the reference pointing back to the map.</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 7%" />
-<col style="width: 12%" />
-<col style="width: 11%" />
-<col style="width: 11%" />
-<col style="width: 12%" />
-<col style="width: 9%" />
-<col style="width: 12%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>CNT</p></th>
@@ -2056,20 +1939,10 @@ It is not necessary to add the reference pointing back to the container object.<
 </table>
 </section>
 <section id="symbolobj">
-<h3>symbolObj<a class="headerlink" href="#symbolobj" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>symbolObj<a class="headerlink" href="#symbolobj" title="この見出しへのパーマリンク">¶</a></h3>
 <p>For symbolObjs it is enough to set ownership properly when they are fetched from or added to the container object.
 It is not necessary to add the reference pointing back to the container object.</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 7%" />
-<col style="width: 12%" />
-<col style="width: 11%" />
-<col style="width: 11%" />
-<col style="width: 12%" />
-<col style="width: 9%" />
-<col style="width: 12%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
 <th class="head"><p>CNT</p></th>
@@ -2132,11 +2005,11 @@ It is not necessary to add the reference pointing back to the container object.<
 </section>
 </section>
 <section id="open-issues">
-<h2><a class="toc-backref" href="#table-of-contents">Open issues</a><a class="headerlink" href="#open-issues" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Open issues</a><a class="headerlink" href="#open-issues" title="この見出しへのパーマリンク">¶</a></h2>
 <p>The following issues should be discussed after this RFC has been
 adopted/implemented.</p>
 <section id="multiple-owners-for-an-object">
-<h3>Multiple owners for an object<a class="headerlink" href="#multiple-owners-for-an-object" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Multiple owners for an object<a class="headerlink" href="#multiple-owners-for-an-object" title="この見出しへのパーマリンク">¶</a></h3>
 <p>It is the case of  layer that is added to more than one map. This should
 be prohibited because the layer has only one parent reference. On insertion
 the code should check whether the C parent reference is not null and in that
@@ -2147,7 +2020,7 @@ to the second map.</p>
 </section>
 </section>
 <section id="api-compatibility">
-<h2><a class="toc-backref" href="#table-of-contents">API Compatibility</a><a class="headerlink" href="#api-compatibility" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">API Compatibility</a><a class="headerlink" href="#api-compatibility" title="この見出しへのパーマリンク">¶</a></h2>
 <p>It is a top priority of this RFC to preserve the investment made by MapScript
 users by maintaining the API backwards compatible in both terms of method
 signatures and usage (i.e. order of invocation, types, return codes, etc).</p>
@@ -2155,7 +2028,7 @@ signatures and usage (i.e. order of invocation, types, return codes, etc).</p>
 and be described under this section.</p>
 </section>
 <section id="status">
-<h2><a class="toc-backref" href="#table-of-contents">Status</a><a class="headerlink" href="#status" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Status</a><a class="headerlink" href="#status" title="この見出しへのパーマリンク">¶</a></h2>
 <p>RFC opened for comments on Jan, the 10th 2007 with a post on mapserver-dev.</p>
 <p>RFC undergoing revision after discussion on mapserver-dev.</p>
 <p>New revision published on MapServer web.</p>
@@ -2164,7 +2037,7 @@ and be described under this section.</p>
 <p>+0: Frank Warmerdam</p>
 </section>
 <section id="activity">
-<h2><a class="toc-backref" href="#table-of-contents">Activity</a><a class="headerlink" href="#activity" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Activity</a><a class="headerlink" href="#activity" title="この見出しへのパーマリンク">¶</a></h2>
 <p>The <a class="reference external" href="https://github.com/MapServer/MapServer/issues/2032">bug #2032</a> will be used to track activity related to this RFC.</p>
 <p>2/20/2007: attached patch that converts map-&gt;layers in array of pointers with dynamic allocation (item 3.3)</p>
 <p>2/24/2007: vote proposed on mapserver-dev</p>
@@ -2189,7 +2062,7 @@ and be described under this section.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -2280,8 +2153,8 @@ and be described under this section.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      最終更新: 2022-05-20
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      最終更新: 2022-09-13
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

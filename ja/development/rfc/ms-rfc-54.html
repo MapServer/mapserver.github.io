@@ -4,15 +4,17 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 54: Rendering Interface API &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 54: Rendering Interface API &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 55: Improve control of output resolution" href="ms-rfc-55.html" />
     <link rel="prev" title="MS RFC 53: Guidelines for MapScript method return values" href="ms-rfc-53.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,26 +148,26 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-54-rendering-interface-api">
-<span id="rfc54"></span><h1>MS RFC 54: Rendering Interface API<a class="headerlink" href="#ms-rfc-54-rendering-interface-api" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="rfc54"></span><h1>MS RFC 54: Rendering Interface API<a class="headerlink" href="#ms-rfc-54-rendering-interface-api" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2009/03/01</p>
 </dd>
-<dt class="field-even">Authors</dt>
+<dt class="field-even">Authors<span class="colon">:</span></dt>
 <dd class="field-even"><p>Thomas Bonfort</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Thomas.Bonfort at camptocamp.com</p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Planning</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 6.0</p>
 </dd>
 </dl>
 <section id="purpose">
-<h2>Purpose<a class="headerlink" href="#purpose" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Purpose<a class="headerlink" href="#purpose" title="この見出しへのパーマリンク">¶</a></h2>
 <p>This RFC proposes the refactoring of MapServer's rendering backends, following
 an approach similar to the vtable architecture used by the input drivers.</p>
 <p>The motivation for this refactoring is that in the current code, each renderer
@@ -191,7 +196,7 @@ to the generic one used by this API.</p>
 </div>
 </section>
 <section id="low-level-rendering-api">
-<h2>Low Level Rendering API<a class="headerlink" href="#low-level-rendering-api" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Low Level Rendering API<a class="headerlink" href="#low-level-rendering-api" title="この見出しへのパーマリンク">¶</a></h2>
 <p>A new <em>renderObj</em> structure is defined and is attached to each outputformat
 depending on which driver is configured. A renderObj contains function pointers
 to the low-level functionality that each renderer should implement, and
@@ -228,14 +233,14 @@ renderObj function pointers point to the low-level functions</p></li>
 </pre></div>
 </div>
 <section id="configuration-parameters">
-<h3>Configuration parameters<a class="headerlink" href="#configuration-parameters" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Configuration parameters<a class="headerlink" href="#configuration-parameters" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Each renderer can inform the higher level calling code of what functionality it
 supports or implements. This will primarily allow us to support vector and
 raster renderers. More details on each configuration parameter will be given
 when appropriate in the rest of this document.</p>
 </section>
 <section id="image-creation-functions">
-<h3>Image Creation Functions<a class="headerlink" href="#image-creation-functions" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Image Creation Functions<a class="headerlink" href="#image-creation-functions" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Each renderer must provide a function to create a new image. MapServer's
 imageObj structure will have an additional void* member that will be used by
 the renderer to store a structure containing any useful information it may
@@ -252,12 +257,12 @@ layout options).</p>
 </div>
 </section>
 <section id="raster-handling-functions">
-<h3>Raster Handling Functions<a class="headerlink" href="#raster-handling-functions" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Raster Handling Functions<a class="headerlink" href="#raster-handling-functions" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Raster handling will follow different code paths depending on whether the
 underlying renderer is already natively a raster renderer (eg. PNG, JPEG) , or if
 it is a vector one (eg. PDF, SVG).</p>
 <section id="raster-buffer-structure">
-<h4>Raster Buffer Structure<a class="headerlink" href="#raster-buffer-structure" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<h4>Raster Buffer Structure<a class="headerlink" href="#raster-buffer-structure" title="この見出しへのパーマリンク">¶</a></h4>
 <p>A new structure defining a raster object in memory is defined, and is used to
 replace the current code that uses a gdImage as a common format.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -290,7 +295,7 @@ raster array.</p>
 </div>
 </section>
 <section id="handling-raster-layers">
-<h4>Handling Raster Layers<a class="headerlink" href="#handling-raster-layers" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<h4>Handling Raster Layers<a class="headerlink" href="#handling-raster-layers" title="この見出しへのパーマリンク">¶</a></h4>
 <p>Depending on the renderer's capabilities, there are two possibilities here,
 that are determined by the <em>supports_pixel_buffer</em> parameter:</p>
 <ul>
@@ -315,7 +320,7 @@ that will allow the higher level code to merge the created raster:</p>
 </section>
 </section>
 <section id="image-saving-functions">
-<h3>Image Saving Functions<a class="headerlink" href="#image-saving-functions" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Image Saving Functions<a class="headerlink" href="#image-saving-functions" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Similarly to raster layers, there are two code paths for saving a created image
 to a stream or to a buffer, depending also on the <em>supports_pixel_buffer</em>
 configuration parameter:</p>
@@ -335,9 +340,9 @@ provide a function for writing itself to a given stream:</p>
 <p>TODO: exporting to a buffer for mapscript getBytes()</p>
 </section>
 <section id="low-level-functions-to-be-implemented-by-a-renderer">
-<h3>Low Level Functions to be Implemented by a renderer<a class="headerlink" href="#low-level-functions-to-be-implemented-by-a-renderer" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Low Level Functions to be Implemented by a renderer<a class="headerlink" href="#low-level-functions-to-be-implemented-by-a-renderer" title="この見出しへのパーマリンク">¶</a></h3>
 <section id="polygons">
-<h4>Polygons<a class="headerlink" href="#polygons" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<h4>Polygons<a class="headerlink" href="#polygons" title="この見出しへのパーマリンク">¶</a></h4>
 <ul class="simple">
 <li><p>solid filled: The simplest case, needs only be passed a color</p></li>
 <li><p>pattern filled: is passed a tile. The size of the tile (i.e. the amount of
@@ -351,7 +356,7 @@ the spacing between markers inside the polygon)</p></li>
 </div>
 </section>
 <section id="lines">
-<h4>Lines<a class="headerlink" href="#lines" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<h4>Lines<a class="headerlink" href="#lines" title="この見出しへのパーマリンク">¶</a></h4>
 <ul class="simple">
 <li><p>simple stroke: is passed a pattern (dashes) and line style (caps, joins)</p></li>
 <li><p>pattern fill: is passed a tile</p></li>
@@ -362,7 +367,7 @@ the spacing between markers inside the polygon)</p></li>
 </div>
 </section>
 <section id="markers">
-<h4>Markers<a class="headerlink" href="#markers" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<h4>Markers<a class="headerlink" href="#markers" title="この見出しへのパーマリンク">¶</a></h4>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">renderVectorSymbol</span><span class="p">)(</span><span class="n">imageObj</span><span class="w"> </span><span class="o">*</span><span class="n">img</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"></span>
 <span class="w">            </span><span class="n">symbolObj</span><span class="w"> </span><span class="o">*</span><span class="n">symbol</span><span class="p">,</span><span class="w"> </span><span class="n">symbolStyleObj</span><span class="w"> </span><span class="o">*</span><span class="n">style</span><span class="p">);</span><span class="w"></span>
 
@@ -381,7 +386,7 @@ the spacing between markers inside the polygon)</p></li>
 </div>
 </section>
 <section id="labels-and-text">
-<h4>Labels and Text<a class="headerlink" href="#labels-and-text" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<h4>Labels and Text<a class="headerlink" href="#labels-and-text" title="この見出しへのパーマリンク">¶</a></h4>
 <ul>
 <li><p>label size calculation: If passed an &quot;advances pointer&quot;, also calculates individual
 advances for each glyphs (for anlge foloow text)</p>
@@ -402,7 +407,7 @@ advances for each glyphs (for anlge foloow text)</p>
 </ul>
 </section>
 <section id="tiles-and-caches">
-<h4>Tiles and Caches<a class="headerlink" href="#tiles-and-caches" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<h4>Tiles and Caches<a class="headerlink" href="#tiles-and-caches" title="この見出しへのパーマリンク">¶</a></h4>
 <p>For some symbols and renderer combinations, it might be benficial to use a cache so
 as not to have to render a complicated symbol over and over again. This behavior would
 probably have to be deactivated when using attribute binding (on size, angle, color...)
@@ -413,7 +418,7 @@ simpler as we'd use the same functions for rendering a symbol than for rendering
 First solution is more flexible, as the renderer can cache anything.</p>
 </section>
 <section id="miscellaneous-functions">
-<h4>Miscellaneous functions<a class="headerlink" href="#miscellaneous-functions" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<h4>Miscellaneous functions<a class="headerlink" href="#miscellaneous-functions" title="この見出しへのパーマリンク">¶</a></h4>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">transformShape</span><span class="p">)(</span><span class="n">shapeObj</span><span class="w"> </span><span class="o">*</span><span class="n">shape</span><span class="p">,</span><span class="w"> </span><span class="n">rectObj</span><span class="w"> </span><span class="n">extend</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">cellsize</span><span class="p">);</span><span class="w"></span>
 </pre></div>
 </div>
@@ -424,7 +429,7 @@ First solution is more flexible, as the renderer can cache anything.</p>
 </div>
 </section>
 <section id="cleanup-functions">
-<h4>Cleanup functions<a class="headerlink" href="#cleanup-functions" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<h4>Cleanup functions<a class="headerlink" href="#cleanup-functions" title="この見出しへのパーマリンク">¶</a></h4>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">freeImage</span><span class="p">)(</span><span class="n">imageObj</span><span class="w"> </span><span class="o">*</span><span class="n">image</span><span class="p">);</span><span class="w"></span>
 <span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">freeSymbol</span><span class="p">)(</span><span class="n">symbolObj</span><span class="w"> </span><span class="o">*</span><span class="n">symbol</span><span class="p">);</span><span class="w"></span>
 <span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">freeShape</span><span class="p">)(</span><span class="n">shapeObj</span><span class="w"> </span><span class="o">*</span><span class="n">shape</span><span class="p">);</span><span class="w"></span>
@@ -440,13 +445,13 @@ cache containing an implementation specific representation of the object.</p>
 </section>
 </section>
 <section id="high-level-usage-of-the-rendering-api">
-<h2>High Level Usage of the rendering API<a class="headerlink" href="#high-level-usage-of-the-rendering-api" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>High Level Usage of the rendering API<a class="headerlink" href="#high-level-usage-of-the-rendering-api" title="この見出しへのパーマリンク">¶</a></h2>
 <section id="image-creation">
-<h3>Image Creation<a class="headerlink" href="#image-creation" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Image Creation<a class="headerlink" href="#image-creation" title="この見出しへのパーマリンク">¶</a></h3>
 <p>nothing special. just pass on to the renderer.</p>
 </section>
 <section id="image-saving">
-<h3>Image Saving<a class="headerlink" href="#image-saving" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Image Saving<a class="headerlink" href="#image-saving" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Depending on whether the renderer can export a raster buffer or not:</p>
 <ul class="simple">
 <li><p>supported: get a raster buffer, eventually apply formatoptions (quantization)
@@ -455,7 +460,7 @@ and pass the buffer to the MapServer's saving functions</p></li>
 </ul>
 </section>
 <section id="raster-layers">
-<h3>Raster Layers<a class="headerlink" href="#raster-layers" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Raster Layers<a class="headerlink" href="#raster-layers" title="この見出しへのパーマリンク">¶</a></h3>
 <p>MapServer's Raster layer handling will be modified so that it can write to a
 rasterBufferObj and not only to a gdImage.</p>
 <div class="admonition note">
@@ -478,7 +483,7 @@ rasterBufferObj and not only to a gdImage.</p>
 </div>
 </section>
 <section id="symbol-cache-and-marker-rendering">
-<h3>Symbol Cache and Marker Rendering<a class="headerlink" href="#symbol-cache-and-marker-rendering" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Symbol Cache and Marker Rendering<a class="headerlink" href="#symbol-cache-and-marker-rendering" title="この見出しへのパーマリンク">¶</a></h3>
 <p>A symbol cache similar to the actual mapgd.c imagecache will be implemented in
 mapimagecache.c .</p>
 <div class="admonition note">
@@ -515,7 +520,7 @@ depending on the format.</p>
 </div>
 </section>
 <section id="line-rendering">
-<h3>Line Rendering<a class="headerlink" href="#line-rendering" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Line Rendering<a class="headerlink" href="#line-rendering" title="この見出しへのパーマリンク">¶</a></h3>
 <ul>
 <li><p>simple stroke: call the renderer directly</p></li>
 <li><p>marker symbols:</p>
@@ -540,7 +545,7 @@ produce poor results.</p></li>
 </ul>
 </section>
 <section id="polygon-rendering">
-<h3>Polygon Rendering<a class="headerlink" href="#polygon-rendering" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Polygon Rendering<a class="headerlink" href="#polygon-rendering" title="この見出しへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>simple fill</p></li>
 <li><p>pattern fill:</p>
@@ -556,7 +561,7 @@ produce poor results.</p></li>
 </ul>
 </section>
 <section id="text-rendering">
-<h3>Text Rendering<a class="headerlink" href="#text-rendering" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Text Rendering<a class="headerlink" href="#text-rendering" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Nothing special to add here, except that the basic preliminary tests (if the
 font is defined, or if the string to render is NULL) and the lookup of the
 system path of the truetype font file will be done once by the high level code
@@ -569,7 +574,7 @@ rendering API. Only truetype fonts are implemented.</p>
 </section>
 </section>
 <section id="image-i-o">
-<h2>Image I/O<a class="headerlink" href="#image-i-o" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Image I/O<a class="headerlink" href="#image-i-o" title="この見出しへのパーマリンク">¶</a></h2>
 <p>Currently all image I/O is done through the GD library. To raise this dependency,
 the RFC proposes to have mapserver implement image loading and saving by directly
 interfacing the libpng / libjpeg / giflib libraries. The corresponding code will
@@ -614,9 +619,9 @@ change.</p>
 </div>
 </section>
 <section id="miscellaneous">
-<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="この見出しへのパーマリンク">¶</a></h2>
 <section id="drawing-some-layers-as-rasters-in-vector-renderers">
-<h3>Drawing some layers as rasters in vector renderers<a class="headerlink" href="#drawing-some-layers-as-rasters-in-vector-renderers" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Drawing some layers as rasters in vector renderers<a class="headerlink" href="#drawing-some-layers-as-rasters-in-vector-renderers" title="この見出しへのパーマリンク">¶</a></h3>
 <p>The current pdf (and SVG?) renderers have the option of switching over to GD for
 some layers, that are then incorporated as a raster image in the final map rather
 than adding each feature in the usual way.</p>
@@ -631,7 +636,7 @@ initializeRasterBuffer.</p>
 </div>
 </section>
 <section id="legend">
-<h3>Legend<a class="headerlink" href="#legend" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Legend<a class="headerlink" href="#legend" title="この見出しへのパーマリンク">¶</a></h3>
 <p>The legend rendering code will have to be refactored, as it currently produces a
 gdImage. Legend rendering will be handled like a normal imageObj.</p>
 <div class="admonition note">
@@ -647,16 +652,16 @@ renderers, as the imageObj they have created isn't an array of pixels.</p>
 </div>
 </section>
 <section id="scalebar">
-<h3>Scalebar<a class="headerlink" href="#scalebar" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Scalebar<a class="headerlink" href="#scalebar" title="この見出しへのパーマリンク">¶</a></h3>
 <p>TBD</p>
 </section>
 <section id="reference-map">
-<h3>Reference Map<a class="headerlink" href="#reference-map" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>Reference Map<a class="headerlink" href="#reference-map" title="この見出しへのパーマリンク">¶</a></h3>
 <p>TBD. Should we even still be supporting this ?</p>
 </section>
 </section>
 <section id="affected-files">
-<h2>Affected Files<a class="headerlink" href="#affected-files" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Affected Files<a class="headerlink" href="#affected-files" title="この見出しへのパーマリンク">¶</a></h2>
 <ul class="simple">
 <li><p>maprendering.c , mapimageio.c, mapcairo.c (added)</p></li>
 <li><p>mapfile.c (defaults, and keywords moved from symbolObj to styleObj)</p></li>
@@ -667,15 +672,15 @@ renderers, as the imageObj they have created isn't an array of pixels.</p>
 </ul>
 </section>
 <section id="documentation">
-<h2>Documentation<a class="headerlink" href="#documentation" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Documentation<a class="headerlink" href="#documentation" title="この見出しへのパーマリンク">¶</a></h2>
 <p>No end documentation needed aside from the migration guide.</p>
 </section>
 <section id="mapscript">
-<h2>Mapscript<a class="headerlink" href="#mapscript" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Mapscript<a class="headerlink" href="#mapscript" title="この見出しへのパーマリンク">¶</a></h2>
 <p>TBD</p>
 </section>
 <section id="backwards-incompatibility">
-<h2>Backwards Incompatibility<a class="headerlink" href="#backwards-incompatibility" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Backwards Incompatibility<a class="headerlink" href="#backwards-incompatibility" title="この見出しへのパーマリンク">¶</a></h2>
 <p>Symbology should be better behaved between renderers, but does imply some backwards
 incompatible changes in how some symbols can be rendered (although this can probably
 seen as fixing bugs rather than backwards incompatibilities)</p>
@@ -689,10 +694,10 @@ width of the line.</p></li>
 </ul>
 </section>
 <section id="comments-from-review-period">
-<h2>Comments from Review period<a class="headerlink" href="#comments-from-review-period" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Comments from Review period<a class="headerlink" href="#comments-from-review-period" title="この見出しへのパーマリンク">¶</a></h2>
 </section>
 <section id="voting-history">
-<h2>Voting History<a class="headerlink" href="#voting-history" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Voting History<a class="headerlink" href="#voting-history" title="この見出しへのパーマリンク">¶</a></h2>
 </section>
 </section>
 
@@ -712,7 +717,7 @@ width of the line.</p></li>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -801,8 +806,8 @@ width of the line.</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      最終更新: 2022-05-20
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      最終更新: 2022-09-13
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

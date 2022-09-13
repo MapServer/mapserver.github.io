@@ -4,15 +4,17 @@
 <html lang="tr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 59: Add Variable Binding to Database Connection Types &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 59: Add Variable Binding to Database Connection Types &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 60: Labeling enhancement: ability to skip ANGLE FOLLOW labels with too much character overlap" href="ms-rfc-60.html" />
     <link rel="prev" title="MS RFC 58: Kml Output" href="ms-rfc-58.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,30 +148,30 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-59-add-variable-binding-to-database-connection-types">
-<span id="rfc59"></span><h1>MS RFC 59: Add Variable Binding to Database Connection Types<a class="headerlink" href="#ms-rfc-59-add-variable-binding-to-database-connection-types" title="Bu başlık için kalıcı bağlantı">¶</a></h1>
+<span id="rfc59"></span><h1>MS RFC 59: Add Variable Binding to Database Connection Types<a class="headerlink" href="#ms-rfc-59-add-variable-binding-to-database-connection-types" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Dan “Ducky” Little</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p>danlittle at yahoo.com</p>
 </dd>
-<dt class="field-odd">Last Edited</dt>
+<dt class="field-odd">Last Edited<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2010/02/20</p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Adopted</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 6.0</p>
 </dd>
 </dl>
 <section id="purpose">
-<h2>Purpose<a class="headerlink" href="#purpose" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>Purpose<a class="headerlink" href="#purpose" title="Permalink to this heading">¶</a></h2>
 <p>Both of the major databases used for spatial data storage with MapServer, PostgreSQL and Oracle, offer the ability to “bind” variables in SQL statements.  The reason they provide variable binding is to prevent needing to resolve data-type issues in the SQL and it prevent SQL injection.  Various MapServer applications take untrusted user input from the CGI request and insert it into an SQL statement.  This leaves an open vector for SQL injection.  This also causes some issues as SQL requires properly escaping strings and integers.  Not having to know that ahead of time is useful.</p>
 </section>
 <section id="implementation-details">
-<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this heading">¶</a></h2>
 <p>There is a need to be able to create the key-value pairings for the various databases in a flexible format.  For example, Oracle can use a named bind variable but PostgreSQL only accepts numbers.  These are some examples of variable binding in PostgreSQL and Oralce to illustrate the differences:</p>
 <p>PostgreSQL</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>select count(*) from parcels where city_id = $1
@@ -200,15 +205,15 @@
 </div>
 </section>
 <section id="backward-compatibility-issues">
-<h2>Backward Compatibility Issues<a class="headerlink" href="#backward-compatibility-issues" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>Backward Compatibility Issues<a class="headerlink" href="#backward-compatibility-issues" title="Permalink to this heading">¶</a></h2>
 <p>The implementation would be completely optional and not provide any backward compatibility issues.</p>
 </section>
 <section id="documentation">
-<h2>Documentation<a class="headerlink" href="#documentation" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">¶</a></h2>
 <p>The mainline documentation will need to add the description of the BINDVALS block and its functionality.</p>
 </section>
 <section id="files-impacted">
-<h2>Files Impacted<a class="headerlink" href="#files-impacted" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>Files Impacted<a class="headerlink" href="#files-impacted" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>mapfile.c</p></li>
 <li><p>mapfile.h</p></li>
@@ -220,10 +225,10 @@
 </ul>
 </section>
 <section id="comments-from-review-period">
-<h2>Comments from Review period<a class="headerlink" href="#comments-from-review-period" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>Comments from Review period<a class="headerlink" href="#comments-from-review-period" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="voting-history">
-<h2>Voting History<a class="headerlink" href="#voting-history" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>Voting History<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
 <p>Voted by the PSC during an in-person code sprint</p>
 </section>
 </section>
@@ -244,7 +249,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -294,8 +299,8 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Telif hakkı</a> 2022, Open Source Geospatial Foundation.
-      Son güncelleme: 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Son güncelleme: 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

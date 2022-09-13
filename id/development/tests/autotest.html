@@ -4,15 +4,17 @@
 <html lang="id">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Regression Testing (msautotest) &#8212; MapServer 7.6.4 documentation</title>
+    <title>Regression Testing (msautotest) &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MapScript Unit Testing" href="mapscript.html" />
     <link rel="prev" title="Vagrant Usage" href="vagrant.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,25 +148,25 @@
           <div class="body" role="main">
             
   <section id="regression-testing-msautotest">
-<span id="autotest"></span><h1><a class="toc-backref" href="#table-of-contents">Regression Testing (msautotest)</a><a class="headerlink" href="#regression-testing-msautotest" title="Link permanen untuk headline ini">¶</a></h1>
+<span id="autotest"></span><h1><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Regression Testing (msautotest)</a><a class="headerlink" href="#regression-testing-msautotest" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Frank Warmerdam</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p>warmerdam at pobox.com</p>
 </dd>
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Jeff McKenna</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p>jmckenna at gatewaygeomatics.com</p>
 </dd>
-<dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2021-04-18</p>
+<dt class="field-odd">Last Updated<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2022-08-20</p>
 </dd>
 </dl>
-<div class="contents topic" id="table-of-contents">
+<nav class="contents" id="table-of-contents">
 <p class="topic-title">Table of Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#regression-testing-msautotest" id="id1">Regression Testing (msautotest)</a></p>
@@ -172,20 +177,20 @@
 <li><p><a class="reference internal" href="#background" id="id5">Background</a></p></li>
 <li><p><a class="reference internal" href="#result-comparisons" id="id6">Result Comparisons</a></p></li>
 <li><p><a class="reference internal" href="#requires-handling-build-options" id="id7">REQUIRES - Handling Build Options</a></p></li>
-<li><p><a class="reference internal" href="#run-parms-tests-not-using-shp2img" id="id8">RUN_PARMS: Tests not using shp2img</a></p></li>
-<li><p><a class="reference internal" href="#result-file-preprocessing" id="id9">Result File Preprocessing</a></p></li>
+<li><p><a class="reference internal" href="#run-parms-tests-not-using-map2img" id="id8">RUN_PARMS: Tests not using map2img</a></p></li>
+<li><p><a class="reference internal" href="#result-file-pre-processing" id="id9">Result File Pre-processing</a></p></li>
 <li><p><a class="reference internal" href="#what-if-a-test-fails" id="id10">What If A Test Fails?</a></p></li>
 <li><p><a class="reference internal" href="#todo" id="id11">TODO</a></p></li>
 <li><p><a class="reference internal" href="#adding-new-tests" id="id12">Adding New Tests</a></p></li>
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <p><cite>msautotest</cite> is a suite of test maps, data files, expected result images,
 and test scripts intended to make it easy to run an a set of automated
 regression tests on MapServer.</p>
 <section id="getting-msautotest">
-<h2><a class="toc-backref" href="#table-of-contents">Getting <cite>msautotest</cite></a><a class="headerlink" href="#getting-msautotest" title="Link permanen untuk headline ini">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Getting <cite>msautotest</cite></a><a class="headerlink" href="#getting-msautotest" title="Permalink to this heading">¶</a></h2>
 <p>Skip this section if you've followed the <a class="reference internal" href="vagrant.html#vagrant"><span class="std std-ref">Vagrant Usage</span></a> steps.</p>
 <p><cite>msautotest</cite> is available from GitHub, and exists inside the <em>main</em>
 MapServer repository, in /MapServer/msautotest/. It can be fetched with
@@ -197,7 +202,7 @@ something like:</p>
 exists after your checkout.</p>
 </section>
 <section id="running-msautotest">
-<h2><a class="toc-backref" href="#table-of-contents">Running msautotest</a><a class="headerlink" href="#running-msautotest" title="Link permanen untuk headline ini">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Running msautotest</a><a class="headerlink" href="#running-msautotest" title="Permalink to this heading">¶</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Catatan</p>
 <p>It is possible that some features tested through msautotest may not be released
@@ -211,7 +216,7 @@ so if you don't have Python on your system, get and install it. More information
 on Python is available at <a class="reference external" href="https://www.python.org">https://www.python.org</a>. Most Linux system have some version
 already installed.</p>
 <p>msautotest also requires that the executables built with MapServer, notably
-<a class="reference internal" href="../../utilities/shp2img.html#shp2img"><span class="std std-ref">shp2img</span></a>, <a class="reference internal" href="../../utilities/legend.html#legend-utility"><span class="std std-ref">legend</span></a>, <a class="reference internal" href="../../cgi/mapserv.html#mapserv"><span class="std std-ref">mapserv</span></a> and
+<a class="reference internal" href="../../utilities/map2img.html#map2img"><span class="std std-ref">map2img</span></a>, <a class="reference internal" href="../../utilities/legend.html#legend-utility"><span class="std std-ref">legend</span></a>, <a class="reference internal" href="../../cgi/mapserv.html#mapserv"><span class="std std-ref">mapserv</span></a> and
 <a class="reference internal" href="../../utilities/scalebar.html#scalebar-utility"><span class="std std-ref">scalebar</span></a>, are available in the path. This can be
 accomplished by adding the MapServer build directory to my path.</p>
 <p>csh:</p>
@@ -222,9 +227,9 @@ accomplished by adding the MapServer build directory to my path.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>% PATH=$HOME/mapserver:$PATH
 </pre></div>
 </div>
-<p>Verify that you can run stuff by typing 'shp2img -v' in the msautotest
+<p>Verify that you can run stuff by typing 'map2img -v' in the msautotest
 directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span> <span class="n">shp2img</span> <span class="o">-</span><span class="n">v</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span> <span class="n">map2img</span> <span class="o">-</span><span class="n">v</span>
 <span class="n">MapServer</span> <span class="n">version</span> <span class="mf">7.6.0</span><span class="o">-</span><span class="n">dev</span> <span class="n">OUTPUT</span><span class="o">=</span><span class="n">PNG</span> <span class="n">OUTPUT</span><span class="o">=</span><span class="n">JPEG</span> <span class="n">OUTPUT</span><span class="o">=</span><span class="n">KML</span>
     <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">PROJ</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">AGG</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">FREETYPE</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">CAIRO</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">SVG_SYMBOLS</span>
     <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">SVGCAIRO</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">ICONV</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">FRIBIDI</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">WMS_SERVER</span> <span class="n">SUPPORTS</span><span class="o">=</span><span class="n">WMS_CLIENT</span>
@@ -310,7 +315,7 @@ Be sure to install it, such as: <cite>apt-get install python-lxml</cite></p>
 an argument of the run_test.py script.</p>
 </section>
 <section id="checking-failures">
-<h2><a class="toc-backref" href="#table-of-contents">Checking Failures</a><a class="headerlink" href="#checking-failures" title="Link permanen untuk headline ini">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Checking Failures</a><a class="headerlink" href="#checking-failures" title="Permalink to this heading">¶</a></h2>
 <p>Because most msautotest tests are comparing generated images to expected
 images, the tests are very sensitive to subtle rounding differences on
 different systems, and subtle rendering changes in libraries like freetype
@@ -318,13 +323,13 @@ gd, and agg. So it is quite common to see some failures.</p>
 <p>These failures then need to be reviewed manually to see if the differences
 are acceptable and just indicating differences in rounding/rendering or
 whether they are &quot;real&quot; bugs. This is normally accomplished by visually
-comparing files in the &quot;result&quot; directory with the corrresponding file in
+comparing files in the &quot;result&quot; directory with the corresponding file in
 the &quot;expected&quot; directory. It is best if this can be done in an application
 that allows images to be layers, and toggled on and off to visually
 highlight what is changing. QGIS can be used for this.</p>
 </section>
 <section id="background">
-<h2><a class="toc-backref" href="#table-of-contents">Background</a><a class="headerlink" href="#background" title="Link permanen untuk headline ini">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Background</a><a class="headerlink" href="#background" title="Permalink to this heading">¶</a></h2>
 <p>The msautotest suite was initially developed by Frank Warmerdam
 (warmerdam at pobox.com), who can be contacted with questions it.</p>
 <p>The msautotest suite is organized as a series of .map files. The python
@@ -351,8 +356,8 @@ directory).</p></li>
 </ul>
 </section>
 <section id="result-comparisons">
-<h2><a class="toc-backref" href="#table-of-contents">Result Comparisons</a><a class="headerlink" href="#result-comparisons" title="Link permanen untuk headline ini">¶</a></h2>
-<p>For shp2img tests The output files generated by processing a map is put in the
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Result Comparisons</a><a class="headerlink" href="#result-comparisons" title="Permalink to this heading">¶</a></h2>
+<p>For map2img tests The output files generated by processing a map is put in the
 file results/&lt;mapfilebasename&gt;.png (regardless of whether it is PNG or not). So
 when gdal/256_overlay_res.map is processed, the output file is written to
 gdal/results/256_overlay_res.png. This is compared to
@@ -379,11 +384,11 @@ differences so it's use is of mixed value.</p>
 comparisons are skipped.</p>
 </section>
 <section id="requires-handling-build-options">
-<h2><a class="toc-backref" href="#table-of-contents">REQUIRES - Handling Build Options</a><a class="headerlink" href="#requires-handling-build-options" title="Link permanen untuk headline ini">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">REQUIRES - Handling Build Options</a><a class="headerlink" href="#requires-handling-build-options" title="Permalink to this heading">¶</a></h2>
 <p>Because MapServer can be built with many possible extensions, such as support
 for OGR, GDAL, and PROJ.4, it is desirable to have the testsuite automatically
 detect which tests should be run based on the configuratio of MapServer. This
-is accomplished by capturing the version output of &quot;shp2img -v&quot; and using the
+is accomplished by capturing the version output of &quot;map2img -v&quot; and using the
 various keys in that to decide which tests can be run. A directory can have a
 file called &quot;all_require.txt&quot; with a &quot;REQUIRES:&quot; line indicating components
 required for all tests in the directory. If any of these requirements are not
@@ -402,15 +407,15 @@ all files in the directory):</p>
 </pre></div>
 </div>
 </section>
-<section id="run-parms-tests-not-using-shp2img">
-<h2><a class="toc-backref" href="#table-of-contents">RUN_PARMS: Tests not using shp2img</a><a class="headerlink" href="#run-parms-tests-not-using-shp2img" title="Link permanen untuk headline ini">¶</a></h2>
+<section id="run-parms-tests-not-using-map2img">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">RUN_PARMS: Tests not using map2img</a><a class="headerlink" href="#run-parms-tests-not-using-map2img" title="Permalink to this heading">¶</a></h2>
 <p>There is also a RUN_PARMS keyword that may be placed in map files to override
 a bunch of behaviour. The default behaviour is to process map files with
-shp2img, but other programs such as mapserv or scalebar can be requested, and
+map2img, but other programs such as mapserv or scalebar can be requested, and
 various commandline arguments altered as well as the name of the output file.
 For instance, the following line in misc/tr_scalebar.map indicates that the
 output file should be called tr_scalebar.png, the commandline should look like
-&quot;[SCALEBAR] [MAPFILE] [RESULT]&quot; instead of the default &quot;[SHP2IMG] -m [MAPFILE]
+&quot;[SCALEBAR] [MAPFILE] [RESULT]&quot; instead of the default &quot;[MAP2IMG] -m [MAPFILE]
 -o [RESULT]&quot;.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RUN_PARMS</span><span class="p">:</span> <span class="n">tr_scalebar</span><span class="o">.</span><span class="n">png</span> <span class="p">[</span><span class="n">SCALEBAR</span><span class="p">]</span> <span class="p">[</span><span class="n">MAPFILE</span><span class="p">]</span> <span class="p">[</span><span class="n">RESULT</span><span class="p">]</span>
 </pre></div>
@@ -422,7 +427,7 @@ redirected to a file.</p>
 </pre></div>
 </div>
 <p>For web services that generate images that would normally be prefixed with the
-Content-type header, use [RESULT_DEMIME] to instruct the test harnass to
+Content-type header, use [RESULT_DEMIME] to instruct the test harness to
 script off any http headers before doing the comparison.  This is particularly
 valuable for image results so the files can be compared using special image
 comparisons.</p>
@@ -431,12 +436,12 @@ comparisons.</p>
 </pre></div>
 </div>
 </section>
-<section id="result-file-preprocessing">
-<h2><a class="toc-backref" href="#table-of-contents">Result File Preprocessing</a><a class="headerlink" href="#result-file-preprocessing" title="Link permanen untuk headline ini">¶</a></h2>
+<section id="result-file-pre-processing">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Result File Pre-processing</a><a class="headerlink" href="#result-file-pre-processing" title="Permalink to this heading">¶</a></h2>
 <p>As mentioned above the [RESULT_DEMIME] directive can be used for image file
 output from web services (ie. WMS GetMap requests).</p>
 <p>For text, XML and HTML output it can also be helpful to apply other
-pre-processing to the output file to make comparisons easlier.   The
+pre-processing to the output file to make comparisons easier.   The
 [RESULT_DEVERSION] directive in the RUN_PARMS will apply several translations
 to the output file including:</p>
 <ul class="simple">
@@ -462,7 +467,7 @@ ShapefileOpen, which will be error messages in this case:</p>
 </div>
 </section>
 <section id="what-if-a-test-fails">
-<h2><a class="toc-backref" href="#table-of-contents">What If A Test Fails?</a><a class="headerlink" href="#what-if-a-test-fails" title="Link permanen untuk headline ini">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">What If A Test Fails?</a><a class="headerlink" href="#what-if-a-test-fails" title="Permalink to this heading">¶</a></h2>
 <p>When running the test suite, it is common for some tests to fail depending on
 vagaries of floating point on the platform, or harmless changes in
 MapServer. To identify these compare the results in result with the file in
@@ -476,14 +481,14 @@ endian systems and therefore be different at the binary level from what was
 expected. PNG should be pretty safe.</p>
 </section>
 <section id="todo">
-<h2><a class="toc-backref" href="#table-of-contents">TODO</a><a class="headerlink" href="#todo" title="Link permanen untuk headline ini">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">TODO</a><a class="headerlink" href="#todo" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Add lots of tests for different stuff!  Very little vector testing done yet.</p></li>
 <li><p>Add something to run tests on the server and report on changes.</p></li>
 </ul>
 </section>
 <section id="adding-new-tests">
-<h2><a class="toc-backref" href="#table-of-contents">Adding New Tests</a><a class="headerlink" href="#adding-new-tests" title="Link permanen untuk headline ini">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Adding New Tests</a><a class="headerlink" href="#adding-new-tests" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Pick an appropriate directory to put the test in. Feel free to start a new
 one for new families of testing functionality.</p></li>
@@ -533,7 +538,7 @@ repository when you are happy with them.  For example,</p></li>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -554,8 +559,8 @@ repository when you are happy with them.  For example,</p></li>
 <li><a class="reference internal" href="#background">Background</a></li>
 <li><a class="reference internal" href="#result-comparisons">Result Comparisons</a></li>
 <li><a class="reference internal" href="#requires-handling-build-options">REQUIRES - Handling Build Options</a></li>
-<li><a class="reference internal" href="#run-parms-tests-not-using-shp2img">RUN_PARMS: Tests not using shp2img</a></li>
-<li><a class="reference internal" href="#result-file-preprocessing">Result File Preprocessing</a></li>
+<li><a class="reference internal" href="#run-parms-tests-not-using-map2img">RUN_PARMS: Tests not using map2img</a></li>
+<li><a class="reference internal" href="#result-file-pre-processing">Result File Pre-processing</a></li>
 <li><a class="reference internal" href="#what-if-a-test-fails">What If A Test Fails?</a></li>
 <li><a class="reference internal" href="#todo">TODO</a></li>
 <li><a class="reference internal" href="#adding-new-tests">Adding New Tests</a></li>
@@ -587,8 +592,8 @@ repository when you are happy with them.  For example,</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Hak cipta</a> 2022, Open Source Geospatial Foundation.
-      Terakhir diperbarui pada 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Terakhir diperbarui pada 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

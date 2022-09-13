@@ -4,15 +4,17 @@
 <html lang="ar">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 131: Allow file paths in MapCache second level dimension values &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 131: Allow file paths in MapCache second level dimension values &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 132: Update MapScript API Docs" href="ms-rfc-132.html" />
     <link rel="prev" title="MS RFC 130: Add support to Z-top, a multi-SQLite, multi-pyramid cache structure" href="ms-rfc-130.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,29 +148,29 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-131-allow-file-paths-in-mapcache-second-level-dimension-values">
-<span id="rfc131"></span><h1>MS RFC 131: Allow file paths in MapCache second level dimension values<a class="headerlink" href="#ms-rfc-131-allow-file-paths-in-mapcache-second-level-dimension-values" title="Permalink to this headline">¶</a></h1>
+<span id="rfc131"></span><h1>MS RFC 131: Allow file paths in MapCache second level dimension values<a class="headerlink" href="#ms-rfc-131-allow-file-paths-in-mapcache-second-level-dimension-values" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2020-05-20</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Jérome Boué</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="mailto:jbo-ads&#37;&#52;&#48;mailo&#46;com">jbo-ads<span>&#64;</span>mailo<span>&#46;</span>com</a></p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Adopted</p>
 </dd>
-<dt class="field-odd">Last update</dt>
+<dt class="field-odd">Last update<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2020-08-06</p>
 </dd>
-<dt class="field-even">Version</dt>
+<dt class="field-even">Version<span class="colon">:</span></dt>
 <dd class="field-even"><p>MapCache 1.12</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>Dimension values in MapCache are mainly used as a means to identify caches
 where to store or fetch tiles, by using a templating mechanism: &quot;{dim}&quot; or
 &quot;{dim:<em>dimname</em>}&quot; (see <a class="reference internal" href="../../mapcache/dimensions.html#mapcache-dimensions-storing"><span class="std std-ref">Storing Dimensions</span></a> and
@@ -183,7 +188,7 @@ security.</p>
 this feature is proposed on that cache type only.</p>
 </section>
 <section id="proposed-solution">
-<h2>Proposed solution<a class="headerlink" href="#proposed-solution" title="Permalink to this headline">¶</a></h2>
+<h2>Proposed solution<a class="headerlink" href="#proposed-solution" title="Permalink to this heading">¶</a></h2>
 <p>From preliminary discussions on <a class="reference external" href="https://lists.osgeo.org/pipermail/mapserver-dev/2019-December/015973.html">[mapserver-dev] mailing list</a>,
 two main principles have emerged:</p>
 <ol class="arabic simple">
@@ -194,7 +199,7 @@ controlled subset of the filesystem can be accessed; forbid &quot;../&quot; in
 dimension paths.</p></li>
 </ol>
 <section id="first-principle-keyword-to-path-mapping">
-<h3>First principle: keyword-to-path mapping<a class="headerlink" href="#first-principle-keyword-to-path-mapping" title="Permalink to this headline">¶</a></h3>
+<h3>First principle: keyword-to-path mapping<a class="headerlink" href="#first-principle-keyword-to-path-mapping" title="Permalink to this heading">¶</a></h3>
 <p>Indeed this feature is already provided in MapCache: this is the so-called
 <a class="reference internal" href="../../mapcache/dimensions.html#mapcache-dimensions-second-level"><span class="std std-ref">Second Level Dimensions</span></a> mechanism.</p>
 <p>The proposed solution should therefore allow paths only with second level
@@ -204,7 +209,7 @@ when fetching dimension value.</p>
 applies: replace '.' and '/' characters by '#' character.</p>
 </section>
 <section id="second-principle-restrict-dimension-paths-to-a-subset-of-filesystem">
-<h3>Second principle: restrict dimension paths to a subset of filesystem<a class="headerlink" href="#second-principle-restrict-dimension-paths-to-a-subset-of-filesystem" title="Permalink to this headline">¶</a></h3>
+<h3>Second principle: restrict dimension paths to a subset of filesystem<a class="headerlink" href="#second-principle-restrict-dimension-paths-to-a-subset-of-filesystem" title="Permalink to this heading">¶</a></h3>
 <p>The <em>root-dimension-path</em> mechanism is already provided in MapCache: templates
 apply on a hard-coded path specified in cache configuration.</p>
 <p>Moreover, in order to make clear that a specific cache supports paths as
@@ -224,19 +229,19 @@ behaviour applies: replace '.' and '/' characters by '#' character.</p>
 </section>
 </section>
 <section id="documentation-update">
-<h2>Documentation update<a class="headerlink" href="#documentation-update" title="Permalink to this headline">¶</a></h2>
+<h2>Documentation update<a class="headerlink" href="#documentation-update" title="Permalink to this heading">¶</a></h2>
 <p>Subsection of <a class="reference internal" href="../../mapcache/caches.html#mapcache-cache-multisqlite"><span class="std std-ref">Using Multiple SQLite Database Files</span></a> shall be modified.</p>
 </section>
 <section id="implementation-details">
-<h2>Implementation details<a class="headerlink" href="#implementation-details" title="Permalink to this headline">¶</a></h2>
+<h2>Implementation details<a class="headerlink" href="#implementation-details" title="Permalink to this heading">¶</a></h2>
 <p>Only <code class="docutils literal notranslate"><span class="pre">lib/cache_sqlite.c</span></code> is impacted.</p>
 </section>
 <section id="backward-compatibility">
-<h2>Backward compatibility<a class="headerlink" href="#backward-compatibility" title="Permalink to this headline">¶</a></h2>
+<h2>Backward compatibility<a class="headerlink" href="#backward-compatibility" title="Permalink to this heading">¶</a></h2>
 <p>As this is a new feature, no backward compatibility is expected.</p>
 </section>
 <section id="voting-history">
-<h2>Voting History<a class="headerlink" href="#voting-history" title="Permalink to this headline">¶</a></h2>
+<h2>Voting History<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
 <p>Adopted with +1 from JeffM, SethG, TomK, MikeS, EvenR, DanielM, SteveL, JeromeB</p>
 </section>
 </section>
@@ -257,7 +262,7 @@ behaviour applies: replace '.' and '/' characters by '#' character.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -310,8 +315,8 @@ behaviour applies: replace '.' and '/' characters by '#' character.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html"> حقوق النشر </a> 2022, Open Source Geospatial Foundation
-      Last updated on 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Last updated on 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

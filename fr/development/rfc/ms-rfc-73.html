@@ -4,15 +4,17 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 73: Improved SVG symbols support &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 73: Improved SVG symbols support &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 74: Includes from non-file connections (eg Databases)" href="ms-rfc-74.html" />
     <link rel="prev" title="MS RFC 72: Layer and Label-Level Geomtransforms" href="ms-rfc-72.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,35 +148,35 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-73-improved-svg-symbols-support">
-<span id="rfc73"></span><h1>MS RFC 73: Improved SVG symbols support<a class="headerlink" href="#ms-rfc-73-improved-svg-symbols-support" title="Lien permanent vers ce titre">¶</a></h1>
+<span id="rfc73"></span><h1>MS RFC 73: Improved SVG symbols support<a class="headerlink" href="#ms-rfc-73-improved-svg-symbols-support" title="Lien permanent vers cette rubrique">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2011/05/19</p>
 </dd>
-<dt class="field-even">Authors</dt>
+<dt class="field-even">Authors<span class="colon">:</span></dt>
 <dd class="field-even"><p>Zak James (zjames at dmsolutions.ca)</p>
 </dd>
-<dt class="field-odd">Authors</dt>
+<dt class="field-odd">Authors<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Yewondwossen Assefa (yassefa at dmsolutions.ca)</p>
 </dd>
-<dt class="field-even">Last Edited</dt>
+<dt class="field-even">Last Edited<span class="colon">:</span></dt>
 <dd class="field-even"><p>2011/05/19</p>
 </dd>
-<dt class="field-odd">Status</dt>
+<dt class="field-odd">Status<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Proposed</p>
 </dd>
-<dt class="field-even">Version</dt>
+<dt class="field-even">Version<span class="colon">:</span></dt>
 <dd class="field-even"><p>MapServer 6.2</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Lien permanent vers cette rubrique">¶</a></h2>
 <p>The SVG format offers several advantages over existing mapserver symbol types
 but existing support is limited. We propose the implementation of complete
 support using the libsvg-cairo library, part of the cairo project.</p>
 </section>
 <section id="technical-solution">
-<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Lien permanent vers cette rubrique">¶</a></h2>
 <p>All renderers will be extended with an added supports_svg flag, set to 0 for
 all but the cairo renderer. When an SVG symbol is requested, other renderers
 will trigger a call to msRenderSVGToPixmap which will parse the referenced svg
@@ -184,7 +189,7 @@ directly.</p>
 option and define USE_LIBSVG_CAIRO.</p>
 </section>
 <section id="existing-partial-implementation">
-<h2>Existing Partial Implementation<a class="headerlink" href="#existing-partial-implementation" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Existing Partial Implementation<a class="headerlink" href="#existing-partial-implementation" title="Lien permanent vers cette rubrique">¶</a></h2>
 <p>If this rfc is adopted the existing SVG symbol code
 (see <a class="reference external" href="https://github.com/MapServer/MapServer/issues/3343">https://github.com/MapServer/MapServer/issues/3343</a>) would be superseded
 and would be removed.</p>
@@ -197,7 +202,7 @@ quality. Additionally, this version will pre-scale and rotate the SVG before
 rasterizing with agg to avoid bitmap artifacts.</p>
 </section>
 <section id="usage-example">
-<h2>Usage example<a class="headerlink" href="#usage-example" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Usage example<a class="headerlink" href="#usage-example" title="Lien permanent vers cette rubrique">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SYMBOL</span>
   <span class="n">NAME</span> <span class="s2">&quot;svgsymbol&quot;</span>
   <span class="n">TYPE</span> <span class="n">SVG</span>
@@ -208,7 +213,7 @@ rasterizing with agg to avoid bitmap artifacts.</p>
 <p>… once defined, the symbol is used within the mapfile like any other.</p>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Lien permanent vers cette rubrique">¶</a></h2>
 <p>There are no compatibility issues with existing mapfiles. The SVG symbol type
 is already allowed within a SYMBOLSET. SVG Symbol support will be disabled by
 default. Enabling it will require installation of the libsvg-cairo library
@@ -216,7 +221,7 @@ available from
 * <a class="reference external" href="https://www.cairographics.org/snapshots/libsvg-cairo-0.1.6.tar.gz">https://www.cairographics.org/snapshots/libsvg-cairo-0.1.6.tar.gz</a></p>
 </section>
 <section id="affected-files">
-<h2>Affected Files<a class="headerlink" href="#affected-files" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Affected Files<a class="headerlink" href="#affected-files" title="Lien permanent vers cette rubrique">¶</a></h2>
 <ul class="simple">
 <li><p>mapserver.h</p></li>
 <li><p>mapdraw.c</p></li>
@@ -230,13 +235,13 @@ available from
 </ul>
 </section>
 <section id="ticket-id">
-<h2>Ticket Id<a class="headerlink" href="#ticket-id" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Ticket Id<a class="headerlink" href="#ticket-id" title="Lien permanent vers cette rubrique">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/3671">https://github.com/MapServer/MapServer/issues/3671</a></p></li>
 </ul>
 </section>
 <section id="voting-history">
-<h2>Voting History<a class="headerlink" href="#voting-history" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Voting History<a class="headerlink" href="#voting-history" title="Lien permanent vers cette rubrique">¶</a></h2>
 <p>+1 from DanielM, SteveW, ThomasB, SteveL, MichaelS, AssefaY</p>
 </section>
 </section>
@@ -257,7 +262,7 @@ available from
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -308,8 +313,8 @@ available from
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Mis à jour le 2022-05-20.
-      Créé en utilisant <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Mis à jour le 2022-09-13.
+      Créé en utilisant <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

@@ -4,15 +4,17 @@
 <html lang="pl">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 112: Retry „Follow” label positioning after maxoverlapangle colision &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 112: Retry „Follow” label positioning after maxoverlapangle colision &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 113: Layer Compositing Pipeline" href="ms-rfc-113.html" />
     <link rel="prev" title="MS RFC 111: MapCache Support for animated time series" href="ms-rfc-111.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,26 +148,26 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-112-retry-follow-label-positioning-after-maxoverlapangle-colision">
-<span id="rfc112"></span><h1>MS RFC 112: Retry „Follow” label positioning after maxoverlapangle colision<a class="headerlink" href="#ms-rfc-112-retry-follow-label-positioning-after-maxoverlapangle-colision" title="Stały odnośnik do tego nagłówka">¶</a></h1>
+<span id="rfc112"></span><h1>MS RFC 112: Retry „Follow” label positioning after maxoverlapangle colision<a class="headerlink" href="#ms-rfc-112-retry-follow-label-positioning-after-maxoverlapangle-colision" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2014/10</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Thomas Bonfort</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Implemented</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 7.2</p>
 </dd>
 </dl>
 <section id="the-current-situation">
-<h2>1. The Current Situation<a class="headerlink" href="#the-current-situation" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>1. The Current Situation<a class="headerlink" href="#the-current-situation" title="Permalink to this heading">¶</a></h2>
 <p>The current algorithm used to place „FOLLOW” labels has the following limitations:</p>
 <ul class="simple">
 <li><p>When two subsequent caracters of the label have a relative angle that is over
@@ -175,7 +180,7 @@ only one will be rendered</p></li>
 </ul>
 </section>
 <section id="proposed-enhancement">
-<h2>2. Proposed enhancement<a class="headerlink" href="#proposed-enhancement" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>2. Proposed enhancement<a class="headerlink" href="#proposed-enhancement" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>The algorithm will be extended to account for and try to correct for
 colisions happening when maxoverlapangle kicks in, by ensuring that such
@@ -211,7 +216,7 @@ label repetitions:</p></li>
 </div></blockquote>
 </section>
 <section id="questions-limitations">
-<h2>2.1 Questions/Limitations<a class="headerlink" href="#questions-limitations" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>2.1 Questions/Limitations<a class="headerlink" href="#questions-limitations" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Should the retrying behavior be enabled by default, and/or can it be
 deactivated ? Computing and testing a retried offset is not costly, the
@@ -223,26 +228,26 @@ by the line length, label length, and repeatdistance.</p></li>
 </ul>
 </section>
 <section id="backwards-compatibility">
-<h2>2.2 Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>2.2 Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="Permalink to this heading">¶</a></h2>
 <p>None expected aside from the fact created maps may contain more/different labels
 than beforehand.</p>
 </section>
 <section id="performance-implications">
-<h2>2.3 Performance Implications<a class="headerlink" href="#performance-implications" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>2.3 Performance Implications<a class="headerlink" href="#performance-implications" title="Permalink to this heading">¶</a></h2>
 <p>Limited. Retrying a label after a colision is not a cpu-heavy operation. Costly
 operations such as computing glyph advances and/or shaping text runs are not
 re-run for each retry.</p>
 </section>
 <section id="implementation-details">
-<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this heading">¶</a></h2>
 <section id="affected-files">
-<h3>3.1 Affected files<a class="headerlink" href="#affected-files" title="Stały odnośnik do tego nagłówka">¶</a></h3>
+<h3>3.1 Affected files<a class="headerlink" href="#affected-files" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>mapprimitive.c: implement retrying behavior - compute retried offsets</p></li>
 </ul>
 </section>
 <section id="tracking-issue">
-<h3>3.2 Tracking Issue<a class="headerlink" href="#tracking-issue" title="Stały odnośnik do tego nagłówka">¶</a></h3>
+<h3>3.2 Tracking Issue<a class="headerlink" href="#tracking-issue" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>code: <a class="reference external" href="https://github.com/MapServer/MapServer/pull/5048">https://github.com/MapServer/MapServer/pull/5048</a></p></li>
 <li><p>tests: <a class="reference external" href="https://github.com/tbonfort/msautotest/tree/displace_follow_labels">https://github.com/tbonfort/msautotest/tree/displace_follow_labels</a></p></li>
@@ -250,7 +255,7 @@ re-run for each retry.</p>
 </section>
 </section>
 <section id="voting-history">
-<h2>4. Voting History<a class="headerlink" href="#voting-history" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>4. Voting History<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
 <p>+1 from SteveL, DanielM, StephanM, PerryN, MikeS, StephenW, ThomasB</p>
 </section>
 </section>
@@ -271,7 +276,7 @@ re-run for each retry.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -325,8 +330,8 @@ re-run for each retry.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Ostatnia modyfikacja 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Ostatnia modyfikacja 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

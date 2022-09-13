@@ -4,15 +4,17 @@
 <html lang="sq">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 99: Remove support for GD renderer &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 99: Remove support for GD renderer &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 100: Support for tile index with mixed SRS in raster layers" href="ms-rfc-100.html" />
     <link rel="prev" title="MS RFC 98: Label/Text Rendering Overhaul" href="ms-rfc-98.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,26 +148,26 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-99-remove-support-for-gd-renderer">
-<span id="rfc99"></span><h1>MS RFC 99: Remove support for GD renderer<a class="headerlink" href="#ms-rfc-99-remove-support-for-gd-renderer" title="Permalidhje te ky titull">¶</a></h1>
+<span id="rfc99"></span><h1>MS RFC 99: Remove support for GD renderer<a class="headerlink" href="#ms-rfc-99-remove-support-for-gd-renderer" title="Permalidhje për te kjo krye">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2013/06</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Thomas Bonfort</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Adopted</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 7.0</p>
 </dd>
 </dl>
 <section id="summary">
-<h2>1. Summary<a class="headerlink" href="#summary" title="Permalidhje te ky titull">¶</a></h2>
+<h2>1. Summary<a class="headerlink" href="#summary" title="Permalidhje për te kjo krye">¶</a></h2>
 <p>Keeping support for the GD rendering library is preventing MapServer from
 moving onto a more feature-full and maintainable text/labeling pipeline. This RFC
 proposes that we remove support for the GD renderer in the upcoming 7.0 release,
@@ -170,7 +175,7 @@ unless there are some use-cases only covered by GD that have been overlooked,
 and/or someone is sufficiently interested to fund the high maintenance
 overhead.</p>
 <section id="history">
-<h3>1.1 History<a class="headerlink" href="#history" title="Permalidhje te ky titull">¶</a></h3>
+<h3>1.1 History<a class="headerlink" href="#history" title="Permalidhje për te kjo krye">¶</a></h3>
 <ul class="simple">
 <li><p>The GD library was initially the only renderer supported by MapServer for producing
 bitmap images (i.e. for png, jpeg and gif outputformats).</p></li>
@@ -189,7 +194,7 @@ compile time.</p></li>
 </ul>
 </section>
 <section id="current-gd-limitations">
-<h3>1.2 Current GD limitations<a class="headerlink" href="#current-gd-limitations" title="Permalidhje te ky titull">¶</a></h3>
+<h3>1.2 Current GD limitations<a class="headerlink" href="#current-gd-limitations" title="Permalidhje për te kjo krye">¶</a></h3>
 <p>In the process of supporting advanced text/label rendering implied by the overhaul of
 <a class="reference internal" href="ms-rfc-98.html#rfc98"><span class="std std-ref">MS RFC 98: Label/Text Rendering Overhaul</span></a>, the limitations of the GD api have shown to be a showstopper for moving forwards.
 Keeping support for GD would require either maintaining the current text rendering pipeline
@@ -200,7 +205,7 @@ complex text shaping).</p>
 from what is expected from a map renderer.</p>
 </section>
 <section id="current-gd-strengths">
-<h3>1.3 Current GD strengths<a class="headerlink" href="#current-gd-strengths" title="Permalidhje te ky titull">¶</a></h3>
+<h3>1.3 Current GD strengths<a class="headerlink" href="#current-gd-strengths" title="Permalidhje për te kjo krye">¶</a></h3>
 <p>GD image buffers have a lower memory overhead, given they work with 8bit pixels instead
 of 32bit ones.</p>
 <p>GD support rendering without anti-aliasing - good for vector area
@@ -208,7 +213,7 @@ fills (avoids thin lines along the «tile» boundaries).</p>
 </section>
 </section>
 <section id="gd-support-removal">
-<h2>2. GD support removal<a class="headerlink" href="#gd-support-removal" title="Permalidhje te ky titull">¶</a></h2>
+<h2>2. GD support removal<a class="headerlink" href="#gd-support-removal" title="Permalidhje për te kjo krye">¶</a></h2>
 <p>Aside from preventing <a class="reference internal" href="ms-rfc-98.html#rfc98"><span class="std std-ref">MS RFC 98: Label/Text Rendering Overhaul</span></a> to happen, support for GD is already himpering development
 due to the overhead required during maintenance and rendering enhancements. Current
 activity on the issue tracker and mailing lists show that it is not being used actively.
@@ -216,7 +221,7 @@ The major 7.0 release is a good time to remove GD support entirely, enabling us 
 onto a maintainable and extensible text rendering pipeline, and allowing us to greatly
 simplify future maintenance.</p>
 <section id="backwards-compatibility">
-<h3>2.1 Backwards compatibility<a class="headerlink" href="#backwards-compatibility" title="Permalidhje te ky titull">¶</a></h3>
+<h3>2.1 Backwards compatibility<a class="headerlink" href="#backwards-compatibility" title="Permalidhje për te kjo krye">¶</a></h3>
 <ul class="simple">
 <li><p>GD outputformats configured in mapfiles will silently be mapped to AGG/PNG8, i.e AGG
 rendered images quantized down to 256 color pngs, as is done currently when GD support
@@ -225,12 +230,12 @@ has beend disabled. The final resulting images will differ.</p></li>
 </ul>
 </section>
 <section id="voting-history">
-<h3>3. Voting History<a class="headerlink" href="#voting-history" title="Permalidhje te ky titull">¶</a></h3>
+<h3>3. Voting History<a class="headerlink" href="#voting-history" title="Permalidhje për te kjo krye">¶</a></h3>
 <p>Passed with +1 from ThomasB, TomK, MikeS, StephanM, SteveW, PerryN,
 DanielM and JeffM</p>
 </section>
 <section id="tracking-issue">
-<h3>4. Tracking Issue<a class="headerlink" href="#tracking-issue" title="Permalidhje te ky titull">¶</a></h3>
+<h3>4. Tracking Issue<a class="headerlink" href="#tracking-issue" title="Permalidhje për te kjo krye">¶</a></h3>
 <p>No specific issue was created for this RFC. Development was tracked inside <a class="reference internal" href="ms-rfc-98.html#rfc98"><span class="std std-ref">MS RFC 98: Label/Text Rendering Overhaul</span></a></p>
 </section>
 </section>
@@ -252,7 +257,7 @@ DanielM and JeffM</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -307,8 +312,8 @@ DanielM and JeffM</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Të drejta kopjimi</a> 2022, Open Source Geospatial Foundation.
-      Përditësuar së fundi më 2022-05-20.
-      Krijuar duke përdorur <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Përditësuar së fundi më 2022-09-13.
+      Krijuar duke përdorur <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

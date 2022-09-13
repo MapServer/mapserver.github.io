@@ -4,15 +4,17 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 135: MapServer 8.0 Config file &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 135: MapServer 8.0 Config file &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 136: Rename shp2img to map2img" href="ms-rfc-136.html" />
     <link rel="prev" title="MS RFC 134: OGC API Support" href="ms-rfc-134.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,32 +148,36 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-135-mapserver-8-0-config-file">
-<span id="rfc135"></span><h1>MS RFC 135: MapServer 8.0 Config file<a class="headerlink" href="#ms-rfc-135-mapserver-8-0-config-file" title="Lien permanent vers ce titre">¶</a></h1>
+<span id="rfc135"></span><h1>MS RFC 135: MapServer 8.0 Config file<a class="headerlink" href="#ms-rfc-135-mapserver-8-0-config-file" title="Lien permanent vers cette rubrique">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Steve Lime</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="mailto:steve&#46;lime&#37;&#52;&#48;state&#46;mn&#46;us">steve<span>&#46;</span>lime<span>&#64;</span>state<span>&#46;</span>mn<span>&#46;</span>us</a></p>
 </dd>
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Jeff McKenna</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="mailto:jmckenna&#37;&#52;&#48;gatewaygeomatics&#46;com">jmckenna<span>&#64;</span>gatewaygeomatics<span>&#46;</span>com</a></p>
 </dd>
-<dt class="field-odd">Status</dt>
-<dd class="field-odd"><p>In progress</p>
+<dt class="field-odd">Status<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Adopted</p>
 </dd>
-<dt class="field-even">Last update</dt>
-<dd class="field-even"><p>2021-08-30</p>
+<dt class="field-even">Last update<span class="colon">:</span></dt>
+<dd class="field-even"><p>2021-10-19</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 8.0</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This document is outdated, please follow the official document: <a class="reference internal" href="../../mapfile/config.html#config"><span class="std std-ref">CONFIG</span></a></p>
+</div>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Lien permanent vers cette rubrique">¶</a></h2>
 <p>Securing the MapServer CGI application requires setting environment variables
 at the web server level. While not particularly difficult it does require access
 to web server configuration files and the approach can vary greatly from platform
@@ -188,40 +197,40 @@ and error prone. This approach largely abandons environment variables with one
 notable exception described below.</p>
 </section>
 <section id="proposed-approach">
-<h2>Proposed Approach<a class="headerlink" href="#proposed-approach" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Proposed Approach<a class="headerlink" href="#proposed-approach" title="Lien permanent vers cette rubrique">¶</a></h2>
 <p>We propose introducing a MapServer config file (basically an <em>ini</em> file) that is
 loaded by the MapServer CGI at runtime and provides site-level configuration
 apart from what is done with a mapfile.</p>
 <section id="identifying-the-config-file">
-<h3>Identifying the Config File<a class="headerlink" href="#identifying-the-config-file" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Identifying the Config File<a class="headerlink" href="#identifying-the-config-file" title="Lien permanent vers cette rubrique">¶</a></h3>
 <p>At present, a single environment variable (<cite>MAPSERVER_CONFIG_FILE</cite>) is referenced
 to determine what config file to load. While it’s somewhat ironic to propose using
 an environment variable to specify a configuration file that avoids setting
 environment variables, in this instance the approach allows different deployments
 (vhosts) on the same server to operate under different configs.</p>
 <p>In addition, a default location/filename (e.g. <cite>${install dir}/etc/mapserver.conf</cite>)
-is supported and set at compile time. This can be overriden by the user at compile
+is supported and set at compile time. This can be overridden by the user at compile
 time using the <cite>-DMAPSERVER_CONFIG_FILE</cite> flag. Precedence is the environment
 variable then the default. If neither are available (and valid, see below) then
 MapServer will refuse to run.</p>
 </section>
 <section id="processing-the-config-file">
-<h3>Processing the Config File<a class="headerlink" href="#processing-the-config-file" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Processing the Config File<a class="headerlink" href="#processing-the-config-file" title="Lien permanent vers cette rubrique">¶</a></h3>
 <p>The config file would look similar to a mapfile with familiar <cite>SECTION … END</cite>
 constructs. In fact, we can use the existing lexer to process the file without
 incurring the overhead of adding another parser or dependencies on other libraries.
-The <cite>configObj</cite> stucture is basically just a series of hashes (<cite>hashObj</cite>) used to
+The <cite>configObj</cite> structure is basically just a series of hashes (<cite>hashObj</cite>) used to
 group similar configuration elements. Currently it consists of:</p>
 <ul class="simple">
 <li><dl class="field-list simple">
-<dt class="field-odd">ENV</dt>
+<dt class="field-odd">ENV<span class="colon">:</span></dt>
 <dd class="field-odd"><p>references to the various environment variables currently supports
 (e.g. <cite>MS_MAP_NO_PATH</cite>)</p>
 </dd>
 </dl>
 </li>
 <li><dl class="field-list simple">
-<dt class="field-odd">MAPS</dt>
+<dt class="field-odd">MAPS<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a curated list of mapfiles available identified by a key. If <cite>MS_MAP_NO_PATH</cite>
 is set then only those keys can be used with the CGI map parameter. This
 is currently supported via environment variables.</p>
@@ -229,7 +238,7 @@ is currently supported via environment variables.</p>
 </dl>
 </li>
 <li><dl class="field-list simple">
-<dt class="field-odd">PLUGINS</dt>
+<dt class="field-odd">PLUGINS<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a curated list of plugins list of plugins identified by a key. This is
 new functionality.</p>
 </dd>
@@ -240,7 +249,7 @@ new functionality.</p>
 configuration information is held.</p>
 </section>
 <section id="relationship-to-the-mapfile">
-<h3>Relationship to the Mapfile<a class="headerlink" href="#relationship-to-the-mapfile" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Relationship to the Mapfile<a class="headerlink" href="#relationship-to-the-mapfile" title="Lien permanent vers cette rubrique">¶</a></h3>
 <p>The current proof of concept implementation requires the config file. Upon successful
 loading of both the config and the map files the <cite>configObj</cite> is added to the <cite>mapObj</cite>
 as a read-only member so that it can be referenced as necessary. Destroying the <cite>mapObj</cite>
@@ -250,7 +259,7 @@ does not destroy the <cite>configObj</cite>, that is done separately.</p>
 might be one solution (thanks Even!).</p>
 </section>
 <section id="file-definition">
-<h3>File Definition<a class="headerlink" href="#file-definition" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>File Definition<a class="headerlink" href="#file-definition" title="Lien permanent vers cette rubrique">¶</a></h3>
 <div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="cp">#</span>
 <span class="cp"># Example Config File</span>
 <span class="cp">#</span>
@@ -271,7 +280,7 @@ might be one solution (thanks Even!).</p>
 </div>
 </section>
 <section id="mapscript-support">
-<h3>MapScript Support<a class="headerlink" href="#mapscript-support" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>MapScript Support<a class="headerlink" href="#mapscript-support" title="Lien permanent vers cette rubrique">¶</a></h3>
 <p>This is primarily a resource to support the configuration of the MapServer CGI
 application. However, there may be circumstances where it makes sense for MapScript
 to leverage the configuration. For example, if we require plugins to be registered
@@ -289,10 +298,10 @@ So for example:</p>
 </div>
 </section>
 <section id="new-source-files">
-<h3>New Source Files<a class="headerlink" href="#new-source-files" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>New Source Files<a class="headerlink" href="#new-source-files" title="Lien permanent vers cette rubrique">¶</a></h3>
 <ul class="simple">
 <li><dl class="field-list simple">
-<dt class="field-odd">mapserv-config.cpp/mapserv-config.h</dt>
+<dt class="field-odd">mapserv-config.cpp/mapserv-config.h<span class="colon">:</span></dt>
 <dd class="field-odd"><p>core implementation, defines loading
 function and helper functions (e.g.
 msConfigGetEnv()).</p>
@@ -302,40 +311,40 @@ msConfigGetEnv()).</p>
 </ul>
 </section>
 <section id="source-files-changed">
-<h3>Source Files Changed<a class="headerlink" href="#source-files-changed" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Source Files Changed<a class="headerlink" href="#source-files-changed" title="Lien permanent vers cette rubrique">¶</a></h3>
 <ul class="simple">
 <li><dl class="field-list simple">
-<dt class="field-odd">mapserv.c</dt>
+<dt class="field-odd">mapserv.c<span class="colon">:</span></dt>
 <dd class="field-odd"><p>load config file, abort if not found.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="field-list simple">
-<dt class="field-odd">mapserver.h</dt>
+<dt class="field-odd">mapserver.h<span class="colon">:</span></dt>
 <dd class="field-odd"><p>add config member to mapObj struct.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="field-list simple">
-<dt class="field-odd">mapfile.c</dt>
+<dt class="field-odd">mapfile.c<span class="colon">:</span></dt>
 <dd class="field-odd"><p>initialize config member of mapObj struct to NULL.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="field-list simple">
-<dt class="field-odd">mapservutil.c</dt>
+<dt class="field-odd">mapservutil.c<span class="colon">:</span></dt>
 <dd class="field-odd"><p>msCGILoadMap() uses msConfigGetEnv() instead of getenv(); adds configObj reference to mapObj.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="field-list simple">
-<dt class="field-odd">mapscript/swiginc/config.i</dt>
+<dt class="field-odd">mapscript/swiginc/config.i<span class="colon">:</span></dt>
 <dd class="field-odd"><p>basic Swig wrapper for a configObj.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="field-list simple">
-<dt class="field-odd">mapscript/swiginc/map.i</dt>
+<dt class="field-odd">mapscript/swiginc/map.i<span class="colon">:</span></dt>
 <dd class="field-odd"><p>extend mapObj constructors to take optional configObj.</p>
 </dd>
 </dl>
@@ -343,10 +352,10 @@ msConfigGetEnv()).</p>
 </ul>
 </section>
 <section id="build-files-changed">
-<h3>Build Files Changed<a class="headerlink" href="#build-files-changed" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Build Files Changed<a class="headerlink" href="#build-files-changed" title="Lien permanent vers cette rubrique">¶</a></h3>
 <ul class="simple">
 <li><dl class="field-list simple">
-<dt class="field-odd">CMakeLists.txt</dt>
+<dt class="field-odd">CMakeLists.txt<span class="colon">:</span></dt>
 <dd class="field-odd"><p>typical integration of new source files.</p>
 </dd>
 </dl>
@@ -355,13 +364,13 @@ msConfigGetEnv()).</p>
 </section>
 </section>
 <section id="limitations-caveats">
-<h2>Limitations/Caveats<a class="headerlink" href="#limitations-caveats" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Limitations/Caveats<a class="headerlink" href="#limitations-caveats" title="Lien permanent vers cette rubrique">¶</a></h2>
 <ul class="simple">
 <li><p>TBD</p></li>
 </ul>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Lien permanent vers cette rubrique">¶</a></h2>
 <p>This proposal requires the use of a config file for all CGI/FastCGI execution.
 This will change the installation and setup process a bit. However, functional
 changes should be relatively limited.</p>
@@ -371,23 +380,29 @@ changes should be relatively limited.</p>
 </div></blockquote>
 </section>
 <section id="security-considerations">
-<h2>Security Considerations<a class="headerlink" href="#security-considerations" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Security Considerations<a class="headerlink" href="#security-considerations" title="Lien permanent vers cette rubrique">¶</a></h2>
 <p>The intention is to improve overall security and ease of configuration. Config
 files would need to stored in trusted locations with access limited to appropriate
 individuals.</p>
 </section>
 <section id="performance-implications">
-<h2>Performance Implications<a class="headerlink" href="#performance-implications" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Performance Implications<a class="headerlink" href="#performance-implications" title="Lien permanent vers cette rubrique">¶</a></h2>
 <p>The config file will have to be read and processed incurring a bit of overhead.
 Although given the I/O associated with a typical MapServer request we would expect
 the impact to be relatively small.</p>
 </section>
 <section id="ticket-id-and-references">
-<h2>Ticket ID and References<a class="headerlink" href="#ticket-id-and-references" title="Lien permanent vers ce titre">¶</a></h2>
+<h2>Ticket ID and References<a class="headerlink" href="#ticket-id-and-references" title="Lien permanent vers cette rubrique">¶</a></h2>
 <ul class="simple">
 <li><p>Pull request <a class="reference external" href="https://github.com/MapServer/MapServer/pull/6303">#6303</a></p></li>
 <li><p>Proof-of-concept <a class="reference external" href="https://github.com/sdlime/mapserver/tree/config">branch</a></p></li>
 </ul>
+</section>
+<section id="voting-history">
+<h2>Voting history<a class="headerlink" href="#voting-history" title="Lien permanent vers cette rubrique">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">+</span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">SteveL</span><span class="p">,</span> <span class="n">JukkaR</span><span class="p">,</span> <span class="n">MikeS</span><span class="p">,</span> <span class="n">JeromeB</span><span class="p">,</span> <span class="n">SethG</span><span class="p">,</span> <span class="n">TomK</span><span class="p">,</span> <span class="n">JeffM</span><span class="p">,</span> <span class="n">DanielM</span><span class="p">,</span> <span class="n">ThomasB</span><span class="p">,</span> <span class="n">EvenR</span>
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -407,7 +422,7 @@ the impact to be relatively small.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -439,6 +454,7 @@ the impact to be relatively small.</p>
 <li><a class="reference internal" href="#security-considerations">Security Considerations</a></li>
 <li><a class="reference internal" href="#performance-implications">Performance Implications</a></li>
 <li><a class="reference internal" href="#ticket-id-and-references">Ticket ID and References</a></li>
+<li><a class="reference internal" href="#voting-history">Voting history</a></li>
 </ul>
 </li>
 </ul>
@@ -467,8 +483,8 @@ the impact to be relatively small.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Mis à jour le 2022-05-20.
-      Créé en utilisant <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Mis à jour le 2022-09-13.
+      Créé en utilisant <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

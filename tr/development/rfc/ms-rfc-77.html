@@ -4,15 +4,17 @@
 <html lang="tr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 77: Support for Multiple Label Objects Within a Class &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 77: Support for Multiple Label Objects Within a Class &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 78: Vector Field Rendering (CONNECTIONTYPE UVRASTER)" href="ms-rfc-78.html" />
     <link rel="prev" title="MS RFC 76: Adding License Metadata to Output Images" href="ms-rfc-76.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,26 +148,26 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-77-support-for-multiple-label-objects-within-a-class">
-<h1>MS RFC 77: Support for Multiple Label Objects Within a Class<a class="headerlink" href="#ms-rfc-77-support-for-multiple-label-objects-within-a-class" title="Bu başlık için kalıcı bağlantı">¶</a></h1>
+<h1>MS RFC 77: Support for Multiple Label Objects Within a Class<a class="headerlink" href="#ms-rfc-77-support-for-multiple-label-objects-within-a-class" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2011/10/01</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Steve Lime, Thomas Bonfort</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p>sdlime at comcast.net,</p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Adopted on 2011-12-15</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 6.2</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>1. Overview<a class="headerlink" href="#overview" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>1. Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>This RFC proposes allowing for the definition of multiple label objects within a class. There are a number of use cases
 where this would be valuable.</p>
 <ul class="simple">
@@ -174,10 +179,10 @@ where this would be valuable.</p>
 place each piece of text separately. This is inefficient and does not allow for group label collision avoidance.</p>
 </section>
 <section id="proposed-technical-change">
-<h2>2. Proposed Technical Change<a class="headerlink" href="#proposed-technical-change" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>2. Proposed Technical Change<a class="headerlink" href="#proposed-technical-change" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="core-object-changes">
-<h2>2.1 Core Object Changes<a class="headerlink" href="#core-object-changes" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>2.1 Core Object Changes<a class="headerlink" href="#core-object-changes" title="Permalink to this heading">¶</a></h2>
 <p>Class object would need to support multiple label objects in much the same way as the they support multiple styles. In
 fact, implementation would follow the styleObj pattern.</p>
 <p>A key requirement is that the extra labels be self-contained, that is, they need to allow for the definition of label
@@ -205,10 +210,10 @@ discussion below) just like the styles attribute currently supported. A label co
 text to be drawn will be carried in a label the text attribute can be removed.</p>
 </section>
 <section id="label-rendering-changes">
-<h2>2.2 Label Rendering Changes<a class="headerlink" href="#label-rendering-changes" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>2.2 Label Rendering Changes<a class="headerlink" href="#label-rendering-changes" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="point-and-polygon-labels">
-<h2>2.2.1 Point and Polygon Labels<a class="headerlink" href="#point-and-polygon-labels" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>2.2.1 Point and Polygon Labels<a class="headerlink" href="#point-and-polygon-labels" title="Permalink to this heading">¶</a></h2>
 <p>The labeling of point and polygon features is done based on a single computed label point. Multiple labels within a classObj
 will be applied to a label point as a group, that is, all label text must be placed successfully or the entire group will not
 be drawn. In this case a new function, msAddLabelGroup() is available to add all labels from a class to the label cache as
@@ -222,7 +227,7 @@ scale will set labeltext=NULL and will not be drawn although others in the group
 text (label-&gt;mindistance).</p>
 </section>
 <section id="line-labels">
-<h2>2.2.2 Line Labels<a class="headerlink" href="#line-labels" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>2.2.2 Line Labels<a class="headerlink" href="#line-labels" title="Permalink to this heading">¶</a></h2>
 <p>Line labeling is another story. Lines often are used to derive curved text, repeating labels and sometimes both. In this case
 a single feature might contribute dozens of labels to the cache. It is impractical to handle these as we would a point or
 polygon with a single label point. A for more common use will be to label a line with multiple names or a combination of a
@@ -232,7 +237,7 @@ but with an added loop to process multiple labels if available.</p>
 scope of this work.</p>
 </section>
 <section id="mapscript">
-<h2>2.3 MapScript<a class="headerlink" href="#mapscript" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>2.3 MapScript<a class="headerlink" href="#mapscript" title="Permalink to this heading">¶</a></h2>
 <p>Class objects will need support for labels similar to what is in place for styles. Presently a classObj supports the following
 methods: getStyle, insertStyle, removeStyle, moveStyleUp and moveStyleDown. We propose adding label equivalents for the first
 three (label order is not nearly as import as style order).</p>
@@ -240,10 +245,10 @@ three (label order is not nearly as import as style order).</p>
 immutable. Further work needs to be done to understand if this represents a regression.</p>
 </section>
 <section id="implementation-details">
-<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="files-affected">
-<h2>3.1. Files Affected<a class="headerlink" href="#files-affected" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>3.1. Files Affected<a class="headerlink" href="#files-affected" title="Permalink to this heading">¶</a></h2>
 <p>Change lis limited primarily to:</p>
 <ul class="simple">
 <li><p>mapserver.h: core structure changes</p></li>
@@ -256,18 +261,18 @@ immutable. Further work needs to be done to understand if this represents a regr
 <p>Various other files see small changes with the change in classObj from one label to many.</p>
 </section>
 <section id="documentation-changes">
-<h2>3.2 Documentation Changes<a class="headerlink" href="#documentation-changes" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>3.2 Documentation Changes<a class="headerlink" href="#documentation-changes" title="Permalink to this heading">¶</a></h2>
 <p>Documentation for classObj (labels 0 .. n) and labelObj (text and expression) will need update. MapScript documentation will
 need changes to document new methods and the change in object hierarchy between classes and labels. Mapfile XML file must
 be changed as well. A number of test cases will added to the MapServer regression test suite- all existing labeling tests
 should continue to be useful.</p>
 </section>
 <section id="bug-id">
-<h2>3.3 Bug ID<a class="headerlink" href="#bug-id" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>3.3 Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this heading">¶</a></h2>
 <p>#4127. Work is underway in a sandbox (<a class="reference external" href="http://svn.osgeo.org/mapserver/sandbox/sdlime/rfc-77/">http://svn.osgeo.org/mapserver/sandbox/sdlime/rfc-77/</a>).</p>
 </section>
 <section id="configuration-examples">
-<h2>4 Configuration Examples<a class="headerlink" href="#configuration-examples" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>4 Configuration Examples<a class="headerlink" href="#configuration-examples" title="Permalink to this heading">¶</a></h2>
 <p>Adding optional text below other text:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LABELITEM</span> <span class="s1">&#39;item1&#39;</span>
 <span class="n">CLASS</span>
@@ -288,12 +293,12 @@ should continue to be useful.</p>
 </div>
 </section>
 <section id="backwards-compatibility">
-<h2>5. Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>5. Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="Permalink to this heading">¶</a></h2>
 <p>At the mapfile level there are no issues, existing mapfiles should run without any change. It is possible that this could
 introduce regressions within MapScript although the scope is not fully known.</p>
 </section>
 <section id="relationship-to-other-outstanding-label-bugs">
-<h2>5.1 Relationship to Other Outstanding Label Bugs<a class="headerlink" href="#relationship-to-other-outstanding-label-bugs" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>5.1 Relationship to Other Outstanding Label Bugs<a class="headerlink" href="#relationship-to-other-outstanding-label-bugs" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>#1355 - None, test is valid w/grouped labels too.</p></li>
 <li><p>#2866 - None.</p></li>
@@ -305,13 +310,13 @@ introduce regressions within MapScript although the scope is not fully known.</p
 </ul>
 </section>
 <section id="enhancements">
-<h2>6. Enhancements<a class="headerlink" href="#enhancements" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>6. Enhancements<a class="headerlink" href="#enhancements" title="Permalink to this heading">¶</a></h2>
 <p>Although beyond the scope of this work it seems that some interesting work related to the relative placement of grouped
 labels might be possible. For example, it could be useful to define positions relative to the previous label instead of
 relative to a label point.</p>
 </section>
 <section id="voting-history">
-<h2>7. Voting history<a class="headerlink" href="#voting-history" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>7. Voting history<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
 <p>Adopted on 12-15-2011 with +1 from SteveL, DanM, JeffM, ThomasB, SteveW, HowardW.</p>
 </section>
 </section>
@@ -332,7 +337,7 @@ relative to a label point.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -391,8 +396,8 @@ relative to a label point.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Telif hakkı</a> 2022, Open Source Geospatial Foundation.
-      Son güncelleme: 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Son güncelleme: 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

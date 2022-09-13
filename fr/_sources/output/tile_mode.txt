@@ -99,6 +99,11 @@ buffer will be applied at the meta-tile level.
         "tile_metatile_level" "0"
       END #metadata
     END #web
+    
+.. tip::
+    Since MapServer 8.0, the *tile_map_edge_buffer* metadata can also be used in
+    WMS GetMap requests, by adding the vendor-specific parameter *TILED=TRUE* 
+    to your GetMap request. 
 
 .. note::
     The MapServer 7.6.2 release included a memory leak fix for *mode=tile* 
@@ -122,7 +127,11 @@ The MapServer tile support adds three new directives to the CGI interface:
   
   - tile=10231 tells the server what tile you want to retrieve, using
     the Bing Maps (formerly "Virtual Earth") tile addressing system
-    
+
+The optional TILESIZE=width+height query parameter (added in MapServer 8.0) can be
+used to override the default tile size of 256x256 pixels, typically to get
+high DPI tiles.
+
 A valid mode=tile request might therefore look like:
 
 ::
@@ -131,7 +140,7 @@ A valid mode=tile request might therefore look like:
        MAP=/ms4w/apps/local-demo/local.map
        &MODE=tile
        &TILEMODE=gmap
-       &TILE=0+0+0       
+       &TILE=0+0+0
        &LAYERS=countries
        
 which results in a 256x256 tile (notice that it is in the Google Mercator projection, 

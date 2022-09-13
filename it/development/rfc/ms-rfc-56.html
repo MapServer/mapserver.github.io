@@ -4,15 +4,17 @@
 <html lang="it">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 56: Tighten control of access to mapfiles and templates &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 56: Tighten control of access to mapfiles and templates &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 57: Labeling enhancements: ability to repeat labels along a line/multiline" href="ms-rfc-57.html" />
     <link rel="prev" title="MS RFC 55: Improve control of output resolution" href="ms-rfc-55.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,38 +148,38 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-56-tighten-control-of-access-to-mapfiles-and-templates">
-<span id="rfc56"></span><h1>MS RFC 56: Tighten control of access to mapfiles and templates<a class="headerlink" href="#ms-rfc-56-tighten-control-of-access-to-mapfiles-and-templates" title="Link a questa intestazione">¶</a></h1>
+<span id="rfc56"></span><h1>MS RFC 56: Tighten control of access to mapfiles and templates<a class="headerlink" href="#ms-rfc-56-tighten-control-of-access-to-mapfiles-and-templates" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Authors</dt>
+<dt class="field-odd">Authors<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Daniel Morissette</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p>dmorissette at mapgears.com</p>
 </dd>
-<dt class="field-odd">Authors</dt>
+<dt class="field-odd">Authors<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Steve Lime</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p>steve.lime at dnr.state.mn.us</p>
 </dd>
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Jeff McKenna</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p>jmckenna at gatewaygeomatics.com</p>
 </dd>
-<dt class="field-odd">Status</dt>
+<dt class="field-odd">Status<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Adopted and implemented on 2009-03-26</p>
 </dd>
-<dt class="field-even">Version</dt>
+<dt class="field-even">Version<span class="colon">:</span></dt>
 <dd class="field-even"><p>MapServer 5.4.0, 5.2.2, and 4.10.4.</p>
 </dd>
-<dt class="field-odd">Last Updated</dt>
+<dt class="field-odd">Last Updated<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2021-03-27</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link a questa intestazione">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>MapServer versions 5.2.1 and older could potentially be used to access
 arbitrary files via the creation of mapfiles or templates in untrusted
 directories.</p>
@@ -190,7 +195,7 @@ are listed in the document: <a class="reference internal" href="../../optimizati
 </div>
 </section>
 <section id="technical-solution">
-<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Link a questa intestazione">¶</a></h2>
+<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Permalink to this heading">¶</a></h2>
 <p>The following mechanisms will be put in place:</p>
 <ul class="simple">
 <li><p>Enforce the requirement for the MAP keyword at the beginning of mapfiles
@@ -208,7 +213,7 @@ by the mapserv CGI:</p>
 sections.</p>
 </section>
 <section id="enforce-the-requirement-for-the-map-and-symbolset-keywords">
-<h2>Enforce the requirement for the MAP and SYMBOLSET keywords<a class="headerlink" href="#enforce-the-requirement-for-the-map-and-symbolset-keywords" title="Link a questa intestazione">¶</a></h2>
+<h2>Enforce the requirement for the MAP and SYMBOLSET keywords<a class="headerlink" href="#enforce-the-requirement-for-the-map-and-symbolset-keywords" title="Permalink to this heading">¶</a></h2>
 <p>The MAP and SYMBOLSET keywords used to be optional at the beginning of
 mapfiles and symbolsets respectively.</p>
 <p>With this change, the MAP keyword will be required on the first line of
@@ -217,7 +222,7 @@ files.</p>
 <p>If the keyword is missing then the parser will reject the file.</p>
 </section>
 <section id="require-a-magic-string-at-the-beginning-of-all-mapserver-templates">
-<h2>Require a Magic String at the beginning of all MapServer templates<a class="headerlink" href="#require-a-magic-string-at-the-beginning-of-all-mapserver-templates" title="Link a questa intestazione">¶</a></h2>
+<h2>Require a Magic String at the beginning of all MapServer templates<a class="headerlink" href="#require-a-magic-string-at-the-beginning-of-all-mapserver-templates" title="Permalink to this heading">¶</a></h2>
 <p>With this change, the first line of a template must contain the «MapServer
 Template» magic string which can be surrounded by comment delimiters in the
 format of the template to facilitate template editing (see examples below).
@@ -275,7 +280,7 @@ MapServer.</p>
 </div>
 </section>
 <section id="ms-map-pattern-environment-variable">
-<h2>MS_MAP_PATTERN Environment Variable<a class="headerlink" href="#ms-map-pattern-environment-variable" title="Link a questa intestazione">¶</a></h2>
+<h2>MS_MAP_PATTERN Environment Variable<a class="headerlink" href="#ms-map-pattern-environment-variable" title="Permalink to this heading">¶</a></h2>
 <p>The optional <em>MS_MAP_PATTERN</em> environment variable, set via mod_env or other
 web server equivalents, can be used to specify a Regular Expression that
 must be matched by all mapfile paths passed to the mapserv CGI.</p>
@@ -305,7 +310,7 @@ directory traversing:</p>
 </ul>
 </section>
 <section id="ms-map-no-path-environment-variable">
-<h2>MS_MAP_NO_PATH Environment Variable<a class="headerlink" href="#ms-map-no-path-environment-variable" title="Link a questa intestazione">¶</a></h2>
+<h2>MS_MAP_NO_PATH Environment Variable<a class="headerlink" href="#ms-map-no-path-environment-variable" title="Permalink to this heading">¶</a></h2>
 <p>The optional <em>MS_MAP_NO_PATH</em> environment variable can be set to any value
 via mod_env or other web server equivalents to forbid the use of explicit
 paths in the map=… URL parameter. Setting <em>MS_MAP_NO_PATH</em> to <strong>any value</strong>
@@ -324,7 +329,7 @@ map=… parameter:</p>
 </div>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link a questa intestazione">¶</a></h2>
+<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h2>
 <p>The MAP and SYMBOLSET keywords must be added to any mapfile and
 symbolset that did not contain them already.</p>
 <p>All MapServer templates must be updated to contain the «MapServer
@@ -333,7 +338,7 @@ Template» magic string on the first line.</p>
 existing applications that don’t use them.</p>
 </section>
 <section id="files-impacted">
-<h2>Files Impacted<a class="headerlink" href="#files-impacted" title="Link a questa intestazione">¶</a></h2>
+<h2>Files Impacted<a class="headerlink" href="#files-impacted" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>mapserver.h</p></li>
 <li><p>maptemplate.c</p></li>
@@ -341,7 +346,7 @@ existing applications that don’t use them.</p>
 </ul>
 </section>
 <section id="ticket-id">
-<h2>Ticket Id<a class="headerlink" href="#ticket-id" title="Link a questa intestazione">¶</a></h2>
+<h2>Ticket Id<a class="headerlink" href="#ticket-id" title="Permalink to this heading">¶</a></h2>
 <p>Related security tickets:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/2939">https://github.com/MapServer/MapServer/issues/2939</a></p></li>
@@ -352,7 +357,7 @@ existing applications that don’t use them.</p>
 </ul>
 </section>
 <section id="voting-history">
-<h2>Voting History<a class="headerlink" href="#voting-history" title="Link a questa intestazione">¶</a></h2>
+<h2>Voting History<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
 <p>Adopted on 2009-03-26 with +1 from DanielM, TomK, PericlesN, JeffM, SteveW, AssefaY, SteveL and TamasS.</p>
 </section>
 </section>
@@ -373,7 +378,7 @@ existing applications that don’t use them.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -426,8 +431,8 @@ existing applications that don’t use them.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Ultimo aggiornamento 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Ultimo aggiornamento 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

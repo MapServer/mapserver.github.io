@@ -4,15 +4,17 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 76: Adding License Metadata to Output Images &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 76: Adding License Metadata to Output Images &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 77: Support for Multiple Label Objects Within a Class" href="ms-rfc-77.html" />
     <link rel="prev" title="MS RFC 75: INSPIRE view service support" href="ms-rfc-75.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,37 +148,37 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-76-adding-license-metadata-to-output-images">
-<span id="rfc76"></span><h1>MS RFC 76: Adding License Metadata to Output Images<a class="headerlink" href="#ms-rfc-76-adding-license-metadata-to-output-images" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="rfc76"></span><h1>MS RFC 76: Adding License Metadata to Output Images<a class="headerlink" href="#ms-rfc-76-adding-license-metadata-to-output-images" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2011/06/22</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Paul Ramsey</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pramsey at opengeo.org</p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Passed</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 6.2</p>
 </dd>
 </dl>
 <p>Description: This RFC proposes allowing XML metadata information to be embedded in MapServer output images. The use case is for any organization producing maps that wishes to embed licensing and authorship information directly in the output images.</p>
 <section id="overview">
-<h2>1. Overview<a class="headerlink" href="#overview" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>XMP is the &quot;extensible metadata platform&quot; <a class="footnote-reference brackets" href="#id13" id="id1">1</a> which allows the embedding of metadata information across a wide range of document and image formats: PNG, GIF, JPEG, PDF, etc. XMP was originally developed by Adobe <a class="footnote-reference brackets" href="#id14" id="id2">2</a> and is supported across their product line. It is now being increasingly included in other standards for metadata embedding and supported by tools for viewing image information (e.g. exiftools). Creative Commons has standards for using XMP to embed commons licensing <a class="footnote-reference brackets" href="#id15" id="id3">3</a> in images and other document, including a specific Creative Commons schema.</p>
+<h2>1. Overview<a class="headerlink" href="#overview" title="この見出しへのパーマリンク">¶</a></h2>
+<p>XMP is the &quot;extensible metadata platform&quot; <a class="footnote-reference brackets" href="#id13" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> which allows the embedding of metadata information across a wide range of document and image formats: PNG, GIF, JPEG, PDF, etc. XMP was originally developed by Adobe <a class="footnote-reference brackets" href="#id14" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> and is supported across their product line. It is now being increasingly included in other standards for metadata embedding and supported by tools for viewing image information (e.g. exiftools). Creative Commons has standards for using XMP to embed commons licensing <a class="footnote-reference brackets" href="#id15" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> in images and other document, including a specific Creative Commons schema.</p>
 <p>One of the challenges of advertising licensing and terms of use in WMS and other web mapping services is that the terms are usually advertised separately from the actual content. So a WMS service might specify terms in the Capabilities document, but the images themselves will be unmarked. Embedding license URLs inside the images themselves using a standard markup allows organizations to be unambiguous about the conditions attached to their content.</p>
 <p>The goal of this change is to allow users the option of embedding XMP metadata in their MapServer output using an Open Source XMP utility library.</p>
 </section>
 <section id="proposed-technical-change">
-<h2>2. Proposed Technical Change<a class="headerlink" href="#proposed-technical-change" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>2. Proposed Technical Change<a class="headerlink" href="#proposed-technical-change" title="この見出しへのパーマリンク">¶</a></h2>
 </section>
 <section id="driver-support">
-<h2>2.1. Driver Support<a class="headerlink" href="#driver-support" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>libexempi <a class="footnote-reference brackets" href="#id16" id="id4">4</a> provides a standard C interface for reading and writing XMP content from multiple image formats. One limitation of libexempi (and all other XMP libraries we investigated) is that it only works on existing files. That means that any image that is going to be tagged with metadata must be written to the disk first. Fortunately the GDAL image driver already writes a temporary file to disk for every request, so we propose that XMP support be available only when using the GDAL output format driver.</p>
+<h2>2.1. Driver Support<a class="headerlink" href="#driver-support" title="この見出しへのパーマリンク">¶</a></h2>
+<p>libexempi <a class="footnote-reference brackets" href="#id16" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> provides a standard C interface for reading and writing XMP content from multiple image formats. One limitation of libexempi (and all other XMP libraries we investigated) is that it only works on existing files. That means that any image that is going to be tagged with metadata must be written to the disk first. Fortunately the GDAL image driver already writes a temporary file to disk for every request, so we propose that XMP support be available only when using the GDAL output format driver.</p>
 <p>For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">OUTPUTFORMAT</span>
   <span class="n">NAME</span> <span class="n">png</span>
@@ -187,20 +192,20 @@
 <p>The XMP metadata embedding code will be called in msSaveImageGDAL just before the temporary file is streamed back to the client.</p>
 </section>
 <section id="map-file-configuration">
-<h2>2.2. Map File Configuration<a class="headerlink" href="#map-file-configuration" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>2.2. Map File Configuration<a class="headerlink" href="#map-file-configuration" title="この見出しへのパーマリンク">¶</a></h2>
 <p>Metadata information is written per-image, so will be stored in the METADATA block of the WEB object in the MAP file.</p>
 <p>The metadata key for each tag will have the form &quot;xmp_&lt;namespace&gt;_&lt;tag&gt;&quot;, so for example: &quot;xmp_dc_Title&quot;, for the Dublin Core title.</p>
 <p>Eight namespaces will be supported by default:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>&quot;meta&quot; which is the standard XMP tag set <a class="footnote-reference brackets" href="#id17" id="id5">5</a></p></li>
-<li><p>&quot;cc&quot; which is the Creative Commons tag set <a class="footnote-reference brackets" href="#id18" id="id6">6</a></p></li>
-<li><p>&quot;dc&quot; which is the Dublin Core tag set <a class="footnote-reference brackets" href="#id19" id="id7">7</a></p></li>
-<li><p>&quot;rights&quot; which is the standard XMP Rights tag set <a class="footnote-reference brackets" href="#id20" id="id8">8</a></p></li>
-<li><p>&quot;exif&quot; which is the EXIF tags set <a class="footnote-reference brackets" href="#id21" id="id9">9</a></p></li>
-<li><p>&quot;tiff&quot; which is the TIFF tags set <a class="footnote-reference brackets" href="#id22" id="id10">10</a></p></li>
-<li><p>&quot;crs&quot; which is the Photoshop Camera Raw Schema <a class="footnote-reference brackets" href="#id23" id="id11">11</a></p></li>
-<li><p>&quot;photoshop&quot; which is the Photoshop tag set <a class="footnote-reference brackets" href="#id24" id="id12">12</a></p></li>
+<li><p>&quot;meta&quot; which is the standard XMP tag set <a class="footnote-reference brackets" href="#id17" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a></p></li>
+<li><p>&quot;cc&quot; which is the Creative Commons tag set <a class="footnote-reference brackets" href="#id18" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a></p></li>
+<li><p>&quot;dc&quot; which is the Dublin Core tag set <a class="footnote-reference brackets" href="#id19" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a></p></li>
+<li><p>&quot;rights&quot; which is the standard XMP Rights tag set <a class="footnote-reference brackets" href="#id20" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a></p></li>
+<li><p>&quot;exif&quot; which is the EXIF tags set <a class="footnote-reference brackets" href="#id21" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></a></p></li>
+<li><p>&quot;tiff&quot; which is the TIFF tags set <a class="footnote-reference brackets" href="#id22" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></a></p></li>
+<li><p>&quot;crs&quot; which is the Photoshop Camera Raw Schema <a class="footnote-reference brackets" href="#id23" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></a></p></li>
+<li><p>&quot;photoshop&quot; which is the Photoshop tag set <a class="footnote-reference brackets" href="#id24" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>12<span class="fn-bracket">]</span></a></p></li>
 </ul>
 </div></blockquote>
 <p>Within those names spaces, users can specify any tag. The MapServer code will not check that the tags are valid for the namespace, that responsibility will fall to the user.</p>
@@ -241,14 +246,14 @@
 </div>
 </section>
 <section id="build-configuration">
-<h2>2.3. Build Configuration<a class="headerlink" href="#build-configuration" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>2.3. Build Configuration<a class="headerlink" href="#build-configuration" title="この見出しへのパーマリンク">¶</a></h2>
 <p>XMP metadata support will require the presence of the libexempi library. The library must be requested or pointed to directly to using the --with-exempi=[yes|no|path] configuration option in the ./configure script.  If --with-exempi is not used, XMP metadata support will not be enabled.</p>
 </section>
 <section id="implementation-details">
-<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="この見出しへのパーマリンク">¶</a></h2>
 </section>
 <section id="files-affected">
-<h2>3.1. Files Affected<a class="headerlink" href="#files-affected" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>3.1. Files Affected<a class="headerlink" href="#files-affected" title="この見出しへのパーマリンク">¶</a></h2>
 <p>The following files will be modified for this RFC:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Makefile</span><span class="o">.</span><span class="ow">in</span>
 <span class="n">Makefile</span><span class="o">.</span><span class="n">vc</span>
@@ -260,19 +265,19 @@
 </div>
 </section>
 <section id="bug-id">
-<h2>3.2. Bug ID<a class="headerlink" href="#bug-id" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>3.2. Bug ID<a class="headerlink" href="#bug-id" title="この見出しへのパーマリンク">¶</a></h2>
 <p>The ticket for RFC 76 (containing proof-of-concept code) can be found here (Bug <a class="reference external" href="https://github.com/MapServer/MapServer/issues/3932">3932</a>).</p>
 </section>
 <section id="documentation">
-<h2>3.3. Documentation<a class="headerlink" href="#documentation" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>3.3. Documentation<a class="headerlink" href="#documentation" title="この見出しへのパーマリンク">¶</a></h2>
 <p>Documentation for this feature will be added to the appropriate map file documentation (metadata keywords) and a separate howto document will be created explaining XMP metadata.</p>
 </section>
 <section id="enhancements">
-<h2>4. Enhancements<a class="headerlink" href="#enhancements" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>4. Enhancements<a class="headerlink" href="#enhancements" title="この見出しへのパーマリンク">¶</a></h2>
 <p>The ability to use the XMP facility across output drivers would be desirable, but that requires intercepting the image before it is streamed to the user and writing it to disk to allow the exempi library to alter the metadata. For GDAL, the write-to-disk step is already part of the output sequence. Other drivers stream their output direct to stdout.</p>
 </section>
 <section id="voting-history">
-<h2>5. Voting history<a class="headerlink" href="#voting-history" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>5. Voting history<a class="headerlink" href="#voting-history" title="この見出しへのパーマリンク">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   <span class="n">Steve</span> <span class="n">Lime</span>
 <span class="o">+</span><span class="mi">1</span> <span class="n">Daniel</span> <span class="n">Morissette</span>
 <span class="o">+</span><span class="mi">1</span> <span class="n">Frank</span> <span class="n">Warmerdam</span>
@@ -289,44 +294,56 @@
 <span class="o">+</span><span class="mi">1</span> <span class="n">Mike</span> <span class="n">Smith</span>
 </pre></div>
 </div>
-<dl class="footnote brackets">
-<dt class="label" id="id13"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
-<dd><p><a class="reference external" href="http://en.wikipedia.org/wiki/Extensible_Metadata_Platform">http://en.wikipedia.org/wiki/Extensible_Metadata_Platform</a></p>
-</dd>
-<dt class="label" id="id14"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
-<dd><p><a class="reference external" href="http://www.adobe.com/products/xmp/overview.html">http://www.adobe.com/products/xmp/overview.html</a></p>
-</dd>
-<dt class="label" id="id15"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
-<dd><p><a class="reference external" href="http://wiki.creativecommons.org/XMP">http://wiki.creativecommons.org/XMP</a></p>
-</dd>
-<dt class="label" id="id16"><span class="brackets"><a class="fn-backref" href="#id4">4</a></span></dt>
-<dd><p><a class="reference external" href="http://libopenraw.freedesktop.org/wiki/Exempi">http://libopenraw.freedesktop.org/wiki/Exempi</a></p>
-</dd>
-<dt class="label" id="id17"><span class="brackets"><a class="fn-backref" href="#id5">5</a></span></dt>
-<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmp">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmp</a></p>
-</dd>
-<dt class="label" id="id18"><span class="brackets"><a class="fn-backref" href="#id6">6</a></span></dt>
-<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#cc">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#cc</a></p>
-</dd>
-<dt class="label" id="id19"><span class="brackets"><a class="fn-backref" href="#id7">7</a></span></dt>
-<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#dc">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#dc</a></p>
-</dd>
-<dt class="label" id="id20"><span class="brackets"><a class="fn-backref" href="#id8">8</a></span></dt>
-<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmpRights">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmpRights</a></p>
-</dd>
-<dt class="label" id="id21"><span class="brackets"><a class="fn-backref" href="#id9">9</a></span></dt>
-<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#exif">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#exif</a></p>
-</dd>
-<dt class="label" id="id22"><span class="brackets"><a class="fn-backref" href="#id10">10</a></span></dt>
-<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#tiff">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#tiff</a></p>
-</dd>
-<dt class="label" id="id23"><span class="brackets"><a class="fn-backref" href="#id11">11</a></span></dt>
-<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#crs">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#crs</a></p>
-</dd>
-<dt class="label" id="id24"><span class="brackets"><a class="fn-backref" href="#id12">12</a></span></dt>
-<dd><p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#photoshop">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#photoshop</a></p>
-</dd>
-</dl>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id13" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="http://en.wikipedia.org/wiki/Extensible_Metadata_Platform">http://en.wikipedia.org/wiki/Extensible_Metadata_Platform</a></p>
+</aside>
+<aside class="footnote brackets" id="id14" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="http://www.adobe.com/products/xmp/overview.html">http://www.adobe.com/products/xmp/overview.html</a></p>
+</aside>
+<aside class="footnote brackets" id="id15" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="http://wiki.creativecommons.org/XMP">http://wiki.creativecommons.org/XMP</a></p>
+</aside>
+<aside class="footnote brackets" id="id16" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="http://libopenraw.freedesktop.org/wiki/Exempi">http://libopenraw.freedesktop.org/wiki/Exempi</a></p>
+</aside>
+<aside class="footnote brackets" id="id17" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">5</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmp">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmp</a></p>
+</aside>
+<aside class="footnote brackets" id="id18" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">6</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#cc">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#cc</a></p>
+</aside>
+<aside class="footnote brackets" id="id19" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id7">7</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#dc">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#dc</a></p>
+</aside>
+<aside class="footnote brackets" id="id20" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id8">8</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmpRights">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#xmpRights</a></p>
+</aside>
+<aside class="footnote brackets" id="id21" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id9">9</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#exif">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#exif</a></p>
+</aside>
+<aside class="footnote brackets" id="id22" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id10">10</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#tiff">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#tiff</a></p>
+</aside>
+<aside class="footnote brackets" id="id23" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id11">11</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#crs">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#crs</a></p>
+</aside>
+<aside class="footnote brackets" id="id24" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id12">12</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#photoshop">http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/XMP.html#photoshop</a></p>
+</aside>
+</aside>
 </section>
 </section>
 
@@ -346,7 +363,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -400,8 +417,8 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      最終更新: 2022-05-20
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      最終更新: 2022-09-13
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

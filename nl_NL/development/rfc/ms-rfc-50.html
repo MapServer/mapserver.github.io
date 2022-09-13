@@ -4,15 +4,17 @@
 <html lang="nl_NL">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 50: OpenGL Rendering Support &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 50: OpenGL Rendering Support &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     
     <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
@@ -23,6 +25,9 @@
     <link rel="next" title="MS RFC 51: XML Mapfile Format" href="ms-rfc-51.html" />
     <link rel="prev" title="MS RFC 49: Symbology, Labeling, and Cartography Improvements" href="ms-rfc-49.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -142,26 +147,26 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-50-opengl-rendering-support">
-<span id="rfc50"></span><h1>MS RFC 50: OpenGL Rendering Support<a class="headerlink" href="#ms-rfc-50-opengl-rendering-support" title="Permalink naar deze titel">¶</a></h1>
+<span id="rfc50"></span><h1>MS RFC 50: OpenGL Rendering Support<a class="headerlink" href="#ms-rfc-50-opengl-rendering-support" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2008/12/23</p>
 </dd>
-<dt class="field-even">Authors</dt>
+<dt class="field-even">Authors<span class="colon">:</span></dt>
 <dd class="field-even"><p>Toby Rahilly, Jonathan Bourke</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p>toby.rahilly at gmail.com. bourke.jf at gmail.com</p>
 </dd>
-<dt class="field-even">Last Edited</dt>
+<dt class="field-even">Last Edited<span class="colon">:</span></dt>
 <dd class="field-even"><p>2008/12/23</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 5.4</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink naar deze titel">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>This RFC proposes the addition of an Opengl Rendering module to MapServer for
 faster rendering of images.</p>
 <p>Presently MapServer supports AGG rendering for high quality anti-aliased images.
@@ -174,7 +179,7 @@ Opengl prototypes are capable of rendering maps an order of magnitude faster
 than AGG with similar image quality.</p>
 </section>
 <section id="technical-solution">
-<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Permalink naar deze titel">¶</a></h2>
+<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Permalink to this heading">¶</a></h2>
 <p>The Opengl rendering module interface and path will be very similar to the
 current AGG rendering module. Like AGG, the Opengl module will make use of GD
 for I/O of the results. However due to the nature of Opengl there are a few key
@@ -200,7 +205,7 @@ video memory. This means the image must be rendered into video memory in
 OpengGL, then copied to the GD image buffer before saving the result.</p>
 </section>
 <section id="c-api-changes">
-<h2>C API Changes<a class="headerlink" href="#c-api-changes" title="Permalink naar deze titel">¶</a></h2>
+<h2>C API Changes<a class="headerlink" href="#c-api-changes" title="Permalink to this heading">¶</a></h2>
 <p>As the Opengl module follows very closely to the AGG implementation, very little
 change has to be made to the core of MapServer. Minor changes are made to the
 following files to add a rendering path for Opengl:</p>
@@ -218,7 +223,7 @@ following files to add a rendering path for Opengl:</p>
 <p>The bulk of Opengl functionality will be found in mapogl.cpp.</p>
 </section>
 <section id="mapfiles">
-<h2>Mapfiles<a class="headerlink" href="#mapfiles" title="Permalink naar deze titel">¶</a></h2>
+<h2>Mapfiles<a class="headerlink" href="#mapfiles" title="Permalink to this heading">¶</a></h2>
 <p>An output block like this will trigger Opengl rendering:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">OUTPUTFORMAT</span>
   <span class="n">NAME</span> <span class="s1">&#39;OGL_PNG24&#39;</span>
@@ -229,7 +234,7 @@ following files to add a rendering path for Opengl:</p>
 </div>
 </section>
 <section id="issues">
-<h2>Issues<a class="headerlink" href="#issues" title="Permalink naar deze titel">¶</a></h2>
+<h2>Issues<a class="headerlink" href="#issues" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>The guts of opengl rendering occurs inside of opengl drivers. Opengl drivers
 vary from hardware and operating system, and the rendering techniques vary with
@@ -241,15 +246,15 @@ implementation for pre-vista windows.</p></li>
 </ul>
 </section>
 <section id="documentation">
-<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink naar deze titel">¶</a></h2>
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">¶</a></h2>
 <p>TBD</p>
 </section>
 <section id="backwards-incompatibility">
-<h2>Backwards Incompatibility<a class="headerlink" href="#backwards-incompatibility" title="Permalink naar deze titel">¶</a></h2>
+<h2>Backwards Incompatibility<a class="headerlink" href="#backwards-incompatibility" title="Permalink to this heading">¶</a></h2>
 <p>No issues expected.</p>
 </section>
 <section id="bug-id">
-<h2>Bug ID<a class="headerlink" href="#bug-id" title="Permalink naar deze titel">¶</a></h2>
+<h2>Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this heading">¶</a></h2>
 <p>Not assigned.</p>
 </section>
 </section>
@@ -270,7 +275,7 @@ implementation for pre-vista windows.</p></li>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -321,8 +326,8 @@ implementation for pre-vista windows.</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Laatste aanpassing op 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

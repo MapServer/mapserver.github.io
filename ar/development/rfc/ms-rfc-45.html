@@ -4,15 +4,17 @@
 <html lang="ar">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 45: Symbology, Labeling, and Cartography Improvements &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 45: Symbology, Labeling, and Cartography Improvements &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 46: Migrate Website to OSGeo" href="ms-rfc-46.html" />
     <link rel="prev" title="MS RFC 44: Restore URL modification of mapfiles to pre-5.0 levels" href="ms-rfc-44.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,28 +148,28 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-45-symbology-labeling-and-cartography-improvements">
-<span id="rfc45"></span><h1>MS RFC 45: Symbology, Labeling, and Cartography Improvements<a class="headerlink" href="#ms-rfc-45-symbology-labeling-and-cartography-improvements" title="Permalink to this headline">¶</a></h1>
+<span id="rfc45"></span><h1>MS RFC 45: Symbology, Labeling, and Cartography Improvements<a class="headerlink" href="#ms-rfc-45-symbology-labeling-and-cartography-improvements" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2008/08/26</p>
 </dd>
-<dt class="field-even">Authors</dt>
+<dt class="field-even">Authors<span class="colon">:</span></dt>
 <dd class="field-even"><p>Stephen Lime, Håvard Tveite, Thomas Bonfort</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Steve.Lime at DNR.State.MN.US</p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Adopted</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 5.4</p>
 </dd>
 </dl>
 <p>(<em>partiallly derived in part from a document prepared by Håvard and
 discussions with other developers working on cartographic output</em>)</p>
 <section id="scale-dependent-rendering">
-<h2>Scale Dependent Rendering<a class="headerlink" href="#scale-dependent-rendering" title="Permalink to this headline">¶</a></h2>
+<h2>Scale Dependent Rendering<a class="headerlink" href="#scale-dependent-rendering" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>All symbols can be scaled. When SYMBOLSCALEDENOM is given for a layer, the
 layer and all of its symbols (height, width, line widths, line patterns, line
@@ -178,11 +183,11 @@ symbol will never be rendered smaller/larger than the given sizes.</p></li>
 </ul>
 </section>
 <section id="precise-symbol-placement">
-<h2>Precise Symbol Placement<a class="headerlink" href="#precise-symbol-placement" title="Permalink to this headline">¶</a></h2>
+<h2>Precise Symbol Placement<a class="headerlink" href="#precise-symbol-placement" title="Permalink to this heading">¶</a></h2>
 <p>Harmonize the placement of symbols relative to the feature (point or line)
 being drawn.</p>
 <section id="fractional-values-for-sizes">
-<h3>Fractional values for sizes<a class="headerlink" href="#fractional-values-for-sizes" title="Permalink to this headline">¶</a></h3>
+<h3>Fractional values for sizes<a class="headerlink" href="#fractional-values-for-sizes" title="Permalink to this heading">¶</a></h3>
 <p>All symbols sizes and symbol geometries should be specified and
 represented as double - AGG supports fractional line widths so users
 should be able to set them explicitly. GD could either round or
@@ -199,7 +204,7 @@ truncate/cast the double to an int.</p>
 </ul>
 </section>
 <section id="center-origin-x-y">
-<h3>CENTER/ORIGIN [x y]<a class="headerlink" href="#center-origin-x-y" title="Permalink to this headline">¶</a></h3>
+<h3>CENTER/ORIGIN [x y]<a class="headerlink" href="#center-origin-x-y" title="Permalink to this heading">¶</a></h3>
 <p>Defines the centre of the symbol using decimal pixels (x axis increasing to
 the right, y axis increasing downwards).</p>
 <ul>
@@ -215,7 +220,7 @@ the right, y axis increasing downwards).</p>
 </ul>
 </section>
 <section id="angle-double-attribute-default-clockwise-compass">
-<h3>ANGLE [double|attribute] [DEFAULT|CLOCKWISE|COMPASS]<a class="headerlink" href="#angle-double-attribute-default-clockwise-compass" title="Permalink to this headline">¶</a></h3>
+<h3>ANGLE [double|attribute] [DEFAULT|CLOCKWISE|COMPASS]<a class="headerlink" href="#angle-double-attribute-default-clockwise-compass" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>STYLE-&gt; ANGLE [double|attribute] [DEFAULT|CLOCKWISE|COMPASS]</p></li>
 <li><p>LABEL-&gt; ANGLE [double|auto|follow|attribute] [DEFAULT|CLOCKWISE|COMPASS]</p></li>
@@ -231,7 +236,7 @@ of rotation/direction is needed.</p>
 If possible, something like:</p>
 </section>
 <section id="modes-of-operation">
-<h3>Modes of operation<a class="headerlink" href="#modes-of-operation" title="Permalink to this headline">¶</a></h3>
+<h3>Modes of operation<a class="headerlink" href="#modes-of-operation" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>DEFAULT reference direction to the right (east), counter-clockwise direction
 of rotation.</p></li>
@@ -242,7 +247,7 @@ rotation.</p></li>
 </ul>
 </section>
 <section id="behavior">
-<h3>Behavior<a class="headerlink" href="#behavior" title="Permalink to this headline">¶</a></h3>
+<h3>Behavior<a class="headerlink" href="#behavior" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>For symbols of Type HATCH, this is the angle of the hatched lines.</p></li>
 <li><p>For points, this specifies the rotation of a symbol around its defined
@@ -257,23 +262,23 @@ examples.</p></li>
 </ul>
 </section>
 <section id="stable-rendering-for-tile-generation">
-<h3>Stable rendering for tile generation<a class="headerlink" href="#stable-rendering-for-tile-generation" title="Permalink to this headline">¶</a></h3>
+<h3>Stable rendering for tile generation<a class="headerlink" href="#stable-rendering-for-tile-generation" title="Permalink to this heading">¶</a></h3>
 <p><em>how and with what keywords?</em></p>
 </section>
 <section id="polygon-fill-symbols">
-<h3>polygon fill symbols<a class="headerlink" href="#polygon-fill-symbols" title="Permalink to this headline">¶</a></h3>
+<h3>polygon fill symbols<a class="headerlink" href="#polygon-fill-symbols" title="Permalink to this heading">¶</a></h3>
 <p>give hatches and vector fills a stable geographical coordinate origin (0,0) to
 better support tiling and continuous rendering of neighbouring polygons</p>
 </section>
 <section id="labeling">
-<h3>labeling<a class="headerlink" href="#labeling" title="Permalink to this headline">¶</a></h3>
+<h3>labeling<a class="headerlink" href="#labeling" title="Permalink to this heading">¶</a></h3>
 <p>TODO</p>
 </section>
 </section>
 <section id="keywords-moved-from-symbol-to-style">
-<h2>Keywords moved from SYMBOL to STYLE<a class="headerlink" href="#keywords-moved-from-symbol-to-style" title="Permalink to this headline">¶</a></h2>
+<h2>Keywords moved from SYMBOL to STYLE<a class="headerlink" href="#keywords-moved-from-symbol-to-style" title="Permalink to this heading">¶</a></h2>
 <section id="fixme-gap-double-end">
-<h3>FIXME GAP [double]+ END<a class="headerlink" href="#fixme-gap-double-end" title="Permalink to this headline">¶</a></h3>
+<h3>FIXME GAP [double]+ END<a class="headerlink" href="#fixme-gap-double-end" title="Permalink to this heading">¶</a></h3>
 <p>Gap between point symbols when rendered on a linear geometry (used eg. for
 shields)</p>
 <ul>
@@ -298,7 +303,7 @@ a way that the symbol's x-axis is directed along the line.</p>
 </ul>
 </section>
 <section id="dashpattern-double-on-double-off-end">
-<h3>DASHPATTERN ([double on] [double off])+ END<a class="headerlink" href="#dashpattern-double-on-double-off-end" title="Permalink to this headline">¶</a></h3>
+<h3>DASHPATTERN ([double on] [double off])+ END<a class="headerlink" href="#dashpattern-double-on-double-off-end" title="Permalink to this heading">¶</a></h3>
 <ul>
 <li><p>renamed from STYLE</p></li>
 <li><p>the distances are scaled</p>
@@ -310,16 +315,16 @@ a way that the symbol's x-axis is directed along the line.</p>
 </ul>
 </section>
 <section id="more-to-come">
-<h3>more to come?<a class="headerlink" href="#more-to-come" title="Permalink to this headline">¶</a></h3>
+<h3>more to come?<a class="headerlink" href="#more-to-come" title="Permalink to this heading">¶</a></h3>
 </section>
 </section>
 <section id="add-minscaledenom-maxscaledenom-parameters-to-styleobj">
-<h2>add MINSCALEDENOM/MAXSCALEDENOM parameters to styleObj<a class="headerlink" href="#add-minscaledenom-maxscaledenom-parameters-to-styleobj" title="Permalink to this headline">¶</a></h2>
+<h2>add MINSCALEDENOM/MAXSCALEDENOM parameters to styleObj<a class="headerlink" href="#add-minscaledenom-maxscaledenom-parameters-to-styleobj" title="Permalink to this heading">¶</a></h2>
 <p>this would allow doing things like removing outlines or the hollow portions of
 &quot;tube&quot; line work based on scale.</p>
 </section>
 <section id="add-labelmethod-to-layerobj">
-<h2>add LABELMETHOD to layerObj<a class="headerlink" href="#add-labelmethod-to-layerobj" title="Permalink to this headline">¶</a></h2>
+<h2>add LABELMETHOD to layerObj<a class="headerlink" href="#add-labelmethod-to-layerobj" title="Permalink to this heading">¶</a></h2>
 <p>(or perhaps just method to labelObj?)</p>
 <ul class="simple">
 <li><p>this would allow users to choose label placement algorithms that meet their
@@ -330,12 +335,12 @@ box center is perfectly adequate.</p></li>
 </ul>
 </section>
 <section id="add-label-to-layersobj">
-<h2>add LABEL to layersObj<a class="headerlink" href="#add-label-to-layersobj" title="Permalink to this headline">¶</a></h2>
+<h2>add LABEL to layersObj<a class="headerlink" href="#add-label-to-layersobj" title="Permalink to this heading">¶</a></h2>
 <p>so that a default can be defined for all classes (sort of like templates). A
 class label would take precedent.</p>
 </section>
 <section id="add-outlinewidth-to-styleobj">
-<h2>add OUTLINEWIDTH to styleObj<a class="headerlink" href="#add-outlinewidth-to-styleobj" title="Permalink to this headline">¶</a></h2>
+<h2>add OUTLINEWIDTH to styleObj<a class="headerlink" href="#add-outlinewidth-to-styleobj" title="Permalink to this heading">¶</a></h2>
 <p>eg for drawing road lines with a cached outline</p>
 <ul class="simple">
 <li><p>It is currently impossible to have scale dependent road networks with a fixed
@@ -345,7 +350,7 @@ networks, without having to specify two style blocks.</p></li>
 </ul>
 </section>
 <section id="add-type-to-styleobj-for-line-and-polygon-types">
-<h2>add TYPE to styleObj for line and polygon types<a class="headerlink" href="#add-type-to-styleobj-for-line-and-polygon-types" title="Permalink to this headline">¶</a></h2>
+<h2>add TYPE to styleObj for line and polygon types<a class="headerlink" href="#add-type-to-styleobj-for-line-and-polygon-types" title="Permalink to this heading">¶</a></h2>
 <p>modifies how the current shape is interpreted. Applies to line and polygon
 layers (for now: any ideas for applying this to point layers?)</p>
 <ul>
@@ -365,7 +370,7 @@ used for example to add arrowheads to lines
 </ul>
 </section>
 <section id="files-affected">
-<h2>Files Affected<a class="headerlink" href="#files-affected" title="Permalink to this headline">¶</a></h2>
+<h2>Files Affected<a class="headerlink" href="#files-affected" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>maplexer.l: C4, C5</p></li>
 <li><p>mapgd.c: B1, C2, C3, C4</p></li>
@@ -376,7 +381,7 @@ used for example to add arrowheads to lines
 </ul>
 </section>
 <section id="bug-ids">
-<h2>Bug IDs<a class="headerlink" href="#bug-ids" title="Permalink to this headline">¶</a></h2>
+<h2>Bug IDs<a class="headerlink" href="#bug-ids" title="Permalink to this heading">¶</a></h2>
 <p>Individual modifications will be tracked with their own tickets which will
 be listed here.</p>
 <blockquote>
@@ -410,7 +415,7 @@ tile generation)</p></li>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -478,8 +483,8 @@ tile generation)</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html"> حقوق النشر </a> 2022, Open Source Geospatial Foundation
-      Last updated on 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Last updated on 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

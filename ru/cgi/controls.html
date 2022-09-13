@@ -4,15 +4,17 @@
 <html lang="ru">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MapServer CGI Controls &#8212; MapServer 7.6.4 documentation</title>
+    <title>MapServer CGI Controls &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/ribbon.css" />
     
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="Run-time Substitution" href="runsub.html" />
     <link rel="prev" title="Map Context Files" href="mapcontext.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -130,7 +135,7 @@
           <a href="mapcontext.html" title="Map Context Files"
              accesskey="P">назад</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.0 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">CGI</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">MapServer CGI Controls</a></li> 
       </ul>
@@ -143,9 +148,9 @@
           <div class="body" role="main">
             
   <section id="mapserver-cgi-controls">
-<span id="cgi-controls"></span><span id="index-0"></span><h1>MapServer CGI Controls<a class="headerlink" href="#mapserver-cgi-controls" title="Ссылка на этот заголовок">¶</a></h1>
+<span id="cgi-controls"></span><span id="index-0"></span><h1>MapServer CGI Controls<a class="headerlink" href="#mapserver-cgi-controls" title="Permalink to this heading">¶</a></h1>
 <section id="variables">
-<h2>Variables<a class="headerlink" href="#variables" title="Ссылка на этот заголовок">¶</a></h2>
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this heading">¶</a></h2>
 <p>Variable names are not case sensitive.</p>
 <dl class="simple" id="index-1">
 <dt>BUFFER [distance]</dt><dd><p>A distance, in the same coordinate system as the map file, used in
@@ -457,11 +462,29 @@ selection feature(s) are available for presentation to the user.</p>
 </dd>
 </dl>
 <dl class="simple" id="index-55">
+<dt>TILE [coord]</dt><dd><p>Used in MODE=TILE. Tile coordinates. See <a class="reference internal" href="../output/tile_mode.html#tile-mode"><span class="std std-ref">Tile Mode</span></a> for details.</p>
+</dd>
+</dl>
+<dl class="simple" id="index-56">
 <dt>TILEINDEX [index]</dt><dd><p>Used for index queries (in conjunction with INDEXQUERY), used with tiled
 shapefile layers.</p>
 </dd>
 </dl>
-<dl id="index-56">
+<dl class="simple" id="index-57">
+<dt>TILEMODE [mode]</dt><dd><p>Used in MODE=TILE. mode can be <cite>gmap</cite> (Google Maps) or <cite>ve</cite> (Bing Maps/Virtual Earth).
+See <a class="reference internal" href="../output/tile_mode.html#tile-mode"><span class="std std-ref">Tile Mode</span></a> for details.</p>
+</dd>
+</dl>
+<p id="index-58">TILESIZE [width] [height]</p>
+<blockquote>
+<div><div class="versionadded">
+<p><span class="versionmodified added">Добавлено в версии 8.0.</span></p>
+</div>
+<p>Used in MODE=TILE. width and height are the tile dimension in in pixels.
+If not specified, defaults to 256x256.
+See <a class="reference internal" href="../output/tile_mode.html#tile-mode"><span class="std std-ref">Tile Mode</span></a> for details.</p>
+</div></blockquote>
+<dl id="index-59">
 <dt>ZOOM [number]</dt><dd><p>Zoom scaling to apply to the creation of the new map. Values greater than
 0 resulting in zooming in, 0 is a pan, and values less than zero are for
 zooming out. A value of 2 means «zoom in twice».</p>
@@ -470,18 +493,18 @@ The zoom is limited by the MINZOOM/MAXZOOM settings compiled into the
 MapServer (-25/25) by default.</p>
 </dd>
 </dl>
-<dl class="simple" id="index-57">
+<dl class="simple" id="index-60">
 <dt>ZOOMDIR [1 | 0 | -1]</dt><dd><p>Direction to zoom. See above.</p>
 </dd>
 </dl>
-<dl id="index-58">
+<dl id="index-61">
 <dt>ZOOMSIZE [number]</dt><dd><p>Absolute magnitude of a zoom. Used with ZOOMDIR.</p>
 <p>ZOOMDIR is limited to MAXZOOM compiled into the MapServer (25 by default).</p>
 </dd>
 </dl>
 </section>
 <section id="changing-map-file-parameters-via-a-form-or-a-url">
-<span id="cgi-mapfile-change-parameters"></span><span id="index-59"></span><h2>Changing map file parameters via a form or a URL<a class="headerlink" href="#changing-map-file-parameters-via-a-form-or-a-url" title="Ссылка на этот заголовок">¶</a></h2>
+<span id="cgi-mapfile-change-parameters"></span><span id="index-62"></span><h2>Changing map file parameters via a form or a URL<a class="headerlink" href="#changing-map-file-parameters-via-a-form-or-a-url" title="Permalink to this heading">¶</a></h2>
 <p>Beginning with version 3.3 it is possible to change virtually any map
 file value from a form or a URL (see <a class="reference internal" href="runsub.html#runsub"><span class="std std-ref">Run-time Substitution</span></a>).  The syntax for
 this is fairly straightforward, and depends on what version of
@@ -495,8 +518,8 @@ run-time substition.  Try it out.</p>
 Within MapScript this is easy to do by yourself since the developer has
 complete control over how input is handled.</p>
 </div>
-<section id="using-mapserver-version-5">
-<h3>Using MapServer version &gt;= 5<a class="headerlink" href="#using-mapserver-version-5" title="Ссылка на этот заголовок">¶</a></h3>
+<section id="using-mapserver-version-8">
+<h3>Using MapServer version &lt;= 8<a class="headerlink" href="#using-mapserver-version-8" title="Permalink to this heading">¶</a></h3>
 <p>Previous versions of the MapServer CGI program allowed certain parameters
 to be changed via a URL using a cumbersome syntax such as
 map_layer_0_class_0_color=255+0+0 which changes the color in one classObj.
@@ -530,8 +553,8 @@ case of layerObj’s and classObj’s). The value is a snippet of a
 mapfile. You cannot create new objects other than inline features at
 this point.</p>
 </section>
-<section id="id1">
-<h3>Using MapServer version &lt; 5<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h3>
+<section id="using-mapserver-version-5">
+<h3>Using MapServer version &lt; 5<a class="headerlink" href="#using-mapserver-version-5" title="Permalink to this heading">¶</a></h3>
 <p>For MapServer version &lt; 5, any value can be expressed using the
 hierarchy used in a map file. A map contains a layer, which contains a
 class, which contains a label, which has a color. This hierarchy is
@@ -564,7 +587,7 @@ rectangle) amounts of data.</p>
 </section>
 </section>
 <section id="specifying-the-location-of-mapfiles-using-an-apache-variable">
-<span id="index-60"></span><h2>Specifying the location of mapfiles using an Apache variable<a class="headerlink" href="#specifying-the-location-of-mapfiles-using-an-apache-variable" title="Ссылка на этот заголовок">¶</a></h2>
+<span id="index-63"></span><h2>Specifying the location of mapfiles using an Apache variable<a class="headerlink" href="#specifying-the-location-of-mapfiles-using-an-apache-variable" title="Permalink to this heading">¶</a></h2>
 <p>Apache variables can be used to specify the location of map files
 (instead of exposing full mapfile paths to the outside world).</p>
 <ol class="arabic">
@@ -574,7 +597,7 @@ httpd.conf:</p>
 </pre></div>
 </div>
 </li>
-<li><p>Refer to the variable in the mapserver CGI URL:</p>
+<li><p>Refer to the variable in the MapServer CGI URL:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://localhost/cgi-bin/mapserv?map=MY_MAPFILE&amp;mode=...
 </pre></div>
 </div>
@@ -582,7 +605,7 @@ httpd.conf:</p>
 </ol>
 </section>
 <section id="rosa-applet-controls">
-<span id="index-61"></span><h2>ROSA-Applet Controls<a class="headerlink" href="#rosa-applet-controls" title="Ссылка на этот заголовок">¶</a></h2>
+<span id="index-64"></span><h2>ROSA-Applet Controls<a class="headerlink" href="#rosa-applet-controls" title="Permalink to this heading">¶</a></h2>
 <p><em>note: Active development and maintenance of the ROSA Applet has stopped</em></p>
 <p>The ROSA Applet parameters were added to the CGI MapServer in version 3.6.
 This Java Applet provides a more intuitive user interface to MapServer. The
@@ -592,7 +615,7 @@ values. Please note that the two parameters have to be handed over to te CGI
 application in the order identified below.</p>
 <dl class="simple">
 <dt>INPUT_TYPE (auto_rect | auto_point)</dt><dd><p>The INPUT_TYPE parameter is needed to identify if the coordinates handed
-over to the mapserver have to be interpreted as rectangular or point data.</p>
+over to MapServer have to be interpreted as rectangular or point data.</p>
 </dd>
 <dt>INPUT_COORD [minx,miny;maxx,maxy]</dt><dd><p>The ROSA-Applet always fills the pair of coordinates. In case of a point
 (input_type=auto_point) min and max coordinate are equal (MapServer
@@ -618,7 +641,7 @@ uses the min value).</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../about.html" title="About">About</a><br>
 <a href="../products.html" title="Products">Products</a><br>
@@ -635,8 +658,8 @@ uses the min value).</p>
 <li><a class="reference internal" href="#">MapServer CGI Controls</a><ul>
 <li><a class="reference internal" href="#variables">Variables</a></li>
 <li><a class="reference internal" href="#changing-map-file-parameters-via-a-form-or-a-url">Changing map file parameters via a form or a URL</a><ul>
-<li><a class="reference internal" href="#using-mapserver-version-5">Using MapServer version &gt;= 5</a></li>
-<li><a class="reference internal" href="#id1">Using MapServer version &lt; 5</a></li>
+<li><a class="reference internal" href="#using-mapserver-version-8">Using MapServer version &lt;= 8</a></li>
+<li><a class="reference internal" href="#using-mapserver-version-5">Using MapServer version &lt; 5</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#specifying-the-location-of-mapfiles-using-an-apache-variable">Specifying the location of mapfiles using an Apache variable</a></li>
@@ -662,15 +685,15 @@ uses the min value).</p>
           <a href="mapcontext.html" title="Map Context Files"
              >назад</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.0 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >CGI</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">MapServer CGI Controls</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Обновлено: 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Обновлено: 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

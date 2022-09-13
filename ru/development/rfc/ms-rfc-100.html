@@ -4,15 +4,17 @@
 <html lang="ru">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 100: Support for tile index with mixed SRS in raster layers &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 100: Support for tile index with mixed SRS in raster layers &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 101: Add Support for Content Dependent Legend Responses" href="ms-rfc-101.html" />
     <link rel="prev" title="MS RFC 99: Remove support for GD renderer" href="ms-rfc-99.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,26 +148,26 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-100-support-for-tile-index-with-mixed-srs-in-raster-layers">
-<span id="rfc100"></span><h1>MS RFC 100: Support for tile index with mixed SRS in raster layers<a class="headerlink" href="#ms-rfc-100-support-for-tile-index-with-mixed-srs-in-raster-layers" title="Ссылка на этот заголовок">¶</a></h1>
+<span id="rfc100"></span><h1>MS RFC 100: Support for tile index with mixed SRS in raster layers<a class="headerlink" href="#ms-rfc-100-support-for-tile-index-with-mixed-srs-in-raster-layers" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2013/07</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Even Rouault</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p>even dot rouault at mines-paris dot org</p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Implemented</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 6.4</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>1. Overview<a class="headerlink" href="#overview" title="Ссылка на этот заголовок">¶</a></h2>
+<h2>1. Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>Raster layers can directly connect to a GDAL dataset or through a tile index.
 But until now, the rasters in the same tile index should have identical SRS.</p>
 <p>For the sake of simplicity of the administration of MapServer mapfiles,
@@ -171,7 +176,7 @@ and/or to avoid unnecessary reprojections of rasters into a common SRS
 it is desirable to have support for tile index with rasters of heterogeneous SRS.</p>
 </section>
 <section id="proposed-solution">
-<h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Ссылка на этот заголовок">¶</a></h2>
+<h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Permalink to this heading">¶</a></h2>
 <p>In the case where a tile index has tiles with mixed SRS, a new keyword, TILESRS
 «field_name», must be added in a LAYER block to specify that the field
 «field_name» contains the SRS of each tile. The value of that field must be a
@@ -208,9 +213,9 @@ A new GDAL python sample script, wcs_virtds_params.py, will be added to ease the
 writing of such layers.</p>
 </section>
 <section id="implementation-details">
-<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Ссылка на этот заголовок">¶</a></h2>
+<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this heading">¶</a></h2>
 <section id="files-affected">
-<h3>3.1 Files affected<a class="headerlink" href="#files-affected" title="Ссылка на этот заголовок">¶</a></h3>
+<h3>3.1 Files affected<a class="headerlink" href="#files-affected" title="Permalink to this heading">¶</a></h3>
 <p>The main changes are in mapraster.c. Note that a code refactoring has been done
 to factor identical code found in msDrawRasterLayerLow() from mapraster.c and
 msRasterQueryByRect() from maprasterquery.c.</p>
@@ -231,22 +236,22 @@ add capability to get projection info from .prj file when PROJECTION = AUTO</p><
 </ul>
 </section>
 <section id="backwards-compatibility-issues">
-<h3>3.2 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Ссылка на этот заголовок">¶</a></h3>
+<h3>3.2 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h3>
 <p>None expected, new functionality.</p>
 </section>
 <section id="mapscript-changes">
-<h3>3.3 MapScript changes<a class="headerlink" href="#mapscript-changes" title="Ссылка на этот заголовок">¶</a></h3>
+<h3>3.3 MapScript changes<a class="headerlink" href="#mapscript-changes" title="Permalink to this heading">¶</a></h3>
 <p>None</p>
 </section>
 <section id="performance-implications">
-<h3>3.4 Performance implications<a class="headerlink" href="#performance-implications" title="Ссылка на этот заголовок">¶</a></h3>
+<h3>3.4 Performance implications<a class="headerlink" href="#performance-implications" title="Permalink to this heading">¶</a></h3>
 <p>Finding tiles that match the request window will be as fast as for tile index
 with same SRS. On-the-fly reprojection will only occur for tiles that intersect
 the request window. So the performance should be similar to current situations
 where a tile index with tiles in SRS=srs1 is requested with SRS=srs2.</p>
 </section>
 <section id="related-bug-fixes">
-<h3>3.5 Related bug fixes<a class="headerlink" href="#related-bug-fixes" title="Ссылка на этот заголовок">¶</a></h3>
+<h3>3.5 Related bug fixes<a class="headerlink" href="#related-bug-fixes" title="Permalink to this heading">¶</a></h3>
 <p>The following syntax did not work properly in layers that referred to a TILEINDEX.</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">PROJECTION</span>
     <span class="nb">AUTO</span>
@@ -266,12 +271,12 @@ resolve layer-&gt;projection to an actual projection when
 layer-&gt;projection.args[0] == «auto», before doing any reprojection.</p>
 </section>
 <section id="restrictions">
-<h3>3.6 Restrictions<a class="headerlink" href="#restrictions" title="Ссылка на этот заголовок">¶</a></h3>
+<h3>3.6 Restrictions<a class="headerlink" href="#restrictions" title="Permalink to this heading">¶</a></h3>
 <p>This RFC only implements TILESRS support for raster layers. Support in vector
 layers is out of scope.</p>
 </section>
 <section id="documentation">
-<h3>3.7 Documentation<a class="headerlink" href="#documentation" title="Ссылка на этот заголовок">¶</a></h3>
+<h3>3.7 Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">¶</a></h3>
 <dl class="simple">
 <dt>The following pages will be updated to document the TILESRS keyword :</dt><dd><ul class="simple">
 <li><p><a class="reference internal" href="../../optimization/tileindex.html#tileindex"><span class="std std-ref">Tile Indexes</span></a></p></li>
@@ -283,7 +288,7 @@ layers is out of scope.</p>
 </section>
 </section>
 <section id="bug-id">
-<h2>4. Bug ID<a class="headerlink" href="#bug-id" title="Ссылка на этот заголовок">¶</a></h2>
+<h2>4. Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Pull request: <a class="reference external" href="https://github.com/MapServer/MapServer/pull/4681">pull4681</a></p></li>
 <li><dl class="simple">
@@ -297,9 +302,9 @@ layers is out of scope.</p>
 </ul>
 </section>
 <section id="gdal-related-enhancements">
-<h2>5 GDAL related enhancements<a class="headerlink" href="#gdal-related-enhancements" title="Ссылка на этот заголовок">¶</a></h2>
+<h2>5 GDAL related enhancements<a class="headerlink" href="#gdal-related-enhancements" title="Permalink to this heading">¶</a></h2>
 <section id="gdaltindex">
-<h3>5.1 gdaltindex<a class="headerlink" href="#gdaltindex" title="Ссылка на этот заголовок">¶</a></h3>
+<h3>5.1 gdaltindex<a class="headerlink" href="#gdaltindex" title="Permalink to this heading">¶</a></h3>
 <p>The gdaltindex utility will be upgraded to add a -src_srs_name option that
 match with the value of the TILESRS keyword. It will also support created
 tileindex in all supported OGR formats with the -f option (up to now only
@@ -314,7 +319,7 @@ shapefile were supported).</p>
 </div>
 </section>
 <section id="wcs-virtds-params-py">
-<h3>5.2 wcs_virtds_params.py<a class="headerlink" href="#wcs-virtds-params-py" title="Ссылка на этот заголовок">¶</a></h3>
+<h3>5.2 wcs_virtds_params.py<a class="headerlink" href="#wcs-virtds-params-py" title="Permalink to this heading">¶</a></h3>
 <p>A sample script, wcs_virtds_params.py, will be added to generate the WCS
 layer definition from a tileindex with mixed SRS.</p>
 <p>Example for a shapefile tileindex :</p>
@@ -381,7 +386,7 @@ layer definition from a tileindex with mixed SRS.</p>
 </section>
 </section>
 <section id="voting-history">
-<h2>6. Voting history<a class="headerlink" href="#voting-history" title="Ссылка на этот заголовок">¶</a></h2>
+<h2>6. Voting history<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
 <p>Vote passed with +1 from ThomasB, StephenW, MichaelS, TamasS, StephanM,
 DanielM, JeffM and SteveL</p>
 </section>
@@ -403,7 +408,7 @@ DanielM, JeffM and SteveL</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -465,8 +470,8 @@ DanielM, JeffM and SteveL</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Обновлено: 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Обновлено: 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

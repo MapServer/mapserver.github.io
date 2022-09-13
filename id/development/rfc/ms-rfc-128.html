@@ -4,15 +4,17 @@
 <html lang="id">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 128: Make C99 and C++11 build requirements &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 128: Make C99 and C++11 build requirements &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 129: Update msautotest to use Pytest" href="ms-rfc-129.html" />
     <link rel="prev" title="MS RFC 127: Drop (broken) support for builds without GDAL and PROJ" href="ms-rfc-127.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,29 +148,29 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-128-make-c99-and-c-11-build-requirements">
-<span id="rfc128"></span><h1>MS RFC 128: Make C99 and C++11 build requirements<a class="headerlink" href="#ms-rfc-128-make-c99-and-c-11-build-requirements" title="Link permanen untuk headline ini">¶</a></h1>
+<span id="rfc128"></span><h1>MS RFC 128: Make C99 and C++11 build requirements<a class="headerlink" href="#ms-rfc-128-make-c99-and-c-11-build-requirements" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2019-12-02</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Even Rouault</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="mailto:even&#46;rouault&#37;&#52;&#48;spatialys&#46;com">even<span>&#46;</span>rouault<span>&#64;</span>spatialys<span>&#46;</span>com</a></p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Adopted</p>
 </dd>
-<dt class="field-odd">Last update</dt>
+<dt class="field-odd">Last update<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2019-12-11</p>
 </dd>
-<dt class="field-even">Version</dt>
+<dt class="field-even">Version<span class="colon">:</span></dt>
 <dd class="field-even"><p>MapServer 7.6</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link permanen untuk headline ini">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>MapServer currently requires C89 for its .c files and C++98/C++03 for its
 .cpp files. We propose to bump the requirements to C99 and C++11.</p>
 <p>This RFC is <em>not</em> about converting at once the whole code base to C99 or C++11,
@@ -177,7 +182,7 @@ the community at large that MapServer can embrace &quot;modern&quot; technologie
 (as far as one can consider standards of 9 or 20 years ago modern :-))</p>
 </section>
 <section id="rationale">
-<h2>Rationale<a class="headerlink" href="#rationale" title="Link permanen untuk headline ini">¶</a></h2>
+<h2>Rationale<a class="headerlink" href="#rationale" title="Permalink to this heading">¶</a></h2>
 <p>This has been discussed at length in projects that MapServer depends on, and
 which have already adopted the above requirements:</p>
 <ul class="simple">
@@ -187,7 +192,7 @@ which have already adopted the above requirements:</p>
 </ul>
 </section>
 <section id="proposed-solution">
-<h2>Proposed solution<a class="headerlink" href="#proposed-solution" title="Link permanen untuk headline ini">¶</a></h2>
+<h2>Proposed solution<a class="headerlink" href="#proposed-solution" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>In CMakeLists.txt, enforce C99 and C++11 requirements</p></li>
 <li><p>In CMakeLists.txt, bump minimum version of CMake to 3.0: this just reflects
@@ -197,7 +202,7 @@ mapscripts.</p></li>
 </ul>
 </section>
 <section id="narrowing-down-c-api">
-<h2>Narrowing down C API<a class="headerlink" href="#narrowing-down-c-api" title="Link permanen untuk headline ini">¶</a></h2>
+<h2>Narrowing down C API<a class="headerlink" href="#narrowing-down-c-api" title="Permalink to this heading">¶</a></h2>
 <p>mapserver.h exposes a (too) large amount of functions as exported, mostly
 in mapserver.h, but also in other headers.
 We believe that most of them are not intended for external consumption.
@@ -207,7 +212,7 @@ maintains for &quot;mapserver.h&quot; only points to MapCache as including mapse
 ( <a class="reference external" href="https://codesearch.debian.net/search?q=mapserver.h">https://codesearch.debian.net/search?q=mapserver.h</a> )</p>
 <p>We thus propose that removal of public symbols is permitted, provided that:</p>
 <ul class="simple">
-<li><p>MapServer binaries (mapserv, shp2img, etc...) and MapScript, which are the main
+<li><p>MapServer binaries (mapserv, map2img, etc...) and MapScript, which are the main
 users of the C API, still compile. If changes are needed in them and that they
 doesn't affect the user, they are permitted.</p></li>
 <li><p>MapCache still compiles. If changes would be needed in MapCache to compile,
@@ -215,7 +220,7 @@ this must be discussed.</p></li>
 </ul>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link permanen untuk headline ini">¶</a></h2>
+<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h2>
 <p>Obsolete environments where MapServer used to build and that have not natively
 C99 support or C++11 will need to upgrade their toolchain.</p>
 <p>On Windows side, this means Visual Studio 2015 or above.
@@ -225,24 +230,24 @@ have all the needed requirements. No change in the Travis and AppVeyor CI have
 been needed to make the below proposed implementation work.</p>
 </section>
 <section id="security-implications">
-<h2>Security implications<a class="headerlink" href="#security-implications" title="Link permanen untuk headline ini">¶</a></h2>
+<h2>Security implications<a class="headerlink" href="#security-implications" title="Permalink to this heading">¶</a></h2>
 <p>None.</p>
 </section>
 <section id="mapscript-implications">
-<h2>MapScript implications<a class="headerlink" href="#mapscript-implications" title="Link permanen untuk headline ini">¶</a></h2>
+<h2>MapScript implications<a class="headerlink" href="#mapscript-implications" title="Permalink to this heading">¶</a></h2>
 <p>None</p>
 </section>
 <section id="documentation-needs">
-<h2>Documentation needs<a class="headerlink" href="#documentation-needs" title="Link permanen untuk headline ini">¶</a></h2>
+<h2>Documentation needs<a class="headerlink" href="#documentation-needs" title="Permalink to this heading">¶</a></h2>
 <p><a class="reference external" href="https://mapserver.org/installation/unix.html">https://mapserver.org/installation/unix.html</a> and <a class="reference external" href="https://mapserver.org/installation/win32.html">https://mapserver.org/installation/win32.html</a>
 will need to mention the new build requirements</p>
 </section>
 <section id="ticket-id-and-references">
-<h2>Ticket ID and references<a class="headerlink" href="#ticket-id-and-references" title="Link permanen untuk headline ini">¶</a></h2>
+<h2>Ticket ID and references<a class="headerlink" href="#ticket-id-and-references" title="Permalink to this heading">¶</a></h2>
 <p>Pull request available at: <a class="reference external" href="https://github.com/MapServer/MapServer/pull/5939">https://github.com/MapServer/MapServer/pull/5939</a></p>
 </section>
 <section id="voting-history">
-<h2>Voting history<a class="headerlink" href="#voting-history" title="Link permanen untuk headline ini">¶</a></h2>
+<h2>Voting history<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
 <p>Adopted with +1 from PSC members SethG, EvenR, MichaelS, JeffM, SteveL, JukkaR,
 DanielM, StephanS, TomK</p>
 </section>
@@ -264,7 +269,7 @@ DanielM, StephanS, TomK</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -317,8 +322,8 @@ DanielM, StephanS, TomK</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Hak cipta</a> 2022, Open Source Geospatial Foundation.
-      Terakhir diperbarui pada 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Terakhir diperbarui pada 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

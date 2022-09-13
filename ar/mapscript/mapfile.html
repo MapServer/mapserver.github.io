@@ -4,15 +4,17 @@
 <html lang="ar">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Mapfile Manipulation &#8212; MapServer 7.6.4 documentation</title>
+    <title>Mapfile Manipulation &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/ribbon.css" />
     
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/translations.js"></script>
     
@@ -22,8 +24,11 @@
     <link rel="search" title="بحث" href="../search.html" />
     <link rel="copyright" title="الحقوق" href="../copyright.html" />
     <link rel="next" title="Querying" href="querying.html" />
-    <link rel="prev" title="Python MapScript Image Generation" href="imagery.html" /> 
+    <link rel="prev" title="MapScript Image Generation" href="imagery.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -127,10 +132,10 @@
           <a href="querying.html" title="Querying"
              accesskey="N">التالي</a> |</li>
         <li class="right" >
-          <a href="imagery.html" title="Python MapScript Image Generation"
+          <a href="imagery.html" title="MapScript Image Generation"
              accesskey="P">السابق</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.0 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapScript</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Mapfile Manipulation</a></li> 
       </ul>
@@ -143,13 +148,22 @@
           <div class="body" role="main">
             
   <span class="target" id="index-0"></span><section id="mapfile-manipulation">
-<h1><a class="toc-backref" href="#id1">Mapfile Manipulation</a><a class="headerlink" href="#mapfile-manipulation" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id1" role="doc-backlink">Mapfile Manipulation</a><a class="headerlink" href="#mapfile-manipulation" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Sean Gillies</p>
 </dd>
+<dt class="field-even">Author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Seth Girvin</p>
+</dd>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sethg at geographika.co.uk</p>
+</dd>
+<dt class="field-even">Last Updated<span class="colon">:</span></dt>
+<dd class="field-even"><p>2021-05-22</p>
+</dd>
 </dl>
-<div class="contents topic" id="id1">
+<nav class="contents" id="id1">
 <p class="topic-title">المحتوى</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#mapfile-manipulation" id="id2">Mapfile Manipulation</a></p>
@@ -162,48 +176,47 @@
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <section id="introduction">
-<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
 <p>The MapScript HowTo docs are intended to complement the API reference with
 examples of usage for specific subjects.  All examples in this document refer
-to the mapfile and testing layers distributed with MapServer 4.2+ and found
-under mapserver/tests.</p>
-<section id="pseudocode">
-<h3>Pseudocode<a class="headerlink" href="#pseudocode" title="Permalink to this headline">¶</a></h3>
-<p>All examples will use a pseudocode that is consistent with the language
-independent API reference.  Each line is a statement. For object attributes
-and methods we use the dot, '.', operator.  Creation and deletion of objects
-will be indicated by 'new' and 'del' keywords.  Other than that, the
-pseudocode looks a lot like Python.</p>
-</section>
+to the Mapfile and testing layers distributed with MapServer and found in source control
+under <code class="docutils literal notranslate"><span class="pre">Mapserver/tests</span></code>.</p>
+<p>The examples below are written in Python. All MapScript languages use the
+same API, but will need to be rewritten using the relevant language's syntax.</p>
 </section>
 <section id="mapfile-overview">
-<h2><a class="toc-backref" href="#id1">Mapfile Overview</a><a class="headerlink" href="#mapfile-overview" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Mapfile Overview</a><a class="headerlink" href="#mapfile-overview" title="Permalink to this heading">¶</a></h2>
 <p>By &quot;Mapfile&quot; here, I mean all the elements that can occur in (nearly)
-arbitrary numbers within a MapScript mapObj: Layers, Classes, and Styles.
-MapServer 4.4 has greatly improved capability to manipulate these objects.</p>
+arbitrary numbers within a MapScript mapObj: Layers, Classes, and Styles.</p>
 </section>
 <section id="the-mapobj-class">
-<span id="index-1"></span><h2><a class="toc-backref" href="#id1">The mapObj Class</a><a class="headerlink" href="#the-mapobj-class" title="Permalink to this headline">¶</a></h2>
-<p>An instance of mapObj is a parent for zero to many layerObj children.</p>
+<span id="index-1"></span><h2><a class="toc-backref" href="#id1" role="doc-backlink">The mapObj Class</a><a class="headerlink" href="#the-mapobj-class" title="Permalink to this heading">¶</a></h2>
+<p>An instance of <a class="reference internal" href="mapscript-api/stub/mapscript.mapObj.html#mapscript.mapObj" title="mapscript.mapObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">mapObj</span></code></a> is a parent for zero to many <a class="reference internal" href="mapscript-api/stub/mapscript.layerObj.html#mapscript.layerObj" title="mapscript.layerObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">layerObj</span></code></a> children.</p>
 <section id="new-instances">
-<h3>New instances<a class="headerlink" href="#new-instances" title="Permalink to this headline">¶</a></h3>
-<p>The mapfile path argument to the mapscript.mapObj constructor is now optional</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">empty_map</span> <span class="o">=</span> <span class="n">new</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">mapObj</span>
+<h3>New instances<a class="headerlink" href="#new-instances" title="Permalink to this heading">¶</a></h3>
+<p>The mapfile path argument to the <a class="reference internal" href="mapscript-api/stub/mapscript.mapObj.html#mapscript.mapObj" title="mapscript.mapObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">mapObj</span></code></a> constructor is optional. The following
+generates a default mapObj with no layers.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">empty_map</span> <span class="o">=</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">mapObj</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>generates a default mapObj with no layers.  A mapObj is initialized from a
-mapfile on disk in the usual manner:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">test_map</span> <span class="o">=</span> <span class="n">new</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">mapObj</span><span class="p">(</span><span class="s1">&#39;tests/test.map&#39;</span><span class="p">)</span>
+<p>A <a class="reference internal" href="mapscript-api/stub/mapscript.mapObj.html#mapscript.mapObj" title="mapscript.mapObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">mapObj</span></code></a> is initialized from a Mapfile on disk in the usual manner:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">test_map</span> <span class="o">=</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">mapObj</span><span class="p">(</span><span class="s1">&#39;tests/test.map&#39;</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="admonition note" id="index-2">
+<p class="admonition-title">ملاحظة</p>
+<p>If you receive the following error <code class="docutils literal notranslate"><span class="pre">msProcessProjection():</span> <span class="pre">Projection</span> <span class="pre">library</span> <span class="pre">error.</span>
+<span class="pre">proj</span> <span class="pre">error</span> <span class="pre">&quot;No</span> <span class="pre">such</span> <span class="pre">file</span> <span class="pre">or</span> <span class="pre">directory&quot;</span> <span class="pre">for</span> <span class="pre">&quot;init=epsg:4326&quot;</span></code> then make sure you have
+set the <code class="docutils literal notranslate"><span class="pre">PROJ_LIB</span></code> environment variable correctly</p>
 </div>
 </section>
 <section id="cloning">
-<span id="index-2"></span><h3>Cloning<a class="headerlink" href="#cloning" title="Permalink to this headline">¶</a></h3>
-<p>An independent copy, less result and label caches, of a mapObj can be produced
-by the new mapObj.clone() method:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">clone_map</span> <span class="o">=</span> <span class="n">test_map</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+<h3>Cloning<a class="headerlink" href="#cloning" title="Permalink to this heading">¶</a></h3>
+<p>An independent copy, less result and label caches, of a <a class="reference internal" href="mapscript-api/stub/mapscript.mapObj.html#mapscript.mapObj" title="mapscript.mapObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">mapObj</span></code></a> can be produced
+by the <a class="reference internal" href="mapscript-api/stub/mapscript.mapObj.html#mapscript.mapObj.clone" title="mapscript.mapObj.clone"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapObj.clone()</span></code></a> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">clone_map</span> <span class="o">=</span> <span class="n">test_map</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -213,78 +226,75 @@ conflict with the clone method of Java's Object class.</p>
 </div>
 </section>
 <section id="saving">
-<span id="index-3"></span><h3>Saving<a class="headerlink" href="#saving" title="Permalink to this headline">¶</a></h3>
-<p>A mapObj can be saved to disk using the save method:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">clone_map</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;clone.map&#39;</span><span class="p">)</span>
+<span id="index-3"></span><h3>Saving<a class="headerlink" href="#saving" title="Permalink to this heading">¶</a></h3>
+<p>A <a class="reference internal" href="mapscript-api/stub/mapscript.mapObj.html#mapscript.mapObj" title="mapscript.mapObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">mapObj</span></code></a> can be saved to disk using the save method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">clone_map</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;clone.map&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Frankly, the msSaveMap() function which is the foundation for mapObj::save
-is incomplete.  Your mileage may vary.</p>
 </section>
 </section>
 <section id="children-of-mapobj">
-<h2><a class="toc-backref" href="#id1">Children of mapObj</a><a class="headerlink" href="#children-of-mapobj" title="Permalink to this headline">¶</a></h2>
-<p>There is a common parent/child object API for Layers, Classes, and Styles in
-MapServer 4.4.</p>
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Children of mapObj</a><a class="headerlink" href="#children-of-mapobj" title="Permalink to this heading">¶</a></h2>
+<p>There is a common parent/child object API for Layers, Classes, and Styles in MapServer.</p>
 <section id="referencing-a-child">
-<h3>Referencing a Child<a class="headerlink" href="#referencing-a-child" title="Permalink to this headline">¶</a></h3>
+<h3>Referencing a Child<a class="headerlink" href="#referencing-a-child" title="Permalink to this heading">¶</a></h3>
 <p>References to Layer, Class, and Style children are obtained by &quot;getChild&quot;-like
 methods of their parent:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">layer_i</span>   <span class="o">=</span> <span class="n">test_map</span><span class="o">.</span><span class="n">getLayer</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-<span class="n">class_ij</span>  <span class="o">=</span>  <span class="n">layer_i</span><span class="o">.</span><span class="n">getClass</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+<span class="n">layer_i</span> <span class="o">=</span> <span class="n">test_map</span><span class="o">.</span><span class="n">getLayer</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="n">class_ij</span> <span class="o">=</span>  <span class="n">layer_i</span><span class="o">.</span><span class="n">getClass</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
 <span class="n">style_ijk</span> <span class="o">=</span> <span class="n">class_ij</span><span class="o">.</span><span class="n">getStyle</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>These references are for convenience only.  MapScript doesn't have any
 reference counting, and you are certain to run into trouble if you try to use
-these references after the parent mapObj has been deleted and freed from
+these references after the parent <a class="reference internal" href="mapscript-api/stub/mapscript.mapObj.html#mapscript.mapObj" title="mapscript.mapObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">mapObj</span></code></a> has been deleted and freed from
 memory.</p>
 </section>
 <section id="cloning-a-child">
-<span id="index-4"></span><h3>Cloning a Child<a class="headerlink" href="#cloning-a-child" title="Permalink to this headline">¶</a></h3>
+<span id="index-4"></span><h3>Cloning a Child<a class="headerlink" href="#cloning-a-child" title="Permalink to this heading">¶</a></h3>
 <p>A completely independent Layer, Class, or Style can be created using the clone
-method of layerObj, classObj, and styleObj:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">clone_layer</span> <span class="o">=</span> <span class="n">layer_i</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+methods of <a class="reference internal" href="mapscript-api/stub/mapscript.layerObj.html#mapscript.layerObj" title="mapscript.layerObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">layerObj</span></code></a>, <a class="reference internal" href="mapscript-api/stub/mapscript.classObj.html#mapscript.classObj" title="mapscript.classObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">classObj</span></code></a>, and <a class="reference internal" href="mapscript-api/stub/mapscript.styleObj.html#mapscript.styleObj" title="mapscript.styleObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">styleObj</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">clone_layer</span> <span class="o">=</span> <span class="n">layer_i</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>This instance has no parent, and is self-owned.</p>
 </section>
 <section id="new-children">
-<h3>New Children<a class="headerlink" href="#new-children" title="Permalink to this headline">¶</a></h3>
-<p>Uninitialized instances of layerObj, classObj, or styleObj can be created
-with the new constructors:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">new_layer</span> <span class="o">=</span> <span class="n">new</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">layerObj</span>
-<span class="n">new_class</span> <span class="o">=</span> <span class="n">new</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">classObj</span>
-<span class="n">new_style</span> <span class="o">=</span> <span class="n">new</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">styleObj</span>
+<h3>New Children<a class="headerlink" href="#new-children" title="Permalink to this heading">¶</a></h3>
+<p>Uninitialized instances of <a class="reference internal" href="mapscript-api/stub/mapscript.layerObj.html#mapscript.layerObj" title="mapscript.layerObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">layerObj</span></code></a>, <a class="reference internal" href="mapscript-api/stub/mapscript.classObj.html#mapscript.classObj" title="mapscript.classObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">classObj</span></code></a>, and
+<a class="reference internal" href="mapscript-api/stub/mapscript.styleObj.html#mapscript.styleObj" title="mapscript.styleObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">styleObj</span></code></a> can be created with the new constructors:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">new_layer</span> <span class="o">=</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">layerObj</span><span class="p">()</span>
+<span class="n">new_class</span> <span class="o">=</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">classObj</span><span class="p">()</span>
+<span class="n">new_style</span> <span class="o">=</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">styleObj</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>and are added to a parent object using &quot;insertChild&quot;-like methods of the
+<p>They are added to a parent object using &quot;insertChild&quot;-like methods of the
 parent which returns the index at which the child was inserted:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">li</span> <span class="o">=</span> <span class="n">test_map</span><span class="o">.</span><span class="n">insertLayer</span><span class="p">(</span><span class="n">new_layer</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">li</span> <span class="o">=</span> <span class="n">test_map</span><span class="o">.</span><span class="n">insertLayer</span><span class="p">(</span><span class="n">new_layer</span><span class="p">)</span>
 <span class="n">ci</span> <span class="o">=</span> <span class="n">test_map</span><span class="o">.</span><span class="n">getLayer</span><span class="p">(</span><span class="n">li</span><span class="p">)</span><span class="o">.</span><span class="n">insertClass</span><span class="p">(</span><span class="n">new_class</span><span class="p">)</span>
 <span class="n">si</span> <span class="o">=</span> <span class="n">test_map</span><span class="o">.</span><span class="n">getLayer</span><span class="p">(</span><span class="n">li</span><span class="p">)</span><span class="o">.</span><span class="n">getClass</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span><span class="o">.</span><span class="n">insertStyle</span><span class="p">(</span><span class="n">new_style</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The insert* methods create a completely new copy of the object and store it
-in the parent with all ownership taken on by the parent.</p>
-<p>see the API reference for more details.</p>
+<p>The insert* methods create a completely new copy of the object and stores it
+in the parent with all ownership taken on by the parent. See the <a class="reference internal" href="mapscript-api/index.html#swig"><span class="std std-ref">SWIG API</span></a>
+reference for more details.</p>
 </section>
 <section id="backwards-compatibility">
-<h3>Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="Permalink to this headline">¶</a></h3>
+<h3>Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="Permalink to this heading">¶</a></h3>
 <p>The old style child object constructors with the parent object as a single
-argument:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">new_layer</span> <span class="o">=</span> <span class="n">new</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">layerObj</span><span class="p">(</span><span class="n">test_map</span><span class="p">)</span>
-<span class="n">new_class</span> <span class="o">=</span> <span class="n">new</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">classObj</span><span class="p">(</span><span class="n">new_layer</span><span class="p">)</span>
-<span class="n">new_style</span> <span class="o">=</span> <span class="n">new</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">styleObj</span><span class="p">(</span><span class="n">new_class</span><span class="p">)</span>
+argument remain in MapServer:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">new_layer</span> <span class="o">=</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">layerObj</span><span class="p">(</span><span class="n">test_map</span><span class="p">)</span>
+<span class="n">new_class</span> <span class="o">=</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">classObj</span><span class="p">(</span><span class="n">new_layer</span><span class="p">)</span>
+<span class="n">new_style</span> <span class="o">=</span> <span class="n">mapscript</span><span class="o">.</span><span class="n">styleObj</span><span class="p">(</span><span class="n">new_class</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>remain in MapServer 4.4.</p>
 </section>
 <section id="removing-children">
-<h3>Removing Children<a class="headerlink" href="#removing-children" title="Permalink to this headline">¶</a></h3>
+<h3>Removing Children<a class="headerlink" href="#removing-children" title="Permalink to this heading">¶</a></h3>
 <p>Child objects can be removed with &quot;removeChild&quot;-like methods of parents, which
 return independent copies of the removed object:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># following from the insertion example ...</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># following from the insertion example ...</span>
 <span class="c1"># remove the inserted style, returns a copy of the original new_style</span>
 <span class="n">removed_style</span> <span class="o">=</span> <span class="n">test_map</span><span class="o">.</span><span class="n">getLayer</span><span class="p">(</span><span class="n">li</span><span class="p">)</span><span class="o">.</span><span class="n">getClass</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span><span class="o">.</span><span class="n">removeStyle</span><span class="p">(</span><span class="n">si</span><span class="p">)</span>
 <span class="n">removed_class</span> <span class="o">=</span> <span class="n">test_map</span><span class="o">.</span><span class="n">getLayer</span><span class="p">(</span><span class="n">li</span><span class="p">)</span><span class="o">.</span><span class="n">removeClass</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
@@ -294,35 +304,28 @@ return independent copies of the removed object:</p>
 </section>
 </section>
 <section id="metadata">
-<h2><a class="toc-backref" href="#id1">Metadata</a><a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Metadata</a><a class="headerlink" href="#metadata" title="Permalink to this heading">¶</a></h2>
 <p>Map, Layer, and Class metadata are the other arbitrarily numbered elements
 (well, up to the built-in limit of 41) of a mapfile.</p>
-<section id="new-api">
-<h3>New API<a class="headerlink" href="#new-api" title="Permalink to this headline">¶</a></h3>
-<p>In MapServer 4.4, the metadata attributes of mapObj.web, layerObj, and classObj
-are instances of hashTableObj, a class which functions like a limited
-dictionary</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">layer</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;wms_name&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+<p>The metadata attributes of <a class="reference internal" href="mapscript-api/stub/mapscript.webObj.html#mapscript.webObj" title="mapscript.webObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">webObj</span></code></a>, <a class="reference internal" href="mapscript-api/stub/mapscript.layerObj.html#mapscript.layerObj" title="mapscript.layerObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">layerObj</span></code></a>, and <a class="reference internal" href="mapscript-api/stub/mapscript.classObj.html#mapscript.classObj" title="mapscript.classObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">classObj</span></code></a>
+are instances of <a class="reference internal" href="mapscript-api/stub/mapscript.hashTableObj.html#mapscript.hashTableObj" title="mapscript.hashTableObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">hashTableObj</span></code></a>, a class which functions like a limited dictionary:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">layer</span> <span class="o">=</span> <span class="n">test_map</span><span class="o">.</span><span class="n">getLayerByName</span><span class="p">(</span><span class="s1">&#39;POLYGON&#39;</span><span class="p">)</span>
+<span class="n">layer</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;wms_name&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
 <span class="n">name</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;wms_name&#39;</span><span class="p">)</span>   <span class="c1"># returns &#39;foo&#39;</span>
 </pre></div>
 </div>
-<p>You can iterate over all keys in a hashTableObj like</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">key</span> <span class="o">=</span> <span class="n">NULL</span>
+<p>You can iterate over all keys in a class:<cite>hashTableObj</cite> as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">key</span> <span class="o">=</span> <span class="kc">None</span>
+
 <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">):</span>
     <span class="n">key</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nextKey</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">NULL</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">break</span>
     <span class="n">value</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-    <span class="o">...</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>See the API Reference (mapscript.txt) for more details.</p>
-</section>
-<section id="backwards-compatibility-for-metadata">
-<h3>Backwards Compatibility for Metadata<a class="headerlink" href="#backwards-compatibility-for-metadata" title="Permalink to this headline">¶</a></h3>
-<p>The old getMetaData and setMetaData methods of mapObj, layerObj, and classObj
-remain for use by older programs.</p>
-</section>
+<p>Note in Python the <a class="reference internal" href="mapscript-api/stub/mapscript.hashTableObj.html#mapscript.hashTableObj" title="mapscript.hashTableObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">hashTableObj</span></code></a> can be treated as a dictionary. See <a class="reference internal" href="python.html#python"><span class="std std-ref">Python MapScript Appendix</span></a>.</p>
 </section>
 </section>
 
@@ -342,7 +345,7 @@ remain for use by older programs.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../about.html" title="About">About</a><br>
 <a href="../products.html" title="Products">Products</a><br>
@@ -357,10 +360,7 @@ remain for use by older programs.</p>
   <h3>Current Table Of Contents</h3>
   <ul>
 <li><a class="reference internal" href="#">Mapfile Manipulation</a><ul>
-<li><a class="reference internal" href="#introduction">Introduction</a><ul>
-<li><a class="reference internal" href="#pseudocode">Pseudocode</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#mapfile-overview">Mapfile Overview</a></li>
 <li><a class="reference internal" href="#the-mapobj-class">The mapObj Class</a><ul>
 <li><a class="reference internal" href="#new-instances">New instances</a></li>
@@ -376,11 +376,7 @@ remain for use by older programs.</p>
 <li><a class="reference internal" href="#removing-children">Removing Children</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#metadata">Metadata</a><ul>
-<li><a class="reference internal" href="#new-api">New API</a></li>
-<li><a class="reference internal" href="#backwards-compatibility-for-metadata">Backwards Compatibility for Metadata</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#metadata">Metadata</a></li>
 </ul>
 </li>
 </ul>
@@ -399,18 +395,18 @@ remain for use by older programs.</p>
           <a href="querying.html" title="Querying"
              >التالي</a> |</li>
         <li class="right" >
-          <a href="imagery.html" title="Python MapScript Image Generation"
+          <a href="imagery.html" title="MapScript Image Generation"
              >السابق</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.0 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >MapScript</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Mapfile Manipulation</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html"> حقوق النشر </a> 2022, Open Source Geospatial Foundation
-      Last updated on 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Last updated on 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

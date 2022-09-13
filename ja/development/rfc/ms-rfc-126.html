@@ -4,15 +4,17 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 126: Port to PROJ 6 API &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 126: Port to PROJ 6 API &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 127: Drop (broken) support for builds without GDAL and PROJ" href="ms-rfc-127.html" />
     <link rel="prev" title="MS RFC 125: Support for CONNECTIONOPTIONS in mapfiles" href="ms-rfc-125.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,29 +148,29 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-126-port-to-proj-6-api">
-<span id="rfc126"></span><h1>MS RFC 126: Port to PROJ 6 API<a class="headerlink" href="#ms-rfc-126-port-to-proj-6-api" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="rfc126"></span><h1>MS RFC 126: Port to PROJ 6 API<a class="headerlink" href="#ms-rfc-126-port-to-proj-6-api" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2019-10-01</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Even Rouault</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="mailto:even&#46;rouault&#37;&#52;&#48;spatialys&#46;com">even<span>&#46;</span>rouault<span>&#64;</span>spatialys<span>&#46;</span>com</a></p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Adopted</p>
 </dd>
-<dt class="field-odd">Last update</dt>
+<dt class="field-odd">Last update<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2019-10-10</p>
 </dd>
-<dt class="field-even">Version</dt>
+<dt class="field-even">Version<span class="colon">:</span></dt>
 <dd class="field-even"><p>MapServer 8.0</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="この見出しへのパーマリンク">¶</a></h2>
 <p>Since March 1st 2019, <a class="reference external" href="https://proj.org/news.html">PROJ 6.0</a> has been released. This version deprecates
 the &quot;traditional&quot; API available in proj_api.h, in favor or the new API
 available in proj.h. For now, traditional API is still usable by defining the
@@ -176,7 +181,7 @@ Support for traditional proj_api.h is still kept for now, when MapServer is
 built against PROJ 4.x or PROJ 5.x.</p>
 </section>
 <section id="proposed-solution">
-<h2>Proposed solution<a class="headerlink" href="#proposed-solution" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Proposed solution<a class="headerlink" href="#proposed-solution" title="この見出しへのパーマリンク">¶</a></h2>
 <p>Most of the interface with PROJ is contained in mapproject.c, so most of
 the changes are done there, and the projectionObj object is the abstraction used
 consistently in the code base to model a coordinate reference system. There were
@@ -237,7 +242,7 @@ reprojectionObj can cache them.</p>
 </div>
 </section>
 <section id="continuous-integration-changes">
-<h2>Continuous integration changes<a class="headerlink" href="#continuous-integration-changes" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Continuous integration changes<a class="headerlink" href="#continuous-integration-changes" title="この見出しへのパーマリンク">¶</a></h2>
 <p>The PHP 7.3 configurations is modified to use PROJ 6 API, whereas other targets still
 use the PROJ 4.x API.
 To make maintaince of the test suite easier, all the Travis configuration are modified
@@ -256,7 +261,7 @@ geocentric conversion)</p>
 build_vagrant against the PROJ 4.x API, and build_vagrant_proj6 against the PROJ 6 API.</p>
 </section>
 <section id="implementation-details">
-<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="この見出しへのパーマリンク">¶</a></h2>
 <p>The following files are modified:</p>
 <ul class="simple">
 <li><p>.travis.yml: change name of the PHP 7.3 config</p></li>
@@ -315,16 +320,16 @@ build_vagrant against the PROJ 4.x API, and build_vagrant_proj6 against the PROJ
 </ul>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="この見出しへのパーマリンク">¶</a></h2>
 <p>None on the Mapfile syntax. There might be slight changes in coordinate
 reprojections due to PROJ changes.</p>
 </section>
 <section id="security-implications">
-<h2>Security implications<a class="headerlink" href="#security-implications" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Security implications<a class="headerlink" href="#security-implications" title="この見出しへのパーマリンク">¶</a></h2>
 <p>None.</p>
 </section>
 <section id="performance-implications">
-<h2>Performance implications<a class="headerlink" href="#performance-implications" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Performance implications<a class="headerlink" href="#performance-implications" title="この見出しへのパーマリンク">¶</a></h2>
 <p>Using PROJ 6 API is slower, especially for single-time invocations of the
 MapServer CGI binary. This shows up in the runtime of msautotest, which consists
 in a lot of such single-time invokations. Typical runtimes showed on Travis-CI
@@ -387,30 +392,30 @@ coordinate operation setup is non neglectable. For use cases where the request
 takes longer, it is expected that the time difference is proportionnaly lower.</p>
 </section>
 <section id="mapscript-implications">
-<h2>MapScript implications<a class="headerlink" href="#mapscript-implications" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>MapScript implications<a class="headerlink" href="#mapscript-implications" title="この見出しへのパーマリンク">¶</a></h2>
 <p>None.</p>
 </section>
 <section id="documentation-needs">
-<h2>Documentation needs<a class="headerlink" href="#documentation-needs" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Documentation needs<a class="headerlink" href="#documentation-needs" title="この見出しへのパーマリンク">¶</a></h2>
 <p>None in theory since there is no syntax change. However some words will be
 added to <a class="reference external" href="https://mapserver.org/mapfile/projection.html">https://mapserver.org/mapfile/projection.html</a> to recommand the use
 of the init=epsg:XXXX syntax instead of PROJ 4 CRS strings to benefit from
 the more accurate late-binding coordinate transformations.</p>
 </section>
 <section id="ticket-id-and-references">
-<h2>Ticket ID and references<a class="headerlink" href="#ticket-id-and-references" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Ticket ID and references<a class="headerlink" href="#ticket-id-and-references" title="この見出しへのパーマリンク">¶</a></h2>
 <ul class="simple">
 <li><p>Ticket: <a class="reference external" href="https://github.com/MapServer/MapServer/issues/5766">https://github.com/MapServer/MapServer/issues/5766</a></p></li>
 <li><p>Pull request available at: <a class="reference external" href="https://github.com/MapServer/MapServer/pull/5888">https://github.com/MapServer/MapServer/pull/5888</a></p></li>
 </ul>
 </section>
 <section id="voting-history">
-<h2>Voting history<a class="headerlink" href="#voting-history" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Voting history<a class="headerlink" href="#voting-history" title="この見出しへのパーマリンク">¶</a></h2>
 <p>+1 from PSC members Even Rouault, Mickael Smith,
 Seth Girvin, Daniel Morissette and Jukka Rahkonen.</p>
 </section>
 <section id="credits">
-<h2>Credits<a class="headerlink" href="#credits" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Credits<a class="headerlink" href="#credits" title="この見出しへのパーマリンク">¶</a></h2>
 <p>Thanks to funding from the French Ministry of Defense.</p>
 </section>
 </section>
@@ -431,7 +436,7 @@ Seth Girvin, Daniel Morissette and Jukka Rahkonen.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -486,8 +491,8 @@ Seth Girvin, Daniel Morissette and Jukka Rahkonen.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      最終更新: 2022-05-20
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      最終更新: 2022-09-13
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

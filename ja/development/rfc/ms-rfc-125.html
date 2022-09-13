@@ -4,15 +4,17 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 125: Support for CONNECTIONOPTIONS in mapfiles &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 125: Support for CONNECTIONOPTIONS in mapfiles &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 126: Port to PROJ 6 API" href="ms-rfc-126.html" />
     <link rel="prev" title="MS RFC 124: Improving SLD Support in MapServer" href="ms-rfc-124.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,29 +148,29 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-125-support-for-connectionoptions-in-mapfiles">
-<span id="rfc125"></span><h1>MS RFC 125: Support for CONNECTIONOPTIONS in mapfiles<a class="headerlink" href="#ms-rfc-125-support-for-connectionoptions-in-mapfiles" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="rfc125"></span><h1>MS RFC 125: Support for CONNECTIONOPTIONS in mapfiles<a class="headerlink" href="#ms-rfc-125-support-for-connectionoptions-in-mapfiles" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2019-09-30</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Even Rouault</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="mailto:even&#46;rouault&#37;&#52;&#48;spatialys&#46;com">even<span>&#46;</span>rouault<span>&#64;</span>spatialys<span>&#46;</span>com</a></p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Adopted</p>
 </dd>
-<dt class="field-odd">Last update</dt>
+<dt class="field-odd">Last update<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2019-10-10</p>
 </dd>
-<dt class="field-even">Version</dt>
+<dt class="field-even">Version<span class="colon">:</span></dt>
 <dd class="field-even"><p>MapServer 8.0</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="この見出しへのパーマリンク">¶</a></h2>
 <p>Since GDAL 2.0, GDAL/OGR raster and vector drivers can accept open options,
 that control certain aspects of te behaviour of the drivers. Those options
 are driver specific, and can be specified with the <a class="reference external" href="https://gdal.org/api/raster_c_api.html#gdal_8h_1aca05455472359964151f9c891d678d5e">GDALOpenEx()</a>
@@ -174,14 +179,14 @@ options, and people have to fallback to workarounds such as using a GDAL or OGR
 .vrt file, in which they embed the open option(s).</p>
 </section>
 <section id="proposed-solution">
-<h2>Proposed solution<a class="headerlink" href="#proposed-solution" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Proposed solution<a class="headerlink" href="#proposed-solution" title="この見出しへのパーマリンク">¶</a></h2>
 <p>A CONNECTIONOPTIONS keyword is added as a child of the LAYER object in MapFile
 syntax and defines a new block that must be ended with END.
 It can accept a sequence of &quot;KEY&quot; &quot;VALUE&quot; open options.
 This syntax is similar to the METADATA block.</p>
 </section>
 <section id="example">
-<h2>Example<a class="headerlink" href="#example" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Example<a class="headerlink" href="#example" title="この見出しへのパーマリンク">¶</a></h2>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
     <span class="k">NAME</span> <span class="s">&quot;test&quot;</span>
     <span class="k">CONNECTIONTYPE</span> <span class="nb">OGR</span>
@@ -195,7 +200,7 @@ This syntax is similar to the METADATA block.</p>
 </div>
 </section>
 <section id="implementation-details">
-<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="この見出しへのパーマリンク">¶</a></h2>
 <p>The following files are modified:</p>
 <ul class="simple">
 <li><p>mapfile.c: load and serialize CONNECTIONOPTIONS</p></li>
@@ -219,38 +224,38 @@ This syntax is similar to the METADATA block.</p>
 </ul>
 </section>
 <section id="limitations">
-<h2>Limitations<a class="headerlink" href="#limitations" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Limitations<a class="headerlink" href="#limitations" title="この見出しへのパーマリンク">¶</a></h2>
 <p>Current implementation is limited to the GDAL and OGR drivers. But CONNECTIONOPTIONS
 could be used by other datasource backends.</p>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="この見出しへのパーマリンク">¶</a></h2>
 <p>None.</p>
 </section>
 <section id="security-implications">
-<h2>Security implications<a class="headerlink" href="#security-implications" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Security implications<a class="headerlink" href="#security-implications" title="この見出しへのパーマリンク">¶</a></h2>
 <p>None.</p>
 </section>
 <section id="performance-implications">
-<h2>Performance implications<a class="headerlink" href="#performance-implications" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Performance implications<a class="headerlink" href="#performance-implications" title="この見出しへのパーマリンク">¶</a></h2>
 <p>None.</p>
 </section>
 <section id="documentation-needs">
-<h2>Documentation needs<a class="headerlink" href="#documentation-needs" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Documentation needs<a class="headerlink" href="#documentation-needs" title="この見出しへのパーマリンク">¶</a></h2>
 <p>The documentation page of the LAYER object will be extended to document
 CONNECTIONOPTIONS.</p>
 </section>
 <section id="ticket-id-and-references">
-<h2>Ticket ID and references<a class="headerlink" href="#ticket-id-and-references" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Ticket ID and references<a class="headerlink" href="#ticket-id-and-references" title="この見出しへのパーマリンク">¶</a></h2>
 <p>Pull request available at: <a class="reference external" href="https://github.com/MapServer/MapServer/pull/5883">https://github.com/MapServer/MapServer/pull/5883</a></p>
 </section>
 <section id="voting-history">
-<h2>Voting history<a class="headerlink" href="#voting-history" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Voting history<a class="headerlink" href="#voting-history" title="この見出しへのパーマリンク">¶</a></h2>
 <p>+1 from PSC members Even Rouault, Tom Kralidis,
 Mickael Smith, Seth Girvin, Daniel Morissette, Steve Lime and Jukka Rahkonen.</p>
 </section>
 <section id="credits">
-<h2>Credits<a class="headerlink" href="#credits" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>Credits<a class="headerlink" href="#credits" title="この見出しへのパーマリンク">¶</a></h2>
 <p>Thanks to funding from the French Ministry of Defense.</p>
 </section>
 </section>
@@ -271,7 +276,7 @@ Mickael Smith, Seth Girvin, Daniel Morissette, Steve Lime and Jukka Rahkonen.</p
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -326,8 +331,8 @@ Mickael Smith, Seth Girvin, Daniel Morissette, Steve Lime and Jukka Rahkonen.</p
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      最終更新: 2022-05-20
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      最終更新: 2022-09-13
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

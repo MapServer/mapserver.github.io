@@ -4,15 +4,17 @@
 <html lang="el">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 79: Layer Masking &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 79: Layer Masking &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 80: Font Fallback Support" href="ms-rfc-80.html" />
     <link rel="prev" title="MS RFC 78: Vector Field Rendering (CONNECTIONTYPE UVRASTER)" href="ms-rfc-78.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,35 +148,35 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-79-layer-masking">
-<span id="rfc79"></span><h1>MS RFC 79: Layer Masking<a class="headerlink" href="#ms-rfc-79-layer-masking" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h1>
+<span id="rfc79"></span><h1>MS RFC 79: Layer Masking<a class="headerlink" href="#ms-rfc-79-layer-masking" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2011/11/30</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Thomas Bonfort</p>
 </dd>
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Alan Boudreault</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p>tbonfort at terriscope.fr</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p>aboudreault at mapgears.com</p>
 </dd>
-<dt class="field-even">Last Edited</dt>
+<dt class="field-even">Last Edited<span class="colon">:</span></dt>
 <dd class="field-even"><p>2012/05/11</p>
 </dd>
-<dt class="field-odd">Status</dt>
+<dt class="field-odd">Status<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Implemented</p>
 </dd>
-<dt class="field-even">Version</dt>
+<dt class="field-even">Version<span class="colon">:</span></dt>
 <dd class="field-even"><p>MapServer 6.2</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>1. Overview<a class="headerlink" href="#overview" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>1. Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>For some applications, it is desirable to mask out one or more layers so
 that only the features that intersect another set of features are rendered
 in the returned image.
@@ -190,7 +195,7 @@ layers, where only the features that intersect the given mask are rendered
 onto the final image.</p>
 </section>
 <section id="proposed-solution">
-<h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Permalink to this heading">¶</a></h2>
 <p>In order to work with all layer types, this RFC proposes to implement layer
 masking at the pixel level, with the addition of a single «MASK» mapfile
 keyword. The MASK keywords is placed at the layer level, and takes a single
@@ -239,7 +244,7 @@ feature will probably want to set the mask layer to STATUS OFF.</p>
 </div>
 </section>
 <section id="implementation-details">
-<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>The parser will have a MASK keyword added to it, expecting a string</p></li>
 <li><p>The layerObj will have two properties added to it:</p>
@@ -268,7 +273,7 @@ following codepath as if layer-&gt;opacity has been set.</p></li>
 </ul>
 </section>
 <section id="files-affected">
-<h2>3.1 Files affected<a class="headerlink" href="#files-affected" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>3.1 Files affected<a class="headerlink" href="#files-affected" title="Permalink to this heading">¶</a></h2>
 <p>The following files will be modified/created by this RFC:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapserver</span><span class="o">.</span><span class="n">h</span><span class="o">/</span><span class="n">mapfile</span><span class="o">.</span><span class="n">c</span><span class="o">/</span><span class="n">mapfile</span><span class="o">.</span><span class="n">h</span><span class="o">/</span><span class="n">maplexer</span><span class="o">.</span><span class="n">l</span><span class="o">/</span><span class="n">mapcopy</span><span class="o">.</span><span class="n">c</span><span class="p">:</span> <span class="n">parser</span> <span class="ow">and</span> <span class="n">new</span> <span class="n">layerObj</span> <span class="n">members</span>
 <span class="n">mapdraw</span><span class="o">.</span><span class="n">c</span><span class="p">:</span> <span class="n">implementation</span> <span class="ow">in</span> <span class="n">msDrawLayer</span><span class="p">()</span>
@@ -278,16 +283,16 @@ following codepath as if layer-&gt;opacity has been set.</p></li>
 </div>
 </section>
 <section id="mapscript">
-<h2>3.2 MapScript<a class="headerlink" href="#mapscript" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>3.2 MapScript<a class="headerlink" href="#mapscript" title="Permalink to this heading">¶</a></h2>
 <p>Getters and Setters will have to be added to programmatically add a MASK to a layerObj.
 No other issues are to be expected.</p>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>3.4 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>3.4 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h2>
 <p>This change provides a new functionality with no backwards compatibility issues being considered.</p>
 </section>
 <section id="limitations">
-<h2>4. Limitations<a class="headerlink" href="#limitations" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>4. Limitations<a class="headerlink" href="#limitations" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Querying: The masking is done at the pixel level, as such all operations that query the
 datasource will not mask out features.</p></li>
@@ -311,16 +316,16 @@ can appear.</p></li>
 </ul>
 </section>
 <section id="error-handling">
-<h2>5. Error Handling<a class="headerlink" href="#error-handling" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>5. Error Handling<a class="headerlink" href="#error-handling" title="Permalink to this heading">¶</a></h2>
 <p>There are no special cases to treat here aside from the classic ones (parsing errors, invalid
 layer referenced by MASK, invalid renderer selected)</p>
 </section>
 <section id="bug-id">
-<h2>6. Bug ID<a class="headerlink" href="#bug-id" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>6. Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this heading">¶</a></h2>
 <p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/4111">https://github.com/MapServer/MapServer/issues/4111</a></p>
 </section>
 <section id="voting-history">
-<h2>7. Voting history<a class="headerlink" href="#voting-history" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>7. Voting history<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
 <p>Passed with +1 from ThomasB, MichaelS, StephenW, AssefaY, FrankW, TamasS, DanielM, JeffMcK, TomK,
 OlivierC, SteveL</p>
 </section>
@@ -342,7 +347,7 @@ OlivierC, SteveL</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -395,8 +400,8 @@ OlivierC, SteveL</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a>2022, Open Source Geospatial Foundation
-      Τελευταία ενημέρωση στις 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Τελευταία ενημέρωση στις 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

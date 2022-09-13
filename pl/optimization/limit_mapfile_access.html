@@ -4,15 +4,17 @@
 <html lang="pl">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Limit Mapfile Access &#8212; MapServer 7.6.4 documentation</title>
+    <title>Limit Mapfile Access &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/ribbon.css" />
     
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="Mapfile Tuning &amp; Management" href="mapfile.html" />
     <link rel="prev" title="FastCGI" href="fastcgi.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -130,7 +135,7 @@
           <a href="fastcgi.html" title="FastCGI"
              accesskey="P">wstecz</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.0 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Optimization</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Limit Mapfile Access</a></li> 
       </ul>
@@ -143,22 +148,22 @@
           <div class="body" role="main">
             
   <section id="limit-mapfile-access">
-<span id="index-0"></span><span id="id1"></span><h1>Limit Mapfile Access<a class="headerlink" href="#limit-mapfile-access" title="Stały odnośnik do tego nagłówka">¶</a></h1>
+<span id="index-0"></span><span id="id1"></span><h1>Limit Mapfile Access<a class="headerlink" href="#limit-mapfile-access" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Stephen Lime</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p>sdlime at gmail.com</p>
 </dd>
-<dt class="field-odd">Author</dt>
+<dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Jeff McKenna</p>
 </dd>
-<dt class="field-even">Contact</dt>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
 <dd class="field-even"><p>jmckenna at gatewaygeomatics.com</p>
 </dd>
-<dt class="field-odd">Last Updated</dt>
-<dd class="field-odd"><p>2021-06-03</p>
+<dt class="field-odd">Last Updated<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2022-08-16</p>
 </dd>
 </dl>
 <p>The MapServer CGI, by default, will happily attempt to process any mapfile it is
@@ -180,7 +185,7 @@ the environment variables described in this MapServer document.</p>
 used by MapScript in any way.</p>
 </div>
 <section id="key-environment-variables">
-<h2>Key Environment Variables<a class="headerlink" href="#key-environment-variables" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>Key Environment Variables<a class="headerlink" href="#key-environment-variables" title="Permalink to this heading">¶</a></h2>
 <div class="admonition seealso">
 <p class="admonition-title">Zobacz także</p>
 <p><a class="reference internal" href="environment_variables.html#environment-variables"><span class="std std-ref">Environment Variables</span></a></p>
@@ -249,9 +254,22 @@ guide for examples.</p>
 <p>If defined, the MS_MAP_PATTERN variable only applies to mapfiles not
 already defined through an environment variable.</p>
 </div>
+<div class="admonition tip">
+<p class="admonition-title">Wskazówka</p>
+<p>As of the MapServer 8.0 release, there are 2 scenarios where you won’t have to
+specify <em>MS_MAP_PATTERN</em> :</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>If using a map alias (set in the <em>MAPS</em> section of the MapServer <a class="reference internal" href="../mapfile/config.html#config"><span class="std std-ref">CONFIG</span></a> file).</p></li>
+<li><p>If MS_MAP_PATTERN is set in the underlying environment - that is, by
+the Web server. MapServer will fall back to the environment variables
+if they exist for any of the <a class="reference internal" href="environment_variables.html#environment-variables"><span class="std std-ref">MS* variables</span></a>.</p></li>
+</ol>
+</div></blockquote>
+</div>
 </section>
 <section id="setting-environment-variables">
-<h2>Setting Environment Variables<a class="headerlink" href="#setting-environment-variables" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>Setting Environment Variables<a class="headerlink" href="#setting-environment-variables" title="Permalink to this heading">¶</a></h2>
 <p>Mechanisms to set environment variables vary from web server to web server, but all
 provide the capability. (regular expression feature sets can vary by operating system
 and version)</p>
@@ -311,7 +329,7 @@ directory traversing:</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../about.html" title="About">About</a><br>
 <a href="../products.html" title="Products">Products</a><br>
@@ -349,15 +367,15 @@ directory traversing:</p>
           <a href="fastcgi.html" title="FastCGI"
              >wstecz</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.0 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Optimization</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Limit Mapfile Access</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Ostatnia modyfikacja 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Ostatnia modyfikacja 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

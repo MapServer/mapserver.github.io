@@ -4,15 +4,17 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 101: Add Support for Content Dependent Legend Responses &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 101: Add Support for Content Dependent Legend Responses &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 102: Support of Styleitem JavaScript Plugin" href="ms-rfc-102.html" />
     <link rel="prev" title="MS RFC 100: Support for tile index with mixed SRS in raster layers" href="ms-rfc-100.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,26 +148,26 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-101-add-support-for-content-dependent-legend-responses">
-<span id="rfc101"></span><h1>MS RFC 101: Add Support for Content Dependent Legend Responses<a class="headerlink" href="#ms-rfc-101-add-support-for-content-dependent-legend-responses" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="rfc101"></span><h1>MS RFC 101: Add Support for Content Dependent Legend Responses<a class="headerlink" href="#ms-rfc-101-add-support-for-content-dependent-legend-responses" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2013-07-19</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Thomas Bonfort</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Adopted</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 6.4</p>
 </dd>
 </dl>
 <section id="summary">
-<h2>1. Summary<a class="headerlink" href="#summary" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>1. Summary<a class="headerlink" href="#summary" title="この見出しへのパーマリンク">¶</a></h2>
 <p>The WMS GetLegendGraphic currently returns a legend image whose content matches
 the classes that are defined in the mapfile (which may also be overridden by an
 SLD), as specified by the WMS specification. This RFC proposes an extension to
@@ -172,7 +177,7 @@ features that are actually present/rendered in the requested extent.</p>
 with the content of the legend that only matches features that are actually
 present in the mapview.</p>
 <section id="example">
-<h3>1.1 Example<a class="headerlink" href="#example" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>1.1 Example<a class="headerlink" href="#example" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Let us suppose we have a legend for a road network, comprising three classes
 for motorways, major roads and minor roads.</p>
 <ul class="simple">
@@ -187,9 +192,9 @@ icons for road features.</p></li>
 </section>
 </section>
 <section id="implementation-details">
-<h2>2. Implementation Details<a class="headerlink" href="#implementation-details" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>2. Implementation Details<a class="headerlink" href="#implementation-details" title="この見出しへのパーマリンク">¶</a></h2>
 <section id="activating-the-feature">
-<h3>2.1 Activating the feature<a class="headerlink" href="#activating-the-feature" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>2.1 Activating the feature<a class="headerlink" href="#activating-the-feature" title="この見出しへのパーマリンク">¶</a></h3>
 <p>Support for content dependent legends will be supported for WMS
 GetLegendGraphic calls on POINT, LINE and POLYGON layers, when the client
 includes the (non-standard) BBOX, SRS/CRS and WIDTH/HEIGHT parameters (i.e. like for
@@ -205,7 +210,7 @@ classical legend rendering will occur.</p>
 </div></blockquote>
 </section>
 <section id="code-impacts">
-<h3>2.2 Code Impacts<a class="headerlink" href="#code-impacts" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>2.2 Code Impacts<a class="headerlink" href="#code-impacts" title="この見出しへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>Inside msWMSDispatch(), if the BBOX parameter is detected during a
 GetLegendGraphic request, then the processing will skip the current
@@ -226,7 +231,7 @@ the legend templating code to produce content dependent html legends.</p></li>
 </ul>
 </section>
 <section id="quirks-and-backwards-incompatibility-issues">
-<h3>2.3 Quirks and Backwards Incompatibility Issues<a class="headerlink" href="#quirks-and-backwards-incompatibility-issues" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>2.3 Quirks and Backwards Incompatibility Issues<a class="headerlink" href="#quirks-and-backwards-incompatibility-issues" title="この見出しへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>Clients that send BBOX, SRS and WIDTH/HEIGHT parameters expecting to obtain a non
 content dependent legend will be returned erroneous results. It can be argued
@@ -252,7 +257,7 @@ LAYERS parameter in the URL that does not coincide with the LAYER parameter.</p>
 </ul>
 </section>
 <section id="performance-impacts-mapscripts">
-<h3>2.4 Performance impacts, mapscripts<a class="headerlink" href="#performance-impacts-mapscripts" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>2.4 Performance impacts, mapscripts<a class="headerlink" href="#performance-impacts-mapscripts" title="この見出しへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><p>No performance impacts (aside from the fact that content dependent legend
 rendering will be obviously slower than traditional legend rendering)</p></li>
@@ -265,13 +270,13 @@ structs have stabilized.</p></li>
 </section>
 </section>
 <section id="miscellaneous">
-<h2>3. Miscellaneous<a class="headerlink" href="#miscellaneous" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>3. Miscellaneous<a class="headerlink" href="#miscellaneous" title="この見出しへのパーマリンク">¶</a></h2>
 <section id="issue-tracking-id">
-<h3>3.1 Issue Tracking ID<a class="headerlink" href="#issue-tracking-id" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>3.1 Issue Tracking ID<a class="headerlink" href="#issue-tracking-id" title="この見出しへのパーマリンク">¶</a></h3>
 <p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/4713">https://github.com/MapServer/MapServer/issues/4713</a></p>
 </section>
 <section id="voting-history">
-<h3>3.2 Voting History<a class="headerlink" href="#voting-history" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>3.2 Voting History<a class="headerlink" href="#voting-history" title="この見出しへのパーマリンク">¶</a></h3>
 <p>+1 from ThomasB, MikeS, TomK, StephanM, PerryN, SteveL, SteveW and JeffM</p>
 </section>
 </section>
@@ -293,7 +298,7 @@ structs have stabilized.</p></li>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -352,8 +357,8 @@ structs have stabilized.</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      最終更新: 2022-05-20
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      最終更新: 2022-09-13
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

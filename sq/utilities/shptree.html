@@ -4,15 +4,17 @@
 <html lang="sq">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>shptree &#8212; MapServer 7.6.4 documentation</title>
+    <title>shptree &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/ribbon.css" />
     
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/translations.js"></script>
     
@@ -22,8 +24,11 @@
     <link rel="search" title="Kērko" href="../search.html" />
     <link rel="copyright" title="Të drejta kopjimi" href="../copyright.html" />
     <link rel="next" title="shptreetst" href="shptreetst.html" />
-    <link rel="prev" title="shp2img" href="shp2img.html" /> 
+    <link rel="prev" title="scalebar" href="scalebar.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -127,10 +132,10 @@
           <a href="shptreetst.html" title="shptreetst"
              accesskey="N">pasuesi</a> |</li>
         <li class="right" >
-          <a href="shp2img.html" title="shp2img"
+          <a href="scalebar.html" title="scalebar"
              accesskey="P">i mëparshmi</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.0 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Utilities</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">shptree</a></li> 
       </ul>
@@ -143,31 +148,39 @@
           <div class="body" role="main">
             
   <section id="shptree">
-<span id="index-0"></span><span id="id1"></span><h1>shptree<a class="headerlink" href="#shptree" title="Permalidhje te ky titull">¶</a></h1>
+<span id="index-0"></span><span id="id1"></span><h1>shptree<a class="headerlink" href="#shptree" title="Permalidhje për te kjo krye">¶</a></h1>
 <section id="purpose">
-<h2>Purpose<a class="headerlink" href="#purpose" title="Permalidhje te ky titull">¶</a></h2>
-<p>Creates a quadtree-based spatial index for a Shape data set.  The
+<h2>Purpose<a class="headerlink" href="#purpose" title="Permalidhje për te kjo krye">¶</a></h2>
+<p>Creates a quadtree-based spatial index for a shapefile.  The
 default tree depth is calculated so that each tree node (quadtree
 cell) contains 8 shapes.  Do not use the default with point files, a
-value between 6 and 10 seems to work ok.  Your millage may vary and
+value between 6 and 10 seems to work ok.  Your mileage may vary and
 you’ll need to do some experimenting.</p>
 <p>The <a class="reference external" href="https://github.com/MapServer/MapServer/wiki/ShpTree">shptree wiki page</a> may also contain
 information on this utility.</p>
+<div class="admonition seealso">
+<p class="admonition-title">Shihni edhe</p>
+<p>view the quadtree quadrants that are part of a <cite>.qix</cite> file with the <a class="reference internal" href="shptreevis.html#shptreevis"><span class="std std-ref">shptreevis</span></a> utility</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">Shihni edhe</p>
+<p>execute a spatial query and examine the <cite>.qix</cite> file with the <a class="reference internal" href="shptreetst.html#shptreetst"><span class="std std-ref">shptreetst</span></a> utility</p>
+</div>
 </section>
 <section id="description">
-<h2>Description<a class="headerlink" href="#description" title="Permalidhje te ky titull">¶</a></h2>
-<p>This utility is a must for any MapServer application that uses Shape
-data sets.  Shptree creates a spatial index of your Shape data set,
+<h2>Description<a class="headerlink" href="#description" title="Permalidhje për te kjo krye">¶</a></h2>
+<p>This utility is a must for any MapServer application that uses Esri shapefiles.
+Shptree creates a spatial index of your shapefile,
 using a quadtree method.  This means that MapServer will use this
 index to quickly find the appropriate shapes to draw.  It creates a
-file of the same name as your Shape data set, with a <em>.qix</em> file
+file of the same name as your shapefile, with a <em>.qix</em> file
 extension.  The quadtree method breaks the file into 4 quadrants,
 recursively until only a few shapes are contained in each quadrant.
 This minimum number can be set with the &lt;depth&gt; parameter of the
 command.</p>
 </section>
 <section id="syntax">
-<h2>Syntax<a class="headerlink" href="#syntax" title="Permalidhje te ky titull">¶</a></h2>
+<h2>Syntax<a class="headerlink" href="#syntax" title="Permalidhje për te kjo krye">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">shptree</span> <span class="o">&lt;</span><span class="n">shpfile</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">depth</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">index_format</span><span class="o">&gt;</span><span class="p">]</span>
   <span class="n">Where</span><span class="p">:</span>
   <span class="o">&lt;</span><span class="n">shpfile</span><span class="o">&gt;</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="o">.</span><span class="n">shp</span> <span class="n">file</span> <span class="n">to</span> <span class="n">index</span><span class="o">.</span>
@@ -198,27 +211,28 @@ file)</p>
 </dl>
 </section>
 <section id="mapfile-notes">
-<h2>Mapfile Notes<a class="headerlink" href="#mapfile-notes" title="Permalidhje te ky titull">¶</a></h2>
-<p>Shape data sets are native to MapServer, and therefore do not require
-the <em>.shp</em> extension in the DATA path of the LAYER.  In fact, in order
-for MapServer to use the <em>.qix</em> extension you MUST NOT specify the
-extension, for example:</p>
+<h2>Mapfile Notes<a class="headerlink" href="#mapfile-notes" title="Permalidhje për te kjo krye">¶</a></h2>
+<p>Shapefiles are native to MapServer, and therefore do not require
+the <em>.shp</em> extension in the DATA path of the LAYER, but it is always
+recommended to specify the extension.  For earlier versions of MapServer
+(before MapServer 5.2), in order for MapServer to use the <em>.qix</em> extension
+you were required to <em>NOT</em> specify the extension, for example:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="p">...</span>
-  <span class="k">DATA</span> <span class="s">&quot;us_states&quot;</span>    <span class="c">#MapServer will search for us_states.qix and will use it</span>
+  <span class="k">DATA</span> <span class="s">&quot;us_states&quot;</span>    <span class="c">#MapServer &lt;5.2 will search for us_states.qix and will use it</span>
   <span class="p">...</span>
 <span class="k">END</span>
 
 <span class="k">LAYER</span>
   <span class="p">...</span>
-  <span class="k">DATA</span> <span class="s">&quot;us_states.shp&quot;</span> <span class="c">#MapServer will search for us_states.shp.qix and won&#39;t find it</span>
+  <span class="k">DATA</span> <span class="s">&quot;us_states.shp&quot;</span> <span class="c">#MapServer &lt;5.2 will search for us_states.shp.qix and won&#39;t find it</span>
   <span class="p">...</span>
 <span class="k">END</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Shënim</p>
-<p>As of MapServer 5.2 the qix will be used even when the .shp extension is specified</p>
+<p>As of MapServer 5.2 the <cite>qix</cite> index will be used even when the <cite>.shp</cite> extension is specified</p>
 </div>
 </section>
 </section>
@@ -239,7 +253,7 @@ extension, for example:</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../about.html" title="About">About</a><br>
 <a href="../products.html" title="Products">Products</a><br>
@@ -276,18 +290,18 @@ extension, for example:</p>
           <a href="shptreetst.html" title="shptreetst"
              >pasuesi</a> |</li>
         <li class="right" >
-          <a href="shp2img.html" title="shp2img"
+          <a href="scalebar.html" title="scalebar"
              >i mëparshmi</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 7.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.0 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Utilities</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">shptree</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Të drejta kopjimi</a> 2022, Open Source Geospatial Foundation.
-      Përditësuar së fundi më 2022-05-20.
-      Krijuar duke përdorur <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Përditësuar së fundi më 2022-09-13.
+      Krijuar duke përdorur <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

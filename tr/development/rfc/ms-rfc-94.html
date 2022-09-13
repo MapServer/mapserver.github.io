@@ -4,15 +4,17 @@
 <html lang="tr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 94: Shape Smoothing &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 94: Shape Smoothing &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 95: Support for lists in expression parser" href="ms-rfc-95.html" />
     <link rel="prev" title="MS RFC 93: UTF Grid Support" href="ms-rfc-93.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,32 +148,32 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-94-shape-smoothing">
-<span id="rfc94"></span><h1>MS RFC 94: Shape Smoothing<a class="headerlink" href="#ms-rfc-94-shape-smoothing" title="Bu başlık için kalıcı bağlantı">¶</a></h1>
+<span id="rfc94"></span><h1>MS RFC 94: Shape Smoothing<a class="headerlink" href="#ms-rfc-94-shape-smoothing" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2013/03/26</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Alan Boudreault</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p>aboudreault at mapgears.com</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Daniel Morissette</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dmorissette at mapgears.com</p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Adopted and Implemented</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 6.4</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>1. Overview<a class="headerlink" href="#overview" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>1. Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>This is a proposal to add the ability to smooth shapes of a vector layer in
 MapServer.</p>
 <p>Currently, there is no way to smooth a shape and they are rendered as they are
@@ -179,7 +184,7 @@ rendering result. Here’s an example of a bad rendering (from a contour layer):
 </div></blockquote>
 </section>
 <section id="the-proposed-solution">
-<h2>2. The proposed solution<a class="headerlink" href="#the-proposed-solution" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>2. The proposed solution<a class="headerlink" href="#the-proposed-solution" title="Permalink to this heading">¶</a></h2>
 <p>This RFC proposes the addition of shape smoothing in MapServer. The initial
 solution will implement the SIA algorithm: Smoothing via Iterative Averaging.
 To find out more about the SIA technique, see
@@ -225,7 +230,7 @@ is 1.</p></li>
 </div>
 </section>
 <section id="examples">
-<h2>3. Examples<a class="headerlink" href="#examples" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>3. Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h2>
 <p>Here are some examples showing results with different parameter values.</p>
 <blockquote>
 <div><img alt="../../_images/smoothing1.png" src="../../_images/smoothing1.png" />
@@ -233,12 +238,12 @@ is 1.</p></li>
 </div></blockquote>
 </section>
 <section id="smoothing-result-factors">
-<h2>4. Smoothing result factors<a class="headerlink" href="#smoothing-result-factors" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>4. Smoothing result factors<a class="headerlink" href="#smoothing-result-factors" title="Permalink to this heading">¶</a></h2>
 <p>Since the smoothing algorithm is performed on a window of x vertices (3 by
 default), there are some factors that might affect the result.</p>
 </section>
 <section id="dataset-resolution-is-too-high">
-<h2>4.1 Dataset resolution is too high<a class="headerlink" href="#dataset-resolution-is-too-high" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>4.1 Dataset resolution is too high<a class="headerlink" href="#dataset-resolution-is-too-high" title="Permalink to this heading">¶</a></h2>
 <p>If you are trying to smooth a line that has a very high resolution (high
 density of vertices at the current view scale), you may not get the expected
 result because the vertices are too dense for the smoothing window size.
@@ -256,7 +261,7 @@ visualization of the issue:</p>
 </div></blockquote>
 </section>
 <section id="dataset-resolution-is-too-low">
-<h2>4.2 Dataset resolution is too low<a class="headerlink" href="#dataset-resolution-is-too-low" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>4.2 Dataset resolution is too low<a class="headerlink" href="#dataset-resolution-is-too-low" title="Permalink to this heading">¶</a></h2>
 <p>If you are trying to smooth a long line that has a low density of
 vertices, you may not get the expected result in some situations where
 you may lose some important parts of the shape during the smoothing,
@@ -281,7 +286,7 @@ rendering since there are more vertices in the output.</p>
 </div></blockquote>
 </section>
 <section id="curves">
-<h2>4.3 Curves<a class="headerlink" href="#curves" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>4.3 Curves<a class="headerlink" href="#curves" title="Permalink to this heading">¶</a></h2>
 <p>The preprocessing step might not be appropriate for all cases since it can
 impact a lot the smoothing result (maybe too much?). However, without it, you
 might notice some bad smoothing with big curves. See this example:</p>
@@ -299,7 +304,7 @@ the curves. Here’s how you can enable it:</p>
 </div></blockquote>
 </section>
 <section id="files-affected">
-<h2>5. Files affected<a class="headerlink" href="#files-affected" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>5. Files affected<a class="headerlink" href="#files-affected" title="Permalink to this heading">¶</a></h2>
 <p>The following files will be modified/created by this RFC:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapserver</span><span class="o">.</span><span class="n">h</span>
 <span class="n">mapsmoothing</span><span class="o">.</span><span class="n">c</span> <span class="p">(</span><span class="n">implementation</span> <span class="n">of</span> <span class="n">the</span> <span class="n">smoothing</span> <span class="n">code</span><span class="p">)</span>
@@ -309,20 +314,20 @@ the curves. Here’s how you can enable it:</p>
 </div>
 </section>
 <section id="mapscript">
-<h2>6. MapScript<a class="headerlink" href="#mapscript" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>6. MapScript<a class="headerlink" href="#mapscript" title="Permalink to this heading">¶</a></h2>
 <p>No issue for any MapScript bindings. The smoothing is handled/rendered
 internally as a geomtransform.</p>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>7. Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>7. Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h2>
 <p>This change provides a new functionality with no backwards compatibility issues being considered.</p>
 </section>
 <section id="tests">
-<h2>8. Tests<a class="headerlink" href="#tests" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>8. Tests<a class="headerlink" href="#tests" title="Permalink to this heading">¶</a></h2>
 <p>msautotest will be modified to add some tests related to that new geomtransform.</p>
 </section>
 <section id="performance">
-<h2>9. Performance<a class="headerlink" href="#performance" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>9. Performance<a class="headerlink" href="#performance" title="Permalink to this heading">¶</a></h2>
 <p>I did a quick performance test: it consists of a line layer (shapefile) that
 draws an 1200x1200 image with 2400 shapes. The number is the layer draw times.</p>
 <blockquote>
@@ -337,7 +342,7 @@ draws an 1200x1200 image with 2400 shapes. The number is the layer draw times.</
 </div></blockquote>
 </section>
 <section id="voting-history">
-<h2>10. Voting history<a class="headerlink" href="#voting-history" title="Bu başlık için kalıcı bağlantı">¶</a></h2>
+<h2>10. Voting history<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
 <p>+1 from Tom, Perry, Stephen, Tamas, Stephan, Daniel, Jeff and Michael.</p>
 </section>
 </section>
@@ -358,7 +363,7 @@ draws an 1200x1200 image with 2400 shapes. The number is the layer draw times.</
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -414,8 +419,8 @@ draws an 1200x1200 image with 2400 shapes. The number is the layer draw times.</
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Telif hakkı</a> 2022, Open Source Geospatial Foundation.
-      Son güncelleme: 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Son güncelleme: 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

@@ -4,15 +4,17 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 113: Layer Compositing Pipeline &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 113: Layer Compositing Pipeline &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 114: Faster retrieval of shape count" href="ms-rfc-114.html" />
     <link rel="prev" title="MS RFC 112: Retry «Follow» label positioning after maxoverlapangle colision" href="ms-rfc-112.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,26 +148,26 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-113-layer-compositing-pipeline">
-<span id="rfc113"></span><h1>MS RFC 113: Layer Compositing Pipeline<a class="headerlink" href="#ms-rfc-113-layer-compositing-pipeline" title="Enlazar permanentemente con este título">¶</a></h1>
+<span id="rfc113"></span><h1>MS RFC 113: Layer Compositing Pipeline<a class="headerlink" href="#ms-rfc-113-layer-compositing-pipeline" title="Enlace permanente a este encabezado">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2015/02</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Thomas Bonfort</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="mailto:thomas&#46;bonfort&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>bonfort<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Implemented</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 7.0</p>
 </dd>
 </dl>
 <section id="motivation">
-<h2>1. Motivation<a class="headerlink" href="#motivation" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2>1. Motivation<a class="headerlink" href="#motivation" title="Enlace permanente a este encabezado">¶</a></h2>
 <p>Some cartographic renderings would benefit from the addition of advanced
 blending modes, as can be explained in detail in
 <a class="reference external" href="http://en.wikipedia.org/wiki/Blend_modes">http://en.wikipedia.org/wiki/Blend_modes</a> . In particular, this functionality is
@@ -170,7 +175,7 @@ essential for more pleasant renderings of raster hillshadings over vector
 surfaces.</p>
 </section>
 <section id="proposed-enhancement">
-<h2>2. Proposed enhancement<a class="headerlink" href="#proposed-enhancement" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2>2. Proposed enhancement<a class="headerlink" href="#proposed-enhancement" title="Enlace permanente a este encabezado">¶</a></h2>
 <p>The LAYER-&gt;OPACITY functionality will be replaced with one or more LAYER-&gt;COMPOSITE
 blocks that will define which compositing mode should be used to blend the current
 layer onto the pre-exisiting basemap. Similarly to when using the actual LAYER-&gt;OPACITY
@@ -193,7 +198,7 @@ and implementations for such features will be determined in a future release and
 Supporting multiple COMPOSITE blocks inside a LAYER will only make real sense once these
 COMPFILTERs are decided upon.</p>
 <section id="supported-compositing-operations">
-<h3>2.1 Supported Compositing Operations<a class="headerlink" href="#supported-compositing-operations" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3>2.1 Supported Compositing Operations<a class="headerlink" href="#supported-compositing-operations" title="Enlace permanente a este encabezado">¶</a></h3>
 <p>The default compositing operator which is equivalent to the current
 layer compositing operator is «src-over». The COMPOP values that
 can be used should be explicit and are listed here:</p>
@@ -233,7 +238,7 @@ backends <em>and</em> when pixman support is not enabled, and will fall back to
 </section>
 </section>
 <section id="backwards-compatibility">
-<h2>2.2 Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2>2.2 Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="Enlace permanente a este encabezado">¶</a></h2>
 <p>LAYER-&gt;OPACITY will be deprecated and should be replaced by</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
   <span class="n">COMPOSITE</span>
@@ -246,12 +251,12 @@ to work with LAYER-&gt;OPACITY but will produce unspecified results if used in
 conjunction with COMPOSITE blocks.</p>
 </section>
 <section id="performance-implications">
-<h2>2.3 Performance Implications<a class="headerlink" href="#performance-implications" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2>2.3 Performance Implications<a class="headerlink" href="#performance-implications" title="Enlace permanente a este encabezado">¶</a></h2>
 <p>None if not explicitly enabled. Depending on the selected compositing operator
 performance may be slightly degraded compared to when using «src-over».</p>
 </section>
 <section id="limitations">
-<h2>2.4 Limitations<a class="headerlink" href="#limitations" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2>2.4 Limitations<a class="headerlink" href="#limitations" title="Enlace permanente a este encabezado">¶</a></h2>
 <ul class="simple">
 <li><p>The Compositing pipeline is ony supported by pixel renderers, and as such will
 not be functional for PDF and SVG backends.</p></li>
@@ -260,9 +265,9 @@ support has been enabled.</p></li>
 </ul>
 </section>
 <section id="implementation-details">
-<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Enlace permanente a este encabezado">¶</a></h2>
 <section id="architecture">
-<h3>3.1 Architecture<a class="headerlink" href="#architecture" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3>3.1 Architecture<a class="headerlink" href="#architecture" title="Enlace permanente a este encabezado">¶</a></h3>
 <ul class="simple">
 <li><p>Renderers will have their vtable signature updated to include a
 compositeRasterBuffer() function to be used when compositing has been
@@ -276,7 +281,7 @@ the cost/benefit ratio (performance, features, dependencies)</p></li>
 </ul>
 </section>
 <section id="affected-files">
-<h3>3.1 Affected files<a class="headerlink" href="#affected-files" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3>3.1 Affected files<a class="headerlink" href="#affected-files" title="Enlace permanente a este encabezado">¶</a></h3>
 <ul class="simple">
 <li><p>mapfile.c, maplexer.l: parser, keywords.</p></li>
 <li><p>mapagg.cpp, mapcairo.c: actual compositing operations</p></li>
@@ -286,7 +291,7 @@ and backwards compatibility</p></li>
 </ul>
 </section>
 <section id="tracking-issue">
-<h3>3.2 Tracking Issue<a class="headerlink" href="#tracking-issue" title="Enlazar permanentemente con este título">¶</a></h3>
+<h3>3.2 Tracking Issue<a class="headerlink" href="#tracking-issue" title="Enlace permanente a este encabezado">¶</a></h3>
 <ul class="simple">
 <li><p>code: <a class="reference external" href="https://github.com/tbonfort/mapserver/compare/compositing">https://github.com/tbonfort/mapserver/compare/compositing</a> (to be updated with PR#)</p></li>
 <li><p>tests: TBD</p></li>
@@ -294,7 +299,7 @@ and backwards compatibility</p></li>
 </section>
 </section>
 <section id="voting-history">
-<h2>4. Voting History<a class="headerlink" href="#voting-history" title="Enlazar permanentemente con este título">¶</a></h2>
+<h2>4. Voting History<a class="headerlink" href="#voting-history" title="Enlace permanente a este encabezado">¶</a></h2>
 <p>+1 from ThomasB, StephanM, MikeS, SteveW, DanielM, TomK and PerryN</p>
 </section>
 </section>
@@ -315,7 +320,7 @@ and backwards compatibility</p></li>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -373,8 +378,8 @@ and backwards compatibility</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Derechos de autor</a> 2022, Open Source Geospatial Foundation.
-      Actualizado por última vez en 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Actualizado por última vez en 2022-09-13.
+      Creado usando <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

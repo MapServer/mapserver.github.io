@@ -4,15 +4,17 @@
 <html lang="el">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 64 - MapServer Expression Parser Overhaul &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 64 - MapServer Expression Parser Overhaul &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 65 - Single-pass Query Changes for 6.0" href="ms-rfc-65.html" />
     <link rel="prev" title="MS RFC 63: Built-in OpenLayers map viewer" href="ms-rfc-63.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,26 +148,26 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-64-mapserver-expression-parser-overhaul">
-<span id="rfc64"></span><h1>MS RFC 64 - MapServer Expression Parser Overhaul<a class="headerlink" href="#ms-rfc-64-mapserver-expression-parser-overhaul" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h1>
+<span id="rfc64"></span><h1>MS RFC 64 - MapServer Expression Parser Overhaul<a class="headerlink" href="#ms-rfc-64-mapserver-expression-parser-overhaul" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2010/11/2</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Steve Lime</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p>sdlime at comcast.net</p>
 </dd>
-<dt class="field-even">Last Edited</dt>
+<dt class="field-even">Last Edited<span class="colon">:</span></dt>
 <dd class="field-even"><p>2010-11-2</p>
 </dd>
-<dt class="field-odd">Status</dt>
+<dt class="field-odd">Status<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Adopted</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>This is a draft RFC addressing 1) how the Bison/Yacc parser for logical expressions is implemented and 2) where in the MapServer code
 the  parser can be used. This RFC could have broader impacts on query processing depending on additional changes at the driver level,
 specifically the RDBMS ones. Those changes don’t have to occur for this to be a useful addition.</p>
@@ -173,7 +178,7 @@ specifically the RDBMS ones. Those changes don’t have to occur for this to be 
 </div></blockquote>
 </section>
 <section id="existing-expression-parsing">
-<h2>Existing Expression Parsing<a class="headerlink" href="#existing-expression-parsing" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>Existing Expression Parsing<a class="headerlink" href="#existing-expression-parsing" title="Permalink to this heading">¶</a></h2>
 <p>The existing logical expression handling in MapServer works like so:</p>
 <blockquote>
 <div><ol class="arabic simple">
@@ -198,7 +203,7 @@ specifically the RDBMS ones. Those changes don’t have to occur for this to be 
 </div></blockquote>
 </section>
 <section id="proposed-technical-changes">
-<h2>Proposed Technical Changes<a class="headerlink" href="#proposed-technical-changes" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>Proposed Technical Changes<a class="headerlink" href="#proposed-technical-changes" title="Permalink to this heading">¶</a></h2>
 <p>This RFC proposes a number of technical changes. The core change, however, involved updating the way logical expressions work.
 Additional features capitalize on this core change to bring additional capabilities to MapServer.</p>
 <p><strong>Core Parser Update</strong></p>
@@ -311,7 +316,7 @@ given in pixels. In the future we might consider implementing a GEOMTRANSFORM at
 classes and/or styles (and consequently in query modes too).</p>
 </section>
 <section id="expression-use-elsewhere">
-<h2>Expression Use Elsewhere<a class="headerlink" href="#expression-use-elsewhere" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>Expression Use Elsewhere<a class="headerlink" href="#expression-use-elsewhere" title="Permalink to this heading">¶</a></h2>
 <p>Currently the logical expression syntax is also used with REQUIRES/LABELREQUIRES and with rasters. In the REQUIRES/LABELREQUIRES case the code
 would remain mostly «as is» we’d still do the substitutions bases on layer status, then explicitly tokenize and parse. Since this done at most once per
 layer there’s really no need to do anything more.</p>
@@ -322,7 +327,7 @@ effects are also possible if you could expose a pixel location to the GEOS opera
 a particular geometry.</p>
 </section>
 <section id="query-impact">
-<h2>Query Impact<a class="headerlink" href="#query-impact" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>Query Impact<a class="headerlink" href="#query-impact" title="Permalink to this heading">¶</a></h2>
 <p>This is where things get interesting. I’m proposing adding a new query, msQueryByFilter() that would work off an expression string (this is working in
 the sandbox). The expression string would still have to be accompanied by an extent parameter. Drivers like shapefiles still need to first apply a bounding
 box before applying a secondary filter. Other drivers could choose to combine the extent and expression string (more likely the tokens) if they so choose.
@@ -333,7 +338,7 @@ driver that uses msEvalExpression(). My hope is that the RDBMS drivers could som
 we would still be able to use those sources.</p>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h2>
 <p>Surprisingly few. The parser changes would all be transparent to the user. Truly handling TEXT expressions as expressions is a regression, albeit a positive
 one IMHO. I would also propose a few expression level changes especially around case-insensitive string and regex comparisons within logical expression. I
 think it makes more sense and is more user friendly to simply define case-insensitive operators (e.g. EQ and IEQ for straight string equality, and ~ and ~* for
@@ -353,13 +358,13 @@ numerous associated enums, defines, etc… could go away.</p>
 </div></blockquote>
 </section>
 <section id="security-issues">
-<h2>Security Issues<a class="headerlink" href="#security-issues" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>Security Issues<a class="headerlink" href="#security-issues" title="Permalink to this heading">¶</a></h2>
 <p>While the bulk of the work is in the bowels of MapServer any change of this magnitude could have unintended consequences. In this case I
 think the largest risks are buffer overflows associated with string operators in the parser and memory leaks. Care would need to be taken in
 developing a comprehensive set of test cases.</p>
 </section>
 <section id="todo-s">
-<h2>Todo’s<a class="headerlink" href="#todo-s" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>Todo’s<a class="headerlink" href="#todo-s" title="Permalink to this heading">¶</a></h2>
 <blockquote>
 <div><ol class="arabic simple">
 <li><p>The “”IN”” operator is in dire need of optimization.</p></li>
@@ -373,13 +378,13 @@ developing a comprehensive set of test cases.</p>
 </div></blockquote>
 </section>
 <section id="bug-id">
-<h2>Bug ID<a class="headerlink" href="#bug-id" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this heading">¶</a></h2>
 <blockquote>
 <div><p>#3613</p>
 </div></blockquote>
 </section>
 <section id="voting-history">
-<h2>Voting history<a class="headerlink" href="#voting-history" title="Μόνιμος σύνδεσμος σε αυτήν την κεφαλίδα">¶</a></h2>
+<h2>Voting history<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
 <blockquote>
 <div><p>Passed on 12/1/2010 with a +1 from Steve L, Steve W, Perry, Assefa, Tamas.</p>
 </div></blockquote>
@@ -402,7 +407,7 @@ developing a comprehensive set of test cases.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -455,8 +460,8 @@ developing a comprehensive set of test cases.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a>2022, Open Source Geospatial Foundation
-      Τελευταία ενημέρωση στις 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Τελευταία ενημέρωση στις 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

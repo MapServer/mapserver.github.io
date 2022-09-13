@@ -4,15 +4,17 @@
 <html lang="pl">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 18: Encryption of passwords in mapfiles &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 18: Encryption of passwords in mapfiles &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 19: Style &amp; Label attribute binding" href="ms-rfc-19.html" />
     <link rel="prev" title="MS RFC 17: Dynamic Allocation of layers, styles, classes and symbols" href="ms-rfc-17.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,35 +148,35 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-18-encryption-of-passwords-in-mapfiles">
-<span id="rfc18"></span><h1>MS RFC 18: Encryption of passwords in mapfiles<a class="headerlink" href="#ms-rfc-18-encryption-of-passwords-in-mapfiles" title="Stały odnośnik do tego nagłówka">¶</a></h1>
+<span id="rfc18"></span><h1>MS RFC 18: Encryption of passwords in mapfiles<a class="headerlink" href="#ms-rfc-18-encryption-of-passwords-in-mapfiles" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2006/05/26</p>
 </dd>
-<dt class="field-even">Author</dt>
+<dt class="field-even">Author<span class="colon">:</span></dt>
 <dd class="field-even"><p>Daniel Morissette</p>
 </dd>
-<dt class="field-odd">Contact</dt>
+<dt class="field-odd">Contact<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dmorissette at mapgears.com</p>
 </dd>
-<dt class="field-even">Last Edited</dt>
+<dt class="field-even">Last Edited<span class="colon">:</span></dt>
 <dd class="field-even"><p>2006/08/11</p>
 </dd>
-<dt class="field-odd">Status</dt>
+<dt class="field-odd">Status<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Completed (2006/08/11)</p>
 </dd>
-<dt class="field-even">Version</dt>
+<dt class="field-even">Version<span class="colon">:</span></dt>
 <dd class="field-even"><p>MapServer 4.10</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>This proposal provides a mechanism to protect database connection passwords
 used inside <a class="reference internal" href="../../mapfile/index.html#mapfile"><span class="std std-ref">mapfiles</span></a> by encrypting them instead of including
 them in plain text.</p>
 </section>
 <section id="technical-solution">
-<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Permalink to this heading">¶</a></h2>
 <p>MapServer will be extended to allow the use of encrypted passwords as part
 of the CONNECTION string for the following layer types:</p>
 <ul class="simple">
@@ -186,7 +191,7 @@ encryption/decryption functions.</p>
 <p>The implementation details follow…</p>
 </section>
 <section id="encryption-key">
-<h2>Encryption key<a class="headerlink" href="#encryption-key" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>Encryption key<a class="headerlink" href="#encryption-key" title="Permalink to this heading">¶</a></h2>
 <p>In order to safely protect the encrypted information, an encryption key will
 be required by this mechanism. The key will NOT be stored in the mapfile: it
 will be stored in a separate file on the server and should be kept in a
@@ -200,7 +205,7 @@ CONFIG directive:</p>
 </div>
 </section>
 <section id="new-msencrypt-command-line-utility">
-<h2>New „msencrypt” command-line utility<a class="headerlink" href="#new-msencrypt-command-line-utility" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>New „msencrypt” command-line utility<a class="headerlink" href="#new-msencrypt-command-line-utility" title="Permalink to this heading">¶</a></h2>
 <p>A „msencrypt” command-line utility will be provided to create an encryption
 key and to encrypt passwords (or any string) for use in a mapfile.</p>
 <p>To create an encryption key:</p>
@@ -215,7 +220,7 @@ key and to encrypt passwords (or any string) for use in a mapfile.</p>
 argument does not need to be specified.</p>
 </section>
 <section id="encoding-of-encrypted-strings">
-<h2>Encoding of encrypted strings<a class="headerlink" href="#encoding-of-encrypted-strings" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>Encoding of encrypted strings<a class="headerlink" href="#encoding-of-encrypted-strings" title="Permalink to this heading">¶</a></h2>
 <p>Since the result of encryption is binary data that is not suitable for
 inclusion directly in a MapServer mapfile, hex encoding will be used for the
 encrypted strings in the mapfile as well as for storing the encryption
@@ -248,7 +253,7 @@ layer types that will be affected:</p>
 </div>
 </section>
 <section id="modifications-to-the-source-code">
-<h2>Modifications to the source code<a class="headerlink" href="#modifications-to-the-source-code" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>Modifications to the source code<a class="headerlink" href="#modifications-to-the-source-code" title="Permalink to this heading">¶</a></h2>
 <p>A msDecryptString() function will be created, it will take a CONNECTION
 string as input and decrypt any encrypted component that it may find in it.
 This function will be called by the various msXXXLayerOpen() methods before
@@ -269,7 +274,7 @@ soon as the function is done with it. This is to prevent exposing the
 decrypted information in error messages or in calls to msSaveMap().</p>
 </section>
 <section id="files-affected">
-<h2>Files affected<a class="headerlink" href="#files-affected" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>Files affected<a class="headerlink" href="#files-affected" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">map</span><span class="o">.</span><span class="n">h</span>
 <span class="n">mapfile</span><span class="o">.</span><span class="n">c</span>
 <span class="n">maporaclespatial</span><span class="o">.</span><span class="n">c</span>
@@ -281,20 +286,20 @@ decrypted information in error messages or in calls to msSaveMap().</p>
 </div>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h2>
 <p>None.</p>
 </section>
 <section id="bug-id">
-<h2>Bug ID<a class="headerlink" href="#bug-id" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this heading">¶</a></h2>
 <p>1792: <a class="reference external" href="https://github.com/MapServer/MapServer/issues/1792">https://github.com/MapServer/MapServer/issues/1792</a></p>
 </section>
 <section id="voting-history">
-<h2>Voting history<a class="headerlink" href="#voting-history" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>Voting history<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
 <p>Adopted on 2006/06/01.
 +1: FrankW, DanielM, HowardB, YewondwossenA, SteveW</p>
 </section>
 <section id="comments-from-the-review-period">
-<h2>Comments from the review period<a class="headerlink" href="#comments-from-the-review-period" title="Stały odnośnik do tego nagłówka">¶</a></h2>
+<h2>Comments from the review period<a class="headerlink" href="#comments-from-the-review-period" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>There were concerns about the use of the {…} delimiter to indicate
 encrypted strings inside CONNECTIONs. Since there was not a better
@@ -337,7 +342,7 @@ valuable passwords in mapfiles encrypted or not.</p></li>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -391,8 +396,8 @@ valuable passwords in mapfiles encrypted or not.</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Ostatnia modyfikacja 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Ostatnia modyfikacja 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

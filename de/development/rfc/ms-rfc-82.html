@@ -4,15 +4,17 @@
 <html lang="de">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 82: Support for Enhanced Layer Metadata Management &#8212; MapServer 7.6.4 documentation</title>
+    <title>MS RFC 82: Support for Enhanced Layer Metadata Management &#8212; MapServer 8.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/translations.js"></script>
     
@@ -24,6 +26,9 @@
     <link rel="next" title="MS RFC 83: Source tree reorganization" href="ms-rfc-83.html" />
     <link rel="prev" title="MS RFC 81: Offset Labels with Leader Lines" href="ms-rfc-81.html" /> 
   </head><body>
+
+
+<!-- for main branch only, do not backport this -->
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -143,26 +148,26 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-82-support-for-enhanced-layer-metadata-management">
-<span id="rfc82"></span><h1>MS RFC 82: Support for Enhanced Layer Metadata Management<a class="headerlink" href="#ms-rfc-82-support-for-enhanced-layer-metadata-management" title="Link zu dieser Überschrift">¶</a></h1>
+<span id="rfc82"></span><h1>MS RFC 82: Support for Enhanced Layer Metadata Management<a class="headerlink" href="#ms-rfc-82-support-for-enhanced-layer-metadata-management" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Date</dt>
+<dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2012-01-24</p>
 </dd>
-<dt class="field-even">Authors</dt>
+<dt class="field-even">Authors<span class="colon">:</span></dt>
 <dd class="field-even"><p>Tom Kralidis (tomkralidis at gmail.com)</p>
 </dd>
-<dt class="field-odd">Last Edited</dt>
+<dt class="field-odd">Last Edited<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2017-04-03</p>
 </dd>
-<dt class="field-even">Status</dt>
+<dt class="field-even">Status<span class="colon">:</span></dt>
 <dd class="field-even"><p>Adopted</p>
 </dd>
-<dt class="field-odd">Version</dt>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
 <dd class="field-odd"><p>MapServer 7.2</p>
 </dd>
 </dl>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p>OGC Web Services (OWS) have the ability to advertise content metadata
 associated with a given resource (WMS Layer, WFS FeatureType, WCS Coverage,
 SOS ObservationOffering), both inline to the Capabilities document and as
@@ -184,7 +189,7 @@ services for cases where XML metadata does not exist / is not specified
 for a given resource.</p>
 </section>
 <section id="technical-solution">
-<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Permalink to this heading">¶</a></h2>
 <p>MapServer will have the ability to generate an ISO 19139:2007 metadata XML
 document dynamically from LAYER.METADATA/ows_* directives and the given layer’s
 spatial properties.</p>
@@ -216,7 +221,7 @@ allow for additional metadata formats to be implemented in the future.  In
 particular, this RFC provides a building block to support the INSPIRE metadata
 format requirements.</p>
 <section id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Link zu dieser Überschrift">¶</a></h3>
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h3>
 <p>Requesting service metadata:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://my.host.com/cgi-bin/mapserv?request=GetMetadata
 </pre></div>
@@ -227,7 +232,7 @@ format requirements.</p>
 </div>
 </section>
 <section id="implementation-details">
-<h3>Implementation Details<a class="headerlink" href="#implementation-details" title="Link zu dieser Überschrift">¶</a></h3>
+<h3>Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this heading">¶</a></h3>
 <p>mapows.c (in <cite>msOWSDispatch</cite>)</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="p">...</span><span class="w"></span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ows_request</span><span class="p">.</span><span class="n">service</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -270,19 +275,19 @@ format requirements.</p>
 </section>
 </section>
 <section id="testing">
-<h2>Testing<a class="headerlink" href="#testing" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this heading">¶</a></h2>
 <p>The <cite>msautotest/wxs</cite> suite will be extended with test cases exemplifying
 the expected behaviour of <cite>GetMetadata</cite>.</p>
 </section>
 <section id="documentation">
-<h2>Documentation<a class="headerlink" href="#documentation" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">¶</a></h2>
 <p>Documentation will be updated by adding <cite>ogc/mapmetadata.txt</cite>
 to <cite>ogc/index.txt</cite>.  As well, <cite>wms_server.txt</cite>, <cite>wfs_server.txt</cite>,
 <cite>wcs_server.txt</cite>, <cite>sos_server.txt</cite> will be updated to explain default
 output if <cite>ows_metadataurl_href</cite> is not set.</p>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h2>
 <p>There are no compatibility issues with existing mapfiles.</p>
 <p>This implementation will result in the ability for MapServer OWS Capabilities
 XML to always advertise XML metadata by reference of a metadata URL
@@ -293,7 +298,7 @@ is not set, then the code will advertise the metadata via a reference to
 the <cite>GetMetadata</cite> operation.</p>
 </section>
 <section id="affected-files">
-<h2>Affected Files<a class="headerlink" href="#affected-files" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>Affected Files<a class="headerlink" href="#affected-files" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>mapmetadata.c (new)</p></li>
 <li><p>mapows.c</p></li>
@@ -307,13 +312,13 @@ the <cite>GetMetadata</cite> operation.</p>
 </ul>
 </section>
 <section id="ticket-id">
-<h2>Ticket Id<a class="headerlink" href="#ticket-id" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>Ticket Id<a class="headerlink" href="#ticket-id" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/MapServer/MapServer/pull/5412">https://github.com/MapServer/MapServer/pull/5412</a></p></li>
 </ul>
 </section>
 <section id="voting-history">
-<h2>Voting History<a class="headerlink" href="#voting-history" title="Link zu dieser Überschrift">¶</a></h2>
+<h2>Voting History<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
 <p>Adopted on 2012/10/08 with +1 from ThomasB, SteveL, StephanM, PerryN,
 SteveW, DanielM, and TomK.</p>
 </section>
@@ -335,7 +340,7 @@ SteveW, DanielM, and TomK.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
 <a href="../../products.html" title="Products">Products</a><br>
@@ -390,8 +395,8 @@ SteveW, DanielM, and TomK.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Zuletzt aktualisiert am 2022-05-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Zuletzt aktualisiert am 2022-09-13.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>
