@@ -12,13 +12,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     
-    <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
+    <link rel="icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -233,22 +230,22 @@ database, after having binded one or more of the <cite>:tileset</cite>,
 <cite>:start_timestamp</cite>, <cite>:end_timestamp</cite> values given the current request.</p></li>
 </ul>
 <p>An example configuration entry is provided here:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;timedimension</span> <span class="na">type=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">default=</span><span class="s">&quot;2010&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;dbfile&gt;</span>/path/to/mapcache-time.sqlite<span class="nt">&lt;/dbfile&gt;</span>
-  <span class="nt">&lt;query&gt;</span>
-    select
-      strftime(&#39;%Y-%m-%dT%H:%M:%SZ&#39;,start_time)||&#39;/&#39;||strftime(&#39;%Y-%m-%dT%H:%M:%SZ&#39;,end_time)
-    from
-      time
-    where
-      source_id=:tileset
-      and
-      start_time<span class="ni">&amp;gt;</span>=datetime(:start_timestamp,&#39;unixepoch&#39;)
-      and
-      end_time<span class="ni">&amp;lt;</span>=datetime(:end_timestamp,&#39;unixepoch&#39;)
-    order by
-      end_time
-  <span class="nt">&lt;/query&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;timedimension</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;sqlite&quot;</span><span class="w"> </span><span class="na">default=</span><span class="s">&quot;2010&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;dbfile&gt;</span>/path/to/mapcache-time.sqlite<span class="nt">&lt;/dbfile&gt;</span>
+<span class="w">  </span><span class="nt">&lt;query&gt;</span>
+<span class="w">    </span>select
+<span class="w">      </span>strftime(&#39;%Y-%m-%dT%H:%M:%SZ&#39;,start_time)||&#39;/&#39;||strftime(&#39;%Y-%m-%dT%H:%M:%SZ&#39;,end_time)
+<span class="w">    </span>from
+<span class="w">      </span>time
+<span class="w">    </span>where
+<span class="w">      </span>source_id=:tileset
+<span class="w">      </span>and
+<span class="w">      </span>start_time<span class="ni">&amp;gt;</span>=datetime(:start_timestamp,&#39;unixepoch&#39;)
+<span class="w">      </span>and
+<span class="w">      </span>end_time<span class="ni">&amp;lt;</span>=datetime(:end_timestamp,&#39;unixepoch&#39;)
+<span class="w">    </span>order<span class="w"> </span>by
+<span class="w">      </span>end_time
+<span class="w">  </span><span class="nt">&lt;/query&gt;</span>
 <span class="nt">&lt;/timedimension&gt;</span>
 </pre></div>
 </div>
@@ -358,48 +355,48 @@ for a given (larger) time interval.</p>
 <h3>3.1 Overview<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
 <p>A struct representing a TIME database will be added, and be sub-classed by a
 sqlite specific implementation.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">MAPCACHE_TIMEDIMENSION_ASSEMBLY_STACK</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">MAPCACHE_TIMEDIMENSION_ASSEMBLY_ANIMATE</span><span class="w"> </span><span class="cm">/* for future use */</span><span class="w"></span>
-<span class="p">}</span><span class="w"> </span><span class="n">mapcache_timedimension_assembly_type</span><span class="p">;</span><span class="w"></span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">MAPCACHE_TIMEDIMENSION_ASSEMBLY_STACK</span><span class="p">,</span>
+<span class="w">  </span><span class="n">MAPCACHE_TIMEDIMENSION_ASSEMBLY_ANIMATE</span><span class="w"> </span><span class="cm">/* for future use */</span>
+<span class="p">}</span><span class="w"> </span><span class="n">mapcache_timedimension_assembly_type</span><span class="p">;</span>
 
-<span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">MAPCACHE_TIMEDIMENSION_SOURCE_SQLITE</span><span class="w"></span>
-<span class="w">  </span><span class="cm">/* for future use */</span><span class="w"></span>
-<span class="p">}</span><span class="w"> </span><span class="n">mapcache_timedimension_source_type</span><span class="p">;</span><span class="w"></span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">MAPCACHE_TIMEDIMENSION_SOURCE_SQLITE</span>
+<span class="w">  </span><span class="cm">/* for future use */</span>
+<span class="p">}</span><span class="w"> </span><span class="n">mapcache_timedimension_source_type</span><span class="p">;</span>
 
-<span class="n">apr_array_header_t</span><span class="o">*</span><span class="w"> </span><span class="nf">mapcache_timedimension_get_entries_for_value</span><span class="p">(</span><span class="w"></span>
-<span class="w">  </span><span class="n">mapcache_context</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">mapcache_timedimension</span><span class="w"> </span><span class="o">*</span><span class="n">timedimension</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">mapcache_tileset</span><span class="w"> </span><span class="o">*</span><span class="n">tileset</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">value</span><span class="w"></span>
-<span class="p">);</span><span class="w"></span>
+<span class="n">apr_array_header_t</span><span class="o">*</span><span class="w"> </span><span class="nf">mapcache_timedimension_get_entries_for_value</span><span class="p">(</span>
+<span class="w">  </span><span class="n">mapcache_context</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">,</span>
+<span class="w">  </span><span class="n">mapcache_timedimension</span><span class="w"> </span><span class="o">*</span><span class="n">timedimension</span><span class="p">,</span>
+<span class="w">  </span><span class="n">mapcache_tileset</span><span class="w"> </span><span class="o">*</span><span class="n">tileset</span><span class="p">,</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">value</span>
+<span class="p">);</span>
 
-<span class="k">struct</span><span class="w"> </span><span class="nc">mapcache_timedimension</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">mapcache_timedimension_assembly_type</span><span class="w"> </span><span class="n">assembly_type</span><span class="p">;</span><span class="w"> </span><span class="cm">/* for future use */</span><span class="w"></span>
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">configuration_parse_xml</span><span class="p">)(</span><span class="w"></span>
-<span class="w">    </span><span class="n">mapcache_context</span><span class="w"> </span><span class="o">*</span><span class="n">context</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="n">mapcache_timedimension</span><span class="w"> </span><span class="o">*</span><span class="n">dim</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="n">ezxml_t</span><span class="w"> </span><span class="n">node</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">apr_array_header_t</span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">get_entries_for_interval</span><span class="p">)(</span><span class="w"></span>
-<span class="w">    </span><span class="n">mapcache_context</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="n">mapcache_timedimension</span><span class="w"> </span><span class="o">*</span><span class="n">dim</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="n">mapcache_tileset</span><span class="w"> </span><span class="o">*</span><span class="n">tileset</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="kt">time_t</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="kt">time_t</span><span class="w"> </span><span class="n">end</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">apr_array_header_t</span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">get_all_entries</span><span class="p">)(</span><span class="w"></span>
-<span class="w">    </span><span class="n">mapcache_context</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="n">mapcache_timedimension</span><span class="w"> </span><span class="o">*</span><span class="n">dim</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="n">mapcache_tileset</span><span class="w"> </span><span class="o">*</span><span class="n">tileset</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">default_value</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">key</span><span class="p">;</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">mapcache_timedimension</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">mapcache_timedimension_assembly_type</span><span class="w"> </span><span class="n">assembly_type</span><span class="p">;</span><span class="w"> </span><span class="cm">/* for future use */</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">configuration_parse_xml</span><span class="p">)(</span>
+<span class="w">    </span><span class="n">mapcache_context</span><span class="w"> </span><span class="o">*</span><span class="n">context</span><span class="p">,</span>
+<span class="w">    </span><span class="n">mapcache_timedimension</span><span class="w"> </span><span class="o">*</span><span class="n">dim</span><span class="p">,</span>
+<span class="w">    </span><span class="n">ezxml_t</span><span class="w"> </span><span class="n">node</span><span class="p">);</span>
+<span class="w">  </span><span class="n">apr_array_header_t</span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">get_entries_for_interval</span><span class="p">)(</span>
+<span class="w">    </span><span class="n">mapcache_context</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">,</span>
+<span class="w">    </span><span class="n">mapcache_timedimension</span><span class="w"> </span><span class="o">*</span><span class="n">dim</span><span class="p">,</span>
+<span class="w">    </span><span class="n">mapcache_tileset</span><span class="w"> </span><span class="o">*</span><span class="n">tileset</span><span class="p">,</span>
+<span class="w">    </span><span class="kt">time_t</span><span class="w"> </span><span class="n">start</span><span class="p">,</span>
+<span class="w">    </span><span class="kt">time_t</span><span class="w"> </span><span class="n">end</span><span class="p">);</span>
+<span class="w">  </span><span class="n">apr_array_header_t</span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">get_all_entries</span><span class="p">)(</span>
+<span class="w">    </span><span class="n">mapcache_context</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">,</span>
+<span class="w">    </span><span class="n">mapcache_timedimension</span><span class="w"> </span><span class="o">*</span><span class="n">dim</span><span class="p">,</span>
+<span class="w">    </span><span class="n">mapcache_tileset</span><span class="w"> </span><span class="o">*</span><span class="n">tileset</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">default_value</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">key</span><span class="p">;</span>
+<span class="p">};</span>
 
-<span class="k">struct</span><span class="w"> </span><span class="nc">mapcache_timedimension_sqlite</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">mapcache_timedimension</span><span class="w"> </span><span class="n">timedimension</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">dbfile</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">query</span><span class="p">;</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">mapcache_timedimension_sqlite</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">mapcache_timedimension</span><span class="w"> </span><span class="n">timedimension</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">dbfile</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">query</span><span class="p">;</span>
+<span class="p">};</span>
 </pre></div>
 </div>
 <p>The structs present two public functions, one to get all valid values (in order
@@ -522,9 +519,9 @@ PerryN</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Last updated on 2022-11-30.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+        &#169; <a href="../../copyright.html">Copyright</a> 2023, Open Source Geospatial Foundation.
+      Last updated on 2023-01-17.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>
