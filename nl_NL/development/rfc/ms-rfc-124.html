@@ -6,18 +6,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>MS RFC 124: Improving SLD Support in MapServer &#8212; MapServer 8.0.0 documentation</title>
+    <title>MS RFC 124: Improving SLD Support in MapServer &#8212; MapServer 8.0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     
-    <link rel="shortcut icon" href="../../_static/mapserver.ico"/>
+    <link rel="icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Over deze documenten" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Zoeken" href="../../search.html" />
@@ -198,22 +196,22 @@ proposed solution.</p>
 <h3>1. Literal constants, variables and arithmetic expressions<a class="headerlink" href="#literal-constants-variables-and-arithmetic-expressions" title="Permalink to this heading">¶</a></h3>
 <p>Currently, MapServer only supports raw constants in &lt;CssParameter&gt; or
 &lt;SvgParameter&gt; tags, e.g.:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;SvgParameter</span> <span class="na">name=</span><span class="s">&quot;stroke&quot;</span><span class="nt">&gt;</span>#0000ff<span class="nt">&lt;/SvgParameter&gt;</span>
-<span class="nt">&lt;SvgParameter</span> <span class="na">name=</span><span class="s">&quot;stroke-width&quot;</span><span class="nt">&gt;</span>2.0<span class="nt">&lt;/SvgParameter&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stroke&quot;</span><span class="nt">&gt;</span>#0000ff<span class="nt">&lt;/SvgParameter&gt;</span>
+<span class="nt">&lt;SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stroke-width&quot;</span><span class="nt">&gt;</span>2.0<span class="nt">&lt;/SvgParameter&gt;</span>
 </pre></div>
 </div>
 <p>The objective is to support &lt;Literal&gt; and &lt;PropertyName&gt; as well as arithmetic
 expressions, e.g.:</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- Literal, PropertyName --&gt;</span>
-<span class="nt">&lt;SvgParameter</span> <span class="na">name=</span><span class="s">&quot;stroke&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;Literal&gt;</span>#0000ff<span class="nt">&lt;/Literal&gt;</span> <span class="nt">&lt;/SvgParameter&gt;</span>
-<span class="nt">&lt;SvgParameter</span> <span class="na">name=</span><span class="s">&quot;stroke-width&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;PropertyName&gt;</span>LINE_WIDTH<span class="nt">&lt;/PropertyName&gt;</span> <span class="nt">&lt;/SvgParameter&gt;</span>
+<span class="nt">&lt;SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stroke&quot;</span><span class="nt">&gt;</span><span class="w"> </span><span class="nt">&lt;Literal&gt;</span>#0000ff<span class="nt">&lt;/Literal&gt;</span><span class="w"> </span><span class="nt">&lt;/SvgParameter&gt;</span>
+<span class="nt">&lt;SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stroke-width&quot;</span><span class="nt">&gt;</span><span class="w"> </span><span class="nt">&lt;PropertyName&gt;</span>LINE_WIDTH<span class="nt">&lt;/PropertyName&gt;</span><span class="w"> </span><span class="nt">&lt;/SvgParameter&gt;</span>
 
 <span class="cm">&lt;!-- Arithmetic expression --&gt;</span>
-<span class="nt">&lt;SvgParameter</span> <span class="na">name=</span><span class="s">&quot;stroke-width&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;Mul&gt;</span>
-    <span class="nt">&lt;PropertyName&gt;</span>CATEGORY<span class="nt">&lt;/PropertyName&gt;</span>
-    <span class="nt">&lt;Literal&gt;</span>3<span class="nt">&lt;/Literal&gt;</span>
-  <span class="nt">&lt;/Mul&gt;</span>
+<span class="nt">&lt;SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stroke-width&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;Mul&gt;</span>
+<span class="w">    </span><span class="nt">&lt;PropertyName&gt;</span>CATEGORY<span class="nt">&lt;/PropertyName&gt;</span>
+<span class="w">    </span><span class="nt">&lt;Literal&gt;</span>3<span class="nt">&lt;/Literal&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/Mul&gt;</span>
 <span class="nt">&lt;/SvgParameter&gt;</span>
 </pre></div>
 </div>
@@ -386,27 +384,27 @@ END
 </div>
 </td>
 <td><div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;se:PointSymbolizer&gt;</span>
-  <span class="nt">&lt;se:Graphic&gt;</span>
-    <span class="nt">&lt;se:Mark&gt;</span>
-      <span class="nt">&lt;se:WellKnownName&gt;</span>star<span class="nt">&lt;/se:WellKnownName&gt;</span>
-<span class="hll">      <span class="nt">&lt;se:Stroke&gt;</span>
-</span><span class="hll">        <span class="nt">&lt;se:SvgParameter</span> <span class="na">name=</span><span class="s">&quot;stroke&quot;</span><span class="nt">&gt;</span>#ff0000<span class="nt">&lt;/se:SvgParameter&gt;</span>
-</span><span class="hll">        <span class="nt">&lt;se:SvgParameter</span> <span class="na">name=</span><span class="s">&quot;stroke-opacity&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/se:SvgParameter&gt;</span>
-</span><span class="hll">        <span class="nt">&lt;se:SvgParameter</span> <span class="na">name=</span><span class="s">&quot;stroke-width&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/se:SvgParameter&gt;</span>
-</span><span class="hll">      <span class="nt">&lt;/se:Stroke&gt;</span>
-</span>      <span class="nt">&lt;se:Fill&gt;</span>
-        <span class="nt">&lt;se:SvgParameter</span> <span class="na">name=</span><span class="s">&quot;fill&quot;</span><span class="nt">&gt;</span>#0000ff<span class="nt">&lt;/se:SvgParameter&gt;</span>
-<span class="hll">        <span class="nt">&lt;se:SvgParameter</span> <span class="na">name=</span><span class="s">&quot;fill-opacity&quot;</span><span class="nt">&gt;</span>0.10<span class="nt">&lt;/se:SvgParameter&gt;</span>
-</span>      <span class="nt">&lt;/se:Fill&gt;</span>
-    <span class="nt">&lt;/se:Mark&gt;</span>
-    <span class="nt">&lt;se:Size&gt;</span>20<span class="nt">&lt;/se:Size&gt;</span>
-<span class="hll">    <span class="nt">&lt;se:Rotation&gt;</span>180<span class="nt">&lt;/se:Rotation&gt;</span>
-</span><span class="hll">    <span class="nt">&lt;se:Displacement&gt;</span>
-</span><span class="hll">      <span class="nt">&lt;se:DisplacementX&gt;</span>2<span class="nt">&lt;/se:DisplacementX&gt;</span>
-</span><span class="hll">      <span class="nt">&lt;se:DisplacementY&gt;</span>2<span class="nt">&lt;/se:DisplacementY&gt;</span>
-</span><span class="hll">    <span class="nt">&lt;/se:Displacement&gt;</span>
-</span><span class="hll">    <span class="nt">&lt;se:Opacity&gt;</span>0.5<span class="nt">&lt;/se:Opacity&gt;</span>
-</span>  <span class="nt">&lt;/se:Graphic&gt;</span>
+<span class="w">  </span><span class="nt">&lt;se:Graphic&gt;</span>
+<span class="w">    </span><span class="nt">&lt;se:Mark&gt;</span>
+<span class="w">      </span><span class="nt">&lt;se:WellKnownName&gt;</span>star<span class="nt">&lt;/se:WellKnownName&gt;</span>
+<span class="hll"><span class="w">      </span><span class="nt">&lt;se:Stroke&gt;</span>
+</span><span class="hll"><span class="w">        </span><span class="nt">&lt;se:SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stroke&quot;</span><span class="nt">&gt;</span>#ff0000<span class="nt">&lt;/se:SvgParameter&gt;</span>
+</span><span class="hll"><span class="w">        </span><span class="nt">&lt;se:SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stroke-opacity&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/se:SvgParameter&gt;</span>
+</span><span class="hll"><span class="w">        </span><span class="nt">&lt;se:SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stroke-width&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/se:SvgParameter&gt;</span>
+</span><span class="hll"><span class="w">      </span><span class="nt">&lt;/se:Stroke&gt;</span>
+</span><span class="w">      </span><span class="nt">&lt;se:Fill&gt;</span>
+<span class="w">        </span><span class="nt">&lt;se:SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;fill&quot;</span><span class="nt">&gt;</span>#0000ff<span class="nt">&lt;/se:SvgParameter&gt;</span>
+<span class="hll"><span class="w">        </span><span class="nt">&lt;se:SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;fill-opacity&quot;</span><span class="nt">&gt;</span>0.10<span class="nt">&lt;/se:SvgParameter&gt;</span>
+</span><span class="w">      </span><span class="nt">&lt;/se:Fill&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/se:Mark&gt;</span>
+<span class="w">    </span><span class="nt">&lt;se:Size&gt;</span>20<span class="nt">&lt;/se:Size&gt;</span>
+<span class="hll"><span class="w">    </span><span class="nt">&lt;se:Rotation&gt;</span>180<span class="nt">&lt;/se:Rotation&gt;</span>
+</span><span class="hll"><span class="w">    </span><span class="nt">&lt;se:Displacement&gt;</span>
+</span><span class="hll"><span class="w">      </span><span class="nt">&lt;se:DisplacementX&gt;</span>2<span class="nt">&lt;/se:DisplacementX&gt;</span>
+</span><span class="hll"><span class="w">      </span><span class="nt">&lt;se:DisplacementY&gt;</span>2<span class="nt">&lt;/se:DisplacementY&gt;</span>
+</span><span class="hll"><span class="w">    </span><span class="nt">&lt;/se:Displacement&gt;</span>
+</span><span class="hll"><span class="w">    </span><span class="nt">&lt;se:Opacity&gt;</span>0.5<span class="nt">&lt;/se:Opacity&gt;</span>
+</span><span class="w">  </span><span class="nt">&lt;/se:Graphic&gt;</span>
 <span class="nt">&lt;/se:PointSymbolizer&gt;</span>
 </pre></div>
 </div>
@@ -430,15 +428,15 @@ END
 </div>
 </td>
 <td><div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;se:PolygonSymbolizer&gt;</span>
-  <span class="nt">&lt;se:Fill&gt;</span>
-    <span class="nt">&lt;se:SvgParameter</span> <span class="na">name=</span><span class="s">&quot;fill&quot;</span><span class="nt">&gt;</span>#00ffff<span class="nt">&lt;/se:SvgParameter&gt;</span>
-    <span class="nt">&lt;se:SvgParameter</span> <span class="na">name=</span><span class="s">&quot;fill-opacity&quot;</span><span class="nt">&gt;</span>0.50<span class="nt">&lt;/se:SvgParameter&gt;</span>
-  <span class="nt">&lt;/se:Fill&gt;</span>
-  <span class="nt">&lt;se:Stroke&gt;</span>
-    <span class="nt">&lt;se:SvgParameter</span> <span class="na">name=</span><span class="s">&quot;stroke&quot;</span><span class="nt">&gt;</span>#ff00ff<span class="nt">&lt;/se:SvgParameter&gt;</span>
-    <span class="nt">&lt;se:SvgParameter</span> <span class="na">name=</span><span class="s">&quot;stroke-width&quot;</span><span class="nt">&gt;</span>1.00<span class="nt">&lt;/se:SvgParameter&gt;</span>
-<span class="hll">    <span class="nt">&lt;se:SvgParameter</span> <span class="na">name=</span><span class="s">&quot;stroke-opacity&quot;</span><span class="nt">&gt;</span>0.50<span class="nt">&lt;/se:SvgParameter&gt;</span>
-</span>  <span class="nt">&lt;/se:Stroke&gt;</span>
+<span class="w">  </span><span class="nt">&lt;se:Fill&gt;</span>
+<span class="w">    </span><span class="nt">&lt;se:SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;fill&quot;</span><span class="nt">&gt;</span>#00ffff<span class="nt">&lt;/se:SvgParameter&gt;</span>
+<span class="w">    </span><span class="nt">&lt;se:SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;fill-opacity&quot;</span><span class="nt">&gt;</span>0.50<span class="nt">&lt;/se:SvgParameter&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/se:Fill&gt;</span>
+<span class="w">  </span><span class="nt">&lt;se:Stroke&gt;</span>
+<span class="w">    </span><span class="nt">&lt;se:SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stroke&quot;</span><span class="nt">&gt;</span>#ff00ff<span class="nt">&lt;/se:SvgParameter&gt;</span>
+<span class="w">    </span><span class="nt">&lt;se:SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stroke-width&quot;</span><span class="nt">&gt;</span>1.00<span class="nt">&lt;/se:SvgParameter&gt;</span>
+<span class="hll"><span class="w">    </span><span class="nt">&lt;se:SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stroke-opacity&quot;</span><span class="nt">&gt;</span>0.50<span class="nt">&lt;/se:SvgParameter&gt;</span>
+</span><span class="w">  </span><span class="nt">&lt;/se:Stroke&gt;</span>
 <span class="nt">&lt;/se:PolygonSymbolizer&gt;</span>
 </pre></div>
 </div>
@@ -466,36 +464,36 @@ END
 </div>
 </td>
 <td><div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;se:TextSymbolizer&gt;</span>
-  <span class="nt">&lt;se:Label&gt;</span>
-    <span class="nt">&lt;se:PropertyName&gt;</span>name<span class="nt">&lt;/se:PropertyName&gt;</span>
-  <span class="nt">&lt;/se:Label&gt;</span>
-  <span class="nt">&lt;se:Font&gt;</span>
-    <span class="nt">&lt;se:SvgParameter</span> <span class="na">name=</span><span class="s">&quot;font-family&quot;</span><span class="nt">&gt;</span>vera<span class="nt">&lt;/se:SvgParameter&gt;</span>
-    <span class="nt">&lt;se:SvgParameter</span> <span class="na">name=</span><span class="s">&quot;font-weight&quot;</span><span class="nt">&gt;</span>bold<span class="nt">&lt;/se:SvgParameter&gt;</span>
-    <span class="nt">&lt;se:SvgParameter</span> <span class="na">name=</span><span class="s">&quot;font-size&quot;</span><span class="nt">&gt;</span>12<span class="nt">&lt;/se:SvgParameter&gt;</span>
-  <span class="nt">&lt;/se:Font&gt;</span>
-  <span class="nt">&lt;se:Fill&gt;</span>
-    <span class="nt">&lt;se:SvgParameter</span> <span class="na">name=</span><span class="s">&quot;fill&quot;</span><span class="nt">&gt;</span>#ffffff<span class="nt">&lt;/se:SvgParameter&gt;</span>
-  <span class="nt">&lt;/se:Fill&gt;</span>
-  <span class="nt">&lt;se:LabelPlacement&gt;</span>
-    <span class="nt">&lt;se:PointPlacement&gt;</span>
-      <span class="nt">&lt;se:Displacement&gt;</span>
-        <span class="nt">&lt;se:DisplacementX&gt;</span>2<span class="nt">&lt;/se:DisplacementX&gt;</span>
-        <span class="nt">&lt;se:DisplacementY&gt;</span>20<span class="nt">&lt;/se:DisplacementY&gt;</span>
-      <span class="nt">&lt;/se:Displacement&gt;</span>
-    <span class="nt">&lt;/se:PointPlacement&gt;</span>
-    <span class="nt">&lt;se:AnchorPoint&gt;</span>
-      <span class="nt">&lt;se:AnchorPointX&gt;</span>0.5<span class="nt">&lt;/se:AnchorPointX&gt;</span>
-      <span class="nt">&lt;se:AnchorPointY&gt;</span>0.5<span class="nt">&lt;/se:AnchorPointY&gt;</span>
-    <span class="nt">&lt;/se:AnchorPoint&gt;</span>
-    <span class="nt">&lt;se:Rotation&gt;</span>15<span class="nt">&lt;/se:Rotation&gt;</span>
-  <span class="nt">&lt;/se:LabelPlacement&gt;</span>
-<span class="hll">  <span class="nt">&lt;se:Halo&gt;</span>
-</span><span class="hll">    <span class="nt">&lt;se:Radius&gt;</span>2<span class="nt">&lt;/se:Radius&gt;</span>
-</span><span class="hll">    <span class="nt">&lt;se:Fill&gt;</span>
-</span><span class="hll">      <span class="nt">&lt;se:SvgParameter</span> <span class="na">name=</span><span class="s">&quot;fill&quot;</span><span class="nt">&gt;</span>#00ff00<span class="nt">&lt;/se:SvgParameter&gt;</span>
-</span><span class="hll">    <span class="nt">&lt;/se:Fill&gt;</span>
-</span><span class="hll">  <span class="nt">&lt;/se:Halo&gt;</span>
+<span class="w">  </span><span class="nt">&lt;se:Label&gt;</span>
+<span class="w">    </span><span class="nt">&lt;se:PropertyName&gt;</span>name<span class="nt">&lt;/se:PropertyName&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/se:Label&gt;</span>
+<span class="w">  </span><span class="nt">&lt;se:Font&gt;</span>
+<span class="w">    </span><span class="nt">&lt;se:SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;font-family&quot;</span><span class="nt">&gt;</span>vera<span class="nt">&lt;/se:SvgParameter&gt;</span>
+<span class="w">    </span><span class="nt">&lt;se:SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;font-weight&quot;</span><span class="nt">&gt;</span>bold<span class="nt">&lt;/se:SvgParameter&gt;</span>
+<span class="w">    </span><span class="nt">&lt;se:SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;font-size&quot;</span><span class="nt">&gt;</span>12<span class="nt">&lt;/se:SvgParameter&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/se:Font&gt;</span>
+<span class="w">  </span><span class="nt">&lt;se:Fill&gt;</span>
+<span class="w">    </span><span class="nt">&lt;se:SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;fill&quot;</span><span class="nt">&gt;</span>#ffffff<span class="nt">&lt;/se:SvgParameter&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/se:Fill&gt;</span>
+<span class="w">  </span><span class="nt">&lt;se:LabelPlacement&gt;</span>
+<span class="w">    </span><span class="nt">&lt;se:PointPlacement&gt;</span>
+<span class="w">      </span><span class="nt">&lt;se:Displacement&gt;</span>
+<span class="w">        </span><span class="nt">&lt;se:DisplacementX&gt;</span>2<span class="nt">&lt;/se:DisplacementX&gt;</span>
+<span class="w">        </span><span class="nt">&lt;se:DisplacementY&gt;</span>20<span class="nt">&lt;/se:DisplacementY&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/se:Displacement&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/se:PointPlacement&gt;</span>
+<span class="w">    </span><span class="nt">&lt;se:AnchorPoint&gt;</span>
+<span class="w">      </span><span class="nt">&lt;se:AnchorPointX&gt;</span>0.5<span class="nt">&lt;/se:AnchorPointX&gt;</span>
+<span class="w">      </span><span class="nt">&lt;se:AnchorPointY&gt;</span>0.5<span class="nt">&lt;/se:AnchorPointY&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/se:AnchorPoint&gt;</span>
+<span class="w">    </span><span class="nt">&lt;se:Rotation&gt;</span>15<span class="nt">&lt;/se:Rotation&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/se:LabelPlacement&gt;</span>
+<span class="hll"><span class="w">  </span><span class="nt">&lt;se:Halo&gt;</span>
+</span><span class="hll"><span class="w">    </span><span class="nt">&lt;se:Radius&gt;</span>2<span class="nt">&lt;/se:Radius&gt;</span>
+</span><span class="hll"><span class="w">    </span><span class="nt">&lt;se:Fill&gt;</span>
+</span><span class="hll"><span class="w">      </span><span class="nt">&lt;se:SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;fill&quot;</span><span class="nt">&gt;</span>#00ff00<span class="nt">&lt;/se:SvgParameter&gt;</span>
+</span><span class="hll"><span class="w">    </span><span class="nt">&lt;/se:Fill&gt;</span>
+</span><span class="hll"><span class="w">  </span><span class="nt">&lt;/se:Halo&gt;</span>
 </span><span class="nt">&lt;/se:TextSymbolizer&gt;</span>
 </pre></div>
 </div>
@@ -634,49 +632,49 @@ section for the inner area.</p></li>
 </thead>
 <tbody>
 <tr class="row-even"><td><div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;FeatureTypeStyle&gt;</span>
-  <span class="nt">&lt;Rule&gt;</span>
-    <span class="nt">&lt;PolygonSymbolizer&gt;</span>
+<span class="w">  </span><span class="nt">&lt;Rule&gt;</span>
+<span class="w">    </span><span class="nt">&lt;PolygonSymbolizer&gt;</span>
 
-      <span class="nt">&lt;Stroke&gt;</span>
-        <span class="nt">&lt;SvgParameter</span> <span class="na">name=</span><span class="s">&quot;stroke&quot;</span><span class="nt">&gt;</span>
-          <span class="nt">&lt;Literal&gt;</span>#FFFF00<span class="nt">&lt;/Literal&gt;</span>
-        <span class="nt">&lt;/SvgParameter&gt;</span>
-      <span class="nt">&lt;/Stroke&gt;</span>
+<span class="w">      </span><span class="nt">&lt;Stroke&gt;</span>
+<span class="w">        </span><span class="nt">&lt;SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stroke&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Literal&gt;</span>#FFFF00<span class="nt">&lt;/Literal&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/SvgParameter&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/Stroke&gt;</span>
 
 
 
-      <span class="nt">&lt;Fill&gt;</span>
-        <span class="nt">&lt;SvgParameter</span> <span class="na">name=</span><span class="s">&quot;fill&quot;</span><span class="nt">&gt;</span>
-          <span class="nt">&lt;Literal&gt;</span>#0000FF<span class="nt">&lt;/Literal&gt;</span>
-        <span class="nt">&lt;/SvgParameter&gt;</span>
-      <span class="nt">&lt;/Fill&gt;</span>
+<span class="w">      </span><span class="nt">&lt;Fill&gt;</span>
+<span class="w">        </span><span class="nt">&lt;SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;fill&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Literal&gt;</span>#0000FF<span class="nt">&lt;/Literal&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/SvgParameter&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/Fill&gt;</span>
 
-    <span class="nt">&lt;/PolygonSymbolizer&gt;</span>
-  <span class="nt">&lt;/Rule&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/PolygonSymbolizer&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/Rule&gt;</span>
 <span class="nt">&lt;/FeatureTypeStyle&gt;</span>
 </pre></div>
 </div>
 </td>
 <td><div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;FeatureTypeStyle&gt;</span>
-  <span class="nt">&lt;Rule&gt;</span>
+<span class="w">  </span><span class="nt">&lt;Rule&gt;</span>
 
-    <span class="nt">&lt;LineSymbolizer&gt;</span>
-      <span class="nt">&lt;Stroke&gt;</span>
-        <span class="nt">&lt;SvgParameter</span> <span class="na">name=</span><span class="s">&quot;stroke&quot;</span><span class="nt">&gt;</span>
-          <span class="nt">&lt;Literal&gt;</span>#FFFF00<span class="nt">&lt;/Literal&gt;</span>
-        <span class="nt">&lt;/SvgParameter&gt;</span>
-      <span class="nt">&lt;/Stroke&gt;</span>
-    <span class="nt">&lt;/LineSymbolizer&gt;</span>
+<span class="w">    </span><span class="nt">&lt;LineSymbolizer&gt;</span>
+<span class="w">      </span><span class="nt">&lt;Stroke&gt;</span>
+<span class="w">        </span><span class="nt">&lt;SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;stroke&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Literal&gt;</span>#FFFF00<span class="nt">&lt;/Literal&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/SvgParameter&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/Stroke&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/LineSymbolizer&gt;</span>
 
-    <span class="nt">&lt;PolygonSymbolizer&gt;</span>
-      <span class="nt">&lt;Fill&gt;</span>
-        <span class="nt">&lt;SvgParameter</span> <span class="na">name=</span><span class="s">&quot;fill&quot;</span><span class="nt">&gt;</span>
-          <span class="nt">&lt;Literal&gt;</span>#0000FF<span class="nt">&lt;/Literal&gt;</span>
-        <span class="nt">&lt;/SvgParameter&gt;</span>
-      <span class="nt">&lt;/Fill&gt;</span>
-    <span class="nt">&lt;/PolygonSymbolizer&gt;</span>
+<span class="w">    </span><span class="nt">&lt;PolygonSymbolizer&gt;</span>
+<span class="w">      </span><span class="nt">&lt;Fill&gt;</span>
+<span class="w">        </span><span class="nt">&lt;SvgParameter</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;fill&quot;</span><span class="nt">&gt;</span>
+<span class="w">          </span><span class="nt">&lt;Literal&gt;</span>#0000FF<span class="nt">&lt;/Literal&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/SvgParameter&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/Fill&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/PolygonSymbolizer&gt;</span>
 
-  <span class="nt">&lt;/Rule&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/Rule&gt;</span>
 <span class="nt">&lt;/FeatureTypeStyle&gt;</span>
 </pre></div>
 </div>
@@ -834,9 +832,9 @@ SteveL, DanielM, JeromeB.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2022-09-13.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+        &#169; <a href="../../copyright.html">Copyright</a> 2023, Open Source Geospatial Foundation.
+      Laatste aanpassing op 2023-04-20.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

@@ -37,6 +37,9 @@ BINDVALS
                 "1"  "Nova Scotia"
         END
 
+    .. note::
+        |RUNSUB|
+
 .. index::
    pair: LAYER; CLASS
    :name: mapfile-layer-class
@@ -135,6 +138,9 @@ CONNECTION [string]
     .. seealso::
         See :ref:`kerneldensity` for specific connection information
         for kernel density estimation.
+
+    .. note::
+        |RUNSUB|
 
 .. index::
    pair: LAYER; CONNECTIONOPTIONS
@@ -263,6 +269,9 @@ DATA [filename]|[sde parameters][postgis table/column][oracle table/column]
 
        :ref:`vector` for specific connection information for various
        data sources.
+
+    .. note::
+        |RUNSUB|
 
 .. index::
    pair: LAYER; DEBUG
@@ -409,6 +418,9 @@ FILTER [string]
         FILTER 'where id=234'.
 
       But this is no longer supported.
+
+    .. note::
+        |RUNSUB|
 
 .. index::
    pair: LAYER; FILTERITEM
@@ -802,6 +814,9 @@ MASK [layername]
 
        :ref:`rfc79`
 
+    .. note::
+        |RUNSUB|
+
 .. index::
    pair: LAYER; MAXFEATURES
    :name: mapfile-layer-maxfeatures
@@ -861,6 +876,9 @@ METADATA
             "title" "My layer title"
             "author" "Me!"
         END
+
+    .. note::
+        Runtime substitution can be used to replace metadata values, but not keys. See :ref:`RUNSUB`
 
 .. index::
    pair: LAYER; MINFEATURESIZE
@@ -950,7 +968,7 @@ OFFSITE [r] [g] [b] | [hexadecimal string]
    pair: LAYER; OPACITY
    :name: mapfile-layer-opacity
 
-.. _OPACITY:
+.. _layer-opacity:
 
 OPACITY [integer|alpha]
 
@@ -963,15 +981,38 @@ OPACITY [integer|alpha]
 
 PLUGIN [filename]
     Additional library to load by MapServer, for this layer.  This is commonly
-    used to load specific support for SDE and Microsoft SQL Server layers,
+    used to load specific support for Oracle and Microsoft SQL Server layers,
     such as:
+    
+    **For MapServer >=8:**
 
       .. code-block:: mapfile
 
         CONNECTIONTYPE PLUGIN
-        CONNECTION "hostname,port:xxx,database,username,password"
-        PLUGIN "C:/ms4w/Apache/specialplugins/msplugin_sde_92.dll"
-        DATA "layername,geometrycolumn,SDE.DEFAULT"
+        CONNECTION "username/password@hostname:port/database"
+        PLUGIN "oci"
+        DATA "geometrycolumn FROM schema.table USING UNIQUE column SRID 4326"
+	
+    Where "oci" is an alias mapped in the global :ref:`CONFIG <config>` 
+    file:
+    
+      .. code-block:: mapfile
+      
+        PLUGINS
+          # new keyed approach to plugins
+          "mssql" "C:/apps/gisinternals/bin/ms/plugins/mssql2008/msplugin_mssql2008.dll"
+          "oci" "C:/apps/gisinternals/bin/ms/plugins/oci/msplugin_oracle.dll"
+          "mssql_ms4w" "C:/ms4w/msplugins/mssql/msplugin_mssql2008.dll"
+        END
+        
+    **For MapServer <8:**
+    
+      .. code-block:: mapfile    
+    
+        CONNECTIONTYPE PLUGIN
+        CONNECTION "server=mysqlserver2008.com;uid=dbusername;pwd=dbpassword;database=Roads Database;Integrated Security=false"
+        PLUGIN "C:/ms4w/msplugins/mssql/msplugin_mssql2008.dll"
+        DATA "the_geom from roads"    
 
 .. index::
    pair: LAYER; POSTLABELCACHE
@@ -993,6 +1034,8 @@ PROCESSING [string]
     processing directives vary by layer type, and the underlying driver that
     processes them.
 
+    .. note::
+        |RUNSUB|
 
     .. index::
        triple: LAYER; PROCESSING; ArcSDE options
@@ -1698,6 +1741,9 @@ SYMBOLSCALEDENOM [double]
         Starting with MapServer 6.4 for raster layers and MapServer 7.2 for
         vector layers, tileindexes with tiles of different projections can be
         used. For that, the :ref:`TILESRS <tilesrs>` parameter must be specified.
+
+    .. note::
+        |RUNSUB|
 
 .. index::
    pair: LAYER; TILEITEM

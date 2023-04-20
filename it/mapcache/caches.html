@@ -6,19 +6,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Cache Types &#8212; MapServer 8.0.0 documentation</title>
+    <title>Cache Types &#8212; MapServer 8.0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../_static/ribbon.css" />
     
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/translations.js"></script>
     
-    <link rel="shortcut icon" href="../_static/mapserver.ico"/>
+    <link rel="icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="A proposito di questi documenti" href="../about.html" />
     <link rel="index" title="Indice" href="../genindex.html" />
     <link rel="search" title="Cerca" href="../search.html" />
@@ -135,8 +133,8 @@
           <a href="seed.html" title="Seeder"
              accesskey="P">precedente</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.0 Documentation</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapCache 1.12.1</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.1 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">MapCache 1.14.0</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Cache Types</a></li> 
       </ul>
     </div>
@@ -148,7 +146,7 @@
           <div class="body" role="main">
             
   <section id="cache-types">
-<span id="mapcache-caches"></span><h1>Cache Types<a class="headerlink" href="#cache-types" title="Permalink to this heading">¶</a></h1>
+<span id="mapcache-caches"></span><h1><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Cache Types</a><a class="headerlink" href="#cache-types" title="Permalink to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Thomas Bonfort</p>
@@ -157,9 +155,28 @@
 <dd class="field-even"><p>tbonfort at terriscope.fr</p>
 </dd>
 </dl>
+<nav class="contents" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#cache-types" id="id1">Cache Types</a></p>
+<ul>
+<li><p><a class="reference internal" href="#disk-caches" id="id2">Disk Caches</a></p></li>
+<li><p><a class="reference internal" href="#berkeley-db-caches" id="id3">Berkeley DB Caches</a></p></li>
+<li><p><a class="reference internal" href="#lightning-memory-mapped-database-caches" id="id4">Lightning Memory-Mapped Database Caches</a></p></li>
+<li><p><a class="reference internal" href="#sqlite-caches" id="id5">SQLite Caches</a></p></li>
+<li><p><a class="reference internal" href="#mbtiles-caches" id="id6">MBTiles Caches</a></p></li>
+<li><p><a class="reference internal" href="#memcache-caches" id="id7">Memcache Caches</a></p></li>
+<li><p><a class="reference internal" href="#geo-tiff-caches" id="id8">(Geo)TIFF Caches</a></p></li>
+<li><p><a class="reference internal" href="#rest-caches" id="id9">REST Caches</a></p></li>
+<li><p><a class="reference internal" href="#meta-caches" id="id10">Meta Caches</a></p></li>
+<li><p><a class="reference internal" href="#riak-caches" id="id11">Riak Caches</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
 <p>This document details the different cache backends that can be used to store tiles.</p>
 <section id="disk-caches">
-<span id="mapcache-cache-disk"></span><h2>Disk Caches<a class="headerlink" href="#disk-caches" title="Permalink to this heading">¶</a></h2>
+<span id="mapcache-cache-disk"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Disk Caches</a><a class="headerlink" href="#disk-caches" title="Permalink to this heading">¶</a></h2>
 <p>The disk based cache is the simplest cache to configure, and the one with the
 the fastest access to existing tiles. It is ideal for small tile repositories,
 but will often cause trouble for sites hosting millions of tiles, as the number of
@@ -173,10 +190,10 @@ user running the tile server.</p>
 <section id="common-configuration">
 <h3>Common Configuration<a class="headerlink" href="#common-configuration" title="Permalink to this heading">¶</a></h3>
 <p>Disk caches are added via</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;disk_cache&quot;</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span> <span class="na">layout=</span><span class="s">&quot;...&quot;</span><span class="nt">&gt;</span>
-  ...
-  <span class="nt">&lt;symlink_blank/&gt;</span>
-  <span class="nt">&lt;creation_retry&gt;</span>3<span class="nt">&lt;/creation_retry&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;disk_cache&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="w"> </span><span class="na">layout=</span><span class="s">&quot;...&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span>...
+<span class="w">  </span><span class="nt">&lt;symlink_blank/&gt;</span>
+<span class="w">  </span><span class="nt">&lt;creation_retry&gt;</span>3<span class="nt">&lt;/creation_retry&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -197,9 +214,9 @@ directory structure corresponding to the name of the grid and the eventual value
 of the tileset’s dimensions is added.</p>
 <p>This cache is capable of detecting blank (i.e. uniform color) tiles and using
 a symbolic link to a single blank tile to gain disk space.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;disk&quot;</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;base&gt;</span>/tmp<span class="nt">&lt;/base&gt;</span>
-   <span class="nt">&lt;symlink_blank/&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;disk&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;base&gt;</span>/tmp<span class="nt">&lt;/base&gt;</span>
+<span class="w">   </span><span class="nt">&lt;symlink_blank/&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -208,9 +225,9 @@ stored, and a key to activate the symbolic linking of blank tiles.</p>
 </section>
 <section id="arcgis-compatible-structure">
 <h3>Arcgis Compatible Structure<a class="headerlink" href="#arcgis-compatible-structure" title="Permalink to this heading">¶</a></h3>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;arcgis&quot;</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span> <span class="na">layout=</span><span class="s">&quot;arcgis&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;base&gt;</span>/tmp<span class="nt">&lt;/base&gt;</span>
-   <span class="nt">&lt;symlink_blank/&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;arcgis&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="w"> </span><span class="na">layout=</span><span class="s">&quot;arcgis&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;base&gt;</span>/tmp<span class="nt">&lt;/base&gt;</span>
+<span class="w">   </span><span class="nt">&lt;symlink_blank/&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -219,9 +236,9 @@ will be stored in files that resemble <cite>/tmp/{tileset}/{grid}/{dimension}/L{
 </section>
 <section id="worldwind-compatible-structure">
 <h3>Worldwind Compatible Structure<a class="headerlink" href="#worldwind-compatible-structure" title="Permalink to this heading">¶</a></h3>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;worldwind&quot;</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span> <span class="na">layout=</span><span class="s">&quot;worldwind&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;base&gt;</span>/tmp<span class="nt">&lt;/base&gt;</span>
-   <span class="nt">&lt;symlink_blank/&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;worldwind&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="w"> </span><span class="na">layout=</span><span class="s">&quot;worldwind&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;base&gt;</span>/tmp<span class="nt">&lt;/base&gt;</span>
+<span class="w">   </span><span class="nt">&lt;symlink_blank/&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -234,8 +251,8 @@ will be stored in files that resemble <cite>/tmp/{tileset}/{grid}/{dimension}/{z
 structure that you define in advance. The &lt;template&gt; parameter takes a string
 argument where various template entries will be replaced at runtime by the correct
 value for each tile to store.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tmpl&quot;</span> <span class="na">type=</span><span class="s">&quot;disk&quot;</span> <span class="na">layout=</span><span class="s">&quot;template&quot;</span><span class="nt">&gt;</span>
-   <span class="cm">&lt;!-- template</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;tmpl&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;disk&quot;</span><span class="w"> </span><span class="na">layout=</span><span class="s">&quot;template&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="cm">&lt;!-- template</span>
 
 <span class="cm">       string template that will be used to map a tile (by tileset, grid name, dimension,</span>
 <span class="cm">       format, x, y, and z) to a filename on the filesystem</span>
@@ -259,14 +276,14 @@ value for each tile to store.</p>
 <span class="cm">        collisions !</span>
 
 <span class="cm">   --&gt;</span>
-   <span class="nt">&lt;template&gt;</span>/tmp/template-test/{tileset}#{grid}#{dim}/{z}/{x}/{y}.{ext}<span class="nt">&lt;/template&gt;</span>
+<span class="w">   </span><span class="nt">&lt;template&gt;</span>/tmp/template-test/{tileset}#{grid}#{dim}/{z}/{x}/{y}.{ext}<span class="nt">&lt;/template&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
 </section>
 </section>
 <section id="berkeley-db-caches">
-<span id="mapcache-cache-bdb"></span><h2>Berkeley DB Caches<a class="headerlink" href="#berkeley-db-caches" title="Permalink to this heading">¶</a></h2>
+<span id="mapcache-cache-bdb"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Berkeley DB Caches</a><a class="headerlink" href="#berkeley-db-caches" title="Permalink to this heading">¶</a></h2>
 <p>The Berkeley DB cache backend stores tiles in a key-value flat-file database,
 and therefore does not have the disadvantages of disk caches with regards to
 the number of files stored on the filesystem. As the image blobs are stored
@@ -280,14 +297,14 @@ possible to use multiple database files for tileset grids or dimensions.</p>
 <p>The Berkeley DB based caches are a bit faster than the disk based caches during
 reads, but may be a bit slower during concurrent writes if a high number of
 threads all try to insert new tiles concurrently.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;bdb&quot;</span> <span class="na">type=</span><span class="s">&quot;bdb&quot;</span><span class="nt">&gt;</span>
-   <span class="cm">&lt;!-- base (required)</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;bdb&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;bdb&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="cm">&lt;!-- base (required)</span>
 <span class="cm">      absolute filesystem path where the Berkeley DB database file is to be stored.</span>
 <span class="cm">      this directory must exist, and be writable</span>
 <span class="cm">   --&gt;</span>
-   <span class="nt">&lt;base&gt;</span>/tmp/foo/<span class="nt">&lt;/base&gt;</span>
+<span class="w">   </span><span class="nt">&lt;base&gt;</span>/tmp/foo/<span class="nt">&lt;/base&gt;</span>
 
-   <span class="cm">&lt;!-- key_template (optional)</span>
+<span class="w">   </span><span class="cm">&lt;!-- key_template (optional)</span>
 <span class="cm">      string template used to create the key for a tile entry in the database.</span>
 <span class="cm">      defaults to the value below. you should include {tileset}, {grid} and {dim} here</span>
 <span class="cm">      unless you know what you are doing, or you will end up with mixed tiles</span>
@@ -297,8 +314,57 @@ threads all try to insert new tiles concurrently.</p>
 </pre></div>
 </div>
 </section>
+<section id="lightning-memory-mapped-database-caches">
+<span id="mapcache-cache-lmdb"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Lightning Memory-Mapped Database Caches</a><a class="headerlink" href="#lightning-memory-mapped-database-caches" title="Permalink to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">Nuovo nella versione 1.14.0.</span></p>
+</div>
+<p>The Lightning Memory-Mapped Database (LMDB) cache backend is similar to the Berkeley
+DB backend. It stores tiles in a key-value flat-file database, and therefore
+does not have the disadvantages of disk caches with regards to the number of
+files stored on the filesystem.</p>
+<p>Note that for a given LMDB cache, only a single database file is created, which
+will store the tiles of its associated tilesets (i.e. there is not a database
+file created per tileset, grid, and/or dimension). If you need to store different
+tilesets to different files, then use multiple LMDB cache entries. It is not
+possible to use multiple database files for tileset grids or dimensions.</p>
+<p>LMDB is a memory-mapped database thus it will show up as a memory used by
+the process. Note that LMDB might not work with remote file systems as they
+must support flock(), memory map sync etc. and should not be accessed from
+multiple hosts.</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;lmdb&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;lmdb&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="cm">&lt;!-- base (required)</span>
+<span class="cm">      absolute filesystem path where the LMDB database file is to be stored.</span>
+<span class="cm">      this directory must exist, and be writable</span>
+<span class="cm">   --&gt;</span>
+<span class="w">   </span><span class="nt">&lt;base&gt;</span>/tmp/foo/<span class="nt">&lt;/base&gt;</span>
+
+<span class="w">   </span><span class="cm">&lt;!-- key_template (optional)</span>
+<span class="cm">      string template used to create the key for a tile entry in the database.</span>
+<span class="cm">      defaults to the value below. you should include {tileset}, {grid} and {dim} here</span>
+<span class="cm">      unless you know what you are doing, or you will end up with mixed tiles</span>
+<span class="cm">   &lt;key_template&gt;{tileset}-{grid}-{dim}-{z}-{y}-{x}.{ext}&lt;/key_template&gt;</span>
+<span class="cm">   --&gt;</span>
+<span class="w">   </span><span class="cm">&lt;!-- max_size (optional)</span>
+<span class="cm">      maximum size of database in thousands of _SC_PAGESIZE.</span>
+<span class="cm">      defaults to 64 that equals 250MiB on most of systems with 4k pagesize.</span>
+<span class="cm">      database can only be grown larger (requires a restart).</span>
+<span class="cm">      when db size will reach the max_size setting, any write attempt will</span>
+<span class="cm">      result in an error message.</span>
+<span class="cm">   &lt;max_size&gt;64&lt;/max_size&gt;</span>
+<span class="cm">   --&gt;</span>
+<span class="w">   </span><span class="cm">&lt;!-- max_readers (optional)</span>
+<span class="cm">      maximum simultaneous reader count. should be higher than web server</span>
+<span class="cm">      process / thread count.</span>
+<span class="cm">      defaults to 126.</span>
+<span class="cm">   &lt;max_readers&gt;126&lt;/max_readers&gt;</span>
+<span class="cm">   --&gt;</span>
+<span class="nt">&lt;/cache&gt;</span>
+</pre></div>
+</div>
+</section>
 <section id="sqlite-caches">
-<span id="mapcache-cache-sqlite"></span><h2>SQLite Caches<a class="headerlink" href="#sqlite-caches" title="Permalink to this heading">¶</a></h2>
+<span id="mapcache-cache-sqlite"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">SQLite Caches</a><a class="headerlink" href="#sqlite-caches" title="Permalink to this heading">¶</a></h2>
 <p>There are two different SQLite caches that vary by the database schema they
 create and query. SQLite caches have the advantage that they store tiles as
 blobs inside a single database file, and therefore do not have the
@@ -311,35 +377,35 @@ insert new tiles concurrently.</p>
 <section id="default-schema">
 <h3>Default Schema<a class="headerlink" href="#default-schema" title="Permalink to this heading">¶</a></h3>
 <p>Tiles are stored in the configured SQLite file created by MapCache with</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">tiles</span><span class="p">(</span><span class="w"></span>
-<span class="w">   </span><span class="n">tileset</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w"></span>
-<span class="w">   </span><span class="n">grid</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w"></span>
-<span class="w">   </span><span class="n">x</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w"></span>
-<span class="w">   </span><span class="n">y</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w"></span>
-<span class="w">   </span><span class="n">z</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w"></span>
-<span class="w">   </span><span class="k">data</span><span class="w"> </span><span class="nb">blob</span><span class="p">,</span><span class="w"></span>
-<span class="w">   </span><span class="n">dim</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w"></span>
-<span class="w">   </span><span class="n">ctime</span><span class="w"> </span><span class="n">datetime</span><span class="p">,</span><span class="w"></span>
-<span class="w">   </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">tileset</span><span class="p">,</span><span class="n">grid</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">dim</span><span class="p">)</span><span class="w"></span>
-<span class="p">);</span><span class="w"></span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">tiles</span><span class="p">(</span>
+<span class="w">   </span><span class="n">tileset</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span>
+<span class="w">   </span><span class="n">grid</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span>
+<span class="w">   </span><span class="n">x</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span>
+<span class="w">   </span><span class="n">y</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span>
+<span class="w">   </span><span class="n">z</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span>
+<span class="w">   </span><span class="k">data</span><span class="w"> </span><span class="nb">blob</span><span class="p">,</span>
+<span class="w">   </span><span class="n">dim</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span>
+<span class="w">   </span><span class="n">ctime</span><span class="w"> </span><span class="n">datetime</span><span class="p">,</span>
+<span class="w">   </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">tileset</span><span class="p">,</span><span class="n">grid</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">dim</span><span class="p">)</span>
+<span class="p">);</span>
 </pre></div>
 </div>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;dbfile&gt;</span>/path/to/dbfile.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;sqlite&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;dbfile&gt;</span>/path/to/dbfile.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
 <p>You may also add custom SQLite pragmas that will be executed when first
 connecting to a SQLite db, e.g. to override some compiled-in SQLite
 defaults</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;dbfile&gt;</span>/tmp/sqlitefile.db<span class="nt">&lt;/dbfile&gt;</span>
-   <span class="nt">&lt;pragma</span> <span class="na">name=</span><span class="s">&quot;max_page_count&quot;</span><span class="nt">&gt;</span>10000000<span class="nt">&lt;/pragma&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;sqlite&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;dbfile&gt;</span>/tmp/sqlitefile.db<span class="nt">&lt;/dbfile&gt;</span>
+<span class="w">   </span><span class="nt">&lt;pragma</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;max_page_count&quot;</span><span class="nt">&gt;</span>10000000<span class="nt">&lt;/pragma&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
 <p>&lt;pragma&gt; entries will result in a call to</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">PRAGMA</span><span class="w"> </span><span class="n">max_page_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000000</span><span class="p">;</span><span class="w"></span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">PRAGMA</span><span class="w"> </span><span class="n">max_page_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000000</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
@@ -351,15 +417,15 @@ will be executed to select or insert a new tile.</p>
 be used against your custom schema. It is up to you to make sure your queries are
 correct and will return the correct data for a given tileset, dimension, grid, x,
 y and z.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqlitecustom&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;dbfile&gt;</span>/tmp/sqlitefile.db<span class="nt">&lt;/dbfile&gt;</span>
-   <span class="nt">&lt;queries&gt;</span>
-     <span class="nt">&lt;create&gt;</span>create table if not exists tiles(tileset text, grid text, x integer, y integer, z integer, data blob, dim text, ctime datetime, primary key(tileset,grid,x,y,z,dim))<span class="nt">&lt;/create&gt;</span>
-     <span class="nt">&lt;exists&gt;</span>select 1 from tiles where x=:x and y=:y and z=:z and dim=:dim and tileset=:tileset and grid=:grid<span class="nt">&lt;/exists&gt;</span>
-     <span class="nt">&lt;get&gt;</span>select data,strftime(&quot;%s&quot;,ctime) from tiles where tileset=:tileset and grid=:grid and x=:x and y=:y and z=:z and dim=:dim<span class="nt">&lt;/get&gt;</span>
-     <span class="nt">&lt;set&gt;</span>insert or replace into tiles(tileset,grid,x,y,z,data,dim,ctime) values (:tileset,:grid,:x,:y,:z,:data,:dim,datetime(&#39;now&#39;))<span class="nt">&lt;/set&gt;</span>
-     <span class="nt">&lt;delete&gt;</span>delete from tiles where x=:x and y=:y and z=:z and dim=:dim and tileset=:tileset and grid=:grid<span class="nt">&lt;/delete&gt;</span>
-   <span class="nt">&lt;/queries&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;sqlitecustom&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;dbfile&gt;</span>/tmp/sqlitefile.db<span class="nt">&lt;/dbfile&gt;</span>
+<span class="w">   </span><span class="nt">&lt;queries&gt;</span>
+<span class="w">     </span><span class="nt">&lt;create&gt;</span>create<span class="w"> </span>table<span class="w"> </span>if<span class="w"> </span>not<span class="w"> </span>exists<span class="w"> </span>tiles(tileset<span class="w"> </span>text,<span class="w"> </span>grid<span class="w"> </span>text,<span class="w"> </span>x<span class="w"> </span>integer,<span class="w"> </span>y<span class="w"> </span>integer,<span class="w"> </span>z<span class="w"> </span>integer,<span class="w"> </span>data<span class="w"> </span>blob,<span class="w"> </span>dim<span class="w"> </span>text,<span class="w"> </span>ctime<span class="w"> </span>datetime,<span class="w"> </span>primary<span class="w"> </span>key(tileset,grid,x,y,z,dim))<span class="nt">&lt;/create&gt;</span>
+<span class="w">     </span><span class="nt">&lt;exists&gt;</span>select<span class="w"> </span>1<span class="w"> </span>from<span class="w"> </span>tiles<span class="w"> </span>where<span class="w"> </span>x=:x<span class="w"> </span>and<span class="w"> </span>y=:y<span class="w"> </span>and<span class="w"> </span>z=:z<span class="w"> </span>and<span class="w"> </span>dim=:dim<span class="w"> </span>and<span class="w"> </span>tileset=:tileset<span class="w"> </span>and<span class="w"> </span>grid=:grid<span class="nt">&lt;/exists&gt;</span>
+<span class="w">     </span><span class="nt">&lt;get&gt;</span>select<span class="w"> </span>data,strftime(&quot;%s&quot;,ctime)<span class="w"> </span>from<span class="w"> </span>tiles<span class="w"> </span>where<span class="w"> </span>tileset=:tileset<span class="w"> </span>and<span class="w"> </span>grid=:grid<span class="w"> </span>and<span class="w"> </span>x=:x<span class="w"> </span>and<span class="w"> </span>y=:y<span class="w"> </span>and<span class="w"> </span>z=:z<span class="w"> </span>and<span class="w"> </span>dim=:dim<span class="nt">&lt;/get&gt;</span>
+<span class="w">     </span><span class="nt">&lt;set&gt;</span>insert<span class="w"> </span>or<span class="w"> </span>replace<span class="w"> </span>into<span class="w"> </span>tiles(tileset,grid,x,y,z,data,dim,ctime)<span class="w"> </span>values<span class="w"> </span>(:tileset,:grid,:x,:y,:z,:data,:dim,datetime(&#39;now&#39;))<span class="nt">&lt;/set&gt;</span>
+<span class="w">     </span><span class="nt">&lt;delete&gt;</span>delete<span class="w"> </span>from<span class="w"> </span>tiles<span class="w"> </span>where<span class="w"> </span>x=:x<span class="w"> </span>and<span class="w"> </span>y=:y<span class="w"> </span>and<span class="w"> </span>z=:z<span class="w"> </span>and<span class="w"> </span>dim=:dim<span class="w"> </span>and<span class="w"> </span>tileset=:tileset<span class="w"> </span>and<span class="w"> </span>grid=:grid<span class="nt">&lt;/delete&gt;</span>
+<span class="w">   </span><span class="nt">&lt;/queries&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -373,9 +439,9 @@ creation timestamp for that tile.</p>
 color) tiles, and will store a quadruplet of the rgba color component in the data
 blob instead of the compressed image data itself. That quadruplet will be
 transformed on-the-fly to a 1-bit palleted PNG before being returned to the client.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqliteblank&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;dbfile&gt;</span>/tmp/sqlitefile.db<span class="nt">&lt;/dbfile&gt;</span>
-   <span class="nt">&lt;detect_blank/&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;sqliteblank&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;dbfile&gt;</span>/tmp/sqlitefile.db<span class="nt">&lt;/dbfile&gt;</span>
+<span class="w">   </span><span class="nt">&lt;detect_blank/&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -393,17 +459,17 @@ purposes, or to keep the size of each file to a reasonable limit if caching
 large amounts of data.</p>
 <p>In order to do so you may use a template to determine which file should be
 used for a given file:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;dbfile&gt;</span>/path/to/{grid}/{dim}/{tileset}.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;sqlite&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;dbfile&gt;</span>/path/to/{grid}/{dim}/{tileset}.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
 <p>You may also limit the x and y number of tiles to be stored inside a single database
 file:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;sqlite&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;dbfile&gt;</span>/path/to/{grid}/{dim}/{tileset}/{z}/{x}-{y}.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
-   <span class="nt">&lt;xcount&gt;</span>1000<span class="nt">&lt;/xcount&gt;</span>
-   <span class="nt">&lt;ycount&gt;</span>1000<span class="nt">&lt;/ycount&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;sqlite&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;dbfile&gt;</span>/path/to/{grid}/{dim}/{tileset}/{z}/{x}-{y}.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
+<span class="w">   </span><span class="nt">&lt;xcount&gt;</span>1000<span class="nt">&lt;/xcount&gt;</span>
+<span class="w">   </span><span class="nt">&lt;ycount&gt;</span>1000<span class="nt">&lt;/ycount&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -446,11 +512,11 @@ named <cite>Z03-R00003-C000009.sqlite3</cite> instead of just <cite>Z3-R3-C9.sql
 &lt;dbfile&gt; entry supports formatting attributes, following the Unix
 printf syntax ( c.f.: <a class="reference external" href="http://linux.die.net/man/3/printf">http://linux.die.net/man/3/printf</a> ), by suffixing
 each template key with «_fmt», e.g.:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;mysqlite&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;dbfile</span>
-      <span class="na">x_fmt=</span><span class="s">&quot;%08d&quot;</span>
-      <span class="na">inv_y_fmt=</span><span class="s">&quot;%08d&quot;</span>
-   <span class="nt">&gt;</span>/data/{tileset}/{grid}/L{z}/R{inv_y}/C{x}.sqlite<span class="nt">&lt;/template&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;mysqlite&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;dbfile</span>
+<span class="w">      </span><span class="na">x_fmt=</span><span class="s">&quot;%08d&quot;</span>
+<span class="w">      </span><span class="na">inv_y_fmt=</span><span class="s">&quot;%08d&quot;</span>
+<span class="w">   </span><span class="nt">&gt;</span>/data/{tileset}/{grid}/L{z}/R{inv_y}/C{x}.sqlite<span class="nt">&lt;/template&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -476,20 +542,20 @@ copied.</p>
 specified with a <cite>&lt;top&gt;</cite> tag defining the top zoom level. Templates keys are
 needed to determine SQLite files to use.</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- multi-pyramid, multi-SQLite, starting at zoom level 8 --&gt;</span>
-<span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;z8&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
-<span class="hll">  <span class="nt">&lt;top&gt;</span>8<span class="nt">&lt;/top&gt;</span>
-</span><span class="hll">  <span class="nt">&lt;dbfile</span> <span class="na">top_fmt=</span><span class="s">&quot;%02d&quot;</span><span class="nt">&gt;</span>/path/to/z{top}-{top_x}-{top_y}.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
+<span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;z8&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+<span class="hll"><span class="w">  </span><span class="nt">&lt;top&gt;</span>8<span class="nt">&lt;/top&gt;</span>
+</span><span class="hll"><span class="w">  </span><span class="nt">&lt;dbfile</span><span class="w"> </span><span class="na">top_fmt=</span><span class="s">&quot;%02d&quot;</span><span class="nt">&gt;</span>/path/to/z{top}-{top_x}-{top_y}.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
 </span><span class="nt">&lt;/cache&gt;</span>
 
 <span class="cm">&lt;!-- single cache from zoom levels 0 to 7 --&gt;</span>
-<span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;z1-7&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;dbfile&gt;</span>/path/to/z0-0-0.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
+<span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;z1-7&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;sqlite3&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;dbfile&gt;</span>/path/to/z0-0-0.sqlite3<span class="nt">&lt;/dbfile&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 
 <span class="cm">&lt;!-- Composite cache made of all caches to address all zoom levels --&gt;</span>
-<span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;zfull&quot;</span> <span class="na">type=</span><span class="s">&quot;composite&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;cache</span> <span class="na">min-zoom=</span><span class="s">&quot;0&quot;</span> <span class="na">max-zoom=</span><span class="s">&quot;7&quot;</span><span class="nt">&gt;</span>z1-7<span class="nt">&lt;/cache&gt;</span>
-  <span class="nt">&lt;cache</span> <span class="na">min-zoom=</span><span class="s">&quot;8&quot;</span><span class="nt">&gt;</span>z8<span class="nt">&lt;/cache&gt;</span>
+<span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;zfull&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;composite&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">min-zoom=</span><span class="s">&quot;0&quot;</span><span class="w"> </span><span class="na">max-zoom=</span><span class="s">&quot;7&quot;</span><span class="nt">&gt;</span>z1-7<span class="nt">&lt;/cache&gt;</span>
+<span class="w">  </span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">min-zoom=</span><span class="s">&quot;8&quot;</span><span class="nt">&gt;</span>z8<span class="nt">&lt;/cache&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -510,7 +576,7 @@ starting from top</p></li>
 </section>
 </section>
 <section id="mbtiles-caches">
-<span id="mapcache-cache-mbtiles"></span><h2>MBTiles Caches<a class="headerlink" href="#mbtiles-caches" title="Permalink to this heading">¶</a></h2>
+<span id="mapcache-cache-mbtiles"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MBTiles Caches</a><a class="headerlink" href="#mbtiles-caches" title="Permalink to this heading">¶</a></h2>
 <p>This cache type is a shortcut to the previous custom schema SQLite cache, with
 pre-populated SQL queries that correspond to the MBTiles specification.</p>
 <p>Although the default MBTiles schema is very simple, MapCache uses the same multi-
@@ -518,32 +584,32 @@ table schema found in most downloadable MBTiles files, notably to enable storing
 blank (i.e. uniform) tiles without duplicating the encoded image data (in the
 same way the disk cache supports tile symlinking).</p>
 <p>The MBTiles schema is created with:</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">images</span><span class="p">(</span><span class="w"></span>
-<span class="w">  </span><span class="n">tile_id</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">tile_data</span><span class="w"> </span><span class="nb">blob</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">tile_id</span><span class="p">));</span><span class="w"></span>
-<span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="k">map</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
-<span class="w">  </span><span class="n">zoom_level</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">tile_column</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">tile_row</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">tile_id</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="k">foreign</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">tile_id</span><span class="p">)</span><span class="w"> </span><span class="k">references</span><span class="w"> </span><span class="n">images</span><span class="p">(</span><span class="n">tile_id</span><span class="p">),</span><span class="w"></span>
-<span class="w">  </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">tile_row</span><span class="p">,</span><span class="n">tile_column</span><span class="p">,</span><span class="n">zoom_level</span><span class="p">));</span><span class="w"></span>
-<span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">metadata</span><span class="p">(</span><span class="w"></span>
-<span class="w">  </span><span class="n">name</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w"></span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">images</span><span class="p">(</span>
+<span class="w">  </span><span class="n">tile_id</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span>
+<span class="w">  </span><span class="n">tile_data</span><span class="w"> </span><span class="nb">blob</span><span class="p">,</span>
+<span class="w">  </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">tile_id</span><span class="p">));</span>
+<span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="k">map</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="n">zoom_level</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span>
+<span class="w">  </span><span class="n">tile_column</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span>
+<span class="w">  </span><span class="n">tile_row</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span>
+<span class="w">  </span><span class="n">tile_id</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span>
+<span class="w">  </span><span class="k">foreign</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">tile_id</span><span class="p">)</span><span class="w"> </span><span class="k">references</span><span class="w"> </span><span class="n">images</span><span class="p">(</span><span class="n">tile_id</span><span class="p">),</span>
+<span class="w">  </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">tile_row</span><span class="p">,</span><span class="n">tile_column</span><span class="p">,</span><span class="n">zoom_level</span><span class="p">));</span>
+<span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">metadata</span><span class="p">(</span>
+<span class="w">  </span><span class="n">name</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span>
 <span class="w">  </span><span class="n">value</span><span class="w"> </span><span class="nb">text</span><span class="p">);</span><span class="w"> </span><span class="c1">-- not used or populated yet</span>
-<span class="k">create</span><span class="w"> </span><span class="k">view</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">tiles</span><span class="w"></span>
-<span class="w">  </span><span class="k">as</span><span class="w"> </span><span class="k">select</span><span class="w"></span>
-<span class="w">     </span><span class="k">map</span><span class="p">.</span><span class="n">zoom_level</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">zoom_level</span><span class="p">,</span><span class="w"></span>
-<span class="w">     </span><span class="k">map</span><span class="p">.</span><span class="n">tile_column</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">tile_column</span><span class="p">,</span><span class="w"></span>
-<span class="w">     </span><span class="k">map</span><span class="p">.</span><span class="n">tile_row</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">tile_row</span><span class="p">,</span><span class="w"></span>
-<span class="w">     </span><span class="n">images</span><span class="p">.</span><span class="n">tile_data</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">tile_data</span><span class="w"></span>
-<span class="w">  </span><span class="k">from</span><span class="w"> </span><span class="k">map</span><span class="w"></span>
-<span class="w">     </span><span class="k">join</span><span class="w"> </span><span class="n">images</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">images</span><span class="p">.</span><span class="n">tile_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">map</span><span class="p">.</span><span class="n">tile_id</span><span class="p">;</span><span class="w"></span>
+<span class="k">create</span><span class="w"> </span><span class="k">view</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">tiles</span>
+<span class="w">  </span><span class="k">as</span><span class="w"> </span><span class="k">select</span>
+<span class="w">     </span><span class="k">map</span><span class="p">.</span><span class="n">zoom_level</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">zoom_level</span><span class="p">,</span>
+<span class="w">     </span><span class="k">map</span><span class="p">.</span><span class="n">tile_column</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">tile_column</span><span class="p">,</span>
+<span class="w">     </span><span class="k">map</span><span class="p">.</span><span class="n">tile_row</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">tile_row</span><span class="p">,</span>
+<span class="w">     </span><span class="n">images</span><span class="p">.</span><span class="n">tile_data</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">tile_data</span>
+<span class="w">  </span><span class="k">from</span><span class="w"> </span><span class="k">map</span>
+<span class="w">     </span><span class="k">join</span><span class="w"> </span><span class="n">images</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">images</span><span class="p">.</span><span class="n">tile_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">map</span><span class="p">.</span><span class="n">tile_id</span><span class="p">;</span>
 </pre></div>
 </div>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;mbtiles&quot;</span> <span class="na">type=</span><span class="s">&quot;mbtiles&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;dbfile&gt;</span>/Users/XXX/Documents/MapBox/tiles/natural-earth-1.mbtiles<span class="nt">&lt;/dbfile&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;mbtiles&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;mbtiles&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;dbfile&gt;</span>/Users/XXX/Documents/MapBox/tiles/natural-earth-1.mbtiles<span class="nt">&lt;/dbfile&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -563,7 +629,7 @@ Upgrading to SQLite &gt;= 3.7.15 seems to resolve this issue.</p>
 </div>
 </section>
 <section id="memcache-caches">
-<span id="mapcache-cache-memcache"></span><h2>Memcache Caches<a class="headerlink" href="#memcache-caches" title="Permalink to this heading">¶</a></h2>
+<span id="mapcache-cache-memcache"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Memcache Caches</a><a class="headerlink" href="#memcache-caches" title="Permalink to this heading">¶</a></h2>
 <p>This cache type stores tiles to an external memcached server running on the local
 machine or accessible on the network. This cache type has the advantage that
 memcached takes care of expiring tiles, so the size of the cache will never
@@ -573,11 +639,11 @@ that under very high loads (usually only attainable on synthetic benchmarks on
 localhost), the memcache implementation of apr-util may fail and start dropping
 connections for some intervals of time before coming back online afterwards.</p>
 <p>You can add multiple &lt;server&gt; entries.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;memcache&quot;</span> <span class="na">type=</span><span class="s">&quot;memcache&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;server&gt;</span>
-      <span class="nt">&lt;host&gt;</span>localhost<span class="nt">&lt;/host&gt;</span>
-      <span class="nt">&lt;port&gt;</span>11211<span class="nt">&lt;/port&gt;</span>
-   <span class="nt">&lt;/server&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;memcache&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;memcache&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;server&gt;</span>
+<span class="w">      </span><span class="nt">&lt;host&gt;</span>localhost<span class="nt">&lt;/host&gt;</span>
+<span class="w">      </span><span class="nt">&lt;port&gt;</span>11211<span class="nt">&lt;/port&gt;</span>
+<span class="w">   </span><span class="nt">&lt;/server&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -591,15 +657,15 @@ keyword.</p>
 may enable blank tile detection, in which case a <cite>#rgba</cite> quadruplet will
 be stored to the cache instead of the actual image data. MapCache will convert
 that on-the-fly to a 1-bit palleted PNG image before returning it to the client.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;memcache&quot;</span> <span class="na">type=</span><span class="s">&quot;memcache&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;detect_blank/&gt;</span>
-   ...
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;memcache&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;memcache&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;detect_blank/&gt;</span>
+<span class="w">   </span>...
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
 </section>
 <section id="geo-tiff-caches">
-<span id="mapcache-cache-tiff"></span><h2>(Geo)TIFF Caches<a class="headerlink" href="#geo-tiff-caches" title="Permalink to this heading">¶</a></h2>
+<span id="mapcache-cache-tiff"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">(Geo)TIFF Caches</a><a class="headerlink" href="#geo-tiff-caches" title="Permalink to this heading">¶</a></h2>
 <p>TIFF caches are the most recent addition to the family of caches, and use the
 internal tile structure of the TIFF specification to access tile data. Tiles can
 be stored in JPEG only (TIFF does not support PNG tiles).</p>
@@ -628,10 +694,10 @@ the TIFF file</p></li>
 <li><p>&lt;ycount&gt; the number of tiles stored along the y (vertical) direction of
 the TIFF file</p></li>
 </ul>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tiff&quot;</span> <span class="na">type=</span><span class="s">&quot;tiff&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;xcount&gt;</span>64<span class="nt">&lt;/xcount&gt;</span>
-   <span class="nt">&lt;ycount&gt;</span>64<span class="nt">&lt;/ycount&gt;</span>
-   ...
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;tiff&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;tiff&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;xcount&gt;</span>64<span class="nt">&lt;/xcount&gt;</span>
+<span class="w">   </span><span class="nt">&lt;ycount&gt;</span>64<span class="nt">&lt;/ycount&gt;</span>
+<span class="w">   </span>...
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -640,9 +706,9 @@ the TIFF file</p></li>
 <h3>Setting Up the File Naming Convention<a class="headerlink" href="#setting-up-the-file-naming-convention" title="Permalink to this heading">¶</a></h3>
 <p>The &lt;template&gt; tag sets the template to use when looking up a TIFF file
 name given the x,y,z of the requested tile</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tiff&quot;</span> <span class="na">type=</span><span class="s">&quot;tiff&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;template&gt;</span>/data/tiffs/{tileset}/{grid}/L{z}/R{inv_y}/C{x}.tif<span class="nt">&lt;/template&gt;</span>
-   ...
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;tiff&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;tiff&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;template&gt;</span>/data/tiffs/{tileset}/{grid}/L{z}/R{inv_y}/C{x}.tif<span class="nt">&lt;/template&gt;</span>
+<span class="w">   </span>...
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -676,11 +742,11 @@ named «Z03-R00003-C000009.tif» instead of just «Z3-R3-C9.tif». The
 &lt;template&gt; entry supports formatting attributes, following the Unix
 printf syntax ( c.f.: <a class="reference external" href="http://linux.die.net/man/3/printf">http://linux.die.net/man/3/printf</a> ), by suffixing
 each template key with «_fmt», e.g.:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tiff&quot;</span> <span class="na">type=</span><span class="s">&quot;tiff&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;template</span>
-      <span class="na">x_fmt=</span><span class="s">&quot;%08d&quot;</span>
-      <span class="na">inv_y_fmt=</span><span class="s">&quot;%08d&quot;</span>
-   <span class="nt">&gt;</span>/data/tiffs/{tileset}/{grid}/L{z}/R{inv_y}/C{x}.tif<span class="nt">&lt;/template&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;tiff&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;tiff&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;template</span>
+<span class="w">      </span><span class="na">x_fmt=</span><span class="s">&quot;%08d&quot;</span>
+<span class="w">      </span><span class="na">inv_y_fmt=</span><span class="s">&quot;%08d&quot;</span>
+<span class="w">   </span><span class="nt">&gt;</span>/data/tiffs/{tileset}/{grid}/L{z}/R{inv_y}/C{x}.tif<span class="nt">&lt;/template&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -700,9 +766,9 @@ applied to the tiles when saved into the TIFF file:</p>
 <p class="admonition-title">Vedi anche</p>
 <p><a class="reference internal" href="formats.html#mapcache-jpeg-format"><span class="std std-ref">JPEG Format</span></a></p>
 </div>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tiff&quot;</span> <span class="na">type=</span><span class="s">&quot;tiff&quot;</span><span class="nt">&gt;</span>
-   ...
-   <span class="nt">&lt;format&gt;</span>myjpeg<span class="nt">&lt;/format&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;tiff&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;tiff&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span>...
+<span class="w">   </span><span class="nt">&lt;format&gt;</span>myjpeg<span class="nt">&lt;/format&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -722,9 +788,9 @@ inside the TIFF cache itself.</p>
 <p class="admonition-title">Vedi anche</p>
 <p><a class="reference internal" href="locks.html#mapcache-locks"><span class="std std-ref">Locking Mechanisms</span></a></p>
 </div>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;tiff&quot;</span> <span class="na">type=</span><span class="s">&quot;tiff&quot;</span><span class="nt">&gt;</span>
-   ...
-   <span class="nt">&lt;locker&gt;</span> .... <span class="nt">&lt;/locker&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;tiff&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;tiff&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span>...
+<span class="w">   </span><span class="nt">&lt;locker&gt;</span><span class="w"> </span>....<span class="w"> </span><span class="nt">&lt;/locker&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -760,7 +826,7 @@ when compiled with GeoTIFF support:</p>
 </section>
 </section>
 <section id="rest-caches">
-<span id="mapcache-cache-rest"></span><h2>REST Caches<a class="headerlink" href="#rest-caches" title="Permalink to this heading">¶</a></h2>
+<span id="mapcache-cache-rest"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">REST Caches</a><a class="headerlink" href="#rest-caches" title="Permalink to this heading">¶</a></h2>
 <p>The following cache types store and retrieve tiles through standard HTTP GET
 and PUT operations, and can be used to store tiles in popular cloud storage
 providers.</p>
@@ -769,8 +835,8 @@ providers.</p>
 <p>This cache type can be used to store tiles to a WebDAV enabled server. You
 must provide a template URL that should be used when accessing a tile with
 a given x,y,z, etc…</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;myrestcache&quot;</span> <span class="na">type=</span><span class="s">&quot;rest&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;url&gt;</span>https://myserver/webdav/{tileset}/{grid}/{z}/{x}/{y}.{ext}<span class="nt">&lt;/url&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;myrestcache&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;rest&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;url&gt;</span>https://myserver/webdav/{tileset}/{grid}/{z}/{x}/{y}.{ext}<span class="nt">&lt;/url&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -780,31 +846,31 @@ a given x,y,z, etc…</p>
 <p>You can customize which headers get added to the HTTP request, either
 globally for every HTTP request, or specifically for a given type of request
 (i.e. when getting, setting or deleting a tile):</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;myrestcache&quot;</span> <span class="na">type=</span><span class="s">&quot;rest&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;url&gt;</span>https://myserver/webdav/{tileset}/{grid}/{z}/{x}/{y}.{ext}<span class="nt">&lt;/url&gt;</span>
-  <span class="nt">&lt;headers&gt;</span>
-    <span class="nt">&lt;Host&gt;</span>my-virtualhost-alias.domain.com<span class="nt">&lt;/Host&gt;</span>
-  <span class="nt">&lt;/headers&gt;</span>
-  <span class="nt">&lt;operation</span> <span class="na">type=</span><span class="s">&quot;put&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;headers&gt;</span>
-      <span class="nt">&lt;X-my-specific-put-header&gt;</span>foo<span class="nt">&lt;/X-my-specific-put-header&gt;</span>
-    <span class="nt">&lt;/headers&gt;</span>
-  <span class="nt">&lt;/operation&gt;</span>
-  <span class="nt">&lt;operation</span> <span class="na">type=</span><span class="s">&quot;get&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;headers&gt;</span>
-      <span class="nt">&lt;X-my-specific-get-header&gt;</span>foo<span class="nt">&lt;/X-my-specific-get-header&gt;</span>
-    <span class="nt">&lt;/headers&gt;</span>
-  <span class="nt">&lt;/operation&gt;</span>
-  <span class="nt">&lt;operation</span> <span class="na">type=</span><span class="s">&quot;head&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;headers&gt;</span>
-      <span class="nt">&lt;X-my-specific-head-header&gt;</span>foo<span class="nt">&lt;/X-my-specific-head-header&gt;</span>
-    <span class="nt">&lt;/headers&gt;</span>
-  <span class="nt">&lt;/operation&gt;</span>
-  <span class="nt">&lt;operation</span> <span class="na">type=</span><span class="s">&quot;delete&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;headers&gt;</span>
-      <span class="nt">&lt;X-my-specific-delete-header&gt;</span>foo<span class="nt">&lt;/X-my-specific-delete-header&gt;</span>
-    <span class="nt">&lt;/headers&gt;</span>
-  <span class="nt">&lt;/operation&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;myrestcache&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;rest&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;url&gt;</span>https://myserver/webdav/{tileset}/{grid}/{z}/{x}/{y}.{ext}<span class="nt">&lt;/url&gt;</span>
+<span class="w">  </span><span class="nt">&lt;headers&gt;</span>
+<span class="w">    </span><span class="nt">&lt;Host&gt;</span>my-virtualhost-alias.domain.com<span class="nt">&lt;/Host&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/headers&gt;</span>
+<span class="w">  </span><span class="nt">&lt;operation</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;put&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;headers&gt;</span>
+<span class="w">      </span><span class="nt">&lt;X-my-specific-put-header&gt;</span>foo<span class="nt">&lt;/X-my-specific-put-header&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/headers&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/operation&gt;</span>
+<span class="w">  </span><span class="nt">&lt;operation</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;get&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;headers&gt;</span>
+<span class="w">      </span><span class="nt">&lt;X-my-specific-get-header&gt;</span>foo<span class="nt">&lt;/X-my-specific-get-header&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/headers&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/operation&gt;</span>
+<span class="w">  </span><span class="nt">&lt;operation</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;head&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;headers&gt;</span>
+<span class="w">      </span><span class="nt">&lt;X-my-specific-head-header&gt;</span>foo<span class="nt">&lt;/X-my-specific-head-header&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/headers&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/operation&gt;</span>
+<span class="w">  </span><span class="nt">&lt;operation</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;delete&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;headers&gt;</span>
+<span class="w">      </span><span class="nt">&lt;X-my-specific-delete-header&gt;</span>foo<span class="nt">&lt;/X-my-specific-delete-header&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/headers&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/operation&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -813,20 +879,20 @@ globally for every HTTP request, or specifically for a given type of request
 <span id="mapcache-cache-rest-s3"></span><h3>Amazon S3 REST Caches<a class="headerlink" href="#amazon-s3-rest-caches" title="Permalink to this heading">¶</a></h3>
 <p>The REST cache has been specialized to enable access to Amazon S3, in order
 to add the layer of authentication/authorization needed for that platform.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;s3&quot;</span> <span class="na">type=</span><span class="s">&quot;s3&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;url&gt;</span>https://foo.s3.amazonaws.com/tiles/{tileset}/{grid}/{z}/{x}/{y}/{ext}<span class="nt">&lt;/url&gt;</span>
-  <span class="nt">&lt;headers&gt;</span>
-    <span class="nt">&lt;Host&gt;</span>foo.s3.amazonaws.com<span class="nt">&lt;/Host&gt;</span>
-  <span class="nt">&lt;/headers&gt;</span>
-  <span class="nt">&lt;id&gt;</span>AKIE3SDEIT6TUG8DXEQI<span class="nt">&lt;/id&gt;</span>
-  <span class="nt">&lt;secret&gt;</span>5F+dGsTfsdfkjdsfSDdasf4555d/sSff56sd/RDS<span class="nt">&lt;/secret&gt;</span>
-  <span class="nt">&lt;region&gt;</span>eu-west-1<span class="nt">&lt;/region&gt;</span>
-  <span class="nt">&lt;operation</span> <span class="na">type=</span><span class="s">&quot;put&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;headers&gt;</span>
-      <span class="nt">&lt;x-amz-storage-class&gt;</span>REDUCED_REDUNDANCY<span class="nt">&lt;/x-amz-storage-class&gt;</span>
-      <span class="nt">&lt;x-amz-acl&gt;</span>public-read<span class="nt">&lt;/x-amz-acl&gt;</span>
-    <span class="nt">&lt;/headers&gt;</span>
-  <span class="nt">&lt;/operation&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;s3&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;s3&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;url&gt;</span>https://foo.s3.amazonaws.com/tiles/{tileset}/{grid}/{z}/{x}/{y}/{ext}<span class="nt">&lt;/url&gt;</span>
+<span class="w">  </span><span class="nt">&lt;headers&gt;</span>
+<span class="w">    </span><span class="nt">&lt;Host&gt;</span>foo.s3.amazonaws.com<span class="nt">&lt;/Host&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/headers&gt;</span>
+<span class="w">  </span><span class="nt">&lt;id&gt;</span>AKIE3SDEIT6TUG8DXEQI<span class="nt">&lt;/id&gt;</span>
+<span class="w">  </span><span class="nt">&lt;secret&gt;</span>5F+dGsTfsdfkjdsfSDdasf4555d/sSff56sd/RDS<span class="nt">&lt;/secret&gt;</span>
+<span class="w">  </span><span class="nt">&lt;region&gt;</span>eu-west-1<span class="nt">&lt;/region&gt;</span>
+<span class="w">  </span><span class="nt">&lt;operation</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;put&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;headers&gt;</span>
+<span class="w">      </span><span class="nt">&lt;x-amz-storage-class&gt;</span>REDUCED_REDUNDANCY<span class="nt">&lt;/x-amz-storage-class&gt;</span>
+<span class="w">      </span><span class="nt">&lt;x-amz-acl&gt;</span>public-read<span class="nt">&lt;/x-amz-acl&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/headers&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/operation&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -840,14 +906,14 @@ accessible).</p>
 <span id="mapcache-cache-rest-azure"></span><h3>Microsoft Azure REST Caches<a class="headerlink" href="#microsoft-azure-rest-caches" title="Permalink to this heading">¶</a></h3>
 <p>The REST cache has been specialized to enable access to Azure storage, in order
 to add the layer of authentication/authorization needed for that platform.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;azure&quot;</span> <span class="na">type=</span><span class="s">&quot;azure&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;url&gt;</span>https://foo.blob.core.windows.net/tiles/{tileset}/{grid}/{z}/{x}/{y}/{ext}<span class="nt">&lt;/url&gt;</span>
-  <span class="nt">&lt;headers&gt;</span>
-    <span class="nt">&lt;Host&gt;</span>foo.blob.core.windows.net<span class="nt">&lt;/Host&gt;</span>
-  <span class="nt">&lt;/headers&gt;</span>
-  <span class="nt">&lt;id&gt;</span>foo<span class="nt">&lt;/id&gt;</span>
-  <span class="nt">&lt;secret&gt;</span>foobarcccccccccccccccccccccyA==<span class="nt">&lt;/secret&gt;</span>
-  <span class="nt">&lt;container&gt;</span>tiles<span class="nt">&lt;/container&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;azure&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;azure&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;url&gt;</span>https://foo.blob.core.windows.net/tiles/{tileset}/{grid}/{z}/{x}/{y}/{ext}<span class="nt">&lt;/url&gt;</span>
+<span class="w">  </span><span class="nt">&lt;headers&gt;</span>
+<span class="w">    </span><span class="nt">&lt;Host&gt;</span>foo.blob.core.windows.net<span class="nt">&lt;/Host&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/headers&gt;</span>
+<span class="w">  </span><span class="nt">&lt;id&gt;</span>foo<span class="nt">&lt;/id&gt;</span>
+<span class="w">  </span><span class="nt">&lt;secret&gt;</span>foobarcccccccccccccccccccccyA==<span class="nt">&lt;/secret&gt;</span>
+<span class="w">  </span><span class="nt">&lt;container&gt;</span>tiles<span class="nt">&lt;/container&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -859,15 +925,15 @@ what headers you want to be adding to your requests depending on your use case.<
 <span id="mapcache-cache-rest-google"></span><h3>Google Cloud Storage REST Caches<a class="headerlink" href="#google-cloud-storage-rest-caches" title="Permalink to this heading">¶</a></h3>
 <p>The REST cache has been specialized to enable access to Google Cloud Storage, in order
 to add the layer of authentication/authorization needed for that platform.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;google&quot;</span> <span class="na">type=</span><span class="s">&quot;google&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;url&gt;</span>https://storage.googleapis.com/mytiles-mapcache/{tileset}/{grid}/{z}/{x}/{y}.{ext}<span class="nt">&lt;/url&gt;</span>
-  <span class="nt">&lt;access&gt;</span>GOOGPGDWFDG345SDFGSD<span class="nt">&lt;/access&gt;</span>
-  <span class="nt">&lt;secret&gt;</span>sdfgsdSDFwedfwefr2345324dfsGdsfgs<span class="nt">&lt;/secret&gt;</span>
-  <span class="nt">&lt;operation</span> <span class="na">type=</span><span class="s">&quot;put&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;headers&gt;</span>
-      <span class="nt">&lt;x-amz-acl&gt;</span>public-read<span class="nt">&lt;/x-amz-acl&gt;</span>
-    <span class="nt">&lt;/headers&gt;</span>
-  <span class="nt">&lt;/operation&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;google&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;google&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;url&gt;</span>https://storage.googleapis.com/mytiles-mapcache/{tileset}/{grid}/{z}/{x}/{y}.{ext}<span class="nt">&lt;/url&gt;</span>
+<span class="w">  </span><span class="nt">&lt;access&gt;</span>GOOGPGDWFDG345SDFGSD<span class="nt">&lt;/access&gt;</span>
+<span class="w">  </span><span class="nt">&lt;secret&gt;</span>sdfgsdSDFwedfwefr2345324dfsGdsfgs<span class="nt">&lt;/secret&gt;</span>
+<span class="w">  </span><span class="nt">&lt;operation</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;put&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;headers&gt;</span>
+<span class="w">      </span><span class="nt">&lt;x-amz-acl&gt;</span>public-read<span class="nt">&lt;/x-amz-acl&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/headers&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/operation&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -878,7 +944,7 @@ Note that support for Google Cloud Storage uses its Amazon compatibility layer.<
 </section>
 </section>
 <section id="meta-caches">
-<span id="mapcache-cache-meta"></span><h2>Meta Caches<a class="headerlink" href="#meta-caches" title="Permalink to this heading">¶</a></h2>
+<span id="mapcache-cache-meta"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Meta Caches</a><a class="headerlink" href="#meta-caches" title="Permalink to this heading">¶</a></h2>
 <p>These cache types do not store tiles themselves, but rather delegate the
 storage of a tile to a number of child caches based on a set of rules or
 behaviors. These caches are mostly useful for large MapCache deployments
@@ -906,9 +972,9 @@ higher zoom-level tiles to a temporary (i.e. memcache) cache.</p>
 defined in the configuration file, and the first one to satisfy the min/max
 zoom and grids constraints is used. It’s up to the user to make sure the
 succession of min/max zoom values and grids makes sense, e.g.:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;composite&quot;</span> <span class="na">type=</span><span class="s">&quot;composite&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;cache</span> <span class="na">min-zoom=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>cache1<span class="nt">&lt;/cache&gt;</span>
-   <span class="nt">&lt;cache</span> <span class="na">min-zoom=</span><span class="s">&quot;9&quot;</span><span class="nt">&gt;</span>this_cache_will_never_be_used<span class="nt">&lt;/cache&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;composite&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;composite&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">min-zoom=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>cache1<span class="nt">&lt;/cache&gt;</span>
+<span class="w">   </span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">min-zoom=</span><span class="s">&quot;9&quot;</span><span class="nt">&gt;</span>this_cache_will_never_be_used<span class="nt">&lt;/cache&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -918,9 +984,9 @@ succession of min/max zoom values and grids makes sense, e.g.:</p>
 <p>These cache types will return tiles from the first configured subcache that does
 not return an error. They can be used when one of the caches is prone to error
 conditions (e.g. remote REST caches, memcache)</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;fallback&quot;</span> <span class="na">type=</span><span class="s">&quot;fallback&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;cache&gt;</span>mymemcache<span class="nt">&lt;/cache&gt;</span>
-   <span class="nt">&lt;cache&gt;</span>mysqlitecache<span class="nt">&lt;/cache&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;fallback&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;fallback&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;cache&gt;</span>mymemcache<span class="nt">&lt;/cache&gt;</span>
+<span class="w">   </span><span class="nt">&lt;cache&gt;</span>mysqlitecache<span class="nt">&lt;/cache&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -929,9 +995,9 @@ conditions (e.g. remote REST caches, memcache)</p>
 <section id="multitier-caches">
 <span id="mapcache-cache-multitier"></span><h3>Multitier Caches<a class="headerlink" href="#multitier-caches" title="Permalink to this heading">¶</a></h3>
 <p>These cache types can be used to combine fast/expensive caches with slow/cheap ones.</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;multitier&quot;</span> <span class="na">type=</span><span class="s">&quot;multitier&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;cache&gt;</span>fast<span class="nt">&lt;/cache&gt;</span>
-   <span class="nt">&lt;cache&gt;</span>cheap<span class="nt">&lt;/cache&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;multitier&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;multitier&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;cache&gt;</span>fast<span class="nt">&lt;/cache&gt;</span>
+<span class="w">   </span><span class="nt">&lt;cache&gt;</span>cheap<span class="nt">&lt;/cache&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -945,19 +1011,19 @@ used tiles (i.e. a memcache one).</p>
 <h3>Cache Combinations<a class="headerlink" href="#cache-combinations" title="Permalink to this heading">¶</a></h3>
 <p>All these meta caches can be combined together to fine tune the availability and
 performance depending on storage costs, time to recreate missing tiles, etc…</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;slow_and_permanent&quot;</span> <span class="na">type=</span><span class="s">&quot;sqlite&quot;</span><span class="nt">&gt;</span>...<span class="nt">&lt;/cache&gt;</span>
-<span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;fast_and_transient&quot;</span> <span class="na">type=</span><span class="s">&quot;memcache&quot;</span><span class="nt">&gt;</span>...<span class="nt">&lt;/cache&gt;</span>
-<span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;low_zooms&quot;</span> <span class="na">type=</span><span class="s">&quot;multitier&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;cache&gt;</span>fast_and_transient<span class="nt">&lt;/cache&gt;</span>
-   <span class="nt">&lt;cache&gt;</span>slow_and_permanent<span class="nt">&lt;/cache&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;slow_and_permanent&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;sqlite&quot;</span><span class="nt">&gt;</span>...<span class="nt">&lt;/cache&gt;</span>
+<span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;fast_and_transient&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;memcache&quot;</span><span class="nt">&gt;</span>...<span class="nt">&lt;/cache&gt;</span>
+<span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;low_zooms&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;multitier&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;cache&gt;</span>fast_and_transient<span class="nt">&lt;/cache&gt;</span>
+<span class="w">   </span><span class="nt">&lt;cache&gt;</span>slow_and_permanent<span class="nt">&lt;/cache&gt;</span>
 <span class="nt">&lt;cache&gt;</span>
-<span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;mycache&quot;</span> <span class="na">type=</span><span class="s">&quot;composite&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;cache</span> <span class="na">maxzoom=</span><span class="s">&quot;12&quot;</span><span class="nt">&gt;</span>low_zooms<span class="nt">&lt;/cache&gt;</span>
-   <span class="nt">&lt;cache&gt;</span>fast_and_transient<span class="nt">&lt;/cache&gt;</span>
+<span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;mycache&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;composite&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">maxzoom=</span><span class="s">&quot;12&quot;</span><span class="nt">&gt;</span>low_zooms<span class="nt">&lt;/cache&gt;</span>
+<span class="w">   </span><span class="nt">&lt;cache&gt;</span>fast_and_transient<span class="nt">&lt;/cache&gt;</span>
 <span class="nt">&lt;cache&gt;</span>
 <span class="nt">&lt;tileset&gt;</span>
-   <span class="nt">&lt;cache&gt;</span>mycache<span class="nt">&lt;/cache&gt;</span>
-   ...
+<span class="w">   </span><span class="nt">&lt;cache&gt;</span>mycache<span class="nt">&lt;/cache&gt;</span>
+<span class="w">   </span>...
 <span class="nt">&lt;/tileset&gt;</span>
 </pre></div>
 </div>
@@ -967,14 +1033,14 @@ populate the fast memcache cache e.g. on restarts.</p>
 </section>
 </section>
 <section id="riak-caches">
-<span id="mapcache-cache-riak"></span><h2>Riak Caches<a class="headerlink" href="#riak-caches" title="Permalink to this heading">¶</a></h2>
+<span id="mapcache-cache-riak"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Riak Caches</a><a class="headerlink" href="#riak-caches" title="Permalink to this heading">¶</a></h2>
 <p>requires <a class="reference external" href="https://github.com/trifork/riack">https://github.com/trifork/riack</a></p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span> <span class="na">name=</span><span class="s">&quot;myriak&quot;</span> <span class="na">type=</span><span class="s">&quot;riak&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;server&gt;</span>
-    <span class="nt">&lt;host&gt;</span>riakhost<span class="nt">&lt;/host&gt;</span>
-    <span class="nt">&lt;port&gt;</span>12345<span class="nt">&lt;/port&gt;</span>
-    <span class="nt">&lt;bucket&gt;</span>mytiles<span class="nt">&lt;/bucket&gt;</span>
-  <span class="nt">&lt;/server&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;cache</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;myriak&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;riak&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;server&gt;</span>
+<span class="w">    </span><span class="nt">&lt;host&gt;</span>riakhost<span class="nt">&lt;/host&gt;</span>
+<span class="w">    </span><span class="nt">&lt;port&gt;</span>12345<span class="nt">&lt;/port&gt;</span>
+<span class="w">    </span><span class="nt">&lt;bucket&gt;</span>mytiles<span class="nt">&lt;/bucket&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/server&gt;</span>
 <span class="nt">&lt;/cache&gt;</span>
 </pre></div>
 </div>
@@ -1021,6 +1087,7 @@ populate the fast memcache cache e.g. on restarts.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#berkeley-db-caches">Berkeley DB Caches</a></li>
+<li><a class="reference internal" href="#lightning-memory-mapped-database-caches">Lightning Memory-Mapped Database Caches</a></li>
 <li><a class="reference internal" href="#sqlite-caches">SQLite Caches</a><ul>
 <li><a class="reference internal" href="#default-schema">Default Schema</a></li>
 <li><a class="reference internal" href="#custom-schema">Custom Schema</a></li>
@@ -1077,15 +1144,15 @@ populate the fast memcache cache e.g. on restarts.</p>
           <a href="seed.html" title="Seeder"
              >precedente</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.0 Documentation</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >MapCache 1.12.1</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.1 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >MapCache 1.14.0</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Cache Types</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../copyright.html">Copyright</a> 2022, Open Source Geospatial Foundation.
-      Ultimo aggiornamento 2022-09-13.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+        &#169; <a href="../copyright.html">Copyright</a> 2023, Open Source Geospatial Foundation.
+      Ultimo aggiornamento 2023-04-20.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>
