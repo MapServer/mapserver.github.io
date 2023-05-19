@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 
 <html lang="nl_NL">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Environment Variables &#8212; MapServer 8.0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
@@ -149,10 +148,10 @@
 <nav class="contents" id="table-of-contents">
 <p class="topic-title">Table of Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#environment-variables" id="id2">Environment Variables</a></p>
+<li><p><a class="reference internal" href="#environment-variables" id="id3">Environment Variables</a></p>
 <ul>
-<li><p><a class="reference internal" href="#background" id="id3">Background</a></p></li>
-<li><p><a class="reference internal" href="#list-of-all-possible-mapserver-environment-variables" id="id4">List of all possible MapServer Environment Variables</a></p></li>
+<li><p><a class="reference internal" href="#background" id="id4">Background</a></p></li>
+<li><p><a class="reference internal" href="#list-of-all-possible-mapserver-environment-variables" id="id5">List of all possible MapServer Environment Variables</a></p></li>
 </ul>
 </li>
 </ul>
@@ -330,7 +329,72 @@ contain the following default <em>MS_MAP_BAD_PATTERN</em> enabled
 </div>
 </dd>
 </dl>
-<dl id="index-9">
+<span id="index-9"></span><dl id="ms-context-bad-pattern">
+<dt>MS_CONTEXT_BAD_PATTERN</dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Nieuw in versie 8.0.1.</span></p>
+</div>
+<p>The <cite>MS_CONTEXT_BAD_PATTERN</cite> environment variable can be used to specify a
+Regular Expression to catch &amp; not allow problematic character sequences
+in any map context paths passed to the mapserv CGI in the context=… URL parameter.
+If the value matches then an error is generated.  By default all
+MapServer installations (since 8.0.1) set a hardcoded value for
+<em>MS_CONTEXT_BAD_PATTERN</em> of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[/\\]{2}|[/\\]?\\.+[/\\]|,
+</pre></div>
+</div>
+<p>which will therefore not allow “/../” or “//” in the map context value.</p>
+<p>For Windows users, MS4W uses the PCRE regex library (which requires a
+slightly different regex syntax), so all future MS4W releases will
+contain the following default <em>MS_MAP_BAD_CONTEXT_PATTERN</em> enabled
+(to not allow “/../” or “//” in the map context value) :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[\/\\\\]{2}|[\/\\\\]?\.{2,}[\/\\\\]|,
+</pre></div>
+</div>
+<p>For more Windows information see <a class="reference external" href="https://ms4w.com/README_INSTALL.html#securing-your-ms4w-installation">Securing your MS4W Installation</a></p>
+<div class="admonition seealso">
+<p class="admonition-title">Zie ook</p>
+<p><a class="reference internal" href="limit_mapfile_access.html#limit-mapfile-access"><span class="std std-ref">Limit Mapfile Access</span></a></p>
+</div>
+</dd>
+</dl>
+<span id="index-10"></span><dl id="ms-context-pattern">
+<dt>MS_CONTEXT_PATTERN</dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Nieuw in versie 8.0.1.</span></p>
+</div>
+<p>The <cite>MS_CONTEXT_PATTERN</cite> environment variable can be used to specify a
+Regular Expression that must be matched by all file paths passed
+to the mapserv CGI in the context=… URL parameter.</p>
+<p>If <cite>MS_CONTEXT_PATTERN</cite> is not set then no map context can be loaded.</p>
+<p>Apache’s SetEnv directive can be used to restrict mapfiles to a
+specific directory and subdirectories.</p>
+<ul>
+<li><p><em>Unix users</em> may set the following expression in Apache to restrict
+mapfiles to the <em>/opt/mapserver</em> directory and subdirectories:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SetEnv</span> <span class="n">MS_CONTEXT_PATTERN</span> <span class="s2">&quot;^\/opt\/mapserver\/([^\.][_A-Za-z0-9\-\.]+\/</span><span class="si">{1}</span><span class="s2">)*([_A-Za-z0-9\-\.]+\.(xml))$&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p><em>Windows Apache/MS4W users</em> can set the following expression in the Apache
+conf file, to limit the possible MAP= paths to the common
+<em>C:/ms4w/apps/</em> directory (where all MS4W mapfiles and applications live),
+allow encoded urls, allow “.” or “_” or “-” in MAP= paths but disallow “..”
+directory traversing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SetEnv</span> <span class="n">MS_CONTEXT_PATTERN</span> <span class="s2">&quot;^(C:)?\/ms4w\/apps\/((?!\.</span><span class="si">{2}</span><span class="s2">)[_A-Za-z0-9\-\.]+\/</span><span class="si">{1}</span><span class="s2">)*([_A-Za-z0-9\-\.]+\.(xml))$&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Notitie</p>
+<p>MS4W users can see specific examples at: <a class="reference external" href="https://ms4w.com/README_INSTALL.html#securing-your-ms4w-installation">https://ms4w.com/README_INSTALL.html#securing-your-ms4w-installation</a></p>
+</div>
+</li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">Zie ook</p>
+<p><a class="reference internal" href="limit_mapfile_access.html#limit-mapfile-access"><span class="std std-ref">Limit Mapfile Access</span></a></p>
+</div>
+</dd>
+</dl>
+<dl id="index-11">
 <dt>MS_MAP_PATTERN</dt><dd><div class="versionadded">
 <p><span class="versionmodified added">Nieuw in versie 5.4.</span></p>
 </div>
@@ -367,12 +431,12 @@ directory traversing:</p>
 </div>
 </dd>
 </dl>
-<dl class="simple" id="index-10">
+<dl class="simple" id="index-12">
 <dt>MS_MODE</dt><dd><p>Default value for the mode=… URL parameter. Setting mode=… in
 the URL takes precedence over the environment variable.</p>
 </dd>
 </dl>
-<dl id="index-11">
+<dl id="index-13">
 <dt>MS_OPENLAYERS_JS_URL</dt><dd><p>The URL to the OpenLayers javascript library (can be used when
 testing WMS services using imagetype application/openlayers),
 for instance:</p>
@@ -381,14 +445,14 @@ for instance:</p>
 </div>
 </dd>
 </dl>
-<dl id="index-12">
+<dl id="index-14">
 <dt>MS_TEMPPATH</dt><dd><p>Set the <a class="reference internal" href="../mapfile/web.html#web"><span class="std std-ref">WEB</span></a> <cite>TEMPPATH</cite>.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Nieuw in versie 6.0.</span></p>
 </div>
 </dd>
 </dl>
-<dl id="index-13">
+<dl id="index-15">
 <dt>MS_XMLMAPFILE_XSLT</dt><dd><p>Used to enable XML Mapfile support.  Points to the location of the
 XSLT to use for the XML-&gt;text mapfile conversion.</p>
 <div class="admonition seealso">
@@ -397,7 +461,7 @@ XSLT to use for the XML-&gt;text mapfile conversion.</p>
 </div>
 </dd>
 </dl>
-<dl id="index-14">
+<dl id="index-16">
 <dt>PROJ_LIB</dt><dd><p>The <cite>PROJ_LIB</cite> environment variable or <cite>CONFIG</cite> directive can be
 used to specify the directory where the PROJ data files are located
 (including the “proj.db” file, or “epsg” file for older PROJ versions),
@@ -477,8 +541,8 @@ if they are not in the default directory where PROJ expects them.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; <a href="../copyright.html">Copyright</a> 2023, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2023-04-20.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+      Laatste aanpassing op 2023-05-19.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
     </div>
   </body>
 </html>
