@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,9 +11,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dd298242" />
     <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css?v=ea091bf4" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=7061b91b"></script>
+    <script src="../../_static/documentation_options.js?v=521b6f53"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -26,6 +26,7 @@
 
 
 <!-- for main branch only, do not backport this -->
+<h4 class="ribbon">DOCS PREVIEW</h4>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -119,7 +120,7 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-16-mapscript-wxs-services">
-<span id="rfc16"></span><h1>MS RFC 16: MapScript WxS Services<a class="headerlink" href="#ms-rfc-16-mapscript-wxs-services" title="Permalink to this heading">¶</a></h1>
+<span id="rfc16"></span><h1>MS RFC 16: MapScript WxS Services<a class="headerlink" href="#ms-rfc-16-mapscript-wxs-services" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2006/05/10</p>
@@ -141,7 +142,7 @@
 </dd>
 </dl>
 <section id="purpose">
-<h2>Purpose<a class="headerlink" href="#purpose" title="Permalink to this heading">¶</a></h2>
+<h2>Purpose<a class="headerlink" href="#purpose" title="Link to this heading">¶</a></h2>
 <p>The general intention is that a WMS or WCS service should be able to
 be setup via MapScript.  The web request would be turned over to a
 MapScript script (Python, Perl, Java, etc) which can then manipulate
@@ -158,7 +159,7 @@ via the .map METADATA tags.</p></li>
 </ul>
 </section>
 <section id="technical-solution">
-<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Permalink to this heading">¶</a></h2>
+<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>GetCapabilities, GetFeatureInfo and GetMap calls for WMS callable from
 MapScript, and results capturable for processing.</p></li>
@@ -179,7 +180,7 @@ customized services.</p></li>
 </ul>
 </section>
 <section id="wxs-functions">
-<h2>WxS Functions<a class="headerlink" href="#wxs-functions" title="Permalink to this heading">¶</a></h2>
+<h2>WxS Functions<a class="headerlink" href="#wxs-functions" title="Link to this heading">¶</a></h2>
 <p>Add the following methods on the mapObj in mapscript/swiginc/map.i.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">OWSDispatch</span><span class="p">(</span> <span class="n">OWSRequest</span> <span class="o">*</span><span class="n">req</span> <span class="p">);</span>
 </pre></div>
@@ -196,7 +197,7 @@ the results.</p></li>
 </ul>
 </section>
 <section id="owsrequest">
-<h2>OWSRequest<a class="headerlink" href="#owsrequest" title="Permalink to this heading">¶</a></h2>
+<h2>OWSRequest<a class="headerlink" href="#owsrequest" title="Link to this heading">¶</a></h2>
 <p>This object is already defined to MapScript in mapscript/swiginc/owsrequest.i
 but it seems to lack a means of setting it from cgi arguments or directly
 by parsing a provided url.  I propose to add the following method on the
@@ -217,7 +218,7 @@ QUERY_STRING if REQUEST_METHOD was GET.</p></li>
 </ul>
 </section>
 <section id="io-hooking">
-<h2>IO Hooking<a class="headerlink" href="#io-hooking" title="Permalink to this heading">¶</a></h2>
+<h2>IO Hooking<a class="headerlink" href="#io-hooking" title="Link to this heading">¶</a></h2>
 <p>Currently output from functions such as msWMSGetCapabilities() is directed
 through the msIO services (in mapio.c), such as msIO_printf().  In order to
 capture this output and make it available for further processing it will be
@@ -298,7 +299,7 @@ track of the previous handler?  Then we could just pop them off.</p>
 seems like it would be complicated.</p>
 </section>
 <section id="gdbuffer">
-<h2>gdBuffer<a class="headerlink" href="#gdbuffer" title="Permalink to this heading">¶</a></h2>
+<h2>gdBuffer<a class="headerlink" href="#gdbuffer" title="Link to this heading">¶</a></h2>
 <p>The msIO_getStdoutBufferBytes() returns a gdBuffer since most language
 bindings already have a way of using this as a “array of raw bytes” buffer.
 It is normally used for fetched gdImage buffers.  But because the msIO
@@ -331,7 +332,7 @@ call gdFree() on data if owns_data is true.</p>
 <p>And similarly for the other bindings.</p>
 </section>
 <section id="files-and-objects-affected">
-<h2>Files and objects affected<a class="headerlink" href="#files-and-objects-affected" title="Permalink to this heading">¶</a></h2>
+<h2>Files and objects affected<a class="headerlink" href="#files-and-objects-affected" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapio</span><span class="o">.</span><span class="n">c</span>
 <span class="n">mapio</span><span class="o">.</span><span class="n">h</span>
 <span class="n">mapscript</span><span class="o">/</span><span class="n">mapscript</span><span class="o">.</span><span class="n">i</span>
@@ -343,12 +344,12 @@ call gdFree() on data if owns_data is true.</p>
 </div>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h2>
+<h2>Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link to this heading">¶</a></h2>
 <p>There are no apparent backward compatibility problems with existing
 MapScript scripts.</p>
 </section>
 <section id="implementation-issues">
-<h2>Implementation Issues<a class="headerlink" href="#implementation-issues" title="Permalink to this heading">¶</a></h2>
+<h2>Implementation Issues<a class="headerlink" href="#implementation-issues" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>the gdBuffer stuff likely ought to be generalized.</p></li>
 <li><p>some MapScript languages lack gdBuffer typemaps (ie. perl).</p></li>
@@ -366,7 +367,7 @@ anyways.</p></li>
 </ul>
 </section>
 <section id="test-suite">
-<h2>Test suite<a class="headerlink" href="#test-suite" title="Permalink to this heading">¶</a></h2>
+<h2>Test suite<a class="headerlink" href="#test-suite" title="Link to this heading">¶</a></h2>
 <p>The msautotest/mspython and python unit tests will be extended with at
 least rudimentary testing of a few of these services.</p>
 <p>As we have no automated tests for other MapScript languages, no automated
@@ -374,7 +375,7 @@ tests will be added, but I will endeavour to prepare simple scripts to test
 things.  Currently this has been done for Python and Perl MapScript.</p>
 </section>
 <section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h2>
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h2>
 <p>This shows a very simple Python MapScript script that invokes a
 passed in OWSRequest passed via normal cgi means, but adding a text/plain
 content type ahead of the regular content type so we can see the results.
@@ -400,15 +401,15 @@ and on the map object.</p>
 </div>
 </section>
 <section id="bug-id">
-<h2>Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this heading">¶</a></h2>
+<h2>Bug ID<a class="headerlink" href="#bug-id" title="Link to this heading">¶</a></h2>
 <p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/1788">https://github.com/MapServer/MapServer/issues/1788</a></p>
 </section>
 <section id="voting-history">
-<h2>Voting history<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
+<h2>Voting history<a class="headerlink" href="#voting-history" title="Link to this heading">¶</a></h2>
 <p>+1: FrankW, SteveW.</p>
 </section>
 <section id="open-questions">
-<h2>Open questions<a class="headerlink" href="#open-questions" title="Permalink to this heading">¶</a></h2>
+<h2>Open questions<a class="headerlink" href="#open-questions" title="Link to this heading">¶</a></h2>
 <p>None</p>
 </section>
 </section>
@@ -486,8 +487,8 @@ and on the map object.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; <a href="../../copyright.html">Copyright</a> 2023, Open Source Geospatial Foundation.
-      Last updated on 2023-08-17.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.0.
+      Last updated on 2023-08-22.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.2.
     </div>
   </body>
 </html>
