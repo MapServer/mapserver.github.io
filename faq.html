@@ -26,6 +26,7 @@
 
 
 <!-- for main branch only, do not backport this -->
+<h4 class="ribbon">DOCS PREVIEW</h4>
 
 <table width="100%" style="width: 100%; background-color: white;">
   <tr>
@@ -325,35 +326,10 @@ width you want. A ‘circle’ symbol can be defined as</p>
 </pre></div>
 </div>
 </section>
-<section id="why-do-my-jpeg-input-images-look-different-via-mapserver">
-<h2>Why do my JPEG input images look different via MapServer?<a class="headerlink" href="#why-do-my-jpeg-input-images-look-different-via-mapserver" title="Link to this heading">¶</a></h2>
-<p>You must be using an old version of MapServer  (where GD was the
-default library for rendering).</p>
-<p>Newer versions of MapServer  use AGG for rendering, and the default
-output formats is 24 bit colour, so there should not be a problem.</p>
-<p>The default output format for MapServer with GD was 8bit
-pseudo-colored PNG or GIF.  Inherently there will be some color
-degradation in converting a 24bit image (16 million colors) image into
-8bit (256 colors).</p>
-<p>With GD output, MapServer used quite a simple method to do the
-transformation, converting pixels to the nearest color in a 175 color
-colorcube. This would usually result in blotchy color in a fairly
-smoothly varying image.</p>
-<p>For GD, solutions used to be:</p>
-<ul class="simple">
-<li><p>Select 24bit output.  This might be as easy as “IMAGETYPE JPEG” in your MAP
-section.</p></li>
-<li><p>Enable dithering (PROCESSING “DITHER=YES”) to produce a better color
-appearance.</p></li>
-<li><p>Preprocess your image to 8bit before using it in MapServer with an external
-application like the GDAL rgb2pct.py script.</p></li>
-</ul>
-<p>For more information review the <a class="reference internal" href="input/raster.html#raster"><span class="std std-ref">Raster Data</span></a>.</p>
-</section>
 <section id="which-image-format-should-i-use">
 <h2>Which image format should I use?<a class="headerlink" href="#which-image-format-should-i-use" title="Link to this heading">¶</a></h2>
 <p>Although MapScript can generate the map in any desired image format it is
-sufficient to only consider the three most prevalent ones: JPEG, PNG, and GIF.</p>
+sufficient to only consider the most prevalent ones: JPEG and PNG.</p>
 <p>JPEG is an image format that uses a lossy compression algorithm to reduce an
 image’s file size and is mostly used when loss of detail through compression
 is either not noticeable or negligible, as in most photos. Maps on the other
@@ -362,33 +338,29 @@ which is something JPEG is not known for displaying very well. In addition,
 maps, unless they include some aerial or satellite imagery, generally only use
 very few different colours. JPEG with its 24bit colour depth capable of
 displaying around 16.7 million colours is simple not suitable for this
-purpose. GIF and PNG however use an indexed colour palette which can be
+purpose. PNG8 however use an indexed colour palette which can be
 optimized for any number (up to 256) of colours which makes them the perfect
 solution for icons, logos, charts or maps. The following comparison (generated
 file sizes only; not file generation duration) will therefore only include
 these two file formats:</p>
 <table class="docutils align-default" id="id2">
-<caption><span class="caption-text">GIF vs. PNG vs. PNG24 Generated Map File Sizes</span><a class="headerlink" href="#id2" title="Link to this table">¶</a></caption>
+<caption><span class="caption-text">PNG8 vs. PNG24 Generated Map File Sizes</span><a class="headerlink" href="#id2" title="Link to this table">¶</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"></th>
-<th class="head"><p>GIF</p></th>
-<th class="head"><p>PNG</p></th>
+<th class="head"><p>PNG8</p></th>
 <th class="head"><p>PNG24</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Vector Data only</p></td>
-<td><p>59kb</p></td>
 <td><p>26kb</p></td>
 <td><p>69kb</p></td>
 </tr>
 <tr class="row-odd"><td><p>Vector Data &amp; Satellite Image coloured</p></td>
-<td><p>156kb</p></td>
 <td><p>182kb</p></td>
 <td><p>573kb</p></td>
 </tr>
 <tr class="row-even"><td><p>Vector Data &amp; Satellite Image monochrome</p></td>
-<td><p>142kb</p></td>
 <td><p>134kb</p></td>
 <td><p>492kb</p></td>
 </tr>
@@ -396,46 +368,11 @@ these two file formats:</p>
 </table>
 <p>(results based on an average 630x396 map with various colours, symbols,
 labels/annotations etc.)</p>
-<p>Although GIF shows a quantitative as well as qualitative advantage over PNG
-when generating maps that contain full coloured remote sensing imagery, PNG is
-the clear quantitative winner in terms of generated file sizes for maps with
-or without additional monochrome imagery and should therefore be the
-preferred image format. If the mapping application however can also display
-fullcolour aerial or satellite imagery, the output file format can be changed
-dynamically to either GIF or even PNG24 to achieve the highest possible image
-quality.</p>
-</section>
-<section id="why-doesn-t-pil-python-imaging-library-open-my-pngs">
-<h2>Why doesn’t PIL (Python Imaging Library) open my PNGs?<a class="headerlink" href="#why-doesn-t-pil-python-imaging-library-open-my-pngs" title="Link to this heading">¶</a></h2>
-<p><a class="reference external" href="https://pillow.readthedocs.io/en/stable/">PIL</a> does not support interlaced
-PNGs at this time (no timetable on when it actually will either). To be able
-to read PNGs in PIL, they must not be interlaced. Modify your OUTPUTFORMAT with
-a FORMATOPTION like so:</p>
-<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">OUTPUTFORMAT</span>
-  <span class="k">NAME</span> <span class="nb">png</span>
-  <span class="k">DRIVER</span> <span class="s">&quot;GD/PNG&quot;</span>
-  <span class="k">MIMETYPE</span> <span class="s">&quot;image/png&quot;</span>
-  <span class="k">IMAGEMODE</span> <span class="nb">RGB</span>
-  <span class="k">EXTENSION</span> <span class="s">&quot;png&quot;</span>
-  <span class="k">FORMATOPTION</span> <span class="s">&quot;INTERLACE=OFF&quot;</span>
-<span class="k">END</span>
-</pre></div>
-</div>
-</section>
-<section id="why-do-my-symbols-look-poor-in-jpeg-output">
-<h2>Why do my symbols look poor in JPEG output?<a class="headerlink" href="#why-do-my-symbols-look-poor-in-jpeg-output" title="Link to this heading">¶</a></h2>
-<p>When I render my symbols to an 8bit output (PNG, GIF) they look fine, but in
-24bit jpeg output they look very blocky and gross.</p>
-<p>You must be using an old version of MapServer .  This should not be
-problem with newer versions.  The following explains the old (GD)
-behaviour.</p>
-<p>In order to render some classes of symbols properly in 24bit output, such as
-symbols from true type fonts, it is necessary to force rendering to occur in
-RGBA. This can be accomplished by including the “TRANSPARENCY ALPHA” line in
-the layer definition. Don’t use this unnecessarily as there is a performance
-penalty.</p>
-<p>This problem also affects PNG24 output or any RGB output format. 8bit (PC256)
-or RGBA output types are already ok.</p>
+<p>PNG8 is the clear quantitative winner in terms of generated file sizes for maps with
+or without additional monochrome imagery.
+If the mapping application however can also display fullcolour aerial or
+satellite imagery, the output file format can be changed dynamically to PNG24
+to achieve the highest possible image quality.</p>
 </section>
 <section id="how-do-i-add-a-copyright-notice-on-the-corner-of-my-map">
 <h2>How do I add a copyright notice on the corner of my map?<a class="headerlink" href="#how-do-i-add-a-copyright-notice-on-the-corner-of-my-map" title="Link to this heading">¶</a></h2>
@@ -501,68 +438,6 @@ in your class.</p>
   <span class="k">WIDTH</span> <span class="mi">3</span>
 <span class="k">END</span>
 </pre></div>
-</div>
-</section>
-<section id="how-can-i-create-simple-antialiased-line-features">
-<h2>How can I create simple antialiased line features?<a class="headerlink" href="#how-can-i-create-simple-antialiased-line-features" title="Link to this heading">¶</a></h2>
-<p>With AGG (used in recent MapServer  version), antialiased lines is the
-default, and can’t be turned off.</p>
-<p>With GD, the easiest way to produce antialiased lines is to:</p>
-<ul class="simple">
-<li><p>use a 24-bit output image type (IMAGEMODE RGB (or RGBA))</p></li>
-<li><p>set TRANSPARENCY ALPHA in the layer using antialiased lines</p></li>
-<li><p>set ANTIALIAS TRUE in the STYLE element of the CLASS with antialiased lines</p></li>
-</ul>
-<p>The following mapfile snippets enable antialiased county borders for
-GD:</p>
-<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="p">...</span>
-<span class="k">IMAGETYPE</span> <span class="s">&quot;png24&quot;</span>
-<span class="p">...</span>
-<span class="k">OUTPUTFORMAT</span>
-  <span class="k">NAME</span> <span class="s">&quot;png24&quot;</span>
-  <span class="k">DRIVER</span> <span class="s">&quot;GD/PNG&quot;</span>
-  <span class="k">MIMETYPE</span> <span class="s">&quot;image/png&quot;</span>
-  <span class="k">IMAGEMODE</span> <span class="nb">RGB</span>
-  <span class="k">EXTENSION</span> <span class="s">&quot;png&quot;</span>
-<span class="k">END</span>
-<span class="p">...</span>
-<span class="k">LAYER</span>
-  <span class="k">NAME</span> <span class="s">&quot;counties&quot;</span>
-  <span class="k">TYPE</span> <span class="nb">line</span>
-  <span class="k">STATUS</span> <span class="nb">default</span>
-  <span class="k">DATA</span> <span class="s">&quot;bdry_counln2.shp&quot;</span>
-  <span class="k">TRANSPARENCY</span> <span class="nb">alpha</span>
-  <span class="k">SYMBOLSCALE</span> <span class="mi">5000000</span>
-  <span class="k">CLASS</span>
-    <span class="k">STYLE</span>
-       <span class="k">WIDTH</span> <span class="mi">3</span>
-       <span class="k">COLOR</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span>
-       <span class="k">ANTIALIAS</span> <span class="nb">true</span>
-    <span class="k">END</span>
-  <span class="k">END</span>
-<span class="k">END</span>
-<span class="p">...</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The bdry_counln2 shapefile referenced in the counties layer is a line
-shapefile. A polygon shapefile could be substituted with roughly the same
-results, though owing to the nature of shapefiles each border would be
-rendered twice and the resulting output line would likely appear to be
-slightly thicker. Alternatively, one could use a polygon shapefile, set
-TYPE to POLYGON, and use OUTLINECOLOR in place of COLOR in the STYLE
-element.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>You can tweak the combination of STYLE-&gt;WIDTH and SYMBOLSCALE to modify
-line widths in your output images.</p>
-</div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="mapfile/symbology/construction.html#sym-construction"><span class="std std-ref">Cartoline</span></a> symbols can be used to achieve fancier
-effects.</p>
 </div>
 </section>
 <section id="which-ogc-specifications-does-mapserver-support">
@@ -819,17 +694,13 @@ was the <a class="reference external" href="http://lists.osgeo.org/pipermail/map
 <li><a class="reference internal" href="#does-mapserver-support-reverse-geocoding">Does MapServer support reverse geocoding?</a></li>
 <li><a class="reference internal" href="#does-mapserver-support-geocoding">Does MapServer support geocoding?</a></li>
 <li><a class="reference internal" href="#how-do-i-set-line-width-in-my-maps">How do I set line width in my maps?</a></li>
-<li><a class="reference internal" href="#why-do-my-jpeg-input-images-look-different-via-mapserver">Why do my JPEG input images look different via MapServer?</a></li>
 <li><a class="reference internal" href="#which-image-format-should-i-use">Which image format should I use?</a></li>
-<li><a class="reference internal" href="#why-doesn-t-pil-python-imaging-library-open-my-pngs">Why doesn’t PIL (Python Imaging Library) open my PNGs?</a></li>
-<li><a class="reference internal" href="#why-do-my-symbols-look-poor-in-jpeg-output">Why do my symbols look poor in JPEG output?</a></li>
 <li><a class="reference internal" href="#how-do-i-add-a-copyright-notice-on-the-corner-of-my-map">How do I add a copyright notice on the corner of my map?</a><ul>
 <li><a class="reference internal" href="#example-layer">Example Layer</a></li>
 <li><a class="reference internal" href="#result">Result</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#how-do-i-have-a-polygon-that-has-both-a-fill-and-an-outline-with-a-width">How do I have a polygon that has both a fill and an outline with a width?</a></li>
-<li><a class="reference internal" href="#how-can-i-create-simple-antialiased-line-features">How can I create simple antialiased line features?</a></li>
 <li><a class="reference internal" href="#which-ogc-specifications-does-mapserver-support">Which OGC Specifications does MapServer support?</a></li>
 <li><a class="reference internal" href="#why-does-my-requested-wms-layer-not-align-correctly">Why does my requested WMS layer not align correctly?</a></li>
 <li><a class="reference internal" href="#when-i-do-a-getcapabilities-why-does-my-browser-want-to-download-mapserv-exe-mapserv">When I do a GetCapabilities, why does my browser want to download mapserv.exe/mapserv?</a></li>
@@ -866,7 +737,7 @@ was the <a class="reference external" href="http://lists.osgeo.org/pipermail/map
     </div>
     <div class="footer" role="contentinfo">
     &#169; <a href="copyright.html">Copyright</a> 2023, Open Source Geospatial Foundation.
-      Last updated on 2023-08-31.
+      Last updated on 2023-09-08.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.2.
     </div>
   </body>
