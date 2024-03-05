@@ -130,10 +130,10 @@
 <dd class="field-even"><p><a class="reference external" href="mailto:sethg&#37;&#52;&#48;geographika&#46;co&#46;uk">sethg<span>&#64;</span>geographika<span>&#46;</span>co<span>&#46;</span>uk</a></p>
 </dd>
 <dt class="field-odd">Last Updated<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2024-02-08</p>
+<dd class="field-odd"><p>2024-03-04</p>
 </dd>
 <dt class="field-even">Version<span class="colon">:</span></dt>
-<dd class="field-even"><p>Targeting MapServer 8.4</p>
+<dd class="field-even"><p>Targeting MapServer 8.2</p>
 </dd>
 <dt class="field-odd">Status<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Draft</p>
@@ -144,13 +144,17 @@
 <p>This proposal outlines how Styled Layer Descriptor (SLD) files could be referenced directly in a Mapfile, allowing styles
 to be applied using SLD files rather than MapServer’s <code class="docutils literal notranslate"><span class="pre">CLASS</span></code> and <code class="docutils literal notranslate"><span class="pre">STYLE</span></code> blocks.</p>
 <p>This would allow easier creation of Mapfiles from other applications, such as QGIS, which could export a Mapfile referencing
-SLD files, rather than attempting to translate QGIS styles directly to MapServer Mapfile syntax. It would make it easier to reuse
+SLD files, rather than attempting to translate QGIS styles directly to MapServer Mapfile syntax. It would make it easier to re-use
 styles between different applications.</p>
 <p>It is proposed that the LAYER’s <a class="reference internal" href="../../mapfile/layer.html#mapfile-layer-styleitem"><span class="std std-ref">STYLEITEM</span></a> keyword is used to reference the SLD files, as in
 the example below:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="k">STYLEITEM</span> <span class="s">&quot;sld://mysldfile.xml&quot;</span> <span class="c"># uses SHAPEPATH and if not set then relative path to the Mapfile or absolute path</span>
-  <span class="k">CLASS</span> <span class="c"># define an empty CLASS here</span>
+  <span class="k">CLASS</span> <span class="c"># Any classes will be ignored, but if there is a problem reading the SLD file it will be used as a fallback</span>
+    <span class="k">STYLE</span>
+        <span class="k">COLOR</span> <span class="mi">255</span> <span class="mi">0</span> <span class="mi">0</span>
+        <span class="k">WIDTH</span> <span class="mi">1</span>
+    <span class="k">END</span>
   <span class="k">END</span>
 <span class="k">END</span>
 </pre></div>
@@ -172,9 +176,9 @@ parameters to a MapServer layer - see the <a class="reference internal" href="..
 </ul>
 <p>Currently <code class="docutils literal notranslate"><span class="pre">msSLDApplySLDURL</span></code> saves an SLD file a URL to a temporary file, and then applies this SLD to the layer.
 Much of the code is already available and can be reused to implement applying SLD directly from a file.</p>
-</section>
-<section id="limitations">
-<h2>2.2 Limitations<a class="headerlink" href="#limitations" title="Link to this heading">¶</a></h2>
+<p>The SLD will be applied at the end of parsing and loading the Mapfile in <code class="docutils literal notranslate"><span class="pre">msLoadMap</span></code> and <code class="docutils literal notranslate"><span class="pre">msLoadMapFromString</span></code>. Any classes in the layer will
+be replaced by classes generated from the SLD. Applying the SLD as early as possible ensures other code paths which affect styling, such as applying SLD from a
+URL are unaffected.</p>
 <p>Currently all uses of SLD rely on the NamedLayer Name property matching the LAYER NAME. For example
 <code class="docutils literal notranslate"><span class="pre">popplace</span></code> in the SLD file:</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;NamedLayer&gt;</span>
@@ -188,13 +192,51 @@ Much of the code is already available and can be reused to implement applying SL
 <span class="k">END</span>
 </pre></div>
 </div>
-<p>If an SLD file is defined within a layer, it is proposed there is no need for the NamedLayer property to match the LAYER NAME.
-This would allow SLD files to be more easily reused, and would avoid confusion as to why the SLD isn’t being applied when specified
+<p>If an SLD file is defined within a layer, it is proposed:</p>
+<ul class="simple">
+<li><p>For SLD files with multiple NamedLayers, if the Name matches the layer names then this will be used.</p></li>
+<li><p>If there are no matches then by default the first named layer will be used. A new <code class="docutils literal notranslate"><span class="pre">SLD_USE_FIRST_NAMEDLAYER</span></code> metadata item is created to apply this logic by default.
+It can be set in the Mapfile to only apply NamedLayer if there is a match in the SLD file using <code class="docutils literal notranslate"><span class="pre">METADATA</span> <span class="pre">&quot;SLD_USE_FIRST_NAMEDLAYER&quot;</span> <span class="pre">&quot;false&quot;</span></code> (or any other value than true).</p></li>
+</ul>
+<p>Using the first layer by default will allow SLD files to be more easily reused, and would avoid confusion as to why the SLD isn’t being applied when specified
 in the Mapfile.</p>
+<section id="feature-level-sld-styling">
+<h3>Feature-level SLD Styling<a class="headerlink" href="#feature-level-sld-styling" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="ms-rfc-61.html#rfc61"><span class="std std-ref">MS RFC 61: Enhance MapServer Feature Style Support</span></a> allowed individual features to be rendered with style read from an attribute, also defined in the <code class="docutils literal notranslate"><span class="pre">STYLEITEM</span></code>.
+This RFC introduces support for SLD to be read from an attribute, along with OGR styles. For example, the following CSV contains two line features,
+the first with an SLD in its STYLE attribute, and the second with an OGR style:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>WKT,STYLE_FIELD
+<span class="s2">&quot;LINESTRING(0.1 0.9,0.9 0.9)&quot;</span>,<span class="s2">&quot;&lt;StyledLayerDescriptor version=&quot;&quot;1.1.0&quot;&quot;&gt;&lt;NamedLayer&gt;&lt;Name&gt;test&lt;/Name&gt;&lt;UserStyle&gt;..</span>
+<span class="s2">&quot;</span>LINESTRING<span class="o">(</span><span class="m">0</span>.1<span class="w"> </span><span class="m">0</span>.8,0.9<span class="w"> </span><span class="m">0</span>.8<span class="o">)</span><span class="s2">&quot;,&quot;</span>PEN<span class="o">(</span>c:#000000<span class="o">)</span><span class="s2">&quot;,&quot;</span>ogr<span class="w"> </span>style<span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">LAYER</span></code> can use the <code class="docutils literal notranslate"><span class="pre">STYLE_FIELD</span></code> in the CSV to style individual features using by setting this attribute in the <code class="docutils literal notranslate"><span class="pre">STYLEITEM</span></code>:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+    <span class="k">NAME</span> <span class="s">&quot;test&quot;</span>
+    <span class="k">CONNECTIONTYPE</span> <span class="nb">OGR</span>
+    <span class="k">CONNECTION</span> <span class="s">&quot;data/mixed_styles.csv&quot;</span>
+    <span class="k">DATA</span> <span class="s">&quot;mixed_styles&quot;</span>
+
+    <span class="k">TYPE</span> <span class="nb">LINE</span>
+    <span class="k">STATUS</span> <span class="nb">ON</span>
+
+    <span class="k">STYLEITEM</span> <span class="s">&quot;STYLE_FIELD&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="limitations">
+<h2>2.2 Limitations<a class="headerlink" href="#limitations" title="Link to this heading">¶</a></h2>
 <p>MapServer supports applying multiple NamedLayers to a LAYER, by creating a copy of the layer and applying subsequent NamedLayer styles
 to these copies. It is proposed only one NamedLayer will be applied to a LAYER when defined as a file in the STYLEITEM property.
 Cloning layers already containing a STYLEITEM will make the code overly complex, and a Mapfile author is free to create as many LAYERs
 in the Mapfile as they wish. If multiple NamedLayers are contained in the SLD file only the first will be used.</p>
+<section id="id1">
+<h3>Feature-level SLD Styling<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>When rendering individual features SLD is applied to the LAYER, the feature is rendered, and then the next feature’s SLD is applied, overriding any previous
+changes. For this reason any “layer-level” features in the SLD will be ignored - for example filters and layer opacity. WMS requests such as <code class="docutils literal notranslate"><span class="pre">GetStyles</span></code> will return an empty
+response. This is currently the case when using OGR styling, or string styles at the feature-level, so no changes will be made in this regard.</p>
+</section>
 </section>
 <section id="testing">
 <h2>2.3 Testing<a class="headerlink" href="#testing" title="Link to this heading">¶</a></h2>
@@ -203,31 +245,42 @@ need to be tested. Tests will include:</p>
 <ul class="simple">
 <li><p>Applying SLD to a LAYER</p></li>
 <li><p>Checking an error is returned if the SLD file cannot be found</p></li>
-<li><p>Checking if multiple NamedLayer files are contained in an SLD file only the first is used</p></li>
-<li><p>Checking SLD is applied even if the LAYER NAME doesn’t match the NamedLayer Name</p></li>
+<li><p>Checking if multiple NamedLayer files are contained in an SLD file the NamedLayer matching the MAP LAYER is used</p></li>
+<li><p>If there are no matches then the first NamedLayer will be used by default</p></li>
 <li><p>Checking Legends are correctly generated</p></li>
 <li><p>Checking SLD can be supplied from a URL or querystring to override the SLD in the STYLEITEM</p></li>
 </ul>
-<p>Reviewing SLD support in MapServer highlighted several use cases which do not currently have tests. Tests may be added as
-part of this implementation. These include:</p>
-<ul class="simple">
-<li><p>Using <code class="docutils literal notranslate"><span class="pre">wms_sld_body</span></code> in a WMS client</p></li>
-<li><p>Using <code class="docutils literal notranslate"><span class="pre">wms_sld_url</span></code> in a WMS client</p></li>
-</ul>
-<p>Several other SLD tests however are provided:</p>
+<p>Several other SLD tests however are already part of the test suite, and will ensure the changes in this RFC don’t break existing
+functionality:</p>
 <ul class="simple">
 <li><p>Passing SLD via <code class="docutils literal notranslate"><span class="pre">sld_body</span></code> in a querystring is tested in many cases for example <code class="docutils literal notranslate"><span class="pre">msautotest/wxs/wms_sld.map</span></code></p></li>
 <li><p>Passing in an SLD URL is tested in <code class="docutils literal notranslate"><span class="pre">msautotest/sld/linemark.map</span></code></p></li>
 </ul>
+<p>Reviewing SLD support in MapServer highlighted several use cases which do not currently have tests. These include:</p>
+<ul class="simple">
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">wms_sld_body</span></code> in a WMS client</p></li>
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">wms_sld_url</span></code> in a WMS client</p></li>
+</ul>
 </section>
 <section id="security-concerns">
 <h2>2.4 Security Concerns<a class="headerlink" href="#security-concerns" title="Link to this heading">¶</a></h2>
-<p>MapServer already accepts SLD from remote URLs and client requests, so local SLD files shouldn’t cause any concerns.</p>
+<p>MapServer already accepts SLD from remote URLs and client requests, so local SLD files shouldn’t cause any new concerns.
+A security risk of accepting external graphics in an SLD was addressed in MapServer 7.0 - see <a class="reference external" href="https://mapserver.org/MIGRATION_GUIDE.html#mapserver-6-4-to-7-0-migration">https://mapserver.org/MIGRATION_GUIDE.html#mapserver-6-4-to-7-0-migration</a>
+by requiring external graphic URLs to be defined in a validation block:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">WEB</span>
+    <span class="k">VALIDATION</span>
+        <span class="s">&quot;sld_external_graphic&quot;</span> <span class="s">&quot;^.*/sld/data/.*&quot;</span>
+    <span class="k">END</span>
+<span class="p">...</span>
+</pre></div>
+</div>
 </section>
 <section id="mapscript">
 <h2>2.5 MapScript<a class="headerlink" href="#mapscript" title="Link to this heading">¶</a></h2>
 <p>MapScript currently includes an <code class="docutils literal notranslate"><span class="pre">applySLD</span></code> function on both Map and Layer objects.
-The <code class="docutils literal notranslate"><span class="pre">layerObj</span></code> also includes a <code class="docutils literal notranslate"><span class="pre">styleitem</span></code> property which can be used to set the <a class="reference internal" href="../../mapfile/layer.html#mapfile-layer-styleitem"><span class="std std-ref">STYLEITEM</span></a> property.</p>
+The <code class="docutils literal notranslate"><span class="pre">layerObj</span></code> also includes a <code class="docutils literal notranslate"><span class="pre">styleitem</span></code> property which can be used to set the <a class="reference internal" href="../../mapfile/layer.html#mapfile-layer-styleitem"><span class="std std-ref">STYLEITEM</span></a> property.
+If <code class="docutils literal notranslate"><span class="pre">mapscript.msLoadMapFromString</span></code> is used to load a Mapfile from a string then any <code class="docutils literal notranslate"><span class="pre">STYLEITEM</span></code> referencing an SLD file will
+automatically be applied to the layer.</p>
 </section>
 <section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Link to this heading">¶</a></h2>
@@ -235,14 +288,17 @@ The <code class="docutils literal notranslate"><span class="pre">layerObj</span>
 <h3>3.1 Affected files<a class="headerlink" href="#affected-files" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>mapdraw.c</p></li>
+<li><p>mapfile.c</p></li>
 <li><p>maplayer.c</p></li>
 <li><p>mapogcsld.cpp</p></li>
+<li><p>mapogcsld.h</p></li>
 </ul>
-<p>More files may be affected once implementation is underway.</p>
 </section>
 <section id="ticket-reference">
 <h3>3.2 Ticket Reference<a class="headerlink" href="#ticket-reference" title="Link to this heading">¶</a></h3>
-<p>TODO - add GitHub pull request URLs.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/MapServer/MapServer/pull/7034">https://github.com/MapServer/MapServer/pull/7034</a></p></li>
+</ul>
 </section>
 <section id="documentation">
 <h3>3.3 Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h3>
@@ -252,7 +308,8 @@ A link to these docs will also be added to the “Other Items Implemented” sec
 </section>
 <section id="voting-history">
 <h2>4. Voting History<a class="headerlink" href="#voting-history" title="Link to this heading">¶</a></h2>
-<p>TODO</p>
+<p>+1 from SethG, EvenR, TamasS, JukkaR, SteveL, JeromeB, DanielM, MikeS, TomK</p>
+<p>See <a class="reference external" href="https://lists.osgeo.org/pipermail/mapserver-dev/2024-February/017105.html">https://lists.osgeo.org/pipermail/mapserver-dev/2024-February/017105.html</a></p>
 </section>
 </section>
 
@@ -288,8 +345,14 @@ A link to these docs will also be added to the “Other Items Implemented” sec
   <ul>
 <li><a class="reference internal" href="#">MS RFC 138: Reference SLD files in Mapfiles</a><ul>
 <li><a class="reference internal" href="#overview">1. Overview</a></li>
-<li><a class="reference internal" href="#proposed-solution">2.1 Proposed Solution</a></li>
-<li><a class="reference internal" href="#limitations">2.2 Limitations</a></li>
+<li><a class="reference internal" href="#proposed-solution">2.1 Proposed Solution</a><ul>
+<li><a class="reference internal" href="#feature-level-sld-styling">Feature-level SLD Styling</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#limitations">2.2 Limitations</a><ul>
+<li><a class="reference internal" href="#id1">Feature-level SLD Styling</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#testing">2.3 Testing</a></li>
 <li><a class="reference internal" href="#security-concerns">2.4 Security Concerns</a></li>
 <li><a class="reference internal" href="#mapscript">2.5 MapScript</a></li>
@@ -328,7 +391,7 @@ A link to these docs will also be added to the “Other Items Implemented” sec
     </div>
     <div class="footer" role="contentinfo">
     &#169; <a href="../../copyright.html">Copyright</a> 2024, Open Source Geospatial Foundation.
-      Last updated on 2024-02-28.
+      Last updated on 2024-03-05.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
