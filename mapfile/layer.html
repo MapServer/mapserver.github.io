@@ -1355,7 +1355,8 @@ request - all the layers of the group will be returned.</p>
 </dd>
 </dl>
 <dl id="mapfile-layer-styleitem">
-<dt>STYLEITEM [&lt;attribute&gt;|auto|&lt;javascript file&gt;]</dt><dd><p>Styling based on attributes or generated with Javascript</p>
+<dt>STYLEITEM [&lt;attribute&gt;|auto|&lt;javascript file&gt;|&lt;sld file&gt;]</dt><dd><p>Styling based on attributes, generated with JavaScript, or generated
+from an SLD file.</p>
 <ul id="index-67">
 <li><p><em>&lt;attribute&gt;</em>: Item to use for feature specific styling. The
 style information may be represented by a separate attribute
@@ -1383,6 +1384,29 @@ a separate attribute by using the <a class="reference external" href="https://gd
 as follows:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ogr2ogr<span class="w"> </span>-sql<span class="w"> </span><span class="s2">&quot;select *, OGR_STYLE from srclayer&quot;</span><span class="w"> </span><span class="s2">&quot;dstlayer&quot;</span><span class="w"> </span><span class="s2">&quot;srclayer&quot;</span>
 </pre></div>
+</div>
+</li>
+<li><p><strong>SLD String</strong> - Different Styled Layer Descriptor documents (see <a class="reference internal" href="../ogc/sld.html#sld"><span class="std std-ref">SLD</span></a>) can be stored
+as strings in the feature attribute to allow styling on a per feature basis. The SLD string
+must end with <code class="docutils literal notranslate"><span class="pre">StyledLayerDescriptor&gt;</span></code> (part of the SLD closing tag) for it to be interpreted as SLD.</p>
+<p>To use the first NamedLayer in the SLD string, whether or not the LAYER <a class="reference internal" href="#mapfile-layer-name"><span class="std std-ref">NAME</span></a>
+matches the NamedLayer Name, add a <strong>SLD_USE_FIRST_NAMEDLAYER</strong>
+<a class="reference internal" href="#mapfile-layer-metadata"><span class="std std-ref">METADATA</span></a> key and set its value to <strong>“true”</strong>.</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">STYLEITEM</span> <span class="s">&quot;STYLE&quot;</span> <span class="c"># name of the attribute containing styling information</span>
+  <span class="k">METADATA</span>
+    <span class="s">&quot;SLD_USE_FIRST_NAMEDLAYER&quot;</span> <span class="s">&quot;true&quot;</span>
+  <span class="k">END</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 8.2.</span></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../development/rfc/ms-rfc-138.html#rfc138"><span class="std std-ref">MS RFC 138: Reference SLD files in Mapfiles</span></a></p>
 </div>
 </li>
 </ul>
@@ -1426,6 +1450,38 @@ definition with one or multiple styles.  See <a class="reference internal" href=
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Requires <a class="reference internal" href="../installation/v8.html#v8-support"><span class="std std-ref">V8 MapScript Support</span></a>.</p>
+</div>
+</li>
+<li><p><em>&lt;SLD file&gt;</em>:</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 8.2.</span></p>
+</div>
+<p>A path to an SLD file. The path mush start with the prefix <strong>sld://</strong>, and
+can be a path relative to the Mapfile, or an absolute path.
+<a class="reference internal" href="class.html#class"><span class="std std-ref">CLASS</span></a> and <a class="reference internal" href="style.html#style"><span class="std std-ref">STYLE</span></a> blocks will then be generated based on the SLD document.</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">STYLEITEM</span> <span class="s">&quot;sld://mysldfile.xml&quot;</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+<p>For SLD files containing multiple NamedLayers, if Name matches the LAYER name then this
+style will be used. If there is no name match then the first NamedLayer in the SLD will be used.
+See <a class="reference internal" href="../ogc/sld.html#sld-named-styles"><span class="std std-ref">Named Styles support</span></a> for more details.</p>
+<p>To enforce matching of a NamedLayer Name and the LAYER <a class="reference internal" href="#mapfile-layer-name"><span class="std std-ref">NAME</span></a> a
+<a class="reference internal" href="#mapfile-layer-metadata"><span class="std std-ref">METADATA</span></a> key can be set to <strong>“false”</strong> as in the example below:</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">STYLEITEM</span> <span class="s">&quot;sld://mysldfile.xml&quot;</span>
+  <span class="k">METADATA</span>
+    <span class="s">&quot;SLD_USE_FIRST_NAMEDLAYER&quot;</span> <span class="s">&quot;false&quot;</span>
+  <span class="k">END</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../development/rfc/ms-rfc-138.html#rfc138"><span class="std std-ref">MS RFC 138: Reference SLD files in Mapfiles</span></a></p>
 </div>
 </li>
 </ul>
