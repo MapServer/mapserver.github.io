@@ -16,7 +16,10 @@ for different distributions.
 .. TIP::
    For example, compiling from source on Ubuntu, by default MapServer will install 
    a sample config file at */usr/local/etc/mapserver-sample.conf*, and you must 
-   rename that file to *mapserver.conf*.
+   rename that file to *mapserver.conf*, and then add into your Apache *.conf* file:
+   *SetEnv MAPSERVER_CONFIG_FILE "/usr/local/etc/mapserver.conf"*.  You can also
+   set this in your *~/.bashrc* file, so that the MapServer commandline utilities 
+   can find it, by adding there: *export MAPSERVER_CONFIG_FILE "/usr/local/etc/mapserver.conf"*.
 
 .. TIP::  
    For MS4W users (version >= 5), the config 
@@ -69,10 +72,15 @@ ENV
 MAPS
     This block allows for aliases to be mapped to mapfile paths. If the ``MS_MAP_NO_PATH`` environment
     variable is set then **only** these aliases can be used in the ``map=`` CGI parameter.
+
+    Aliases are case-insensitive - "ITASCA" and "Itasca" are handled identically.
+
     The use of aliases also helps to simplify :ref:`ogcapi` URLs, for example the alias 
     ``itasca`` can be used in the place of a mapfile path in a URL for example: 
-    http://localhost/mapserver/itasca/ogcapi/collections
-    Aliases are case-insensitive - "ITASCA" and "Itasca" are handled identically.
+    http://localhost/mapserver/itasca/ogcapi/collections. 
+
+    As of MapServer 8.2 *all* types of MapServer requests can use keys from the ``MAPS`` block in the config file
+    as part of a URL for example http://localhost/itasca/?request=WMS&...
     
     .. code-block:: mapfile
 

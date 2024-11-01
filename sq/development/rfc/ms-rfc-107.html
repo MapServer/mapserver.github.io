@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 
-<html lang="sq">
+<html lang="sq" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MS RFC 107: Support for the edge of pixel (OGC) extent model in MapServer &#8212; MapServer 8.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
+    <title>MS RFC 107: Support for the edge of pixel (OGC) extent model in MapServer &#8212; MapServer 8.2.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css?v=6c7b17ac" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dd298242" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css?v=ea091bf4" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/translations.js"></script>
+    <script src="../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../../_static/documentation_options.js?v=c07307fa"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/translations.js?v=752e5543"></script>
     
     <link rel="icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Mbi këto dokumente" href="../../about.html" />
@@ -119,7 +125,7 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Lëvizje</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -145,7 +151,7 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-107-support-for-the-edge-of-pixel-ogc-extent-model-in-mapserver">
-<span id="rfc107"></span><h1>MS RFC 107: Support for the edge of pixel (OGC) extent model in MapServer<a class="headerlink" href="#ms-rfc-107-support-for-the-edge-of-pixel-ogc-extent-model-in-mapserver" title="Permalidhje për te kjo krye">¶</a></h1>
+<span id="rfc107"></span><h1>MS RFC 107: Support for the edge of pixel (OGC) extent model in MapServer<a class="headerlink" href="#ms-rfc-107-support-for-the-edge-of-pixel-ogc-extent-model-in-mapserver" title="Lidhje për te kjo krye">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2014/01</p>
@@ -167,7 +173,7 @@
 but we now intend to keep the current edge-of-pixel extent model as well by using
 a different implementation proposal.</p>
 <section id="overview">
-<h2>1. Overview<a class="headerlink" href="#overview" title="Permalidhje për te kjo krye">¶</a></h2>
+<h2>1. Overview<a class="headerlink" href="#overview" title="Lidhje për te kjo krye">¶</a></h2>
 <p>According to <a class="reference internal" href="ms-rfc-25.html#rfc25"><span class="std std-ref">MS RFC 25</span></a>
 «MapServer uses different pixel and extent model than defined by OGC
 services such as WCS and WMS. MapServer uses the center of a pixel to represent
@@ -207,7 +213,7 @@ they would normally expect.</p>
 the current model which can be selected by a new parameter added to the mapfile.</p>
 </section>
 <section id="proposed-solution">
-<h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Permalidhje për te kjo krye">¶</a></h2>
+<h2>2. Proposed solution<a class="headerlink" href="#proposed-solution" title="Lidhje për te kjo krye">¶</a></h2>
 <p>The key point of the implementation is to replace the ‹1› constant values in the
 extent/scale calculations with a new pixeladjustment parameter. This parameter can be
 defined in the mapfile as:</p>
@@ -227,7 +233,7 @@ the implementation fairly straightforward not requiring to add quite some
 in the formula instead of the constant 1 should not result in perceptible degradation.</p>
 </section>
 <section id="implementation-details">
-<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalidhje për te kjo krye">¶</a></h2>
+<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Lidhje për te kjo krye">¶</a></h2>
 <p>The core of this implementation will change the cellsize calculation macro by adding
 the new parameter (in mapfile.h) as follows:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define MS_CELLSIZE(min,max,d,a) ((max - min)/(d-a))</span>
@@ -300,14 +306,14 @@ the new parameter (in mapfile.h) as follows:</p>
 msAdjustExtent, msCalculateScale and MS_CELLSIZE to provide this new parameter from
 the map object. See the following subchapters for the details.</p>
 <section id="adding-pixeladjustment">
-<h3>3.1 Adding PIXELADJUSTMENT<a class="headerlink" href="#adding-pixeladjustment" title="Permalidhje për te kjo krye">¶</a></h3>
+<h3>3.1 Adding PIXELADJUSTMENT<a class="headerlink" href="#adding-pixeladjustment" title="Lidhje për te kjo krye">¶</a></h3>
 <p>A new integer parameter will be added to mapObj (in mapserver.h) and we
 will also modify the lexer (maplexer.l, maplexer.c) to recognize this new setting.
 The mapfile reader and writer (in mapfile.c, mapfile.h) will be modified to read/write this
 new value and initialize the default value of PIXELADJUSTMENT to 1.</p>
 </section>
 <section id="modify-the-wms-half-of-pixel-adjustment-code">
-<h3>3.2 Modify the WMS half of pixel adjustment code<a class="headerlink" href="#modify-the-wms-half-of-pixel-adjustment-code" title="Permalidhje për te kjo krye">¶</a></h3>
+<h3>3.2 Modify the WMS half of pixel adjustment code<a class="headerlink" href="#modify-the-wms-half-of-pixel-adjustment-code" title="Lidhje për te kjo krye">¶</a></h3>
 <p>The OGC adjustment code (mentioned above) should now be changed to:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">maxx</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">minx</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">map</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">;</span>
 <span class="n">map</span><span class="o">-&gt;</span><span class="n">extent</span><span class="p">.</span><span class="n">minx</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">dx</span><span class="o">*</span><span class="mf">0.5</span><span class="o">*</span><span class="n">map</span><span class="o">-&gt;</span><span class="n">pixeladjustment</span><span class="p">;</span>
@@ -320,13 +326,13 @@ new value and initialize the default value of PIXELADJUSTMENT to 1.</p>
 </div>
 </section>
 <section id="provide-pixeladjustment-parameter-for-msadjustextent-and-mscalculatescale-and-ms-cellsize">
-<h3>3.3 Provide pixeladjustment parameter for msAdjustExtent and msCalculateScale and MS_CELLSIZE<a class="headerlink" href="#provide-pixeladjustment-parameter-for-msadjustextent-and-mscalculatescale-and-ms-cellsize" title="Permalidhje për te kjo krye">¶</a></h3>
+<h3>3.3 Provide pixeladjustment parameter for msAdjustExtent and msCalculateScale and MS_CELLSIZE<a class="headerlink" href="#provide-pixeladjustment-parameter-for-msadjustextent-and-mscalculatescale-and-ms-cellsize" title="Lidhje për te kjo krye">¶</a></h3>
 <p>We enumerate all occurrences of these functions and provide the new parameter
 from mapObj-&gt;pixeladjustment or mapServObj-&gt;map-&gt;pixeladjustment.
 For the list of all files affected in this change please refer to chapter 4.</p>
 </section>
 <section id="modify-the-calculation-of-the-search-rectangle">
-<h3>3.4 Modify the calculation of the search rectangle<a class="headerlink" href="#modify-the-calculation-of-the-search-rectangle" title="Permalidhje për te kjo krye">¶</a></h3>
+<h3>3.4 Modify the calculation of the search rectangle<a class="headerlink" href="#modify-the-calculation-of-the-search-rectangle" title="Lidhje për te kjo krye">¶</a></h3>
 <p>We should modify the code in some places when searching for the shapes
 to utilize the pixeladjustment parameters like:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* identify target shapes */</span>
@@ -341,7 +347,7 @@ to utilize the pixeladjustment parameters like:</p>
 </div>
 </section>
 <section id="modify-msmapcomputegeotransform">
-<h3>3.5 Modify msMapComputeGeotransform<a class="headerlink" href="#modify-msmapcomputegeotransform" title="Permalidhje për te kjo krye">¶</a></h3>
+<h3>3.5 Modify msMapComputeGeotransform<a class="headerlink" href="#modify-msmapcomputegeotransform" title="Lidhje për te kjo krye">¶</a></h3>
 <p>The calclulation should be modified as (in mapobject.c):</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">map</span><span class="o">-&gt;</span><span class="n">gt</span><span class="p">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span>
 <span class="w">  </span><span class="n">cos</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">geo_width</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">map</span><span class="o">-&gt;</span><span class="n">width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">map</span><span class="o">-&gt;</span><span class="n">pixeladjustment</span><span class="p">);</span>
@@ -361,7 +367,7 @@ to utilize the pixeladjustment parameters like:</p>
 </div>
 </section>
 <section id="mapscript-related-changes">
-<h3>3.6 Mapscript related changes<a class="headerlink" href="#mapscript-related-changes" title="Permalidhje për te kjo krye">¶</a></h3>
+<h3>3.6 Mapscript related changes<a class="headerlink" href="#mapscript-related-changes" title="Lidhje për te kjo krye">¶</a></h3>
 <p>We also have a couple of places in the mapscript code where the calls of
 msAdjustExtent and msCalculateScale should be updated (see chapter 4 for the details).
 We also have to modify the signature of the ‹fit› function for the rect object as follows:</p>
@@ -373,7 +379,7 @@ We also have to modify the signature of the ‹fit› function for the rect obje
 </section>
 </section>
 <section id="files-affected">
-<h2>4. Files affected<a class="headerlink" href="#files-affected" title="Permalidhje për te kjo krye">¶</a></h2>
+<h2>4. Files affected<a class="headerlink" href="#files-affected" title="Lidhje për te kjo krye">¶</a></h2>
 <ul class="simple">
 <li><p>mapchart.c: Modify the calculation of the search rectangle (see 3.4)</p></li>
 <li><p>mapcluster.c: Modify the calculation of the search rectangle (see 3.4)</p></li>
@@ -406,17 +412,17 @@ We also have to modify the signature of the ‹fit› function for the rect obje
 </ul>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>5. Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalidhje për te kjo krye">¶</a></h2>
+<h2>5. Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Lidhje për te kjo krye">¶</a></h2>
 <p>The default value of PIXELADJUSTMENT will keep the current behaviour with regards
 the the calculation, but we need to modify the signature of the mapscript
 function: ‹fit›.</p>
 </section>
 <section id="bug-id">
-<h2>6. Bug ID<a class="headerlink" href="#bug-id" title="Permalidhje për te kjo krye">¶</a></h2>
+<h2>6. Bug ID<a class="headerlink" href="#bug-id" title="Lidhje për te kjo krye">¶</a></h2>
 <p>TBD</p>
 </section>
 <section id="voting-history">
-<h2>7. Voting history<a class="headerlink" href="#voting-history" title="Permalidhje për te kjo krye">¶</a></h2>
+<h2>7. Voting history<a class="headerlink" href="#voting-history" title="Lidhje për te kjo krye">¶</a></h2>
 <p>TBD</p>
 </section>
 </section>
@@ -426,9 +432,9 @@ function: ‹fit›.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Kërkim i shpejtë</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -436,7 +442,7 @@ function: ‹fit›.</p>
       <input type="submit" value="Shko" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -475,7 +481,7 @@ function: ‹fit›.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Lëvizje</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -494,9 +500,9 @@ function: ‹fit›.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Të drejta kopjimi</a> 2023, Open Source Geospatial Foundation.
-      Përditësuar së fundi më 2023-05-19.
-      Krijuar duke përdorur <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    &#169; <a href="../../copyright.html">Të drejta kopjimi</a> 2024, Open Source Geospatial Foundation.
+      Përditësuar së fundi më 2024-11-01.
+      Krijuar duke përdorur <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     </div>
   </body>
 </html>

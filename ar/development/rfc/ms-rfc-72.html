@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 
-<html lang="ar">
+<html lang="ar" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MS RFC 72: Layer and Label-Level Geomtransforms &#8212; MapServer 8.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
+    <title>MS RFC 72: Layer and Label-Level Geomtransforms &#8212; MapServer 8.2.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css?v=6c7b17ac" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dd298242" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css?v=ea091bf4" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/translations.js"></script>
+    <script src="../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../../_static/documentation_options.js?v=62ee2fe3"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/translations.js?v=3d5367c0"></script>
     
     <link rel="icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -119,7 +125,7 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -145,7 +151,7 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-72-layer-and-label-level-geomtransforms">
-<span id="rfc72"></span><h1>MS RFC 72: Layer and Label-Level Geomtransforms<a class="headerlink" href="#ms-rfc-72-layer-and-label-level-geomtransforms" title="Permalink to this heading">¶</a></h1>
+<span id="rfc72"></span><h1>MS RFC 72: Layer and Label-Level Geomtransforms<a class="headerlink" href="#ms-rfc-72-layer-and-label-level-geomtransforms" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2011/06/27</p>
@@ -164,7 +170,7 @@
 </dd>
 </dl>
 <section id="overview">
-<h2>1. Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<h2>1. Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>MapServer 6.0 introduced the concept of geometry expressions within a styleObj-geomtransform. For
 example, one could write:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">STYLE</span>
@@ -185,7 +191,7 @@ example, one could write:</p>
 </div></blockquote>
 </section>
 <section id="the-proposed-solution">
-<h2>2. The proposed solution<a class="headerlink" href="#the-proposed-solution" title="Permalink to this heading">¶</a></h2>
+<h2>2. The proposed solution<a class="headerlink" href="#the-proposed-solution" title="Link to this heading">¶</a></h2>
 <p>This RFC proposes to extend GEOMTRANSFORMS to both the layer and label contexts. Basically the same
 keyword and syntax would become valid in other objects.</p>
 <p>For a layer the transformation would be applied to geometries as they are read from a datasource
@@ -200,7 +206,7 @@ of a polygon or perhaps creating a curved labels within a polygon.</p>
 impact but as tiling becomes the norm this is less an issue.</p>
 </section>
 <section id="implementation-details">
-<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this heading">¶</a></h2>
+<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Link to this heading">¶</a></h2>
 <p>For layers I propose adding a check to the functions msLayerGetShape() and msLayerNextShape() to
 conditionally apply the GEOMSTRANFORM before returning the shape. The resulting shape would contain
 all the attributes of the parent. (Note: one potential issue is that certain operations might affect
@@ -210,7 +216,7 @@ the bounding box used to select candidate shapes via msLayerWhichShapes()).</p>
 to be made.</p>
 </section>
 <section id="files-affected">
-<h2>3.1 Files affected<a class="headerlink" href="#files-affected" title="Permalink to this heading">¶</a></h2>
+<h2>3.1 Files affected<a class="headerlink" href="#files-affected" title="Link to this heading">¶</a></h2>
 <p>The following files will be modified/created by this RFC:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapfile</span><span class="o">.</span><span class="n">c</span> <span class="p">(</span><span class="n">layer</span><span class="o">/</span><span class="n">label</span> <span class="n">read</span><span class="o">/</span><span class="n">write</span><span class="p">)</span>
 <span class="n">mapdraw</span><span class="o">.</span><span class="n">c</span> <span class="p">(</span><span class="n">update</span> <span class="n">msDrawShape</span><span class="p">())</span>
@@ -221,25 +227,25 @@ to be made.</p>
 </div>
 </section>
 <section id="mapscript-issues">
-<h2>3.2 MapScript Issues<a class="headerlink" href="#mapscript-issues" title="Permalink to this heading">¶</a></h2>
+<h2>3.2 MapScript Issues<a class="headerlink" href="#mapscript-issues" title="Link to this heading">¶</a></h2>
 <p>These are just expressionObj's so functions to get/set them already exist.</p>
 </section>
 <section id="security-issues">
-<h2>3.3 Security Issues<a class="headerlink" href="#security-issues" title="Permalink to this heading">¶</a></h2>
+<h2>3.3 Security Issues<a class="headerlink" href="#security-issues" title="Link to this heading">¶</a></h2>
 <p>Care must be take to avoid memory leaks associated with the production of the transformed shapes. It
 would make sense to allow runtime substitution like is done with layer filters and class expressions.
 Similarly, validation patterns would be required.</p>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>3.4 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h2>
+<h2>3.4 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link to this heading">¶</a></h2>
 <p>This change provides a new functionality with no backwards compatibility issues being considered.</p>
 </section>
 <section id="bug-id">
-<h2>4. Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this heading">¶</a></h2>
+<h2>4. Bug ID<a class="headerlink" href="#bug-id" title="Link to this heading">¶</a></h2>
 <p>None assigned. See related ticket #3871.</p>
 </section>
 <section id="voting-history">
-<h2>5. Voting history<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
+<h2>5. Voting history<a class="headerlink" href="#voting-history" title="Link to this heading">¶</a></h2>
 <p>None</p>
 </section>
 </section>
@@ -249,9 +255,9 @@ Similarly, validation patterns would be required.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">البحث السريع</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -259,7 +265,7 @@ Similarly, validation patterns would be required.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -292,7 +298,7 @@ Similarly, validation patterns would be required.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -311,9 +317,9 @@ Similarly, validation patterns would be required.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html"> حقوق النشر </a> 2023, Open Source Geospatial Foundation
-      Last updated on 2023-05-19.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    &#169; <a href="../../copyright.html">الحقوق</a> 2024, Open Source Geospatial Foundation.
+      Last updated on 2024-11-01.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     </div>
   </body>
 </html>

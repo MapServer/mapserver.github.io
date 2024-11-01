@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 
-<html lang="ar">
+<html lang="ar" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MS RFC 37: MapServer Spatial Reference Improvements and Additions &#8212; MapServer 8.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
+    <title>MS RFC 37: MapServer Spatial Reference Improvements and Additions &#8212; MapServer 8.2.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css?v=6c7b17ac" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dd298242" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css?v=ea091bf4" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/translations.js"></script>
+    <script src="../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../../_static/documentation_options.js?v=62ee2fe3"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/translations.js?v=3d5367c0"></script>
     
     <link rel="icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -119,7 +125,7 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -145,7 +151,7 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-37-mapserver-spatial-reference-improvements-and-additions">
-<span id="rfc37"></span><h1>MS RFC 37: MapServer Spatial Reference Improvements and Additions<a class="headerlink" href="#ms-rfc-37-mapserver-spatial-reference-improvements-and-additions" title="Permalink to this heading">¶</a></h1>
+<span id="rfc37"></span><h1>MS RFC 37: MapServer Spatial Reference Improvements and Additions<a class="headerlink" href="#ms-rfc-37-mapserver-spatial-reference-improvements-and-additions" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Howard Butler</p>
@@ -164,7 +170,7 @@
 </dd>
 </dl>
 <section id="purpose">
-<h2>Purpose<a class="headerlink" href="#purpose" title="Permalink to this heading">¶</a></h2>
+<h2>Purpose<a class="headerlink" href="#purpose" title="Link to this heading">¶</a></h2>
 <p>To provide MapServer with the ability to set its PROJECTION information from
 directly from the datasource itself, in an
 attempt to lessen the burden related to dealing with coordinate system
@@ -172,7 +178,7 @@ information on users.  These improvements will be optionally available and
 not interfere with previous PROJECTION definition methods.</p>
 </section>
 <section id="the-history-of-spatial-references-in-mapserver">
-<h2>The History of Spatial References in MapServer<a class="headerlink" href="#the-history-of-spatial-references-in-mapserver" title="Permalink to this heading">¶</a></h2>
+<h2>The History of Spatial References in MapServer<a class="headerlink" href="#the-history-of-spatial-references-in-mapserver" title="Link to this heading">¶</a></h2>
 <p>MapServer's spatial reference support is quite anemic by many standards.
 While most of the data sources MapServer interacts with support describing
 the spatial reference of contained layers, MapServer has historically dropped
@@ -181,7 +187,7 @@ the information on the floor or completely ignored it.</p>
 PROJECTION is different than the MAP's.  When this is the case, MapServer
 reprojects the LAYER's data to the MAP's spatial reference during a map draw.</p>
 <section id="definition">
-<h3>Definition<a class="headerlink" href="#definition" title="Permalink to this heading">¶</a></h3>
+<h3>Definition<a class="headerlink" href="#definition" title="Link to this heading">¶</a></h3>
 <p>MapServer has historically used two different approaches for defining the
 spatial reference of its data -- EPSG/ESRI codes in the form:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PROJECTION</span>
@@ -214,7 +220,7 @@ not widely advertised or regularized:</p>
 </div>
 </section>
 <section id="performance-observations">
-<h3>Performance Observations<a class="headerlink" href="#performance-observations" title="Permalink to this heading">¶</a></h3>
+<h3>Performance Observations<a class="headerlink" href="#performance-observations" title="Link to this heading">¶</a></h3>
 <p>MapServer's current spatial reference story is focussed on two things --
 simple description and ensuring that unnecessary data reprojection doesn't
 happen.  MapServer currently uses PROJ.4 directly to do its data reprojection,
@@ -233,7 +239,7 @@ mechanism in PROJ.4 that allows subsequent lookups to be fast.</p>
 </div>
 </section>
 <section id="usability">
-<h3>Usability<a class="headerlink" href="#usability" title="Permalink to this heading">¶</a></h3>
+<h3>Usability<a class="headerlink" href="#usability" title="Link to this heading">¶</a></h3>
 <p>The usability of these two mechanism can be a nightmare for users.  First,
 most of the spatial reference descriptions that people work with are of the
 WKT variety -- not PROJ.4.  While it is straightforward to set the PROJECTION
@@ -250,7 +256,7 @@ but this approach still foists pain and misery on the users.</p>
 </section>
 </section>
 <section id="specification-features">
-<h2>Specification Features<a class="headerlink" href="#specification-features" title="Permalink to this heading">¶</a></h2>
+<h2>Specification Features<a class="headerlink" href="#specification-features" title="Link to this heading">¶</a></h2>
 <p>MapServer will continue to behave as before, and the user can opt-in for
 AUTO projection support by using the AUTO keyword in a projection object as
 so:</p>
@@ -264,7 +270,7 @@ so:</p>
 </div>
 </section>
 <section id="implementation-details">
-<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this heading">¶</a></h2>
+<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="Link to this heading">¶</a></h2>
 <p>It is important that MapServer's previous spatial reference definition
 behavior be preserved.  First, drastically changing the PROJECTION definitions
 would mean a lot of unnecessary mapfile churn.  Second, continuing to define
@@ -278,7 +284,7 @@ into PROJ.4 for setting on the projectionObj.</p></li>
 <li><p>PROJECTION will support an explicit AUTO keyword</p></li>
 </ol>
 <section id="virtual-table-method">
-<h3>Virtual Table Method<a class="headerlink" href="#virtual-table-method" title="Permalink to this heading">¶</a></h3>
+<h3>Virtual Table Method<a class="headerlink" href="#virtual-table-method" title="Link to this heading">¶</a></h3>
 <p>To support AUTO projection definitions,
 drivers need to have the ability to return spatial reference information.
 MapServer's layer plugin architecture provides mechanisms for interacting with
@@ -290,7 +296,7 @@ virtual table member is proposed:</p>
 </div>
 </section>
 <section id="additional-methods">
-<h3>Additional methods<a class="headerlink" href="#additional-methods" title="Permalink to this heading">¶</a></h3>
+<h3>Additional methods<a class="headerlink" href="#additional-methods" title="Link to this heading">¶</a></h3>
 <p>The msOGCWKT2ProjectionObj method already exists, but a few more would be
 added to allow drivers that implement LayerGetAutoProjection to generate
 a projectionObj.</p>
@@ -300,7 +306,7 @@ a projectionObj.</p>
 </ul>
 </section>
 <section id="driver-specific-implementations">
-<h3>Driver-specific implementations<a class="headerlink" href="#driver-specific-implementations" title="Permalink to this heading">¶</a></h3>
+<h3>Driver-specific implementations<a class="headerlink" href="#driver-specific-implementations" title="Link to this heading">¶</a></h3>
 <p>The following drivers will have implementations provided to support TYPE AUTO
 spatial reference definitions:</p>
 <ul class="simple">
@@ -313,7 +319,7 @@ spatial reference definitions:</p>
 </section>
 </section>
 <section id="files-affected">
-<h2>Files Affected<a class="headerlink" href="#files-affected" title="Permalink to this heading">¶</a></h2>
+<h2>Files Affected<a class="headerlink" href="#files-affected" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapserver</span><span class="o">.</span><span class="n">h</span>
 <span class="n">mapfile</span><span class="o">.</span><span class="n">c</span>
 <span class="n">mapscript</span><span class="o">/</span><span class="n">swiginc</span><span class="o">/</span><span class="n">projection</span><span class="o">.</span><span class="n">i</span>
@@ -331,12 +337,12 @@ spatial reference definitions:</p>
 </div>
 </section>
 <section id="backward-compatibility-issues">
-<h2>Backward Compatibility Issues<a class="headerlink" href="#backward-compatibility-issues" title="Permalink to this heading">¶</a></h2>
+<h2>Backward Compatibility Issues<a class="headerlink" href="#backward-compatibility-issues" title="Link to this heading">¶</a></h2>
 <p>All work described in this RFC will provide optional capabilities to MapServer
 and no backward compatibility issues are expected.</p>
 </section>
 <section id="documentation">
-<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">¶</a></h2>
+<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h2>
 <p>This RFC will stand as primary documentation for the feature until such time
 as the methods and practices described in this document are integrated into
 the regular MapServer documentation framework.</p>
@@ -348,9 +354,9 @@ the regular MapServer documentation framework.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">البحث السريع</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -358,7 +364,7 @@ the regular MapServer documentation framework.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -399,7 +405,7 @@ the regular MapServer documentation framework.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -418,9 +424,9 @@ the regular MapServer documentation framework.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html"> حقوق النشر </a> 2023, Open Source Geospatial Foundation
-      Last updated on 2023-05-19.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    &#169; <a href="../../copyright.html">الحقوق</a> 2024, Open Source Geospatial Foundation.
+      Last updated on 2024-11-01.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     </div>
   </body>
 </html>

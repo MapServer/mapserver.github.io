@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 
-<html lang="pl">
+<html lang="pl" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MS RFC 15: Support for thread neutral operation of MapServer/MapScript &#8212; MapServer 8.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
+    <title>MS RFC 15: Support for thread neutral operation of MapServer/MapScript &#8212; MapServer 8.2.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css?v=6c7b17ac" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dd298242" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css?v=ea091bf4" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/translations.js"></script>
+    <script src="../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../../_static/documentation_options.js?v=47f36ae4"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/translations.js?v=da4973ce"></script>
     
     <link rel="icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="O tych dokumentach" href="../../about.html" />
@@ -119,7 +125,7 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Nawigacja</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -145,7 +151,7 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-15-support-for-thread-neutral-operation-of-mapserver-mapscript">
-<span id="rfc15"></span><h1>MS RFC 15: Support for thread neutral operation of MapServer/MapScript<a class="headerlink" href="#ms-rfc-15-support-for-thread-neutral-operation-of-mapserver-mapscript" title="Permalink to this heading">¶</a></h1>
+<span id="rfc15"></span><h1>MS RFC 15: Support for thread neutral operation of MapServer/MapScript<a class="headerlink" href="#ms-rfc-15-support-for-thread-neutral-operation-of-mapserver-mapscript" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2006/05/01</p>
@@ -164,7 +170,7 @@
 </dd>
 </dl>
 <section id="overview">
-<h2>1. Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<h2>1. Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>By this time the core MapServer code has become widely used by many of the
 different application models. The extended usage of MapScript causes the
 possibility that the execution of the code is carried out by multiple
@@ -183,7 +189,7 @@ Currently this behavior may be controlled by the USE_THREAD
 compilation switch.</p>
 </section>
 <section id="purpose">
-<h2>2. Purpose<a class="headerlink" href="#purpose" title="Permalink to this heading">¶</a></h2>
+<h2>2. Purpose<a class="headerlink" href="#purpose" title="Link to this heading">¶</a></h2>
 <p>The purpose of this change is to get a significant performance boost by
 removing „big locks” from the code. It would add a significant improvement of
 the applications having high number of multiple threads executed
@@ -193,7 +199,7 @@ result in higher clarity of the code by determining the code segments
 affected by multiple threads.</p>
 </section>
 <section id="general-principles-of-the-solution">
-<h2>2. General principles of the solution<a class="headerlink" href="#general-principles-of-the-solution" title="Permalink to this heading">¶</a></h2>
+<h2>2. General principles of the solution<a class="headerlink" href="#general-principles-of-the-solution" title="Link to this heading">¶</a></h2>
 <p>This RFC is in a special situation since wide area of the code is to be
 reviewed and extensive developer support is needed. The proposal will reach
 the proposed state only if all of the open issues are classified and
@@ -207,7 +213,7 @@ enumerated later. To handle these issues the following options will be
 considered ordering by the expediency. The latter is the less expedient.</p>
 </section>
 <section id="not-changing-the-code-considering-as-safe-without-locks">
-<h2>2.1 Not changing the code (Considering as safe without locks)<a class="headerlink" href="#not-changing-the-code-considering-as-safe-without-locks" title="Permalink to this heading">¶</a></h2>
+<h2>2.1 Not changing the code (Considering as safe without locks)<a class="headerlink" href="#not-changing-the-code-considering-as-safe-without-locks" title="Link to this heading">¶</a></h2>
 <p>Some of the process-wide global variables store invariant data - like
 enumerations - having been initialized at compilation time. Since these
 variables can be simultaneously read by multiple threads there is nothing
@@ -215,7 +221,7 @@ to be done and even the locks should be removed - if exist - ensuring the
 thread isolation to be realized. Might be redeclared as „static const”.</p>
 </section>
 <section id="retaining-the-variable-but-reconsidering-the-initialization-code">
-<h2>2.2 Retaining the variable, but reconsidering the initialization code<a class="headerlink" href="#retaining-the-variable-but-reconsidering-the-initialization-code" title="Permalink to this heading">¶</a></h2>
+<h2>2.2 Retaining the variable, but reconsidering the initialization code<a class="headerlink" href="#retaining-the-variable-but-reconsidering-the-initialization-code" title="Link to this heading">¶</a></h2>
 <p>Some of the global variables store invariant data but the initial value is
 assigned at run time during the module initialization phase. In this situation
 we should ensure that the initialization will be done before the subsequent
@@ -227,13 +233,13 @@ strategy should be reviewed and the locks should be restricted to the
 initialization code.</p>
 </section>
 <section id="rewriting-the-code-to-eliminate-the-need-of-the-global-variable">
-<h2>2.3 Rewriting the code to eliminate the need of the global variable<a class="headerlink" href="#rewriting-the-code-to-eliminate-the-need-of-the-global-variable" title="Permalink to this heading">¶</a></h2>
+<h2>2.3 Rewriting the code to eliminate the need of the global variable<a class="headerlink" href="#rewriting-the-code-to-eliminate-the-need-of-the-global-variable" title="Link to this heading">¶</a></h2>
 <p>If the global variable could be eliminated by changing the code structure we
 will consider to make these changes. The locks related to these variables
 should be removed.</p>
 </section>
 <section id="using-thread-local-variable-instead-of-the-global-one">
-<h2>2.4 Using thread local variable instead of the global one<a class="headerlink" href="#using-thread-local-variable-instead-of-the-global-one" title="Permalink to this heading">¶</a></h2>
+<h2>2.4 Using thread local variable instead of the global one<a class="headerlink" href="#using-thread-local-variable-instead-of-the-global-one" title="Link to this heading">¶</a></h2>
 <p>When the usage of the global variable cannot be eliminated easily we will
 consider to use thread local variables instead. To implement thread local
 variables, theoretically we have at least 2 options to do:</p>
@@ -252,7 +258,7 @@ declared with __declspec(thread).</p>
 more difficult. GDAL has a sample implementation for it might be taken over.</p>
 </section>
 <section id="not-changing-the-code-marking-as-safe-with-locks-will-be-reconsidered-later">
-<h2>2.5 Not changing the code (Marking as safe with locks, will be reconsidered later)<a class="headerlink" href="#not-changing-the-code-marking-as-safe-with-locks-will-be-reconsidered-later" title="Permalink to this heading">¶</a></h2>
+<h2>2.5 Not changing the code (Marking as safe with locks, will be reconsidered later)<a class="headerlink" href="#not-changing-the-code-marking-as-safe-with-locks-will-be-reconsidered-later" title="Link to this heading">¶</a></h2>
 <p>Some of the MapServer code and/or the related external libraries may not be
 modified easily and will be protected by locks in this phase of the
 realization. These issues will be kept open and the solution for the thread
@@ -261,7 +267,7 @@ documented along with the MapServer source files and the thread safety FAQ</p>
 <p><a class="reference external" href="http://mapserver.gis.umn.edu/docs/faq/thread_safety">http://mapserver.gis.umn.edu/docs/faq/thread_safety</a></p>
 </section>
 <section id="not-changing-the-code-marking-as-unsafe-will-be-deprecated-and-unsupported">
-<h2>2.6 Not changing the code (Marking as unsafe, will be deprecated and unsupported)<a class="headerlink" href="#not-changing-the-code-marking-as-unsafe-will-be-deprecated-and-unsupported" title="Permalink to this heading">¶</a></h2>
+<h2>2.6 Not changing the code (Marking as unsafe, will be deprecated and unsupported)<a class="headerlink" href="#not-changing-the-code-marking-as-unsafe-will-be-deprecated-and-unsupported" title="Link to this heading">¶</a></h2>
 <p>Having lack of support of portions of the existing code may keep from changing
 the code easily. These portions of the code will not be modified in this
 phase of the realization. These issues will be kept open and might be
@@ -269,7 +275,7 @@ reconsidered later. The open issues will be enumerated and documented
 along with the MapServer source files and the thread safety FAQ.</p>
 </section>
 <section id="issues-of-the-mapserver-mapscript-code">
-<h2>3. Issues of the MapServer /Mapscript code<a class="headerlink" href="#issues-of-the-mapserver-mapscript-code" title="Permalink to this heading">¶</a></h2>
+<h2>3. Issues of the MapServer /Mapscript code<a class="headerlink" href="#issues-of-the-mapserver-mapscript-code" title="Link to this heading">¶</a></h2>
 <p>This chapter will enumerate the sections of the existing code should be
 reconsidered according to the options mentioned previously. The line
 numbers may slightly change according to the developers work.</p>
@@ -595,11 +601,11 @@ mapscript\csharp\csmodule.i(41):       static $moduleHelper the$moduleHelper = n
 <p>TODO</p>
 </section>
 <section id="issues-of-the-related-libraries">
-<h2>3. Issues of the related libraries<a class="headerlink" href="#issues-of-the-related-libraries" title="Permalink to this heading">¶</a></h2>
+<h2>3. Issues of the related libraries<a class="headerlink" href="#issues-of-the-related-libraries" title="Link to this heading">¶</a></h2>
 <p>TODO</p>
 </section>
 <section id="considerations-for-the-future-development">
-<h2>4. Considerations for the future development<a class="headerlink" href="#considerations-for-the-future-development" title="Permalink to this heading">¶</a></h2>
+<h2>4. Considerations for the future development<a class="headerlink" href="#considerations-for-the-future-development" title="Link to this heading">¶</a></h2>
 <p>Developers should keep in mind that their code may be called by multiple
 threads simultaneously. Using process-wide global variables modified at run
 time will be discouraged in the future. If the usage is inevitable the
@@ -607,12 +613,12 @@ variables should be protected by using mutual exclusion properly depending
 on the USE_THREAD constant.</p>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>5. Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h2>
+<h2>5. Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link to this heading">¶</a></h2>
 <p>This is binary and source code level backward incompatible change.
 The compatibility of the mapscript interface might be kept.</p>
 </section>
 <section id="bug-id">
-<h2>Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this heading">¶</a></h2>
+<h2>Bug ID<a class="headerlink" href="#bug-id" title="Link to this heading">¶</a></h2>
 <dl class="simple">
 <dt>The following bug is added as a primary source for collecting the developer</dt><dd><p>and user response. Nevertheless the MapServer users and developers list
 will also be monitored and the RFC will be updated accordingly by the
@@ -622,7 +628,7 @@ primary author.</p>
 <p>Bug <a class="reference external" href="https://github.com/MapServer/MapServer/issues/1764">1764</a></p>
 </section>
 <section id="voting-history">
-<h2>Voting history<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
+<h2>Voting history<a class="headerlink" href="#voting-history" title="Link to this heading">¶</a></h2>
 <p>Still not proposed for voting</p>
 </section>
 </section>
@@ -632,9 +638,9 @@ primary author.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Szybkie wyszukiwanie</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -642,7 +648,7 @@ primary author.</p>
       <input type="submit" value="Szukaj" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -681,7 +687,7 @@ primary author.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Nawigacja</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -700,9 +706,9 @@ primary author.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Copyright</a> 2023, Open Source Geospatial Foundation.
-      Ostatnia modyfikacja 2023-05-19.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    &#169; <a href="../../copyright.html">Copyright</a> 2024, Open Source Geospatial Foundation.
+      Ostatnia modyfikacja 2024-11-01.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     </div>
   </body>
 </html>

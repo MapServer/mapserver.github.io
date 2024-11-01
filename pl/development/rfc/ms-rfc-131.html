@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 
-<html lang="pl">
+<html lang="pl" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MS RFC 131: Allow file paths in MapCache second level dimension values &#8212; MapServer 8.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
+    <title>MS RFC 131: Allow file paths in MapCache second level dimension values &#8212; MapServer 8.2.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css?v=6c7b17ac" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dd298242" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css?v=ea091bf4" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/translations.js"></script>
+    <script src="../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../../_static/documentation_options.js?v=47f36ae4"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/translations.js?v=da4973ce"></script>
     
     <link rel="icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="O tych dokumentach" href="../../about.html" />
@@ -119,7 +125,7 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Nawigacja</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -145,7 +151,7 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-131-allow-file-paths-in-mapcache-second-level-dimension-values">
-<span id="rfc131"></span><h1>MS RFC 131: Allow file paths in MapCache second level dimension values<a class="headerlink" href="#ms-rfc-131-allow-file-paths-in-mapcache-second-level-dimension-values" title="Permalink to this heading">¶</a></h1>
+<span id="rfc131"></span><h1>MS RFC 131: Allow file paths in MapCache second level dimension values<a class="headerlink" href="#ms-rfc-131-allow-file-paths-in-mapcache-second-level-dimension-values" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2020-05-20</p>
@@ -167,7 +173,7 @@
 </dd>
 </dl>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>Dimension values in MapCache are mainly used as a means to identify caches
 where to store or fetch tiles, by using a templating mechanism: „{dim}” or
 „{dim:<em>dimname</em>}” (see <a class="reference internal" href="../../mapcache/dimensions.html#mapcache-dimensions-storing"><span class="std std-ref">Storing Dimensions</span></a> and
@@ -185,7 +191,7 @@ security.</p>
 this feature is proposed on that cache type only.</p>
 </section>
 <section id="proposed-solution">
-<h2>Proposed solution<a class="headerlink" href="#proposed-solution" title="Permalink to this heading">¶</a></h2>
+<h2>Proposed solution<a class="headerlink" href="#proposed-solution" title="Link to this heading">¶</a></h2>
 <p>From preliminary discussions on <a class="reference external" href="https://lists.osgeo.org/pipermail/mapserver-dev/2019-December/015973.html">[mapserver-dev] mailing list</a>,
 two main principles have emerged:</p>
 <ol class="arabic simple">
@@ -196,7 +202,7 @@ controlled subset of the filesystem can be accessed; forbid „../” in
 dimension paths.</p></li>
 </ol>
 <section id="first-principle-keyword-to-path-mapping">
-<h3>First principle: keyword-to-path mapping<a class="headerlink" href="#first-principle-keyword-to-path-mapping" title="Permalink to this heading">¶</a></h3>
+<h3>First principle: keyword-to-path mapping<a class="headerlink" href="#first-principle-keyword-to-path-mapping" title="Link to this heading">¶</a></h3>
 <p>Indeed this feature is already provided in MapCache: this is the so-called
 <a class="reference internal" href="../../mapcache/dimensions.html#mapcache-dimensions-second-level"><span class="std std-ref">Second Level Dimensions</span></a> mechanism.</p>
 <p>The proposed solution should therefore allow paths only with second level
@@ -206,7 +212,7 @@ when fetching dimension value.</p>
 applies: replace «.» and «/» characters by «#» character.</p>
 </section>
 <section id="second-principle-restrict-dimension-paths-to-a-subset-of-filesystem">
-<h3>Second principle: restrict dimension paths to a subset of filesystem<a class="headerlink" href="#second-principle-restrict-dimension-paths-to-a-subset-of-filesystem" title="Permalink to this heading">¶</a></h3>
+<h3>Second principle: restrict dimension paths to a subset of filesystem<a class="headerlink" href="#second-principle-restrict-dimension-paths-to-a-subset-of-filesystem" title="Link to this heading">¶</a></h3>
 <p>The <em>root-dimension-path</em> mechanism is already provided in MapCache: templates
 apply on a hard-coded path specified in cache configuration.</p>
 <p>Moreover, in order to make clear that a specific cache supports paths as
@@ -226,19 +232,19 @@ behaviour applies: replace «.» and «/» characters by «#» character.</p>
 </section>
 </section>
 <section id="documentation-update">
-<h2>Documentation update<a class="headerlink" href="#documentation-update" title="Permalink to this heading">¶</a></h2>
+<h2>Documentation update<a class="headerlink" href="#documentation-update" title="Link to this heading">¶</a></h2>
 <p>Subsection of <a class="reference internal" href="../../mapcache/caches.html#mapcache-cache-multisqlite"><span class="std std-ref">Using Multiple SQLite Database Files</span></a> shall be modified.</p>
 </section>
 <section id="implementation-details">
-<h2>Implementation details<a class="headerlink" href="#implementation-details" title="Permalink to this heading">¶</a></h2>
+<h2>Implementation details<a class="headerlink" href="#implementation-details" title="Link to this heading">¶</a></h2>
 <p>Only <code class="docutils literal notranslate"><span class="pre">lib/cache_sqlite.c</span></code> is impacted.</p>
 </section>
 <section id="backward-compatibility">
-<h2>Backward compatibility<a class="headerlink" href="#backward-compatibility" title="Permalink to this heading">¶</a></h2>
+<h2>Backward compatibility<a class="headerlink" href="#backward-compatibility" title="Link to this heading">¶</a></h2>
 <p>As this is a new feature, no backward compatibility is expected.</p>
 </section>
 <section id="voting-history">
-<h2>Voting History<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
+<h2>Voting History<a class="headerlink" href="#voting-history" title="Link to this heading">¶</a></h2>
 <p>Adopted with +1 from JeffM, SethG, TomK, MikeS, EvenR, DanielM, SteveL, JeromeB</p>
 </section>
 </section>
@@ -248,9 +254,9 @@ behaviour applies: replace «.» and «/» characters by «#» character.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Szybkie wyszukiwanie</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -258,7 +264,7 @@ behaviour applies: replace «.» and «/» characters by «#» character.</p>
       <input type="submit" value="Szukaj" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -292,7 +298,7 @@ behaviour applies: replace «.» and «/» characters by «#» character.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Nawigacja</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -311,9 +317,9 @@ behaviour applies: replace «.» and «/» characters by «#» character.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Copyright</a> 2023, Open Source Geospatial Foundation.
-      Ostatnia modyfikacja 2023-05-19.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    &#169; <a href="../../copyright.html">Copyright</a> 2024, Open Source Geospatial Foundation.
+      Ostatnia modyfikacja 2024-11-01.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     </div>
   </body>
 </html>

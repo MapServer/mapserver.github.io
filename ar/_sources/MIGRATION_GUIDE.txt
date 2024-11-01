@@ -6,12 +6,29 @@
 MapServer Migration Guide
 *****************************************************************************
 
-:Last Updated: 2023-04-18
+:Last Updated: 2024-08-26
 
 .. contents:: Table of Contents
     :depth: 2
     :backlinks: top
     
+.. _migration-8-2:
+   
+MapServer 8.0 to 8.2 Migration
+==============================
+
+- The 8.2 release includes a fix for a security flaw for regex validation 
+  (CVE has been requested)
+  
+- The GitHub `repository <https://github.com/MapServer/MapServer/>`__ has been 
+  restructured to move all source code into the */src* folder
+  
+- The unused `sym2img` commandline utility has been removed
+
+- support for GDAL < 3 has been removed 
+
+- support for PROJ < 6 has been removed
+
 .. _migration-8-0:
    
 MapServer 7.6 to 8.0 Migration
@@ -37,7 +54,27 @@ MapServer 7.6 to 8.0 Migration
 
   .. TIP::  
      The MS4W community has produced many code examples of PHPNG (SWIG) MapScript:
-     https://ms4w.com/trac/wiki/MigrationGuide5.x     
+     https://ms4w.com/trac/wiki/MigrationGuide5.x
+
+- To follow the WMS specification, the `STYLES` parameter will now be required for 
+  GetMap requests.	To bypass this requirement, you can set `wms_allow_getmap_without_styles`
+  in your :ref:`WMS Server <wms_server>` mapfile, such as:
+  
+  .. code-block:: mapfile
+  
+      MAP
+        ...
+        WEB
+          METADATA
+            "wms_title" "My WMS Server"
+            ...
+            "wms_allow_getmap_without_styles" "true"
+          END #metadata
+        END #web
+        ...
+      END #map
+  
+  
 
 - Several deprecated mapfile parameters have been removed, and will throw an
   error if you still specify them now.  The following are specific examples 
@@ -296,7 +333,7 @@ MapServer 6.4 to 7.0 Migration
 
 - Layer opacity is now deprecated a result of RFC 113 - Layer Compositing. The mapfile parser
   and MapScript getter/setter functions will continue to function but unpredictable results will 
-  occur if used in conjunction with COMPOSITE blocks. For more information see http://www.mapserver.org/development/rfc/ms-rfc-113.html.
+  occur if used in conjunction with COMPOSITE blocks. For more information see https://mapserver.org/development/rfc/ms-rfc-113.html.
 
 ::
 
@@ -324,14 +361,14 @@ MapServer 6.4 to 7.0 Migration
   OGR remains an alternative for those that really need it although the OGR/SDE driver suffers from the 
   same issues that prompted the removal from MapServer.
 
-- GD graphics library support was removed (http://www.mapserver.org/development/rfc/ms-rfc-99.html) and  
+- GD graphics library support was removed (https://mapserver.org/development/rfc/ms-rfc-99.html) and  
   had been optional since 6.2. 
 
     - GIF output cannot be produced from MapServer although 8-bit PNG output can be be produced using the AGG/PNG8 driver.  
 
-    - Bitmap fonts have been replaced with an embedded TrueType font (see http://www.mapserver.org/development/rfc/ms-rfc-104.html)
+    - Bitmap fonts have been replaced with an embedded TrueType font (see https://mapserver.org/development/rfc/ms-rfc-104.html)
 
-- RFC 98 - Label/Text Rendering Overhaul (http://www.mapserver.org/development/rfc/ms-rfc-98.html) may 
+- RFC 98 - Label/Text Rendering Overhaul (https://mapserver.org/development/rfc/ms-rfc-98.html) may 
   result in subtle label/character placement changes. Support for negative MAXLENGTH that implied forced 
   linebreaks is not supported anymore, workaround implies pre-processing such labels to include linebreaks
   or wrap characters.
@@ -976,7 +1013,7 @@ AGG rendering changes
 see `the AGG rendering specifics`_ for the changes relating to the addition
 of the `Antigrain Geometry`_ rendering engine.
 
-.. _`the AGG rendering specifics`: https://www.mapserver.org/output/agg.html
+.. _`the AGG rendering specifics`: https://mapserver.org/output/agg.html
 .. _`Antigrain Geometry`: https://en.wikipedia.org/wiki/Anti-Grain_Geometry
 
 ---------------------------------------------------

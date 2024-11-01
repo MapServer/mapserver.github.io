@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 
-<html lang="ja">
+<html lang="ja" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MS RFC 80: Font Fallback Support &#8212; MapServer 8.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
+    <title>MS RFC 80: Font Fallback Support &#8212; MapServer 8.2.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css?v=6c7b17ac" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dd298242" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css?v=ea091bf4" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/translations.js"></script>
+    <script src="../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../../_static/documentation_options.js?v=1f53ca25"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/translations.js?v=91613774"></script>
     
     <link rel="icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="このドキュメントについて" href="../../about.html" />
@@ -119,7 +125,7 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -145,7 +151,7 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-80-font-fallback-support">
-<span id="rfc80"></span><h1>MS RFC 80: Font Fallback Support<a class="headerlink" href="#ms-rfc-80-font-fallback-support" title="この見出しへのパーマリンク">¶</a></h1>
+<span id="rfc80"></span><h1>MS RFC 80: Font Fallback Support<a class="headerlink" href="#ms-rfc-80-font-fallback-support" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2011/12/07</p>
@@ -170,7 +176,7 @@
 </dd>
 </dl>
 <section id="overview">
-<h2>1. Overview<a class="headerlink" href="#overview" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>1. Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>This RFC proposes allowing for the definition of fallback fonts for labels, to
 be used when a glyph is not available in the initial font.</p>
 <p>Presently, if a glyph is not available in the font of a label, the font's error
@@ -188,17 +194,17 @@ only one font is specified, this functionality has no effect. The same fontlist
 support is available for attribute binding.</p>
 </section>
 <section id="proposed-technical-change">
-<h2>2. Proposed Technical Change<a class="headerlink" href="#proposed-technical-change" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>2. Proposed Technical Change<a class="headerlink" href="#proposed-technical-change" title="Link to this heading">¶</a></h2>
 </section>
 <section id="core-object-changes">
-<h2>2.1 Core Object Changes<a class="headerlink" href="#core-object-changes" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>2.1 Core Object Changes<a class="headerlink" href="#core-object-changes" title="Link to this heading">¶</a></h2>
 <p>The Label Style Object would need to support multiple fonts. The proposed
 implementation uses a hard limit to the number of fonts, to avoid overhead. The
 number of fonts can be changed using the MS_MAX_LABEL_FONTS define, the
 suggested default is 5.</p>
 </section>
 <section id="label-rendering-changes">
-<h2>2.2 Label Rendering Changes<a class="headerlink" href="#label-rendering-changes" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>2.2 Label Rendering Changes<a class="headerlink" href="#label-rendering-changes" title="Link to this heading">¶</a></h2>
 <p>The function pointer signature of GetTruetypeTextBBox needs to be changed to be
 able to receive multiple fonts and their count. This requires a change to every
 renderer, as does the change of the labelStyleObj.</p>
@@ -207,13 +213,13 @@ list passed in to implement the glyph fallback. Renderers operating on complete
 strings can use fonts[0] for no change in behavior.</p>
 </section>
 <section id="mapscript">
-<h2>2.3 MapScript<a class="headerlink" href="#mapscript" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>2.3 MapScript<a class="headerlink" href="#mapscript" title="Link to this heading">¶</a></h2>
 <p>The mapscript getters and setters are unchanged, but the semantics
 of the string passed to labelObj-&gt;setFont() is modified as it now
 expects a comma-separated list of fontset keys.</p>
 </section>
 <section id="implementation-details">
-<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Link to this heading">¶</a></h2>
 <p>The proposed implementation adds font fallback support to the cairo and agg
 renderers.</p>
 <p>The labelObj is unchanged, but its &quot;char* font&quot; member semantics
@@ -232,7 +238,7 @@ use some specific code to detect missing characters and use the fallback
 fonts when needed.</p>
 </section>
 <section id="files-affected">
-<h2>3.1. Files Affected<a class="headerlink" href="#files-affected" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>3.1. Files Affected<a class="headerlink" href="#files-affected" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>maplabel.c:</p></li>
 </ul>
@@ -273,18 +279,18 @@ in labelStyleObj</p></li>
 </ul>
 </section>
 <section id="bug-id">
-<h2>3.2 Bug ID<a class="headerlink" href="#bug-id" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>3.2 Bug ID<a class="headerlink" href="#bug-id" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/MapServer/MapServer/issues/4114">https://github.com/MapServer/MapServer/issues/4114</a></p></li>
 </ul>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>4. Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>4. Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link to this heading">¶</a></h2>
 <p>None expected, unless existing fontset keys contained commas. I'm not
 sure this was valid syntax anyways, and was definitely bad practice.</p>
 </section>
 <section id="error-reporting">
-<h2>5. Error reporting<a class="headerlink" href="#error-reporting" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>5. Error reporting<a class="headerlink" href="#error-reporting" title="Link to this heading">¶</a></h2>
 <p>The hard limit on the maximum number of fonts allowed is enforced in
 msFontsetLookupFonts() which will halt processing and return an error
 message stating that the maximum number of fonts is set to
@@ -293,13 +299,13 @@ error message if one of the referenced fonts could not be loaded (due
 to an inaccessible or corrupt ttf file).</p>
 </section>
 <section id="example-usage">
-<h2>6. Example Usage<a class="headerlink" href="#example-usage" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>6. Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>see msautotest entry <a class="reference external" href="http://trac.osgeo.org/mapserver/changeset/12863">http://trac.osgeo.org/mapserver/changeset/12863</a></p></li>
 </ul>
 </section>
 <section id="voting-history">
-<h2>7. Voting history<a class="headerlink" href="#voting-history" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>7. Voting history<a class="headerlink" href="#voting-history" title="Link to this heading">¶</a></h2>
 <p>Passed with +1 from ThomasB, SteveW, MichaelS, SteveL, PerryN, DanielM</p>
 </section>
 </section>
@@ -309,9 +315,9 @@ to an inaccessible or corrupt ttf file).</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -319,7 +325,7 @@ to an inaccessible or corrupt ttf file).</p>
       <input type="submit" value="検索" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -355,7 +361,7 @@ to an inaccessible or corrupt ttf file).</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -374,9 +380,9 @@ to an inaccessible or corrupt ttf file).</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Copyright</a> 2023, Open Source Geospatial Foundation.
-      最終更新: 2023-05-19
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    &#169; <a href="../../copyright.html">著作権</a> 2024, Open Source Geospatial Foundation.
+      最終更新: 2024-11-01
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     </div>
   </body>
 </html>

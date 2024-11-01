@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 
-<html lang="it">
+<html lang="it" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MS RFC 28: Redesign of LOG/DEBUG output mechanisms &#8212; MapServer 8.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
+    <title>MS RFC 28: Redesign of LOG/DEBUG output mechanisms &#8212; MapServer 8.2.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css?v=6c7b17ac" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dd298242" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css?v=ea091bf4" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/translations.js"></script>
+    <script src="../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../../_static/documentation_options.js?v=e0b7afdb"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/translations.js?v=da26b4cc"></script>
     
     <link rel="icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="A proposito di questi documenti" href="../../about.html" />
@@ -119,7 +125,7 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigazione</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -145,7 +151,7 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-28-redesign-of-log-debug-output-mechanisms">
-<span id="rfc28"></span><h1>MS RFC 28: Redesign of LOG/DEBUG output mechanisms<a class="headerlink" href="#ms-rfc-28-redesign-of-log-debug-output-mechanisms" title="Permalink to this heading">¶</a></h1>
+<span id="rfc28"></span><h1>MS RFC 28: Redesign of LOG/DEBUG output mechanisms<a class="headerlink" href="#ms-rfc-28-redesign-of-log-debug-output-mechanisms" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2007-06-14</p>
@@ -167,7 +173,7 @@
 </dd>
 </dl>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>MapServer 4.10 and older used to have multiple LOG/DEBUG output mechanisms
 that did not play well together. In order to improve the usability of the
 software this RFC proposes a new LOG/DEBUG output mechanism with more
@@ -175,7 +181,7 @@ control on the output location (logfile or stderr) and that works under
 all supported web servers.</p>
 </section>
 <section id="inventory-of-existing-mechanisms">
-<h2>Inventory of existing mechanisms<a class="headerlink" href="#inventory-of-existing-mechanisms" title="Permalink to this heading">¶</a></h2>
+<h2>Inventory of existing mechanisms<a class="headerlink" href="#inventory-of-existing-mechanisms" title="Link to this heading">¶</a></h2>
 <p>MapServer 4.10 and older support the following LOG/DEBUG systems:</p>
 <ul>
 <li><p>LOG [filename] in the WEB object:</p>
@@ -203,7 +209,7 @@ MapServer’s output.</p>
 </ul>
 </section>
 <section id="questions">
-<h2>Questions<a class="headerlink" href="#questions" title="Permalink to this heading">¶</a></h2>
+<h2>Questions<a class="headerlink" href="#questions" title="Link to this heading">¶</a></h2>
 <ul>
 <li><p>Q: Is the mapserv-specific LOG option really used by anyone? Do we need to
 maintain it, should we get rid of it, or perhaps extend it? At a minimum
@@ -214,7 +220,7 @@ mechanisms described in this RFC.</p>
 </ul>
 </section>
 <section id="technical-solution">
-<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Permalink to this heading">¶</a></h2>
+<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Link to this heading">¶</a></h2>
 <p>We will essentially merge the MS_ERRORFILE and DEBUG/msDebug() mechanisms.
 The variable MS_ERRORFILE will specify the location of the output, with
 possible values being either a file path on disk, or one of «stderr» or
@@ -233,7 +239,7 @@ request only and not global across threads, this will be done using the same
 mechanism currently used by msGetErrorObj() in maperror.c.</p>
 </section>
 <section id="setting-ms-errorfile">
-<h2>Setting MS_ERRORFILE<a class="headerlink" href="#setting-ms-errorfile" title="Permalink to this heading">¶</a></h2>
+<h2>Setting MS_ERRORFILE<a class="headerlink" href="#setting-ms-errorfile" title="Link to this heading">¶</a></h2>
 <p>The variable MS_ERRORFILE will specify the location of the output, with
 possible values being either a file path on disk, or one of the following
 special values:</p>
@@ -263,7 +269,7 @@ parsing of a mapfile, error/debug logging may become available only <em>after</e
 the MS_ERRORFILE directive has been parsed.</p>
 </section>
 <section id="debug-levels">
-<h2>DEBUG levels<a class="headerlink" href="#debug-levels" title="Permalink to this heading">¶</a></h2>
+<h2>DEBUG levels<a class="headerlink" href="#debug-levels" title="Link to this heading">¶</a></h2>
 <p>The current DEBUG ON/OFF mechanism, at the layer and map level will be
 extended to support multiple debug levels as follows. The default is
 DEBUG OFF (Level 0):</p>
@@ -297,7 +303,7 @@ the developers than to the users.</p>
 </ul>
 </section>
 <section id="the-ms-debuglevel-environment-variable">
-<h2>The MS_DEBUGLEVEL environment variable<a class="headerlink" href="#the-ms-debuglevel-environment-variable" title="Permalink to this heading">¶</a></h2>
+<h2>The MS_DEBUGLEVEL environment variable<a class="headerlink" href="#the-ms-debuglevel-environment-variable" title="Link to this heading">¶</a></h2>
 <p>Debug level can also be set using the (optional) MS_DEBUGLEVEL environment
 variable.</p>
 <p>When set, this value is used as the default debug level value for all map and
@@ -312,7 +318,7 @@ output before the map is loaded, to capture the full process initialization
 and map loading time, for instance.</p>
 </section>
 <section id="mapscript-implications">
-<h2>MapScript Implications<a class="headerlink" href="#mapscript-implications" title="Permalink to this heading">¶</a></h2>
+<h2>MapScript Implications<a class="headerlink" href="#mapscript-implications" title="Link to this heading">¶</a></h2>
 <p>No direct implication. Setting MS_ERRORFILE will enable debug output in
 MapScript as well.</p>
 <p>Note that output to stderr or stdout may not work as expected in some
@@ -321,7 +327,7 @@ support those special cases as part of this RFC. However, logging to a file
 on disk will work with all MapScript flavours.</p>
 </section>
 <section id="files-affected">
-<h2>Files affected<a class="headerlink" href="#files-affected" title="Permalink to this heading">¶</a></h2>
+<h2>Files affected<a class="headerlink" href="#files-affected" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">map</span><span class="o">.</span><span class="n">h</span>
 <span class="n">mapfile</span><span class="o">.</span><span class="n">c</span>
 <span class="n">maperror</span><span class="o">.</span><span class="n">c</span>
@@ -331,7 +337,7 @@ on disk will work with all MapScript flavours.</p>
 edited to adjust the debug level at which the various msDebug() calls kick in.</p>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h2>
+<h2>Backwards compatibility issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>The MapServer 4.x and older MS_ERRORFILE continues to work as before by
 default</p></li>
@@ -341,7 +347,7 @@ debug level in order to be enabled.</p></li>
 </ul>
 </section>
 <section id="bug-id">
-<h2>Bug ID<a class="headerlink" href="#bug-id" title="Permalink to this heading">¶</a></h2>
+<h2>Bug ID<a class="headerlink" href="#bug-id" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>709: <a class="reference external" href="https://github.com/MapServer/MapServer/issues/709">https://github.com/MapServer/MapServer/issues/709</a></p></li>
 <li><p>1333: <a class="reference external" href="https://github.com/MapServer/MapServer/issues/1333">https://github.com/MapServer/MapServer/issues/1333</a></p></li>
@@ -350,12 +356,12 @@ debug level in order to be enabled.</p></li>
 </ul>
 </section>
 <section id="voting-history">
-<h2>Voting history<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
+<h2>Voting history<a class="headerlink" href="#voting-history" title="Link to this heading">¶</a></h2>
 <p>Vote completed on 2007-06-29:</p>
 <p>+1 from DanielM, TomK, FrankW, TamasS, JeffM, SteveL and AssefaY.</p>
 </section>
 <section id="questions-comments-from-the-review-period">
-<h2>Questions/Comments from the review period<a class="headerlink" href="#questions-comments-from-the-review-period" title="Permalink to this heading">¶</a></h2>
+<h2>Questions/Comments from the review period<a class="headerlink" href="#questions-comments-from-the-review-period" title="Link to this heading">¶</a></h2>
 <ul>
 <li><p>Q: Can we catch the output of OGR/GDAL’s CPLDebug calls, perhaps when
 the map-level debug level is &gt;= 3?</p>
@@ -370,9 +376,9 @@ the map-level debug level is &gt;= 3?</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Ricerca veloce</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -380,7 +386,7 @@ the map-level debug level is &gt;= 3?</p>
       <input type="submit" value="Vai" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -417,7 +423,7 @@ the map-level debug level is &gt;= 3?</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigazione</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -436,9 +442,9 @@ the map-level debug level is &gt;= 3?</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Copyright</a> 2023, Open Source Geospatial Foundation.
-      Ultimo aggiornamento 2023-05-19.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    &#169; <a href="../../copyright.html">Copyright</a> 2024, Open Source Geospatial Foundation.
+      Ultimo aggiornamento 2024-11-01.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     </div>
   </body>
 </html>

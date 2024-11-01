@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 
-<html lang="ar">
+<html lang="ar" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Mapfile Tuning &amp; Management &#8212; MapServer 8.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/ribbon.css" />
+    <title>Mapfile Tuning &amp; Management &#8212; MapServer 8.2.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx.css?v=6c7b17ac" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=dd298242" />
+    <link rel="stylesheet" type="text/css" href="../_static/ribbon.css?v=ea091bf4" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/translations.js"></script>
+    <script src="../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../_static/documentation_options.js?v=62ee2fe3"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=3d5367c0"></script>
     
     <link rel="icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="../about.html" />
@@ -119,7 +125,7 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -132,7 +138,7 @@
           <a href="limit_mapfile_access.html" title="Limit Mapfile Access"
              accesskey="P">السابق</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.1 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.2.2 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Optimization</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Mapfile Tuning &amp; Management</a></li> 
       </ul>
@@ -145,7 +151,7 @@
           <div class="body" role="main">
             
   <section id="mapfile-tuning-management">
-<span id="mapfile-tuning"></span><span id="index-0"></span><h1><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Mapfile Tuning &amp; Management</a><a class="headerlink" href="#mapfile-tuning-management" title="Permalink to this heading">¶</a></h1>
+<span id="mapfile-tuning"></span><span id="index-0"></span><h1><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Mapfile Tuning &amp; Management</a><a class="headerlink" href="#mapfile-tuning-management" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>David Fawcett</p>
@@ -160,7 +166,7 @@
 <dd class="field-even"><p>jmckenna at gatewaygeomatics.com</p>
 </dd>
 <dt class="field-odd">Last Updated<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2021-04-13</p>
+<dd class="field-odd"><p>2024-06-20</p>
 </dd>
 </dl>
 <nav class="contents" id="table-of-contents">
@@ -191,7 +197,7 @@
 </ul>
 </nav>
 <section id="introduction">
-<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
 <p>The contents of a .map file ('mapfile') are used by MapServer for configuration, data
 access, projection, and more. Because the mapfile is parsed every time a map
 image is requested, it is important to think about what you include in the
@@ -208,9 +214,9 @@ environment variables to secure your server are listed in <a class="reference in
 </div>
 </section>
 <section id="steps-to-possibly-review">
-<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Steps to Possibly Review</a><a class="headerlink" href="#steps-to-possibly-review" title="Permalink to this heading">¶</a></h2>
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Steps to Possibly Review</a><a class="headerlink" href="#steps-to-possibly-review" title="Link to this heading">¶</a></h2>
 <section id="use-a-mapserver-syntax-file-for-your-favorite-text-editor">
-<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">1. Use a MapServer Syntax file for your Favorite Text Editor</a><a class="headerlink" href="#use-a-mapserver-syntax-file-for-your-favorite-text-editor" title="Permalink to this heading">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">1. Use a MapServer Syntax file for your Favorite Text Editor</a><a class="headerlink" href="#use-a-mapserver-syntax-file-for-your-favorite-text-editor" title="Link to this heading">¶</a></h3>
 <p>Although it's maybe not be classed as an 'optimization', using a syntax
 file to add color-coding to MapServer mapfile parameters in your text editor,
 can help save you time and make your MapServer-mapfile-management-life
@@ -219,7 +225,7 @@ MapServer listed on the page at <a class="reference internal" href="../developme
 <img alt="../_images/mapfile-color-syntax.png" class="no-scaled-link" src="../_images/mapfile-color-syntax.png" style="width: 500px; height: 294px;" />
 </section>
 <section id="testing-your-mapfile-for-speed">
-<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">2. Testing your Mapfile for Speed</a><a class="headerlink" href="#testing-your-mapfile-for-speed" title="Permalink to this heading">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">2. Testing your Mapfile for Speed</a><a class="headerlink" href="#testing-your-mapfile-for-speed" title="Link to this heading">¶</a></h3>
 <p>If optimization and performance are important to you, then get to know and love
 the MapServer commandline utility <a class="reference internal" href="../utilities/map2img.html#map2img"><span class="std std-ref">map2img</span></a>. <em>map2img</em> will verify that your
 mapfile creates a valid map image, but it can also display draw times (length of
@@ -270,7 +276,7 @@ need to execute <em>setenv.bat</em> before using the utility).</p>
 </div>
 </section>
 <section id="use-the-various-config-settings-for-debugging">
-<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">3. Use the various CONFIG settings for debugging</a><a class="headerlink" href="#use-the-various-config-settings-for-debugging" title="Permalink to this heading">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">3. Use the various CONFIG settings for debugging</a><a class="headerlink" href="#use-the-various-config-settings-for-debugging" title="Link to this heading">¶</a></h3>
 <p>Review the <a class="reference internal" href="debugging.html#debugging"><span class="std std-ref">Debugging MapServer</span></a> document and try setting the CONFIG parameter
 at the MAP-level in your mapfile, to hopefully get more information
 from various sources such as from the PROJ library, GDAL library, etc.</p>
@@ -292,7 +298,7 @@ from various sources such as from the PROJ library, GDAL library, etc.</p>
 </div>
 </section>
 <section id="test-the-full-map-request-through-the-mapserv-executable">
-<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">4. Test the full Map Request through the mapserv Executable</a><a class="headerlink" href="#test-the-full-map-request-through-the-mapserv-executable" title="Permalink to this heading">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">4. Test the full Map Request through the mapserv Executable</a><a class="headerlink" href="#test-the-full-map-request-through-the-mapserv-executable" title="Link to this heading">¶</a></h3>
 <p>There are times when your mapfile generates a valid map image with a local
 map2img command, but then the same mapfile will cause an error in a map
 request through the web server, such as Apache.  It is these times when
@@ -309,11 +315,11 @@ the request to an image, or report an error:</p>
 </pre></div>
 </div>
 <p><strong>Note:</strong> Besides checking your web server logs, you can also use QGIS to get the exact
-request to your OWS (WMS/WFS etc.) service: see <a class="reference external" href="https://github.com/mapserver/mapserver/wiki/Get-the-Raw-WMS-Request-Generated-by-QGIS">https://github.com/mapserver/mapserver/wiki/Get-the-Raw-WMS-Request-Generated-by-QGIS</a></p>
+request to your OWS (WMS/WFS etc.) service: see <a class="reference external" href="https://github.com/MapServer/MapServer/wiki/Get-the-Raw-WMS-Request-Generated-by-QGIS">https://github.com/MapServer/MapServer/wiki/Get-the-Raw-WMS-Request-Generated-by-QGIS</a></p>
 <img alt="../_images/qgis-network-logger.png" class="no-scaled-link" src="../_images/qgis-network-logger.png" style="width: 800px; height: 207px;" />
 </section>
 <section id="projections">
-<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">5. Projections</a><a class="headerlink" href="#projections" title="Permalink to this heading">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">5. Projections</a><a class="headerlink" href="#projections" title="Link to this heading">¶</a></h3>
 <p>There are two ways to define projections in a mapfile. You can either use
 inline projection parameters or specify an EPSG code for that projection. If
 you use the <a class="reference internal" href="../glossary.html#term-EPSG"><span class="xref std std-term">EPSG</span></a> code method, <a class="reference internal" href="../glossary.html#term-PROJ"><span class="xref std std-term">PROJ</span></a> looks up the projection
@@ -363,7 +369,7 @@ time to be developed and shared).</p>
 </ul>
 </section>
 <section id="use-includes">
-<span id="index-2"></span><h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">6. Use INCLUDEs</a><a class="headerlink" href="#use-includes" title="Permalink to this heading">¶</a></h3>
+<span id="index-2"></span><h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">6. Use INCLUDEs</a><a class="headerlink" href="#use-includes" title="Link to this heading">¶</a></h3>
 <p>Implemented back in MapServer 4.10, the mapfile <a class="reference internal" href="../mapfile/include.html#include"><span class="std std-ref">INCLUDE</span></a> parameter is
 possibly one of the best ways to help manage your large mapfiles (you might
 argue that this is not 'optimization' for speed again, but for it is very
@@ -400,7 +406,7 @@ obvious layers.</p>
 </div>
 </section>
 <section id="layers">
-<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">7. Layers</a><a class="headerlink" href="#layers" title="Permalink to this heading">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">7. Layers</a><a class="headerlink" href="#layers" title="Link to this heading">¶</a></h3>
 <p>For every layer in a mapfile that has a status of ON or DEFAULT, MapServer
 will load that layer and prepare it for display, even if that layer never gets
 displayed.</p>
@@ -465,7 +471,7 @@ matched on the first try:</p>
 </ul>
 </section>
 <section id="yes-data-formats-matter">
-<span id="index-3"></span><h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">8. Yes Data Formats Matter</a><a class="headerlink" href="#yes-data-formats-matter" title="Permalink to this heading">¶</a></h3>
+<span id="index-3"></span><h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">8. Yes Data Formats Matter</a><a class="headerlink" href="#yes-data-formats-matter" title="Link to this heading">¶</a></h3>
 <p>This is often not written in documents, yet is often taught in hands-on
 workshops (as maybe readers or developers can be reading the document here
 and become offended if it differs in their thinking or the purpose of
@@ -521,7 +527,7 @@ all utilities mentioned above.</p>
 </div>
 </section>
 <section id="enable-caching-through-mapcache">
-<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">9. Enable Caching through MapCache</a><a class="headerlink" href="#enable-caching-through-mapcache" title="Permalink to this heading">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">9. Enable Caching through MapCache</a><a class="headerlink" href="#enable-caching-through-mapcache" title="Link to this heading">¶</a></h3>
 <p>If your mapfile serves any OGC-related service (such as WMS, WFS, etc.) you should
 consider enabling <a class="reference internal" href="../mapcache/index.html#mapcache"><span class="std std-ref">MapCache</span></a>, an Apache module, for your services. Caching
 common map results (as an image file, or inside a SQLite db for example) for common
@@ -529,7 +535,7 @@ map extents, will obviously drastically improve speed, and cancel-out any format
 discussions/benefits/arguments mentioned above.</p>
 </section>
 <section id="symbols">
-<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">10. Symbols</a><a class="headerlink" href="#symbols" title="Permalink to this heading">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">10. Symbols</a><a class="headerlink" href="#symbols" title="Link to this heading">¶</a></h3>
 <p>When the mapfile is loaded, each raster symbol listed in the symbols file is
 located on the filesystem and loaded.</p>
 <p><strong>Optimization Suggestions</strong></p>
@@ -539,7 +545,7 @@ be used by your application.</p></li>
 </ul>
 </section>
 <section id="fonts">
-<span id="index-4"></span><h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">11. Fonts</a><a class="headerlink" href="#fonts" title="Permalink to this heading">¶</a></h3>
+<span id="index-4"></span><h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">11. Fonts</a><a class="headerlink" href="#fonts" title="Link to this heading">¶</a></h3>
 <p>To load a font, MapServer opens up a lookup file (often named fonts.list or fonts.txt)
 <a class="reference internal" href="../mapfile/fontset.html#fontset"><span class="std std-ref">FONTSET</span></a> which contains an alias for the font and the path for that font file. If you have a
 fonts.list file with a long list of fonts, it will take more time for
@@ -550,7 +556,7 @@ MapServer to locate and load the font that you need.</p>
 </ul>
 </section>
 <section id="use-mapscript">
-<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">12. Use MapScript</a><a class="headerlink" href="#use-mapscript" title="Permalink to this heading">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">12. Use MapScript</a><a class="headerlink" href="#use-mapscript" title="Link to this heading">¶</a></h3>
 <p>MapScript, in your favorite language such as PHP or Python, can be used to manipulate
 mapfiles on-the-fly.  Some common use cases are:</p>
 <ul class="simple">
@@ -562,7 +568,7 @@ mapfiles on-the-fly.  Some common use cases are:</p>
 of available parameters and functions (methods) are listed in the <a class="reference internal" href="../mapscript/mapscript-api/index.html#swig"><span class="std std-ref">SWIG MapScript API Reference</span></a>.</p>
 </section>
 <section id="don-t-expose-your-map-path">
-<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">13. Don't expose your MAP path</a><a class="headerlink" href="#don-t-expose-your-map-path" title="Permalink to this heading">¶</a></h3>
+<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">13. Don't expose your MAP path</a><a class="headerlink" href="#don-t-expose-your-map-path" title="Link to this heading">¶</a></h3>
 <p>This is more obvious if your mapfile serves OGC services, such as set in the
 <em>wms_onlineresource</em> metadata parameter in your WEB object, which by default
 must contain the <em>MAP=path/to/your/mapfile</em>, but exposing paths on your public
@@ -581,9 +587,9 @@ of how to enable these environment variables.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">البحث السريع</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -591,7 +597,7 @@ of how to enable these environment variables.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../about.html" title="About">About</a><br>
@@ -632,7 +638,7 @@ of how to enable these environment variables.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -645,15 +651,15 @@ of how to enable these environment variables.</p>
           <a href="limit_mapfile_access.html" title="Limit Mapfile Access"
              >السابق</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.1 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.2.2 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Optimization</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Mapfile Tuning &amp; Management</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../copyright.html"> حقوق النشر </a> 2023, Open Source Geospatial Foundation
-      Last updated on 2023-05-19.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    &#169; <a href="../copyright.html">الحقوق</a> 2024, Open Source Geospatial Foundation.
+      Last updated on 2024-11-01.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     </div>
   </body>
 </html>

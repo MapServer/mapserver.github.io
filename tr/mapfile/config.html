@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 
-<html lang="tr">
+<html lang="tr" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>CONFIG &#8212; MapServer 8.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/ribbon.css" />
+    <title>CONFIG &#8212; MapServer 8.2.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx.css?v=6c7b17ac" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=dd298242" />
+    <link rel="stylesheet" type="text/css" href="../_static/ribbon.css?v=ea091bf4" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/translations.js"></script>
+    <script src="../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../_static/documentation_options.js?v=bd4d36b4"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=5dbee647"></script>
     
     <link rel="icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="Bu belgeler hakkında" href="../about.html" />
@@ -119,7 +125,7 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Gezinti</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -132,7 +138,7 @@
           <a href="composite.html" title="COMPOSITE"
              accesskey="P">önceki</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.1 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.2.2 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Mapfile</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">CONFIG</a></li> 
       </ul>
@@ -145,7 +151,7 @@
           <div class="body" role="main">
             
   <section id="config">
-<span id="index-0"></span><span id="id1"></span><h1>CONFIG<a class="headerlink" href="#config" title="Permalink to this heading">¶</a></h1>
+<span id="index-0"></span><span id="id1"></span><h1>CONFIG<a class="headerlink" href="#config" title="Link to this heading">¶</a></h1>
 <p>As of MapServer 8.0, MapServer has a required global configuration file, implemented through
 <a class="reference internal" href="../development/rfc/ms-rfc-135.html#rfc135"><span class="std std-ref">RFC 135</span></a>, which aims to make configuring MapServer both more secure
 and straight forward. The configuration file path can be set using the environment variable
@@ -155,7 +161,10 @@ for different distributions.</p>
 <p class="admonition-title">Tüyo</p>
 <p>For example, compiling from source on Ubuntu, by default MapServer will install
 a sample config file at <em>/usr/local/etc/mapserver-sample.conf</em>, and you must
-rename that file to <em>mapserver.conf</em>.</p>
+rename that file to <em>mapserver.conf</em>, and then add into your Apache <em>.conf</em> file:
+<em>SetEnv MAPSERVER_CONFIG_FILE “/usr/local/etc/mapserver.conf”</em>.  You can also
+set this in your <em>~/.bashrc</em> file, so that the MapServer commandline utilities
+can find it, by adding there: <em>export MAPSERVER_CONFIG_FILE “/usr/local/etc/mapserver.conf”</em>.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tüyo</p>
@@ -201,11 +210,13 @@ if they exist for any of the <a class="reference internal" href="../optimization
 </dl>
 <dl id="mapfile-config-maps">
 <dt>MAPS</dt><dd><p>This block allows for aliases to be mapped to mapfile paths. If the <code class="docutils literal notranslate"><span class="pre">MS_MAP_NO_PATH</span></code> environment
-variable is set then <strong>only</strong> these aliases can be used in the <code class="docutils literal notranslate"><span class="pre">map=</span></code> CGI parameter.
-The use of aliases also helps to simplify <a class="reference internal" href="../ogc/ogc_api.html#ogcapi"><span class="std std-ref">OGC API : Features</span></a> URLs, for example the alias
+variable is set then <strong>only</strong> these aliases can be used in the <code class="docutils literal notranslate"><span class="pre">map=</span></code> CGI parameter.</p>
+<p>Aliases are case-insensitive - “ITASCA” and “Itasca” are handled identically.</p>
+<p>The use of aliases also helps to simplify <a class="reference internal" href="../ogc/ogc_api.html#ogcapi"><span class="std std-ref">OGC API : Features</span></a> URLs, for example the alias
 <code class="docutils literal notranslate"><span class="pre">itasca</span></code> can be used in the place of a mapfile path in a URL for example:
-<a class="reference external" href="http://localhost/mapserver/itasca/ogcapi/collections">http://localhost/mapserver/itasca/ogcapi/collections</a>
-Aliases are case-insensitive - “ITASCA” and “Itasca” are handled identically.</p>
+<a class="reference external" href="http://localhost/mapserver/itasca/ogcapi/collections">http://localhost/mapserver/itasca/ogcapi/collections</a>.</p>
+<p>As of MapServer 8.2 <em>all</em> types of MapServer requests can use keys from the <code class="docutils literal notranslate"><span class="pre">MAPS</span></code> block in the config file
+as part of a URL for example <a class="reference external" href="http://localhost/itasca/">http://localhost/itasca/</a>?request=WMS&amp;…</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="err">MAPS</span>
   <span class="err">ITASCA</span> <span class="s">&quot;/opt/mapserver/mapserver-demo/itasca.map&quot;</span>
   <span class="err">TEST_MAPFI</span><span class="ow">LE</span> <span class="s">&quot;/opt/mapserver/test/test.map&quot;</span>
@@ -217,7 +228,7 @@ Aliases are case-insensitive - “ITASCA” and “Itasca” are handled identic
 <dl id="mapfile-config-plugins">
 <dt>PLUGINS</dt><dd><p>This block allows for keys to be mapped to plugin library paths. For example the <a class="reference internal" href="../input/vector/mssql.html#mssql-plugin"><span class="std std-ref">MS SQL Plugin</span></a>.
 This registry of plugins avoids possible unsafe libraries being loaded by a mapfile.</p>
-<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="err">PLUGINS</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">PLUGINS</span>
   <span class="s">&quot;mssql&quot;</span> <span class="s">&quot;C:\MapServer</span><span class="se">\b</span><span class="s">in\ms\plugins\mssql2008\msplugin_mssql2008.dll&quot;</span>
 <span class="k">END</span>
 </pre></div>
@@ -291,9 +302,9 @@ This registry of plugins avoids possible unsafe libraries being loaded by a mapf
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Hızlı Arama</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -301,7 +312,7 @@ This registry of plugins avoids possible unsafe libraries being loaded by a mapf
       <input type="submit" value="Git" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../about.html" title="About">About</a><br>
@@ -318,7 +329,7 @@ This registry of plugins avoids possible unsafe libraries being loaded by a mapf
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Gezinti</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -331,15 +342,15 @@ This registry of plugins avoids possible unsafe libraries being loaded by a mapf
           <a href="composite.html" title="COMPOSITE"
              >önceki</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.0.1 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.2.2 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Mapfile</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">CONFIG</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../copyright.html">Telif hakkı</a> 2023, Open Source Geospatial Foundation.
-      Son güncelleme: 2023-05-19.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    &#169; <a href="../copyright.html">Telif hakkı</a> 2024, Open Source Geospatial Foundation.
+      Son güncelleme: 2024-11-01.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     </div>
   </body>
 </html>

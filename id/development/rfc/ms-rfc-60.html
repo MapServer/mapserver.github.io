@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 
-<html lang="id">
+<html lang="id" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MS RFC 60: Labeling enhancement: ability to skip ANGLE FOLLOW labels with too much character overlap &#8212; MapServer 8.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
+    <title>MS RFC 60: Labeling enhancement: ability to skip ANGLE FOLLOW labels with too much character overlap &#8212; MapServer 8.2.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css?v=6c7b17ac" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dd298242" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css?v=ea091bf4" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/translations.js"></script>
+    <script src="../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../../_static/documentation_options.js?v=107fbe1b"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/translations.js?v=2cbafe98"></script>
     
     <link rel="icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Tentang dokumen ini" href="../../about.html" />
@@ -119,7 +125,7 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigasi</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -145,7 +151,7 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-60-labeling-enhancement-ability-to-skip-angle-follow-labels-with-too-much-character-overlap">
-<span id="rfc60"></span><h1>MS RFC 60: Labeling enhancement: ability to skip ANGLE FOLLOW labels with too much character overlap<a class="headerlink" href="#ms-rfc-60-labeling-enhancement-ability-to-skip-angle-follow-labels-with-too-much-character-overlap" title="Permalink to this heading">¶</a></h1>
+<span id="rfc60"></span><h1>MS RFC 60: Labeling enhancement: ability to skip ANGLE FOLLOW labels with too much character overlap<a class="headerlink" href="#ms-rfc-60-labeling-enhancement-ability-to-skip-angle-follow-labels-with-too-much-character-overlap" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2009/06/26</p>
@@ -167,7 +173,7 @@
 </dd>
 </dl>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>At the moment, ANGLE FOLLOW labels on very sharp curved lines can result
 in labels on which some characters overlap, resulting in either bad looking or
 sometimes completely unreadable labels.</p>
@@ -184,7 +190,7 @@ overlap and ticket <a class="reference external" href="https://github.com/MapSer
 has been created for it.</p>
 </section>
 <section id="background">
-<h2>Background<a class="headerlink" href="#background" title="Permalink to this heading">¶</a></h2>
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading">¶</a></h2>
 <p>This issue was found as part of the FOSS4G 2010 Benchmarking exercise where one
 of the layers to render was contours with labels. We've seen that MapServer
 did a poor job of labeling some contours with sharp curves using ANGLE FOLLOW,
@@ -198,7 +204,7 @@ bad labels and the second by GeoServer without the bad labels:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523/geoserver-wms.png">http://trac.osgeo.org/mapserver/attachment/ticket/3523/geoserver-wms.png</a></p>
 </section>
 <section id="experiments">
-<h2>Experiments<a class="headerlink" href="#experiments" title="Permalink to this heading">¶</a></h2>
+<h2>Experiments<a class="headerlink" href="#experiments" title="Link to this heading">¶</a></h2>
 <p>We have found that it is of no use to test the character bboxes for
 overlap since most of them overlap in normal situations as we can see in
 the following images:</p>
@@ -214,7 +220,7 @@ overlap larger than 22.5 degrees are skipped:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523/maxoverlapangle-2.png">http://trac.osgeo.org/mapserver/attachment/ticket/3523/maxoverlapangle-2.png</a></p>
 </section>
 <section id="technical-solution">
-<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Permalink to this heading">¶</a></h2>
+<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Link to this heading">¶</a></h2>
 <p>A new MAXOVERLAPANGLE keyword will be added to the LABEL object, whose
 value is the angle threshold to use in filtering out ANGLE FOLLOW labels in
 which characters overlap (floating point value in degrees).</p>
@@ -227,7 +233,7 @@ to bad overlap in labels.</p>
 based on this criteria, restoring the pre-6.0 behavior.</p>
 </section>
 <section id="usage-example">
-<h2>Usage example<a class="headerlink" href="#usage-example" title="Permalink to this heading">¶</a></h2>
+<h2>Usage example<a class="headerlink" href="#usage-example" title="Link to this heading">¶</a></h2>
 <p>This feature is enabled by default with a default value of 22.5 degrees,
 so no mapfile changes are required to enable it.</p>
 <p>This example will increase the MAXOVERLAPANGLE to 30 degrees, resulting in
@@ -262,7 +268,7 @@ MINDISTANCE to produce maps with even more labels. Here is an example:</p>
 <p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-collisions-repeatdistance-400-min-100.png">http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-collisions-repeatdistance-400-min-100.png</a></p>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h2>
+<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link to this heading">¶</a></h2>
 <p>This new feature will be enabled by default with a default MAXOVERLAPANGLE
 value of 22.5 degreees. Existing mapfiles will work without any change, but
 may end up producing maps with less labels if they contain several bad labels
@@ -272,7 +278,7 @@ up or down to get better results.</p>
 <p>There is no other backwards compatibility issue.</p>
 </section>
 <section id="files-impacted">
-<h2>Files Impacted<a class="headerlink" href="#files-impacted" title="Permalink to this heading">¶</a></h2>
+<h2>Files Impacted<a class="headerlink" href="#files-impacted" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>mapfile.c</p></li>
 <li><p>mapfile.h</p></li>
@@ -283,7 +289,7 @@ up or down to get better results.</p>
 </ul>
 </section>
 <section id="ticket-id">
-<h2>Ticket Id<a class="headerlink" href="#ticket-id" title="Permalink to this heading">¶</a></h2>
+<h2>Ticket Id<a class="headerlink" href="#ticket-id" title="Link to this heading">¶</a></h2>
 <p>Main ticket:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523">http://trac.osgeo.org/mapserver/attachment/ticket/3523</a></p></li>
@@ -294,7 +300,7 @@ up or down to get better results.</p>
 </ul>
 </section>
 <section id="voting-history">
-<h2>Voting History<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
+<h2>Voting History<a class="headerlink" href="#voting-history" title="Link to this heading">¶</a></h2>
 <p>Adopted on 2010-09-23 with +1 from DanielM, SteveL, FrankW, TomK, PericlesN, ThomasB, SteveW, HowardB, AssefaY, JeffM and TamasS.</p>
 </section>
 </section>
@@ -304,9 +310,9 @@ up or down to get better results.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Pencarian cepat</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -314,7 +320,7 @@ up or down to get better results.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -347,7 +353,7 @@ up or down to get better results.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigasi</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -366,9 +372,9 @@ up or down to get better results.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Hak cipta</a> 2023, Open Source Geospatial Foundation.
-      Terakhir diperbarui pada 2023-05-19.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    &#169; <a href="../../copyright.html">Hak Cipta</a> 2024, Open Source Geospatial Foundation.
+      Terakhir diperbarui pada 2024-11-01.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     </div>
   </body>
 </html>

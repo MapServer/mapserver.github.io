@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 
-<html lang="de">
+<html lang="de" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MS RFC 52: One-pass query processing &#8212; MapServer 8.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
+    <title>MS RFC 52: One-pass query processing &#8212; MapServer 8.2.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css?v=6c7b17ac" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dd298242" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css?v=ea091bf4" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/translations.js"></script>
+    <script src="../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../../_static/documentation_options.js?v=fb36aa81"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/translations.js?v=79cc9f76"></script>
     
     <link rel="icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Über dieses Dokument" href="../../about.html" />
@@ -119,7 +125,7 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -145,7 +151,7 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-52-one-pass-query-processing">
-<h1>MS RFC 52: One-pass query processing<a class="headerlink" href="#ms-rfc-52-one-pass-query-processing" title="Permalink to this heading">¶</a></h1>
+<h1>MS RFC 52: One-pass query processing<a class="headerlink" href="#ms-rfc-52-one-pass-query-processing" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2009/03/08</p>
@@ -167,7 +173,7 @@
 </dd>
 </dl>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>This RFC proposes change(s) to the current of query (by point, by box, by shape,
 etc…) processing in MapServer.</p>
 <p>Presently MapServer supports a very flexible query mechanism that utilizes two
@@ -179,7 +185,7 @@ as implemented, provides random access to the data which can be very expensive f
 certain drivers.</p>
 </section>
 <section id="technical-solution">
-<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Permalink to this heading">¶</a></h2>
+<h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Link to this heading">¶</a></h2>
 <p>There are a number of potential solutions:</p>
 <p>1. One could cache the returned shapes in memory. While this wouldn’t result in
 a true single-pass, you wouldn’t have to go back to the original driver twice.
@@ -246,7 +252,7 @@ set. It is the drivers responsibility to provide data to uniquely identify a
 row in the result set.</p>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Permalink to this heading">¶</a></h2>
+<h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link to this heading">¶</a></h2>
 <p>This solution will most likely require changes to MapScript applications that
 process query results depending on types of data being processed. Those hitting
 shapefiles for example will still function „as is“ since there that driver will
@@ -258,7 +264,7 @@ possible to get back to a result once a layer is ultimately closed. A proposed
 solution to this problem is presented next.</p>
 </section>
 <section id="query-file-support">
-<h2>Query File Support<a class="headerlink" href="#query-file-support" title="Permalink to this heading">¶</a></h2>
+<h2>Query File Support<a class="headerlink" href="#query-file-support" title="Link to this heading">¶</a></h2>
 <p>Query files have provided a means of saving the results of a query operation for
 use in subsequent map production. The series of indexes gathered during a query
 are written to disk and read later to be used to access the data a feature at a
@@ -293,7 +299,7 @@ appropriate query. The msSaveQuery() and msLoadQuery() function signatures would
 remain „as is“ although the internals would change.</p>
 </section>
 <section id="files-impacted">
-<h2>Files Impacted<a class="headerlink" href="#files-impacted" title="Permalink to this heading">¶</a></h2>
+<h2>Files Impacted<a class="headerlink" href="#files-impacted" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>driver files: implement msXXXLayerResultsGetShape() function to shape fetching
 code if necessary</p></li>
@@ -314,7 +320,7 @@ to take a lone mapObj as input, add msInitQuery() and msFreeQuery() functions</p
 <p>Although a number of files are impacted the changes in general are relatively simple.</p>
 </section>
 <section id="unknowns">
-<h2>Unknowns<a class="headerlink" href="#unknowns" title="Permalink to this heading">¶</a></h2>
+<h2>Unknowns<a class="headerlink" href="#unknowns" title="Link to this heading">¶</a></h2>
 <p>To date only shapefiles, PostGIS and Oracle drivers have been tested with this new
 scheme, all with positive results. Even shapefiles showed a performance improvement
 simply due to incurring the overhead of opening files just once. It’s not clear how
@@ -325,7 +331,7 @@ a wrapper to msLayerGetShape(). This change may render that method obsolete but 
 checking need be done.</p>
 </section>
 <section id="voting-history">
-<h2>Voting History<a class="headerlink" href="#voting-history" title="Permalink to this heading">¶</a></h2>
+<h2>Voting History<a class="headerlink" href="#voting-history" title="Link to this heading">¶</a></h2>
 <p>+1 from SteveL, DanielM, HowardB, PerryN, TamasS</p>
 </section>
 </section>
@@ -335,9 +341,9 @@ checking need be done.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Schnellsuche</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -345,7 +351,7 @@ checking need be done.</p>
       <input type="submit" value="Los" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -376,7 +382,7 @@ checking need be done.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -395,9 +401,9 @@ checking need be done.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Copyright</a> 2023, Open Source Geospatial Foundation.
-      Zuletzt aktualisiert am 2023-05-19.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    &#169; <a href="../../copyright.html">Copyright</a> 2024, Open Source Geospatial Foundation.
+      Zuletzt aktualisiert am 2024-11-01.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     </div>
   </body>
 </html>

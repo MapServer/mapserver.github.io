@@ -526,13 +526,22 @@ the client in a given *format*.
       <!-- metadata
 
            Optional metadata tags used for responding to GetCapabilities
-           requests. You can put anything here, but only the title, abstract and
+           requests. You can put anything here, but only the title, abstract, wgs84boundingbox and
            keywords tags are currently used to populate the GetCapabilities
            document.
       -->
       <metadata>
          <title>vmap0 map</title>
          <abstract>blabla</abstract>
+         <!-- Sets the extent of the tileset. Used by GIS to zoom to the layer. Order is Lon/Lat (example extent 
+         is the region around London). Will be translated 
+         to 
+         <ows:WGS84BoundingBox>
+            <ows:LowerCorner>-0.837 51.058</ows:LowerCorner>
+            <ows:UpperCorner>0.57 51.834</ows:UpperCorner>
+         </ows:WGS84BoundingBox> 
+         -->
+         <wgs84boundingbox>-0.837 51.058 0.57 51.834</wgs84boundingbox>
          <keywords>
             <keyword>foo</keyword>
             <keyword>bar</keyword>
@@ -603,6 +612,26 @@ the client in a given *format*.
            overrides the value given by <expires>. By default tiles don't expire.
       -->
       <auto_expire>86400</auto_expire>
+
+      <!-- cache-control
+
+            Optional Cache-Control HTTP header directives.
+            These directives apply to all tiled responses (TMS, WMTS, ...).
+            The "max-age=" directive is always set based on the <expires>
+            and <auto_expire> configuration parameters.
+
+            The specified value is passed verbatim without any validation whatsoever.
+            Please refer to the HTTP header documentation for valid usage:
+            https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
+
+            For instance, for historic maps that are not expected to change,
+            set the <expires> option to "31556926" (one year) and <cache-control>
+            to "immutable" (do not check until expired). On clients supporting
+            the "immutable" directive (e.g., Firefox), data will be loaded
+            directly from a local cache without issuing any requests
+            to the server to revalidate it.
+      -->
+      <cache-control>immutable</cache-control>
 
       <!-- dimensions
 

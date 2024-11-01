@@ -22,11 +22,11 @@ way of defining the appearance of an object (a :ref:`CLASS` or a
 
 ANGLE [double|attribute|AUTO]
     Angle, given in degrees, to rotate the symbol (counter clockwise).
-    Default is 0 (no rotation).  If you have an attribute that
-    specifies angles in a clockwise direction (compass direction), you
-    have to adjust the angle attribute values before they reach
-    MapServer  (360-ANGLE), as it is not possible to use a mathematical
-    expression for `ANGLE`.
+    Default is 0 (no rotation), and must be in the range 0 to 360.
+    If you have an attribute that specifies angles in a clockwise
+    direction (compass direction), you have to adjust the angle attribute
+    values before they reach MapServer  (360-ANGLE), as it is not possible
+    to use a mathematical expression for `ANGLE`.
 
     - For points, it specifies the rotation of the symbol around its
       center.
@@ -482,7 +482,6 @@ MAXSCALEDENOM [double]
    :name: mapfile-style-maxsize
 
 MAXSIZE [double]
-    .. versionremoved:: 8.0
 
     Maximum size in pixels to draw a symbol. Default is 500. Must be greater than 0. Starting
     from version 5.4, the value can also be a decimal value (and not
@@ -519,7 +518,6 @@ MINSCALEDENOM [double]
    :name: mapfile-style-minsize
 
 MINSIZE [double]
-    .. versionremoved:: 8.0
 
     Minimum size in pixels to draw a symbol. Default is 0. Must be greater or equal to 0. Starting
     from version 5.4, the value can also be a decimal value (and not
@@ -764,7 +762,7 @@ RANGEITEM [attribute]
    pair: STYLE; SIZE
    :name: mapfile-style-size
 
-SIZE [double|attribute]
+SIZE [double|attribute|expression]
     Height, in layer `SIZEUNITS`, of the symbol/pattern to be used.
     Default value depends on the :ref:`symbol` `TYPE`.  For `pixmap`:
     the height (in pixels) of the pixmap; for `ellipse` and `vector`:
@@ -800,6 +798,17 @@ SIZE [double|attribute]
       The associated RFC document for this feature is :ref:`RFC19`.
     - Starting from version 5.4, the value can also be a decimal
       value (and not only integer).
+    - [*expression*] was introduced in version 8.2 to allow expressions
+      to be used to calculate size values. Expressions must return a numeric value,
+      and attributes can be used as part of the expression.
+
+      .. code-block:: mapfile
+
+        STYLE
+          SYMBOL 'circle'
+          COLOR 255 0 0
+          SIZE ([MYHEIGHT] * 2)
+        END
 
 .. index::
    pair: STYLE; SYMBOL

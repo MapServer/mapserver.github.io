@@ -9,7 +9,7 @@
 
 :Author: Jeff McKenna
 :Contact: jmckenna at gatewaygeomatics.com
-:Last Updated: 2022-09-05
+:Last Updated: 2024-08-26
 
 .. contents:: Table of Contents
     :depth: 3
@@ -123,28 +123,30 @@ ready with WMS/WFS support)
 
 Example 1. On Unix:
 
-::
+.. code-block:: bash
 
    $ ./mapserv -v
-   MapServer version 7.7-dev OUTPUT=PNG OUTPUT=JPEG OUTPUT=KML SUPPORTS=PROJ 
-   SUPPORTS=AGG SUPPORTS=FREETYPE SUPPORTS=CAIRO SUPPORTS=SVG_SYMBOLS 
-   SUPPORTS=RSVG SUPPORTS=ICONV SUPPORTS=FRIBIDI SUPPORTS=WMS_SERVER 
-   SUPPORTS=WMS_CLIENT SUPPORTS=WFS_SERVER SUPPORTS=WFS_CLIENT 
-   SUPPORTS=WCS_SERVER SUPPORTS=SOS_SERVER SUPPORTS=GEOS SUPPORTS=PBF 
-   INPUT=JPEG INPUT=POSTGIS INPUT=OGR INPUT=GDAL INPUT=SHAPEFILE
+   MapServer version 8.3-dev PROJ version 9.4 GDAL version 3.9 OUTPUT=PNG 
+   OUTPUT=JPEG OUTPUT=KML SUPPORTS=PROJ SUPPORTS=AGG SUPPORTS=FREETYPE 
+   SUPPORTS=CAIRO SUPPORTS=SVG_SYMBOLS SUPPORTS=RSVG SUPPORTS=ICONV 
+   SUPPORTS=FRIBIDI SUPPORTS=WMS_SERVER SUPPORTS=WMS_CLIENT SUPPORTS=WFS_SERVER 
+   SUPPORTS=WFS_CLIENT SUPPORTS=WCS_SERVER SUPPORTS=SOS_SERVER 
+   SUPPORTS=OGCAPI_SERVER SUPPORTS=GEOS SUPPORTS=PBF INPUT=JPEG INPUT=POSTGIS 
+   INPUT=OGR INPUT=GDAL INPUT=SHAPEFILE INPUT=FLATGEOBU
 
 Example 2. On Windows:
 
-::
+.. code-block:: bash
 
    C:\ms4w> mapserv -v
-   MapServer version 7.7.0-dev (MS4W 4.0.5) OUTPUT=PNG OUTPUT=JPEG OUTPUT=KML 
-   SUPPORTS=PROJ SUPPORTS=AGG SUPPORTS=FREETYPE SUPPORTS=CAIRO 
-   SUPPORTS=SVG_SYMBOLS SUPPORTS=SVGCAIRO SUPPORTS=ICONV SUPPORTS=FRIBIDI 
-   SUPPORTS=WMS_SERVER SUPPORTS=WMS_CLIENT SUPPORTS=WFS_SERVER 
-   SUPPORTS=WFS_CLIENT SUPPORTS=WCS_SERVER SUPPORTS=SOS_SERVER 
-   SUPPORTS=FASTCGI SUPPORTS=THREADS SUPPORTS=GEOS SUPPORTS=POINT_Z_M 
-   SUPPORTS=PBF INPUT=JPEG INPUT=POSTGIS INPUT=OGR INPUT=GDAL INPUT=SHAPEFILE 
+   MapServer version 8.3.0-dev  (MS4W 5.0.0) PROJ version 9.5 
+   GDAL version 3.10 OUTPUT=PNG OUTPUT=JPEG OUTPUT=KML SUPPORTS=PROJ 
+   SUPPORTS=AGG SUPPORTS=FREETYPE SUPPORTS=CAIRO SUPPORTS=SVG_SYMBOLS 
+   SUPPORTS=SVGCAIRO SUPPORTS=ICONV SUPPORTS=FRIBIDI SUPPORTS=WMS_SERVER 
+   SUPPORTS=WMS_CLIENT SUPPORTS=WFS_SERVER SUPPORTS=WFS_CLIENT SUPPORTS=WCS_SERVER 
+   SUPPORTS=SOS_SERVER SUPPORTS=OGCAPI_SERVER SUPPORTS=FASTCGI SUPPORTS=THREADS 
+   SUPPORTS=GEOS SUPPORTS=PBF INPUT=JPEG INPUT=POSTGIS INPUT=OGR INPUT=GDAL 
+   INPUT=SHAPEFILE INPUT=FLATGEOBUF
 
 .. index:: 
    pair: WMS Server; Mapfile
@@ -318,13 +320,13 @@ Let's go through each of these parameters in more detail:
     http://my.host.com/cgi-bin/mapserv?map=/path/to/your-mapfile.map" #must change mapfile path
           
 
-  By creating a wrapper script on the server it is possible to hide
-  the "map=" parameter from the URL and then your server's online
-  resource URL could be something like:
+  By setting an :ref:`alias in map config <mapfile-config-maps>` (or creating a wrapper script 
+  on the server) it is possible to hide the "map=" parameter from 
+  the URL and then your server's online resource URL could be something like:
 
   ::
   
-    http://my.host.com/cgi-bin/mywms?
+    http://my.host.com/mywms?
           
 
   This is covered in more detail in the section "More About the Online
@@ -439,6 +441,13 @@ the WMS spec:
    "STYLES=" with an empty value to use default style(s). Named styles
    are also supported and are controlled by CLASS GROUP names in the
    mapfile.
+   
+   .. note::
+
+      As of the MapServer 8.0 release, MapServer strictly requires
+      the "STYLES=" parameter (unless SLD & SLD_BODY are specified).  
+      To avoid this requirement, you can set 
+      `"wms_allow_getmap_without_styles" "true"` in MAP.WEB.METADATA.   
 
    **SRS=namespace:identifier:** Spatial Reference System.
 
@@ -628,6 +637,20 @@ which is defined as an opaque string terminated by "?" or "&" (See
 But anyway, even if it's valid, the above URL is still ugly. And you
 might want to use a nicer URL for your WMS Online Resource URL. Here
 are some suggestions:
+
+.. index::
+   pair: Mapserver; Alias
+
+Mapserver Alias in config
+-----------------------------------------
+
+Since Mapserver 8.2 it is possible to configure a set of :ref:`map aliases
+in config <mapfile-config-maps>`. An alias can be used as a parameter in 
+path, to reference the configured mapfile for that alias.
+
+::
+
+  https://example.com/myalias?service=wms&request=GetCapabilities
 
 .. index::
    pair: Apache; ReWriteRule
@@ -1073,6 +1096,17 @@ wms_postcode, wms_country**
 - *WMS TAG Name:* ContactAddress and family (WMS1.1.1, sect. 7.1.4.2)
 - *Description:* Optional contact address information. If provided
   then all six metadata items are required.
+  
+.. index:: 
+   triple: WMS; METADATA; wms_allow_getmap_without_styles
+
+**wms_allow_getmap_without_styles**
+
+  .. versionadded:: 8.0
+
+- *Description:* (Optional) "true" or "false".  If true, the "STYLES="
+  GetMap parameter will not be required.  If false (the default as of
+  MapServer 8.0) the "STYLES=" GetMap parameter will be required.
 
 .. index:: 
    triple: WMS; METADATA; wms_attribution_logourl_format
@@ -1135,11 +1169,12 @@ wms_postcode, wms_country**
 
 **wms_bbox_extended:**
 
+  .. versionadded:: 6.0
+
 - *Description:* (Optional) "true" or "false".  If true, bounding
   boxes are reported for all supported SRS / CRS in the capabilities
   document.  If false, only the bounding box of the first SRS / CRS is
   reported.
-- Introduced in 6.0.
 
 .. index:: 
    triple: WMS; METADATA; wms_contactelectronicmailaddress
@@ -1685,11 +1720,12 @@ Layer Object Metadata
 
 **wms_bbox_extended:**
 
+  .. versionadded:: 6.0
+
 - *Description:* (Optional) "true" or "false".  If true, bounding
   boxes are reported for all supported SRS / CRS in the capabilities
   document.  If false, only the bounding box of the first SRS / CRS is
   reported.
-- Introduced in 6.0.
 
 .. index:: 
    triple: WMS; METADATA; wms_dataurl_format
@@ -1935,6 +1971,8 @@ Layer Object Metadata
 
 **wms_metadataurl_list**
 
+  .. versionadded:: 8.0
+
 - *Description:* (Optional) Space-separated list of parts of metadata keys,
   to be able to specify several MetadataURL. If the value of wms_metadataurl_list
   is "foo bar", then wms_metadataurl_foo_href, wms_metadataurl_foo_format,
@@ -1955,8 +1993,6 @@ Layer Object Metadata
         "wms_metadataurl_html_format" "text/html"
         "wms_metadataurl_html_type" "TC211"
         "wms_metadataurl_html_href" "http://example.com/testHTML"
-
-- .. versionadded:: 8.0
 
 .. index:: 
    triple: WMS; METADATA; wms_metadataurl_type
@@ -2277,8 +2313,8 @@ FAQ / Common Problems
 :Q: **How can I find the EPSG code for my data's projection?**
 
 :A: If you know some of the parameters of your data's projection, 
-    then you can use the search tool at https://epsg.io/ to find your data's 
-    associated EPSG code. The EPSG official home now also allows
+    then you can use the search tool at https://spatialreference.org to find your data's 
+    associated EPSG code. The EPSG official home also allows
     you to perform a text or map search for a projection: https://epsg.org/
     
     For `PROJ <https://proj.org/>`_ version >= 6: the EPSG codes are stored in a SpatiaLite

@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 
-<html lang="ja">
+<html lang="ja" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MS RFC 68: Support for combining features from multiple layers &#8212; MapServer 8.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css" />
+    <title>MS RFC 68: Support for combining features from multiple layers &#8212; MapServer 8.2.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css?v=6c7b17ac" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dd298242" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ribbon.css?v=ea091bf4" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/translations.js"></script>
+    <script src="../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../../_static/documentation_options.js?v=1f53ca25"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/translations.js?v=91613774"></script>
     
     <link rel="icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="このドキュメントについて" href="../../about.html" />
@@ -119,7 +125,7 @@
 </table>
 
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -145,7 +151,7 @@
           <div class="body" role="main">
             
   <section id="ms-rfc-68-support-for-combining-features-from-multiple-layers">
-<span id="rfc68"></span><h1>MS RFC 68: Support for combining features from multiple layers<a class="headerlink" href="#ms-rfc-68-support-for-combining-features-from-multiple-layers" title="この見出しへのパーマリンク">¶</a></h1>
+<span id="rfc68"></span><h1>MS RFC 68: Support for combining features from multiple layers<a class="headerlink" href="#ms-rfc-68-support-for-combining-features-from-multiple-layers" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2011/02/10</p>
@@ -167,7 +173,7 @@
 provider (CONNECTIONTYPE=UNION) which provides an option to represent features
 from multiple layers in a single layer.</p>
 <section id="overview">
-<h2>1. Overview<a class="headerlink" href="#overview" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>1. Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>Today, you can combine multiple files using a tileindex, but only if they have
 the same attributes, and description. In theory, it might be nice to be able to have
 multiple source layers that have similar attributes and to be able to combine them
@@ -179,7 +185,7 @@ features from multiple layers when configuring clustering support
 as per <a class="reference internal" href="ms-rfc-69.html#rfc69"><span class="std std-ref">MS RFC 69</span></a>.</p>
 </section>
 <section id="the-proposed-solution">
-<h2>2. The proposed solution<a class="headerlink" href="#the-proposed-solution" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>2. The proposed solution<a class="headerlink" href="#the-proposed-solution" title="Link to this heading">¶</a></h2>
 <p>This functionality will be implemented as a separate layer data provider (CONNECTIONTYPE=UNION).
 The union layer will use the CONNECTION parameter to define the source layers in the
 mapfiles as follows:</p>
@@ -221,7 +227,7 @@ shapes from one layer we start retrieving the features from the next source laye
 the LayerOpen call.</p>
 </section>
 <section id="handling-the-layer-attributes-items">
-<h2>2.1 Handling the layer attributes (items)<a class="headerlink" href="#handling-the-layer-attributes-items" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>2.1 Handling the layer attributes (items)<a class="headerlink" href="#handling-the-layer-attributes-items" title="Link to this heading">¶</a></h2>
 <p>In general the source layers must provide those attributes which are required when
 rendering the union layer, however the underlying data may contain further attributes,
 which are not used when fetching the data from the original source.
@@ -237,12 +243,12 @@ At this stage of the development, the driver will expose the following additiona
 </ol>
 </section>
 <section id="projections">
-<h2>2.2 Projections<a class="headerlink" href="#projections" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>2.2 Projections<a class="headerlink" href="#projections" title="Link to this heading">¶</a></h2>
 <p>It is suggested to use the same projection of the union layer and the source layers. The layer provider
 will however support transforming the feature positions between the source layers and the union layer.</p>
 </section>
 <section id="handling-classes-and-styles">
-<h2>2.3 Handling classes and styles<a class="headerlink" href="#handling-classes-and-styles" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>2.3 Handling classes and styles<a class="headerlink" href="#handling-classes-and-styles" title="Link to this heading">¶</a></h2>
 <p>We can define the symbology and labelling of the union layers in the same way as
 any other layer by specifying the classes and styles. In addition we will also support
 the STYLEITEM AUTO option for the union layer, which is essential if we want to display
@@ -250,14 +256,14 @@ the features in the same way as with the source layers. The source layers
 may also use the STYLEITEM AUTO setting if the underlying data source provides that.</p>
 </section>
 <section id="query-processing">
-<h2>2.4 Query processing<a class="headerlink" href="#query-processing" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>2.4 Query processing<a class="headerlink" href="#query-processing" title="Link to this heading">¶</a></h2>
 <p>The driver will create (and operate on) a copy of the source layers which will allow to
 keep the underlying layers open until the union layer is open. This will provide the
 single pass query to work in case if the source layer supports it.
 The queries on the union layer will anyway behave the same like with the other layers.</p>
 </section>
 <section id="implementation-details">
-<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Link to this heading">¶</a></h2>
 <p>In order to implement this enhancement the following changes should be made in the MapServer codebase:</p>
 <ol class="arabic simple">
 <li><p>Modify the lexer to interpret the new connection type (UNION).</p></li>
@@ -265,7 +271,7 @@ The queries on the union layer will anyway behave the same like with the other l
 </ol>
 </section>
 <section id="files-affected">
-<h2>3.1 Files affected<a class="headerlink" href="#files-affected" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>3.1 Files affected<a class="headerlink" href="#files-affected" title="Link to this heading">¶</a></h2>
 <p>The following files will be modified/created by this RFC:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">maplexer</span><span class="o">.</span><span class="n">l</span> <span class="p">(</span><span class="n">maplexer</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
 <span class="n">mapserver</span><span class="o">.</span><span class="n">h</span>
@@ -276,21 +282,21 @@ The queries on the union layer will anyway behave the same like with the other l
 </div>
 </section>
 <section id="mapscript-issues">
-<h2>3.2 MapScript Issues<a class="headerlink" href="#mapscript-issues" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>3.2 MapScript Issues<a class="headerlink" href="#mapscript-issues" title="Link to this heading">¶</a></h2>
 <p>The connection type of this new layer will be exposed in the MapScript interface.
 No further impact is taken into account at the moment.</p>
 </section>
 <section id="backwards-compatibility-issues">
-<h2>3.3 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>3.3 Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link to this heading">¶</a></h2>
 <p>This change provides a new functionality with no backwards compatibility issues being considered.</p>
 </section>
 <section id="bug-id">
-<h2>4. Bug ID<a class="headerlink" href="#bug-id" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>4. Bug ID<a class="headerlink" href="#bug-id" title="Link to this heading">¶</a></h2>
 <p>The ticket for RFC-68 (containing implementation code) can be found here.</p>
 <p>Bug <a class="reference external" href="https://github.com/MapServer/MapServer/issues/3674">3674</a></p>
 </section>
 <section id="voting-history">
-<h2>5. Voting history<a class="headerlink" href="#voting-history" title="この見出しへのパーマリンク">¶</a></h2>
+<h2>5. Voting history<a class="headerlink" href="#voting-history" title="Link to this heading">¶</a></h2>
 <p>+1 from SteveW, DanielM, AssefaY, PericlesN, ThomasB, SteveL, TamasS</p>
 </section>
 </section>
@@ -300,9 +306,9 @@ No further impact is taken into account at the moment.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -310,7 +316,7 @@ No further impact is taken into account at the moment.</p>
       <input type="submit" value="検索" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p>
 <a href="../../about.html" title="About">About</a><br>
@@ -346,7 +352,7 @@ No further impact is taken into account at the moment.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -365,9 +371,9 @@ No further impact is taken into account at the moment.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; <a href="../../copyright.html">Copyright</a> 2023, Open Source Geospatial Foundation.
-      最終更新: 2023-05-19
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    &#169; <a href="../../copyright.html">著作権</a> 2024, Open Source Geospatial Foundation.
+      最終更新: 2024-11-01
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     </div>
   </body>
 </html>
