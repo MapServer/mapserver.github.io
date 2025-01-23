@@ -133,7 +133,7 @@
 <dd class="field-even"><p><a class="reference external" href="mailto:sethg&#37;&#52;&#48;geographika&#46;co&#46;uk">sethg<span>&#64;</span>geographika<span>&#46;</span>co<span>&#46;</span>uk</a></p>
 </dd>
 <dt class="field-odd">Last Updated<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2025-01-18</p>
+<dd class="field-odd"><p>2025-01-23</p>
 </dd>
 <dt class="field-even">Version<span class="colon">:</span></dt>
 <dd class="field-even"><p>MapServer 8.6</p>
@@ -150,6 +150,10 @@ additional scripting. While scripting can achieve this, integrating the capabili
 would offer greater convenience and maintainability.</p>
 <p>With the introduction of the <a class="reference internal" href="../../mapfile/config.html#config"><span class="std std-ref">CONFIG file</span></a> in MapServer 8.0, it is now possible to centrally manage information about all Mapfiles in a deployment.
 This would ensure that the homepage remains automatically synchronised with both the CONFIG file and the capabilities of the Mapfiles it references.</p>
+<p>The homepage would be a “superset” of all available Mapfiles in a MapServer deployment, as listed in the CONFIG file.
+Each individual Mapfile would still have its own OGC API landing page, so the homepage is best described as a directory of all landing pages.</p>
+<p>As most MapServer deployments will likely be serving out a combination of WxS and new OGC API services for some time to come,
+it will allow both types to be listed together.</p>
 </section>
 <section id="proposed-solution">
 <h2>2.1 Proposed Solution<a class="headerlink" href="#proposed-solution" title="Link to this heading">¶</a></h2>
@@ -157,12 +161,12 @@ This would ensure that the homepage remains automatically synchronised with both
 in the <a class="reference internal" href="../../mapfile/config.html#config"><span class="std std-ref">CONFIG file</span></a> will be read to return a list of available services. By default the homepage service will be disabled unless a new
 <code class="docutils literal notranslate"><span class="pre">ENV</span></code> option <code class="docutils literal notranslate"><span class="pre">MS_HOMEPAGE_TEMPLATE</span></code> has been set. This should be set to a folder containing a <code class="docutils literal notranslate"><span class="pre">homepage.html</span></code> value. However if only JSON
 responses are required it can be set to any value to enable the homepage service.</p>
-<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="err">ENV</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">ENV</span>
     <span class="err">MS_HOMEPAGE_TEMPLATE_DIRECTORY</span> <span class="s">&quot;share/ogcapi/templates/homepage/&quot;</span> <span class="c"># REQUIRED</span>
     <span class="p">...</span>
 <span class="k">END</span>
 <span class="c"># Example MAPS block in the CONFIG file</span>
-<span class="err">MAPS</span>
+<span class="k">MAPS</span>
     <span class="err">TEST_MAPFILE</span><span class="mi">1</span> <span class="s">&quot;/opt/mapserver/test/test1.map&quot;</span>
     <span class="err">TEST_MAPFILE</span><span class="mi">2</span> <span class="s">&quot;/opt/mapserver/test/test2.map&quot;</span>
 <span class="k">END</span>
@@ -183,39 +187,66 @@ mapserv -nh <span class="s2">&quot;QUERY_STRING=mode=config&amp;f=html&quot;</sp
 </div>
 <p>As the service returns JSON any client-side library can be used to render the output. However a default HTML template  will be provided
 following the same approach as in OGC Features API.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Even though the JSON format is based on the OGC API, the homepage JSON service will still be generated for a Mapfile even if it only supports
+older WxS services.</p>
+</div>
 <section id="json-structure">
 <h3>JSON Structure<a class="headerlink" href="#json-structure" title="Link to this heading">¶</a></h3>
-<p>JSON will be generated using the nlohmann/json and Inja approach already implemented in <a class="reference internal" href="ms-rfc-134.html#rfc134"><span class="std std-ref">MS RFC 134: OGC API Support</span></a>.
-A proposed JSON structure is shown below. Final details may vary. URLs will be constructed based on settings in each individual Mapfile.</p>
+<p>JSON will be generated using the nlohmann/json and Inja approach already implemented in <a class="reference internal" href="ms-rfc-134.html#rfc134"><span class="std std-ref">MS RFC 134: OGC API Support</span></a>.</p>
+<p>The returned JSON will conform to the the <a class="reference external" href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-api-catalog/08/">api-catalog</a>,
+a draft IETF (Internet Engineering Task Force) standard. An example implementation is the <a class="reference external" href="https://demo.pygeoapi.io/">pygeoapi homepage</a>
+(see the associated <a class="reference external" href="https://github.com/geopython/demo.pygeoapi.io/pull/60/files">pull request</a>). The JSON structure is available at
+<a class="reference external" href="https://demo.pygeoapi.io/api-catalog.json">https://demo.pygeoapi.io/api-catalog.json</a>. An extract is shown below:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;TEST_MAPFILE1&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// the key in the config file</span>
-<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;My_Mapfile&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// the NAME in the Mapfile</span>
-<span class="w">  </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;My Mapfile Title&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// the TITLE in the Mapfile</span>
-<span class="w">  </span><span class="nt">&quot;links&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="nt">&quot;linkset&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;href&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&amp;VERSION=1.3.0&amp;REQUEST=GetCapabilities&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;GetCapabilities&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WMS&quot;</span>
+<span class="w">      </span><span class="nt">&quot;anchor&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://demo.pygeoapi.io/master&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;service-desc&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;href&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://demo.pygeoapi.io/master/openapi?f=json&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pygeoapi - latest GitHub &#39;master&#39; version (JSON)&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;application/vnd.oai.openapi+json&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">&quot;service-doc&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;href&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://demo.pygeoapi.io/master/openapi?f=html&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pygeoapi - latest GitHub &#39;master&#39; version (HTML)&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;text/html&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">]</span>
 <span class="w">    </span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;href&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://demo.mapserver.org/cgi-bin/wfs?SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=GetCapabilities&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;GetCapabilities&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WFS&quot;</span>
-<span class="w">    </span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;href&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://demo.mapserver.org/cgi-bin/wcs?SERVICE=WCS&amp;VERSION=1.0.0&amp;REQUEST=GetCapabilities&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;GetCapabilities&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WCS&quot;</span>
-<span class="w">    </span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;href&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://demo.mapserver.org/cgi-bin/mapserv/localdemo/ogcapi/api?f=html&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Landing Page&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OGCAPI&quot;</span>
-<span class="w">    </span><span class="p">},</span>
-<span class="w">  </span><span class="p">]</span>
-<span class="p">}</span>
 </pre></div>
 </div>
+<p>The api-catalog specification allows for an additional <code class="docutils literal notranslate"><span class="pre">service-meta</span></code> property <em>“used to link to additional metadata about the API,
+and is primarily intended for machine consumption.”</em>  This can be used to add any additional properties from Mapfiles
+required to generate a MapServer homepage. <code class="docutils literal notranslate"><span class="pre">service-doc</span></code> isn’t mandatory property, so WxS service links can ignore this.</p>
+<p>An example of the proposed JSON and metadata is shown below:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;linkset&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;anchor&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://demo.mapserver.org/&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;service-desc&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;href&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://demo.mapserver.org/cgi-bin/msautotest?SERVICE=WMS&amp;VERSION=1.3.0&amp;REQUEST=GetCapabilities&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;World WMS service&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;text/xml&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">&quot;service-meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="p">{</span>
+<span class="w">           </span><span class="nt">&quot;service-type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;wms&quot;</span><span class="p">,</span>
+<span class="w">           </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WMS demo server for MapServer, used in the msautotest suite&quot;</span><span class="p">,</span>
+<span class="w">           </span><span class="nt">&quot;keywords&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;layers&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;list&quot;</span><span class="p">],</span>
+<span class="w">           </span><span class="nt">&quot;mapfile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;msautotest.map&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">href</span></code> values will be constructed based on settings in each individual Mapfile.</p>
 </section>
 <section id="future-development">
 <h3>Future Development<a class="headerlink" href="#future-development" title="Link to this heading">¶</a></h3>
@@ -383,7 +414,7 @@ if <code class="docutils literal notranslate"><span class="pre">ows_onlineresour
     </div>
     <div class="footer" role="contentinfo">
     &#169; <a href="../../copyright.html">Copyright</a> 2025, Open Source Geospatial Foundation.
-      Last updated on 2025-01-21.
+      Last updated on 2025-01-23.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
