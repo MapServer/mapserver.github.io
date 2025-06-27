@@ -174,7 +174,7 @@ Committee (PSC) member.</p>
 <p class="admonition-title">Note</p>
 <p>Which version should I download?</p>
 <ul class="simple">
-<li><p>Unless you are using deprecated features in your Mapfiles you should download the latest stable release.</p></li>
+<li><p>Unless you are using deprecated features in your mapfiles you should download the latest stable release.</p></li>
 <li><p>Nearly all servers will now have a x64 (64-bit) architecture, so unless you are restricted to a win32 (32-bit) server
 download a x64 rather than a win32 release.</p></li>
 <li><p>Unless you have a good reason you should use the latest compiler version. MSVC 2022 means the binaries were compiled with
@@ -312,14 +312,14 @@ copied in:</p>
     # point to the certs file for HTTPS access to OWS servers
     CURL_CA_BUNDLE <span class="s2">&quot;C:\MapServer\bin\curl\curl-ca-bundle.crt&quot;</span>
 
-    # to set a default Mapfile uncomment below
+    # to set a default mapfile uncomment below
     # MS_MAPFILE <span class="s2">&quot;C:/MapServer/apps/test/test.map&quot;</span>
 
-    # to block MapServer from accesssing Mapfile by path uncomment below
+    # to block MapServer from accesssing mapfile by path uncomment below
     # MS_MAP_NO_PATH TRUE
   END
 
-  # allow Mapfiles to be accessed by key
+  # allow mapfiles to be accessed by key
   MAPS
     <span class="s2">&quot;test&quot;</span> <span class="s2">&quot;C:/MapServer/apps/tests/test.map&quot;</span>
   END
@@ -342,7 +342,7 @@ Server &gt; FastCGI Settings &gt; <code class="docutils literal notranslate"><sp
 </section>
 <section id="setting-up-applications">
 <h2><a class="toc-backref" href="#id5" role="doc-backlink">Setting up Applications</a><a class="headerlink" href="#setting-up-applications" title="Link to this heading">¶</a></h2>
-<p>MapServer applications consist of a Mapfile, and additional optional files for data, symbols, logs, and images. The same instance of MapServer
+<p>MapServer applications consist of a mapfile, and additional optional files for data, symbols, logs, and images. The same instance of MapServer
 can be used to serve many applications. In this example we will create a new <code class="docutils literal notranslate"><span class="pre">test</span></code> subfolder for a test application in a <code class="docutils literal notranslate"><span class="pre">C:\MapServer\apps</span></code> folder.</p>
 <div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="k">md</span> C:\MapServer\apps\test
 </pre></div>
@@ -391,7 +391,7 @@ notepad C:\MapServer\apps\test\test.map
 <span class="k">CONFIG</span> <span class="s">&quot;MS_ERRORFILE&quot;</span> <span class="s">&quot;logs\ms.log&quot;</span>
 </pre></div>
 </div>
-<p>The path to the log file is relative to the Mapfile, so in this example you need to create a new <code class="docutils literal notranslate"><span class="pre">C:\MapServer\apps\test\logs</span></code> folder:</p>
+<p>The path to the log file is relative to the mapfile, so in this example you need to create a new <code class="docutils literal notranslate"><span class="pre">C:\MapServer\apps\test\logs</span></code> folder:</p>
 <div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="k">md</span> C:\MapServer\apps\test\logs
 </pre></div>
 </div>
@@ -431,7 +431,7 @@ with different environment variables and can be modified by IIS Manager, or usin
 </div>
 <p>You can make then make a request without the query string requiring <code class="docutils literal notranslate"><span class="pre">map=C:/MapServer/apps/test/test.map</span></code>: <a class="reference external" href="http://localhost/mapserver/mapserv?SERVICE=WMS&amp;VERSION=1.3.0&amp;REQUEST=GetMap&amp;LAYERS=country_bounds&amp;STYLES=&amp;CRS=EPSG:4326&amp;BBOX=-180,-90,180,90&amp;WIDTH=400&amp;HEIGHT=300&amp;FORMAT=image/png">http://localhost/mapserver/mapserv?SERVICE=WMS&amp;VERSION=1.3.0&amp;REQUEST=GetMap&amp;LAYERS=country_bounds&amp;STYLES=&amp;CRS=EPSG:4326&amp;BBOX=-180,-90,180,90&amp;WIDTH=400&amp;HEIGHT=300&amp;FORMAT=image/png</a></p>
 <p>In addition to this method the <a class="reference external" href="https://www.iis.net/downloads/microsoft/url-rewrite">URL Rewrite module</a>
-can be used to set different Mapfiles dependent on query string parameters or domain names.</p>
+can be used to set different mapfiles dependent on query string parameters or domain names.</p>
 </section>
 <section id="setting-a-certificates-file">
 <h3><a class="toc-backref" href="#id9" role="doc-backlink">Setting a Certificates File</a><a class="headerlink" href="#setting-a-certificates-file" title="Link to this heading">¶</a></h3>
@@ -445,7 +445,7 @@ certificates file. This can be set using the <code class="docutils literal notra
 </section>
 <section id="securing-mapserver-in-iis">
 <h2><a class="toc-backref" href="#id10" role="doc-backlink">Securing MapServer in IIS</a><a class="headerlink" href="#securing-mapserver-in-iis" title="Link to this heading">¶</a></h2>
-<p>MapServer has two environment variables that can be used to restrict which Mapfiles can be accessed.</p>
+<p>MapServer has two environment variables that can be used to restrict which mapfiles can be accessed.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>As of MapServer 8.0 these variables can be set in the <a class="reference internal" href="../mapfile/config.html#config"><span class="std std-ref">CONFIG</span></a> file rather than as variables in IIS</p>
@@ -455,14 +455,14 @@ be set to any value (“True” in this example) so that only the <code class="d
 <div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="nv">%windir%</span>\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi /+<span class="s2">&quot;[fullPath=&#39;C:\Mapserver\bin\mapserv.exe&#39;].environmentVariables.[name=&#39;MS_MAP_NO_PATH&#39;,value=&#39;True&#39;]&quot;</span> /commit:apphost
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">MS_MAP_PATTERN</span></code> can be set to limit the folders from which Mapfiles can be accessed using a regular expression. For example to limit
+<p><code class="docutils literal notranslate"><span class="pre">MS_MAP_PATTERN</span></code> can be set to limit the folders from which mapfiles can be accessed using a regular expression. For example to limit
 to the <code class="docutils literal notranslate"><span class="pre">C:\MapServer\apps</span></code> (note this path is case-sensitive) folder use the following regular expression: <code class="docutils literal notranslate"><span class="pre">&quot;^(C:)?\/MapServer\/apps\/((?!\.{2})[_A-Za-z0-9\-\.]+\/{1})*([_A-Za-z0-9\-\.]+\.(map))$&quot;</span></code></p>
 <div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="nv">%windir%</span>\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi /+<span class="s2">&quot;[fullPath=&#39;C:\Mapserver\bin\mapserv.exe&#39;].environmentVariables.[name=&#39;MS_MAP_PATTERN&#39;,value=&#39;&quot;</span><span class="se">^(</span>C:)?\/MapServer\/apps\/((?!\.{2})[_A-Za-z0-9\-\.]+\/{1})*([_A-Za-z0-9\-\.]+\.(map))$<span class="s2">&quot;&#39;]&quot;</span> /commit:apphost
 </pre></div>
 </div>
 <p>In addition to these methods IIS itself can be used to block or filter query string parameters. The
 <a class="reference external" href="https://docs.microsoft.com/en-us/iis/configuration/system.webserver/security/requestfiltering/denyquerystringsequences/">denyQueryStringSequences</a>
-element can be set to block a Mapfile being set by a URL. Both <cite>map=</cite> and the encoded <cite>map%3d</cite> are blocked.</p>
+element can be set to block a mapfile being set by a URL. Both <cite>map=</cite> and the encoded <cite>map%3d</cite> are blocked.</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="nt">&lt;configuration&gt;</span>
 <span class="w">    </span><span class="nt">&lt;system.webServer&gt;</span>
@@ -507,7 +507,7 @@ for MapServer in the <code class="docutils literal notranslate"><span class="pre
 </pre></div>
 </div>
 </li>
-<li><p>If the <code class="docutils literal notranslate"><span class="pre">CONFIG</span></code> file security regular expressions used to limit access to Mapfiles do not match the supplied Mapfile you will receive the following:</p>
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">CONFIG</span></code> file security regular expressions used to limit access to mapfiles do not match the supplied mapfile you will receive the following:</p>
 <div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>msCGILoadMap(): Web application error. CGI variable <span class="p">&amp;</span>quot;map<span class="p">&amp;</span>quot; fails to validate.
 </pre></div>
 </div>
