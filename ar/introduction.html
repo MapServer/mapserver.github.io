@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>An Introduction to MapServer &#8212; MapServer 8.2.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <title>An Introduction to MapServer &#8212; MapServer 8.4.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx.css?v=6c7b17ac" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=dd298242" />
@@ -14,12 +14,12 @@
     
     <script src="_static/jquery.js?v=5d32c60e"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="_static/documentation_options.js?v=62ee2fe3"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/documentation_options.js?v=0ee09a07"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/translations.js?v=3d5367c0"></script>
+    <script src="_static/translations.js?v=87cb2081"></script>
     
     <link rel="icon" href="_static/mapserver.ico"/>
     <link rel="author" title="About these documents" href="about.html" />
@@ -27,7 +27,7 @@
     <link rel="search" title="بحث" href="search.html" />
     <link rel="copyright" title="الحقوق" href="copyright.html" />
     <link rel="next" title="MapServer Tutorial" href="tutorial/index.html" />
-    <link rel="prev" title="MapServer 8.2.2 Documentation" href="documentation.html" /> 
+    <link rel="prev" title="MapServer 8.4.0 Documentation" href="documentation.html" /> 
   </head><body>
 
 
@@ -44,7 +44,7 @@
       <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
       <a href="community/service_providers.html" title="Professional Service Providers">Service Providers</a> |      
       <a href="faq.html" title="Frequently Asked Questions">FAQ</a> |
-      <a href="https://twitter.com/mapserver_osgeo" title="Twitter" target="_blank">Twitter</a> |
+      <a href="https://fosstodon.org/@mapserver" title="Mastodon" target="_blank">Mastodon</a> |
       <a href="download.html" title="Download Source or Binaries">Download </a> |
       <a class="badge" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KRJ2X44N3HA6U&source=url" target="_blank">
         <img src="https://img.shields.io/badge/donate-%E2%9D%A4%C2%A0-ff69b4.svg?style=flat" alt="Donate to MapServer">
@@ -135,10 +135,10 @@
           <a href="tutorial/index.html" title="MapServer Tutorial"
              accesskey="N">التالي</a> |</li>
         <li class="right" >
-          <a href="documentation.html" title="MapServer 8.2.2 Documentation"
+          <a href="documentation.html" title="MapServer 8.4.0 Documentation"
              accesskey="P">السابق</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="documentation.html" accesskey="U">MapServer 8.2.2 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="documentation.html" accesskey="U">MapServer 8.4.0 Documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">An Introduction to MapServer</a></li> 
       </ul>
     </div>
@@ -171,7 +171,7 @@
 <dd class="field-even"><p>hobu.inc at gmail.com</p>
 </dd>
 <dt class="field-odd">Last Updated<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2024-07-08</p>
+<dd class="field-odd"><p>2025-04-14</p>
 </dd>
 </dl>
 <nav class="contents" id="id1">
@@ -227,7 +227,7 @@
 <li><p><a class="reference internal" href="#matrix-irc" id="id41">Matrix/IRC</a></p></li>
 <li><p><a class="reference internal" href="#reporting-bugs" id="id42">Reporting bugs</a></p></li>
 <li><p><a class="reference internal" href="#tutorial" id="id43">Tutorial</a></p></li>
-<li><p><a class="reference internal" href="#test-suite" id="id44">Test Suite</a></p></li>
+<li><p><a class="reference internal" href="#test-suite-msautotest" id="id44">Test Suite (msautotest)</a></p></li>
 <li><p><a class="reference internal" href="#books" id="id45">Books</a></p></li>
 </ul>
 </li>
@@ -358,7 +358,7 @@ environment variables to secure your server are listed in <a class="reference in
 </li>
 <li><p><strong>Web/HTTP Server</strong> - serves up the HTML pages when hit by the
 user's browser.  You need a working Web (HTTP) server, such as
-<a class="reference external" href="http://httpd.apache.org">Apache</a> or Microsoft Internet
+<a class="reference external" href="https://httpd.apache.org">Apache</a> or Microsoft Internet
 Information Server, on the machine on which you are installing
 MapServer.</p></li>
 </ul>
@@ -933,7 +933,7 @@ geographic data layers (you will probably want to delete the existing layers
 or set their status to <cite>OFF</cite>).</p>
 <p>Unless you are adding layers that fall within the same geographic area
 as the demo, modify <a class="reference internal" href="mapfile/map.html#map"><span class="std std-ref">MAP</span></a> <cite>EXTENT</cite> to match the extent of your
-data.  To determine the extent of your data, you can use <a class="reference external" href="https://gdal.org/programs/ogrinfo.html">ogrinfo</a>.  If you have access to a GIS,
+data.  To determine the extent of your data, you can use <a class="reference external" href="https://gdal.org/en/stable/programs/ogrinfo.html">ogrinfo</a>.  If you have access to a GIS,
 you could use that as well.  The <a class="reference internal" href="mapfile/map.html#map"><span class="std std-ref">MAP</span></a> <cite>EXTENT</cite> needs to be in the
 units of your output projection.</p>
 <p>If you add geographic data layers with different geographical
@@ -955,7 +955,7 @@ support spatially enabled databases such as
 <a class="reference external" href="https://postgis.net/">PostgreSQL-PostGIS</a>,
 and file formats such as
 <a class="reference external" href="https://en.wikipedia.org/wiki/Geography_Markup_Language">Geography Markup Language (GML)</a>,
-<a class="reference external" href="https://www.pitneybowes.com/ca/en/location-intelligence/geographic-information-systems/mapinfo-pro.html">MapInfo</a>, delimited text files, and more
+<a class="reference external" href="https://en.wikipedia.org/wiki/MapInfo_Pro">MapInfo</a>, delimited text files, and more
 formats with <a class="reference internal" href="input/vector/ogr.html#ogr"><span class="std std-ref">OGR Vector Layers Through MapServer</span></a>.</p>
 <p>See the <a class="reference internal" href="input/vector/index.html#vector"><span class="std std-ref">Vector Data reference</span></a> for examples on how to
 add different geographic data sources to your MapServer project.</p>
@@ -965,7 +965,7 @@ add different geographic data sources to your MapServer project.</p>
 <p>Raster data is image or grid data.
 Through <a class="reference external" href="https://gdal.org/">GDAL</a>, MapServer supports
 most raster formats - see the
-<a class="reference external" href="https://gdal.org/drivers/raster/index.html">GDAL format list</a>.
+<a class="reference external" href="https://gdal.org/en/stable/drivers/raster/index.html">GDAL format list</a>.
 More specific information can be found in the
 <a class="reference internal" href="input/raster.html#raster"><span class="std std-ref">Raster Data reference</span></a>.</p>
 <div class="admonition note">
@@ -1025,7 +1025,7 @@ documentation.</p>
 </section>
 <section id="interfaces">
 <h3><a class="toc-backref" href="#id1" role="doc-backlink">Interfaces</a><a class="headerlink" href="#interfaces" title="Link to this heading">¶</a></h3>
-<p>See: OpenLayers <a class="reference external" href="http://openlayers.org">http://openlayers.org</a>, GeoMOOSE <a class="reference external" href="http://geomoose.org">http://geomoose.org</a></p>
+<p>See: OpenLayers <a class="reference external" href="https://openlayers.org">https://openlayers.org</a>, GeoMOOSE <a class="reference external" href="https://geomoose.org">https://geomoose.org</a></p>
 <div class="admonition note">
 <p class="admonition-title">ملاحظة</p>
 <p>MS4W users can install both OpenLayers and GeoMOOSE as ready-to-use
@@ -1125,23 +1125,23 @@ tracker</a>.</p>
 <h3><a class="toc-backref" href="#id1" role="doc-backlink">Tutorial</a><a class="headerlink" href="#tutorial" title="Link to this heading">¶</a></h3>
 <p><a class="reference external" href="https://mapserver.org/tutorial/">Here</a> is a quick tutorial for new users.</p>
 </section>
-<section id="test-suite">
-<h3><a class="toc-backref" href="#id1" role="doc-backlink">Test Suite</a><a class="headerlink" href="#test-suite" title="Link to this heading">¶</a></h3>
-<p>Download the <a class="reference external" href="https://github.com/MapServer/MapServer/wiki/Test-Suite/">MapServer Test Suite</a> for a demonstration of
-some MapServer functionality.</p>
+<section id="test-suite-msautotest">
+<h3><a class="toc-backref" href="#id1" role="doc-backlink">Test Suite (msautotest)</a><a class="headerlink" href="#test-suite-msautotest" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://www.mapserver.org/development/tests/autotest.html/">msautotest</a> contains test mapfiles
+and data for most MapServer functionality.</p>
 </section>
 <section id="books">
 <h3><a class="toc-backref" href="#id1" role="doc-backlink">Books</a><a class="headerlink" href="#books" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="http://www.oreilly.com/catalog/webmapping/">Web Mapping Illustrated</a>, a book by Tyler
+<p><a class="reference external" href="https://www.oreilly.com/library/view/web-mapping-illustrated/0596008651/">Web Mapping Illustrated</a>, a book by Tyler
 Mitchell that describes well and provides real-world examples for the
 use of Web mapping concepts, Open Source GIS software, MapServer, Web
 services, and PostGIS.</p>
-<p><a class="reference external" href="http://www.oreilly.com/catalog/mappinghks/">Mapping Hacks</a>, by
+<p><a class="reference external" href="https://www.oreilly.com/library/view/mapping-hacks/0596007035/">Mapping Hacks</a>, by
 Schuyler Erle, Rich Gibson, and Jo Walsh, creatively demonstrates
 digital mapping tools and concepts.  MapServer only appears in a
 handful of the 100 hacks, but many more are useful for concepts and
 inspiration.</p>
-<p><a class="reference external" href="https://www.apress.com/gp/book/9781590594902">Beginning MapServer: Opensource GIS Development</a>, by Bill
+<p><a class="reference external" href="https://link.springer.com/book/10.1007/978-1-4302-0053-6">Beginning MapServer: Opensource GIS Development</a>, by Bill
 Kropla.  According to the publisher, it covers installation and
 configuration, basic MapServer topics and features, incorporation of
 dynamic data, advanced topics, MapScript, and the creation of an
@@ -1176,7 +1176,7 @@ actual application.</p>
 <a href="documentation.html" title="Documentation">Documentation</a><br>
 <a href="faq.html" title="FAQ">FAQ</a><br>
 <a href="psc.html" title="PSC">PSC</a><br>
-<a href="https://twitter.com/mapserver_osgeo" title="Twitter">Twitter</a>
+<a href="https://fosstodon.org/@mapserver" title="Mastodon">Mastodon</a>
 </p>
   <h3>Current Table Of Contents</h3>
   <ul>
@@ -1228,7 +1228,7 @@ actual application.</p>
 <li><a class="reference internal" href="#matrix-irc">Matrix/IRC</a></li>
 <li><a class="reference internal" href="#reporting-bugs">Reporting bugs</a></li>
 <li><a class="reference internal" href="#tutorial">Tutorial</a></li>
-<li><a class="reference internal" href="#test-suite">Test Suite</a></li>
+<li><a class="reference internal" href="#test-suite-msautotest">Test Suite (msautotest)</a></li>
 <li><a class="reference internal" href="#books">Books</a></li>
 </ul>
 </li>
@@ -1250,17 +1250,17 @@ actual application.</p>
           <a href="tutorial/index.html" title="MapServer Tutorial"
              >التالي</a> |</li>
         <li class="right" >
-          <a href="documentation.html" title="MapServer 8.2.2 Documentation"
+          <a href="documentation.html" title="MapServer 8.4.0 Documentation"
              >السابق</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="documentation.html" >MapServer 8.2.2 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="documentation.html" >MapServer 8.4.0 Documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">An Introduction to MapServer</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; <a href="copyright.html">الحقوق</a> 2024, Open Source Geospatial Foundation.
-      Last updated on 2024-11-01.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    &#169; <a href="copyright.html">الحقوق</a> 2025, Open Source Geospatial Foundation.
+      Last updated on 2025-07-14.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

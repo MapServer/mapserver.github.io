@@ -1,19 +1,2745 @@
 /*
- * language_data.js
- * ~~~~~~~~~~~~~~~~
- *
  * This script contains the language-specific data used by searchtools.js,
  * namely the list of stopwords, stemmer, scorer and splitter.
- *
- * :copyright: Copyright 2007-2024 by the Sphinx team, see AUTHORS.
- * :license: BSD, see LICENSE for details.
- *
  */
 
 var stopwords = [];
 
 
 /* Non-minified version is copied as a separate JS file, if available */
-BaseStemmer=function(){this.setCurrent=function(r){this.current=r;this.cursor=0;this.limit=this.current.length;this.limit_backward=0;this.bra=this.cursor;this.ket=this.limit};this.getCurrent=function(){return this.current};this.copy_from=function(r){this.current=r.current;this.cursor=r.cursor;this.limit=r.limit;this.limit_backward=r.limit_backward;this.bra=r.bra;this.ket=r.ket};this.in_grouping=function(r,t,i){if(this.cursor>=this.limit)return false;var s=this.current.charCodeAt(this.cursor);if(s>i||s<t)return false;s-=t;if((r[s>>>3]&1<<(s&7))==0)return false;this.cursor++;return true};this.in_grouping_b=function(r,t,i){if(this.cursor<=this.limit_backward)return false;var s=this.current.charCodeAt(this.cursor-1);if(s>i||s<t)return false;s-=t;if((r[s>>>3]&1<<(s&7))==0)return false;this.cursor--;return true};this.out_grouping=function(r,t,i){if(this.cursor>=this.limit)return false;var s=this.current.charCodeAt(this.cursor);if(s>i||s<t){this.cursor++;return true}s-=t;if((r[s>>>3]&1<<(s&7))==0){this.cursor++;return true}return false};this.out_grouping_b=function(r,t,i){if(this.cursor<=this.limit_backward)return false;var s=this.current.charCodeAt(this.cursor-1);if(s>i||s<t){this.cursor--;return true}s-=t;if((r[s>>>3]&1<<(s&7))==0){this.cursor--;return true}return false};this.eq_s=function(r){if(this.limit-this.cursor<r.length)return false;if(this.current.slice(this.cursor,this.cursor+r.length)!=r){return false}this.cursor+=r.length;return true};this.eq_s_b=function(r){if(this.cursor-this.limit_backward<r.length)return false;if(this.current.slice(this.cursor-r.length,this.cursor)!=r){return false}this.cursor-=r.length;return true};this.find_among=function(r){var t=0;var i=r.length;var s=this.cursor;var e=this.limit;var h=0;var u=0;var n=false;while(true){var c=t+(i-t>>>1);var a=0;var f=h<u?h:u;var l=r[c];var o;for(o=f;o<l[0].length;o++){if(s+f==e){a=-1;break}a=this.current.charCodeAt(s+f)-l[0].charCodeAt(o);if(a!=0)break;f++}if(a<0){i=c;u=f}else{t=c;h=f}if(i-t<=1){if(t>0)break;if(i==t)break;if(n)break;n=true}}do{var l=r[t];if(h>=l[0].length){this.cursor=s+l[0].length;if(l.length<4)return l[2];var v=l[3](this);this.cursor=s+l[0].length;if(v)return l[2]}t=l[1]}while(t>=0);return 0};this.find_among_b=function(r){var t=0;var i=r.length;var s=this.cursor;var e=this.limit_backward;var h=0;var u=0;var n=false;while(true){var c=t+(i-t>>1);var a=0;var f=h<u?h:u;var l=r[c];var o;for(o=l[0].length-1-f;o>=0;o--){if(s-f==e){a=-1;break}a=this.current.charCodeAt(s-1-f)-l[0].charCodeAt(o);if(a!=0)break;f++}if(a<0){i=c;u=f}else{t=c;h=f}if(i-t<=1){if(t>0)break;if(i==t)break;if(n)break;n=true}}do{var l=r[t];if(h>=l[0].length){this.cursor=s-l[0].length;if(l.length<4)return l[2];var v=l[3](this);this.cursor=s-l[0].length;if(v)return l[2]}t=l[1]}while(t>=0);return 0};this.replace_s=function(r,t,i){var s=i.length-(t-r);this.current=this.current.slice(0,r)+i+this.current.slice(t);this.limit+=s;if(this.cursor>=t)this.cursor+=s;else if(this.cursor>r)this.cursor=r;return s};this.slice_check=function(){if(this.bra<0||this.bra>this.ket||this.ket>this.limit||this.limit>this.current.length){return false}return true};this.slice_from=function(r){var t=false;if(this.slice_check()){this.replace_s(this.bra,this.ket,r);t=true}return t};this.slice_del=function(){return this.slice_from("")};this.insert=function(r,t,i){var s=this.replace_s(r,t,i);if(r<=this.bra)this.bra+=s;if(r<=this.ket)this.ket+=s};this.slice_to=function(){var r="";if(this.slice_check()){r=this.current.slice(this.bra,this.ket)}return r};this.assign_to=function(){return this.current.slice(0,this.limit)}};
-TurkishStemmer=function(){var r=new BaseStemmer;var i=[["m",-1,-1],["n",-1,-1],["miz",-1,-1],["niz",-1,-1],["muz",-1,-1],["nuz",-1,-1],["müz",-1,-1],["nüz",-1,-1],["mız",-1,-1],["nız",-1,-1]];var e=[["leri",-1,-1],["ları",-1,-1]];var u=[["ni",-1,-1],["nu",-1,-1],["nü",-1,-1],["nı",-1,-1]];var a=[["in",-1,-1],["un",-1,-1],["ün",-1,-1],["ın",-1,-1]];var s=[["a",-1,-1],["e",-1,-1]];var t=[["na",-1,-1],["ne",-1,-1]];var l=[["da",-1,-1],["ta",-1,-1],["de",-1,-1],["te",-1,-1]];var c=[["nda",-1,-1],["nde",-1,-1]];var o=[["dan",-1,-1],["tan",-1,-1],["den",-1,-1],["ten",-1,-1]];var f=[["ndan",-1,-1],["nden",-1,-1]];var n=[["la",-1,-1],["le",-1,-1]];var b=[["ca",-1,-1],["ce",-1,-1]];var m=[["im",-1,-1],["um",-1,-1],["üm",-1,-1],["ım",-1,-1]];var k=[["sin",-1,-1],["sun",-1,-1],["sün",-1,-1],["sın",-1,-1]];var _=[["iz",-1,-1],["uz",-1,-1],["üz",-1,-1],["ız",-1,-1]];var v=[["siniz",-1,-1],["sunuz",-1,-1],["sünüz",-1,-1],["sınız",-1,-1]];var d=[["lar",-1,-1],["ler",-1,-1]];var g=[["niz",-1,-1],["nuz",-1,-1],["nüz",-1,-1],["nız",-1,-1]];var w=[["dir",-1,-1],["tir",-1,-1],["dur",-1,-1],["tur",-1,-1],["dür",-1,-1],["tür",-1,-1],["dır",-1,-1],["tır",-1,-1]];var q=[["casına",-1,-1],["cesine",-1,-1]];var p=[["di",-1,-1],["ti",-1,-1],["dik",-1,-1],["tik",-1,-1],["duk",-1,-1],["tuk",-1,-1],["dük",-1,-1],["tük",-1,-1],["dık",-1,-1],["tık",-1,-1],["dim",-1,-1],["tim",-1,-1],["dum",-1,-1],["tum",-1,-1],["düm",-1,-1],["tüm",-1,-1],["dım",-1,-1],["tım",-1,-1],["din",-1,-1],["tin",-1,-1],["dun",-1,-1],["tun",-1,-1],["dün",-1,-1],["tün",-1,-1],["dın",-1,-1],["tın",-1,-1],["du",-1,-1],["tu",-1,-1],["dü",-1,-1],["tü",-1,-1],["dı",-1,-1],["tı",-1,-1]];var h=[["sa",-1,-1],["se",-1,-1],["sak",-1,-1],["sek",-1,-1],["sam",-1,-1],["sem",-1,-1],["san",-1,-1],["sen",-1,-1]];var z=[["miş",-1,-1],["muş",-1,-1],["müş",-1,-1],["mış",-1,-1]];var y=[["b",-1,1],["c",-1,2],["d",-1,3],["ğ",-1,4]];var C=[17,65,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,32,8,0,0,0,0,0,0,1];var S=[1,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,1];var B=[1,64,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1];var T=[17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,130];var W=[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1];var j=[17];var x=[65];var A=[65];var D=false;function E(){var i=r.limit-r.cursor;r:while(true){var e=r.limit-r.cursor;i:{if(!r.in_grouping_b(C,97,305)){break i}r.cursor=r.limit-e;break r}r.cursor=r.limit-e;if(r.cursor<=r.limit_backward){return false}r.cursor--}r:{var u=r.limit-r.cursor;i:{if(!r.eq_s_b("a")){break i}e:while(true){var a=r.limit-r.cursor;u:{if(!r.in_grouping_b(B,97,305)){break u}r.cursor=r.limit-a;break e}r.cursor=r.limit-a;if(r.cursor<=r.limit_backward){break i}r.cursor--}break r}r.cursor=r.limit-u;i:{if(!r.eq_s_b("e")){break i}e:while(true){var s=r.limit-r.cursor;u:{if(!r.in_grouping_b(T,101,252)){break u}r.cursor=r.limit-s;break e}r.cursor=r.limit-s;if(r.cursor<=r.limit_backward){break i}r.cursor--}break r}r.cursor=r.limit-u;i:{if(!r.eq_s_b("ı")){break i}e:while(true){var t=r.limit-r.cursor;u:{if(!r.in_grouping_b(W,97,305)){break u}r.cursor=r.limit-t;break e}r.cursor=r.limit-t;if(r.cursor<=r.limit_backward){break i}r.cursor--}break r}r.cursor=r.limit-u;i:{if(!r.eq_s_b("i")){break i}e:while(true){var l=r.limit-r.cursor;u:{if(!r.in_grouping_b(j,101,105)){break u}r.cursor=r.limit-l;break e}r.cursor=r.limit-l;if(r.cursor<=r.limit_backward){break i}r.cursor--}break r}r.cursor=r.limit-u;i:{if(!r.eq_s_b("o")){break i}e:while(true){var c=r.limit-r.cursor;u:{if(!r.in_grouping_b(x,111,117)){break u}r.cursor=r.limit-c;break e}r.cursor=r.limit-c;if(r.cursor<=r.limit_backward){break i}r.cursor--}break r}r.cursor=r.limit-u;i:{if(!r.eq_s_b("ö")){break i}e:while(true){var o=r.limit-r.cursor;u:{if(!r.in_grouping_b(A,246,252)){break u}r.cursor=r.limit-o;break e}r.cursor=r.limit-o;if(r.cursor<=r.limit_backward){break i}r.cursor--}break r}r.cursor=r.limit-u;i:{if(!r.eq_s_b("u")){break i}e:while(true){var f=r.limit-r.cursor;u:{if(!r.in_grouping_b(x,111,117)){break u}r.cursor=r.limit-f;break e}r.cursor=r.limit-f;if(r.cursor<=r.limit_backward){break i}r.cursor--}break r}r.cursor=r.limit-u;if(!r.eq_s_b("ü")){return false}i:while(true){var n=r.limit-r.cursor;e:{if(!r.in_grouping_b(A,246,252)){break e}r.cursor=r.limit-n;break i}r.cursor=r.limit-n;if(r.cursor<=r.limit_backward){return false}r.cursor--}}r.cursor=r.limit-i;return true}function F(){r:{var i=r.limit-r.cursor;i:{if(!r.eq_s_b("n")){break i}var e=r.limit-r.cursor;if(!r.in_grouping_b(C,97,305)){break i}r.cursor=r.limit-e;break r}r.cursor=r.limit-i;{var u=r.limit-r.cursor;i:{var a=r.limit-r.cursor;if(!r.eq_s_b("n")){break i}r.cursor=r.limit-a;return false}r.cursor=r.limit-u}var s=r.limit-r.cursor;if(r.cursor<=r.limit_backward){return false}r.cursor--;if(!r.in_grouping_b(C,97,305)){return false}r.cursor=r.limit-s}return true}function G(){r:{var i=r.limit-r.cursor;i:{if(!r.eq_s_b("s")){break i}var e=r.limit-r.cursor;if(!r.in_grouping_b(C,97,305)){break i}r.cursor=r.limit-e;break r}r.cursor=r.limit-i;{var u=r.limit-r.cursor;i:{var a=r.limit-r.cursor;if(!r.eq_s_b("s")){break i}r.cursor=r.limit-a;return false}r.cursor=r.limit-u}var s=r.limit-r.cursor;if(r.cursor<=r.limit_backward){return false}r.cursor--;if(!r.in_grouping_b(C,97,305)){return false}r.cursor=r.limit-s}return true}function H(){r:{var i=r.limit-r.cursor;i:{if(!r.eq_s_b("y")){break i}var e=r.limit-r.cursor;if(!r.in_grouping_b(C,97,305)){break i}r.cursor=r.limit-e;break r}r.cursor=r.limit-i;{var u=r.limit-r.cursor;i:{var a=r.limit-r.cursor;if(!r.eq_s_b("y")){break i}r.cursor=r.limit-a;return false}r.cursor=r.limit-u}var s=r.limit-r.cursor;if(r.cursor<=r.limit_backward){return false}r.cursor--;if(!r.in_grouping_b(C,97,305)){return false}r.cursor=r.limit-s}return true}function I(){r:{var i=r.limit-r.cursor;i:{if(!r.in_grouping_b(S,105,305)){break i}var e=r.limit-r.cursor;if(!r.out_grouping_b(C,97,305)){break i}r.cursor=r.limit-e;break r}r.cursor=r.limit-i;{var u=r.limit-r.cursor;i:{var a=r.limit-r.cursor;if(!r.in_grouping_b(S,105,305)){break i}r.cursor=r.limit-a;return false}r.cursor=r.limit-u}var s=r.limit-r.cursor;if(r.cursor<=r.limit_backward){return false}r.cursor--;if(!r.out_grouping_b(C,97,305)){return false}r.cursor=r.limit-s}return true}function J(){if(r.find_among_b(i)==0){return false}if(!I()){return false}return true}function K(){if(!E()){return false}if(!r.in_grouping_b(S,105,305)){return false}if(!G()){return false}return true}function L(){if(r.find_among_b(e)==0){return false}return true}function M(){if(!E()){return false}if(!r.in_grouping_b(S,105,305)){return false}if(!H()){return false}return true}function N(){if(!E()){return false}if(r.find_among_b(u)==0){return false}return true}function O(){if(!E()){return false}if(r.find_among_b(a)==0){return false}if(!F()){return false}return true}function P(){if(!E()){return false}if(r.find_among_b(s)==0){return false}if(!H()){return false}return true}function Q(){if(!E()){return false}if(r.find_among_b(t)==0){return false}return true}function R(){if(!E()){return false}if(r.find_among_b(l)==0){return false}return true}function U(){if(!E()){return false}if(r.find_among_b(c)==0){return false}return true}function V(){if(!E()){return false}if(r.find_among_b(o)==0){return false}return true}function X(){if(!E()){return false}if(r.find_among_b(f)==0){return false}return true}function Y(){if(!E()){return false}if(r.find_among_b(n)==0){return false}if(!H()){return false}return true}function Z(){if(!r.eq_s_b("ki")){return false}return true}function $(){if(!E()){return false}if(r.find_among_b(b)==0){return false}if(!F()){return false}return true}function rr(){if(!E()){return false}if(r.find_among_b(m)==0){return false}if(!H()){return false}return true}function ir(){if(!E()){return false}if(r.find_among_b(k)==0){return false}return true}function er(){if(!E()){return false}if(r.find_among_b(_)==0){return false}if(!H()){return false}return true}function ur(){if(r.find_among_b(v)==0){return false}return true}function ar(){if(!E()){return false}if(r.find_among_b(d)==0){return false}return true}function sr(){if(!E()){return false}if(r.find_among_b(g)==0){return false}return true}function tr(){if(!E()){return false}if(r.find_among_b(w)==0){return false}return true}function lr(){if(r.find_among_b(q)==0){return false}return true}function cr(){if(!E()){return false}if(r.find_among_b(p)==0){return false}if(!H()){return false}return true}function or(){if(r.find_among_b(h)==0){return false}if(!H()){return false}return true}function fr(){if(!E()){return false}if(r.find_among_b(z)==0){return false}if(!H()){return false}return true}function nr(){if(!r.eq_s_b("ken")){return false}if(!H()){return false}return true}function br(){r.ket=r.cursor;D=true;r:{var i=r.limit-r.cursor;i:{e:{var e=r.limit-r.cursor;u:{if(!fr()){break u}break e}r.cursor=r.limit-e;u:{if(!cr()){break u}break e}r.cursor=r.limit-e;u:{if(!or()){break u}break e}r.cursor=r.limit-e;if(!nr()){break i}}break r}r.cursor=r.limit-i;i:{if(!lr()){break i}e:{var u=r.limit-r.cursor;u:{if(!ur()){break u}break e}r.cursor=r.limit-u;u:{if(!ar()){break u}break e}r.cursor=r.limit-u;u:{if(!rr()){break u}break e}r.cursor=r.limit-u;u:{if(!ir()){break u}break e}r.cursor=r.limit-u;u:{if(!er()){break u}break e}r.cursor=r.limit-u}if(!fr()){break i}break r}r.cursor=r.limit-i;i:{if(!ar()){break i}r.bra=r.cursor;if(!r.slice_del()){return false}var a=r.limit-r.cursor;e:{r.ket=r.cursor;u:{var s=r.limit-r.cursor;a:{if(!tr()){break a}break u}r.cursor=r.limit-s;a:{if(!cr()){break a}break u}r.cursor=r.limit-s;a:{if(!or()){break a}break u}r.cursor=r.limit-s;if(!fr()){r.cursor=r.limit-a;break e}}}D=false;break r}r.cursor=r.limit-i;i:{if(!sr()){break i}e:{var t=r.limit-r.cursor;u:{if(!cr()){break u}break e}r.cursor=r.limit-t;if(!or()){break i}}break r}r.cursor=r.limit-i;i:{e:{var l=r.limit-r.cursor;u:{if(!ur()){break u}break e}r.cursor=r.limit-l;u:{if(!er()){break u}break e}r.cursor=r.limit-l;u:{if(!ir()){break u}break e}r.cursor=r.limit-l;if(!rr()){break i}}r.bra=r.cursor;if(!r.slice_del()){return false}var c=r.limit-r.cursor;e:{r.ket=r.cursor;if(!fr()){r.cursor=r.limit-c;break e}}break r}r.cursor=r.limit-i;if(!tr()){return false}r.bra=r.cursor;if(!r.slice_del()){return false}var o=r.limit-r.cursor;i:{r.ket=r.cursor;e:{var f=r.limit-r.cursor;u:{if(!ur()){break u}break e}r.cursor=r.limit-f;u:{if(!ar()){break u}break e}r.cursor=r.limit-f;u:{if(!rr()){break u}break e}r.cursor=r.limit-f;u:{if(!ir()){break u}break e}r.cursor=r.limit-f;u:{if(!er()){break u}break e}r.cursor=r.limit-f}if(!fr()){r.cursor=r.limit-o;break i}}}r.bra=r.cursor;if(!r.slice_del()){return false}return true}function mr(){r.ket=r.cursor;if(!Z()){return false}r:{var i=r.limit-r.cursor;i:{if(!R()){break i}r.bra=r.cursor;if(!r.slice_del()){return false}var e=r.limit-r.cursor;e:{r.ket=r.cursor;u:{var u=r.limit-r.cursor;a:{if(!ar()){break a}r.bra=r.cursor;if(!r.slice_del()){return false}var a=r.limit-r.cursor;s:{if(!mr()){r.cursor=r.limit-a;break s}}break u}r.cursor=r.limit-u;if(!J()){r.cursor=r.limit-e;break e}r.bra=r.cursor;if(!r.slice_del()){return false}var s=r.limit-r.cursor;a:{r.ket=r.cursor;if(!ar()){r.cursor=r.limit-s;break a}r.bra=r.cursor;if(!r.slice_del()){return false}if(!mr()){r.cursor=r.limit-s;break a}}}}break r}r.cursor=r.limit-i;i:{if(!O()){break i}r.bra=r.cursor;if(!r.slice_del()){return false}var t=r.limit-r.cursor;e:{r.ket=r.cursor;u:{var l=r.limit-r.cursor;a:{if(!L()){break a}r.bra=r.cursor;if(!r.slice_del()){return false}break u}r.cursor=r.limit-l;a:{r.ket=r.cursor;s:{var c=r.limit-r.cursor;t:{if(!J()){break t}break s}r.cursor=r.limit-c;if(!K()){break a}}r.bra=r.cursor;if(!r.slice_del()){return false}var o=r.limit-r.cursor;s:{r.ket=r.cursor;if(!ar()){r.cursor=r.limit-o;break s}r.bra=r.cursor;if(!r.slice_del()){return false}if(!mr()){r.cursor=r.limit-o;break s}}break u}r.cursor=r.limit-l;if(!mr()){r.cursor=r.limit-t;break e}}}break r}r.cursor=r.limit-i;if(!U()){return false}i:{var f=r.limit-r.cursor;e:{if(!L()){break e}r.bra=r.cursor;if(!r.slice_del()){return false}break i}r.cursor=r.limit-f;e:{if(!K()){break e}r.bra=r.cursor;if(!r.slice_del()){return false}var n=r.limit-r.cursor;u:{r.ket=r.cursor;if(!ar()){r.cursor=r.limit-n;break u}r.bra=r.cursor;if(!r.slice_del()){return false}if(!mr()){r.cursor=r.limit-n;break u}}break i}r.cursor=r.limit-f;if(!mr()){return false}}}return true}function kr(){r:{var i=r.limit-r.cursor;i:{r.ket=r.cursor;if(!ar()){break i}r.bra=r.cursor;if(!r.slice_del()){return false}var e=r.limit-r.cursor;e:{if(!mr()){r.cursor=r.limit-e;break e}}break r}r.cursor=r.limit-i;i:{r.ket=r.cursor;if(!$()){break i}r.bra=r.cursor;if(!r.slice_del()){return false}var u=r.limit-r.cursor;e:{u:{var a=r.limit-r.cursor;a:{r.ket=r.cursor;if(!L()){break a}r.bra=r.cursor;if(!r.slice_del()){return false}break u}r.cursor=r.limit-a;a:{r.ket=r.cursor;s:{var s=r.limit-r.cursor;t:{if(!J()){break t}break s}r.cursor=r.limit-s;if(!K()){break a}}r.bra=r.cursor;if(!r.slice_del()){return false}var t=r.limit-r.cursor;s:{r.ket=r.cursor;if(!ar()){r.cursor=r.limit-t;break s}r.bra=r.cursor;if(!r.slice_del()){return false}if(!mr()){r.cursor=r.limit-t;break s}}break u}r.cursor=r.limit-a;r.ket=r.cursor;if(!ar()){r.cursor=r.limit-u;break e}r.bra=r.cursor;if(!r.slice_del()){return false}if(!mr()){r.cursor=r.limit-u;break e}}}break r}r.cursor=r.limit-i;i:{r.ket=r.cursor;e:{var l=r.limit-r.cursor;u:{if(!U()){break u}break e}r.cursor=r.limit-l;if(!Q()){break i}}e:{var c=r.limit-r.cursor;u:{if(!L()){break u}r.bra=r.cursor;if(!r.slice_del()){return false}break e}r.cursor=r.limit-c;u:{if(!K()){break u}r.bra=r.cursor;if(!r.slice_del()){return false}var o=r.limit-r.cursor;a:{r.ket=r.cursor;if(!ar()){r.cursor=r.limit-o;break a}r.bra=r.cursor;if(!r.slice_del()){return false}if(!mr()){r.cursor=r.limit-o;break a}}break e}r.cursor=r.limit-c;if(!mr()){break i}}break r}r.cursor=r.limit-i;i:{r.ket=r.cursor;e:{var f=r.limit-r.cursor;u:{if(!X()){break u}break e}r.cursor=r.limit-f;if(!N()){break i}}e:{var n=r.limit-r.cursor;u:{if(!K()){break u}r.bra=r.cursor;if(!r.slice_del()){return false}var b=r.limit-r.cursor;a:{r.ket=r.cursor;if(!ar()){r.cursor=r.limit-b;break a}r.bra=r.cursor;if(!r.slice_del()){return false}if(!mr()){r.cursor=r.limit-b;break a}}break e}r.cursor=r.limit-n;if(!L()){break i}}break r}r.cursor=r.limit-i;i:{r.ket=r.cursor;if(!V()){break i}r.bra=r.cursor;if(!r.slice_del()){return false}var m=r.limit-r.cursor;e:{r.ket=r.cursor;u:{var k=r.limit-r.cursor;a:{if(!J()){break a}r.bra=r.cursor;if(!r.slice_del()){return false}var _=r.limit-r.cursor;s:{r.ket=r.cursor;if(!ar()){r.cursor=r.limit-_;break s}r.bra=r.cursor;if(!r.slice_del()){return false}if(!mr()){r.cursor=r.limit-_;break s}}break u}r.cursor=r.limit-k;a:{if(!ar()){break a}r.bra=r.cursor;if(!r.slice_del()){return false}var v=r.limit-r.cursor;s:{if(!mr()){r.cursor=r.limit-v;break s}}break u}r.cursor=r.limit-k;if(!mr()){r.cursor=r.limit-m;break e}}}break r}r.cursor=r.limit-i;i:{r.ket=r.cursor;e:{var d=r.limit-r.cursor;u:{if(!O()){break u}break e}r.cursor=r.limit-d;if(!Y()){break i}}r.bra=r.cursor;if(!r.slice_del()){return false}var g=r.limit-r.cursor;e:{u:{var w=r.limit-r.cursor;a:{r.ket=r.cursor;if(!ar()){break a}r.bra=r.cursor;if(!r.slice_del()){return false}if(!mr()){break a}break u}r.cursor=r.limit-w;a:{r.ket=r.cursor;s:{var q=r.limit-r.cursor;t:{if(!J()){break t}break s}r.cursor=r.limit-q;if(!K()){break a}}r.bra=r.cursor;if(!r.slice_del()){return false}var p=r.limit-r.cursor;s:{r.ket=r.cursor;if(!ar()){r.cursor=r.limit-p;break s}r.bra=r.cursor;if(!r.slice_del()){return false}if(!mr()){r.cursor=r.limit-p;break s}}break u}r.cursor=r.limit-w;if(!mr()){r.cursor=r.limit-g;break e}}}break r}r.cursor=r.limit-i;i:{r.ket=r.cursor;if(!L()){break i}r.bra=r.cursor;if(!r.slice_del()){return false}break r}r.cursor=r.limit-i;i:{if(!mr()){break i}break r}r.cursor=r.limit-i;i:{r.ket=r.cursor;e:{var h=r.limit-r.cursor;u:{if(!R()){break u}break e}r.cursor=r.limit-h;u:{if(!M()){break u}break e}r.cursor=r.limit-h;if(!P()){break i}}r.bra=r.cursor;if(!r.slice_del()){return false}var z=r.limit-r.cursor;e:{r.ket=r.cursor;u:{var y=r.limit-r.cursor;a:{if(!J()){break a}r.bra=r.cursor;if(!r.slice_del()){return false}var C=r.limit-r.cursor;s:{r.ket=r.cursor;if(!ar()){r.cursor=r.limit-C;break s}}break u}r.cursor=r.limit-y;if(!ar()){r.cursor=r.limit-z;break e}}r.bra=r.cursor;if(!r.slice_del()){return false}r.ket=r.cursor;if(!mr()){r.cursor=r.limit-z;break e}}break r}r.cursor=r.limit-i;r.ket=r.cursor;i:{var S=r.limit-r.cursor;e:{if(!J()){break e}break i}r.cursor=r.limit-S;if(!K()){return false}}r.bra=r.cursor;if(!r.slice_del()){return false}var B=r.limit-r.cursor;i:{r.ket=r.cursor;if(!ar()){r.cursor=r.limit-B;break i}r.bra=r.cursor;if(!r.slice_del()){return false}if(!mr()){r.cursor=r.limit-B;break i}}}return true}function _r(){var i;r.ket=r.cursor;i=r.find_among_b(y);if(i==0){return false}r.bra=r.cursor;switch(i){case 1:if(!r.slice_from("p")){return false}break;case 2:if(!r.slice_from("ç")){return false}break;case 3:if(!r.slice_from("t")){return false}break;case 4:if(!r.slice_from("k")){return false}break}return true}function vr(){var i=r.limit-r.cursor;r:{var e=r.limit-r.cursor;i:{if(!r.eq_s_b("d")){break i}break r}r.cursor=r.limit-e;if(!r.eq_s_b("g")){return false}}r.cursor=r.limit-i;r:{var u=r.limit-r.cursor;i:{var a=r.limit-r.cursor;e:while(true){var s=r.limit-r.cursor;u:{if(!r.in_grouping_b(C,97,305)){break u}r.cursor=r.limit-s;break e}r.cursor=r.limit-s;if(r.cursor<=r.limit_backward){break i}r.cursor--}e:{var t=r.limit-r.cursor;u:{if(!r.eq_s_b("a")){break u}break e}r.cursor=r.limit-t;if(!r.eq_s_b("ı")){break i}}r.cursor=r.limit-a;{var l=r.cursor;r.insert(r.cursor,r.cursor,"ı");r.cursor=l}break r}r.cursor=r.limit-u;i:{var c=r.limit-r.cursor;e:while(true){var o=r.limit-r.cursor;u:{if(!r.in_grouping_b(C,97,305)){break u}r.cursor=r.limit-o;break e}r.cursor=r.limit-o;if(r.cursor<=r.limit_backward){break i}r.cursor--}e:{var f=r.limit-r.cursor;u:{if(!r.eq_s_b("e")){break u}break e}r.cursor=r.limit-f;if(!r.eq_s_b("i")){break i}}r.cursor=r.limit-c;{var n=r.cursor;r.insert(r.cursor,r.cursor,"i");r.cursor=n}break r}r.cursor=r.limit-u;i:{var b=r.limit-r.cursor;e:while(true){var m=r.limit-r.cursor;u:{if(!r.in_grouping_b(C,97,305)){break u}r.cursor=r.limit-m;break e}r.cursor=r.limit-m;if(r.cursor<=r.limit_backward){break i}r.cursor--}e:{var k=r.limit-r.cursor;u:{if(!r.eq_s_b("o")){break u}break e}r.cursor=r.limit-k;if(!r.eq_s_b("u")){break i}}r.cursor=r.limit-b;{var _=r.cursor;r.insert(r.cursor,r.cursor,"u");r.cursor=_}break r}r.cursor=r.limit-u;var v=r.limit-r.cursor;i:while(true){var d=r.limit-r.cursor;e:{if(!r.in_grouping_b(C,97,305)){break e}r.cursor=r.limit-d;break i}r.cursor=r.limit-d;if(r.cursor<=r.limit_backward){return false}r.cursor--}i:{var g=r.limit-r.cursor;e:{if(!r.eq_s_b("ö")){break e}break i}r.cursor=r.limit-g;if(!r.eq_s_b("ü")){return false}}r.cursor=r.limit-v;{var w=r.cursor;r.insert(r.cursor,r.cursor,"ü");r.cursor=w}}return true}function dr(){if(!r.eq_s_b("ad")){return false}var i=r.limit-r.cursor;r:{if(!r.eq_s_b("soy")){r.cursor=r.limit-i;break r}}if(r.cursor>r.limit_backward){return false}return true}function gr(){var i=r.cursor;{var e=2;while(true){var u=r.cursor;r:{i:while(true){e:{if(!r.in_grouping(C,97,305)){break e}break i}if(r.cursor>=r.limit){break r}r.cursor++}e--;continue}r.cursor=u;break}if(e>0){return false}}r.cursor=i;return true}function wr(){r.limit_backward=r.cursor;r.cursor=r.limit;{var i=r.limit-r.cursor;r:{if(!dr()){break r}return false}r.cursor=r.limit-i}var e=r.limit-r.cursor;vr();r.cursor=r.limit-e;var u=r.limit-r.cursor;_r();r.cursor=r.limit-u;r.cursor=r.limit_backward;return true}this.stem=function(){if(!gr()){return false}r.limit_backward=r.cursor;r.cursor=r.limit;var i=r.limit-r.cursor;br();r.cursor=r.limit-i;if(!D){return false}var e=r.limit-r.cursor;kr();r.cursor=r.limit-e;r.cursor=r.limit_backward;if(!wr()){return false}return true};this["stemWord"]=function(i){r.setCurrent(i);this.stem();return r.getCurrent()}};
+/**@constructor*/
+BaseStemmer = function() {
+    this.setCurrent = function(value) {
+        this.current = value;
+        this.cursor = 0;
+        this.limit = this.current.length;
+        this.limit_backward = 0;
+        this.bra = this.cursor;
+        this.ket = this.limit;
+    };
+
+    this.getCurrent = function() {
+        return this.current;
+    };
+
+    this.copy_from = function(other) {
+        this.current          = other.current;
+        this.cursor           = other.cursor;
+        this.limit            = other.limit;
+        this.limit_backward   = other.limit_backward;
+        this.bra              = other.bra;
+        this.ket              = other.ket;
+    };
+
+    this.in_grouping = function(s, min, max) {
+        if (this.cursor >= this.limit) return false;
+        var ch = this.current.charCodeAt(this.cursor);
+        if (ch > max || ch < min) return false;
+        ch -= min;
+        if ((s[ch >>> 3] & (0x1 << (ch & 0x7))) == 0) return false;
+        this.cursor++;
+        return true;
+    };
+
+    this.in_grouping_b = function(s, min, max) {
+        if (this.cursor <= this.limit_backward) return false;
+        var ch = this.current.charCodeAt(this.cursor - 1);
+        if (ch > max || ch < min) return false;
+        ch -= min;
+        if ((s[ch >>> 3] & (0x1 << (ch & 0x7))) == 0) return false;
+        this.cursor--;
+        return true;
+    };
+
+    this.out_grouping = function(s, min, max) {
+        if (this.cursor >= this.limit) return false;
+        var ch = this.current.charCodeAt(this.cursor);
+        if (ch > max || ch < min) {
+            this.cursor++;
+            return true;
+        }
+        ch -= min;
+        if ((s[ch >>> 3] & (0X1 << (ch & 0x7))) == 0) {
+            this.cursor++;
+            return true;
+        }
+        return false;
+    };
+
+    this.out_grouping_b = function(s, min, max) {
+        if (this.cursor <= this.limit_backward) return false;
+        var ch = this.current.charCodeAt(this.cursor - 1);
+        if (ch > max || ch < min) {
+            this.cursor--;
+            return true;
+        }
+        ch -= min;
+        if ((s[ch >>> 3] & (0x1 << (ch & 0x7))) == 0) {
+            this.cursor--;
+            return true;
+        }
+        return false;
+    };
+
+    this.eq_s = function(s)
+    {
+        if (this.limit - this.cursor < s.length) return false;
+        if (this.current.slice(this.cursor, this.cursor + s.length) != s)
+        {
+            return false;
+        }
+        this.cursor += s.length;
+        return true;
+    };
+
+    this.eq_s_b = function(s)
+    {
+        if (this.cursor - this.limit_backward < s.length) return false;
+        if (this.current.slice(this.cursor - s.length, this.cursor) != s)
+        {
+            return false;
+        }
+        this.cursor -= s.length;
+        return true;
+    };
+
+    /** @return {number} */ this.find_among = function(v)
+    {
+        var i = 0;
+        var j = v.length;
+
+        var c = this.cursor;
+        var l = this.limit;
+
+        var common_i = 0;
+        var common_j = 0;
+
+        var first_key_inspected = false;
+
+        while (true)
+        {
+            var k = i + ((j - i) >>> 1);
+            var diff = 0;
+            var common = common_i < common_j ? common_i : common_j; // smaller
+            // w[0]: string, w[1]: substring_i, w[2]: result, w[3]: function (optional)
+            var w = v[k];
+            var i2;
+            for (i2 = common; i2 < w[0].length; i2++)
+            {
+                if (c + common == l)
+                {
+                    diff = -1;
+                    break;
+                }
+                diff = this.current.charCodeAt(c + common) - w[0].charCodeAt(i2);
+                if (diff != 0) break;
+                common++;
+            }
+            if (diff < 0)
+            {
+                j = k;
+                common_j = common;
+            }
+            else
+            {
+                i = k;
+                common_i = common;
+            }
+            if (j - i <= 1)
+            {
+                if (i > 0) break; // v->s has been inspected
+                if (j == i) break; // only one item in v
+
+                // - but now we need to go round once more to get
+                // v->s inspected. This looks messy, but is actually
+                // the optimal approach.
+
+                if (first_key_inspected) break;
+                first_key_inspected = true;
+            }
+        }
+        do {
+            var w = v[i];
+            if (common_i >= w[0].length)
+            {
+                this.cursor = c + w[0].length;
+                if (w.length < 4) return w[2];
+                var res = w[3](this);
+                this.cursor = c + w[0].length;
+                if (res) return w[2];
+            }
+            i = w[1];
+        } while (i >= 0);
+        return 0;
+    };
+
+    // find_among_b is for backwards processing. Same comments apply
+    this.find_among_b = function(v)
+    {
+        var i = 0;
+        var j = v.length
+
+        var c = this.cursor;
+        var lb = this.limit_backward;
+
+        var common_i = 0;
+        var common_j = 0;
+
+        var first_key_inspected = false;
+
+        while (true)
+        {
+            var k = i + ((j - i) >> 1);
+            var diff = 0;
+            var common = common_i < common_j ? common_i : common_j;
+            var w = v[k];
+            var i2;
+            for (i2 = w[0].length - 1 - common; i2 >= 0; i2--)
+            {
+                if (c - common == lb)
+                {
+                    diff = -1;
+                    break;
+                }
+                diff = this.current.charCodeAt(c - 1 - common) - w[0].charCodeAt(i2);
+                if (diff != 0) break;
+                common++;
+            }
+            if (diff < 0)
+            {
+                j = k;
+                common_j = common;
+            }
+            else
+            {
+                i = k;
+                common_i = common;
+            }
+            if (j - i <= 1)
+            {
+                if (i > 0) break;
+                if (j == i) break;
+                if (first_key_inspected) break;
+                first_key_inspected = true;
+            }
+        }
+        do {
+            var w = v[i];
+            if (common_i >= w[0].length)
+            {
+                this.cursor = c - w[0].length;
+                if (w.length < 4) return w[2];
+                var res = w[3](this);
+                this.cursor = c - w[0].length;
+                if (res) return w[2];
+            }
+            i = w[1];
+        } while (i >= 0);
+        return 0;
+    };
+
+    /* to replace chars between c_bra and c_ket in this.current by the
+     * chars in s.
+     */
+    this.replace_s = function(c_bra, c_ket, s)
+    {
+        var adjustment = s.length - (c_ket - c_bra);
+        this.current = this.current.slice(0, c_bra) + s + this.current.slice(c_ket);
+        this.limit += adjustment;
+        if (this.cursor >= c_ket) this.cursor += adjustment;
+        else if (this.cursor > c_bra) this.cursor = c_bra;
+        return adjustment;
+    };
+
+    this.slice_check = function()
+    {
+        if (this.bra < 0 ||
+            this.bra > this.ket ||
+            this.ket > this.limit ||
+            this.limit > this.current.length)
+        {
+            return false;
+        }
+        return true;
+    };
+
+    this.slice_from = function(s)
+    {
+        var result = false;
+        if (this.slice_check())
+        {
+            this.replace_s(this.bra, this.ket, s);
+            result = true;
+        }
+        return result;
+    };
+
+    this.slice_del = function()
+    {
+        return this.slice_from("");
+    };
+
+    this.insert = function(c_bra, c_ket, s)
+    {
+        var adjustment = this.replace_s(c_bra, c_ket, s);
+        if (c_bra <= this.bra) this.bra += adjustment;
+        if (c_bra <= this.ket) this.ket += adjustment;
+    };
+
+    this.slice_to = function()
+    {
+        var result = '';
+        if (this.slice_check())
+        {
+            result = this.current.slice(this.bra, this.ket);
+        }
+        return result;
+    };
+
+    this.assign_to = function()
+    {
+        return this.current.slice(0, this.limit);
+    };
+};
+
+// Generated by Snowball 2.1.0 - https://snowballstem.org/
+
+/**@constructor*/
+TurkishStemmer = function() {
+    var base = new BaseStemmer();
+    /** @const */ var a_0 = [
+        ["m", -1, -1],
+        ["n", -1, -1],
+        ["miz", -1, -1],
+        ["niz", -1, -1],
+        ["muz", -1, -1],
+        ["nuz", -1, -1],
+        ["m\u00FCz", -1, -1],
+        ["n\u00FCz", -1, -1],
+        ["m\u0131z", -1, -1],
+        ["n\u0131z", -1, -1]
+    ];
+
+    /** @const */ var a_1 = [
+        ["leri", -1, -1],
+        ["lar\u0131", -1, -1]
+    ];
+
+    /** @const */ var a_2 = [
+        ["ni", -1, -1],
+        ["nu", -1, -1],
+        ["n\u00FC", -1, -1],
+        ["n\u0131", -1, -1]
+    ];
+
+    /** @const */ var a_3 = [
+        ["in", -1, -1],
+        ["un", -1, -1],
+        ["\u00FCn", -1, -1],
+        ["\u0131n", -1, -1]
+    ];
+
+    /** @const */ var a_4 = [
+        ["a", -1, -1],
+        ["e", -1, -1]
+    ];
+
+    /** @const */ var a_5 = [
+        ["na", -1, -1],
+        ["ne", -1, -1]
+    ];
+
+    /** @const */ var a_6 = [
+        ["da", -1, -1],
+        ["ta", -1, -1],
+        ["de", -1, -1],
+        ["te", -1, -1]
+    ];
+
+    /** @const */ var a_7 = [
+        ["nda", -1, -1],
+        ["nde", -1, -1]
+    ];
+
+    /** @const */ var a_8 = [
+        ["dan", -1, -1],
+        ["tan", -1, -1],
+        ["den", -1, -1],
+        ["ten", -1, -1]
+    ];
+
+    /** @const */ var a_9 = [
+        ["ndan", -1, -1],
+        ["nden", -1, -1]
+    ];
+
+    /** @const */ var a_10 = [
+        ["la", -1, -1],
+        ["le", -1, -1]
+    ];
+
+    /** @const */ var a_11 = [
+        ["ca", -1, -1],
+        ["ce", -1, -1]
+    ];
+
+    /** @const */ var a_12 = [
+        ["im", -1, -1],
+        ["um", -1, -1],
+        ["\u00FCm", -1, -1],
+        ["\u0131m", -1, -1]
+    ];
+
+    /** @const */ var a_13 = [
+        ["sin", -1, -1],
+        ["sun", -1, -1],
+        ["s\u00FCn", -1, -1],
+        ["s\u0131n", -1, -1]
+    ];
+
+    /** @const */ var a_14 = [
+        ["iz", -1, -1],
+        ["uz", -1, -1],
+        ["\u00FCz", -1, -1],
+        ["\u0131z", -1, -1]
+    ];
+
+    /** @const */ var a_15 = [
+        ["siniz", -1, -1],
+        ["sunuz", -1, -1],
+        ["s\u00FCn\u00FCz", -1, -1],
+        ["s\u0131n\u0131z", -1, -1]
+    ];
+
+    /** @const */ var a_16 = [
+        ["lar", -1, -1],
+        ["ler", -1, -1]
+    ];
+
+    /** @const */ var a_17 = [
+        ["niz", -1, -1],
+        ["nuz", -1, -1],
+        ["n\u00FCz", -1, -1],
+        ["n\u0131z", -1, -1]
+    ];
+
+    /** @const */ var a_18 = [
+        ["dir", -1, -1],
+        ["tir", -1, -1],
+        ["dur", -1, -1],
+        ["tur", -1, -1],
+        ["d\u00FCr", -1, -1],
+        ["t\u00FCr", -1, -1],
+        ["d\u0131r", -1, -1],
+        ["t\u0131r", -1, -1]
+    ];
+
+    /** @const */ var a_19 = [
+        ["cas\u0131na", -1, -1],
+        ["cesine", -1, -1]
+    ];
+
+    /** @const */ var a_20 = [
+        ["di", -1, -1],
+        ["ti", -1, -1],
+        ["dik", -1, -1],
+        ["tik", -1, -1],
+        ["duk", -1, -1],
+        ["tuk", -1, -1],
+        ["d\u00FCk", -1, -1],
+        ["t\u00FCk", -1, -1],
+        ["d\u0131k", -1, -1],
+        ["t\u0131k", -1, -1],
+        ["dim", -1, -1],
+        ["tim", -1, -1],
+        ["dum", -1, -1],
+        ["tum", -1, -1],
+        ["d\u00FCm", -1, -1],
+        ["t\u00FCm", -1, -1],
+        ["d\u0131m", -1, -1],
+        ["t\u0131m", -1, -1],
+        ["din", -1, -1],
+        ["tin", -1, -1],
+        ["dun", -1, -1],
+        ["tun", -1, -1],
+        ["d\u00FCn", -1, -1],
+        ["t\u00FCn", -1, -1],
+        ["d\u0131n", -1, -1],
+        ["t\u0131n", -1, -1],
+        ["du", -1, -1],
+        ["tu", -1, -1],
+        ["d\u00FC", -1, -1],
+        ["t\u00FC", -1, -1],
+        ["d\u0131", -1, -1],
+        ["t\u0131", -1, -1]
+    ];
+
+    /** @const */ var a_21 = [
+        ["sa", -1, -1],
+        ["se", -1, -1],
+        ["sak", -1, -1],
+        ["sek", -1, -1],
+        ["sam", -1, -1],
+        ["sem", -1, -1],
+        ["san", -1, -1],
+        ["sen", -1, -1]
+    ];
+
+    /** @const */ var a_22 = [
+        ["mi\u015F", -1, -1],
+        ["mu\u015F", -1, -1],
+        ["m\u00FC\u015F", -1, -1],
+        ["m\u0131\u015F", -1, -1]
+    ];
+
+    /** @const */ var a_23 = [
+        ["b", -1, 1],
+        ["c", -1, 2],
+        ["d", -1, 3],
+        ["\u011F", -1, 4]
+    ];
+
+    /** @const */ var /** Array<int> */ g_vowel = [17, 65, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 8, 0, 0, 0, 0, 0, 0, 1];
+
+    /** @const */ var /** Array<int> */ g_U = [1, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 1];
+
+    /** @const */ var /** Array<int> */ g_vowel1 = [1, 64, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+
+    /** @const */ var /** Array<int> */ g_vowel2 = [17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 130];
+
+    /** @const */ var /** Array<int> */ g_vowel3 = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+
+    /** @const */ var /** Array<int> */ g_vowel4 = [17];
+
+    /** @const */ var /** Array<int> */ g_vowel5 = [65];
+
+    /** @const */ var /** Array<int> */ g_vowel6 = [65];
+
+    var /** boolean */ B_continue_stemming_noun_suffixes = false;
+
+
+    /** @return {boolean} */
+    function r_check_vowel_harmony() {
+        var /** number */ v_1 = base.limit - base.cursor;
+        golab0: while(true)
+        {
+            var /** number */ v_2 = base.limit - base.cursor;
+            lab1: {
+                if (!(base.in_grouping_b(g_vowel, 97, 305)))
+                {
+                    break lab1;
+                }
+                base.cursor = base.limit - v_2;
+                break golab0;
+            }
+            base.cursor = base.limit - v_2;
+            if (base.cursor <= base.limit_backward)
+            {
+                return false;
+            }
+            base.cursor--;
+        }
+        lab2: {
+            var /** number */ v_3 = base.limit - base.cursor;
+            lab3: {
+                if (!(base.eq_s_b("a")))
+                {
+                    break lab3;
+                }
+                golab4: while(true)
+                {
+                    var /** number */ v_4 = base.limit - base.cursor;
+                    lab5: {
+                        if (!(base.in_grouping_b(g_vowel1, 97, 305)))
+                        {
+                            break lab5;
+                        }
+                        base.cursor = base.limit - v_4;
+                        break golab4;
+                    }
+                    base.cursor = base.limit - v_4;
+                    if (base.cursor <= base.limit_backward)
+                    {
+                        break lab3;
+                    }
+                    base.cursor--;
+                }
+                break lab2;
+            }
+            base.cursor = base.limit - v_3;
+            lab6: {
+                if (!(base.eq_s_b("e")))
+                {
+                    break lab6;
+                }
+                golab7: while(true)
+                {
+                    var /** number */ v_5 = base.limit - base.cursor;
+                    lab8: {
+                        if (!(base.in_grouping_b(g_vowel2, 101, 252)))
+                        {
+                            break lab8;
+                        }
+                        base.cursor = base.limit - v_5;
+                        break golab7;
+                    }
+                    base.cursor = base.limit - v_5;
+                    if (base.cursor <= base.limit_backward)
+                    {
+                        break lab6;
+                    }
+                    base.cursor--;
+                }
+                break lab2;
+            }
+            base.cursor = base.limit - v_3;
+            lab9: {
+                if (!(base.eq_s_b("\u0131")))
+                {
+                    break lab9;
+                }
+                golab10: while(true)
+                {
+                    var /** number */ v_6 = base.limit - base.cursor;
+                    lab11: {
+                        if (!(base.in_grouping_b(g_vowel3, 97, 305)))
+                        {
+                            break lab11;
+                        }
+                        base.cursor = base.limit - v_6;
+                        break golab10;
+                    }
+                    base.cursor = base.limit - v_6;
+                    if (base.cursor <= base.limit_backward)
+                    {
+                        break lab9;
+                    }
+                    base.cursor--;
+                }
+                break lab2;
+            }
+            base.cursor = base.limit - v_3;
+            lab12: {
+                if (!(base.eq_s_b("i")))
+                {
+                    break lab12;
+                }
+                golab13: while(true)
+                {
+                    var /** number */ v_7 = base.limit - base.cursor;
+                    lab14: {
+                        if (!(base.in_grouping_b(g_vowel4, 101, 105)))
+                        {
+                            break lab14;
+                        }
+                        base.cursor = base.limit - v_7;
+                        break golab13;
+                    }
+                    base.cursor = base.limit - v_7;
+                    if (base.cursor <= base.limit_backward)
+                    {
+                        break lab12;
+                    }
+                    base.cursor--;
+                }
+                break lab2;
+            }
+            base.cursor = base.limit - v_3;
+            lab15: {
+                if (!(base.eq_s_b("o")))
+                {
+                    break lab15;
+                }
+                golab16: while(true)
+                {
+                    var /** number */ v_8 = base.limit - base.cursor;
+                    lab17: {
+                        if (!(base.in_grouping_b(g_vowel5, 111, 117)))
+                        {
+                            break lab17;
+                        }
+                        base.cursor = base.limit - v_8;
+                        break golab16;
+                    }
+                    base.cursor = base.limit - v_8;
+                    if (base.cursor <= base.limit_backward)
+                    {
+                        break lab15;
+                    }
+                    base.cursor--;
+                }
+                break lab2;
+            }
+            base.cursor = base.limit - v_3;
+            lab18: {
+                if (!(base.eq_s_b("\u00F6")))
+                {
+                    break lab18;
+                }
+                golab19: while(true)
+                {
+                    var /** number */ v_9 = base.limit - base.cursor;
+                    lab20: {
+                        if (!(base.in_grouping_b(g_vowel6, 246, 252)))
+                        {
+                            break lab20;
+                        }
+                        base.cursor = base.limit - v_9;
+                        break golab19;
+                    }
+                    base.cursor = base.limit - v_9;
+                    if (base.cursor <= base.limit_backward)
+                    {
+                        break lab18;
+                    }
+                    base.cursor--;
+                }
+                break lab2;
+            }
+            base.cursor = base.limit - v_3;
+            lab21: {
+                if (!(base.eq_s_b("u")))
+                {
+                    break lab21;
+                }
+                golab22: while(true)
+                {
+                    var /** number */ v_10 = base.limit - base.cursor;
+                    lab23: {
+                        if (!(base.in_grouping_b(g_vowel5, 111, 117)))
+                        {
+                            break lab23;
+                        }
+                        base.cursor = base.limit - v_10;
+                        break golab22;
+                    }
+                    base.cursor = base.limit - v_10;
+                    if (base.cursor <= base.limit_backward)
+                    {
+                        break lab21;
+                    }
+                    base.cursor--;
+                }
+                break lab2;
+            }
+            base.cursor = base.limit - v_3;
+            if (!(base.eq_s_b("\u00FC")))
+            {
+                return false;
+            }
+            golab24: while(true)
+            {
+                var /** number */ v_11 = base.limit - base.cursor;
+                lab25: {
+                    if (!(base.in_grouping_b(g_vowel6, 246, 252)))
+                    {
+                        break lab25;
+                    }
+                    base.cursor = base.limit - v_11;
+                    break golab24;
+                }
+                base.cursor = base.limit - v_11;
+                if (base.cursor <= base.limit_backward)
+                {
+                    return false;
+                }
+                base.cursor--;
+            }
+        }
+        base.cursor = base.limit - v_1;
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_suffix_with_optional_n_consonant() {
+        lab0: {
+            var /** number */ v_1 = base.limit - base.cursor;
+            lab1: {
+                if (!(base.eq_s_b("n")))
+                {
+                    break lab1;
+                }
+                var /** number */ v_2 = base.limit - base.cursor;
+                if (!(base.in_grouping_b(g_vowel, 97, 305)))
+                {
+                    break lab1;
+                }
+                base.cursor = base.limit - v_2;
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            {
+                var /** number */ v_3 = base.limit - base.cursor;
+                lab2: {
+                    var /** number */ v_4 = base.limit - base.cursor;
+                    if (!(base.eq_s_b("n")))
+                    {
+                        break lab2;
+                    }
+                    base.cursor = base.limit - v_4;
+                    return false;
+                }
+                base.cursor = base.limit - v_3;
+            }
+            var /** number */ v_5 = base.limit - base.cursor;
+            if (base.cursor <= base.limit_backward)
+            {
+                return false;
+            }
+            base.cursor--;
+            if (!(base.in_grouping_b(g_vowel, 97, 305)))
+            {
+                return false;
+            }
+            base.cursor = base.limit - v_5;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_suffix_with_optional_s_consonant() {
+        lab0: {
+            var /** number */ v_1 = base.limit - base.cursor;
+            lab1: {
+                if (!(base.eq_s_b("s")))
+                {
+                    break lab1;
+                }
+                var /** number */ v_2 = base.limit - base.cursor;
+                if (!(base.in_grouping_b(g_vowel, 97, 305)))
+                {
+                    break lab1;
+                }
+                base.cursor = base.limit - v_2;
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            {
+                var /** number */ v_3 = base.limit - base.cursor;
+                lab2: {
+                    var /** number */ v_4 = base.limit - base.cursor;
+                    if (!(base.eq_s_b("s")))
+                    {
+                        break lab2;
+                    }
+                    base.cursor = base.limit - v_4;
+                    return false;
+                }
+                base.cursor = base.limit - v_3;
+            }
+            var /** number */ v_5 = base.limit - base.cursor;
+            if (base.cursor <= base.limit_backward)
+            {
+                return false;
+            }
+            base.cursor--;
+            if (!(base.in_grouping_b(g_vowel, 97, 305)))
+            {
+                return false;
+            }
+            base.cursor = base.limit - v_5;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_suffix_with_optional_y_consonant() {
+        lab0: {
+            var /** number */ v_1 = base.limit - base.cursor;
+            lab1: {
+                if (!(base.eq_s_b("y")))
+                {
+                    break lab1;
+                }
+                var /** number */ v_2 = base.limit - base.cursor;
+                if (!(base.in_grouping_b(g_vowel, 97, 305)))
+                {
+                    break lab1;
+                }
+                base.cursor = base.limit - v_2;
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            {
+                var /** number */ v_3 = base.limit - base.cursor;
+                lab2: {
+                    var /** number */ v_4 = base.limit - base.cursor;
+                    if (!(base.eq_s_b("y")))
+                    {
+                        break lab2;
+                    }
+                    base.cursor = base.limit - v_4;
+                    return false;
+                }
+                base.cursor = base.limit - v_3;
+            }
+            var /** number */ v_5 = base.limit - base.cursor;
+            if (base.cursor <= base.limit_backward)
+            {
+                return false;
+            }
+            base.cursor--;
+            if (!(base.in_grouping_b(g_vowel, 97, 305)))
+            {
+                return false;
+            }
+            base.cursor = base.limit - v_5;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_suffix_with_optional_U_vowel() {
+        lab0: {
+            var /** number */ v_1 = base.limit - base.cursor;
+            lab1: {
+                if (!(base.in_grouping_b(g_U, 105, 305)))
+                {
+                    break lab1;
+                }
+                var /** number */ v_2 = base.limit - base.cursor;
+                if (!(base.out_grouping_b(g_vowel, 97, 305)))
+                {
+                    break lab1;
+                }
+                base.cursor = base.limit - v_2;
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            {
+                var /** number */ v_3 = base.limit - base.cursor;
+                lab2: {
+                    var /** number */ v_4 = base.limit - base.cursor;
+                    if (!(base.in_grouping_b(g_U, 105, 305)))
+                    {
+                        break lab2;
+                    }
+                    base.cursor = base.limit - v_4;
+                    return false;
+                }
+                base.cursor = base.limit - v_3;
+            }
+            var /** number */ v_5 = base.limit - base.cursor;
+            if (base.cursor <= base.limit_backward)
+            {
+                return false;
+            }
+            base.cursor--;
+            if (!(base.out_grouping_b(g_vowel, 97, 305)))
+            {
+                return false;
+            }
+            base.cursor = base.limit - v_5;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_possessives() {
+        if (base.find_among_b(a_0) == 0)
+        {
+            return false;
+        }
+        if (!r_mark_suffix_with_optional_U_vowel())
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_sU() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (!(base.in_grouping_b(g_U, 105, 305)))
+        {
+            return false;
+        }
+        if (!r_mark_suffix_with_optional_s_consonant())
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_lArI() {
+        if (base.find_among_b(a_1) == 0)
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_yU() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (!(base.in_grouping_b(g_U, 105, 305)))
+        {
+            return false;
+        }
+        if (!r_mark_suffix_with_optional_y_consonant())
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_nU() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_2) == 0)
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_nUn() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_3) == 0)
+        {
+            return false;
+        }
+        if (!r_mark_suffix_with_optional_n_consonant())
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_yA() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_4) == 0)
+        {
+            return false;
+        }
+        if (!r_mark_suffix_with_optional_y_consonant())
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_nA() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_5) == 0)
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_DA() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_6) == 0)
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_ndA() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_7) == 0)
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_DAn() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_8) == 0)
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_ndAn() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_9) == 0)
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_ylA() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_10) == 0)
+        {
+            return false;
+        }
+        if (!r_mark_suffix_with_optional_y_consonant())
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_ki() {
+        if (!(base.eq_s_b("ki")))
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_ncA() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_11) == 0)
+        {
+            return false;
+        }
+        if (!r_mark_suffix_with_optional_n_consonant())
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_yUm() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_12) == 0)
+        {
+            return false;
+        }
+        if (!r_mark_suffix_with_optional_y_consonant())
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_sUn() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_13) == 0)
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_yUz() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_14) == 0)
+        {
+            return false;
+        }
+        if (!r_mark_suffix_with_optional_y_consonant())
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_sUnUz() {
+        if (base.find_among_b(a_15) == 0)
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_lAr() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_16) == 0)
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_nUz() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_17) == 0)
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_DUr() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_18) == 0)
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_cAsInA() {
+        if (base.find_among_b(a_19) == 0)
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_yDU() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_20) == 0)
+        {
+            return false;
+        }
+        if (!r_mark_suffix_with_optional_y_consonant())
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_ysA() {
+        if (base.find_among_b(a_21) == 0)
+        {
+            return false;
+        }
+        if (!r_mark_suffix_with_optional_y_consonant())
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_ymUs_() {
+        if (!r_check_vowel_harmony())
+        {
+            return false;
+        }
+        if (base.find_among_b(a_22) == 0)
+        {
+            return false;
+        }
+        if (!r_mark_suffix_with_optional_y_consonant())
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_mark_yken() {
+        if (!(base.eq_s_b("ken")))
+        {
+            return false;
+        }
+        if (!r_mark_suffix_with_optional_y_consonant())
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_stem_nominal_verb_suffixes() {
+        base.ket = base.cursor;
+        B_continue_stemming_noun_suffixes = true;
+        lab0: {
+            var /** number */ v_1 = base.limit - base.cursor;
+            lab1: {
+                lab2: {
+                    var /** number */ v_2 = base.limit - base.cursor;
+                    lab3: {
+                        if (!r_mark_ymUs_())
+                        {
+                            break lab3;
+                        }
+                        break lab2;
+                    }
+                    base.cursor = base.limit - v_2;
+                    lab4: {
+                        if (!r_mark_yDU())
+                        {
+                            break lab4;
+                        }
+                        break lab2;
+                    }
+                    base.cursor = base.limit - v_2;
+                    lab5: {
+                        if (!r_mark_ysA())
+                        {
+                            break lab5;
+                        }
+                        break lab2;
+                    }
+                    base.cursor = base.limit - v_2;
+                    if (!r_mark_yken())
+                    {
+                        break lab1;
+                    }
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            lab6: {
+                if (!r_mark_cAsInA())
+                {
+                    break lab6;
+                }
+                lab7: {
+                    var /** number */ v_3 = base.limit - base.cursor;
+                    lab8: {
+                        if (!r_mark_sUnUz())
+                        {
+                            break lab8;
+                        }
+                        break lab7;
+                    }
+                    base.cursor = base.limit - v_3;
+                    lab9: {
+                        if (!r_mark_lAr())
+                        {
+                            break lab9;
+                        }
+                        break lab7;
+                    }
+                    base.cursor = base.limit - v_3;
+                    lab10: {
+                        if (!r_mark_yUm())
+                        {
+                            break lab10;
+                        }
+                        break lab7;
+                    }
+                    base.cursor = base.limit - v_3;
+                    lab11: {
+                        if (!r_mark_sUn())
+                        {
+                            break lab11;
+                        }
+                        break lab7;
+                    }
+                    base.cursor = base.limit - v_3;
+                    lab12: {
+                        if (!r_mark_yUz())
+                        {
+                            break lab12;
+                        }
+                        break lab7;
+                    }
+                    base.cursor = base.limit - v_3;
+                }
+                if (!r_mark_ymUs_())
+                {
+                    break lab6;
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            lab13: {
+                if (!r_mark_lAr())
+                {
+                    break lab13;
+                }
+                base.bra = base.cursor;
+                if (!base.slice_del())
+                {
+                    return false;
+                }
+                var /** number */ v_4 = base.limit - base.cursor;
+                lab14: {
+                    base.ket = base.cursor;
+                    lab15: {
+                        var /** number */ v_5 = base.limit - base.cursor;
+                        lab16: {
+                            if (!r_mark_DUr())
+                            {
+                                break lab16;
+                            }
+                            break lab15;
+                        }
+                        base.cursor = base.limit - v_5;
+                        lab17: {
+                            if (!r_mark_yDU())
+                            {
+                                break lab17;
+                            }
+                            break lab15;
+                        }
+                        base.cursor = base.limit - v_5;
+                        lab18: {
+                            if (!r_mark_ysA())
+                            {
+                                break lab18;
+                            }
+                            break lab15;
+                        }
+                        base.cursor = base.limit - v_5;
+                        if (!r_mark_ymUs_())
+                        {
+                            base.cursor = base.limit - v_4;
+                            break lab14;
+                        }
+                    }
+                }
+                B_continue_stemming_noun_suffixes = false;
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            lab19: {
+                if (!r_mark_nUz())
+                {
+                    break lab19;
+                }
+                lab20: {
+                    var /** number */ v_6 = base.limit - base.cursor;
+                    lab21: {
+                        if (!r_mark_yDU())
+                        {
+                            break lab21;
+                        }
+                        break lab20;
+                    }
+                    base.cursor = base.limit - v_6;
+                    if (!r_mark_ysA())
+                    {
+                        break lab19;
+                    }
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            lab22: {
+                lab23: {
+                    var /** number */ v_7 = base.limit - base.cursor;
+                    lab24: {
+                        if (!r_mark_sUnUz())
+                        {
+                            break lab24;
+                        }
+                        break lab23;
+                    }
+                    base.cursor = base.limit - v_7;
+                    lab25: {
+                        if (!r_mark_yUz())
+                        {
+                            break lab25;
+                        }
+                        break lab23;
+                    }
+                    base.cursor = base.limit - v_7;
+                    lab26: {
+                        if (!r_mark_sUn())
+                        {
+                            break lab26;
+                        }
+                        break lab23;
+                    }
+                    base.cursor = base.limit - v_7;
+                    if (!r_mark_yUm())
+                    {
+                        break lab22;
+                    }
+                }
+                base.bra = base.cursor;
+                if (!base.slice_del())
+                {
+                    return false;
+                }
+                var /** number */ v_8 = base.limit - base.cursor;
+                lab27: {
+                    base.ket = base.cursor;
+                    if (!r_mark_ymUs_())
+                    {
+                        base.cursor = base.limit - v_8;
+                        break lab27;
+                    }
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            if (!r_mark_DUr())
+            {
+                return false;
+            }
+            base.bra = base.cursor;
+            if (!base.slice_del())
+            {
+                return false;
+            }
+            var /** number */ v_9 = base.limit - base.cursor;
+            lab28: {
+                base.ket = base.cursor;
+                lab29: {
+                    var /** number */ v_10 = base.limit - base.cursor;
+                    lab30: {
+                        if (!r_mark_sUnUz())
+                        {
+                            break lab30;
+                        }
+                        break lab29;
+                    }
+                    base.cursor = base.limit - v_10;
+                    lab31: {
+                        if (!r_mark_lAr())
+                        {
+                            break lab31;
+                        }
+                        break lab29;
+                    }
+                    base.cursor = base.limit - v_10;
+                    lab32: {
+                        if (!r_mark_yUm())
+                        {
+                            break lab32;
+                        }
+                        break lab29;
+                    }
+                    base.cursor = base.limit - v_10;
+                    lab33: {
+                        if (!r_mark_sUn())
+                        {
+                            break lab33;
+                        }
+                        break lab29;
+                    }
+                    base.cursor = base.limit - v_10;
+                    lab34: {
+                        if (!r_mark_yUz())
+                        {
+                            break lab34;
+                        }
+                        break lab29;
+                    }
+                    base.cursor = base.limit - v_10;
+                }
+                if (!r_mark_ymUs_())
+                {
+                    base.cursor = base.limit - v_9;
+                    break lab28;
+                }
+            }
+        }
+        base.bra = base.cursor;
+        if (!base.slice_del())
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_stem_suffix_chain_before_ki() {
+        base.ket = base.cursor;
+        if (!r_mark_ki())
+        {
+            return false;
+        }
+        lab0: {
+            var /** number */ v_1 = base.limit - base.cursor;
+            lab1: {
+                if (!r_mark_DA())
+                {
+                    break lab1;
+                }
+                base.bra = base.cursor;
+                if (!base.slice_del())
+                {
+                    return false;
+                }
+                var /** number */ v_2 = base.limit - base.cursor;
+                lab2: {
+                    base.ket = base.cursor;
+                    lab3: {
+                        var /** number */ v_3 = base.limit - base.cursor;
+                        lab4: {
+                            if (!r_mark_lAr())
+                            {
+                                break lab4;
+                            }
+                            base.bra = base.cursor;
+                            if (!base.slice_del())
+                            {
+                                return false;
+                            }
+                            var /** number */ v_4 = base.limit - base.cursor;
+                            lab5: {
+                                if (!r_stem_suffix_chain_before_ki())
+                                {
+                                    base.cursor = base.limit - v_4;
+                                    break lab5;
+                                }
+                            }
+                            break lab3;
+                        }
+                        base.cursor = base.limit - v_3;
+                        if (!r_mark_possessives())
+                        {
+                            base.cursor = base.limit - v_2;
+                            break lab2;
+                        }
+                        base.bra = base.cursor;
+                        if (!base.slice_del())
+                        {
+                            return false;
+                        }
+                        var /** number */ v_5 = base.limit - base.cursor;
+                        lab6: {
+                            base.ket = base.cursor;
+                            if (!r_mark_lAr())
+                            {
+                                base.cursor = base.limit - v_5;
+                                break lab6;
+                            }
+                            base.bra = base.cursor;
+                            if (!base.slice_del())
+                            {
+                                return false;
+                            }
+                            if (!r_stem_suffix_chain_before_ki())
+                            {
+                                base.cursor = base.limit - v_5;
+                                break lab6;
+                            }
+                        }
+                    }
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            lab7: {
+                if (!r_mark_nUn())
+                {
+                    break lab7;
+                }
+                base.bra = base.cursor;
+                if (!base.slice_del())
+                {
+                    return false;
+                }
+                var /** number */ v_6 = base.limit - base.cursor;
+                lab8: {
+                    base.ket = base.cursor;
+                    lab9: {
+                        var /** number */ v_7 = base.limit - base.cursor;
+                        lab10: {
+                            if (!r_mark_lArI())
+                            {
+                                break lab10;
+                            }
+                            base.bra = base.cursor;
+                            if (!base.slice_del())
+                            {
+                                return false;
+                            }
+                            break lab9;
+                        }
+                        base.cursor = base.limit - v_7;
+                        lab11: {
+                            base.ket = base.cursor;
+                            lab12: {
+                                var /** number */ v_8 = base.limit - base.cursor;
+                                lab13: {
+                                    if (!r_mark_possessives())
+                                    {
+                                        break lab13;
+                                    }
+                                    break lab12;
+                                }
+                                base.cursor = base.limit - v_8;
+                                if (!r_mark_sU())
+                                {
+                                    break lab11;
+                                }
+                            }
+                            base.bra = base.cursor;
+                            if (!base.slice_del())
+                            {
+                                return false;
+                            }
+                            var /** number */ v_9 = base.limit - base.cursor;
+                            lab14: {
+                                base.ket = base.cursor;
+                                if (!r_mark_lAr())
+                                {
+                                    base.cursor = base.limit - v_9;
+                                    break lab14;
+                                }
+                                base.bra = base.cursor;
+                                if (!base.slice_del())
+                                {
+                                    return false;
+                                }
+                                if (!r_stem_suffix_chain_before_ki())
+                                {
+                                    base.cursor = base.limit - v_9;
+                                    break lab14;
+                                }
+                            }
+                            break lab9;
+                        }
+                        base.cursor = base.limit - v_7;
+                        if (!r_stem_suffix_chain_before_ki())
+                        {
+                            base.cursor = base.limit - v_6;
+                            break lab8;
+                        }
+                    }
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            if (!r_mark_ndA())
+            {
+                return false;
+            }
+            lab15: {
+                var /** number */ v_10 = base.limit - base.cursor;
+                lab16: {
+                    if (!r_mark_lArI())
+                    {
+                        break lab16;
+                    }
+                    base.bra = base.cursor;
+                    if (!base.slice_del())
+                    {
+                        return false;
+                    }
+                    break lab15;
+                }
+                base.cursor = base.limit - v_10;
+                lab17: {
+                    if (!r_mark_sU())
+                    {
+                        break lab17;
+                    }
+                    base.bra = base.cursor;
+                    if (!base.slice_del())
+                    {
+                        return false;
+                    }
+                    var /** number */ v_11 = base.limit - base.cursor;
+                    lab18: {
+                        base.ket = base.cursor;
+                        if (!r_mark_lAr())
+                        {
+                            base.cursor = base.limit - v_11;
+                            break lab18;
+                        }
+                        base.bra = base.cursor;
+                        if (!base.slice_del())
+                        {
+                            return false;
+                        }
+                        if (!r_stem_suffix_chain_before_ki())
+                        {
+                            base.cursor = base.limit - v_11;
+                            break lab18;
+                        }
+                    }
+                    break lab15;
+                }
+                base.cursor = base.limit - v_10;
+                if (!r_stem_suffix_chain_before_ki())
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_stem_noun_suffixes() {
+        lab0: {
+            var /** number */ v_1 = base.limit - base.cursor;
+            lab1: {
+                base.ket = base.cursor;
+                if (!r_mark_lAr())
+                {
+                    break lab1;
+                }
+                base.bra = base.cursor;
+                if (!base.slice_del())
+                {
+                    return false;
+                }
+                var /** number */ v_2 = base.limit - base.cursor;
+                lab2: {
+                    if (!r_stem_suffix_chain_before_ki())
+                    {
+                        base.cursor = base.limit - v_2;
+                        break lab2;
+                    }
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            lab3: {
+                base.ket = base.cursor;
+                if (!r_mark_ncA())
+                {
+                    break lab3;
+                }
+                base.bra = base.cursor;
+                if (!base.slice_del())
+                {
+                    return false;
+                }
+                var /** number */ v_3 = base.limit - base.cursor;
+                lab4: {
+                    lab5: {
+                        var /** number */ v_4 = base.limit - base.cursor;
+                        lab6: {
+                            base.ket = base.cursor;
+                            if (!r_mark_lArI())
+                            {
+                                break lab6;
+                            }
+                            base.bra = base.cursor;
+                            if (!base.slice_del())
+                            {
+                                return false;
+                            }
+                            break lab5;
+                        }
+                        base.cursor = base.limit - v_4;
+                        lab7: {
+                            base.ket = base.cursor;
+                            lab8: {
+                                var /** number */ v_5 = base.limit - base.cursor;
+                                lab9: {
+                                    if (!r_mark_possessives())
+                                    {
+                                        break lab9;
+                                    }
+                                    break lab8;
+                                }
+                                base.cursor = base.limit - v_5;
+                                if (!r_mark_sU())
+                                {
+                                    break lab7;
+                                }
+                            }
+                            base.bra = base.cursor;
+                            if (!base.slice_del())
+                            {
+                                return false;
+                            }
+                            var /** number */ v_6 = base.limit - base.cursor;
+                            lab10: {
+                                base.ket = base.cursor;
+                                if (!r_mark_lAr())
+                                {
+                                    base.cursor = base.limit - v_6;
+                                    break lab10;
+                                }
+                                base.bra = base.cursor;
+                                if (!base.slice_del())
+                                {
+                                    return false;
+                                }
+                                if (!r_stem_suffix_chain_before_ki())
+                                {
+                                    base.cursor = base.limit - v_6;
+                                    break lab10;
+                                }
+                            }
+                            break lab5;
+                        }
+                        base.cursor = base.limit - v_4;
+                        base.ket = base.cursor;
+                        if (!r_mark_lAr())
+                        {
+                            base.cursor = base.limit - v_3;
+                            break lab4;
+                        }
+                        base.bra = base.cursor;
+                        if (!base.slice_del())
+                        {
+                            return false;
+                        }
+                        if (!r_stem_suffix_chain_before_ki())
+                        {
+                            base.cursor = base.limit - v_3;
+                            break lab4;
+                        }
+                    }
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            lab11: {
+                base.ket = base.cursor;
+                lab12: {
+                    var /** number */ v_7 = base.limit - base.cursor;
+                    lab13: {
+                        if (!r_mark_ndA())
+                        {
+                            break lab13;
+                        }
+                        break lab12;
+                    }
+                    base.cursor = base.limit - v_7;
+                    if (!r_mark_nA())
+                    {
+                        break lab11;
+                    }
+                }
+                lab14: {
+                    var /** number */ v_8 = base.limit - base.cursor;
+                    lab15: {
+                        if (!r_mark_lArI())
+                        {
+                            break lab15;
+                        }
+                        base.bra = base.cursor;
+                        if (!base.slice_del())
+                        {
+                            return false;
+                        }
+                        break lab14;
+                    }
+                    base.cursor = base.limit - v_8;
+                    lab16: {
+                        if (!r_mark_sU())
+                        {
+                            break lab16;
+                        }
+                        base.bra = base.cursor;
+                        if (!base.slice_del())
+                        {
+                            return false;
+                        }
+                        var /** number */ v_9 = base.limit - base.cursor;
+                        lab17: {
+                            base.ket = base.cursor;
+                            if (!r_mark_lAr())
+                            {
+                                base.cursor = base.limit - v_9;
+                                break lab17;
+                            }
+                            base.bra = base.cursor;
+                            if (!base.slice_del())
+                            {
+                                return false;
+                            }
+                            if (!r_stem_suffix_chain_before_ki())
+                            {
+                                base.cursor = base.limit - v_9;
+                                break lab17;
+                            }
+                        }
+                        break lab14;
+                    }
+                    base.cursor = base.limit - v_8;
+                    if (!r_stem_suffix_chain_before_ki())
+                    {
+                        break lab11;
+                    }
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            lab18: {
+                base.ket = base.cursor;
+                lab19: {
+                    var /** number */ v_10 = base.limit - base.cursor;
+                    lab20: {
+                        if (!r_mark_ndAn())
+                        {
+                            break lab20;
+                        }
+                        break lab19;
+                    }
+                    base.cursor = base.limit - v_10;
+                    if (!r_mark_nU())
+                    {
+                        break lab18;
+                    }
+                }
+                lab21: {
+                    var /** number */ v_11 = base.limit - base.cursor;
+                    lab22: {
+                        if (!r_mark_sU())
+                        {
+                            break lab22;
+                        }
+                        base.bra = base.cursor;
+                        if (!base.slice_del())
+                        {
+                            return false;
+                        }
+                        var /** number */ v_12 = base.limit - base.cursor;
+                        lab23: {
+                            base.ket = base.cursor;
+                            if (!r_mark_lAr())
+                            {
+                                base.cursor = base.limit - v_12;
+                                break lab23;
+                            }
+                            base.bra = base.cursor;
+                            if (!base.slice_del())
+                            {
+                                return false;
+                            }
+                            if (!r_stem_suffix_chain_before_ki())
+                            {
+                                base.cursor = base.limit - v_12;
+                                break lab23;
+                            }
+                        }
+                        break lab21;
+                    }
+                    base.cursor = base.limit - v_11;
+                    if (!r_mark_lArI())
+                    {
+                        break lab18;
+                    }
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            lab24: {
+                base.ket = base.cursor;
+                if (!r_mark_DAn())
+                {
+                    break lab24;
+                }
+                base.bra = base.cursor;
+                if (!base.slice_del())
+                {
+                    return false;
+                }
+                var /** number */ v_13 = base.limit - base.cursor;
+                lab25: {
+                    base.ket = base.cursor;
+                    lab26: {
+                        var /** number */ v_14 = base.limit - base.cursor;
+                        lab27: {
+                            if (!r_mark_possessives())
+                            {
+                                break lab27;
+                            }
+                            base.bra = base.cursor;
+                            if (!base.slice_del())
+                            {
+                                return false;
+                            }
+                            var /** number */ v_15 = base.limit - base.cursor;
+                            lab28: {
+                                base.ket = base.cursor;
+                                if (!r_mark_lAr())
+                                {
+                                    base.cursor = base.limit - v_15;
+                                    break lab28;
+                                }
+                                base.bra = base.cursor;
+                                if (!base.slice_del())
+                                {
+                                    return false;
+                                }
+                                if (!r_stem_suffix_chain_before_ki())
+                                {
+                                    base.cursor = base.limit - v_15;
+                                    break lab28;
+                                }
+                            }
+                            break lab26;
+                        }
+                        base.cursor = base.limit - v_14;
+                        lab29: {
+                            if (!r_mark_lAr())
+                            {
+                                break lab29;
+                            }
+                            base.bra = base.cursor;
+                            if (!base.slice_del())
+                            {
+                                return false;
+                            }
+                            var /** number */ v_16 = base.limit - base.cursor;
+                            lab30: {
+                                if (!r_stem_suffix_chain_before_ki())
+                                {
+                                    base.cursor = base.limit - v_16;
+                                    break lab30;
+                                }
+                            }
+                            break lab26;
+                        }
+                        base.cursor = base.limit - v_14;
+                        if (!r_stem_suffix_chain_before_ki())
+                        {
+                            base.cursor = base.limit - v_13;
+                            break lab25;
+                        }
+                    }
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            lab31: {
+                base.ket = base.cursor;
+                lab32: {
+                    var /** number */ v_17 = base.limit - base.cursor;
+                    lab33: {
+                        if (!r_mark_nUn())
+                        {
+                            break lab33;
+                        }
+                        break lab32;
+                    }
+                    base.cursor = base.limit - v_17;
+                    if (!r_mark_ylA())
+                    {
+                        break lab31;
+                    }
+                }
+                base.bra = base.cursor;
+                if (!base.slice_del())
+                {
+                    return false;
+                }
+                var /** number */ v_18 = base.limit - base.cursor;
+                lab34: {
+                    lab35: {
+                        var /** number */ v_19 = base.limit - base.cursor;
+                        lab36: {
+                            base.ket = base.cursor;
+                            if (!r_mark_lAr())
+                            {
+                                break lab36;
+                            }
+                            base.bra = base.cursor;
+                            if (!base.slice_del())
+                            {
+                                return false;
+                            }
+                            if (!r_stem_suffix_chain_before_ki())
+                            {
+                                break lab36;
+                            }
+                            break lab35;
+                        }
+                        base.cursor = base.limit - v_19;
+                        lab37: {
+                            base.ket = base.cursor;
+                            lab38: {
+                                var /** number */ v_20 = base.limit - base.cursor;
+                                lab39: {
+                                    if (!r_mark_possessives())
+                                    {
+                                        break lab39;
+                                    }
+                                    break lab38;
+                                }
+                                base.cursor = base.limit - v_20;
+                                if (!r_mark_sU())
+                                {
+                                    break lab37;
+                                }
+                            }
+                            base.bra = base.cursor;
+                            if (!base.slice_del())
+                            {
+                                return false;
+                            }
+                            var /** number */ v_21 = base.limit - base.cursor;
+                            lab40: {
+                                base.ket = base.cursor;
+                                if (!r_mark_lAr())
+                                {
+                                    base.cursor = base.limit - v_21;
+                                    break lab40;
+                                }
+                                base.bra = base.cursor;
+                                if (!base.slice_del())
+                                {
+                                    return false;
+                                }
+                                if (!r_stem_suffix_chain_before_ki())
+                                {
+                                    base.cursor = base.limit - v_21;
+                                    break lab40;
+                                }
+                            }
+                            break lab35;
+                        }
+                        base.cursor = base.limit - v_19;
+                        if (!r_stem_suffix_chain_before_ki())
+                        {
+                            base.cursor = base.limit - v_18;
+                            break lab34;
+                        }
+                    }
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            lab41: {
+                base.ket = base.cursor;
+                if (!r_mark_lArI())
+                {
+                    break lab41;
+                }
+                base.bra = base.cursor;
+                if (!base.slice_del())
+                {
+                    return false;
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            lab42: {
+                if (!r_stem_suffix_chain_before_ki())
+                {
+                    break lab42;
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            lab43: {
+                base.ket = base.cursor;
+                lab44: {
+                    var /** number */ v_22 = base.limit - base.cursor;
+                    lab45: {
+                        if (!r_mark_DA())
+                        {
+                            break lab45;
+                        }
+                        break lab44;
+                    }
+                    base.cursor = base.limit - v_22;
+                    lab46: {
+                        if (!r_mark_yU())
+                        {
+                            break lab46;
+                        }
+                        break lab44;
+                    }
+                    base.cursor = base.limit - v_22;
+                    if (!r_mark_yA())
+                    {
+                        break lab43;
+                    }
+                }
+                base.bra = base.cursor;
+                if (!base.slice_del())
+                {
+                    return false;
+                }
+                var /** number */ v_23 = base.limit - base.cursor;
+                lab47: {
+                    base.ket = base.cursor;
+                    lab48: {
+                        var /** number */ v_24 = base.limit - base.cursor;
+                        lab49: {
+                            if (!r_mark_possessives())
+                            {
+                                break lab49;
+                            }
+                            base.bra = base.cursor;
+                            if (!base.slice_del())
+                            {
+                                return false;
+                            }
+                            var /** number */ v_25 = base.limit - base.cursor;
+                            lab50: {
+                                base.ket = base.cursor;
+                                if (!r_mark_lAr())
+                                {
+                                    base.cursor = base.limit - v_25;
+                                    break lab50;
+                                }
+                            }
+                            break lab48;
+                        }
+                        base.cursor = base.limit - v_24;
+                        if (!r_mark_lAr())
+                        {
+                            base.cursor = base.limit - v_23;
+                            break lab47;
+                        }
+                    }
+                    base.bra = base.cursor;
+                    if (!base.slice_del())
+                    {
+                        return false;
+                    }
+                    base.ket = base.cursor;
+                    if (!r_stem_suffix_chain_before_ki())
+                    {
+                        base.cursor = base.limit - v_23;
+                        break lab47;
+                    }
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_1;
+            base.ket = base.cursor;
+            lab51: {
+                var /** number */ v_26 = base.limit - base.cursor;
+                lab52: {
+                    if (!r_mark_possessives())
+                    {
+                        break lab52;
+                    }
+                    break lab51;
+                }
+                base.cursor = base.limit - v_26;
+                if (!r_mark_sU())
+                {
+                    return false;
+                }
+            }
+            base.bra = base.cursor;
+            if (!base.slice_del())
+            {
+                return false;
+            }
+            var /** number */ v_27 = base.limit - base.cursor;
+            lab53: {
+                base.ket = base.cursor;
+                if (!r_mark_lAr())
+                {
+                    base.cursor = base.limit - v_27;
+                    break lab53;
+                }
+                base.bra = base.cursor;
+                if (!base.slice_del())
+                {
+                    return false;
+                }
+                if (!r_stem_suffix_chain_before_ki())
+                {
+                    base.cursor = base.limit - v_27;
+                    break lab53;
+                }
+            }
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_post_process_last_consonants() {
+        var /** number */ among_var;
+        base.ket = base.cursor;
+        among_var = base.find_among_b(a_23);
+        if (among_var == 0)
+        {
+            return false;
+        }
+        base.bra = base.cursor;
+        switch (among_var) {
+            case 1:
+                if (!base.slice_from("p"))
+                {
+                    return false;
+                }
+                break;
+            case 2:
+                if (!base.slice_from("\u00E7"))
+                {
+                    return false;
+                }
+                break;
+            case 3:
+                if (!base.slice_from("t"))
+                {
+                    return false;
+                }
+                break;
+            case 4:
+                if (!base.slice_from("k"))
+                {
+                    return false;
+                }
+                break;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_append_U_to_stems_ending_with_d_or_g() {
+        var /** number */ v_1 = base.limit - base.cursor;
+        lab0: {
+            var /** number */ v_2 = base.limit - base.cursor;
+            lab1: {
+                if (!(base.eq_s_b("d")))
+                {
+                    break lab1;
+                }
+                break lab0;
+            }
+            base.cursor = base.limit - v_2;
+            if (!(base.eq_s_b("g")))
+            {
+                return false;
+            }
+        }
+        base.cursor = base.limit - v_1;
+        lab2: {
+            var /** number */ v_3 = base.limit - base.cursor;
+            lab3: {
+                var /** number */ v_4 = base.limit - base.cursor;
+                golab4: while(true)
+                {
+                    var /** number */ v_5 = base.limit - base.cursor;
+                    lab5: {
+                        if (!(base.in_grouping_b(g_vowel, 97, 305)))
+                        {
+                            break lab5;
+                        }
+                        base.cursor = base.limit - v_5;
+                        break golab4;
+                    }
+                    base.cursor = base.limit - v_5;
+                    if (base.cursor <= base.limit_backward)
+                    {
+                        break lab3;
+                    }
+                    base.cursor--;
+                }
+                lab6: {
+                    var /** number */ v_6 = base.limit - base.cursor;
+                    lab7: {
+                        if (!(base.eq_s_b("a")))
+                        {
+                            break lab7;
+                        }
+                        break lab6;
+                    }
+                    base.cursor = base.limit - v_6;
+                    if (!(base.eq_s_b("\u0131")))
+                    {
+                        break lab3;
+                    }
+                }
+                base.cursor = base.limit - v_4;
+                {
+                    var /** number */ c1 = base.cursor;
+                    base.insert(base.cursor, base.cursor, "\u0131");
+                    base.cursor = c1;
+                }
+                break lab2;
+            }
+            base.cursor = base.limit - v_3;
+            lab8: {
+                var /** number */ v_7 = base.limit - base.cursor;
+                golab9: while(true)
+                {
+                    var /** number */ v_8 = base.limit - base.cursor;
+                    lab10: {
+                        if (!(base.in_grouping_b(g_vowel, 97, 305)))
+                        {
+                            break lab10;
+                        }
+                        base.cursor = base.limit - v_8;
+                        break golab9;
+                    }
+                    base.cursor = base.limit - v_8;
+                    if (base.cursor <= base.limit_backward)
+                    {
+                        break lab8;
+                    }
+                    base.cursor--;
+                }
+                lab11: {
+                    var /** number */ v_9 = base.limit - base.cursor;
+                    lab12: {
+                        if (!(base.eq_s_b("e")))
+                        {
+                            break lab12;
+                        }
+                        break lab11;
+                    }
+                    base.cursor = base.limit - v_9;
+                    if (!(base.eq_s_b("i")))
+                    {
+                        break lab8;
+                    }
+                }
+                base.cursor = base.limit - v_7;
+                {
+                    var /** number */ c2 = base.cursor;
+                    base.insert(base.cursor, base.cursor, "i");
+                    base.cursor = c2;
+                }
+                break lab2;
+            }
+            base.cursor = base.limit - v_3;
+            lab13: {
+                var /** number */ v_10 = base.limit - base.cursor;
+                golab14: while(true)
+                {
+                    var /** number */ v_11 = base.limit - base.cursor;
+                    lab15: {
+                        if (!(base.in_grouping_b(g_vowel, 97, 305)))
+                        {
+                            break lab15;
+                        }
+                        base.cursor = base.limit - v_11;
+                        break golab14;
+                    }
+                    base.cursor = base.limit - v_11;
+                    if (base.cursor <= base.limit_backward)
+                    {
+                        break lab13;
+                    }
+                    base.cursor--;
+                }
+                lab16: {
+                    var /** number */ v_12 = base.limit - base.cursor;
+                    lab17: {
+                        if (!(base.eq_s_b("o")))
+                        {
+                            break lab17;
+                        }
+                        break lab16;
+                    }
+                    base.cursor = base.limit - v_12;
+                    if (!(base.eq_s_b("u")))
+                    {
+                        break lab13;
+                    }
+                }
+                base.cursor = base.limit - v_10;
+                {
+                    var /** number */ c3 = base.cursor;
+                    base.insert(base.cursor, base.cursor, "u");
+                    base.cursor = c3;
+                }
+                break lab2;
+            }
+            base.cursor = base.limit - v_3;
+            var /** number */ v_13 = base.limit - base.cursor;
+            golab18: while(true)
+            {
+                var /** number */ v_14 = base.limit - base.cursor;
+                lab19: {
+                    if (!(base.in_grouping_b(g_vowel, 97, 305)))
+                    {
+                        break lab19;
+                    }
+                    base.cursor = base.limit - v_14;
+                    break golab18;
+                }
+                base.cursor = base.limit - v_14;
+                if (base.cursor <= base.limit_backward)
+                {
+                    return false;
+                }
+                base.cursor--;
+            }
+            lab20: {
+                var /** number */ v_15 = base.limit - base.cursor;
+                lab21: {
+                    if (!(base.eq_s_b("\u00F6")))
+                    {
+                        break lab21;
+                    }
+                    break lab20;
+                }
+                base.cursor = base.limit - v_15;
+                if (!(base.eq_s_b("\u00FC")))
+                {
+                    return false;
+                }
+            }
+            base.cursor = base.limit - v_13;
+            {
+                var /** number */ c4 = base.cursor;
+                base.insert(base.cursor, base.cursor, "\u00FC");
+                base.cursor = c4;
+            }
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_is_reserved_word() {
+        if (!(base.eq_s_b("ad")))
+        {
+            return false;
+        }
+        var /** number */ v_1 = base.limit - base.cursor;
+        lab0: {
+            if (!(base.eq_s_b("soy")))
+            {
+                base.cursor = base.limit - v_1;
+                break lab0;
+            }
+        }
+        if (base.cursor > base.limit_backward)
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_more_than_one_syllable_word() {
+        var /** number */ v_1 = base.cursor;
+        {
+            var v_2 = 2;
+            while(true)
+            {
+                var /** number */ v_3 = base.cursor;
+                lab0: {
+                    golab1: while(true)
+                    {
+                        lab2: {
+                            if (!(base.in_grouping(g_vowel, 97, 305)))
+                            {
+                                break lab2;
+                            }
+                            break golab1;
+                        }
+                        if (base.cursor >= base.limit)
+                        {
+                            break lab0;
+                        }
+                        base.cursor++;
+                    }
+                    v_2--;
+                    continue;
+                }
+                base.cursor = v_3;
+                break;
+            }
+            if (v_2 > 0)
+            {
+                return false;
+            }
+        }
+        base.cursor = v_1;
+        return true;
+    };
+
+    /** @return {boolean} */
+    function r_postlude() {
+        base.limit_backward = base.cursor; base.cursor = base.limit;
+        {
+            var /** number */ v_1 = base.limit - base.cursor;
+            lab0: {
+                if (!r_is_reserved_word())
+                {
+                    break lab0;
+                }
+                return false;
+            }
+            base.cursor = base.limit - v_1;
+        }
+        var /** number */ v_2 = base.limit - base.cursor;
+        r_append_U_to_stems_ending_with_d_or_g();
+        base.cursor = base.limit - v_2;
+        var /** number */ v_3 = base.limit - base.cursor;
+        r_post_process_last_consonants();
+        base.cursor = base.limit - v_3;
+        base.cursor = base.limit_backward;
+        return true;
+    };
+
+    this.stem = /** @return {boolean} */ function() {
+        if (!r_more_than_one_syllable_word())
+        {
+            return false;
+        }
+        base.limit_backward = base.cursor; base.cursor = base.limit;
+        var /** number */ v_1 = base.limit - base.cursor;
+        r_stem_nominal_verb_suffixes();
+        base.cursor = base.limit - v_1;
+        if (!B_continue_stemming_noun_suffixes)
+        {
+            return false;
+        }
+        var /** number */ v_2 = base.limit - base.cursor;
+        r_stem_noun_suffixes();
+        base.cursor = base.limit - v_2;
+        base.cursor = base.limit_backward;
+        if (!r_postlude())
+        {
+            return false;
+        }
+        return true;
+    };
+
+    /**@return{string}*/
+    this['stemWord'] = function(/**string*/word) {
+        base.setCurrent(word);
+        this.stem();
+        return base.getCurrent();
+    };
+};
+
 Stemmer = TurkishStemmer;

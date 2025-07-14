@@ -5,7 +5,7 @@ Running MapServer on IIS
 
 :Author: Seth Girvin
 :Contact: sgirvin at compass.ie
-:Last Updated: 2022-04-04
+:Last Updated: 2024-11-21
 
 .. contents::
    :local:
@@ -37,7 +37,7 @@ Committee (PSC) member.
 
     Which version should I download?
     
-    + Unless you are using deprecated features in your Mapfiles you should download the latest stable release. 
+    + Unless you are using deprecated features in your mapfiles you should download the latest stable release. 
     + Nearly all servers will now have a x64 (64-bit) architecture, so unless you are restricted to a win32 (32-bit) server
       download a x64 rather than a win32 release. 
     + Unless you have a good reason you should use the latest compiler version. MSVC 2022 means the binaries were compiled with
@@ -172,7 +172,7 @@ MapServer Configuration File
 The MapServer 8.0 release introduced a new :ref:`config` file. This allows all MapServer global environment variables to be set in a single place, which is
 easier to manage than IIS FastCGI variables, and more portable between different environments and operating systems.
 
-For this example we will create an empty configuration file at ``C:\MapServer\apps\mapserver.config``. Once the file is created the following sample configuration can be
+For this example we will create an empty configuration file at ``C:\MapServer\apps\mapserver.conf``. Once the file is created the following sample configuration can be
 copied in:
 
 .. code-block:: bat
@@ -187,19 +187,19 @@ copied in:
         # MS_MAP_PATTERN "^(C:)?\/MapServer\/apps\/((?!\.{2})[_A-Za-z0-9\-\.]+\/{1})*([_A-Za-z0-9\-\.]+\.(map))$"
         
         # path to the Proj4 projection files
-        PROJ_LIB "C:/MapServer/bin/proj7/SHARE" 
+        PROJ_DATA "C:/MapServer/bin/proj9/SHARE" 
         
         # point to the certs file for HTTPS access to OWS servers
         CURL_CA_BUNDLE "C:\MapServer\bin\curl\curl-ca-bundle.crt"
         
-        # to set a default Mapfile uncomment below
+        # to set a default mapfile uncomment below
         # MS_MAPFILE "C:/MapServer/apps/test/test.map"
         
-        # to block MapServer from accesssing Mapfile by path uncomment below
+        # to block MapServer from accesssing mapfile by path uncomment below
         # MS_MAP_NO_PATH TRUE
       END
 
-      # allow Mapfiles to be accessed by key
+      # allow mapfiles to be accessed by key
       MAPS
         "test" "C:/MapServer/apps/tests/test.map"
       END
@@ -225,7 +225,7 @@ Alternatively it can beset from the command line with the following command:
 Setting up Applications
 -----------------------
 
-MapServer applications consist of a Mapfile, and additional optional files for data, symbols, logs, and images. The same instance of MapServer
+MapServer applications consist of a mapfile, and additional optional files for data, symbols, logs, and images. The same instance of MapServer
 can be used to serve many applications. In this example we will create a new ``test`` subfolder for a test application in a ``C:\MapServer\apps`` folder. 
 
 .. code-block:: bat
@@ -244,7 +244,7 @@ Now create a new `test.map` file in this folder and paste in the test Mapfile be
     MAP
         EXTENT -180 -90 180 90
         # Set the path to where the map projections are stored
-        CONFIG "PROJ_LIB" "C:\MapServer\bin\proj\SHARE"
+        CONFIG "PROJ_DATA" "C:\MapServer\bin\proj\SHARE"
         NAME "TestMap"
         WEB
           METADATA
@@ -257,7 +257,7 @@ Now create a new `test.map` file in this folder and paste in the test Mapfile be
         LAYER
           NAME "country_bounds"
           TYPE RASTER
-          CONNECTION "http://demo.mapserver.org/cgi-bin/wms?"
+          CONNECTION "https://demo.mapserver.org/cgi-bin/wms?"
           CONNECTIONTYPE WMS
           METADATA
             "wms_srs"             "epsg:4326"
@@ -283,7 +283,7 @@ You can set-up MapServer logging by adding the following lines to your ``MAP`` b
     DEBUG 5 # a value from 0 (OFF) to 5 (detailed)
     CONFIG "MS_ERRORFILE" "logs\ms.log"
 
-The path to the log file is relative to the Mapfile, so in this example you need to create a new ``C:\MapServer\apps\test\logs`` folder:
+The path to the log file is relative to the mapfile, so in this example you need to create a new ``C:\MapServer\apps\test\logs`` folder:
 
 .. code-block:: bat
 
@@ -324,7 +324,7 @@ FastCGI configurations are stored in ``C:\Windows\System32\inetsrv\config\applic
 .. code-block:: xml
 
     <environmentVariables>
-       <environmentVariable name="CURL_CA_BUNDLE" value="C:\MapServer\bin\curl\curl-ca-bundle.crt" />
+       <environmentVariable name="CURL_CA_BUNDLE" value="C:\MapServer\bin\curl-ca-bundle.crt" />
     </environmentVariables>
 
 Setting a Default Mapfile
@@ -339,7 +339,7 @@ The ``MS_MAPFILE`` environment variable can be set to a default map as follows:
 You can make then make a request without the query string requiring ``map=C:/MapServer/apps/test/test.map``: http://localhost/mapserver/mapserv?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=country_bounds&STYLES=&CRS=EPSG:4326&BBOX=-180,-90,180,90&WIDTH=400&HEIGHT=300&FORMAT=image/png
 
 In addition to this method the `URL Rewrite module <https://www.iis.net/downloads/microsoft/url-rewrite>`_ 
-can be used to set different Mapfiles dependent on query string parameters or domain names. 
+can be used to set different mapfiles dependent on query string parameters or domain names. 
 
 Setting a Certificates File
 +++++++++++++++++++++++++++
@@ -356,7 +356,7 @@ See :ref:`wxs_secure` for further details.
 Securing MapServer in IIS
 --------------------------
 
-MapServer has two environment variables that can be used to restrict which Mapfiles can be accessed. 
+MapServer has two environment variables that can be used to restrict which mapfiles can be accessed. 
 
 .. note::
 
@@ -369,7 +369,7 @@ be set to any value ("True" in this example) so that only the ``MS_MAPFILE`` env
 
   %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi /+"[fullPath='C:\Mapserver\bin\mapserv.exe'].environmentVariables.[name='MS_MAP_NO_PATH',value='True']" /commit:apphost
 
-``MS_MAP_PATTERN`` can be set to limit the folders from which Mapfiles can be accessed using a regular expression. For example to limit
+``MS_MAP_PATTERN`` can be set to limit the folders from which mapfiles can be accessed using a regular expression. For example to limit
 to the ``C:\MapServer\apps`` (note this path is case-sensitive) folder use the following regular expression: ``"^(C:)?\/MapServer\/apps\/((?!\.{2})[_A-Za-z0-9\-\.]+\/{1})*([_A-Za-z0-9\-\.]+\.(map))$"``
 
 .. code-block:: bat
@@ -378,7 +378,7 @@ to the ``C:\MapServer\apps`` (note this path is case-sensitive) folder use the f
 
 In addition to these methods IIS itself can be used to block or filter query string parameters. The 
 `denyQueryStringSequences <https://docs.microsoft.com/en-us/iis/configuration/system.webserver/security/requestfiltering/denyquerystringsequences/>`_ 
-element can be set to block a Mapfile being set by a URL. Both `map=` and the encoded `map%3d` are blocked. 
+element can be set to block a mapfile being set by a URL. Both `map=` and the encoded `map%3d` are blocked. 
 
 
 .. code-block:: xml
@@ -430,7 +430,7 @@ Common error messages and how to resolve them are listed below.
 
     msLoadMap(): Regular expression error. MS_DEFAULT_MAPFILE_PATTERN validation failed.
 
-+ If the ``CONFIG`` file security regular expressions used to limit access to Mapfiles do not match the supplied Mapfile you will receive the following:
++ If the ``CONFIG`` file security regular expressions used to limit access to mapfiles do not match the supplied mapfile you will receive the following:
 
   .. code-block:: bat
   
@@ -442,9 +442,9 @@ Common error messages and how to resolve them are listed below.
 
     msLoadMap(): Unable to access file. (C:/MapServer/apps/test/test.map)
 
-+ MapServer projections are stored in ``C:\MapServer\bin\proj\SHARE`` (or ``C:\MapServer\bin\proj6\SHARE`` when using PROJ 6). When the projection is specified 
++ MapServer projections are stored in ``C:\MapServer\bin\proj\SHARE`` (or ``C:\MapServer\bin\proj9\SHARE`` when using PROJ 9). When the projection is specified 
   in the following form `"init=epsg:3857"`, MapServer will try to find this code in the `epsg` file, where it is listed as `<3857> +proj=merc +a=6378137...`. 
-  If you receive the error below then make sure the ``CONFIG "PROJ_LIB" "C:\MapServer\bin\proj\SHARE"`` setting is pointing to the correct path. 
+  If you receive the error below then make sure the ``CONFIG "PROJ_DATA" "C:\MapServer\bin\proj\SHARE"`` setting is pointing to the correct path. 
   *Note on one installation this message was shown as forward slashes rather than backslashes were used.*
 
   .. code-block:: bat

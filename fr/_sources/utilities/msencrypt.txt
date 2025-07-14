@@ -19,8 +19,8 @@ Purpose
 
 Used to create an encryption key or to encrypt portions of connection
 strings for use in mapfiles (added in v4.10).  Typically you might
-want to encrypt portions of the CONNECTION parameter for a database
-connection.  The following CONNECTIONTYPEs are supported for using
+want to encrypt portions of the ``CONNECTION`` parameter for a database
+connection.  The following ``CONNECTIONTYPEs`` are supported for using
 this encryption method:
 
 + :ref:`OGR <ogr>`
@@ -49,15 +49,22 @@ Use in Mapfile
 -----------------------------------------------------------------------------
 
 The location of the encryption key can be specified by two mechanisms, either by 
-setting the environment variable MS_ENCRYPTION_KEY or using a CONFIG directive 
-in the MAP object of your mapfile.  For example: 
+setting the variable ``MS_ENCRYPTION_KEY`` in the ``ENV`` section of the MapServer :ref:`Configuration <config>`, or using a ``CONFIG`` directive 
+in the MAP object of your mapfile. Prior to MapServer version 8.0 ``MS_ENCRYPTION_KEY`` could be set as an environment variable.
+
+For example you can add the following to your mapfile: 
   
 ::
   
     CONFIG MS_ENCRYPTION_KEY "/path/to/mykey.txt"
 
-Use the { and } characters as delimiters for encrypted strings inside database 
-CONNECTIONs in your mapfile.  For example: 
+.. note::
+
+    As of MapServer 8.4 this can be an absolute path, or a path relative to the mapfile.
+    When setting in the :ref:`Configuration <config>` the path must be absolute.
+
+Use the { and } characters as delimiters for encrypted strings inside the database 
+``CONNECTION`` in your mapfile.  For example: 
   
 ::
   
@@ -72,7 +79,7 @@ Example
     The following PostGIS example requires at least MapServer 5.0.3 or 5.2)  
     Let's say we have a LAYER that uses a POSTGIS connection as follows:
   
-::
+.. code-block:: mapfile
   
     LAYER
       NAME "provinces"
@@ -122,7 +129,7 @@ it in a second):
    inside the MAP object can be used to set an environment variable
    inside a mapfile:
 
-::
+.. code-block:: mapfile
     
     MAP
         ...
@@ -138,5 +145,5 @@ it in a second):
     CONNECTION "host=127.0.0.1 dbname=gmap user=postgres
                 password={3656026A23DBAFC04C402EDFAB7CE714} port=5432"
  
-5. Done!  Give your new encrypted mapfile a try with the
+5. Done!  Give your new encrypted Mapfile a try with the
    :ref:`map2img` utility!

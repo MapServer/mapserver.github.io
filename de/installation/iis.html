@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Running MapServer on IIS &#8212; MapServer 8.2.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <title>Running MapServer on IIS &#8212; MapServer 8.4.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx.css?v=6c7b17ac" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=dd298242" />
@@ -14,12 +14,12 @@
     
     <script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=fb36aa81"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/documentation_options.js?v=97381f65"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/translations.js?v=79cc9f76"></script>
+    <script src="../_static/translations.js?v=9bf55d28"></script>
     
     <link rel="icon" href="../_static/mapserver.ico"/>
     <link rel="author" title="Über dieses Dokument" href="../about.html" />
@@ -44,7 +44,7 @@
       <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
       <a href="../community/service_providers.html" title="Professional Service Providers">Service Providers</a> |      
       <a href="../faq.html" title="Frequently Asked Questions">FAQ</a> |
-      <a href="https://twitter.com/mapserver_osgeo" title="Twitter" target="_blank">Twitter</a> |
+      <a href="https://fosstodon.org/@mapserver" title="Mastodon" target="_blank">Mastodon</a> |
       <a href="../download.html" title="Download Source or Binaries">Download </a> |
       <a class="badge" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KRJ2X44N3HA6U&source=url" target="_blank">
         <img src="https://img.shields.io/badge/donate-%E2%9D%A4%C2%A0-ff69b4.svg?style=flat" alt="Donate to MapServer">
@@ -138,7 +138,7 @@
           <a href="dotnet.html" title=".NET MapScript Compilation"
              accesskey="P">zurück</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.2.2 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.4.0 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Installation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Running MapServer on IIS</a></li> 
       </ul>
@@ -160,7 +160,7 @@
 <dd class="field-even"><p>sgirvin at compass.ie</p>
 </dd>
 <dt class="field-odd">Last Updated<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2022-04-04</p>
+<dd class="field-odd"><p>2024-11-21</p>
 </dd>
 </dl>
 <nav class="contents local" id="inhalt">
@@ -201,7 +201,7 @@ Committee (PSC) member.</p>
 <p class="admonition-title">Bemerkung</p>
 <p>Which version should I download?</p>
 <ul class="simple">
-<li><p>Unless you are using deprecated features in your Mapfiles you should download the latest stable release.</p></li>
+<li><p>Unless you are using deprecated features in your mapfiles you should download the latest stable release.</p></li>
 <li><p>Nearly all servers will now have a x64 (64-bit) architecture, so unless you are restricted to a win32 (32-bit) server
 download a x64 rather than a win32 release.</p></li>
 <li><p>Unless you have a good reason you should use the latest compiler version. MSVC 2022 means the binaries were compiled with
@@ -322,7 +322,7 @@ been successfully configured as a FastCGI application in IIS.</p>
 <h2><a class="toc-backref" href="#id4" role="doc-backlink">MapServer Configuration File</a><a class="headerlink" href="#mapserver-configuration-file" title="Link to this heading">¶</a></h2>
 <p>The MapServer 8.0 release introduced a new <a class="reference internal" href="../mapfile/config.html#config"><span class="std std-ref">CONFIG</span></a> file. This allows all MapServer global environment variables to be set in a single place, which is
 easier to manage than IIS FastCGI variables, and more portable between different environments and operating systems.</p>
-<p>For this example we will create an empty configuration file at <code class="docutils literal notranslate"><span class="pre">C:\MapServer\apps\mapserver.config</span></code>. Once the file is created the following sample configuration can be
+<p>For this example we will create an empty configuration file at <code class="docutils literal notranslate"><span class="pre">C:\MapServer\apps\mapserver.conf</span></code>. Once the file is created the following sample configuration can be
 copied in:</p>
 <div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>CONFIG
   ENV
@@ -334,19 +334,19 @@ copied in:</p>
     # MS_MAP_PATTERN <span class="s2">&quot;^(C:)?\/MapServer\/apps\/((?!\.{2})[_A-Za-z0-9\-\.]+\/{1})*([_A-Za-z0-9\-\.]+\.(map))$&quot;</span>
 
     # path to the Proj4 projection files
-    PROJ_LIB <span class="s2">&quot;C:/MapServer/bin/proj7/SHARE&quot;</span>
+    PROJ_DATA <span class="s2">&quot;C:/MapServer/bin/proj9/SHARE&quot;</span>
 
     # point to the certs file for HTTPS access to OWS servers
     CURL_CA_BUNDLE <span class="s2">&quot;C:\MapServer\bin\curl\curl-ca-bundle.crt&quot;</span>
 
-    # to set a default Mapfile uncomment below
+    # to set a default mapfile uncomment below
     # MS_MAPFILE <span class="s2">&quot;C:/MapServer/apps/test/test.map&quot;</span>
 
-    # to block MapServer from accesssing Mapfile by path uncomment below
+    # to block MapServer from accesssing mapfile by path uncomment below
     # MS_MAP_NO_PATH TRUE
   END
 
-  # allow Mapfiles to be accessed by key
+  # allow mapfiles to be accessed by key
   MAPS
     <span class="s2">&quot;test&quot;</span> <span class="s2">&quot;C:/MapServer/apps/tests/test.map&quot;</span>
   END
@@ -369,7 +369,7 @@ Server &gt; FastCGI Settings &gt; <code class="docutils literal notranslate"><sp
 </section>
 <section id="setting-up-applications">
 <h2><a class="toc-backref" href="#id5" role="doc-backlink">Setting up Applications</a><a class="headerlink" href="#setting-up-applications" title="Link to this heading">¶</a></h2>
-<p>MapServer applications consist of a Mapfile, and additional optional files for data, symbols, logs, and images. The same instance of MapServer
+<p>MapServer applications consist of a mapfile, and additional optional files for data, symbols, logs, and images. The same instance of MapServer
 can be used to serve many applications. In this example we will create a new <code class="docutils literal notranslate"><span class="pre">test</span></code> subfolder for a test application in a <code class="docutils literal notranslate"><span class="pre">C:\MapServer\apps</span></code> folder.</p>
 <div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="k">md</span> C:\MapServer\apps\test
 </pre></div>
@@ -382,7 +382,7 @@ notepad C:\MapServer\apps\test\test.map
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">MAP</span>
     <span class="k">EXTENT</span> <span class="p">-</span><span class="mi">180</span> <span class="p">-</span><span class="mi">90</span> <span class="mi">180</span> <span class="mi">90</span>
     <span class="c"># Set the path to where the map projections are stored</span>
-    <span class="k">CONFIG</span> <span class="s">&quot;PROJ_LIB&quot;</span> <span class="s">&quot;C:\MapServer</span><span class="se">\b</span><span class="s">in\proj\SHARE&quot;</span>
+    <span class="k">CONFIG</span> <span class="s">&quot;PROJ_DATA&quot;</span> <span class="s">&quot;C:\MapServer</span><span class="se">\b</span><span class="s">in\proj\SHARE&quot;</span>
     <span class="k">NAME</span> <span class="s">&quot;TestMap&quot;</span>
     <span class="k">WEB</span>
       <span class="k">METADATA</span>
@@ -395,7 +395,7 @@ notepad C:\MapServer\apps\test\test.map
     <span class="k">LAYER</span>
       <span class="k">NAME</span> <span class="s">&quot;country_bounds&quot;</span>
       <span class="k">TYPE</span> <span class="nb">RASTER</span>
-      <span class="k">CONNECTION</span> <span class="s">&quot;http://demo.mapserver.org/cgi-bin/wms?&quot;</span>
+      <span class="k">CONNECTION</span> <span class="s">&quot;https://demo.mapserver.org/cgi-bin/wms?&quot;</span>
       <span class="k">CONNECTIONTYPE</span> <span class="nb">WMS</span>
       <span class="k">METADATA</span>
         <span class="s">&quot;wms_srs&quot;</span>             <span class="s">&quot;epsg:4326&quot;</span>
@@ -418,7 +418,7 @@ notepad C:\MapServer\apps\test\test.map
 <span class="k">CONFIG</span> <span class="s">&quot;MS_ERRORFILE&quot;</span> <span class="s">&quot;logs\ms.log&quot;</span>
 </pre></div>
 </div>
-<p>The path to the log file is relative to the Mapfile, so in this example you need to create a new <code class="docutils literal notranslate"><span class="pre">C:\MapServer\apps\test\logs</span></code> folder:</p>
+<p>The path to the log file is relative to the mapfile, so in this example you need to create a new <code class="docutils literal notranslate"><span class="pre">C:\MapServer\apps\test\logs</span></code> folder:</p>
 <div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="k">md</span> C:\MapServer\apps\test\logs
 </pre></div>
 </div>
@@ -446,7 +446,7 @@ with different environment variables and can be modified by IIS Manager, or usin
 <img alt="../_images/iis-environ-settings.png" src="../_images/iis-environ-settings.png" />
 <p>FastCGI configurations are stored in <code class="docutils literal notranslate"><span class="pre">C:\Windows\System32\inetsrv\config\applicationHost.config</span></code> in the format below:</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;environmentVariables&gt;</span>
-<span class="w">   </span><span class="nt">&lt;environmentVariable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;CURL_CA_BUNDLE&quot;</span><span class="w"> </span><span class="na">value=</span><span class="s">&quot;C:\MapServer\bin\curl\curl-ca-bundle.crt&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">   </span><span class="nt">&lt;environmentVariable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;CURL_CA_BUNDLE&quot;</span><span class="w"> </span><span class="na">value=</span><span class="s">&quot;C:\MapServer\bin\curl-ca-bundle.crt&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/environmentVariables&gt;</span>
 </pre></div>
 </div>
@@ -458,7 +458,7 @@ with different environment variables and can be modified by IIS Manager, or usin
 </div>
 <p>You can make then make a request without the query string requiring <code class="docutils literal notranslate"><span class="pre">map=C:/MapServer/apps/test/test.map</span></code>: <a class="reference external" href="http://localhost/mapserver/mapserv?SERVICE=WMS&amp;VERSION=1.3.0&amp;REQUEST=GetMap&amp;LAYERS=country_bounds&amp;STYLES=&amp;CRS=EPSG:4326&amp;BBOX=-180,-90,180,90&amp;WIDTH=400&amp;HEIGHT=300&amp;FORMAT=image/png">http://localhost/mapserver/mapserv?SERVICE=WMS&amp;VERSION=1.3.0&amp;REQUEST=GetMap&amp;LAYERS=country_bounds&amp;STYLES=&amp;CRS=EPSG:4326&amp;BBOX=-180,-90,180,90&amp;WIDTH=400&amp;HEIGHT=300&amp;FORMAT=image/png</a></p>
 <p>In addition to this method the <a class="reference external" href="https://www.iis.net/downloads/microsoft/url-rewrite">URL Rewrite module</a>
-can be used to set different Mapfiles dependent on query string parameters or domain names.</p>
+can be used to set different mapfiles dependent on query string parameters or domain names.</p>
 </section>
 <section id="setting-a-certificates-file">
 <h3><a class="toc-backref" href="#id9" role="doc-backlink">Setting a Certificates File</a><a class="headerlink" href="#setting-a-certificates-file" title="Link to this heading">¶</a></h3>
@@ -472,7 +472,7 @@ certificates file. This can be set using the <code class="docutils literal notra
 </section>
 <section id="securing-mapserver-in-iis">
 <h2><a class="toc-backref" href="#id10" role="doc-backlink">Securing MapServer in IIS</a><a class="headerlink" href="#securing-mapserver-in-iis" title="Link to this heading">¶</a></h2>
-<p>MapServer has two environment variables that can be used to restrict which Mapfiles can be accessed.</p>
+<p>MapServer has two environment variables that can be used to restrict which mapfiles can be accessed.</p>
 <div class="admonition note">
 <p class="admonition-title">Bemerkung</p>
 <p>As of MapServer 8.0 these variables can be set in the <a class="reference internal" href="../mapfile/config.html#config"><span class="std std-ref">CONFIG</span></a> file rather than as variables in IIS</p>
@@ -482,14 +482,14 @@ be set to any value („True“ in this example) so that only the <code class="d
 <div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="nv">%windir%</span>\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi /+<span class="s2">&quot;[fullPath=&#39;C:\Mapserver\bin\mapserv.exe&#39;].environmentVariables.[name=&#39;MS_MAP_NO_PATH&#39;,value=&#39;True&#39;]&quot;</span> /commit:apphost
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">MS_MAP_PATTERN</span></code> can be set to limit the folders from which Mapfiles can be accessed using a regular expression. For example to limit
+<p><code class="docutils literal notranslate"><span class="pre">MS_MAP_PATTERN</span></code> can be set to limit the folders from which mapfiles can be accessed using a regular expression. For example to limit
 to the <code class="docutils literal notranslate"><span class="pre">C:\MapServer\apps</span></code> (note this path is case-sensitive) folder use the following regular expression: <code class="docutils literal notranslate"><span class="pre">&quot;^(C:)?\/MapServer\/apps\/((?!\.{2})[_A-Za-z0-9\-\.]+\/{1})*([_A-Za-z0-9\-\.]+\.(map))$&quot;</span></code></p>
 <div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="nv">%windir%</span>\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi /+<span class="s2">&quot;[fullPath=&#39;C:\Mapserver\bin\mapserv.exe&#39;].environmentVariables.[name=&#39;MS_MAP_PATTERN&#39;,value=&#39;&quot;</span><span class="se">^(</span>C:)?\/MapServer\/apps\/((?!\.{2})[_A-Za-z0-9\-\.]+\/{1})*([_A-Za-z0-9\-\.]+\.(map))$<span class="s2">&quot;&#39;]&quot;</span> /commit:apphost
 </pre></div>
 </div>
 <p>In addition to these methods IIS itself can be used to block or filter query string parameters. The
 <a class="reference external" href="https://docs.microsoft.com/en-us/iis/configuration/system.webserver/security/requestfiltering/denyquerystringsequences/">denyQueryStringSequences</a>
-element can be set to block a Mapfile being set by a URL. Both <cite>map=</cite> and the encoded <cite>map%3d</cite> are blocked.</p>
+element can be set to block a mapfile being set by a URL. Both <cite>map=</cite> and the encoded <cite>map%3d</cite> are blocked.</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="nt">&lt;configuration&gt;</span>
 <span class="w">    </span><span class="nt">&lt;system.webServer&gt;</span>
@@ -534,7 +534,7 @@ for MapServer in the <code class="docutils literal notranslate"><span class="pre
 </pre></div>
 </div>
 </li>
-<li><p>If the <code class="docutils literal notranslate"><span class="pre">CONFIG</span></code> file security regular expressions used to limit access to Mapfiles do not match the supplied Mapfile you will receive the following:</p>
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">CONFIG</span></code> file security regular expressions used to limit access to mapfiles do not match the supplied mapfile you will receive the following:</p>
 <div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>msCGILoadMap(): Web application error. CGI variable <span class="p">&amp;</span>quot;map<span class="p">&amp;</span>quot; fails to validate.
 </pre></div>
 </div>
@@ -544,9 +544,9 @@ for MapServer in the <code class="docutils literal notranslate"><span class="pre
 </pre></div>
 </div>
 </li>
-<li><p>MapServer projections are stored in <code class="docutils literal notranslate"><span class="pre">C:\MapServer\bin\proj\SHARE</span></code> (or <code class="docutils literal notranslate"><span class="pre">C:\MapServer\bin\proj6\SHARE</span></code> when using PROJ 6). When the projection is specified
+<li><p>MapServer projections are stored in <code class="docutils literal notranslate"><span class="pre">C:\MapServer\bin\proj\SHARE</span></code> (or <code class="docutils literal notranslate"><span class="pre">C:\MapServer\bin\proj9\SHARE</span></code> when using PROJ 9). When the projection is specified
 in the following form <cite>„init=epsg:3857“</cite>, MapServer will try to find this code in the <cite>epsg</cite> file, where it is listed as <cite>&lt;3857&gt; +proj=merc +a=6378137…</cite>.
-If you receive the error below then make sure the <code class="docutils literal notranslate"><span class="pre">CONFIG</span> <span class="pre">&quot;PROJ_LIB&quot;</span> <span class="pre">&quot;C:\MapServer\bin\proj\SHARE&quot;</span></code> setting is pointing to the correct path.
+If you receive the error below then make sure the <code class="docutils literal notranslate"><span class="pre">CONFIG</span> <span class="pre">&quot;PROJ_DATA&quot;</span> <span class="pre">&quot;C:\MapServer\bin\proj\SHARE&quot;</span></code> setting is pointing to the correct path.
 <em>Note on one installation this message was shown as forward slashes rather than backslashes were used.</em></p>
 <div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>msProcessProjection(): Projection library error. proj error <span class="s2">&quot;No such file or directory&quot;</span> for <span class="s2">&quot;init=epsg:3857&quot;</span>
 </pre></div>
@@ -619,7 +619,7 @@ The FastCGI executable could not be found
 <a href="../documentation.html" title="Documentation">Documentation</a><br>
 <a href="../faq.html" title="FAQ">FAQ</a><br>
 <a href="../psc.html" title="PSC">PSC</a><br>
-<a href="https://twitter.com/mapserver_osgeo" title="Twitter">Twitter</a>
+<a href="https://fosstodon.org/@mapserver" title="Mastodon">Mastodon</a>
 </p>
   <h3>Current Table Of Contents</h3>
   <ul>
@@ -657,15 +657,15 @@ The FastCGI executable could not be found
           <a href="dotnet.html" title=".NET MapScript Compilation"
              >zurück</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.2.2 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.4.0 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Installation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Running MapServer on IIS</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; <a href="../copyright.html">Copyright</a> 2024, Open Source Geospatial Foundation.
-      Zuletzt aktualisiert am 2024-11-01.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    &#169; <a href="../copyright.html">Copyright</a> 2025, Open Source Geospatial Foundation.
+      Zuletzt aktualisiert am 2025-07-14.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

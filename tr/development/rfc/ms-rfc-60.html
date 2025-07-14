@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MS RFC 60: Labeling enhancement: ability to skip ANGLE FOLLOW labels with too much character overlap &#8212; MapServer 8.2.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <title>MS RFC 60: Labeling enhancement: ability to skip ANGLE FOLLOW labels with too much character overlap &#8212; MapServer 8.4.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css?v=6c7b17ac" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dd298242" />
@@ -14,12 +14,12 @@
     
     <script src="../../_static/jquery.js?v=5d32c60e"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../../_static/documentation_options.js?v=bd4d36b4"></script>
-    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/documentation_options.js?v=d1438350"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/translations.js?v=5dbee647"></script>
+    <script src="../../_static/translations.js?v=b0f24d8d"></script>
     
     <link rel="icon" href="../../_static/mapserver.ico"/>
     <link rel="author" title="Bu belgeler hakkında" href="../../about.html" />
@@ -44,7 +44,7 @@
       <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
       <a href="../../community/service_providers.html" title="Professional Service Providers">Service Providers</a> |      
       <a href="../../faq.html" title="Frequently Asked Questions">FAQ</a> |
-      <a href="https://twitter.com/mapserver_osgeo" title="Twitter" target="_blank">Twitter</a> |
+      <a href="https://fosstodon.org/@mapserver" title="Mastodon" target="_blank">Mastodon</a> |
       <a href="../../download.html" title="Download Source or Binaries">Download </a> |
       <a class="badge" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KRJ2X44N3HA6U&source=url" target="_blank">
         <img src="https://img.shields.io/badge/donate-%E2%9D%A4%C2%A0-ff69b4.svg?style=flat" alt="Donate to MapServer">
@@ -200,24 +200,24 @@ problematic labels because it simply detected the overlapping chars and
 skipped those labels. This is the approach we propose to implement here.</p>
 <p>Here are two maps of the same area, the first produced by MapServer with the
 bad labels and the second by GeoServer without the bad labels:</p>
-<p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-wms.png">http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-wms.png</a></p>
-<p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523/geoserver-wms.png">http://trac.osgeo.org/mapserver/attachment/ticket/3523/geoserver-wms.png</a></p>
+<p><a class="reference external" href="https://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-wms.png">https://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-wms.png</a></p>
+<p><a class="reference external" href="https://trac.osgeo.org/mapserver/attachment/ticket/3523/geoserver-wms.png">https://trac.osgeo.org/mapserver/attachment/ticket/3523/geoserver-wms.png</a></p>
 </section>
 <section id="experiments">
 <h2>Experiments<a class="headerlink" href="#experiments" title="Link to this heading">¶</a></h2>
 <p>We have found that it is of no use to test the character bboxes for
 overlap since most of them overlap in normal situations as we can see in
 the following images:</p>
-<p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-label-boxes.png">http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-label-boxes.png</a></p>
+<p><a class="reference external" href="https://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-label-boxes.png">https://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-label-boxes.png</a></p>
 <p>OTOH we found that we could compare the angles of consecutive characters
 within a given label and use that as a better indicator of
 possible overlap. In most cases, a overlap of more than 22.5 degrees
 is a good threshold to use to decide to skip a given label.</p>
 <p>The following image shows the same contours in which labels with character
 overlap larger than 22.5 degrees are skipped:</p>
-<p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-label-with-fix.png">http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-label-with-fix.png</a></p>
+<p><a class="reference external" href="https://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-label-with-fix.png">https://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-label-with-fix.png</a></p>
 <p>Here is another example with a street map:</p>
-<p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523/maxoverlapangle-2.png">http://trac.osgeo.org/mapserver/attachment/ticket/3523/maxoverlapangle-2.png</a></p>
+<p><a class="reference external" href="https://trac.osgeo.org/mapserver/attachment/ticket/3523/maxoverlapangle-2.png">https://trac.osgeo.org/mapserver/attachment/ticket/3523/maxoverlapangle-2.png</a></p>
 </section>
 <section id="technical-solution">
 <h2>Technical Solution<a class="headerlink" href="#technical-solution" title="Link to this heading">¶</a></h2>
@@ -265,7 +265,7 @@ MINDISTANCE to produce maps with even more labels. Here is an example:</p>
 </pre></div>
 </div>
 <p>… and here is the resulting contour map with the above settings:</p>
-<p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-collisions-repeatdistance-400-min-100.png">http://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-collisions-repeatdistance-400-min-100.png</a></p>
+<p><a class="reference external" href="https://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-collisions-repeatdistance-400-min-100.png">https://trac.osgeo.org/mapserver/attachment/ticket/3523/mapserver-collisions-repeatdistance-400-min-100.png</a></p>
 </section>
 <section id="backwards-compatibility-issues">
 <h2>Backwards Compatibility Issues<a class="headerlink" href="#backwards-compatibility-issues" title="Link to this heading">¶</a></h2>
@@ -292,11 +292,11 @@ up or down to get better results.</p>
 <h2>Ticket Id<a class="headerlink" href="#ticket-id" title="Link to this heading">¶</a></h2>
 <p>Main ticket:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/3523">http://trac.osgeo.org/mapserver/attachment/ticket/3523</a></p></li>
+<li><p><a class="reference external" href="https://trac.osgeo.org/mapserver/attachment/ticket/3523">https://trac.osgeo.org/mapserver/attachment/ticket/3523</a></p></li>
 </ul>
 <p>See also:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="http://trac.osgeo.org/mapserver/attachment/ticket/2221">http://trac.osgeo.org/mapserver/attachment/ticket/2221</a></p></li>
+<li><p><a class="reference external" href="https://trac.osgeo.org/mapserver/attachment/ticket/2221">https://trac.osgeo.org/mapserver/attachment/ticket/2221</a></p></li>
 </ul>
 </section>
 <section id="voting-history">
@@ -331,7 +331,7 @@ up or down to get better results.</p>
 <a href="../../documentation.html" title="Documentation">Documentation</a><br>
 <a href="../../faq.html" title="FAQ">FAQ</a><br>
 <a href="../../psc.html" title="PSC">PSC</a><br>
-<a href="https://twitter.com/mapserver_osgeo" title="Twitter">Twitter</a>
+<a href="https://fosstodon.org/@mapserver" title="Mastodon">Mastodon</a>
 </p>
   <h3>Current Table Of Contents</h3>
   <ul>
@@ -372,9 +372,9 @@ up or down to get better results.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; <a href="../../copyright.html">Telif hakkı</a> 2024, Open Source Geospatial Foundation.
-      Son güncelleme: 2024-11-01.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    &#169; <a href="../../copyright.html">Telif hakkı</a> 2025, Open Source Geospatial Foundation.
+      Son güncelleme: 2025-07-14.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

@@ -2,7 +2,7 @@ Documentation.addTranslations({
     "locale": "pl",
     "messages": {
         "%(filename)s &#8212; %(docstitle)s": "%(filename)s &#8212; %(docstitle)s",
-        "&#169; %(copyright_prefix)s %(copyright)s.": "",
+        "&#169; %(copyright_prefix)s %(copyright)s.": "&#169; %(copyright_prefix)s %(copyright)s.",
         ", in ": ", w ",
         "About these documents": "O tych dokumentach",
         "Automatically generated list of changes in version %(version)s": "Automatycznie wygenerowana lista zmian w wersji %(version)s",
@@ -20,7 +20,7 @@ Documentation.addTranslations({
         "Go": "Szukaj",
         "Hide Search Matches": "Ukryj wyniki wyszukiwania",
         "Index": "Indeks",
-        "Index &#x2013; %(key)s": "",
+        "Index &#x2013; %(key)s": "Indeks &#x2013; %(key)s",
         "Index pages by letter": "Strony indeksu alfabetycznie",
         "Indices and tables:": "Indeksy i tablice:",
         "Last updated on %(last_updated)s.": "Ostatnia modyfikacja %(last_updated)s.",
@@ -36,7 +36,12 @@ Documentation.addTranslations({
         "Search": "Szukaj",
         "Search Page": "Wyszukiwanie",
         "Search Results": "Wyniki wyszukiwania",
-        "Search finished, found ${resultCount} page(s) matching the search query.": "",
+        "Search finished, found one page matching the search query.": [
+            "",
+            "",
+            "",
+            ""
+        ],
         "Search within %(docstitle)s": "Szukaj po\u015br\u00f3d %(docstitle)s",
         "Searching": "Wyszukiwanie",
         "Searching for multiple words only shows matches that contain\n    all words.": "",

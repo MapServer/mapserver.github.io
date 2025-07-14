@@ -250,7 +250,7 @@ file is a tile of the larger raster mosaic available for display. The list of
 files forming a layer can be stored in a shapefile with polygons representing
 the footprint of each file, and the name of the files. This is called a
 'TILEINDEX' and works similarly to the same feature in vector layers. The result
-can be represented in the Mapfile as one layer, but MapServer will first scan
+can be represented in the mapfile as one layer, but MapServer will first scan
 the tile index, and ensure that only raster files overlapping the current
 display request will be opened.
 
@@ -469,6 +469,22 @@ are supported in MapServer 4.0 and newer.
        PROCESSING "EXTENT_PRIORITY=WORLD"
       
 .. index::
+   triple: LAYER; PROCESSING; GAMMA
+
+**GAMMA=<numeric_value>**
+    This directive (MapServer 8.4+) instructs the GDAL reader to apply a
+    `gamma correction <https://en.wikipedia.org/wiki/Gamma_correction>`__ step.
+    The default value is 1.0 (no gamma correction).
+    It is performed after classification, if any.
+    It does not apply to raw rendering.
+
+    Example:
+
+    ::
+
+       PROCESSING "GAMMA=0.75"
+
+.. index::
    triple: LAYER; PROCESSING; LOAD_FULL_RES_IMAGE
 
 **LOAD_FULL_RES_IMAGE=YES/NO**
@@ -633,6 +649,85 @@ are supported in MapServer 4.0 and newer.
       
 .. index::
    pair: Raster; Query
+
+.. _rasterlabel:
+
+Raster Labelling
+================
+
+.. versionadded:: 8.4
+
+This is the ability to render labels from raster pixel values,
+as an alternative or complement to other typical raster rendering (grayscale,
+classification, etc.). Typical applications are for temperature, wind, humidity,
+slopes, altitude, noise, pollution, etc.
+
+Visual example:
+
+ .. image:: ../images/rasterlabel.png
+
+LAYER Description
+-----------------
+
+A raster labelling layer :ref:`LAYER` is a hybrid layer, which has a raster data
+source as input and vector features as output.  The output features
+are represented as points.  Queries are not supported.
+
+Since the data source is a raster, all raster processing options can
+be used (e.g. RESAMPLE).  RESAMPLE=AVERAGE generally gives a good
+result, and the default.  This can be overridden by explicitly
+specifying the type of resampling.
+
+Vector field layers are of `TYPE` `point`, and have `CONNECTIONTYPE`
+`rasterlabel`. The raster data set is specified in `DATA`. The band to label
+is set through the `PROCESSING` `BANDS` option.
+
+LAYER Attributes
+----------------
+
+The rasterlabel connection type offers the following attribute:
+
+* [value]: the raw value
+
+Optional `PROCESSING` Settings
+------------------------------
+
+* `BANDS=<num>`: Specify the band to label. Not needed if there is a single band.
+* `LABEL_SPACING=<num>`: The spacing is simply the distance, in pixels, between points
+  to be displayed in the vector field. Default is 32.
+* `RESAMPLE=NEAREST/AVERAGE/BILINEAR`: Defaults to AVERAGE.
+* `ALLOW_OVERSAMPLE=YES/NO`: Whether it is allowed to oversample the raster at
+  a resolution higher than its nominal resolution. Default is NO, meaning that
+  when zooming in beyond the nominal resolution of the raster, at most one
+  point will be generated for each source pixel. This gives to the user a sense
+  of the resolution of the data it displays.
+
+Example of a layer definition
+-----------------------------
+
+.. code-block:: mapfile
+
+  LAYER
+    NAME "temperature"
+    TYPE POINT
+    CONNECTIONTYPE RASTERLABEL
+    PROJECTION
+      "init=epsg:4326"
+    END
+    DATA "data/temperature.tif"
+    # PROCESSING "BANDS=1"
+    # PROCESSING "LABEL_SPACING=32"
+    # PROCESSING "RESAMPLE=AVERAGE"
+    # PROCESSING "ALLOW_OVERSAMPLE=NO"
+    CLASS
+        TEXT (tostring([value],"%.1f")+"°")
+        LABEL
+          TYPE TRUETYPE
+          SIZE 7
+        END # label
+    END # class
+  END
+
 
 Raster Query
 ============
@@ -984,7 +1079,7 @@ MapServer the extension .wld is always OK for world files.
 .. _`gdaltindex`: https://gdal.org/programs/gdaltindex.html
 .. _`FWTools`: http://fwtools.maptools.org/
 .. _`MS4W`: https://ms4w.com
-.. _`OSGeo4W`: http://trac.osgeo.org/osgeo4w/
+.. _`OSGeo4W`: https://trac.osgeo.org/osgeo4w/
 .. _`RasterQuery`: https://github.com/MapServer/MapServer/wiki/RasterQuery
 .. _`gdaladdo`: https://gdal.org/programs/gdaladdo.html
 .. _`gdal_translate`: https://gdal.org/programs/gdal_translate.html
