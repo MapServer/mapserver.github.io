@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>WFS Server &#8212; MapServer 8.4.1 documentation</title>
+    <title>WFS Server &#8212; MapServer 8.6.0-beta2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx.css?v=48f05237" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
     
     <script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=d725fbd8"></script>
+    <script src="../_static/documentation_options.js?v=7dfd10d4"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -138,7 +138,7 @@
           <a href="layer_metadata.html" title="Layer Metadata"
              accesskey="P">前へ</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.4.1 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.6.0-beta2 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">OGC Support and Configuration</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">WFS Server</a></li> 
       </ul>
@@ -166,7 +166,7 @@
 <dd class="field-even"><p>even.rouault at mines-paris.org</p>
 </dd>
 <dt class="field-odd">Last Updated<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2025-04-14</p>
+<dd class="field-odd"><p>2025-11-09</p>
 </dd>
 </dl>
 <nav class="contents" id="id2">
@@ -342,6 +342,8 @@ the comments for the required parameters.</p>
       <span class="s">&quot;gml_include_items&quot;</span> <span class="s">&quot;all&quot;</span> <span class="c">## Optional (serves all attributes for layer)</span>
       <span class="s">&quot;gml_featureid&quot;</span>     <span class="s">&quot;ID&quot;</span> <span class="c">## REQUIRED</span>
       <span class="s">&quot;gml_types&quot;</span>         <span class="s">&quot;auto&quot;</span> <span class="c">## Optional (automatically populate the type for the attributes)</span>
+      <span class="s">&quot;gml_geometries&quot;</span>    <span class="s">&quot;geom&quot;</span> <span class="c">## Recommended (give new name for geometry elements)</span>
+      <span class="s">&quot;gml_geom_type&quot;</span>     <span class="s">&quot;polygon&quot;</span> <span class="c">## Recommended (specify the geometry type for the layer)</span>
       <span class="s">&quot;wfs_enable_request&quot;</span> <span class="s">&quot;*&quot;</span>
       <span class="s">&quot;wfs_use_default_extent_for_getfeature&quot;</span> <span class="s">&quot;false&quot;</span> <span class="c">## Optional (improves performance of OGR layers)</span>
     <span class="k">END</span>
@@ -481,6 +483,73 @@ support. (recommended)</p></li>
 <li><p><a class="reference external" href="https://www.deegree.org/">Deegree</a> provides a WFS client.</p></li>
 <li><p><a class="reference external" href="https://en.wikipedia.org/wiki/UDig">uDig</a> can add layers from WMS/WFS servers.</p></li>
 </ul>
+</section>
+<section id="test-with-an-ogrinfo-command">
+<h4>Test with an ogrinfo command<a class="headerlink" href="#test-with-an-ogrinfo-command" title="Link to this heading">¶</a></h4>
+<p>You can use GDAL's <a class="reference external" href="https://gdal.org/en/stable/drivers/vector/wfs.html">WFS driver</a>
+and the <a class="reference external" href="https://gdal.org/en/stable/programs/ogrinfo.html">ogrinfo utility</a>
+to analyze your WFS service.</p>
+<p>For example, here is a command to examine the <cite>continents</cite> WFS layer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ogrinfo</span> <span class="n">WFS</span><span class="p">:</span><span class="s2">&quot;https://demo.mapserver.org/cgi-bin/wfs?SERVICE=WFS&amp;VERSION=2.0.0&amp;REQUEST=GetCapabilities&quot;</span> <span class="n">continents</span>
+</pre></div>
+</div>
+<p>Which should return something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>INFO: Open of `WFS:https://demo.mapserver.org/cgi-bin/wfs?SERVICE=WFS&amp;VERSION=2.0.0&amp;REQUEST=GetCapabilities&#39;
+    using driver `WFS&#39; successful.
+  Metadata:
+    TITLE=WFS Demo Server for MapServer
+    ABSTRACT=This demonstration server showcases MapServer (www.mapserver.org) and its OGC support
+    PROVIDER_NAME=GatewayGeo
+
+  Layer name: ms:continents
+  Metadata:
+    TITLE=World continents
+  Geometry: Curve Polygon
+  Feature Count: 27458
+  Extent: (-180.000000, -90.000000) - (180.000000, 83.627419)
+  Layer SRS WKT:
+  GEOGCRS[&quot;WGS 84&quot;,
+      ENSEMBLE[&quot;World Geodetic System 1984 ensemble&quot;,
+          MEMBER[&quot;World Geodetic System 1984 (Transit)&quot;],
+          MEMBER[&quot;World Geodetic System 1984 (G730)&quot;],
+          MEMBER[&quot;World Geodetic System 1984 (G873)&quot;],
+          MEMBER[&quot;World Geodetic System 1984 (G1150)&quot;],
+          MEMBER[&quot;World Geodetic System 1984 (G1674)&quot;],
+          MEMBER[&quot;World Geodetic System 1984 (G1762)&quot;],
+          MEMBER[&quot;World Geodetic System 1984 (G2139)&quot;],
+          MEMBER[&quot;World Geodetic System 1984 (G2296)&quot;],
+          ELLIPSOID[&quot;WGS 84&quot;,6378137,298.257223563,
+              LENGTHUNIT[&quot;metre&quot;,1]],
+          ENSEMBLEACCURACY[2.0]],
+      PRIMEM[&quot;Greenwich&quot;,0,
+          ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],
+      CS[ellipsoidal,2],
+          AXIS[&quot;geodetic latitude (Lat)&quot;,north,
+              ORDER[1],
+              ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],
+          AXIS[&quot;geodetic longitude (Lon)&quot;,east,
+              ORDER[2],
+              ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],
+      USAGE[
+          SCOPE[&quot;Horizontal component of 3D system.&quot;],
+          AREA[&quot;World.&quot;],
+          BBOX[-90,-180,90,180]],
+      ID[&quot;EPSG&quot;,4326]]
+  Data axis to CRS axis mapping: 2,1
+  Supported SRS: EPSG:4326, EPSG:4269, EPSG:3978, EPSG:3857
+  Geometry Column = geom
+  gml_id: String (0.0) NOT NULL
+  NA2DESC: String (0.0)
+  NA3DESC: String (0.0)
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you notice &quot;Geometry: Unknown (any)&quot; in the ogrinfo response, you
+should set the &quot;gml_geometries&quot; and &quot;gml_geom_type&quot; properties in
+the LAYER.METADATA of your WFS server mapfile, as in the example
+mapfile above.</p>
+</div>
 </section>
 <section id="support-for-get-and-post-requests">
 <h4>Support for GET and POST Requests<a class="headerlink" href="#support-for-get-and-post-requests" title="Link to this heading">¶</a></h4>
@@ -1351,6 +1420,7 @@ against the WFS spec. Suggestions on how to handle this are welcome
 <li><a class="reference internal" href="#validate-the-capabilities-metadata">Validate the Capabilities Metadata</a></li>
 <li><a class="reference internal" href="#test-with-a-getfeature-request">Test With a GetFeature Request</a></li>
 <li><a class="reference internal" href="#test-with-a-real-client">Test with a Real Client</a></li>
+<li><a class="reference internal" href="#test-with-an-ogrinfo-command">Test with an ogrinfo command</a></li>
 <li><a class="reference internal" href="#support-for-get-and-post-requests">Support for GET and POST Requests</a></li>
 <li><a class="reference internal" href="#support-for-filter-encoding">Support for Filter Encoding</a></li>
 <li><a class="reference internal" href="#support-for-sorting">Support for Sorting</a></li>
@@ -1391,14 +1461,14 @@ against the WFS spec. Suggestions on how to handle this are welcome
           <a href="layer_metadata.html" title="Layer Metadata"
              >前へ</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.4.1 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.6.0-beta2 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >OGC Support and Configuration</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">WFS Server</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
     &#169; <a href="../copyright.html">著作権</a> 2025, Open Source Geospatial Foundation.
-      最終更新: 2025-09-22
+      最終更新: 2025-11-18
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>

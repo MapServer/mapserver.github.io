@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MS RFC 140: MapServer Homepage &#8212; MapServer 8.4.1 documentation</title>
+    <title>MS RFC 140: MapServer Index Page &#8212; MapServer 8.6.0-beta2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx.css?v=48f05237" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
     
     <script src="../../_static/jquery.js?v=5d32c60e"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../../_static/documentation_options.js?v=753b0749"></script>
+    <script src="../../_static/documentation_options.js?v=dfe3ec45"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -140,7 +140,7 @@
         <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Request for Comments</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">MS RFC 140: MapServer Homepage</a></li> 
+        <li class="nav-item nav-item-this"><a href="">MS RFC 140: MapServer Index Page</a></li> 
       </ul>
     </div>
   
@@ -150,8 +150,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="ms-rfc-140-mapserver-homepage">
-<span id="rfc140"></span><h1>MS RFC 140: MapServer Homepage<a class="headerlink" href="#ms-rfc-140-mapserver-homepage" title="Link to this heading">¶</a></h1>
+  <section id="ms-rfc-140-mapserver-index-page">
+<span id="rfc140"></span><h1>MS RFC 140: MapServer Index Page<a class="headerlink" href="#ms-rfc-140-mapserver-index-page" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Author<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Seth Girvin</p>
@@ -160,36 +160,36 @@
 <dd class="field-even"><p><a class="reference external" href="mailto:sethg&#37;&#52;&#48;geographika&#46;co&#46;uk">sethg<span>&#64;</span>geographika<span>&#46;</span>co<span>&#46;</span>uk</a></p>
 </dd>
 <dt class="field-odd">Last Updated<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2025-05-09</p>
+<dd class="field-odd"><p>2025-10-17</p>
 </dd>
 <dt class="field-even">Version<span class="colon">:</span></dt>
 <dd class="field-even"><p>MapServer 8.6</p>
 </dd>
 <dt class="field-odd">Status<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Draft</p>
+<dd class="field-odd"><p>Adopted</p>
 </dd>
 </dl>
 <section id="overview">
 <h2>1. Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
-<p>This RFC proposes adding functionality to MapServer for dynamically generating a homepage that lists all map services available in a given deployment.
+<p>This RFC proposes adding functionality to MapServer for dynamically generating a index page that lists all map services available in a given deployment.
 This feature would enable the creation of pages like <a class="reference external" href="https://maps.isric.org/">https://maps.isric.org/</a> directly from a MapServer deployment, without requiring
 additional scripting. While scripting can achieve this, integrating the capability into MapServer itself
 would offer greater convenience and maintainability.</p>
 <p>With the introduction of the <a class="reference internal" href="../../mapfile/config.html#config"><span class="std std-ref">CONFIG file</span></a> in MapServer 8.0, it is now possible to centrally manage information about all Mapfiles in a deployment.
-This would ensure that the homepage remains automatically synchronised with both the CONFIG file and the capabilities of the Mapfiles it references.</p>
-<p>The homepage would be a “superset” of all available Mapfiles in a MapServer deployment, as listed in the CONFIG file.
-Each individual Mapfile would still have its own OGC API landing page, so the homepage is best described as a directory of all landing pages.</p>
+This would ensure that the index page remains automatically synchronised with both the CONFIG file and the capabilities of the Mapfiles it references.</p>
+<p>The index page would be a “superset” of all available Mapfiles in a MapServer deployment, as listed in the CONFIG file.
+Each individual Mapfile would still have its own OGC API landing page, so the index page is best described as a directory of all landing pages.</p>
 <p>As most MapServer deployments will likely be serving out a combination of WxS and new OGC API services for some time to come,
 it will allow both types to be listed together.</p>
 </section>
 <section id="proposed-solution">
 <h2>2.1 Proposed Solution<a class="headerlink" href="#proposed-solution" title="Link to this heading">¶</a></h2>
-<p>A new MapServer <a class="reference internal" href="../../cgi/index.html#cgi"><span class="std std-ref">CGI mode</span></a> - <code class="docutils literal notranslate"><span class="pre">mode=config</span></code> will be added to allow details of the MapServer services to be returned. The <code class="docutils literal notranslate"><span class="pre">MAPS</span></code> block
-in the <a class="reference internal" href="../../mapfile/config.html#config"><span class="std std-ref">CONFIG file</span></a> will be read to return a list of available services. By default the homepage service will be disabled unless a new
-<code class="docutils literal notranslate"><span class="pre">ENV</span></code> option <code class="docutils literal notranslate"><span class="pre">MS_HOMEPAGE_TEMPLATE</span></code> has been set. This should be set to a folder containing a <code class="docutils literal notranslate"><span class="pre">homepage.html</span></code> value. However if only JSON
-responses are required it can be set to any value to enable the homepage service.</p>
+<p>New MapServer functionality will be added to allow details of the MapServer services to be returned. The <code class="docutils literal notranslate"><span class="pre">MAPS</span></code> block
+in the <a class="reference internal" href="../../mapfile/config.html#config"><span class="std std-ref">CONFIG file</span></a> will be read to return a list of available services. By default the index page service will be disabled unless a new
+<code class="docutils literal notranslate"><span class="pre">ENV</span></code> option <code class="docutils literal notranslate"><span class="pre">MS_INDEX_TEMPLATE_DIRECTORY</span></code> has been set. This should be set to a folder containing a <code class="docutils literal notranslate"><span class="pre">landing.html</span></code> value. However if only JSON
+responses are required it can be set to any value to enable the index page service.</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">ENV</span>
-    <span class="err">MS_HOMEPAGE_TEMPLATE_DIRECTORY</span> <span class="s">&quot;share/ogcapi/templates/homepage/&quot;</span> <span class="c"># REQUIRED</span>
+    <span class="nb">MS_INDEX_TEMPLATE_DIRECTORY</span> <span class="s">&quot;/mapserver/share/ogcapi/templates/html-index-bootstrap/&quot;</span> <span class="c"># REQUIRED</span>
     <span class="p">...</span>
 <span class="k">END</span>
 <span class="c"># Example MAPS block in the CONFIG file</span>
@@ -204,19 +204,19 @@ it is proposed the OGC API use of the <code class="docutils literal notranslate"
 used to select this, for example <code class="docutils literal notranslate"><span class="pre">f=html</span></code> or <code class="docutils literal notranslate"><span class="pre">f=json</span></code>. As with the OGC Features API if not specified JSON will be the default.
 Requests will look as follows:</p>
 <div class="highlight-bat notranslate"><div class="highlight"><pre><span></span># example web requests
-# http://localhost/cgi-bin/mapserv.exe?mode=config<span class="p">&amp;</span>f=json
-# http://localhost/cgi-bin/mapserv.exe?mode=config<span class="p">&amp;</span>f=html
+# http://localhost/cgi-bin/mapserv.exe?f=json
+# http://localhost/cgi-bin/mapserv.exe?f=html
 
 # from the command line
-mapserv -nh <span class="s2">&quot;QUERY_STRING=mode=config&amp;f=json&quot;</span> -conf <span class="s2">&quot;/usr/local/etc/mapserver.conf&quot;</span>
-mapserv -nh <span class="s2">&quot;QUERY_STRING=mode=config&amp;f=html&quot;</span> -conf <span class="s2">&quot;C:\MapServer\apps\mapserver.conf&quot;</span>
+mapserv -nh <span class="s2">&quot;QUERY_STRING=f=json&quot;</span> -conf <span class="s2">&quot;/usr/local/etc/mapserver.conf&quot;</span>
+mapserv -nh <span class="s2">&quot;QUERY_STRING=f=html&quot;</span> -conf <span class="s2">&quot;C:\MapServer\apps\mapserver.conf&quot;</span>
 </pre></div>
 </div>
 <p>As the service returns JSON any client-side library can be used to render the output. However a default HTML template  will be provided
 following the same approach as in OGC Features API.</p>
 <div class="admonition note">
 <p class="admonition-title">Not</p>
-<p>Even though the JSON format is based on the OGC API, the homepage JSON service will still be generated for a Mapfile even if it only supports
+<p>Even though the JSON format is based on the OGC API, the index page JSON service will still be generated for a Mapfile even if it only supports
 older WxS services.</p>
 </div>
 <section id="json-structure">
@@ -249,7 +249,7 @@ a draft IETF (Internet Engineering Task Force) standard. An example implementati
 </div>
 <p>The api-catalog specification allows for an additional <code class="docutils literal notranslate"><span class="pre">service-meta</span></code> property <em>“used to link to additional metadata about the API,
 and is primarily intended for machine consumption.”</em>  This can be used to add any additional properties from Mapfiles
-required to generate a MapServer homepage. <code class="docutils literal notranslate"><span class="pre">service-doc</span></code> isn’t mandatory property, so WxS service links can ignore this.</p>
+required to generate a MapServer index page. <code class="docutils literal notranslate"><span class="pre">service-doc</span></code> isn’t mandatory property, so WxS service links can ignore this.</p>
 <p>An example of the proposed JSON and metadata is shown below:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;linkset&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
@@ -316,7 +316,7 @@ that the URLs will return valid XML if the Mapfile is not configured correctly.<
 <h2>2.4 Security Concerns<a class="headerlink" href="#security-concerns" title="Link to this heading">¶</a></h2>
 <p>This new feature will make services more discoverable, but with this comes the risk of leaking information.
 The service will be opt-in, and up to the administrators of the deployment if they want this information to be
-visible by setting the <code class="docutils literal notranslate"><span class="pre">MS_HOMEPAGE_TEMPLATE_DIRECTORY</span></code> value in the <code class="docutils literal notranslate"><span class="pre">CONFIG</span></code> file.</p>
+visible by setting the <code class="docutils literal notranslate"><span class="pre">MS_INDEX_TEMPLATE_DIRECTORY</span></code> value in the <code class="docutils literal notranslate"><span class="pre">CONFIG</span></code> file.</p>
 </section>
 <section id="mapscript">
 <h2>2.5 MapScript<a class="headerlink" href="#mapscript" title="Link to this heading">¶</a></h2>
@@ -326,11 +326,7 @@ None of the current MapServer <code class="docutils literal notranslate"><span c
 <section id="implementation-details">
 <h2>3. Implementation Details<a class="headerlink" href="#implementation-details" title="Link to this heading">¶</a></h2>
 <p>This section contains notes from prototyping a possible solution. The final approach may differ.</p>
-<p>A requests will be checked for <code class="docutils literal notranslate"><span class="pre">mode=config</span></code> in mapserv.c to return JSON and exit.
-A new mode will be added to <code class="docutils literal notranslate"><span class="pre">mapservutil.c</span></code></p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="n">modeStrings</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span>
-</pre></div>
-</div>
+<p>Requests will be checked in mapserv.c to return JSON and exit.</p>
 <p>To list services supported in a Mapfile <code class="docutils literal notranslate"><span class="pre">msOWSRequestIsEnabled</span></code> will be used:</p>
 <ul class="simple">
 <li><p>“AO”, “OGCAPI”</p></li>
@@ -347,17 +343,18 @@ if <code class="docutils literal notranslate"><span class="pre">ows_onlineresour
 <li><p>mapserv.c</p></li>
 <li><p>mapservutil.c</p></li>
 <li><p>mapserver.h</p></li>
+<li><p>mapserv-config.cpp</p></li>
 </ul>
 </section>
 <section id="ticket-reference">
 <h3>3.2 Ticket Reference<a class="headerlink" href="#ticket-reference" title="Link to this heading">¶</a></h3>
 <ul class="simple">
-<li><p>TODO</p></li>
+<li><p><a class="reference external" href="https://github.com/MapServer/MapServer/pull/7350">https://github.com/MapServer/MapServer/pull/7350</a></p></li>
 </ul>
 </section>
 <section id="documentation">
 <h3>3.3 Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h3>
-<p>TODO</p>
+<p>See <a class="reference external" href="https://github.com/MapServer/MapServer-documentation/pull/1039">https://github.com/MapServer/MapServer-documentation/pull/1039</a></p>
 </section>
 </section>
 <section id="voting-history">
@@ -397,7 +394,7 @@ if <code class="docutils literal notranslate"><span class="pre">ows_onlineresour
 </p>
   <h3>Current Table Of Contents</h3>
   <ul>
-<li><a class="reference internal" href="#">MS RFC 140: MapServer Homepage</a><ul>
+<li><a class="reference internal" href="#">MS RFC 140: MapServer Index Page</a><ul>
 <li><a class="reference internal" href="#overview">1. Overview</a></li>
 <li><a class="reference internal" href="#proposed-solution">2.1 Proposed Solution</a><ul>
 <li><a class="reference internal" href="#json-structure">JSON Structure</a></li>
@@ -438,12 +435,12 @@ if <code class="docutils literal notranslate"><span class="pre">ows_onlineresour
         <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Development</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Request for Comments</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">MS RFC 140: MapServer Homepage</a></li> 
+        <li class="nav-item nav-item-this"><a href="">MS RFC 140: MapServer Index Page</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
     &#169; <a href="../../copyright.html">Telif hakkı</a> 2025, Open Source Geospatial Foundation.
-      Son güncelleme: 2025-09-22.
+      Son güncelleme: 2025-11-18.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
