@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx.css?v=48f05237" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=dd298242" />
     <link rel="stylesheet" type="text/css" href="../_static/ribbon.css?v=ea091bf4" />
     
@@ -166,7 +167,7 @@
 <dd class="field-even"><p>even.rouault at mines-paris.org</p>
 </dd>
 <dt class="field-odd">Last Updated<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2026-03-29</p>
+<dd class="field-odd"><p>2026-04-09</p>
 </dd>
 </dl>
 <nav class="contents" id="contents">
@@ -223,12 +224,38 @@ the <a class="reference internal" href="../development/rfc/ms-rfc-105.html#rfc10
 <p>In order to enable MapServer to serve WFS, it MUST be compiled against
 certain libraries:</p>
 <ul class="simple">
-<li><p>PROJ: The reprojection library. Version 4.4.3 or greater is required.</p></li>
-<li><p>GDAL/OGR: I/O support libraries. Version 1.6.0 or greater is required.</p></li>
+<li><p><a class="reference external" href="https://proj.org">PROJ</a>: The reprojection library. Version 4.4.3 or greater is required.</p></li>
+<li><p><a class="reference external" href="https://gdal.org">GDAL</a>: I/O support libraries. Version 1.6.0 or greater is required.</p></li>
 </ul>
-<p>Please see the MapServer <a class="reference internal" href="../installation/unix.html#unix"><span class="std std-ref">UNIX Compilation and Installation HowTo</span></a> for detailed instructions on compiling MapServer with support
-for these libraries and features.  For Windows users, the <a class="reference external" href="https://ms4w.com">MS4W</a>
-installer comes ready to serve both WFS and WMS.</p>
+<p>(Unix users should refer to the <a class="reference internal" href="../installation/unix.html#unix"><span class="std std-ref">Compiling on Unix</span></a> document for any compiling
+instructions, and Windows users might want to use <a class="reference external" href="https://ms4w.com">MS4W</a>,
+which comes ready with WFS support)</p>
+<p>You can check that your mapserv executable includes WFS server support by using
+the «-v» command-line switch and look for «SUPPORTS=WFS_SERVER».</p>
+<p>Example 1. On Unix:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./mapserv<span class="w"> </span>-v
+MapServer<span class="w"> </span>version<span class="w"> </span><span class="m">8</span>.7-dev<span class="w"> </span>PROJ<span class="w"> </span>version<span class="w"> </span><span class="m">9</span>.8<span class="w"> </span>GDAL<span class="w"> </span>version<span class="w"> </span><span class="m">3</span>.12
+<span class="nv">OUTPUT</span><span class="o">=</span>PNG<span class="w"> </span><span class="nv">OUTPUT</span><span class="o">=</span>JPEG<span class="w"> </span><span class="nv">OUTPUT</span><span class="o">=</span>KML<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>PROJ<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>AGG
+<span class="nv">SUPPORTS</span><span class="o">=</span>FREETYPE<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>CAIRO<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>SVG_SYMBOLS<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>RSVG
+<span class="nv">SUPPORTS</span><span class="o">=</span>ICONV<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>FRIBIDI<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>WMS_SERVER<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>WMS_CLIENT
+<span class="nv">SUPPORTS</span><span class="o">=</span>WFS_SERVER<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>WFS_CLIENT<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>WCS_SERVER
+<span class="nv">SUPPORTS</span><span class="o">=</span>SOS_SERVER<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>OGCAPI_SERVER<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>GEOS<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>PBF
+<span class="nv">INPUT</span><span class="o">=</span>JPEG<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>POSTGIS<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>OGR<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>GDAL<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>SHAPEFILE
+<span class="nv">INPUT</span><span class="o">=</span>FLATGEOBUF
+</pre></div>
+</div>
+<p>Example 2. On Windows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>C:<span class="se">\m</span>s4w&gt;<span class="w"> </span>mapserv<span class="w"> </span>-v
+MapServer<span class="w"> </span>version<span class="w"> </span><span class="m">8</span>.7-dev<span class="w"> </span><span class="o">(</span>MS4W<span class="w"> </span><span class="m">5</span>.2.0<span class="o">)</span><span class="w"> </span>PROJ<span class="w"> </span>version<span class="w"> </span><span class="m">9</span>.9
+GDAL<span class="w"> </span>version<span class="w"> </span><span class="m">3</span>.13<span class="w"> </span><span class="nv">OUTPUT</span><span class="o">=</span>PNG<span class="w"> </span><span class="nv">OUTPUT</span><span class="o">=</span>JPEG<span class="w"> </span><span class="nv">OUTPUT</span><span class="o">=</span>KML<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>PROJ
+<span class="nv">SUPPORTS</span><span class="o">=</span>AGG<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>FREETYPE<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>CAIRO<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>SVG_SYMBOLS
+<span class="nv">SUPPORTS</span><span class="o">=</span>SVGCAIRO<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>ICONV<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>FRIBIDI<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>WMS_SERVER
+<span class="nv">SUPPORTS</span><span class="o">=</span>WMS_CLIENT<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>WFS_SERVER<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>WFS_CLIENT
+<span class="nv">SUPPORTS</span><span class="o">=</span>WCS_SERVER<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>SOS_SERVER<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>OGCAPI_SERVER
+<span class="nv">SUPPORTS</span><span class="o">=</span>FASTCGI<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>THREADS<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>GEOS<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>PBF<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>JPEG
+<span class="nv">INPUT</span><span class="o">=</span>POSTGIS<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>OGR<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>GDAL<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>SHAPEFILE<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>FLATGEOBUF
+</pre></div>
+</div>
 </section>
 <section id="versions-of-gml-supported">
 <span id="index-1"></span><h3>Versions of GML Supported<a class="headerlink" href="#versions-of-gml-supported" title="Lidhje për te kjo krye">¶</a></h3>
@@ -475,13 +502,18 @@ layers.</p>
 online resource with it and you should be off and running.</p>
 <p>If you don’t have your own WFS client installed already, here are a
 few pointers:</p>
-<ul class="simple">
+<ul>
 <li><p>MapServer itself can be used as a WFS client, see the <a class="reference internal" href="wfs_client.html#wfs-client"><span class="std std-ref">WFS
 Client HowTo</span></a>.</p></li>
 <li><p><a class="reference external" href="https://qgis.org/">QGIS</a> is a full GIS package which includes WFS client
-support. (recommended)</p></li>
+support. (recommended)</p>
+<div class="admonition tip">
+<p class="admonition-title">Ndihmëz</p>
+<p>You can/should use the <a class="reference external" href="https://github.com/MapServer/MapServer/wiki/Get-the-Raw-WMS-Request-Generated-by-QGIS">QGIS Network Logger</a>
+to get the exact GetFeature or GetCapabilities requests sent by QGIS.</p>
+</div>
+</li>
 <li><p><a class="reference external" href="https://www.deegree.org/">Deegree</a> provides a WFS client.</p></li>
-<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/UDig">uDig</a> can add layers from WMS/WFS servers.</p></li>
 </ul>
 </section>
 <section id="test-with-an-ogrinfo-command">
@@ -1468,7 +1500,7 @@ against the WFS spec. Suggestions on how to handle this are welcome
     </div>
     <div class="footer" role="contentinfo">
     &#169; <a href="../copyright.html">Të drejta kopjimi</a> 2026, Open Source Geospatial Foundation.
-      Përditësuar së fundi më 2026-03-30.
+      Përditësuar së fundi më 2026-04-13.
       Krijuar duke përdorur <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>

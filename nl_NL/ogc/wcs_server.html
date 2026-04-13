@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx.css?v=48f05237" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_collapse.css?v=226d88b4" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=dd298242" />
     <link rel="stylesheet" type="text/css" href="../_static/ribbon.css?v=ea091bf4" />
     
@@ -171,7 +172,7 @@
 <dd class="field-even"><p>fabian.schindler at eox.at</p>
 </dd>
 <dt class="field-odd">Last Updated<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2026-03-23</p>
+<dd class="field-odd"><p>2026-04-13</p>
 </dd>
 </dl>
 <nav class="contents" id="table-of-contents">
@@ -188,10 +189,9 @@
 <li><p><a class="reference internal" href="#inspire-download-service-support" id="id9">INSPIRE download service support</a></p></li>
 <li><p><a class="reference internal" href="#reference-section" id="id10">Reference Section</a></p></li>
 <li><p><a class="reference internal" href="#rules-for-handling-srs-in-a-mapserver-wcs" id="id11">Rules for handling SRS in a MapServer WCS</a></p></li>
-<li><p><a class="reference internal" href="#spatio-temporal-indexes" id="id12">Spatio/Temporal Indexes</a></p></li>
-<li><p><a class="reference internal" href="#wcs-2-0-application-profile-earth-observation-eo-wcs" id="id13">WCS 2.0 Application Profile - Earth Observation (EO-WCS)</a></p></li>
-<li><p><a class="reference internal" href="#to-do-items-and-known-limitations" id="id14">To-do Items and Known Limitations</a></p></li>
-<li><p><a class="reference internal" href="#credits" id="id15">Credits</a></p></li>
+<li><p><a class="reference internal" href="#wcs-2-0-application-profile-earth-observation-eo-wcs" id="id12">WCS 2.0 Application Profile - Earth Observation (EO-WCS)</a></p></li>
+<li><p><a class="reference internal" href="#to-do-items-and-known-limitations" id="id13">To-do Items and Known Limitations</a></p></li>
+<li><p><a class="reference internal" href="#credits" id="id14">Credits</a></p></li>
 </ul>
 </li>
 </ul>
@@ -199,7 +199,7 @@
 <section id="introduction">
 <h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
 <p>A WCS (or Web Coverage Service) allows for the publication of
-“coverages”- digital geospatial information representing space-varying
+“coverages”: digital geospatial information representing space-varying
 phenomena. In the MapServer world it allows for unfiltered access to
 raster data. Conceptually it is easy think of WCS as a raster
 equivalent of WFS. The following documentation is based on the <a class="reference external" href="https://portal.ogc.org/files/?artifact_id=3837">Open
@@ -208,6 +208,7 @@ Implementation Specification version 1.0.0</a>.</p>
 <section id="links-to-wcs-related-information">
 <h3>Links to WCS-Related Information<a class="headerlink" href="#links-to-wcs-related-information" title="Link to this heading">¶</a></h3>
 <ul class="simple">
+<li><p><a class="reference internal" href="wcs_format.html#wcs-format"><span class="std std-ref">MapServer WCS Use Cases</span></a></p></li>
 <li><p><a class="reference external" href="https://www.ogc.org/standards/wcs">OGC’c WCS Standard page</a></p></li>
 <li><p><a class="reference external" href="https://portal.ogc.org/files/?artifact_id=3837">WCS 1.0.0 specification</a></p></li>
 <li><p><a class="reference external" href="https://portal.ogc.org/files/?artifact_id=22560">WCS 1.1.1c1 specification</a></p></li>
@@ -219,7 +220,6 @@ Implementation Specification version 1.0.0</a>.</p>
 <li><p><a class="reference external" href="https://portal.ogc.org/files/?artifact_id=41440">WCS 2.0 Specification - XML/POST Protocol Binding Extension</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="wms_server.html#wms-server"><span class="std std-ref">WMS Server HowTo</span></a></p></li>
 </ul>
 </section>
 <section id="software-requirements">
@@ -227,120 +227,156 @@ Implementation Specification version 1.0.0</a>.</p>
 <p>In order to enable MapServer to serve WCS data, it MUST be compiled
 against certain libraries:</p>
 <ul class="simple">
-<li><p>PROJ: The reprojection library. Version 4.4.3 or greater is required.</p></li>
-<li><p>GDAL: raster support library.</p></li>
-<li><p>MapServer: version &gt;= 4.4 (tested with 5.0.2 while updating this document)</p></li>
+<li><p><a class="reference external" href="https://proj.org">PROJ</a>: The reprojection library. Version 4.4.3 or
+greater is required.</p></li>
+<li><p><a class="reference external" href="https://gdal.org">GDAL</a>: raster support library.</p></li>
+<li><p>MapServer: version &gt;= 4.4 (tested with 8.6.1 while updating this document)</p></li>
 </ul>
-<p>For WCS 1.1.x (MapServer 5.2) and WCS 2.0 (MapServer 6.0) support
+<p>For WCS 1.1.x support (since MapServer 5.2) and WCS 2.0 support (since MapServer 6.0)
 there is an additional requirement:</p>
 <ul class="simple">
-<li><p>libxml2: An xml parser and generation library.</p></li>
+<li><p><a class="reference external" href="https://gitlab.gnome.org/GNOME/libxml2/-/wikis/home">libxml2</a>: An xml
+parser and generation library.</p></li>
 </ul>
-<p>Please see the <a class="reference internal" href="../installation/unix.html#unix"><span class="std std-ref">MapServer UNIX Compilation and Installation HowTo</span></a> for detailed instructions on compiling MapServer with support
-for these libraries and features.  For Windows users, <a class="reference external" href="https://ms4w.com">MapServer for
-Windows (MS4W)</a> comes with WCS Server support.</p>
+<p>(Unix users should refer to the <a class="reference internal" href="../installation/unix.html#unix"><span class="std std-ref">Compiling on Unix</span></a> document for any compiling
+instructions, and Windows users might want to use <a class="reference external" href="https://ms4w.com">MS4W</a>,
+which comes ready with WCS support)</p>
+<p>You can check that your <a class="reference internal" href="../cgi/mapserv.html#mapserv"><span class="std std-ref">mapserv</span></a> executable includes WCS server support
+by using the “-v” command-line switch and look for “SUPPORTS=WCS_SERVER”.</p>
+<p>Example 1. On Unix:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./mapserv<span class="w"> </span>-v
+MapServer<span class="w"> </span>version<span class="w"> </span><span class="m">8</span>.7-dev<span class="w"> </span>PROJ<span class="w"> </span>version<span class="w"> </span><span class="m">9</span>.8<span class="w"> </span>GDAL<span class="w"> </span>version<span class="w"> </span><span class="m">3</span>.12
+<span class="nv">OUTPUT</span><span class="o">=</span>PNG<span class="w"> </span><span class="nv">OUTPUT</span><span class="o">=</span>JPEG<span class="w"> </span><span class="nv">OUTPUT</span><span class="o">=</span>KML<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>PROJ<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>AGG
+<span class="nv">SUPPORTS</span><span class="o">=</span>FREETYPE<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>CAIRO<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>SVG_SYMBOLS<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>RSVG
+<span class="nv">SUPPORTS</span><span class="o">=</span>ICONV<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>FRIBIDI<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>WMS_SERVER<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>WMS_CLIENT
+<span class="nv">SUPPORTS</span><span class="o">=</span>WFS_SERVER<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>WFS_CLIENT<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>WCS_SERVER
+<span class="nv">SUPPORTS</span><span class="o">=</span>SOS_SERVER<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>OGCAPI_SERVER<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>GEOS<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>PBF
+<span class="nv">INPUT</span><span class="o">=</span>JPEG<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>POSTGIS<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>OGR<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>GDAL<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>SHAPEFILE
+<span class="nv">INPUT</span><span class="o">=</span>FLATGEOBUF
+</pre></div>
+</div>
+<p>Example 2. On Windows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>C:<span class="se">\m</span>s4w&gt;<span class="w"> </span>mapserv<span class="w"> </span>-v
+MapServer<span class="w"> </span>version<span class="w"> </span><span class="m">8</span>.7-dev<span class="w"> </span><span class="o">(</span>MS4W<span class="w"> </span><span class="m">5</span>.2.0<span class="o">)</span><span class="w"> </span>PROJ<span class="w"> </span>version<span class="w"> </span><span class="m">9</span>.9
+GDAL<span class="w"> </span>version<span class="w"> </span><span class="m">3</span>.13<span class="w"> </span><span class="nv">OUTPUT</span><span class="o">=</span>PNG<span class="w"> </span><span class="nv">OUTPUT</span><span class="o">=</span>JPEG<span class="w"> </span><span class="nv">OUTPUT</span><span class="o">=</span>KML<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>PROJ
+<span class="nv">SUPPORTS</span><span class="o">=</span>AGG<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>FREETYPE<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>CAIRO<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>SVG_SYMBOLS
+<span class="nv">SUPPORTS</span><span class="o">=</span>SVGCAIRO<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>ICONV<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>FRIBIDI<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>WMS_SERVER
+<span class="nv">SUPPORTS</span><span class="o">=</span>WMS_CLIENT<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>WFS_SERVER<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>WFS_CLIENT
+<span class="nv">SUPPORTS</span><span class="o">=</span>WCS_SERVER<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>SOS_SERVER<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>OGCAPI_SERVER
+<span class="nv">SUPPORTS</span><span class="o">=</span>FASTCGI<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>THREADS<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>GEOS<span class="w"> </span><span class="nv">SUPPORTS</span><span class="o">=</span>PBF<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>JPEG
+<span class="nv">INPUT</span><span class="o">=</span>POSTGIS<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>OGR<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>GDAL<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>SHAPEFILE<span class="w"> </span><span class="nv">INPUT</span><span class="o">=</span>FLATGEOBUF
+</pre></div>
+</div>
 </section>
 </section>
 <section id="configuring-your-mapfile-to-serve-wcs-layers">
 <span id="index-1"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Configuring Your Mapfile to Serve WCS Layers</a><a class="headerlink" href="#configuring-your-mapfile-to-serve-wcs-layers" title="Link to this heading">¶</a></h2>
-<p>Much as in the WMS and WFS support, WCS publishing is enabled by
-adding certain magic METADATA keyword/value pairs to a .map file.</p>
+<p>Similar to configuring <a class="reference internal" href="wms_server.html#wms-server"><span class="std std-ref">WMS</span></a> and <a class="reference internal" href="wfs_server.html#wfs-server"><span class="std std-ref">WFS</span></a>
+support, WCS publishing in MapServer is enabled by adding certain magic
+METADATA keyword/value pairs to a <cite>.map</cite> file.</p>
 <p>MapServer will serve and include in its WCS capabilities only the
 layers that meet the following conditions:</p>
 <ul class="simple">
 <li><p>Data source is a raster, which is processed using GDAL
-(e.g GeoTIFF, Erdas Imagine, …)</p></li>
+(e.g GeoTIFF, NetCDF, …)</p></li>
 <li><p>LAYER NAME must be set</p></li>
 <li><p>LAYER TYPE is set to RASTER</p></li>
-<li><p>WEB metadata or LAYER metadata “wcs_enable_request” must be set</p></li>
+<li><p>WEB metadata or LAYER metadata “wcs_enable_request” must be set
+(see <a class="reference external" href="https://mapserver.org/development/rfc/ms-rfc-67.html">MS RFC 67</a>)</p></li>
 <li><p>WEB metadata “wcs_label” must be set</p></li>
 <li><p>LAYER metadata “wcs_label” must be set</p></li>
 <li><p>LAYER metadata “wcs_rangeset_name” must be set</p></li>
 <li><p>LAYER metadata “wcs_rangeset_label” must be set</p></li>
-<li><p>LAYER is enabled to be served via WCS (see <a class="reference external" href="https://mapserver.org/development/rfc/ms-rfc-67.html">MS RFC 67</a>)</p></li>
-<li><p>LAYER PROJECTION must be set, even if PROJECTION is set at the MAP
-level (a bug?)</p></li>
+<li><p>LAYER PROJECTION must be set (which tells MapServer the source projection
+of the raster), and must also set the map-level PROJECTION (which
+specifies the output projection)</p></li>
 </ul>
 <section id="example-wcs-server-mapfile">
 <h3>Example WCS Server Mapfile<a class="headerlink" href="#example-wcs-server-mapfile" title="Link to this heading">¶</a></h3>
-<p>The following is an example of a simple WCS Server mapfile. Note the
-comments for the required parameters.</p>
+<p>The following is an example of a simple WCS Server mapfile (that servers one
+single raster). Note the comments for the required parameters.</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">MAP</span>
-  <span class="k">NAME</span> <span class="err">WCS_server</span>
+  <span class="k">NAME</span> <span class="s">&quot;WCS_server&quot;</span>
   <span class="k">STATUS</span> <span class="nb">ON</span>
   <span class="k">SIZE</span> <span class="mi">400</span> <span class="mi">300</span>
   <span class="k">SYMBOLSET</span> <span class="s">&quot;../etc/symbols.txt&quot;</span>
-  <span class="k">EXTENT</span> <span class="p">-</span><span class="mi">2200000</span> <span class="p">-</span><span class="mi">712631</span> <span class="mi">3072800</span> <span class="mi">3840000</span>
+  <span class="k">EXTENT</span> <span class="p">-</span><span class="mi">6661783</span> <span class="mi">2801107</span> <span class="mi">11407237</span> <span class="mi">8055791</span> <span class="c">#for EPSG:3857, but useful only when testing mapfile through map2img (with WCS)</span>
   <span class="k">UNITS</span> <span class="nb">METERS</span>
-  <span class="k">SHAPEPATH</span> <span class="s">&quot;../data&quot;</span>
+  <span class="k">SHAPEPATH</span> <span class="s">&quot;./data&quot;</span>
   <span class="k">IMAGECOLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
   <span class="k">FONTSET</span> <span class="s">&quot;../etc/fonts.txt&quot;</span>
 
+  <span class="k">CONFIG</span> <span class="s">&quot;MS_ERRORFILE&quot;</span> <span class="s">&quot;/ms4w/tmp/ms_tmp/ms_error.txt&quot;</span>
+  <span class="k">DEBUG</span> <span class="mi">5</span>
 
-  <span class="c">#</span>
-  <span class="c"># Start of web interface definition</span>
-  <span class="c">#</span>
   <span class="k">WEB</span>
     <span class="k">IMAGEPATH</span> <span class="s">&quot;/ms4w/tmp/ms_tmp/&quot;</span>
     <span class="k">IMAGEURL</span> <span class="s">&quot;/ms_tmp/&quot;</span>
     <span class="k">METADATA</span>
-      <span class="s">&quot;wcs_label&quot;</span>           <span class="s">&quot;GMap WCS Demo Server&quot;</span> <span class="c">### required</span>
-      <span class="s">&quot;wcs_description&quot;</span>     <span class="s">&quot;Some text description of the service&quot;</span>
-      <span class="s">&quot;wcs_onlineresource&quot;</span>  <span class="s">&quot;http://127.0.0.1/cgi-bin/mapserv.exe?&quot;</span> <span class="c">### recommended</span>
-      <span class="s">&quot;wcs_fees&quot;</span>            <span class="s">&quot;none&quot;</span>
-      <span class="s">&quot;wcs_accessconstraints&quot;</span>    <span class="s">&quot;none&quot;</span>
-      <span class="s">&quot;wcs_keywordlist&quot;</span>          <span class="s">&quot;wcs,test&quot;</span>
-      <span class="s">&quot;wcs_metadatalink_type&quot;</span>    <span class="s">&quot;TC211&quot;</span>
-      <span class="s">&quot;wcs_metadatalink_format&quot;</span>  <span class="s">&quot;text/plain&quot;</span>
-      <span class="s">&quot;wcs_metadatalink_href&quot;</span>    <span class="s">&quot;http://someurl.com&quot;</span>
-      <span class="s">&quot;wcs_address&quot;</span>              <span class="s">&quot;124 Gilmour Street&quot;</span>
-      <span class="s">&quot;wcs_city&quot;</span>                 <span class="s">&quot;Ottawa&quot;</span>
-      <span class="s">&quot;wcs_stateorprovince&quot;</span>      <span class="s">&quot;ON&quot;</span>
-      <span class="s">&quot;wcs_postcode&quot;</span>             <span class="s">&quot;90210&quot;</span>
-      <span class="s">&quot;wcs_country&quot;</span>              <span class="s">&quot;Canada&quot;</span>
-      <span class="s">&quot;wcs_contactelectronicmailaddress&quot;</span> <span class="s">&quot;blah@blah&quot;</span>
-      <span class="s">&quot;wcs_contactperson&quot;</span>            <span class="s">&quot;me&quot;</span>
-      <span class="s">&quot;wcs_contactorganization&quot;</span>      <span class="s">&quot;unemployed&quot;</span>
-      <span class="s">&quot;wcs_contactposition&quot;</span>          <span class="s">&quot;manager&quot;</span>
-      <span class="s">&quot;wcs_contactvoicetelephone&quot;</span>    <span class="s">&quot;613-555-1234&quot;</span>
-      <span class="s">&quot;wcs_contactfacimiletelephone&quot;</span> <span class="s">&quot;613-555-1235&quot;</span>
-      <span class="s">&quot;wcs_service_onlineresource&quot;</span>   <span class="s">&quot;http://127.0.0.1/cgi-bin/mapserv.exe?&quot;</span>
-      <span class="s">&quot;wcs_enable_request&quot;</span>           <span class="s">&quot;*&quot;</span>
+      <span class="s">&quot;wcs_label&quot;</span>                     <span class="s">&quot;WCS Demo Server&quot;</span> <span class="c">### required</span>
+      <span class="s">&quot;wcs_description&quot;</span>               <span class="s">&quot;Some text description of the service&quot;</span> <span class="c">### recommended</span>
+      <span class="s">&quot;wcs_onlineresource&quot;</span>            <span class="s">&quot;http://127.0.0.1/cgi-bin/mapserv.exe?MAP=/ms4w/apps/wcs-demo/wcs.map&quot;</span> <span class="c">### recommended</span>
+      <span class="s">&quot;wcs_service_onlineresource&quot;</span>    <span class="s">&quot;http://127.0.0.1/cgi-bin/mapserv.exe?MAP=/ms4w/apps/wcs-demo/wcs.map&quot;</span> <span class="c">### recommended</span>
+      <span class="s">&quot;ows_title&quot;</span>                     <span class="s">&quot;WCS Demo Server for MapServer&quot;</span> <span class="c">### recommended</span>
+      <span class="s">&quot;ows_abstract&quot;</span>                  <span class="s">&quot;This demonstration server showcases MapServer and its OGC support.&quot;</span> <span class="c">### recommended</span>
+      <span class="s">&quot;ows_contactperson&quot;</span>             <span class="s">&quot;me&quot;</span>
+      <span class="s">&quot;ows_contactposition&quot;</span>           <span class="s">&quot;VIP&quot;</span>
+      <span class="s">&quot;ows_contactorganization&quot;</span>       <span class="s">&quot;FOSS4G&quot;</span>
+      <span class="s">&quot;ows_contactelectronicmailaddress&quot;</span> <span class="s">&quot;blah@blah.com&quot;</span>
+      <span class="s">&quot;ows_contactvoicetelephone&quot;</span>     <span class="s">&quot;+xx-xxx-xxx-xxxx&quot;</span>
+      <span class="s">&quot;ows_contactfacsimiletelephone&quot;</span> <span class="s">&quot;+xx-xxx-xxx-xxxx&quot;</span>
+      <span class="s">&quot;ows_role&quot;</span>                      <span class="s">&quot;developer&quot;</span>
+      <span class="s">&quot;ows_addresstype&quot;</span>               <span class="s">&quot;postal&quot;</span>
+      <span class="s">&quot;ows_address&quot;</span>                   <span class="s">&quot;1234 Main Street&quot;</span>
+      <span class="s">&quot;ows_city&quot;</span>                      <span class="s">&quot;xxxxx&quot;</span>
+      <span class="s">&quot;ows_stateorprovince&quot;</span>           <span class="s">&quot;xx&quot;</span>
+      <span class="s">&quot;ows_postcode&quot;</span>                  <span class="s">&quot;xxx xxx&quot;</span>
+      <span class="s">&quot;ows_country&quot;</span>                   <span class="s">&quot;Canada&quot;</span>
+      <span class="s">&quot;ows_fees&quot;</span>                      <span class="s">&quot;None&quot;</span>
+      <span class="s">&quot;ows_accessconstraints&quot;</span>         <span class="s">&quot;None&quot;</span>
+      <span class="s">&quot;ows_hoursofservice&quot;</span>            <span class="s">&quot;xxx&quot;</span>
+      <span class="s">&quot;ows_contactinstructions&quot;</span>       <span class="s">&quot;xxx&quot;</span>
+      <span class="s">&quot;wcs_keywordlist&quot;</span>               <span class="s">&quot;WCS,MODIS,NDVI,MapServer&quot;</span>
+      <span class="s">&quot;wcs_enable_request&quot;</span>            <span class="s">&quot;*&quot;</span>  <span class="c">### required</span>
     <span class="k">END</span>
   <span class="k">END</span>
 
+  <span class="c">#output projection</span>
   <span class="k">PROJECTION</span>
-    <span class="s">&quot;init=epsg:3978&quot;</span>
+    <span class="s">&quot;init=epsg:3857&quot;</span> <span class="c">#LCC, see https://spatialreference.org/ref/epsg/3857/</span>
   <span class="k">END</span>
 
-
   <span class="k">LAYER</span>
-    <span class="k">NAME</span> <span class="err">bathymetry</span>
+    <span class="k">NAME</span> <span class="s">&quot;bluemarble-2004&quot;</span>
     <span class="k">METADATA</span>
       <span class="s">&quot;wcs_label&quot;</span>           <span class="s">&quot;Elevation/Bathymetry&quot;</span>  <span class="c">### required</span>
-      <span class="s">&quot;wcs_rangeset_name&quot;</span>   <span class="s">&quot;Range 1&quot;</span>  <span class="c">### required to support DescribeCoverage request</span>
-      <span class="s">&quot;wcs_rangeset_label&quot;</span>  <span class="s">&quot;My Label&quot;</span> <span class="c">### required to support DescribeCoverage request</span>
+      <span class="s">&quot;wcs_rangeset_name&quot;</span>   <span class="s">&quot;My range&quot;</span>  <span class="c">### required to support DescribeCoverage request</span>
+      <span class="s">&quot;wcs_rangeset_label&quot;</span>  <span class="s">&quot;My label&quot;</span> <span class="c">### required to support DescribeCoverage request</span>
+      <span class="s">&quot;wcs_formats&quot;</span>         <span class="s">&quot;image/tiff&quot;</span>  <span class="c">### required</span>
+      <span class="s">&quot;ows_extent&quot;</span>          <span class="s">&quot;-180 -90 180 90&quot;</span> <span class="c">### recommended</span>
     <span class="k">END</span>
     <span class="k">TYPE</span> <span class="nb">RASTER</span> <span class="c">### required</span>
     <span class="k">STATUS</span> <span class="nb">ON</span>
-    <span class="k">DATA</span> <span class="err">bath_mapserver</span><span class="p">.</span><span class="err">tif</span>
+    <span class="k">DATA</span> <span class="s">&quot;world.topo.bathy.200401.3x5400x2700_geo.tif&quot;</span>
+    <span class="c">#the data&#39;s source projection</span>
     <span class="k">PROJECTION</span>
-      <span class="s">&quot;init=epsg:3978&quot;</span>
+      <span class="s">&quot;init=epsg:4326&quot;</span> <span class="c">#LCC, see https://spatialreference.org/ref/epsg/4326/</span>
     <span class="k">END</span>
-  <span class="k">END</span>
-<span class="k">END</span> <span class="c"># Map File</span>
+    <span class="k">DEBUG</span> <span class="mi">5</span>
+  <span class="k">END</span> <span class="c"># layer</span>
+<span class="k">END</span> <span class="c"># mapfile</span>
 </pre></div>
 </div>
 </section>
 <section id="output-formats">
 <span id="index-2"></span><h3>Output Formats<a class="headerlink" href="#output-formats" title="Link to this heading">¶</a></h3>
 <p>The raster formats supported by MapServer WCS are determined by the
-wcs_formats metadata item on the LAYER.  This should contain a space
+<em>wcs_formats</em> metadata item on the LAYER.  This should contain a space
 separated list of OUTPUTFORMAT driver names separated by spaces.  If
 absent, all raster OUTPUTFORMATs are allowed.</p>
 <p>WCS is a “raw data” oriented format.  So it often most suitable to use
 it with format using the BYTE, INT16 and FLOAT32 IMAGEMODEs with GDAL
-related output formats rather than the built in “rendering oriented”
+related output formats rather than the built-in “rendering oriented”
 output formats.  By default the only GDAL format driver defined is the
 GTiff driver.  The following are example output format declarations
 utilizing the raw image modes:</p>
@@ -364,6 +400,252 @@ utilizing the raw image modes:</p>
 </div>
 <p>The FORMATOPTION FILENAME defines the preferred name of the result
 file when returned WCS GetCoverage results.</p>
+</section>
+<section id="spatio-temporal-indexes">
+<h3>Spatio/Temporal Indexes<a class="headerlink" href="#spatio-temporal-indexes" title="Link to this heading">¶</a></h3>
+<p>MapServer has long supported a method of breaking a dataset into smaller, more
+manageable pieces or tiles. In this case a shapefile is used to store the
+boundary of each tile, and an attribute holds the location of the actual data.
+Within a MapServer mapfile the layer keywords <em>TILEINDEX</em> and <em>TILEITEM</em> are used
+to activate tiling.</p>
+<p>Consider the example where an organization wants to serve hundreds or even
+thousands of MODIS scenes in GeoTIFF format. Five images cover the spatial extent and each group
+of five varies by date of acquisition. This turns out to be a fairly common
+scenario for organizations interested in WCS, one that the existing tiling
+support does not adequately address. In previous versions of MapServer a
+developer would have to create one tileindex and one layer definition for
+each group of five images. This could result in configuration files that are
+prohibitively long and difficult to manage.</p>
+<p>In order to more efficiently support the WCS specification a new tiling scheme
+has been implemented within MapServer. One that supports spatial sub-setting,
+but also ad hoc sub-setting based on any attributes found within tileindex.
+In many cases a temporal attribute could be used, but sub-setting is not
+limited to that case. The new scheme introduces the concept of <strong>tileindex
+layers</strong>, that is, <em>a separate layer definition is used to describe the tile
+index dataset</em>. With this we get all the benefits of any MapServer layer, most
+importantly we can apply MapServer filters to the data. Filters can be defined
+at runtime using MapServer CGI, MapScript or via the WCS server interface. The
+syntax for the layer using the index remains unchanged except that the value
+for <a class="reference internal" href="../optimization/tileindex.html#tileindex"><span class="std std-ref">Tile Indexes</span></a> refers to the index layer instead of an external shapefile.</p>
+<p>So, looking at the example above again we can reduce our MapServer
+configuration to two layer definitions, one for the tileindex and one for the
+imagery itself. Extracting a single date’s worth of imagery is now a matter of
+setting the appropriate filter within the tileindex layer.</p>
+<section id="building-spatio-temporal-tileindexes">
+<h4>Building Spatio-Temporal TileIndexes<a class="headerlink" href="#building-spatio-temporal-tileindexes" title="Link to this heading">¶</a></h4>
+<p><strong>Step 1: Create your spatial index</strong></p>
+<p>Taking the above example, the first step is to create the spatial index with the
+GDAL utility <a class="reference external" href="https://gdal.org/en/stable/programs/gdaltindex.html">gdaltindex</a>.
+Simply point gdaltindex at the directory containing the
+collection of images and it will build a shapefile index suitable for use with
+MapServer.</p>
+<p>For example, the following command creates a shapefile index, for a folder
+that contains many GeoTIFF images:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gdaltindex<span class="w"> </span>-of<span class="w"> </span><span class="s2">&quot;ESRI Shapefile&quot;</span><span class="w"> </span>index_bluemarble.shp<span class="w"> </span>*.tif
+</pre></div>
+</div>
+<p>Since GDAL 3.11 you can alternatively use the <a class="reference external" href="https://gdal.org/en/stable/programs/gdal_raster_index.html">gdal program</a>
+such as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gdal<span class="w"> </span>raster<span class="w"> </span>index<span class="w"> </span>--of<span class="w"> </span><span class="s2">&quot;ESRI Shapefile&quot;</span><span class="w"> </span>*.tif<span class="w"> </span>index_bluemarble.shp
+</pre></div>
+</div>
+<p>If you open that new spatial index in <a class="reference external" href="https://qgis.org">QGIS</a> and then
+view its attributes, you’ll notice a single <em>location</em> field with all of the
+GeoTIFF filenames, such as:</p>
+<img alt="../_images/wcs-index1.png" class="no-scaled-link" height="330" src="../_images/wcs-index1.png" width="300" />
+<p><strong>Step 2: Execute shptree on your spatial index file</strong></p>
+<p>Use MapServer’s <a class="reference internal" href="../utilities/shptree.html#shptree"><span class="std std-ref">shptree</span></a> utility to make it faster for MapServer
+to parse the index, with a command such as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>shptree<span class="w"> </span>index_bluemarble.shp
+</pre></div>
+</div>
+<p>You should notice that a new <em>.qix</em> file was created.</p>
+<p><strong>Step 3: Add the temporal information to the index</strong></p>
+<p>The next step would be to add the temporal (time) information to that index.</p>
+<p>You could either use QGIS again &amp; manually add the time values to the index
+attributes (in a new string field such as <em>imgdate</em>), or write a script to do
+that: the pseudo code would look something like:</p>
+<ul class="simple">
+<li><p>open the index .dbf file for reading</p></li>
+<li><p>create a new column to hold the image acquisition date</p></li>
+<li><p>for each image; 1) extract the image acquisition date and 2) insert it into
+the new column</p></li>
+<li><p>close the index .dbf file</p></li>
+</ul>
+<p>Whatever you choose, the resulting attributes of your spatial index file
+may look like:</p>
+<img alt="../_images/wcs-index2.png" class="no-scaled-link" height="323" src="../_images/wcs-index2.png" width="400" />
+</section>
+<section id="mapfile-define-your-spatio-temporal-tileindexes">
+<h4>Mapfile: define your Spatio/Temporal TileIndexes<a class="headerlink" href="#mapfile-define-your-spatio-temporal-tileindexes" title="Link to this heading">¶</a></h4>
+<p><strong>Step 1: Setup your tileindex LAYER</strong></p>
+<p>The tileindex layer is where you point to the tileindex file that you
+recently generated, and also define the FILTER for time requests, and
+setup validation for that time format.</p>
+<div class="admonition note">
+<p class="admonition-title">Notitie</p>
+<p>You must setup a <a class="reference internal" href="../mapfile/validation.html#validation"><span class="std std-ref">VALIDATION</span></a> block for MapServer to
+properly pass the <em>time</em> values in the WCS request.</p>
+</div>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="k">tileindex</span> <span class="k">layer</span> <span class="o">*/</span>
+<span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;bluemarble-idx&quot;</span>
+  <span class="k">TYPE</span> <span class="k">TILEINDEX</span>
+  <span class="k">DATA</span> <span class="s">&quot;index_bluemarble.shp&quot;</span>
+  <span class="k">FILTER</span> <span class="p">(</span><span class="s">&quot;[imgdate]&quot;</span> <span class="o">=</span> <span class="s">&#39;%time%&#39;</span><span class="p">)</span>
+  <span class="k">VALIDATION</span>
+    <span class="c">#handle time values of format YYYY-MM-DDT00:00:00</span>
+    <span class="s">&#39;time&#39;</span>   <span class="s">&#39;^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$&#39;</span>
+  <span class="k">END</span>
+  <span class="k">PROJECTION</span>
+    <span class="s">&quot;init=epsg:4326&quot;</span>
+  <span class="k">END</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+<p><strong>Step 2: Setup your raster images LAYER</strong></p>
+<p>Now you can setup your raster images layer, that will point to the other tileindex
+layer.</p>
+<div class="admonition note">
+<p class="admonition-title">Notitie</p>
+<p>You must list all possible time values in the “wcs_timeposition” metadata.</p>
+</div>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="nb">raster</span> <span class="k">layer</span><span class="p">,</span> <span class="err">that</span> <span class="k">points</span> <span class="k">to</span> <span class="err">the</span> <span class="err">above</span> <span class="k">tileindex</span> <span class="k">layer</span> <span class="o">*/</span>
+<span class="k">LAYER</span>
+  <span class="k">NAME</span> <span class="s">&quot;bluemarble-2004&quot;</span>
+  <span class="k">METADATA</span>
+    <span class="s">&quot;wcs_label&quot;</span>           <span class="s">&quot;Elevation/Bathymetry&quot;</span>  <span class="c">### required</span>
+    <span class="s">&quot;wcs_description&quot;</span>     <span class="s">&quot;My WCS layer&quot;</span>  <span class="c">### recommended</span>
+    <span class="s">&quot;wcs_rangeset_name&quot;</span>   <span class="s">&quot;My range&quot;</span>  <span class="c">### required to support DescribeCoverage request</span>
+    <span class="s">&quot;wcs_rangeset_label&quot;</span>  <span class="s">&quot;My label&quot;</span> <span class="c">### required to support DescribeCoverage request</span>
+    <span class="s">&quot;wcs_formats&quot;</span>         <span class="s">&quot;image/tiff&quot;</span>  <span class="c">### required</span>
+    <span class="s">&quot;ows_extent&quot;</span>          <span class="s">&quot;-180 -90 180 90&quot;</span> <span class="c">### recommended</span>
+    <span class="s">&quot;wcs_resolution&quot;</span>      <span class="s">&quot;0.066666666700000 0.066666666700000&quot;</span> <span class="c">### required</span>
+    <span class="s">&quot;wcs_nativeformat&quot;</span>    <span class="s">&quot;raw binary&quot;</span>
+    <span class="s">&quot;wcs_bandcount&quot;</span>       <span class="s">&quot;3&quot;</span>
+    <span class="s">&quot;wcs_timeposition&quot;</span>    <span class="s">&quot;2004-01-01T00:00:00,2004-02-01T00:00:00,2004-03-01T00:00:00,2004-04-01T00:00:00,2004-05-01T00:00:00,2004-06-01T00:00:00,2004-07-01T00:00:00,2004-08-01T00:00:00,2004-09-01T00:00:00,2004-10-01T00:00:00,2004-11-01T00:00:00,2004-12-01T00:00:00&quot;</span> <span class="c">### required</span>
+    <span class="s">&quot;wcs_timeitem&quot;</span>        <span class="s">&quot;imgdate&quot;</span> <span class="c">### required</span>
+    <span class="s">&quot;wcs_rangeset_axes&quot;</span>   <span class="s">&quot;bands&quot;</span>
+    <span class="s">&quot;wcs_rangeset_label&quot;</span>  <span class="s">&quot;Bands&quot;</span>
+    <span class="s">&quot;wcs_rangeset_name&quot;</span>   <span class="s">&quot;Bands&quot;</span>
+  <span class="k">END</span>
+  <span class="k">TYPE</span> <span class="nb">RASTER</span> <span class="c">### required</span>
+  <span class="k">STATUS</span> <span class="nb">ON</span>
+  <span class="k">TILEINDEX</span> <span class="s">&quot;bluemarble-idx&quot;</span>
+  <span class="k">TILEITEM</span> <span class="s">&quot;location&quot;</span>
+  <span class="c">#the data&#39;s source projection</span>
+  <span class="k">PROJECTION</span>
+    <span class="s">&quot;init=epsg:4326&quot;</span> <span class="c">#LCC, see https://spatialreference.org/ref/epsg/4326/</span>
+  <span class="k">END</span>
+  <span class="k">DEBUG</span> <span class="mi">5</span>
+<span class="k">END</span> <span class="c"># layer</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="example-wcs-server-mapfile-with-spatial-temporal">
+<h3>Example WCS Server Mapfile with Spatial/Temporal<a class="headerlink" href="#example-wcs-server-mapfile-with-spatial-temporal" title="Link to this heading">¶</a></h3>
+<p>The following is an example of a WCS Server mapfile that serves raster images
+by pointing to a separate tileindex layer. Note the comments for the
+required parameters.</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">MAP</span>
+  <span class="k">NAME</span> <span class="s">&quot;WCS_server&quot;</span>
+  <span class="k">STATUS</span> <span class="nb">ON</span>
+  <span class="k">SIZE</span> <span class="mi">400</span> <span class="mi">300</span>
+  <span class="k">SYMBOLSET</span> <span class="s">&quot;../etc/symbols.txt&quot;</span>
+  <span class="k">EXTENT</span> <span class="p">-</span><span class="mi">6661783</span> <span class="mi">2801107</span> <span class="mi">11407237</span> <span class="mi">8055791</span> <span class="c">#for EPSG:3857, but useful only when testing mapfile through map2img (with WCS)</span>
+  <span class="k">UNITS</span> <span class="nb">METERS</span>
+  <span class="k">SHAPEPATH</span> <span class="s">&quot;./data&quot;</span>
+  <span class="k">IMAGECOLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
+  <span class="k">FONTSET</span> <span class="s">&quot;../etc/fonts.txt&quot;</span>
+
+  <span class="k">CONFIG</span> <span class="s">&quot;MS_ERRORFILE&quot;</span> <span class="s">&quot;/ms4w/tmp/ms_tmp/ms_error.txt&quot;</span>
+  <span class="k">DEBUG</span> <span class="mi">5</span>
+
+  <span class="k">WEB</span>
+    <span class="k">IMAGEPATH</span> <span class="s">&quot;/ms4w/tmp/ms_tmp/&quot;</span>
+    <span class="k">IMAGEURL</span> <span class="s">&quot;/ms_tmp/&quot;</span>
+    <span class="k">METADATA</span>
+      <span class="s">&quot;wcs_label&quot;</span>                     <span class="s">&quot;WCS Demo Server&quot;</span> <span class="c">### required</span>
+      <span class="s">&quot;wcs_description&quot;</span>               <span class="s">&quot;Some text description of the service&quot;</span> <span class="c">### recommended</span>
+      <span class="s">&quot;wcs_onlineresource&quot;</span>            <span class="s">&quot;http://127.0.0.1/cgi-bin/mapserv.exe?MAP=/ms4w/apps/wcs-demo/wcs-tiled.map&quot;</span> <span class="c">### recommended</span>
+      <span class="s">&quot;wcs_service_onlineresource&quot;</span>    <span class="s">&quot;http://127.0.0.1/cgi-bin/mapserv.exe?MAP=/ms4w/apps/wcs-demo/wcs-tiled.map&quot;</span> <span class="c">### recommended</span>
+      <span class="s">&quot;ows_title&quot;</span>                     <span class="s">&quot;WCS Demo Server for MapServer&quot;</span> <span class="c">### recommended</span>
+      <span class="s">&quot;ows_abstract&quot;</span>                  <span class="s">&quot;This demonstration server showcases MapServer and its OGC support.&quot;</span> <span class="c">### recommended</span>
+      <span class="s">&quot;ows_contactperson&quot;</span>             <span class="s">&quot;me&quot;</span>
+      <span class="s">&quot;ows_contactposition&quot;</span>           <span class="s">&quot;VIP&quot;</span>
+      <span class="s">&quot;ows_contactorganization&quot;</span>       <span class="s">&quot;FOSS4G&quot;</span>
+      <span class="s">&quot;ows_contactelectronicmailaddress&quot;</span> <span class="s">&quot;blah@blah.com&quot;</span>
+      <span class="s">&quot;ows_contactvoicetelephone&quot;</span>     <span class="s">&quot;+xx-xxx-xxx-xxxx&quot;</span>
+      <span class="s">&quot;ows_contactfacsimiletelephone&quot;</span> <span class="s">&quot;+xx-xxx-xxx-xxxx&quot;</span>
+      <span class="s">&quot;ows_role&quot;</span>                      <span class="s">&quot;developer&quot;</span>
+      <span class="s">&quot;ows_addresstype&quot;</span>               <span class="s">&quot;postal&quot;</span>
+      <span class="s">&quot;ows_address&quot;</span>                   <span class="s">&quot;1234 Main Street&quot;</span>
+      <span class="s">&quot;ows_city&quot;</span>                      <span class="s">&quot;xxxxx&quot;</span>
+      <span class="s">&quot;ows_stateorprovince&quot;</span>           <span class="s">&quot;xx&quot;</span>
+      <span class="s">&quot;ows_postcode&quot;</span>                  <span class="s">&quot;xxx xxx&quot;</span>
+      <span class="s">&quot;ows_country&quot;</span>                   <span class="s">&quot;Canada&quot;</span>
+      <span class="s">&quot;ows_fees&quot;</span>                      <span class="s">&quot;None&quot;</span>
+      <span class="s">&quot;ows_accessconstraints&quot;</span>         <span class="s">&quot;None&quot;</span>
+      <span class="s">&quot;ows_hoursofservice&quot;</span>            <span class="s">&quot;xxx&quot;</span>
+      <span class="s">&quot;ows_contactinstructions&quot;</span>       <span class="s">&quot;xxx&quot;</span>
+      <span class="s">&quot;wcs_keywordlist&quot;</span>               <span class="s">&quot;WCS,MODIS,NDVI,MapServer&quot;</span>
+      <span class="s">&quot;wcs_enable_request&quot;</span>            <span class="s">&quot;*&quot;</span>  <span class="c">### required</span>
+    <span class="k">END</span>
+  <span class="k">END</span>
+
+  <span class="c">#output projection</span>
+  <span class="k">PROJECTION</span>
+    <span class="s">&quot;init=epsg:3857&quot;</span> <span class="c">#LCC, see https://spatialreference.org/ref/epsg/3857/</span>
+  <span class="k">END</span>
+
+  <span class="o">/*</span> <span class="k">tileindex</span> <span class="k">layer</span> <span class="o">*/</span>
+  <span class="k">LAYER</span>
+    <span class="k">NAME</span> <span class="s">&quot;bluemarble-idx&quot;</span>
+    <span class="k">TYPE</span> <span class="k">TILEINDEX</span>
+    <span class="k">DATA</span> <span class="s">&quot;index_bluemarble.shp&quot;</span>
+    <span class="k">FILTER</span> <span class="p">(</span><span class="s">&quot;[imgdate]&quot;</span> <span class="o">=</span> <span class="s">&#39;%time%&#39;</span><span class="p">)</span>
+    <span class="k">VALIDATION</span>
+      <span class="c">#handle time values of format YYYY-MM-DDT00:00:00</span>
+      <span class="s">&#39;time&#39;</span>   <span class="s">&#39;^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$&#39;</span>
+    <span class="k">END</span>
+    <span class="k">PROJECTION</span>
+      <span class="s">&quot;init=epsg:4326&quot;</span>
+    <span class="k">END</span>
+  <span class="k">END</span>
+
+  <span class="o">/*</span> <span class="nb">raster</span> <span class="k">layer</span><span class="p">,</span> <span class="err">that</span> <span class="k">points</span> <span class="k">to</span> <span class="err">the</span> <span class="err">above</span> <span class="k">tileindex</span> <span class="k">layer</span> <span class="o">*/</span>
+  <span class="k">LAYER</span>
+    <span class="k">NAME</span> <span class="s">&quot;bluemarble-2004&quot;</span>
+    <span class="k">METADATA</span>
+      <span class="s">&quot;wcs_label&quot;</span>           <span class="s">&quot;Elevation/Bathymetry&quot;</span>  <span class="c">### required</span>
+      <span class="s">&quot;wcs_description&quot;</span>     <span class="s">&quot;My WCS layer&quot;</span>  <span class="c">### recommended</span>
+      <span class="s">&quot;wcs_rangeset_name&quot;</span>   <span class="s">&quot;My range&quot;</span>  <span class="c">### required to support DescribeCoverage request</span>
+      <span class="s">&quot;wcs_rangeset_label&quot;</span>  <span class="s">&quot;My label&quot;</span> <span class="c">### required to support DescribeCoverage request</span>
+      <span class="s">&quot;wcs_formats&quot;</span>         <span class="s">&quot;image/tiff&quot;</span>  <span class="c">### required</span>
+      <span class="s">&quot;ows_extent&quot;</span>          <span class="s">&quot;-180 -90 180 90&quot;</span> <span class="c">### recommended</span>
+      <span class="s">&quot;wcs_resolution&quot;</span>      <span class="s">&quot;0.066666666700000 0.066666666700000&quot;</span> <span class="c">### required</span>
+      <span class="s">&quot;wcs_nativeformat&quot;</span>    <span class="s">&quot;raw binary&quot;</span>
+      <span class="s">&quot;wcs_bandcount&quot;</span>       <span class="s">&quot;3&quot;</span>
+      <span class="s">&quot;wcs_timeposition&quot;</span>    <span class="s">&quot;2004-01-01T00:00:00,2004-02-01T00:00:00,2004-03-01T00:00:00,2004-04-01T00:00:00,2004-05-01T00:00:00,2004-06-01T00:00:00,2004-07-01T00:00:00,2004-08-01T00:00:00,2004-09-01T00:00:00,2004-10-01T00:00:00,2004-11-01T00:00:00,2004-12-01T00:00:00&quot;</span> <span class="c">### required</span>
+      <span class="s">&quot;wcs_timeitem&quot;</span>        <span class="s">&quot;imgdate&quot;</span> <span class="c">### required</span>
+      <span class="s">&quot;wcs_rangeset_axes&quot;</span>   <span class="s">&quot;bands&quot;</span>
+      <span class="s">&quot;wcs_rangeset_label&quot;</span>  <span class="s">&quot;Bands&quot;</span>
+      <span class="s">&quot;wcs_rangeset_name&quot;</span>   <span class="s">&quot;Bands&quot;</span>
+    <span class="k">END</span>
+    <span class="k">TYPE</span> <span class="nb">RASTER</span> <span class="c">### required</span>
+    <span class="k">STATUS</span> <span class="nb">ON</span>
+    <span class="k">TILEINDEX</span> <span class="s">&quot;bluemarble-idx&quot;</span>
+    <span class="k">TILEITEM</span> <span class="s">&quot;location&quot;</span>
+    <span class="c">#the data&#39;s source projection</span>
+    <span class="k">PROJECTION</span>
+      <span class="s">&quot;init=epsg:4326&quot;</span> <span class="c">#LCC, see https://spatialreference.org/ref/epsg/4326/</span>
+    <span class="k">END</span>
+    <span class="k">DEBUG</span> <span class="mi">5</span>
+  <span class="k">END</span> <span class="c"># layer</span>
+<span class="k">END</span> <span class="c"># mapfile</span>
+</pre></div>
+</div>
 </section>
 </section>
 <section id="test-your-wcs-1-0-server">
@@ -390,9 +672,29 @@ environment variables to secure your server are listed in <a class="reference in
 <p>If you get an error message in the XML output then take necessary
 actions. Common problems and solutions are listed in the FAQ at the
 end of this document.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To see MapServer error messages as you execute WCS requests, be sure
+to set the <cite>CONFIG “MS_ERRORFILE”</cite> parameter, as well as <cite>DEBUG 5</cite> at in your
+LAYER, such as:</p>
+<blockquote>
+<div><div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">MAP</span>
+  <span class="p">...</span>
+  <span class="k">CONFIG</span> <span class="s">&quot;MS_ERRORFILE&quot;</span> <span class="s">&quot;/ms4w/tmp/ms_error.txt&quot;</span>
+  <span class="k">DEBUG</span> <span class="mi">5</span>
+  <span class="p">...</span>
+  <span class="k">LAYER</span>
+    <span class="k">DEBUG</span> <span class="mi">5</span>
+    <span class="p">...</span>
+  <span class="k">END</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
 <p>If everything went well, you should have a complete XML capabilities
-document.  Search it for the word “WARNING”… MapServer inserts XML
-comments starting with “&lt;!–WARNING: “ in the XML output if it detects
+document.  Search it for the word <cite>“WARNING”</cite>, as MapServer inserts XML
+comments starting with <cite>“&lt;!–WARNING: “</cite> in the XML output if it detects
 missing mapfile parameters or metadata items.</p>
 <p>Note that when a request happens, it is passed through WMS, WFS, and
 WCS in MapServer (in that order) until one of the services respond to
@@ -429,14 +731,15 @@ according to the WCS spec:</p>
 <p><strong>COVERAGE=coverage_name:</strong> Name of an available coverage, as
 stated in the GetCapabilities</p>
 <p><strong>CRS=epsg_code:</strong> Coordinate Reference System in which the request
-is expressed.</p>
+is expressed. (you can search for EPSG codes on
+<a class="reference external" href="https://spatialreference.org/">spatialreference.org</a>)</p>
 <p><strong>BBOX=minx,miny,maxx,maxy:</strong> Bounding box corners (lower left,
 upper right) in CRS units.  One of BBOX or TIME is required.</p>
 <p><strong>TIME=time1,time2:</strong> Request a subset corresponding to a time. One
 of BBOX or TIME is required..</p>
-<p><strong>WIDTH=output_width:</strong> Width in pixels of map picture.  One of
+<p><strong>WIDTH=output_width:</strong> Width in pixels of map image.  One of
 WIDTH/HEIGHT or RESX/Y is required.</p>
-<p><strong>HEIGHT=output_height:</strong> Height in pixels of map picture.  One of
+<p><strong>HEIGHT=output_height:</strong> Height in pixels of map image.  One of
 WIDTH/HEIGHT or RESX/Y is required.</p>
 <p><strong>RESX=x:</strong> When requesting a georectified grid coverage, this
 requests a subset with a specific spatial resolution.  One of
@@ -462,14 +765,321 @@ would look like:</p>
 </pre></div>
 </div>
 <p>Here is a working example of a GetCoverage request (note that a 350KB
-tif is being requested, so this may take a second):</p>
-<p><a class="reference external" href="https://demo.mapserver.org/cgi-bin/wcs?SERVICE=WCS&amp;VERSION=1.0.0&amp;REQUEST=GetCoverage&amp;COVERAGE=modis-001&amp;CRS=EPSG:26915&amp;BBOX=159707,4597395,1400707,5501395&amp;WIDTH=400&amp;HEIGHT=300&amp;FORMAT=GEOTIFF_RGB">WCS GetCoverage live example</a></p>
+tif is being requested, which should automatically be downloaded locally):</p>
+<p><a class="reference external" href="https://demo.mapserver.org/cgi-bin/wcs?SERVICE=WCS&amp;VERSION=1.0.0&amp;REQUEST=GetCoverage&amp;COVERAGE=modis&amp;TIME=2002-001&amp;CRS=EPSG:26915&amp;BBOX=159707,4597395,1400707,5501395&amp;WIDTH=400&amp;HEIGHT=300&amp;FORMAT=geotiff">WCS GetCoverage live example</a></p>
+</section>
+<section id="test-using-gdal-utilities">
+<h3>Test Using GDAL Utilities<a class="headerlink" href="#test-using-gdal-utilities" title="Link to this heading">¶</a></h3>
+<p>A nice way to test your new WCS service is through the GDAL commandline.</p>
+<p><strong>Example 1: Get information on a MapServer WCS service:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gdalinfo<span class="w"> </span>-oo<span class="w"> </span><span class="nv">CLEAR_CACHE</span><span class="o">=</span>YES<span class="w"> </span>WCS:<span class="s2">&quot;https://demo.mapserver.org/cgi-bin/wcs?VERSION=1.0.0&quot;</span>
+</pre></div>
+</div>
+<p>Since GDAL 3.11 you can alternatively use the <a class="reference external" href="https://gdal.org/en/stable/programs/gdal_raster_index.html">gdal program</a>
+such as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gdal<span class="w"> </span>info<span class="w"> </span>--oo<span class="w"> </span><span class="nv">CLEAR_CACHE</span><span class="o">=</span>YES<span class="w"> </span>WCS:<span class="s2">&quot;https://demo.mapserver.org/cgi-bin/wcs?VERSION=1.0.0&quot;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="46493c78-9f93-49dd-83b6-d56dbcb2a71a" name="46493c78-9f93-49dd-83b6-d56dbcb2a71a" type="checkbox"><label class="sphinx_collapse__label" for="46493c78-9f93-49dd-83b6-d56dbcb2a71a"><i class="sphinx_collapse__icon"></i>Click here to see sample response</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Driver: WCS/OGC Web Coverage Service
+Files: C:\Users\jeffm\.gdal\wcs_cache\bGtUw.aux.xml
+Size is 512, 512
+Origin = (0.000000000000000,0.000000000000000)
+Pixel Size = (1.000000000000000,1.000000000000000)
+Metadata:
+  WCS_GLOBAL#keywords=WCS,MODIS,NDVI
+  WCS_GLOBAL#Service.accessConstraints=None
+  WCS_GLOBAL#Service.description=Setup by GatewayGeo
+  WCS_GLOBAL#Service.fees=None
+  WCS_GLOBAL#Service.label=WCS Demo Server for MapServer, setup by GatewayGeo
+  WCS_GLOBAL#Service.name=MapServer WCS
+  WCS_GLOBAL#Service.responsibleParty.contactInfo.address.administrativeArea=Nova Scotia
+  WCS_GLOBAL#Service.responsibleParty.contactInfo.address.city=Lunenburg
+  WCS_GLOBAL#Service.responsibleParty.contactInfo.address.country=Canada
+  WCS_GLOBAL#Service.responsibleParty.contactInfo.address.deliveryPoint=1101 Blue Rocks Road
+  WCS_GLOBAL#Service.responsibleParty.contactInfo.address.electronicMailAddress=info@gatewaygeomatics.com
+  WCS_GLOBAL#Service.responsibleParty.contactInfo.address.postalCode=B0J 2C0
+  WCS_GLOBAL#Service.responsibleParty.contactInfo.phone.facsimile=+xx-xxx-xxx-xxxx
+  WCS_GLOBAL#Service.responsibleParty.contactInfo.phone.voice=+xx-xxx-xxx-xxxx
+  WCS_GLOBAL#Service.responsibleParty.individualName=Jeff McKenna
+  WCS_GLOBAL#Service.responsibleParty.organisationName=GatewayGeo
+  WCS_GLOBAL#Service.responsibleParty.positionName=Director
+  WCS_GLOBAL#updateSequence=0
+  WCS_GLOBAL#version=1.0.0
+Subdatasets:
+  SUBDATASET_1_NAME=https://demo.mapserver.org/cgi-bin/wcs?VERSION=1.0.0&amp;COVERAGE=ndvi
+  SUBDATASET_1_DESC=North Central US MODIS-based NDVI Images for 2002
+  SUBDATASET_2_NAME=https://demo.mapserver.org/cgi-bin/wcs?VERSION=1.0.0&amp;COVERAGE=fpar
+  SUBDATASET_2_DESC=North Central US MODIS-based FPAR Images for 2002
+  SUBDATASET_3_NAME=https://demo.mapserver.org/cgi-bin/wcs?VERSION=1.0.0&amp;COVERAGE=modis
+  SUBDATASET_3_DESC=North Central US MODIS Images for 2002
+Corner Coordinates:
+Upper Left  (   0.0000000,   0.0000000)
+Lower Left  (       0.000,     512.000)
+Upper Right (     512.000,       0.000)
+Lower Right (     512.000,     512.000)
+Center      (     256.000,     256.000)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can get debugging info from GDAL by first setting the <em>CPL_DEBUG</em> environment variable
+(useful to see the exact GetCapabilities or GetCoverage requests), before re-running
+your gdal command, such as:</p>
+<p>Windows CMD:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPL_DEBUG</span><span class="o">=</span><span class="n">ON</span>
+</pre></div>
+</div>
+<p>Windows PowerShell:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$Env:CPL_DEBUG = &quot;ON&quot;
+</pre></div>
+</div>
+<p>Linux:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">CPL_DEBUG</span><span class="o">=</span><span class="n">ON</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="43f83424-364c-4ebc-9b92-c3e4df7343b4" name="43f83424-364c-4ebc-9b92-c3e4df7343b4" type="checkbox"><label class="sphinx_collapse__label" for="43f83424-364c-4ebc-9b92-c3e4df7343b4"><i class="sphinx_collapse__icon"></i>Click here to see sample response</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>HTTP: Fetch(https://demo.mapserver.org/cgi-bin/wcs?SERVICE=WCS&amp;REQUEST=GetCoverage&amp;VERSION=1.0.0&amp;COVERAGE=modis&amp;FORMAT=geotiff&amp;BBOX=159457,5500645,160457,5501645&amp;WIDTH=2&amp;HEIGHT=2&amp;CRS=EPSG:26915&amp;time=2002-001)
+WCS: GDALOpenResult() on content-type: image/tiff
+GDAL: GDALOpen(/vsimem/.#!HIDDEN!#./1/wcsresult.dat, this=037EDF50) succeeds as GTiff.
+GDAL: GDALClose(/vsimem/.#!HIDDEN!#./1/wcsresult.dat, this=037EDF50)
+GDAL: GDALOpen(C:\Users\jeffm\.gdal\wcs_cache\FnoLB.xml, this=01956EA0) succeeds as WCS.
+0GDAL: GDAL_CACHEMAX = 102 MB
+GDAL: GDALDatasetCopyWholeRaster(): 2481*512 swaths, bInterleave=1
+WCS: DirectRasterIO(0,0,2481,512) -&gt; (2481,512) (3 bands)
+
+HTTP: Fetch(https://demo.mapserver.org/cgi-bin/wcs?SERVICE=WCS&amp;REQUEST=GetCoverage&amp;VERSION=1.0.0&amp;COVERAGE=modis&amp;FORMAT=geotiff&amp;BBOX=159457,5245645,1399957,5501645&amp;WIDTH=2481&amp;HEIGHT=512&amp;CRS=EPSG:26915&amp;time=2002-001&amp;bands=1,2,3)
+WCS: GDALOpenResult() on content-type: image/tiff
+GDAL: GDALOpen(/vsimem/.#!HIDDEN!#./2/wcsresult.dat, this=037EE738) succeeds as GTiff.
+GDAL: GDALClose(/vsimem/.#!HIDDEN!#./2/wcsresult.dat, this=037EE738)
+...10...20..WCS: DirectRasterIO(0,512,2481,512) -&gt; (2481,512) (3 bands)
+
+HTTP: Fetch(https://demo.mapserver.org/cgi-bin/wcs?SERVICE=WCS&amp;REQUEST=GetCoverage&amp;VERSION=1.0.0&amp;COVERAGE=modis&amp;FORMAT=geotiff&amp;BBOX=159457,4989645,1399957,5245645&amp;WIDTH=2481&amp;HEIGHT=512&amp;CRS=EPSG:26915&amp;time=2002-001&amp;bands=1,2,3)
+WCS: GDALOpenResult() on content-type: image/tiff
+GDAL: GDALOpen(/vsimem/.#!HIDDEN!#./3/wcsresult.dat, this=037EE738) succeeds as GTiff.
+GDAL: GDALClose(/vsimem/.#!HIDDEN!#./3/wcsresult.dat, this=037EE738)
+.30...40...50WCS: DirectRasterIO(0,1024,2481,512) -&gt; (2481,512) (3 bands)
+
+HTTP: Fetch(https://demo.mapserver.org/cgi-bin/wcs?SERVICE=WCS&amp;REQUEST=GetCoverage&amp;VERSION=1.0.0&amp;COVERAGE=modis&amp;FORMAT=geotiff&amp;BBOX=159457,4733645,1399957,4989645&amp;WIDTH=2481&amp;HEIGHT=512&amp;CRS=EPSG:26915&amp;time=2002-001&amp;bands=1,2,3)
+WCS: GDALOpenResult() on content-type: image/tiff
+GDAL: GDALOpen(/vsimem/.#!HIDDEN!#./4/wcsresult.dat, this=037EE738) succeeds as GTiff.
+GDAL: GDALClose(/vsimem/.#!HIDDEN!#./4/wcsresult.dat, this=037EE738)
+...60...70..WCS: DirectRasterIO(0,1536,2481,271) -&gt; (2481,271) (3 bands)
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>Example 2: Get information on specific MapServer WCS layer:</strong></p>
+<p>The following gets information on the ‘modis’ raster layer in a MapServer WCS service:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gdalinfo<span class="w"> </span>-oo<span class="w"> </span><span class="nv">CLEAR_CACHE</span><span class="o">=</span>YES<span class="w"> </span>WCS:<span class="s2">&quot;https://demo.mapserver.org/cgi-bin/wcs?VERSION=1.0.0&amp;COVERAGE=modis&quot;</span>
+</pre></div>
+</div>
+<p>Since GDAL 3.11 you can alternatively use the <a class="reference external" href="https://gdal.org/en/stable/programs/gdal_raster_index.html">gdal program</a>
+such as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gdal<span class="w"> </span>info<span class="w"> </span>--oo<span class="w"> </span><span class="nv">CLEAR_CACHE</span><span class="o">=</span>YES<span class="w"> </span>WCS:<span class="s2">&quot;https://demo.mapserver.org/cgi-bin/wcs?VERSION=1.0.0&amp;COVERAGE=modis&quot;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="9b3cd291-b36c-4962-a385-dbe518fb5935" name="9b3cd291-b36c-4962-a385-dbe518fb5935" type="checkbox"><label class="sphinx_collapse__label" for="9b3cd291-b36c-4962-a385-dbe518fb5935"><i class="sphinx_collapse__icon"></i>Click here to see sample response</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Driver</span><span class="p">:</span> <span class="n">WCS</span><span class="o">/</span><span class="n">OGC</span> <span class="n">Web</span> <span class="n">Coverage</span> <span class="n">Service</span>
+<span class="n">Files</span><span class="p">:</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">jeffm</span>\<span class="o">.</span><span class="n">gdal</span>\<span class="n">wcs_cache</span>\<span class="n">lZCmz</span><span class="o">.</span><span class="n">xml</span>
+       <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">jeffm</span>\<span class="o">.</span><span class="n">gdal</span>\<span class="n">wcs_cache</span>\<span class="n">lZCmz</span><span class="o">.</span><span class="n">xml</span><span class="o">.</span><span class="n">aux</span><span class="o">.</span><span class="n">xml</span>
+<span class="n">Size</span> <span class="ow">is</span> <span class="mi">2481</span><span class="p">,</span> <span class="mi">1807</span>
+<span class="n">Coordinate</span> <span class="n">System</span> <span class="ow">is</span><span class="p">:</span>
+<span class="n">PROJCRS</span><span class="p">[</span><span class="s2">&quot;NAD83 / UTM zone 15N&quot;</span><span class="p">,</span>
+    <span class="n">BASEGEOGCRS</span><span class="p">[</span><span class="s2">&quot;NAD83&quot;</span><span class="p">,</span>
+        <span class="n">DATUM</span><span class="p">[</span><span class="s2">&quot;North American Datum 1983&quot;</span><span class="p">,</span>
+            <span class="n">ELLIPSOID</span><span class="p">[</span><span class="s2">&quot;GRS 1980&quot;</span><span class="p">,</span><span class="mi">6378137</span><span class="p">,</span><span class="mf">298.257222101</span><span class="p">,</span>
+                <span class="n">LENGTHUNIT</span><span class="p">[</span><span class="s2">&quot;metre&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">]]],</span>
+        <span class="n">PRIMEM</span><span class="p">[</span><span class="s2">&quot;Greenwich&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">ANGLEUNIT</span><span class="p">[</span><span class="s2">&quot;degree&quot;</span><span class="p">,</span><span class="mf">0.0174532925199433</span><span class="p">]],</span>
+        <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">4269</span><span class="p">]],</span>
+    <span class="n">CONVERSION</span><span class="p">[</span><span class="s2">&quot;UTM zone 15N&quot;</span><span class="p">,</span>
+        <span class="n">METHOD</span><span class="p">[</span><span class="s2">&quot;Transverse Mercator&quot;</span><span class="p">,</span>
+            <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">9807</span><span class="p">]],</span>
+        <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;Latitude of natural origin&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">ANGLEUNIT</span><span class="p">[</span><span class="s2">&quot;degree&quot;</span><span class="p">,</span><span class="mf">0.0174532925199433</span><span class="p">],</span>
+            <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">8801</span><span class="p">]],</span>
+        <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;Longitude of natural origin&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">93</span><span class="p">,</span>
+            <span class="n">ANGLEUNIT</span><span class="p">[</span><span class="s2">&quot;degree&quot;</span><span class="p">,</span><span class="mf">0.0174532925199433</span><span class="p">],</span>
+            <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">8802</span><span class="p">]],</span>
+        <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;Scale factor at natural origin&quot;</span><span class="p">,</span><span class="mf">0.9996</span><span class="p">,</span>
+            <span class="n">SCALEUNIT</span><span class="p">[</span><span class="s2">&quot;unity&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">8805</span><span class="p">]],</span>
+        <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;False easting&quot;</span><span class="p">,</span><span class="mi">500000</span><span class="p">,</span>
+            <span class="n">LENGTHUNIT</span><span class="p">[</span><span class="s2">&quot;metre&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">8806</span><span class="p">]],</span>
+        <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;False northing&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">LENGTHUNIT</span><span class="p">[</span><span class="s2">&quot;metre&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">8807</span><span class="p">]]],</span>
+    <span class="n">CS</span><span class="p">[</span><span class="n">Cartesian</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">AXIS</span><span class="p">[</span><span class="s2">&quot;(E)&quot;</span><span class="p">,</span><span class="n">east</span><span class="p">,</span>
+            <span class="n">ORDER</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">LENGTHUNIT</span><span class="p">[</span><span class="s2">&quot;metre&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span>
+        <span class="n">AXIS</span><span class="p">[</span><span class="s2">&quot;(N)&quot;</span><span class="p">,</span><span class="n">north</span><span class="p">,</span>
+            <span class="n">ORDER</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">LENGTHUNIT</span><span class="p">[</span><span class="s2">&quot;metre&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span>
+    <span class="n">USAGE</span><span class="p">[</span>
+        <span class="n">SCOPE</span><span class="p">[</span><span class="s2">&quot;Engineering survey, topographic mapping.&quot;</span><span class="p">],</span>
+        <span class="n">AREA</span><span class="p">[</span><span class="s2">&quot;North America - between 96┬░W and 90┬░W - onshore and offshore. Canada - Manitoba; Nunavut; Ontario. United States (USA) - Arkansas; Illinois; Iowa; Kansas; Louisiana; Michigan; Minnesota; Mississippi; Missouri; Nebraska; Oklahoma; Tennessee; Texas; Wisconsin.&quot;</span><span class="p">],</span>
+        <span class="n">BBOX</span><span class="p">[</span><span class="mf">25.61</span><span class="p">,</span><span class="o">-</span><span class="mi">96</span><span class="p">,</span><span class="mi">84</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">]],</span>
+    <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">26915</span><span class="p">]]</span>
+<span class="n">Data</span> <span class="n">axis</span> <span class="n">to</span> <span class="n">CRS</span> <span class="n">axis</span> <span class="n">mapping</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span>
+<span class="n">Origin</span> <span class="o">=</span> <span class="p">(</span><span class="mf">159457.000000000000000</span><span class="p">,</span><span class="mf">5501645.000000000000000</span><span class="p">)</span>
+<span class="n">Pixel</span> <span class="n">Size</span> <span class="o">=</span> <span class="p">(</span><span class="mf">500.000000000000000</span><span class="p">,</span><span class="o">-</span><span class="mf">500.000000000000000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Example 3: Get information on MapServer WCS layer for a specific time:</strong></p>
+<p>The following gets information on the ‘modis’ raster layer in a MapServer WCS service,
+for a specific time:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gdalinfo<span class="w"> </span>-oo<span class="w"> </span><span class="nv">CLEAR_CACHE</span><span class="o">=</span>YES<span class="w"> </span>-oo<span class="w"> </span><span class="nv">DefaultTime</span><span class="o">=</span><span class="s2">&quot;2002-001&quot;</span><span class="w"> </span>WCS:<span class="s2">&quot;https://demo.mapserver.org/cgi-bin/wcs?VERSION=1.0.0&amp;COVERAGE=modis&quot;</span>
+</pre></div>
+</div>
+<p>Since GDAL 3.11 you can alternatively use the <a class="reference external" href="https://gdal.org/en/stable/programs/gdal_raster_index.html">gdal program</a>
+such as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gdal<span class="w"> </span>info<span class="w"> </span>--oo<span class="w"> </span><span class="nv">CLEAR_CACHE</span><span class="o">=</span>YES<span class="w"> </span>--oo<span class="w"> </span><span class="nv">DefaultTime</span><span class="o">=</span><span class="s2">&quot;2002-001&quot;</span><span class="w"> </span>WCS:<span class="s2">&quot;https://demo.mapserver.org/cgi-bin/wcs?VERSION=1.0.0&amp;COVERAGE=modis&quot;</span>
+</pre></div>
+</div>
+<div class="sphinx_collapse docutils container">
+<input class="sphinx_collapse__input" id="b5a23b24-5f0c-4899-9c3c-e2aed6cc30f7" name="b5a23b24-5f0c-4899-9c3c-e2aed6cc30f7" type="checkbox"><label class="sphinx_collapse__label" for="b5a23b24-5f0c-4899-9c3c-e2aed6cc30f7"><i class="sphinx_collapse__icon"></i>Click here to see sample response</label><div class="sphinx_collapse__content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Driver</span><span class="p">:</span> <span class="n">WCS</span><span class="o">/</span><span class="n">OGC</span> <span class="n">Web</span> <span class="n">Coverage</span> <span class="n">Service</span>
+<span class="n">Files</span><span class="p">:</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">jeffm</span>\<span class="o">.</span><span class="n">gdal</span>\<span class="n">wcs_cache</span>\<span class="n">ADNOa</span><span class="o">.</span><span class="n">xml</span>
+       <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">jeffm</span>\<span class="o">.</span><span class="n">gdal</span>\<span class="n">wcs_cache</span>\<span class="n">ADNOa</span><span class="o">.</span><span class="n">xml</span><span class="o">.</span><span class="n">aux</span><span class="o">.</span><span class="n">xml</span>
+<span class="n">Size</span> <span class="ow">is</span> <span class="mi">2481</span><span class="p">,</span> <span class="mi">1807</span>
+<span class="n">Coordinate</span> <span class="n">System</span> <span class="ow">is</span><span class="p">:</span>
+<span class="n">PROJCRS</span><span class="p">[</span><span class="s2">&quot;NAD83 / UTM zone 15N&quot;</span><span class="p">,</span>
+    <span class="n">BASEGEOGCRS</span><span class="p">[</span><span class="s2">&quot;NAD83&quot;</span><span class="p">,</span>
+        <span class="n">DATUM</span><span class="p">[</span><span class="s2">&quot;North American Datum 1983&quot;</span><span class="p">,</span>
+            <span class="n">ELLIPSOID</span><span class="p">[</span><span class="s2">&quot;GRS 1980&quot;</span><span class="p">,</span><span class="mi">6378137</span><span class="p">,</span><span class="mf">298.257222101</span><span class="p">,</span>
+                <span class="n">LENGTHUNIT</span><span class="p">[</span><span class="s2">&quot;metre&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">]]],</span>
+        <span class="n">PRIMEM</span><span class="p">[</span><span class="s2">&quot;Greenwich&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">ANGLEUNIT</span><span class="p">[</span><span class="s2">&quot;degree&quot;</span><span class="p">,</span><span class="mf">0.0174532925199433</span><span class="p">]],</span>
+        <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">4269</span><span class="p">]],</span>
+    <span class="n">CONVERSION</span><span class="p">[</span><span class="s2">&quot;UTM zone 15N&quot;</span><span class="p">,</span>
+        <span class="n">METHOD</span><span class="p">[</span><span class="s2">&quot;Transverse Mercator&quot;</span><span class="p">,</span>
+            <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">9807</span><span class="p">]],</span>
+        <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;Latitude of natural origin&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">ANGLEUNIT</span><span class="p">[</span><span class="s2">&quot;degree&quot;</span><span class="p">,</span><span class="mf">0.0174532925199433</span><span class="p">],</span>
+            <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">8801</span><span class="p">]],</span>
+        <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;Longitude of natural origin&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">93</span><span class="p">,</span>
+            <span class="n">ANGLEUNIT</span><span class="p">[</span><span class="s2">&quot;degree&quot;</span><span class="p">,</span><span class="mf">0.0174532925199433</span><span class="p">],</span>
+            <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">8802</span><span class="p">]],</span>
+        <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;Scale factor at natural origin&quot;</span><span class="p">,</span><span class="mf">0.9996</span><span class="p">,</span>
+            <span class="n">SCALEUNIT</span><span class="p">[</span><span class="s2">&quot;unity&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">8805</span><span class="p">]],</span>
+        <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;False easting&quot;</span><span class="p">,</span><span class="mi">500000</span><span class="p">,</span>
+            <span class="n">LENGTHUNIT</span><span class="p">[</span><span class="s2">&quot;metre&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">8806</span><span class="p">]],</span>
+        <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;False northing&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">LENGTHUNIT</span><span class="p">[</span><span class="s2">&quot;metre&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">8807</span><span class="p">]]],</span>
+    <span class="n">CS</span><span class="p">[</span><span class="n">Cartesian</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">AXIS</span><span class="p">[</span><span class="s2">&quot;(E)&quot;</span><span class="p">,</span><span class="n">east</span><span class="p">,</span>
+            <span class="n">ORDER</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">LENGTHUNIT</span><span class="p">[</span><span class="s2">&quot;metre&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span>
+        <span class="n">AXIS</span><span class="p">[</span><span class="s2">&quot;(N)&quot;</span><span class="p">,</span><span class="n">north</span><span class="p">,</span>
+            <span class="n">ORDER</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">LENGTHUNIT</span><span class="p">[</span><span class="s2">&quot;metre&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span>
+    <span class="n">USAGE</span><span class="p">[</span>
+        <span class="n">SCOPE</span><span class="p">[</span><span class="s2">&quot;Engineering survey, topographic mapping.&quot;</span><span class="p">],</span>
+        <span class="n">AREA</span><span class="p">[</span><span class="s2">&quot;North America - between 96┬░W and 90┬░W - onshore and offshore. Canada - Manitoba; Nunavut; Ontario. United States (USA) - Arkansas; Illinois; Iowa; Kansas; Louisiana; Michigan; Minnesota; Mississippi; Missouri; Nebraska; Oklahoma; Tennessee; Texas; Wisconsin.&quot;</span><span class="p">],</span>
+        <span class="n">BBOX</span><span class="p">[</span><span class="mf">25.61</span><span class="p">,</span><span class="o">-</span><span class="mi">96</span><span class="p">,</span><span class="mi">84</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">]],</span>
+    <span class="n">ID</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="mi">26915</span><span class="p">]]</span>
+<span class="n">Data</span> <span class="n">axis</span> <span class="n">to</span> <span class="n">CRS</span> <span class="n">axis</span> <span class="n">mapping</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span>
+<span class="n">Origin</span> <span class="o">=</span> <span class="p">(</span><span class="mf">159457.000000000000000</span><span class="p">,</span><span class="mf">5501645.000000000000000</span><span class="p">)</span>
+<span class="n">Pixel</span> <span class="n">Size</span> <span class="o">=</span> <span class="p">(</span><span class="mf">500.000000000000000</span><span class="p">,</span><span class="o">-</span><span class="mf">500.000000000000000</span><span class="p">)</span>
+<span class="n">Metadata</span><span class="p">:</span>
+  <span class="n">description</span><span class="o">=</span><span class="n">Setup</span> <span class="n">by</span> <span class="n">GatewayGeo</span>
+  <span class="n">label</span><span class="o">=</span><span class="n">North</span> <span class="n">Central</span> <span class="n">US</span> <span class="n">MODIS</span> <span class="n">Images</span> <span class="k">for</span> <span class="mi">2002</span>
+  <span class="n">TIME_POSITION</span><span class="o">=</span><span class="mi">2002</span><span class="o">-</span><span class="mi">001</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#keywords=WCS,MODIS,NDVI</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.accessConstraints=None</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.description=Setup by GatewayGeo</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.fees=None</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.label=WCS Demo Server for MapServer, setup by GatewayGeo</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.name=MapServer WCS</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.responsibleParty.contactInfo.address.administrativeArea=Nova Scotia</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.responsibleParty.contactInfo.address.city=Lunenburg</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.responsibleParty.contactInfo.address.country=Canada</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.responsibleParty.contactInfo.address.deliveryPoint=1101 Blue Rocks Road</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.responsibleParty.contactInfo.address.electronicMailAddress=info@gatewaygeomatics.com</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.responsibleParty.contactInfo.address.postalCode=B0J 2C0</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.responsibleParty.contactInfo.phone.facsimile=+xx-xxx-xxx-xxxx</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.responsibleParty.contactInfo.phone.voice=+xx-xxx-xxx-xxxx</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.responsibleParty.individualName=Jeff McKenna</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.responsibleParty.organisationName=GatewayGeo</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#Service.responsibleParty.positionName=Director</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#updateSequence=0</span>
+  <span class="n">WCS_GLOBAL</span><span class="c1">#version=1.0.0</span>
+<span class="n">Subdatasets</span><span class="p">:</span>
+  <span class="n">SUBDATASET_1_NAME</span><span class="o">=</span><span class="n">WCS_SDS</span><span class="p">:</span><span class="n">time</span><span class="o">=</span><span class="s2">&quot;2002-001&quot;</span><span class="p">,</span><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">jeffm</span>\<span class="o">.</span><span class="n">gdal</span>\<span class="n">wcs_cache</span>\<span class="n">ADNOa</span><span class="o">.</span><span class="n">xml</span>
+  <span class="n">SUBDATASET_1_DESC</span><span class="o">=</span><span class="n">Coverage</span> <span class="n">modis</span> <span class="n">at</span> <span class="n">time</span> <span class="mi">2002</span><span class="o">-</span><span class="mi">001</span>
+  <span class="n">SUBDATASET_2_NAME</span><span class="o">=</span><span class="n">WCS_SDS</span><span class="p">:</span><span class="n">time</span><span class="o">=</span><span class="s2">&quot;2002-057&quot;</span><span class="p">,</span><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">jeffm</span>\<span class="o">.</span><span class="n">gdal</span>\<span class="n">wcs_cache</span>\<span class="n">ADNOa</span><span class="o">.</span><span class="n">xml</span>
+  <span class="n">SUBDATASET_2_DESC</span><span class="o">=</span><span class="n">Coverage</span> <span class="n">modis</span> <span class="n">at</span> <span class="n">time</span> <span class="mi">2002</span><span class="o">-</span><span class="mi">057</span>
+  <span class="n">SUBDATASET_3_NAME</span><span class="o">=</span><span class="n">WCS_SDS</span><span class="p">:</span><span class="n">time</span><span class="o">=</span><span class="s2">&quot;2002-073&quot;</span><span class="p">,</span><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">jeffm</span>\<span class="o">.</span><span class="n">gdal</span>\<span class="n">wcs_cache</span>\<span class="n">ADNOa</span><span class="o">.</span><span class="n">xml</span>
+  <span class="n">SUBDATASET_3_DESC</span><span class="o">=</span><span class="n">Coverage</span> <span class="n">modis</span> <span class="n">at</span> <span class="n">time</span> <span class="mi">2002</span><span class="o">-</span><span class="mi">073</span>
+  <span class="n">SUBDATASET_4_NAME</span><span class="o">=</span><span class="n">WCS_SDS</span><span class="p">:</span><span class="n">time</span><span class="o">=</span><span class="s2">&quot;2002-089&quot;</span><span class="p">,</span><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">jeffm</span>\<span class="o">.</span><span class="n">gdal</span>\<span class="n">wcs_cache</span>\<span class="n">ADNOa</span><span class="o">.</span><span class="n">xml</span>
+  <span class="n">SUBDATASET_4_DESC</span><span class="o">=</span><span class="n">Coverage</span> <span class="n">modis</span> <span class="n">at</span> <span class="n">time</span> <span class="mi">2002</span><span class="o">-</span><span class="mi">089</span>
+  <span class="n">SUBDATASET_5_NAME</span><span class="o">=</span><span class="n">WCS_SDS</span><span class="p">:</span><span class="n">time</span><span class="o">=</span><span class="s2">&quot;2002-097&quot;</span><span class="p">,</span><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">jeffm</span>\<span class="o">.</span><span class="n">gdal</span>\<span class="n">wcs_cache</span>\<span class="n">ADNOa</span><span class="o">.</span><span class="n">xml</span>
+  <span class="n">SUBDATASET_5_DESC</span><span class="o">=</span><span class="n">Coverage</span> <span class="n">modis</span> <span class="n">at</span> <span class="n">time</span> <span class="mi">2002</span><span class="o">-</span><span class="mi">097</span>
+  <span class="n">SUBDATASET_6_NAME</span><span class="o">=</span><span class="n">WCS_SDS</span><span class="p">:</span><span class="n">time</span><span class="o">=</span><span class="s2">&quot;2002-105&quot;</span><span class="p">,</span><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">jeffm</span>\<span class="o">.</span><span class="n">gdal</span>\<span class="n">wcs_cache</span>\<span class="n">ADNOa</span><span class="o">.</span><span class="n">xml</span>
+  <span class="n">SUBDATASET_6_DESC</span><span class="o">=</span><span class="n">Coverage</span> <span class="n">modis</span> <span class="n">at</span> <span class="n">time</span> <span class="mi">2002</span><span class="o">-</span><span class="mi">105</span>
+  <span class="n">SUBDATASET_7_NAME</span><span class="o">=</span><span class="n">WCS_SDS</span><span class="p">:</span><span class="n">time</span><span class="o">=</span><span class="s2">&quot;2002-121&quot;</span><span class="p">,</span><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">jeffm</span>\<span class="o">.</span><span class="n">gdal</span>\<span class="n">wcs_cache</span>\<span class="n">ADNOa</span><span class="o">.</span><span class="n">xml</span>
+  <span class="n">SUBDATASET_7_DESC</span><span class="o">=</span><span class="n">Coverage</span> <span class="n">modis</span> <span class="n">at</span> <span class="n">time</span> <span class="mi">2002</span><span class="o">-</span><span class="mi">121</span>
+  <span class="n">SUBDATASET_8_NAME</span><span class="o">=</span><span class="n">WCS_SDS</span><span class="p">:</span><span class="n">time</span><span class="o">=</span><span class="s2">&quot;2002-153&quot;</span><span class="p">,</span><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">jeffm</span>\<span class="o">.</span><span class="n">gdal</span>\<span class="n">wcs_cache</span>\<span class="n">ADNOa</span><span class="o">.</span><span class="n">xml</span>
+  <span class="n">SUBDATASET_8_DESC</span><span class="o">=</span><span class="n">Coverage</span> <span class="n">modis</span> <span class="n">at</span> <span class="n">time</span> <span class="mi">2002</span><span class="o">-</span><span class="mi">153</span>
+  <span class="n">SUBDATASET_9_NAME</span><span class="o">=</span><span class="n">WCS_SDS</span><span class="p">:</span><span class="n">time</span><span class="o">=</span><span class="s2">&quot;2002-169&quot;</span><span class="p">,</span><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">jeffm</span>\<span class="o">.</span><span class="n">gdal</span>\<span class="n">wcs_cache</span>\<span class="n">ADNOa</span><span class="o">.</span><span class="n">xml</span>
+  <span class="n">SUBDATASET_9_DESC</span><span class="o">=</span><span class="n">Coverage</span> <span class="n">modis</span> <span class="n">at</span> <span class="n">time</span> <span class="mi">2002</span><span class="o">-</span><span class="mi">169</span>
+  <span class="n">SUBDATASET_10_NAME</span><span class="o">=</span><span class="n">WCS_SDS</span><span class="p">:</span><span class="n">time</span><span class="o">=</span><span class="s2">&quot;2002-185&quot;</span><span class="p">,</span><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">jeffm</span>\<span class="o">.</span><span class="n">gdal</span>\<span class="n">wcs_cache</span>\<span class="n">ADNOa</span><span class="o">.</span><span class="n">xml</span>
+  <span class="n">SUBDATASET_10_DESC</span><span class="o">=</span><span class="n">Coverage</span> <span class="n">modis</span> <span class="n">at</span> <span class="n">time</span> <span class="mi">2002</span><span class="o">-</span><span class="mi">185</span>
+<span class="n">Corner</span> <span class="n">Coordinates</span><span class="p">:</span>
+<span class="n">Upper</span> <span class="n">Left</span>  <span class="p">(</span>  <span class="mf">159457.000</span><span class="p">,</span> <span class="mf">5501645.000</span><span class="p">)</span> <span class="p">(</span> <span class="mi">97</span><span class="n">d42</span><span class="s1">&#39;39.02&quot;W, 49d34&#39;</span><span class="mf">16.99</span><span class="s2">&quot;N)</span>
+<span class="n">Lower</span> <span class="n">Left</span>  <span class="p">(</span>  <span class="mf">159457.000</span><span class="p">,</span> <span class="mf">4598145.000</span><span class="p">)</span> <span class="p">(</span> <span class="mi">97</span><span class="n">d</span> <span class="mi">4</span><span class="s1">&#39;38.66&quot;W, 41d27&#39;</span><span class="mf">45.44</span><span class="s2">&quot;N)</span>
+<span class="n">Upper</span> <span class="n">Right</span> <span class="p">(</span> <span class="mf">1399957.000</span><span class="p">,</span> <span class="mf">5501645.000</span><span class="p">)</span> <span class="p">(</span> <span class="mi">80</span><span class="n">d40</span><span class="s1">&#39;50.24&quot;W, 49d 0&#39;</span><span class="mf">20.53</span><span class="s2">&quot;N)</span>
+<span class="n">Lower</span> <span class="n">Right</span> <span class="p">(</span> <span class="mf">1399957.000</span><span class="p">,</span> <span class="mf">4598145.000</span><span class="p">)</span> <span class="p">(</span> <span class="mi">82</span><span class="n">d18</span><span class="s1">&#39; 6.92&quot;W, 41d 2&#39;</span> <span class="mf">5.85</span><span class="s2">&quot;N)</span>
+<span class="n">Center</span>      <span class="p">(</span>  <span class="mf">779707.000</span><span class="p">,</span> <span class="mf">5049895.000</span><span class="p">)</span> <span class="p">(</span> <span class="mi">89</span><span class="n">d25</span><span class="s1">&#39; 0.65&quot;W, 45d32&#39;</span><span class="mf">46.92</span><span class="s2">&quot;N)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Example 4: Get GeoTIFF for a MapServer WCS layer for a specific time:</strong></p>
+<p>The following converts a ‘modis’ raster layer in a MapServer WCS service,
+for a specific time, to a GeoTIFF:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gdal_translate<span class="w"> </span>-of<span class="w"> </span>GTiff<span class="w"> </span>-oo<span class="w"> </span><span class="nv">CLEAR_CACHE</span><span class="o">=</span>YES<span class="w"> </span>-oo<span class="w"> </span><span class="nv">DefaultTime</span><span class="o">=</span><span class="s2">&quot;2002-001&quot;</span><span class="w"> </span>WCS:<span class="s2">&quot;https://demo.mapserver.org/cgi-bin/wcs?VERSION=1.0.0&amp;COVERAGE=modis&quot;</span><span class="w"> </span>modis-2002-001.tif
+</pre></div>
+</div>
+<p>Since GDAL 3.11 you can alternatively use the <a class="reference external" href="https://gdal.org/en/stable/programs/gdal_raster_index.html">gdal program</a>
+such as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gdal<span class="w"> </span>convert<span class="w"> </span>--of<span class="w"> </span>GTiff<span class="w"> </span>--oo<span class="w"> </span><span class="nv">CLEAR_CACHE</span><span class="o">=</span>YES<span class="w"> </span>--oo<span class="w"> </span><span class="nv">DefaultTime</span><span class="o">=</span><span class="s2">&quot;2002-001&quot;</span><span class="w"> </span>WCS:<span class="s2">&quot;https://demo.mapserver.org/cgi-bin/wcs?VERSION=1.0.0&amp;COVERAGE=modis&quot;</span><span class="w"> </span>modis-2002-001-2.tif
+</pre></div>
+</div>
+</section>
+<section id="test-using-qgis-add-wcs-layer">
+<h3>Test Using QGIS “Add WCS Layer”<a class="headerlink" href="#test-using-qgis-add-wcs-layer" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://qgis.org">QGIS</a> is an excellent way to test your WCS service,
+through the <em>Layer/Add Layer/Add WCS Layer</em> menu item.</p>
+<img alt="../_images/qgis-add-wcs-layer.png" class="no-scaled-link" height="217" src="../_images/qgis-add-wcs-layer.png" width="500" />
+<p>You can then try to choose an exact time (and associated GeoTIFF file) from the
+MapServer WCS service.</p>
+<img alt="../_images/qgis-add-wcs-layer2.png" class="no-scaled-link" height="374" src="../_images/qgis-add-wcs-layer2.png" width="500" />
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can/should use the <a class="reference external" href="https://github.com/MapServer/MapServer/wiki/Get-the-Raw-WMS-Request-Generated-by-QGIS">QGIS Network Logger</a>
+to get the exact GetCapabilities or GetCoverage requests sent by QGIS.</p>
+</div>
 </section>
 </section>
 <section id="wcs-1-1-0-issues">
 <span id="index-3"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">WCS 1.1.0+ Issues</a><a class="headerlink" href="#wcs-1-1-0-issues" title="Link to this heading">¶</a></h2>
-<p>WCS 1.1.0 and later versions of the WCS protocol are supported by
-MapServer 5.2.  For the most part the map file setup for WCS 1.1.0 is
+<p>WCS 1.1.0 and later versions of the WCS protocol are supported since
+MapServer 5.2.0.  For the most part the mapfile setup for WCS 1.1.0 is
 similar to WCS 1.0.0, but the actual protocol is substantially
 changed.</p>
 <section id="getcapabilities">
@@ -580,13 +1190,13 @@ DescribeCoverage will be in this ordering as appropriate.</p>
 <span id="index-4"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">WCS 2.0</a><a class="headerlink" href="#wcs-2-0" title="Link to this heading">¶</a></h2>
 <section id="overview">
 <h3>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h3>
-<p>Version 6.0 introduces support for the new version 2.0 of the WCS
-specification. This section documents the usage of the new WCS
-version.</p>
+<p>MapServer 6.0 introduced support for version 2.0 of the WCS
+specification. This section documents how to configure WCS
+version 2.0 with MapServer.</p>
 <section id="web-coverage-service-wcs-2-0-interface-standard">
 <h4>Web Coverage Service (WCS) 2.0 Interface Standard<a class="headerlink" href="#web-coverage-service-wcs-2-0-interface-standard" title="Link to this heading">¶</a></h4>
-<p>This specification adopts the new OGC Core and Extension model and at
-the moment the following documents are available from the <a class="reference external" href="https://www.ogc.org/standards/wcs">OGC’c WCS
+<p>This specification adopts the new OGC Core and Extension model, and
+the following documents are available from the <a class="reference external" href="https://www.ogc.org/standards/wcs">OGC’c WCS
 Standard page</a>:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://portal.ogc.org/files/?artifact_id=48553">GML 3.2.1 Application Schema Coverages</a></p></li>
@@ -608,7 +1218,7 @@ responses should validate.</p>
 </section>
 <section id="wcs-2-0-kvp-request-parameters">
 <h4>WCS 2.0 KVP request parameters<a class="headerlink" href="#wcs-2-0-kvp-request-parameters" title="Link to this heading">¶</a></h4>
-<p>The following KVP request parameters are available in WCS 2.0:</p>
+<p>The following KVP (key/value pair) request parameters are available in WCS 2.0:</p>
 <blockquote>
 <div><p><strong>COVERAGEID=id</strong>: This parameter is technically the same as the
 <strong>COVERAGE</strong> parameter for WCS 1.0 or the <strong>IDENTIFIER</strong> parameter
@@ -764,10 +1374,11 @@ requests.</p>
 </section>
 <section id="changes-to-previous-versions">
 <h3>Changes to previous versions<a class="headerlink" href="#changes-to-previous-versions" title="Link to this heading">¶</a></h3>
-<p>The layer name must be a valid NCName, i.e: must not start with a
-number and can only contain alphanumerical characters. This constraint
-derives of the gml:id property which has to be a NCName, that relates
-to the coverage ID which is itself taken from the layers name.</p>
+<p>The layer name must be a valid NCName (“”non-colonized name”),
+i.e: must not start with a number and can only contain alphanumerical
+characters. This constraint derives from the <cite>gml:id</cite> property which has
+to be a NCName, that relates to the coverage ID which is itself
+taken from the layer’s name.</p>
 </section>
 <section id="specifying-coverage-specific-metadata">
 <h3>Specifying coverage specific metadata<a class="headerlink" href="#specifying-coverage-specific-metadata" title="Link to this heading">¶</a></h3>
@@ -778,8 +1389,8 @@ all of the required metadata can be retrieved from the source image.</p>
 image does not provide these metadata.  Not every input image format
 has geospatial metadata attached.  In this case, the layer metadata
 can be used to provide this information.</p>
-<p>The convention is that once (wcs|ows)_extent and one of (wcs|ows)_size
-and (wcs|ows)_resolution is set in the layer metadata, all the
+<p>The convention is that once <em>(wcs|ows)_extent</em> and one of <em>(wcs|ows)_size</em>
+and <em>(wcs|ows)_resolution</em> is set in the layer metadata, all the
 coverage specific metadata will be retrieved from there.  Otherwise
 the source image is queried via GDAL, if possible.</p>
 <p>The relevant layer metadata fields are (wcs|ows)_bandcount, (wcs|ows)_imagemode,
@@ -792,8 +1403,8 @@ discussed.</p>
 <p>The following layer metadata fields can be used to return a more
 detailed description for the range type of a “virtual dataset”
 coverage.  A coverage is considered as a “virtual dataset” if the
-(wcs|ows)_extent metadata entry and one of the (wcs|ows)_size or
-(wcs|ows)_resolution metadata entries are set.</p>
+<em>(wcs|ows)_extent</em> metadata entry and one of the <em>(wcs|ows)_size</em> or
+<em>(wcs|ows)_resolution</em> metadata entries are set.</p>
 <p>First of all, the used version of metadata has to be identified. To
 identify the bands of a coverage, the following field must be
 present:</p>
@@ -819,7 +1430,7 @@ following:</p>
 <p>All values are interpreted as strings, only “interval” is interpreted
 as 2 double precision float values separated with a space.</p>
 <p>Also default values can be configured for every key. These have the
-same suffix as the band specific keys but start with (wcs|ows) instead
+same suffix as the band specific keys but start with <em>(wcs|ows)</em> instead
 of the bands name:</p>
 <blockquote>
 <div><ul class="simple">
@@ -831,10 +1442,10 @@ of the bands name:</p>
 </ul>
 </div></blockquote>
 <p>If no specific or default value is given, the output is dependent on
-the metadata key. The UOM, for example will be set to ‘W.m-2.Sr-1’,
-interval and significant figures will be determined according to the
-image type and definition, description, and interpretation will not be
-visible in the output at all.</p>
+the metadata key. The UOM (unit of measurement) for example will be
+set to ‘W.m-2.Sr-1’, interval and significant figures will be determined
+according to the image type and definition, description, and interpretation
+will not be visible in the output at all.</p>
 <p>This example demonstrates the use of the band-specific metadata fields
 with their default values:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">METADATA</span>
@@ -1089,7 +1700,7 @@ item in the accept languages list contained in the list specified with
 <h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Reference Section</a><a class="headerlink" href="#reference-section" title="Link to this heading">¶</a></h2>
 <p>To avoid confusion only “wcs_*” and “ows_*” prefixed metadata entries
 are evaluated in OGC WCS services. Previous versions used “wms_*”
-prefixed entries as fallback which is dropped in version 6.0 in favor of
+prefixed entries as fallback which was dropped in version 6.0 in favor of
 forcing explicit decisions. The module will look for the “wcs_*” and
 “ows_*” metadata prefixes in this order.</p>
 <p>The following metadata are available in the setup of the mapfile:</p>
@@ -1197,7 +1808,7 @@ be specified.</p></li>
 <p id="index-32"><strong>wcs_metadatalink_list</strong></p>
 <blockquote>
 <div><div class="versionadded">
-<p><span class="versionmodified added">Added in version 8.0.</span></p>
+<p><span class="versionmodified added">Added in version 8.0.0.</span></p>
 </div>
 </div></blockquote>
 <ul>
@@ -1218,6 +1829,10 @@ wcs_metadatalink_href, wcs_metadatalink_format and wcs_metadatalink_type items.<
 <span class="s">&quot;wcs_metadatalink_html_type&quot;</span> <span class="s">&quot;TC211&quot;</span>
 <span class="s">&quot;wcs_metadatalink_html_href&quot;</span> <span class="s">&quot;http://example.com/testHTML&quot;</span>
 </pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">Zie ook</p>
+<p>original Pull Request <a class="reference external" href="https://github.com/MapServer/MapServer/pull/6031/">#6031</a></p>
 </div>
 </li>
 </ul>
@@ -1366,10 +1981,15 @@ GetCoverage requests will use this format when no other format is
 specified (the format parameter is optional then).</p></li>
 </ul>
 <p id="index-65"><strong>wcs_outputformat_{OUTPUTFORMATNAME}_creationoption_{OPTIONNAME}</strong></p>
+<blockquote>
+<div><div class="versionadded">
+<p><span class="versionmodified added">Added in version 7.2.0.</span></p>
+</div>
+</div></blockquote>
 <ul>
-<li><p><em>Description:</em> (Optional) (added in MapServer 7.2.0) To provide
-creation options in a (GDAL) output format specific and layer specific way.
-{OUTPUTFORMATNAME} should be substituted by the user with the OUTPUTFORMAT.NAME
+<li><p><em>Description:</em> (Optional) To provide creation options in a (GDAL) output
+format specific and layer specific way.`{OUTPUTFORMATNAME}` should be
+substituted by the user with the OUTPUTFORMAT.NAME
 value of an output format allowed for the layer. And {OPTIONNAME} by a
 valid GDAL creation option valid for the OUTPUTFORMAT.DRIVER.</p>
 <p>The purpose of this metadata item is to provide creation options that depend
@@ -1383,14 +2003,24 @@ metadata item named
 <strong>wcs_outputformat_{OUTPUTFORMATNAME}_creationoption_BAND_{bandnumber}_{OPTIONNAME}</strong>.
 bandnumber will be automatically adjusted when passed to GDAL so that the
 WCS band subsetting is properly taken into account.
-You can consult <a class="reference external" href="https://github.com/MapServer/MapServer/blob/main/msautotest/wxs/wcs_grib_output.map">WCS GRIB output in msautotest</a> as
-a practical example of how to configure GRIB2 WCS output (requires GDAL 2.3.0)</p>
+You can consult <a class="reference external" href="https://github.com/MapServer/MapServer/blob/main/msautotest/wxs/wcs_grib_output.map">wcs_grib_output.map</a>
+in msautotest as a practical example of how to configure GRIB2 WCS output
+(requires GDAL 2.3.0).</p>
+<div class="admonition seealso">
+<p class="admonition-title">Zie ook</p>
+<p>original Pull Request <a class="reference external" href="https://github.com/MapServer/MapServer/pull/5530/">#5530</a></p>
+</div>
 </li>
 </ul>
 <p id="index-66"><strong>wcs_outputformat_{OUTPUTFORMATNAME}_mdi_{DOMAIN}_{KEY}</strong></p>
+<blockquote>
+<div><div class="versionadded">
+<p><span class="versionmodified added">Added in version 8.0.0.</span></p>
+</div>
+</div></blockquote>
 <ul>
-<li><p><em>Description:</em> (Optional) (added in MapServer 8.0.0) To provide
-metadata item (mdi) options in a GDAL output format specific and layer specific way.
+<li><p><em>Description:</em> (Optional) To provide metadata item (mdi) options in a GDAL
+output format specific and layer specific way.
 {OUTPUTFORMATNAME} should be substituted by the user with the OUTPUTFORMAT.NAME
 value of an output format allowed for the layer.
 {DOMAIN} is the name of a GDAL metadata domain. In general, you should use “default”
@@ -1450,6 +2080,10 @@ the extra dimension (e.g. “standard_name”, “units”, etc.)</p>
 the output of the WCS request is netCDF too, and no manual wcs_outputformat_netCDF_mdi_*
 item is defined, then MapServer will automatically forward metadata from the
 input dataset to the output file to generate a netCDF 3D dataset.</p>
+<div class="admonition seealso">
+<p class="admonition-title">Zie ook</p>
+<p>original Pull Request <a class="reference external" href="https://github.com/MapServer/MapServer/pull/6456/">#6456</a></p>
+</div>
 </li>
 </ul>
 <p><em>Axes Descriptions</em> (WCS 1.x only)</p>
@@ -1525,63 +2159,6 @@ the Layer Metadata API for the given layer. See the
 <h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Rules for handling SRS in a MapServer WCS</a><a class="headerlink" href="#rules-for-handling-srs-in-a-mapserver-wcs" title="Link to this heading">¶</a></h2>
 <p>TODO!</p>
 </section>
-<section id="spatio-temporal-indexes">
-<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Spatio/Temporal Indexes</a><a class="headerlink" href="#spatio-temporal-indexes" title="Link to this heading">¶</a></h2>
-<p>MapServer has long supported a method of breaking a dataset into smaller, more
-manageable pieces or tiles. In this case a shapefile is used to store the
-boundary of each tile, and an attribute holds the location of the actual data.
-Within a MapServer mapfile the layer keywords TILEINDEX and TILEITEM are used
-to activate tiling.</p>
-<p>Consider the example where an organization wants to serve hundreds or even
-thousands of MODIS scenes. Five images cover the spatial extent and each group
-of five varies by date of acquisition. This turns out to be a fairly common
-scenario for organizations interested in WCS, one that the existing tiling
-support does not adequately address. In previous versions of MapServer a
-developer would have to create one tile index and one layer definition for
-each group of five images. This could result in configuration files that are
-prohibitively long and difficult to manage.</p>
-<p>In order to more efficiently support the WCS specification a new tiling scheme
-has been implemented within MapServer. One that supports spatial sub-setting,
-but also ad hoc sub-setting based on any attributes found within tile index.
-In many cases a temporal attribute could be used, but sub-setting is not
-limited to that case. The new scheme introduces the concept of tile index
-layers, that is, a separate layer definition is used to describe the tile
-index dataset. With this we get all the benefits of any MapServer layer, most
-importantly we can apply MapServer filters to the data. Filters can be defined
-at runtime using MapServer CGI, MapScript or via the WCS server interface. The
-syntax for the layer using the index remains unchanged except that the value
-for <a class="reference internal" href="../optimization/tileindex.html#tileindex"><span class="std std-ref">Tile Indexes</span></a> refers to the index layer instead of an external shapefile.</p>
-<p>So, looking at the example above again we can reduce our MapServer
-configuration to two layer definitions, one for the tile index and one for the
-imagery itself. Extracting a single dates worth of imagery is now a matter of
-setting the appropriate filter within the tile index layer.</p>
-<section id="building-spatio-temporal-tile-indexes">
-<h3>Building Spatio-Temporal Tile Indexes<a class="headerlink" href="#building-spatio-temporal-tile-indexes" title="Link to this heading">¶</a></h3>
-<p>Developing these tile indexes is more difficult than basic indexes simply
-because there are no ready-made tools to do so. Fortunately we can leverage
-existing tool available within MapServer or supporting libraries such as GDAL
-by post processing their output.</p>
-<p>Taking the above example, building an index is relatively simple task if you
-are willing to roll up your sleeves and write a bit of code. First, the basic
-spatial index needs to be built. The GDAL utility gdaltindex already does
-this. Simply point gdaltindex at the directory containing the collection of
-MODIS images and it will build a shapefile index suitable for use with
-MapServer. The next step would be to add the temporal information. The pseudo
-code would look something like:</p>
-<ul class="simple">
-<li><p>open the index .dbf file for reading</p></li>
-<li><p>create a new column to hold the image acquisition date</p></li>
-<li><p>for each image; 1) extract the image acquisition date and 2) insert it into
-the new column</p></li>
-<li><p>close the index .dbf file</p></li>
-</ul>
-<p>This general approach could be used for many cases. A scripting language such
-as Perl, PHP or Python works well since they all have readily available
-modules for manipulating .dbf files. A worst case would involve hand editing
-the resulting .dbf file using a desktop tool such as Mircosoft Access or ESRI
-Arcview.</p>
-</section>
-</section>
 <section id="wcs-2-0-application-profile-earth-observation-eo-wcs">
 <h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">WCS 2.0 Application Profile - Earth Observation (EO-WCS)</a><a class="headerlink" href="#wcs-2-0-application-profile-earth-observation-eo-wcs" title="Link to this heading">¶</a></h2>
 <p>OGC adopted an Earth Observation
@@ -1654,12 +2231,20 @@ Service of Canada.</p>
 <li><a class="reference internal" href="#configuring-your-mapfile-to-serve-wcs-layers">Configuring Your Mapfile to Serve WCS Layers</a><ul>
 <li><a class="reference internal" href="#example-wcs-server-mapfile">Example WCS Server Mapfile</a></li>
 <li><a class="reference internal" href="#output-formats">Output Formats</a></li>
+<li><a class="reference internal" href="#spatio-temporal-indexes">Spatio/Temporal Indexes</a><ul>
+<li><a class="reference internal" href="#building-spatio-temporal-tileindexes">Building Spatio-Temporal TileIndexes</a></li>
+<li><a class="reference internal" href="#mapfile-define-your-spatio-temporal-tileindexes">Mapfile: define your Spatio/Temporal TileIndexes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-wcs-server-mapfile-with-spatial-temporal">Example WCS Server Mapfile with Spatial/Temporal</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#test-your-wcs-1-0-server">Test Your WCS 1.0 Server</a><ul>
 <li><a class="reference internal" href="#validate-the-capabilities-metadata">Validate the Capabilities Metadata</a></li>
 <li><a class="reference internal" href="#test-with-a-describecoverage-request">Test With a DescribeCoverage Request</a></li>
 <li><a class="reference internal" href="#test-with-a-getcoverage-request">Test With a GetCoverage Request</a></li>
+<li><a class="reference internal" href="#test-using-gdal-utilities">Test Using GDAL Utilities</a></li>
+<li><a class="reference internal" href="#test-using-qgis-add-wcs-layer">Test Using QGIS “Add WCS Layer”</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#wcs-1-1-0-issues">WCS 1.1.0+ Issues</a><ul>
@@ -1696,10 +2281,6 @@ Service of Canada.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#rules-for-handling-srs-in-a-mapserver-wcs">Rules for handling SRS in a MapServer WCS</a></li>
-<li><a class="reference internal" href="#spatio-temporal-indexes">Spatio/Temporal Indexes</a><ul>
-<li><a class="reference internal" href="#building-spatio-temporal-tile-indexes">Building Spatio-Temporal Tile Indexes</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#wcs-2-0-application-profile-earth-observation-eo-wcs">WCS 2.0 Application Profile - Earth Observation (EO-WCS)</a></li>
 <li><a class="reference internal" href="#to-do-items-and-known-limitations">To-do Items and Known Limitations</a></li>
 <li><a class="reference internal" href="#credits">Credits</a></li>
@@ -1731,7 +2312,7 @@ Service of Canada.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; <a href="../copyright.html">Copyright</a> 2026, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2026-03-30.
+      Laatste aanpassing op 2026-04-13.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>
