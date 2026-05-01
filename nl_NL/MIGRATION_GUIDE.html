@@ -41,7 +41,7 @@
     <td style="padding: 10px 10px 0px 0px; text-align: right; vertical-align: top;">
       <a href="index.html" title="Home">Home</a> |
       <a href="products.html" title="Products (MapServer core, MapCache, TinyOWS">Products</a> |
-      <a href="https://github.com/mapserver/mapserver/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
+      <a href="https://github.com/MapServer/MapServer/issues/" title="Issue Tracker (MapServer core)">Issue Tracker</a> |
       <a href="community/service_providers.html" title="Professional Service Providers">Service Providers</a> |      
       <a href="faq.html" title="Frequently Asked Questions">FAQ</a> |
       <a href="https://fosstodon.org/@mapserver" title="Mastodon" target="_blank">Mastodon</a> |
@@ -153,7 +153,7 @@
 <span id="migration"></span><h1><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer Migration Guide</a><a class="headerlink" href="#mapserver-migration-guide" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Last Updated<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2026-04-19</p>
+<dd class="field-odd"><p>2026-05-01</p>
 </dd>
 </dl>
 <nav class="contents" id="table-of-contents">
@@ -280,8 +280,7 @@ if no other class can be applied.</p>
 <li><p><a class="reference internal" href="ogc/ogc_api.html#ogcapi"><span class="std std-ref">OGC API : Features</span></a> has been enhanced to allow the appending of additional
 query parameters to all URLs generated through the API, by
 defining the <cite>ows_extra_params</cite> parameter in the mapfile’s WEB.METADATA object.</p>
-<blockquote>
-<div><div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">MAP</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">MAP</span>
   <span class="p">...</span>
   <span class="k">WEB</span>
     <span class="k">METADATA</span>
@@ -298,7 +297,6 @@ defining the <cite>ows_extra_params</cite> parameter in the mapfile’s WEB.META
 <span class="k">END</span> <span class="c1">#map</span>
 </pre></div>
 </div>
-</div></blockquote>
 <p>All subsequent URLs available through OGCAPI: Features will contain that
 <cite>token=123</cite>, such as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://127.0.0.1/cgi-bin/mapserv.exe/local-demo/ogcapi/collections/ocean/items?f=json&amp;token=123
@@ -322,6 +320,8 @@ not store passwords and other tokens in mapfiles.  See steps at <a class="refere
 <li><p>The 8.4.1 release includes a fix for a security flaw for WFS filter requests to
 an OGR backend connection (see CVE record: <a class="reference external" href="https://www.cve.org/CVERecord?id=CVE-2025-59431">CVE-2025-59431</a>,
 or MapServer’s <a class="reference external" href="https://github.com/MapServer/MapServer/security/advisories/GHSA-256m-rx4h-r55w">Security Advisory</a>)</p></li>
+<li><p>MapServer now requires at least <a class="reference external" href="https://cmake.org/">CMake</a> version 3.16
+for building</p></li>
 <li><p>you can now build against the PCRE2 library (WITH_PCRE2=ON)</p></li>
 <li><p>reminder that since the PROJ 9.1 release, the former <cite>PROJ_LIB</cite> variable has
 been replaced with <cite>PROJ_DATA</cite></p>
@@ -499,7 +499,8 @@ through OGC services).</p>
 <section id="mapserver-7-4-to-7-6-migration">
 <span id="migration-7-6"></span><h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 7.4 to 7.6 Migration</a><a class="headerlink" href="#mapserver-7-4-to-7-6-migration" title="Link to this heading">¶</a></h2>
 <ul>
-<li><p>MapServer now requires at least CMake version 3.0 for compiling</p></li>
+<li><p>MapServer now requires at least <a class="reference external" href="https://cmake.org/">CMake</a> version 3.0
+for building</p></li>
 <li><p>PointZM data support (X,Y,Z,M coordinates) is now enabled by default</p></li>
 <li><p>the PROJ 6 API is now supported.  Read about the many changes in PROJ since
 the <a class="reference external" href="https://proj.org/news.html">PROJ 6.0 release</a>.  Note that older
@@ -515,8 +516,7 @@ PROJ versions such as 5.2.0 will still work with MapServer.</p>
 </li>
 <li><p>CONNECTIONOPTIONS parameter has been added in the mapfile LAYER, to take
 advantage of GDAL/OGR driver options. (see <a class="reference internal" href="development/rfc/ms-rfc-125.html#rfc125"><span class="std std-ref">RFC 125</span></a>) such as:</p>
-<blockquote>
-<div><div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="k">NAME</span> <span class="s">&quot;test&quot;</span>
   <span class="k">CONNECTIONTYPE</span> <span class="nb">OGR</span>
   <span class="k">CONNECTION</span> <span class="s">&quot;./data/nested_attrs.geojson&quot;</span>
@@ -527,13 +527,11 @@ advantage of GDAL/OGR driver options. (see <a class="reference internal" href="d
 <span class="k">END</span>
 </pre></div>
 </div>
-</div></blockquote>
 </li>
 <li><p>new processing directive <cite>RENDERMODE</cite> (added through <a class="reference internal" href="development/rfc/ms-rfc-124.html#rfc124"><span class="std std-ref">RFC 124 SLD changes</span></a>)
 to enable a ‘painters model’ where all classes for a layer are drawn at once with a
 <cite>ALL_MATCHING_CLASSES</cite> setting, such as:</p>
-<blockquote>
-<div><div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="k">NAME</span> <span class="s">&quot;test&quot;</span>
   <span class="k">CONNECTIONTYPE</span> <span class="nb">OGR</span>
   <span class="k">CONNECTION</span> <span class="s">&quot;./data/nested_attrs.geojson&quot;</span>
@@ -550,7 +548,6 @@ to enable a ‘painters model’ where all classes for a layer are drawn at once
 <span class="k">END</span>
 </pre></div>
 </div>
-</div></blockquote>
 <p>More information in <a class="reference external" href="https://github.com/MapServer/MapServer/pull/5839">issue 5839</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Notitie</p>
@@ -570,8 +567,7 @@ MapServer through commandline, your <a class="reference internal" href="mapfile/
 will still be leveraged for how that error is handled locally.</p>
 </div>
 <p>Here is an example of the new <cite>wms_essential</cite> parameter:</p>
-<blockquote>
-<div><div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="k">NAME</span> <span class="s">&quot;country_bounds&quot;</span>
   <span class="k">TYPE</span> <span class="nb">RASTER</span>
   <span class="k">STATUS</span> <span class="nb">ON</span>
@@ -587,19 +583,16 @@ will still be leveraged for how that error is handled locally.</p>
 <span class="k">END</span>
 </pre></div>
 </div>
-</div></blockquote>
 </li>
 <li><p>Windows users can now use umlauts (special characters such as ä ö ü) in their
 directory paths and filenames, such as:</p>
-<blockquote>
-<div><div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
   <span class="p">..</span>
   <span class="k">DATA</span>  <span class="s">&quot;ä1-test.tif&quot;</span>
   <span class="p">..</span>
 <span class="k">END</span> <span class="c1">#layer</span>
 </pre></div>
 </div>
-</div></blockquote>
 </li>
 </ul>
 </section>
@@ -648,29 +641,28 @@ by default labels that do not fully fit in the map image will be discarded.</p><
 </section>
 <section id="mapserver-6-4-to-7-0-migration">
 <h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 6.4 to 7.0 Migration</a><a class="headerlink" href="#mapserver-6-4-to-7-0-migration" title="Link to this heading">¶</a></h2>
-<ul class="simple">
+<ul>
 <li><p>The predefined field names for the union and cluster layers have been changed.
 Colons in the field names have been replaced with underscores to avoid producing
 invalid GetFeatureInfo results. The field names in the mapfiles should be modified
 according to this change.</p></li>
 <li><p>Layer FILTERs <em>must</em> use MapServer expression syntax only. Drivers will attempt to translate
 from MapServer syntax to native syntax (e.g. SQL). Native expressions can still be set either
-using: 1) sub-selects in the DATA statement or 2) using the new NATIVE_FILTER processing key.</p></li>
-</ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># OGR Layer Before</span>
-<span class="n">LAYER</span>
-  <span class="o">...</span>
-  <span class="n">FILTER</span> <span class="s1">&#39;where id=234&#39;</span>
-<span class="n">END</span>
+using: 1) sub-selects in the DATA statement or 2) using the new NATIVE_FILTER processing key.</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="c1"># OGR Layer Before</span>
+<span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">FILTER</span> <span class="s">&#39;where id=234&#39;</span>
+<span class="k">END</span>
 
 <span class="c1"># OGR Layer After</span>
-<span class="n">LAYER</span>
-  <span class="o">...</span>
-  <span class="n">PROCESSING</span> <span class="s1">&#39;NATIVE_FILTER=id=234&#39;</span>
-<span class="n">END</span>
+<span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">PROCESSING</span> <span class="s">&#39;NATIVE_FILTER=id=234&#39;</span>
+<span class="k">END</span>
 </pre></div>
 </div>
-<ul class="simple">
+</li>
 <li><p>MapServer attribute queries (e.g. mode=item[n]query) <em>must</em> be specified using MapServer
 expression syntax (qstring and qitem (opt)). For RDBMS backends you no longer send SQL snippets,
 rather the underlying driver will attempt to translate the expression to native syntax (e.g. SQL).
@@ -678,24 +670,23 @@ If translation fails (or the driver doesn’t support translation) then MapServe
 the expression instead.</p></li>
 <li><p>Layer opacity is now deprecated a result of RFC 113 - Layer Compositing. The mapfile parser
 and MapScript getter/setter functions will continue to function but unpredictable results will
-occur if used in conjunction with COMPOSITE blocks. For more information see <a class="reference external" href="https://mapserver.org/development/rfc/ms-rfc-113.html">https://mapserver.org/development/rfc/ms-rfc-113.html</a>.</p></li>
-</ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Before</span>
-<span class="n">LAYER</span>
-  <span class="o">...</span>
-  <span class="n">OPACITY</span> <span class="mi">70</span>
-<span class="n">END</span>
+occur if used in conjunction with COMPOSITE blocks. For more information see <a class="reference external" href="https://mapserver.org/development/rfc/ms-rfc-113.html">https://mapserver.org/development/rfc/ms-rfc-113.html</a>.</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="c1"># Before</span>
+<span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">OPACITY</span> <span class="mi">70</span>
+<span class="k">END</span>
 
 <span class="c1"># After</span>
-<span class="n">LAYER</span>
-  <span class="o">...</span>
-  <span class="n">COMPOSITE</span>
-    <span class="n">OPACITY</span> <span class="mi">70</span>
-  <span class="n">END</span>
-<span class="n">END</span>
+<span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">COMPOSITE</span>
+    <span class="k">OPACITY</span> <span class="mi">70</span>
+  <span class="k">END</span>
+<span class="k">END</span>
 </pre></div>
 </div>
-<ul>
+</li>
 <li><p>Handling of non UTF-8 encoded datasources has changed with RFC103. Mapfiles
 now <em>must</em> be saved in UTF-8 encoding, and requests returned by MapServer
 will always be UTF-8 encoded. Various “xxx_encoding” metadata entries used to
@@ -718,38 +709,40 @@ result in subtle label/character placement changes. Support for negative MAXLENG
 linebreaks is not supported anymore, workaround implies pre-processing such labels to include linebreaks
 or wrap characters.</p></li>
 <li><p>ExternalGraphics added through SLD must now validate against the
-“sld_external_graphic” entry of the MAP-&gt;WEB-&gt;VALIDATION block</p></li>
-</ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MAP</span>
- <span class="n">WEB</span>
-  <span class="n">VALIDATION</span>
-   <span class="s2">&quot;sld_external_graphic&quot;</span> <span class="s2">&quot;^/path/to/symbols/.*png&quot;</span>
-  <span class="n">END</span>
- <span class="n">END</span>
-<span class="n">END</span>
+“sld_external_graphic” entry of the MAP-&gt;WEB-&gt;VALIDATION block</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">MAP</span>
+ <span class="k">WEB</span>
+  <span class="k">VALIDATION</span>
+   <span class="s">&quot;sld_external_graphic&quot;</span> <span class="s">&quot;^/path/to/symbols/.*png&quot;</span>
+  <span class="k">END</span>
+ <span class="k">END</span>
+<span class="k">END</span>
 </pre></div>
 </div>
+</li>
+</ul>
 </section>
 <section id="mapserver-6-2-to-6-4-migration">
 <h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">MapServer 6.2 to 6.4 Migration</a><a class="headerlink" href="#mapserver-6-2-to-6-4-migration" title="Link to this heading">¶</a></h2>
-<ul class="simple">
+<ul>
+<li><p>MapServer now must be built with the CMake tool. Build instructions
+are included in the <a class="reference external" href="https://github.com/MapServer/MapServer/blob/main/INSTALL_CMAKE.md">INSTALL_CMAKE.md</a>
+file in the source directory. You will need to have CMake installed
+on your system. Users of mapscripts (except PHP) will also need <a class="reference external" href="https://www.swig.org/">SWIG</a>
+to be installed.</p></li>
 <li><p>The “ows_extent” layer metadata is not used anymore to obtain georeferencing
 information for unreferenced raster data. Please use the “extent” layer key
-instead</p></li>
-</ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LAYER</span>
-  <span class="o">...</span>
-  <span class="n">EXTENT</span> <span class="o">-</span><span class="mi">180</span> <span class="mi">90</span> <span class="mi">180</span> <span class="mi">90</span>
-<span class="n">END</span>
+instead</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
+  <span class="p">...</span>
+  <span class="k">EXTENT</span> <span class="p">-</span><span class="mi">180</span> <span class="mi">90</span> <span class="mi">180</span> <span class="mi">90</span>
+<span class="k">END</span>
 </pre></div>
 </div>
-<ul class="simple">
+</li>
 <li><p>Validation patterns cannot be specified in metadata blocks (i.e. using
 xxx_validation_pattern and default_xxx metadata entries), use VALIDATION blocks.
 see #4596 #4604 #4608 or <a class="reference internal" href="cgi/runsub.html#runsub"><span class="std std-ref">Run-time Substitution</span></a></p></li>
-<li><p>Build has changed after the switch to cmake. Build instructions are included in
-the INSTALL.CMAKE file in the source directory. You will need to have cmake installed
-on your system. Users of mapscripts (except php) will also need swig to be installed.</p></li>
 <li><p>WFS paging parameter startIndex changed to base on 0 instead of 1 (0 is the first
 feature). See #4180 for external references.</p></li>
 <li><p>Template substitution tags were case-sensitive, they are now
@@ -860,19 +853,19 @@ Pretty neat huh? Plus you can do attribute binding for any of the styleObj attri
 support it.</p>
 <p>As a result the parameters BACKGROUNDCOLOR, BACKGROUNDSHADOWCOLOR, BACKGROUNDSHADOWSIZE
 are no more. To draw a label “box” in 6.0 you’d do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LABEL</span>
-  <span class="o">...</span>
-  <span class="n">STYLE</span> <span class="c1"># a shadow</span>
-    <span class="n">GEOMTRANSFORM</span> <span class="s1">&#39;labelpoly&#39;</span>
-    <span class="n">COLOR</span> <span class="mi">222</span> <span class="mi">222</span> <span class="mi">222</span>
-    <span class="n">OFFSET</span> <span class="mi">2</span> <span class="mi">2</span>
-  <span class="n">END</span>
-  <span class="n">STYLE</span> <span class="c1"># bbox</span>
-    <span class="n">GEOMTRANSFORM</span> <span class="s1">&#39;labelpoly&#39;</span>
-    <span class="n">COLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
-    <span class="n">OUTLINECOLOR</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
-  <span class="n">END</span>
-<span class="n">END</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LABEL</span>
+  <span class="p">...</span>
+  <span class="k">STYLE</span> <span class="c1"># a shadow</span>
+    <span class="k">GEOMTRANSFORM</span> <span class="s">&#39;labelpoly&#39;</span>
+    <span class="k">COLOR</span> <span class="mi">222</span> <span class="mi">222</span> <span class="mi">222</span>
+    <span class="k">OFFSET</span> <span class="mi">2</span> <span class="mi">2</span>
+  <span class="k">END</span>
+  <span class="k">STYLE</span> <span class="c1"># bbox</span>
+    <span class="k">GEOMTRANSFORM</span> <span class="s">&#39;labelpoly&#39;</span>
+    <span class="k">COLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
+    <span class="k">OUTLINECOLOR</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+  <span class="k">END</span>
+<span class="k">END</span>
 </pre></div>
 </div>
 <p>More verbose but <em>much</em> more flexible in the long run.</p>
@@ -964,12 +957,12 @@ forcing explicit decisions.</p>
 <p>The DUMP LAYER parameter has been removed.  To enable output of
 geometries in WMS getfeatureinfo requests - GML
 (INFO_FORMAT=application/vnd.ogc.gml), LAYER METADATA is used
-instead:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">METADATA</span>
-  <span class="n">gml_geometries</span> <span class="s2">&quot;geom&quot;</span>
-  <span class="n">gml_geom_type</span> <span class="s2">&quot;polygon&quot;</span>
-  <span class="o">...</span>
-<span class="n">END</span>
+instead.</p>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">METADATA</span>
+  <span class="err">gml_geometries</span> <span class="s">&quot;geom&quot;</span>
+  <span class="err">gml_geom_</span><span class="k">type</span> <span class="s">&quot;polygon&quot;</span>
+  <span class="p">...</span>
+<span class="k">END</span>
 </pre></div>
 </div>
 </section>
@@ -986,9 +979,9 @@ expressions. Examples:</p>
 following character is “, ‘ or .</p>
 <p>For Windows users: if you have a path string delimited by single/double
 quotes that ends with , you will have to escape the last backslash.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHAPEPATH</span> <span class="s2">&quot;C:\ms4w\shapefiles</span><span class="se">\&quot;</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">SHAPEPATH</span> <span class="s">&quot;C:\ms4w\shapefiles</span><span class="se">\&quot;</span>
 <span class="c1"># should be modified to...</span>
-<span class="n">SHAPEPATH</span> <span class="s2">&quot;C:\ms4w\shapefiles</span><span class="se">\\</span><span class="s2">&quot;</span>
+<span class="k">SHAPEPATH</span> <span class="s">&quot;C:\ms4w\shapefiles</span><span class="se">\\</span><span class="s">&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -1086,23 +1079,23 @@ $myShape = new shapeObj(MS_SHAPE_LINE);</p>
 the 5.4/5.6 versions. Gone are resultsGetShape and getFeature methods. You should now use a
 refactored getShape method to access layer shapes. That method takes a resultObj and returns
 a shapeObj. Typical use would be (in Perl):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$layer-&gt;queryByRect($map, $map-&gt;{extent}); # layer is still open
+<div class="highlight-perl notranslate"><div class="highlight"><pre><span></span><span class="nv">$layer</span><span class="o">-&gt;</span><span class="n">queryByRect</span><span class="p">(</span><span class="nv">$map</span><span class="p">,</span><span class="w"> </span><span class="nv">$map</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">extent</span><span class="p">});</span><span class="w"> </span><span class="c1"># layer is still open</span>
 
-for($i=0; $i&lt;$layer-&gt;getNumResults(); $i++) {
-  $shape = $layer-&gt;getShape($layer-&gt;getResult($i));
-  print &quot;$i: &quot;. $shape-&gt;getValue(1) .&quot;\n&quot;;
-}
+<span class="k">for</span><span class="p">(</span><span class="nv">$i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nv">$i</span><span class="sr">&lt;$layer-&gt;</span><span class="n">getNumResults</span><span class="p">();</span><span class="w"> </span><span class="nv">$i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nv">$shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">$layer</span><span class="o">-&gt;</span><span class="n">getShape</span><span class="p">(</span><span class="nv">$layer</span><span class="o">-&gt;</span><span class="n">getResult</span><span class="p">(</span><span class="nv">$i</span><span class="p">));</span>
+<span class="w">  </span><span class="k">print</span><span class="w"> </span><span class="s">&quot;$i: &quot;</span><span class="o">.</span><span class="w"> </span><span class="nv">$shape</span><span class="o">-&gt;</span><span class="n">getValue</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">.</span><span class="s">&quot;\n&quot;</span><span class="p">;</span>
+<span class="p">}</span>
 
-$layer-&gt;close();
+<span class="nv">$layer</span><span class="o">-&gt;</span><span class="nb">close</span><span class="p">();</span>
 </pre></div>
 </div>
 <p>A resultObj encapsulates the data used to manage a result set.</p>
 <p>To access shapes independently of a query use the new resultObj class:</p>
-<blockquote>
-<div><p>$layer-&gt;open();
-$shape = $layer-&gt;getShape(new mapscript::resultObj(1));
-$layer-&gt;close();</p>
-</div></blockquote>
+<div class="highlight-perl notranslate"><div class="highlight"><pre><span></span><span class="nv">$layer</span><span class="o">-&gt;</span><span class="nb">open</span><span class="p">();</span>
+<span class="nv">$shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">$layer</span><span class="o">-&gt;</span><span class="n">getShape</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="nn">mapscript::</span><span class="n">resultObj</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+<span class="nv">$layer</span><span class="o">-&gt;</span><span class="nb">close</span><span class="p">();</span>
+</pre></div>
+</div>
 <p>See <a class="reference external" href="https://mapserver.org/development/rfc/ms-rfc-65.html">https://mapserver.org/development/rfc/ms-rfc-65.html</a> for more information.</p>
 </section>
 <section id="outputformat">
@@ -1235,10 +1228,10 @@ feature attributes to STYLE and LABEL properties. In the past keywords
 like ANGLEITEM or LABELSIZEITEM were used, now you denote the attribute
 in the context of the property being bound. For example, to bind an
 attribute to a label size you’d do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LABEL</span>
-  <span class="o">...</span>
-  <span class="n">SIZE</span> <span class="p">[</span><span class="n">mySizeItem</span><span class="p">]</span>
-<span class="n">END</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LABEL</span>
+  <span class="p">...</span>
+  <span class="k">SIZE</span> <span class="nx">[mySizeItem]</span>
+<span class="k">END</span>
 </pre></div>
 </div>
 <p>The []’s denote a binding (as with logical expressions). The following
@@ -1601,7 +1594,7 @@ and RGBA will likely only be supported with AGG</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; <a href="copyright.html">Copyright</a> 2026, Open Source Geospatial Foundation.
-      Laatste aanpassing op 2026-04-20.
+      Laatste aanpassing op 2026-05-01.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>
