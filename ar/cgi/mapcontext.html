@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Map Context Files &#8212; MapServer 8.6.4 documentation</title>
+    <title>Map Context Files &#8212; MapServer 8.6.5 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx.css?v=48f05237" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
     
     <script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=113b1412"></script>
+    <script src="../_static/documentation_options.js?v=b543900b"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -139,7 +139,7 @@
           <a href="mapserv.html" title="mapserv"
              accesskey="P">السابق</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.6.5 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">CGI</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Map Context Files</a></li> 
       </ul>
@@ -179,19 +179,30 @@ accessing a local context file:</p>
 </div>
 <p>Due to security concerns loading a file from a URL is disabled by default. To
 enable this functionality, the user needs to set a CONFIG parameter called
-CGI_CONTEXT_URL in the default map file that will allow this functionality.
+<code class="docutils literal notranslate"><span class="pre">CGI_CONTEXT_URL</span></code> in the default map file that will allow this functionality.
 Here is an example of a map file with the CONFIG parameter:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start of map file</span>
-<span class="n">NAME</span> <span class="n">DEMO</span>
-<span class="n">STATUS</span> <span class="n">ON</span>
-<span class="n">SIZE</span> <span class="mi">400</span> <span class="mi">300</span>
-<span class="n">EXTENT</span> <span class="o">-</span><span class="mi">2200000</span> <span class="o">-</span><span class="mi">712631</span> <span class="mi">3072800</span> <span class="mi">3840000</span>
-<span class="n">UNITS</span> <span class="n">METERS</span>
-<span class="n">IMAGECOLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
-<span class="n">IMAGETYPE</span> <span class="n">png</span>
-<span class="n">CONFIG</span> <span class="s2">&quot;CGI_CONTEXT_URL&quot;</span> <span class="s2">&quot;1&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MAP</span>
+    <span class="n">NAME</span> <span class="n">DEMO</span>
+    <span class="n">STATUS</span> <span class="n">ON</span>
+    <span class="n">SIZE</span> <span class="mi">400</span> <span class="mi">300</span>
+    <span class="n">EXTENT</span> <span class="o">-</span><span class="mi">2200000</span> <span class="o">-</span><span class="mi">712631</span> <span class="mi">3072800</span> <span class="mi">3840000</span>
+    <span class="n">UNITS</span> <span class="n">METERS</span>
+    <span class="n">IMAGECOLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
+    <span class="n">IMAGETYPE</span> <span class="n">png</span>
+    <span class="n">CONFIG</span> <span class="s2">&quot;CGI_CONTEXT_URL&quot;</span> <span class="s2">&quot;1&quot;</span>
 <span class="o">...</span>
 </pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">تحذير</p>
+<p><code class="docutils literal notranslate"><span class="pre">CGI_CONTEXT_URL</span></code> is disabled by default. Enabling this option allows
+MapServer to load remote context documents specified through the
+<code class="docutils literal notranslate"><span class="pre">CONTEXT</span></code> CGI parameter and may result in server-side requests to
+URLs contained in those documents.</p>
+<p>Only enable this option when context documents come from trusted
+sources. Where possible, outbound network access from the MapServer
+host should be limited (for example through firewall or network policy
+rules) to trusted services.</p>
 </div>
 </section>
 <section id="default-map-file">
@@ -205,26 +216,27 @@ imageurl or contain a list of layers. Information coming from the context
 values found in the map file.</p>
 <p>Here is an example of a default map file containing the minimum
 required parameters:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NAME</span> <span class="n">CGI</span><span class="o">-</span><span class="n">CONTEXT</span><span class="o">-</span><span class="n">DEMO</span>
-<span class="n">STATUS</span> <span class="n">ON</span>
-<span class="n">SIZE</span> <span class="mi">400</span> <span class="mi">300</span>
-<span class="n">EXTENT</span> <span class="o">-</span><span class="mi">2200000</span> <span class="o">-</span><span class="mi">712631</span> <span class="mi">3072800</span> <span class="mi">3840000</span>
-<span class="n">UNITS</span> <span class="n">METERS</span>
-<span class="n">IMAGECOLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
-<span class="n">IMAGETYPE</span> <span class="n">png</span>
-<span class="c1">#</span>
-<span class="c1"># Start of web interface definition</span>
-<span class="c1">#</span>
-<span class="n">WEB</span>
-  <span class="n">MINSCALE</span> <span class="mi">2000000</span>
-  <span class="n">MAXSCALE</span> <span class="mi">50000000</span>
-<span class="c1">#</span>
-<span class="c1"># On Windows systems, /tmp and /tmp/ms_tmp/ should be created at the root</span>
-<span class="c1"># of the drive where the .MAP file resides.</span>
-<span class="c1">#</span>
-  <span class="n">IMAGEPATH</span> <span class="s2">&quot;/ms4w/tmp/ms_tmp/&quot;</span>
-  <span class="n">IMAGEURL</span> <span class="s2">&quot;/ms_tmp/&quot;</span>
-<span class="n">END</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MAP</span>
+    <span class="n">NAME</span> <span class="n">CGI</span><span class="o">-</span><span class="n">CONTEXT</span><span class="o">-</span><span class="n">DEMO</span>
+    <span class="n">STATUS</span> <span class="n">ON</span>
+    <span class="n">SIZE</span> <span class="mi">400</span> <span class="mi">300</span>
+    <span class="n">EXTENT</span> <span class="o">-</span><span class="mi">2200000</span> <span class="o">-</span><span class="mi">712631</span> <span class="mi">3072800</span> <span class="mi">3840000</span>
+    <span class="n">UNITS</span> <span class="n">METERS</span>
+    <span class="n">IMAGECOLOR</span> <span class="mi">255</span> <span class="mi">255</span> <span class="mi">255</span>
+    <span class="n">IMAGETYPE</span> <span class="n">png</span>
+    <span class="c1">#</span>
+    <span class="c1"># Start of web interface definition</span>
+    <span class="c1">#</span>
+    <span class="n">WEB</span>
+      <span class="n">MINSCALE</span> <span class="mi">2000000</span>
+      <span class="n">MAXSCALE</span> <span class="mi">50000000</span>
+    <span class="c1">#</span>
+    <span class="c1"># On Windows systems, /tmp and /tmp/ms_tmp/ should be created at the root</span>
+    <span class="c1"># of the drive where the .MAP file resides.</span>
+    <span class="c1">#</span>
+      <span class="n">IMAGEPATH</span> <span class="s2">&quot;/ms4w/tmp/ms_tmp/&quot;</span>
+      <span class="n">IMAGEURL</span> <span class="s2">&quot;/ms_tmp/&quot;</span>
+    <span class="n">END</span>
 <span class="n">END</span> <span class="c1"># Map File</span>
 </pre></div>
 </div>
@@ -286,14 +298,14 @@ required parameters:</p>
           <a href="mapserv.html" title="mapserv"
              >السابق</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Home</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.6.4 Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../documentation.html" >MapServer 8.6.5 Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >CGI</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Map Context Files</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
     &#169; <a href="../copyright.html">الحقوق</a> 2026, Open Source Geospatial Foundation.
-      Last updated on 2026-07-03.
+      Last updated on 2026-07-10.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>
