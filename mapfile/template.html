@@ -216,6 +216,14 @@ template. This might pass the current mapextent to a new MapServer
 call. <em>[mapext]</em> is substituted by a space delimited set of lower left
 and upper right coordinates. This would break the URL. <em>[mapext_esc]</em>
 is substituted by a proper encoded set.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If the datasource is untrusted, use the escaped versions of template
+substitutions to avoid cross-site scripting (XSS) vulnerabilities.</p>
+<p>For example, if a field contains <code class="docutils literal notranslate"><span class="pre">&lt;script&gt;alert(1)&lt;/script&gt;</span></code> and the
+unescaped value is included in the generated HTML, the script could be
+executed in the user’s browser.</p>
+</div>
 </section>
 </section>
 <section id="format">
@@ -944,6 +952,9 @@ to the right. Useful to create fixed width strings.</p>
 </pre></div>
 </div>
 </dd>
+<dt>[values]</dt><dd><p>All attribute values of the feature in a single comma-delimited string.
+The values are unescaped. Available only when processing query results.</p>
+</dd>
 <dt>[attribute name],[attrribute name_esc],[attribute item name_raw]</dt><dd><p>Attribute name from the data table of a queried layer. Only
 attributes for the active query layers are accessible. Case must
 be the same as what is stored in the data file. ArcView, for
@@ -1154,7 +1165,7 @@ application settings.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; <a href="../copyright.html">Copyright</a> 2026, Open Source Geospatial Foundation.
-      Last updated on 2026-07-24.
+      Last updated on 2026-08-14.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>
