@@ -264,15 +264,15 @@ and name value pairs.</p>
 </div>
 <p>Here is a simple generic example:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">CONNECTIONTYPE</span> <span class="nb">POSTGIS</span>
-<span class="k">CONNECTION</span> <span class="s">&quot;host=yourhostname dbname=yourdatabasename user=yourdbusername</span>
-            <span class="err">password</span><span class="o">=</span><span class="err">yourdbpassword</span> <span class="err">port</span><span class="o">=</span><span class="err">yourpgport</span><span class="s">&quot;</span>
-<span class="k">DATA</span> <span class="s">&quot;geometrycolumn from yourtablename&quot;</span>
+<span class="k">CONNECTION</span> <span class="s">"host=yourhostname dbname=yourdatabasename user=yourdbusername</span>
+            <span class="err">password</span><span class="o">=</span><span class="err">yourdbpassword</span> <span class="err">port</span><span class="o">=</span><span class="err">yourpgport</span><span class="s">"</span>
+<span class="k">DATA</span> <span class="s">"geometrycolumn from yourtablename"</span>
 </pre></div>
 </div>
 <p>This example shows specifying the unique key and srid in the DATA line:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">CONNECTIONTYPE</span> <span class="nb">POSTGIS</span>
-<span class="k">CONNECTION</span> <span class="s">&quot;dbname=yourdatabasename user=yourdbusername&quot;</span>
-<span class="k">DATA</span> <span class="s">&quot;the_geom from the_database using unique gid using srid=4326&quot;</span>
+<span class="k">CONNECTION</span> <span class="s">"dbname=yourdatabasename user=yourdbusername"</span>
+<span class="k">DATA</span> <span class="s">"the_geom from the_database using unique gid using srid=4326"</span>
 </pre></div>
 </div>
 <p>This example shows using a SQL subquery to perform a join inside the
@@ -280,19 +280,19 @@ database and map the result in MapServer. Note the «as subquery»
 string in the statement – everything between «from» and «using» is
 sent to the database for evaluation:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">CONNECTIONTYPE</span> <span class="nb">POSTGIS</span>
-<span class="k">CONNECTION</span> <span class="s">&quot;dbname=yourdatabasename user=yourdbusername&quot;</span>
-<span class="k">DATA</span> <span class="s">&quot;the_geom from (select g.gid, g.the_geom, a.attr1, a.attr2 from</span>
+<span class="k">CONNECTION</span> <span class="s">"dbname=yourdatabasename user=yourdbusername"</span>
+<span class="k">DATA</span> <span class="s">"the_geom from (select g.gid, g.the_geom, a.attr1, a.attr2 from</span>
       <span class="err">geo</span><span class="k">table</span> <span class="err">g</span> <span class="k">join</span> <span class="err">attr</span><span class="k">table</span> <span class="err">a</span> <span class="nb">on</span> <span class="err">g</span><span class="p">.</span><span class="err">gid</span> <span class="o">=</span> <span class="err">a</span><span class="p">.</span><span class="err">aid</span><span class="p">)</span> <span class="err">as</span> <span class="err">sub</span><span class="nb">query</span>
-      <span class="err">using</span> <span class="err">unique</span> <span class="err">gid</span> <span class="err">using</span> <span class="err">srid</span><span class="o">=</span><span class="mi">4326</span><span class="s">&quot;</span>
+      <span class="err">using</span> <span class="err">unique</span> <span class="err">gid</span> <span class="err">using</span> <span class="err">srid</span><span class="o">=</span><span class="mi">4326</span><span class="s">"</span>
 </pre></div>
 </div>
 <p>This example shows using a geometry function and database sort to
 limit the number of features and vertices returned to MapServer:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">CONNECTIONTYPE</span> <span class="nb">POSTGIS</span>
-<span class="k">CONNECTION</span> <span class="s">&quot;dbname=yourdatabasename user=yourdbusername&quot;</span>
-<span class="k">DATA</span> <span class="s">&quot;the_geom from (select g.gid, ST_Simplify(g.the_geom, 10.0) as</span>
+<span class="k">CONNECTION</span> <span class="s">"dbname=yourdatabasename user=yourdbusername"</span>
+<span class="k">DATA</span> <span class="s">"the_geom from (select g.gid, ST_Simplify(g.the_geom, 10.0) as</span>
       <span class="err">the_geom</span> <span class="k">from</span> <span class="err">geo</span><span class="k">table</span> <span class="err">g</span> <span class="err">order</span> <span class="err">by</span> <span class="err">ST_Area</span><span class="p">(</span><span class="err">g</span><span class="p">.</span><span class="err">the_geom</span><span class="p">)</span> <span class="err">desc</span>
-      <span class="err">limit</span> <span class="mi">10</span><span class="p">)</span> <span class="err">as</span> <span class="err">sub</span><span class="nb">query</span> <span class="err">using</span> <span class="err">unique</span> <span class="err">gid</span> <span class="err">using</span> <span class="err">srid</span><span class="o">=</span><span class="mi">4326</span><span class="s">&quot;</span>
+      <span class="err">limit</span> <span class="mi">10</span><span class="p">)</span> <span class="err">as</span> <span class="err">sub</span><span class="nb">query</span> <span class="err">using</span> <span class="err">unique</span> <span class="err">gid</span> <span class="err">using</span> <span class="err">srid</span><span class="o">=</span><span class="mi">4326</span><span class="s">"</span>
 </pre></div>
 </div>
 <p>This example shows the use of the !BOX! substitution string to
@@ -304,10 +304,10 @@ PostgreSQL planner will generate the optimal plan from the generated
 SQL, but in some cases (complex sub-queries) a better plan can be
 generated by placing the !BOX! closer to the middle of the query:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">CONNECTIONTYPE</span> <span class="nb">POSTGIS</span>
-<span class="k">CONNECTION</span> <span class="s">&quot;dbname=yourdatabasename user=yourdbusername&quot;</span>
-<span class="k">DATA</span> <span class="s">&quot;the_geom from (select g.gid, ST_Union(g.the_geom, 10.0) as</span>
+<span class="k">CONNECTION</span> <span class="s">"dbname=yourdatabasename user=yourdbusername"</span>
+<span class="k">DATA</span> <span class="s">"the_geom from (select g.gid, ST_Union(g.the_geom, 10.0) as</span>
       <span class="err">the_geom</span> <span class="k">from</span> <span class="err">geo</span><span class="k">table</span> <span class="err">g</span> <span class="err">where</span> <span class="err">ST_Intersects</span><span class="p">(</span><span class="err">g</span><span class="p">.</span><span class="err">geom</span><span class="p">,</span><span class="err">!BOX!</span><span class="p">))</span> <span class="err">as</span>
-      <span class="err">sub</span><span class="nb">query</span> <span class="err">using</span> <span class="err">unique</span> <span class="err">gid</span> <span class="err">using</span> <span class="err">srid</span><span class="o">=</span><span class="mi">4326</span><span class="s">&quot;</span>
+      <span class="err">sub</span><span class="nb">query</span> <span class="err">using</span> <span class="err">unique</span> <span class="err">gid</span> <span class="err">using</span> <span class="err">srid</span><span class="o">=</span><span class="mi">4326</span><span class="s">"</span>
 </pre></div>
 </div>
 </section>
@@ -332,46 +332,46 @@ PostgreSQL driver, by using the ‹–formats› command:</p>
 <a class="reference external" href="https://ms4w.com">MS4W</a> packages, which include the driver.</p>
 <p>Once you have the driver you are ready to try an ogrinfo command on
 your database to get a list of spatial tables:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;ogrinfo PG:&quot;host=127.0.0.1 user=postgres password=postgres dbname=canada port=5432&quot;
-      using driver `PostgreSQL&#39; successful.
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;ogrinfo PG:"host=127.0.0.1 user=postgres password=postgres dbname=canada port=5432"
+      using driver `PostgreSQL' successful.
       1: province (Polygon)
 </pre></div>
 </div>
 <p>Now use ogrinfo to get information on the structure of the spatial table:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;ogrinfo PG:&quot;host=127.0.0.1 user=postgres password=postgres dbname=canada port=5432&quot; province -summary
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;ogrinfo PG:"host=127.0.0.1 user=postgres password=postgres dbname=canada port=5432" province -summary
 
- INFO: Open of `PG:host=127.0.0.1 user=postgres password=postgres dbname=canada&#39;
-    using driver `PostgreSQL&#39; successful.
+ INFO: Open of `PG:host=127.0.0.1 user=postgres password=postgres dbname=canada'
+    using driver `PostgreSQL' successful.
 
   Layer name: province
   Geometry: Polygon
   Feature Count: 1068
   Extent: (-2340603.750000, -719746.062500) - (3009430.500000, 3836605.250000)
   Layer SRS WKT:
-  PROJCS[&quot;NAD83 / Canada Atlas Lambert&quot;,
-      GEOGCS[&quot;NAD83&quot;,
-          DATUM[&quot;North_American_Datum_1983&quot;,
-              SPHEROID[&quot;GRS 1980&quot;,6378137,298.257222101,
-                  AUTHORITY[&quot;EPSG&quot;,&quot;7019&quot;]],
+  PROJCS["NAD83 / Canada Atlas Lambert",
+      GEOGCS["NAD83",
+          DATUM["North_American_Datum_1983",
+              SPHEROID["GRS 1980",6378137,298.257222101,
+                  AUTHORITY["EPSG","7019"]],
               TOWGS84[0,0,0,0,0,0,0],
-              AUTHORITY[&quot;EPSG&quot;,&quot;6269&quot;]],
-          PRIMEM[&quot;Greenwich&quot;,0,
-              AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],
-          UNIT[&quot;degree&quot;,0.0174532925199433,
-              AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],
-          AUTHORITY[&quot;EPSG&quot;,&quot;4269&quot;]],
-      PROJECTION[&quot;Lambert_Conformal_Conic_2SP&quot;],
-      PARAMETER[&quot;standard_parallel_1&quot;,49],
-      PARAMETER[&quot;standard_parallel_2&quot;,77],
-      PARAMETER[&quot;latitude_of_origin&quot;,49],
-      PARAMETER[&quot;central_meridian&quot;,-95],
-      PARAMETER[&quot;false_easting&quot;,0],
-      PARAMETER[&quot;false_northing&quot;,0],
-      UNIT[&quot;metre&quot;,1,
-          AUTHORITY[&quot;EPSG&quot;,&quot;9001&quot;]],
-      AXIS[&quot;Easting&quot;,EAST],
-      AXIS[&quot;Northing&quot;,NORTH],
-      AUTHORITY[&quot;EPSG&quot;,&quot;3978&quot;]]
+              AUTHORITY["EPSG","6269"]],
+          PRIMEM["Greenwich",0,
+              AUTHORITY["EPSG","8901"]],
+          UNIT["degree",0.0174532925199433,
+              AUTHORITY["EPSG","9122"]],
+          AUTHORITY["EPSG","4269"]],
+      PROJECTION["Lambert_Conformal_Conic_2SP"],
+      PARAMETER["standard_parallel_1",49],
+      PARAMETER["standard_parallel_2",77],
+      PARAMETER["latitude_of_origin",49],
+      PARAMETER["central_meridian",-95],
+      PARAMETER["false_easting",0],
+      PARAMETER["false_northing",0],
+      UNIT["metre",1,
+          AUTHORITY["EPSG","9001"]],
+      AXIS["Easting",EAST],
+      AXIS["Northing",NORTH],
+      AUTHORITY["EPSG","3978"]]
   FID Column = ogc_fid
   Geometry Column = wkb_geometry
   ...
@@ -381,23 +381,23 @@ your database to get a list of spatial tables:</p>
 <section id="mapfile-example">
 <h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Mapfile Example</a><a class="headerlink" href="#mapfile-example" title="Lidhje për te kjo krye">¶</a></h2>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
-  <span class="k">NAME</span> <span class="s">&quot;province&quot;</span>
+  <span class="k">NAME</span> <span class="s">"province"</span>
   <span class="k">STATUS</span> <span class="nb">ON</span>
   <span class="k">TYPE</span> <span class="nb">POLYGON</span>
   <span class="k">CONNECTIONTYPE</span> <span class="nb">POSTGIS</span>
-  <span class="k">CONNECTION</span> <span class="s">&quot;host=127.0.0.1 user=postgres password=postgres port=5432 dbname=canada&quot;</span>
-  <span class="k">DATA</span> <span class="s">&quot;wkb_geometry FROM province USING UNIQUE ogc_fid USING srid=3978&quot;</span>
+  <span class="k">CONNECTION</span> <span class="s">"host=127.0.0.1 user=postgres password=postgres port=5432 dbname=canada"</span>
+  <span class="k">DATA</span> <span class="s">"wkb_geometry FROM province USING UNIQUE ogc_fid USING srid=3978"</span>
   <span class="k">EXTENT</span> <span class="p">-</span><span class="mf">2340603.750000</span> <span class="p">-</span><span class="mf">719746.062500</span> <span class="mf">3009430.500000</span> <span class="mf">3836605.250000</span> <span class="c1"># for maximum performance</span>
-  <span class="k">PROCESSING</span> <span class="s">&quot;CLOSE_CONNECTION=DEFER&quot;</span> <span class="c1"># for maximum performance</span>
+  <span class="k">PROCESSING</span> <span class="s">"CLOSE_CONNECTION=DEFER"</span> <span class="c1"># for maximum performance</span>
   <span class="k">CLASS</span>
-    <span class="k">NAME</span> <span class="s">&quot;Provincial Land&quot;</span>
+    <span class="k">NAME</span> <span class="s">"Provincial Land"</span>
     <span class="k">STYLE</span>
       <span class="k">COLOR</span> <span class="mi">240</span> <span class="mi">240</span> <span class="mi">240</span>
       <span class="k">OUTLINECOLOR</span> <span class="mi">199</span> <span class="mi">199</span> <span class="mi">199</span>
     <span class="k">END</span>
   <span class="k">END</span>
   <span class="k">PROJECTION</span> <span class="c1">#source</span>
-    <span class="s">&quot;init=epsg:3978&quot;</span>
+    <span class="s">"init=epsg:3978"</span>
   <span class="k">END</span>
 <span class="k">END</span>
 </pre></div>
@@ -439,7 +439,7 @@ file.</p>
 <h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Connect with GDALINFO</a><a class="headerlink" href="#connect-with-gdalinfo" title="Lidhje për te kjo krye">¶</a></h3>
 <p>Use the <em>gdalinfo</em> utility to list the available raster tables in your
 database, such as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gdalinfo</span> <span class="n">PG</span><span class="p">:</span><span class="s2">&quot;host=127.0.0.1 port=5432 user=postgres password=postgres dbname=mydb&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gdalinfo</span> <span class="n">PG</span><span class="p">:</span><span class="s2">"host=127.0.0.1 port=5432 user=postgres password=postgres dbname=mydb"</span>
 </pre></div>
 </div>
 <p>which returns something like:</p>
@@ -447,42 +447,42 @@ database, such as:</p>
 
 <span class="n">Subdatasets</span><span class="p">:</span>
   <span class="o">...</span>
-    <span class="n">SUBDATASET_3_NAME</span><span class="o">=</span><span class="n">PG</span><span class="p">:</span><span class="n">host</span><span class="o">=</span><span class="mf">127.0.0.1</span> <span class="n">port</span><span class="o">=</span><span class="mi">5432</span> <span class="n">user</span><span class="o">=</span><span class="n">postgres</span> <span class="n">password</span><span class="o">=</span><span class="n">postgres</span> <span class="n">dbname</span><span class="o">=</span><span class="n">mydb</span>  <span class="n">schema</span><span class="o">=</span><span class="s1">&#39;public&#39;</span> <span class="n">table</span><span class="o">=</span><span class="s1">&#39;lunenburg_colorhillshade&#39;</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;rast&#39;</span>
+    <span class="n">SUBDATASET_3_NAME</span><span class="o">=</span><span class="n">PG</span><span class="p">:</span><span class="n">host</span><span class="o">=</span><span class="mf">127.0.0.1</span> <span class="n">port</span><span class="o">=</span><span class="mi">5432</span> <span class="n">user</span><span class="o">=</span><span class="n">postgres</span> <span class="n">password</span><span class="o">=</span><span class="n">postgres</span> <span class="n">dbname</span><span class="o">=</span><span class="n">mydb</span>  <span class="n">schema</span><span class="o">=</span><span class="s1">'public'</span> <span class="n">table</span><span class="o">=</span><span class="s1">'lunenburg_colorhillshade'</span> <span class="n">column</span><span class="o">=</span><span class="s1">'rast'</span>
     <span class="n">SUBDATASET_3_DESC</span><span class="o">=</span><span class="n">PostGIS</span> <span class="n">Raster</span> <span class="n">table</span> <span class="n">at</span> <span class="n">public</span><span class="o">.</span><span class="n">lunenburg_colorhillshade</span> <span class="p">(</span><span class="n">rast</span><span class="p">)</span>
   <span class="o">...</span>
 </pre></div>
 </div>
 <p>Next specify the <em>table</em> and <em>column</em>, with the <em>-nomd</em> switch, such as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gdalinfo</span> <span class="n">PG</span><span class="p">:</span><span class="s2">&quot;host=127.0.0.1 port=5432 user=postgres password=postgres dbname=mydb table=lunenburg_colorhillshade column=rast&quot;</span> <span class="o">-</span><span class="n">nomd</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gdalinfo</span> <span class="n">PG</span><span class="p">:</span><span class="s2">"host=127.0.0.1 port=5432 user=postgres password=postgres dbname=mydb table=lunenburg_colorhillshade column=rast"</span> <span class="o">-</span><span class="n">nomd</span>
 </pre></div>
 </div>
 <p>which returns a summary of the raster, including its projection
 (<a class="reference external" href="https://spatialreference.org/ref/epsg/2961/">EPSG:2961</a>) :</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Driver</span><span class="p">:</span> <span class="n">PostGISRaster</span><span class="o">/</span><span class="n">PostGIS</span> <span class="n">Raster</span> <span class="n">driver</span>
 <span class="n">Coordinate</span> <span class="n">System</span> <span class="ow">is</span><span class="p">:</span>
-<span class="n">PROJCS</span><span class="p">[</span><span class="s2">&quot;NAD83(CSRS) / UTM zone 20N&quot;</span><span class="p">,</span>
-    <span class="n">GEOGCS</span><span class="p">[</span><span class="s2">&quot;NAD83(CSRS)&quot;</span><span class="p">,</span>
-        <span class="n">DATUM</span><span class="p">[</span><span class="s2">&quot;NAD83_Canadian_Spatial_Reference_System&quot;</span><span class="p">,</span>
-            <span class="n">SPHEROID</span><span class="p">[</span><span class="s2">&quot;GRS 1980&quot;</span><span class="p">,</span><span class="mi">6378137</span><span class="p">,</span><span class="mf">298.257222101</span><span class="p">,</span>
-                <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="s2">&quot;7019&quot;</span><span class="p">]],</span>
+<span class="n">PROJCS</span><span class="p">[</span><span class="s2">"NAD83(CSRS) / UTM zone 20N"</span><span class="p">,</span>
+    <span class="n">GEOGCS</span><span class="p">[</span><span class="s2">"NAD83(CSRS)"</span><span class="p">,</span>
+        <span class="n">DATUM</span><span class="p">[</span><span class="s2">"NAD83_Canadian_Spatial_Reference_System"</span><span class="p">,</span>
+            <span class="n">SPHEROID</span><span class="p">[</span><span class="s2">"GRS 1980"</span><span class="p">,</span><span class="mi">6378137</span><span class="p">,</span><span class="mf">298.257222101</span><span class="p">,</span>
+                <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">"EPSG"</span><span class="p">,</span><span class="s2">"7019"</span><span class="p">]],</span>
             <span class="n">TOWGS84</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="s2">&quot;6140&quot;</span><span class="p">]],</span>
-        <span class="n">PRIMEM</span><span class="p">[</span><span class="s2">&quot;Greenwich&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span>
-            <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="s2">&quot;8901&quot;</span><span class="p">]],</span>
-        <span class="n">UNIT</span><span class="p">[</span><span class="s2">&quot;degree&quot;</span><span class="p">,</span><span class="mf">0.0174532925199433</span><span class="p">,</span>
-            <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="s2">&quot;9122&quot;</span><span class="p">]],</span>
-        <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="s2">&quot;4617&quot;</span><span class="p">]],</span>
-    <span class="n">PROJECTION</span><span class="p">[</span><span class="s2">&quot;Transverse_Mercator&quot;</span><span class="p">],</span>
-    <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;latitude_of_origin&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
-    <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;central_meridian&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">63</span><span class="p">],</span>
-    <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;scale_factor&quot;</span><span class="p">,</span><span class="mf">0.9996</span><span class="p">],</span>
-    <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;false_easting&quot;</span><span class="p">,</span><span class="mi">500000</span><span class="p">],</span>
-    <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">&quot;false_northing&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
-    <span class="n">UNIT</span><span class="p">[</span><span class="s2">&quot;metre&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="s2">&quot;9001&quot;</span><span class="p">]],</span>
-    <span class="n">AXIS</span><span class="p">[</span><span class="s2">&quot;Easting&quot;</span><span class="p">,</span><span class="n">EAST</span><span class="p">],</span>
-    <span class="n">AXIS</span><span class="p">[</span><span class="s2">&quot;Northing&quot;</span><span class="p">,</span><span class="n">NORTH</span><span class="p">],</span>
-    <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">&quot;EPSG&quot;</span><span class="p">,</span><span class="s2">&quot;2961&quot;</span><span class="p">]]</span>
+            <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">"EPSG"</span><span class="p">,</span><span class="s2">"6140"</span><span class="p">]],</span>
+        <span class="n">PRIMEM</span><span class="p">[</span><span class="s2">"Greenwich"</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">"EPSG"</span><span class="p">,</span><span class="s2">"8901"</span><span class="p">]],</span>
+        <span class="n">UNIT</span><span class="p">[</span><span class="s2">"degree"</span><span class="p">,</span><span class="mf">0.0174532925199433</span><span class="p">,</span>
+            <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">"EPSG"</span><span class="p">,</span><span class="s2">"9122"</span><span class="p">]],</span>
+        <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">"EPSG"</span><span class="p">,</span><span class="s2">"4617"</span><span class="p">]],</span>
+    <span class="n">PROJECTION</span><span class="p">[</span><span class="s2">"Transverse_Mercator"</span><span class="p">],</span>
+    <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">"latitude_of_origin"</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">"central_meridian"</span><span class="p">,</span><span class="o">-</span><span class="mi">63</span><span class="p">],</span>
+    <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">"scale_factor"</span><span class="p">,</span><span class="mf">0.9996</span><span class="p">],</span>
+    <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">"false_easting"</span><span class="p">,</span><span class="mi">500000</span><span class="p">],</span>
+    <span class="n">PARAMETER</span><span class="p">[</span><span class="s2">"false_northing"</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">UNIT</span><span class="p">[</span><span class="s2">"metre"</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">"EPSG"</span><span class="p">,</span><span class="s2">"9001"</span><span class="p">]],</span>
+    <span class="n">AXIS</span><span class="p">[</span><span class="s2">"Easting"</span><span class="p">,</span><span class="n">EAST</span><span class="p">],</span>
+    <span class="n">AXIS</span><span class="p">[</span><span class="s2">"Northing"</span><span class="p">,</span><span class="n">NORTH</span><span class="p">],</span>
+    <span class="n">AUTHORITY</span><span class="p">[</span><span class="s2">"EPSG"</span><span class="p">,</span><span class="s2">"2961"</span><span class="p">]]</span>
 </pre></div>
 </div>
 </section>
@@ -492,17 +492,17 @@ database, such as:</p>
 connection parameters are specified in the <em>DATA</em> parameter, such
 as:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
-  <span class="k">NAME</span> <span class="s">&quot;lunenburg_raster&quot;</span>
+  <span class="k">NAME</span> <span class="s">"lunenburg_raster"</span>
   <span class="k">TYPE</span> <span class="nb">RASTER</span>
   <span class="k">STATUS</span> <span class="nb">ON</span>
-  <span class="k">DATA</span> <span class="s">&quot;PG:host=127.0.0.1 port=5432 sslmode=disable user=postgres password=postgres dbname=mydb schema=public table=lunenburg_colorhillshade column=rast mode=2&quot;</span>
+  <span class="k">DATA</span> <span class="s">"PG:host=127.0.0.1 port=5432 sslmode=disable user=postgres password=postgres dbname=mydb schema=public table=lunenburg_colorhillshade column=rast mode=2"</span>
   <span class="k">PROJECTION</span>
-    <span class="s">&quot;init=epsg:2961&quot;</span>
+    <span class="s">"init=epsg:2961"</span>
   <span class="k">END</span>
   <span class="k">CLASS</span>
-    <span class="k">NAME</span> <span class="s">&quot;Lunenburg&quot;</span>
+    <span class="k">NAME</span> <span class="s">"Lunenburg"</span>
   <span class="k">END</span>
-  <span class="k">PROCESSING</span> <span class="s">&quot;CLOSE_CONNECTION=DEFER&quot;</span>
+  <span class="k">PROCESSING</span> <span class="s">"CLOSE_CONNECTION=DEFER"</span>
 <span class="k">END</span> <span class="c1"># layer</span>
 </pre></div>
 </div>
@@ -545,7 +545,7 @@ specified at the layer level. See <a class="reference internal" href="../../ogc/
 <p class="admonition-title">Shënim</p>
 <p>It is still possible to force 2D only geometries to be retrieved from PostGIS by
 setting the following PROCESSING option</p>
-<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">PROCESSING</span> <span class="s">&quot;FORCE2D=YES&quot;</span>
+<div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">PROCESSING</span> <span class="s">"FORCE2D=YES"</span>
 </pre></div>
 </div>
 </div>
@@ -563,18 +563,18 @@ through MapServer directly.</p>
 <section id="example-1-circularstring-in-mapserver">
 <h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Example#1: CircularString in MapServer</a><a class="headerlink" href="#example-1-circularstring-in-mapserver" title="Lidhje për te kjo krye">¶</a></h3>
 <p>The following is the Well Known Text of the feature loading into PostGIS:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">test</span> <span class="p">(</span> <span class="n">g</span><span class="p">,</span> <span class="nb">id</span> <span class="p">)</span> <span class="n">VALUES</span> <span class="p">(</span> <span class="n">ST_GeomFromText</span><span class="p">(</span><span class="s1">&#39;CIRCULARSTRING(0 0,</span>
-                                    <span class="mi">4</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">)</span><span class="s1">&#39;, -1), 2);</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">test</span> <span class="p">(</span> <span class="n">g</span><span class="p">,</span> <span class="nb">id</span> <span class="p">)</span> <span class="n">VALUES</span> <span class="p">(</span> <span class="n">ST_GeomFromText</span><span class="p">(</span><span class="s1">'CIRCULARSTRING(0 0,</span>
+                                    <span class="mi">4</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">)</span><span class="s1">', -1), 2);</span>
 </pre></div>
 </div>
 <p>An example MapServer layer might look like:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
-  <span class="k">NAME</span> <span class="s">&quot;curves_poly&quot;</span>
+  <span class="k">NAME</span> <span class="s">"curves_poly"</span>
   <span class="k">STATUS</span> <span class="nb">DEFAULT</span>
   <span class="k">TYPE</span> <span class="nb">POLYGON</span>
   <span class="k">CONNECTIONTYPE</span> <span class="nb">postgis</span>
-  <span class="k">CONNECTION</span> <span class="s">&quot;user=postgres password=postgres dbname=curves host=localhost port=5432&quot;</span>
-  <span class="k">DATA</span> <span class="s">&quot;g from test using SRID=-1 using unique id&quot;</span>
+  <span class="k">CONNECTION</span> <span class="s">"user=postgres password=postgres dbname=curves host=localhost port=5432"</span>
+  <span class="k">DATA</span> <span class="s">"g from test using SRID=-1 using unique id"</span>
   <span class="k">CLASS</span>
     <span class="k">STYLE</span>
       <span class="k">COLOR</span> <span class="mi">128</span> <span class="mi">128</span> <span class="mi">128</span>
@@ -590,18 +590,18 @@ through MapServer directly.</p>
 <section id="example-2-compoundcurve-in-mapserver">
 <h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Example#2: CompoundCurve in MapServer</a><a class="headerlink" href="#example-2-compoundcurve-in-mapserver" title="Lidhje për te kjo krye">¶</a></h3>
 <p>The following is the Well Known Text of the feature loading into PostGIS:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">test</span> <span class="p">(</span> <span class="n">g</span><span class="p">,</span> <span class="nb">id</span> <span class="p">)</span> <span class="n">VALUES</span> <span class="p">(</span> <span class="n">ST_GeomFromText</span><span class="p">(</span><span class="s1">&#39;COMPOUNDCURVE(</span>
-                  <span class="n">CIRCULARSTRING</span><span class="p">(</span><span class="mi">0</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="mi">0</span><span class="p">),(</span><span class="mi">1</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">))</span><span class="s1">&#39;, -1), 3);</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">test</span> <span class="p">(</span> <span class="n">g</span><span class="p">,</span> <span class="nb">id</span> <span class="p">)</span> <span class="n">VALUES</span> <span class="p">(</span> <span class="n">ST_GeomFromText</span><span class="p">(</span><span class="s1">'COMPOUNDCURVE(</span>
+                  <span class="n">CIRCULARSTRING</span><span class="p">(</span><span class="mi">0</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="mi">0</span><span class="p">),(</span><span class="mi">1</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">))</span><span class="s1">', -1), 3);</span>
 </pre></div>
 </div>
 <p>An example MapServer layer might look like:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
-  <span class="k">NAME</span> <span class="s">&quot;curves_poly&quot;</span>
+  <span class="k">NAME</span> <span class="s">"curves_poly"</span>
   <span class="k">STATUS</span> <span class="nb">DEFAULT</span>
   <span class="k">TYPE</span> <span class="nb">POLYGON</span>
   <span class="k">CONNECTIONTYPE</span> <span class="nb">postgis</span>
-  <span class="k">CONNECTION</span> <span class="s">&quot;user=postgres password=postgres dbname=curves host=localhost port=5432&quot;</span>
-  <span class="k">DATA</span> <span class="s">&quot;g from test using SRID=-1 using unique id&quot;</span>
+  <span class="k">CONNECTION</span> <span class="s">"user=postgres password=postgres dbname=curves host=localhost port=5432"</span>
+  <span class="k">DATA</span> <span class="s">"g from test using SRID=-1 using unique id"</span>
   <span class="k">CLASS</span>
     <span class="k">STYLE</span>
       <span class="k">COLOR</span> <span class="mi">128</span> <span class="mi">128</span> <span class="mi">128</span>
@@ -617,19 +617,19 @@ through MapServer directly.</p>
 <section id="example-3-curvepolygon-in-mapserver">
 <h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Example#3: CurvePolygon in MapServer</a><a class="headerlink" href="#example-3-curvepolygon-in-mapserver" title="Lidhje për te kjo krye">¶</a></h3>
 <p>The following is the Well Known Text of the feature loading into PostGIS:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">test</span> <span class="p">(</span> <span class="n">g</span><span class="p">,</span> <span class="nb">id</span> <span class="p">)</span> <span class="n">VALUES</span> <span class="p">(</span> <span class="n">ST_GeomFromText</span><span class="p">(</span><span class="s1">&#39;CURVEPOLYGON(</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">test</span> <span class="p">(</span> <span class="n">g</span><span class="p">,</span> <span class="nb">id</span> <span class="p">)</span> <span class="n">VALUES</span> <span class="p">(</span> <span class="n">ST_GeomFromText</span><span class="p">(</span><span class="s1">'CURVEPOLYGON(</span>
                   <span class="n">CIRCULARSTRING</span><span class="p">(</span><span class="mi">0</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">),(</span><span class="mi">1</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span> <span class="mi">3</span><span class="p">,</span>
-                  <span class="mi">3</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">))</span><span class="s1">&#39;, -1), 4);</span>
+                  <span class="mi">3</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">))</span><span class="s1">', -1), 4);</span>
 </pre></div>
 </div>
 <p>An example MapServer layer might look like:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
-  <span class="k">NAME</span> <span class="s">&quot;curves_poly&quot;</span>
+  <span class="k">NAME</span> <span class="s">"curves_poly"</span>
   <span class="k">STATUS</span> <span class="nb">DEFAULT</span>
   <span class="k">TYPE</span> <span class="nb">POLYGON</span>
   <span class="k">CONNECTIONTYPE</span> <span class="nb">postgis</span>
-  <span class="k">CONNECTION</span> <span class="s">&quot;user=postgres password=postgres dbname=curves host=localhost port=5432&quot;</span>
-  <span class="k">DATA</span> <span class="s">&quot;g from test using SRID=-1 using unique id&quot;</span>
+  <span class="k">CONNECTION</span> <span class="s">"user=postgres password=postgres dbname=curves host=localhost port=5432"</span>
+  <span class="k">DATA</span> <span class="s">"g from test using SRID=-1 using unique id"</span>
   <span class="k">CLASS</span>
     <span class="k">STYLE</span>
       <span class="k">COLOR</span> <span class="mi">128</span> <span class="mi">128</span> <span class="mi">128</span>
@@ -645,18 +645,18 @@ through MapServer directly.</p>
 <section id="example-4-multicurve-in-mapserver">
 <h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Example#4: MultiCurve in MapServer</a><a class="headerlink" href="#example-4-multicurve-in-mapserver" title="Lidhje për te kjo krye">¶</a></h3>
 <p>The following is the Well Known Text of the feature loading into PostGIS:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">test</span> <span class="p">(</span> <span class="n">g</span><span class="p">,</span> <span class="nb">id</span> <span class="p">)</span> <span class="n">VALUES</span> <span class="p">(</span> <span class="n">ST_GeomFromText</span><span class="p">(</span><span class="s1">&#39;MULTICURVE((0 0,</span>
-                  <span class="mi">5</span> <span class="mi">5</span><span class="p">),</span><span class="n">CIRCULARSTRING</span><span class="p">(</span><span class="mi">4</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span> <span class="mi">4</span><span class="p">))</span><span class="s1">&#39;, -1), 6);</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">test</span> <span class="p">(</span> <span class="n">g</span><span class="p">,</span> <span class="nb">id</span> <span class="p">)</span> <span class="n">VALUES</span> <span class="p">(</span> <span class="n">ST_GeomFromText</span><span class="p">(</span><span class="s1">'MULTICURVE((0 0,</span>
+                  <span class="mi">5</span> <span class="mi">5</span><span class="p">),</span><span class="n">CIRCULARSTRING</span><span class="p">(</span><span class="mi">4</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span> <span class="mi">4</span><span class="p">))</span><span class="s1">', -1), 6);</span>
 </pre></div>
 </div>
 <p>An example MapServer layer might look like:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
-  <span class="k">NAME</span> <span class="s">&quot;curves_poly&quot;</span>
+  <span class="k">NAME</span> <span class="s">"curves_poly"</span>
   <span class="k">STATUS</span> <span class="nb">DEFAULT</span>
   <span class="k">TYPE</span> <span class="nb">POLYGON</span>
   <span class="k">CONNECTIONTYPE</span> <span class="nb">postgis</span>
-  <span class="k">CONNECTION</span> <span class="s">&quot;user=postgres password=postgres dbname=curves host=localhost port=5432&quot;</span>
-  <span class="k">DATA</span> <span class="s">&quot;g from test using SRID=-1 using unique id&quot;</span>
+  <span class="k">CONNECTION</span> <span class="s">"user=postgres password=postgres dbname=curves host=localhost port=5432"</span>
+  <span class="k">DATA</span> <span class="s">"g from test using SRID=-1 using unique id"</span>
   <span class="k">CLASS</span>
     <span class="k">STYLE</span>
       <span class="k">COLOR</span> <span class="mi">128</span> <span class="mi">128</span> <span class="mi">128</span>
@@ -672,20 +672,20 @@ through MapServer directly.</p>
 <section id="example-5-multisurface-in-mapserver">
 <h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Example#5: MultiSurface in MapServer</a><a class="headerlink" href="#example-5-multisurface-in-mapserver" title="Lidhje për te kjo krye">¶</a></h3>
 <p>The following is the Well Known Text of the feature loading into PostGIS:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">test</span> <span class="p">(</span> <span class="n">g</span><span class="p">,</span> <span class="nb">id</span> <span class="p">)</span> <span class="n">VALUES</span> <span class="p">(</span> <span class="n">ST_GeomFromText</span><span class="p">(</span><span class="s1">&#39;MULTISURFACE(</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">test</span> <span class="p">(</span> <span class="n">g</span><span class="p">,</span> <span class="nb">id</span> <span class="p">)</span> <span class="n">VALUES</span> <span class="p">(</span> <span class="n">ST_GeomFromText</span><span class="p">(</span><span class="s1">'MULTISURFACE(</span>
                   <span class="n">CURVEPOLYGON</span><span class="p">(</span><span class="n">CIRCULARSTRING</span><span class="p">(</span><span class="mi">0</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span> <span class="mi">4</span><span class="p">,</span>
                   <span class="mi">0</span> <span class="mi">0</span><span class="p">),(</span><span class="mi">1</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">)),((</span><span class="mi">10</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">14</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">11</span> <span class="mi">10</span><span class="p">,</span>
-                  <span class="mi">10</span> <span class="mi">10</span><span class="p">),(</span><span class="mi">11</span> <span class="mi">11</span><span class="p">,</span> <span class="mf">11.5</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span> <span class="mf">11.5</span><span class="p">,</span> <span class="mi">11</span> <span class="mi">11</span><span class="p">)))</span><span class="s1">&#39;, -1), 7);</span>
+                  <span class="mi">10</span> <span class="mi">10</span><span class="p">),(</span><span class="mi">11</span> <span class="mi">11</span><span class="p">,</span> <span class="mf">11.5</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span> <span class="mf">11.5</span><span class="p">,</span> <span class="mi">11</span> <span class="mi">11</span><span class="p">)))</span><span class="s1">', -1), 7);</span>
 </pre></div>
 </div>
 <p>An example MapServer layer might look like:</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
-  <span class="k">NAME</span> <span class="s">&quot;curves_poly&quot;</span>
+  <span class="k">NAME</span> <span class="s">"curves_poly"</span>
   <span class="k">STATUS</span> <span class="nb">DEFAULT</span>
   <span class="k">TYPE</span> <span class="nb">POLYGON</span>
   <span class="k">CONNECTIONTYPE</span> <span class="nb">postgis</span>
-  <span class="k">CONNECTION</span> <span class="s">&quot;user=postgres password=postgres dbname=curves host=localhost port=5432&quot;</span>
-  <span class="k">DATA</span> <span class="s">&quot;g from test using SRID=-1 using unique id&quot;</span>
+  <span class="k">CONNECTION</span> <span class="s">"user=postgres password=postgres dbname=curves host=localhost port=5432"</span>
+  <span class="k">DATA</span> <span class="s">"g from test using SRID=-1 using unique id"</span>
   <span class="k">CLASS</span>
     <span class="k">STYLE</span>
       <span class="k">COLOR</span> <span class="mi">128</span> <span class="mi">128</span> <span class="mi">128</span>
@@ -703,14 +703,14 @@ through MapServer directly.</p>
 <p>If you cannot upgrade to MapServer 6.0, then you can use the PostGIS function <em>ST_CurveToLine()</em> in your
 MapServer LAYER to draw the curves (note that this is much slower however):</p>
 <div class="highlight-mapfile notranslate"><div class="highlight"><pre><span></span><span class="k">LAYER</span>
-  <span class="k">NAME</span> <span class="s">&quot;curves_poly&quot;</span>
+  <span class="k">NAME</span> <span class="s">"curves_poly"</span>
   <span class="k">STATUS</span> <span class="nb">DEFAULT</span>
   <span class="k">TYPE</span> <span class="nb">POLYGON</span>
   <span class="k">CONNECTIONTYPE</span> <span class="nb">postgis</span>
-  <span class="k">CONNECTION</span> <span class="s">&quot;user=postgres password=postgres dbname=curves host=localhost port=5432&quot;</span>
-  <span class="k">DATA</span> <span class="s">&quot;wkb_geometry from (select c.id, ST_CurveToLine(c.g) as</span>
+  <span class="k">CONNECTION</span> <span class="s">"user=postgres password=postgres dbname=curves host=localhost port=5432"</span>
+  <span class="k">DATA</span> <span class="s">"wkb_geometry from (select c.id, ST_CurveToLine(c.g) as</span>
                            <span class="err">wkb_geometry</span> <span class="k">from</span> <span class="err">c</span><span class="p">)</span> <span class="err">as</span> <span class="err">sub</span><span class="nb">query</span> <span class="err">using</span>
-                           <span class="err">unique</span> <span class="err">id</span> <span class="err">using</span> <span class="err">SRID</span><span class="o">=</span><span class="p">-</span><span class="mi">1</span><span class="s">&quot;</span>
+                           <span class="err">unique</span> <span class="err">id</span> <span class="err">using</span> <span class="err">SRID</span><span class="o">=</span><span class="p">-</span><span class="mi">1</span><span class="s">"</span>
   <span class="k">CLASS</span>
     <span class="k">STYLE</span>
       <span class="k">COLOR</span> <span class="mi">128</span> <span class="mi">128</span> <span class="mi">128</span>
@@ -805,7 +805,7 @@ MapServer LAYER to draw the curves (note that this is much slower however):</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; <a href="../../copyright.html">Të drejta kopjimi</a> 2026, Open Source Geospatial Foundation.
-      Përditësuar së fundi më 2026-07-15.
+      Përditësuar së fundi më 2026-09-06.
       Krijuar duke përdorur <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>

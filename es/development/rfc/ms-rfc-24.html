@@ -224,17 +224,17 @@ of mapserver-HEAD as of 31st December 2006.</p>
 <section id="object-equality-identity">
 <h3>Object equality/identity<a class="headerlink" href="#object-equality-identity" title="Link to this heading">¶</a></h3>
 <p>Consider the following Java MapScript code:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapObj</span> <span class="nb">map</span><span class="o">=</span><span class="n">new</span> <span class="n">mapObj</span><span class="p">(</span><span class="s2">&quot;my.map&quot;</span><span class="p">);</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapObj</span> <span class="nb">map</span><span class="o">=</span><span class="n">new</span> <span class="n">mapObj</span><span class="p">(</span><span class="s2">"my.map"</span><span class="p">);</span>
 <span class="n">layerObj</span> <span class="n">layer</span><span class="o">=</span><span class="n">new</span> <span class="n">layerObj</span><span class="p">(</span><span class="n">null</span><span class="p">);</span>
 <span class="o">//</span> <span class="n">add</span> <span class="n">layer</span> <span class="n">to</span> <span class="n">the</span> <span class="nb">map</span>
 <span class="nb">int</span> <span class="n">index</span><span class="o">=</span><span class="nb">map</span><span class="o">.</span><span class="n">insertLayer</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
 <span class="o">//</span> <span class="nb">set</span> <span class="n">its</span> <span class="n">name</span>
-<span class="n">layer</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;Change me&quot;</span><span class="p">);</span>
+<span class="n">layer</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">"Change me"</span><span class="p">);</span>
 
 <span class="o">//</span> <span class="n">fetch</span> <span class="kn">from</span><span class="w"> </span><span class="nn">map</span>
 <span class="n">layerObj</span> <span class="n">newLayer</span><span class="o">=</span><span class="nb">map</span><span class="o">.</span><span class="n">getLayer</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
 <span class="o">//</span> <span class="n">they</span> <span class="n">should</span> <span class="n">be</span> <span class="n">the</span> <span class="n">same</span><span class="o">...</span>
-<span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="n">newLayer</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot;==&quot;</span><span class="o">+</span><span class="n">layer</span><span class="o">.</span><span class="n">getName</span><span class="p">());</span>
+<span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="n">newLayer</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span><span class="o">+</span><span class="s2">"=="</span><span class="o">+</span><span class="n">layer</span><span class="o">.</span><span class="n">getName</span><span class="p">());</span>
 <span class="o">//</span> <span class="ow">and</span> <span class="n">this</span> <span class="n">should</span> <span class="nb">print</span> <span class="n">true</span> <span class="p">(</span><span class="n">it</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">reference</span> <span class="n">comparison</span><span class="p">)</span>
 <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="n">newLayer</span><span class="o">==</span><span class="n">layer</span><span class="p">);</span>
 </pre></div>
@@ -254,12 +254,12 @@ This currently happens for the most used insert methods (i.e. <em>insertClass</e
 <p>Objects created through MapScript can be garbage-collected «early», when there
 are live objects still referencing them.
 See this example in Java:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mapObj map=new mapObj(&quot;data/emptymap.map&quot;);
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mapObj map=new mapObj("data/emptymap.map");
 
 layerObj layer=new layerObj(map);
-layer.setName(&quot;Layer 0&quot;);
+layer.setName("Layer 0");
 classObj clazz=new classObj(null);
-clazz.setName(&quot;Clazz 0 NULL&quot;);
+clazz.setName("Clazz 0 NULL");
 int pos=layer.insertClass(clazz, -1);
 
 map=null;
@@ -276,12 +276,12 @@ clazz.getLayer().getMap().draw();
 <p>and its Perl equivalent:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>use mapscript;
 
-$map = new mapscript::mapObj(&quot;../../tests/test.map&quot;);
+$map = new mapscript::mapObj("../../tests/test.map");
 $layer = new mapscript::layerObj($map);
 
-print &quot;Before first draw for $layer-&gt;{map}\n&quot;;
+print "Before first draw for $layer-&gt;{map}\n";
 $layer-&gt;{map}-&gt;draw();
-print &quot;Map drawn, now undef map\n&quot;;
+print "Map drawn, now undef map\n";
 $map = undef;
 $map1=$layer-&gt;{map}-&gt;draw();
 // perl interpreter segfault
@@ -426,14 +426,14 @@ the new feature</p></li>
 <li><p>the macro will be modified to suit the implementation at previous item</p></li>
 </ol>
 <p>To implement item 1 we will use a perl pie like the following:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;s/([mM])ap-&gt;layers\[(.*?)\]\]\./GET_LAYER(</span><span class="se">\1</span><span class="s2">ap, </span><span class="se">\2</span><span class="s2">\])-&gt;/g&quot;</span> <span class="o">*.</span><span class="n">c</span>
-<span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;s/([mM])ap-&gt;layers\[(.*?)\]\./GET_LAYER(</span><span class="se">\1</span><span class="s2">ap, </span><span class="se">\2</span><span class="s2">)-&gt;/g&quot;</span> <span class="o">*.</span><span class="n">c</span>
-<span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;s/([mM])ap-&gt;layers\[(.*?)\]\]/GET_LAYER(</span><span class="se">\1</span><span class="s2">ap, </span><span class="se">\2</span><span class="s2">\])/g&quot;</span> <span class="o">*.</span><span class="n">c</span>
-<span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;s/([mM])ap-&gt;layers\[(.*?)\]/GET_LAYER(</span><span class="se">\1</span><span class="s2">ap, </span><span class="se">\2</span><span class="s2">)/g&quot;</span> <span class="o">*.</span><span class="n">c</span>
-<span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;s/dst-&gt;layers\[(.*?)\]\./GET_LAYER(dst, </span><span class="se">\1</span><span class="s2">)-&gt;/g&quot;</span> <span class="o">*.</span><span class="n">c</span>
-<span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;s/src-&gt;layers\[(.*?)\]\./GET_LAYER(src, </span><span class="se">\1</span><span class="s2">)-&gt;/g&quot;</span> <span class="o">*.</span><span class="n">c</span>
-<span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;s/dst-&gt;layers\[(.*?)\]/GET_LAYER(dst, </span><span class="se">\1</span><span class="s2">)/g&quot;</span> <span class="o">*.</span><span class="n">c</span>
-<span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;s/src-&gt;layers\[(.*?)\]/GET_LAYER(src, </span><span class="se">\1</span><span class="s2">)/g&quot;</span> <span class="o">*.</span><span class="n">c</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">"s/([mM])ap-&gt;layers\[(.*?)\]\]\./GET_LAYER(</span><span class="se">\1</span><span class="s2">ap, </span><span class="se">\2</span><span class="s2">\])-&gt;/g"</span> <span class="o">*.</span><span class="n">c</span>
+<span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">"s/([mM])ap-&gt;layers\[(.*?)\]\./GET_LAYER(</span><span class="se">\1</span><span class="s2">ap, </span><span class="se">\2</span><span class="s2">)-&gt;/g"</span> <span class="o">*.</span><span class="n">c</span>
+<span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">"s/([mM])ap-&gt;layers\[(.*?)\]\]/GET_LAYER(</span><span class="se">\1</span><span class="s2">ap, </span><span class="se">\2</span><span class="s2">\])/g"</span> <span class="o">*.</span><span class="n">c</span>
+<span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">"s/([mM])ap-&gt;layers\[(.*?)\]/GET_LAYER(</span><span class="se">\1</span><span class="s2">ap, </span><span class="se">\2</span><span class="s2">)/g"</span> <span class="o">*.</span><span class="n">c</span>
+<span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">"s/dst-&gt;layers\[(.*?)\]\./GET_LAYER(dst, </span><span class="se">\1</span><span class="s2">)-&gt;/g"</span> <span class="o">*.</span><span class="n">c</span>
+<span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">"s/src-&gt;layers\[(.*?)\]\./GET_LAYER(src, </span><span class="se">\1</span><span class="s2">)-&gt;/g"</span> <span class="o">*.</span><span class="n">c</span>
+<span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">"s/dst-&gt;layers\[(.*?)\]/GET_LAYER(dst, </span><span class="se">\1</span><span class="s2">)/g"</span> <span class="o">*.</span><span class="n">c</span>
+<span class="n">perl</span> <span class="o">-</span><span class="n">pi</span> <span class="o">-</span><span class="n">e</span> <span class="s2">"s/src-&gt;layers\[(.*?)\]/GET_LAYER(src, </span><span class="se">\1</span><span class="s2">)/g"</span> <span class="o">*.</span><span class="n">c</span>
 </pre></div>
 </div>
 <p>and this is the macro that will be used:</p>
@@ -538,7 +538,7 @@ be adopted for those languages that support OOrientation.</p>
 <section id="perl-mapscript-code-example-for-layerobj">
 <h3>PERL: MapScript code example for layerObj<a class="headerlink" href="#perl-mapscript-code-example-for-layerobj" title="Link to this heading">¶</a></h3>
 <p>Code example for layerObj (<em>plmodule.i</em>):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>%feature(&quot;shadow&quot;) layerObj(mapObj *map)
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>%feature("shadow") layerObj(mapObj *map)
 %{
 sub new {
         my $pkg = shift;
@@ -552,10 +552,10 @@ sub new {
 }
 %}
 
-%feature(&quot;shadow&quot;) ~layerObj()
+%feature("shadow") ~layerObj()
 %{
 sub DESTROY {
-        return unless $_[0]-&gt;isa(&#39;HASH&#39;);
+        return unless $_[0]-&gt;isa('HASH');
         my $self = tied(%{$_[0]});
         return unless defined $self;
         delete $ITERATORS{$self};
@@ -569,7 +569,7 @@ sub DESTROY {
         %LAYERMAP={};
         sub LAYER_ADD_MAP_REF {
                 my ($layer, $map)=@_;
-                #print &quot;MAP key=&quot; . tied(%$layer) . &quot;\n&quot;;
+                #print "MAP key=" . tied(%$layer) . "\n";
                 $LAYERMAP{ tied(%$layer) }=$map;
         }
 
@@ -2157,7 +2157,7 @@ and be described under this section.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; <a href="../../copyright.html">Copyright</a> 2026, Open Source Geospatial Foundation.
-      Actualizado por última vez en 2026-07-15.
+      Actualizado por última vez en 2026-09-06.
       Creado usando <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>

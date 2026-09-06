@@ -243,6 +243,14 @@ template. This might pass the current mapextent to a new MapServer
 call. <em>[mapext]</em> is substituted by a space delimited set of lower left
 and upper right coordinates. This would break the URL. <em>[mapext_esc]</em>
 is substituted by a proper encoded set.</p>
+<div class="admonition warning">
+<p class="admonition-title">Uyarı</p>
+<p>If the datasource is untrusted, use the escaped versions of template
+substitutions to avoid cross-site scripting (XSS) vulnerabilities.</p>
+<p>For example, if a field contains <code class="docutils literal notranslate"><span class="pre">&lt;script&gt;alert(1)&lt;/script&gt;</span></code> and the
+unescaped value is included in the generated HTML, the script could be
+executed in the user’s browser.</p>
+</div>
 </section>
 </section>
 <section id="format">
@@ -273,7 +281,7 @@ which looks like:</p>
 <li><dl>
 <dt>format=</dt><dd><p>A format string as supported by the standard C strftime()
 function.  As an example, the default format is defined as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">date</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%b/%Y:%H:%M:%S %z&quot;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">date</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"</span><span class="si">%d</span><span class="s2">/%b/%Y:%H:%M:%S %z"</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -435,7 +443,7 @@ might return:</p>
 <dt>format=</dt><dd><p>Format of the coordinates.  Default is “$minx $miny $maxx
 $maxy”.  For example, to add commas to the coordinates
 you would use:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">mapext</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$minx,$miny,$maxx,$maxy&quot;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">mapext</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"$minx,$miny,$maxx,$maxy"</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -503,7 +511,7 @@ might return:</p>
 <dt>format=</dt><dd><p>Format of the coordinates.  Default is “$minx $miny $maxx
 $maxy”.  For example, to add commas to the coordinates
 you would use:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">rawext</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$minx,$miny,$maxx,$maxy&quot;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">rawext</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"$minx,$miny,$maxx,$maxy"</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -573,7 +581,7 @@ Specified in map coordinates.  For example,
 <dt>format=</dt><dd><p>Format of the coordinates.  Default is “$minx $miny $maxx
 $maxy”.  For example, to add commas to the coordinates
 you would use:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">mapext_latlon</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$minx,$miny,$maxx,$maxy&quot;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">mapext_latlon</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"$minx,$miny,$maxx,$maxy"</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -637,7 +645,7 @@ might return:</p>
 <dt>format=</dt><dd><p>Format of the coordinates.  Default is “$minx $miny $maxx
 $maxy”.  For example, to add commas to the coordinates
 you would use:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">refwext</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$minx,$miny,$maxx,$maxy&quot;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">refwext</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"$minx,$miny,$maxx,$maxy"</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -741,7 +749,7 @@ might return:</p>
 <dt>format=</dt><dd><p>Format of the coordinates.  Default is “$minx $miny $maxx
 $maxy”.  For example, to add commas to the coordinates
 you would use:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">shpext</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$minx,$miny,$maxx,$maxy&quot;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">shpext</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"$minx,$miny,$maxx,$maxy"</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -855,15 +863,15 @@ coordinates.  Defaults are “”.</p>
 </li>
 </ul>
 <p>As a simple example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">shpxy</span> <span class="n">xh</span><span class="o">=</span><span class="s2">&quot;(&quot;</span> <span class="n">yf</span><span class="o">=</span><span class="s2">&quot;)&quot;</span><span class="p">]</span> <span class="n">will</span> <span class="n">result</span> <span class="ow">in</span><span class="p">:</span> <span class="p">(</span><span class="n">x1</span> <span class="n">y1</span><span class="p">),(</span><span class="n">x2</span> <span class="n">y2</span><span class="p">),(</span><span class="n">x3</span> <span class="n">y3</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">shpxy</span> <span class="n">xh</span><span class="o">=</span><span class="s2">"("</span> <span class="n">yf</span><span class="o">=</span><span class="s2">")"</span><span class="p">]</span> <span class="n">will</span> <span class="n">result</span> <span class="ow">in</span><span class="p">:</span> <span class="p">(</span><span class="n">x1</span> <span class="n">y1</span><span class="p">),(</span><span class="n">x2</span> <span class="n">y2</span><span class="p">),(</span><span class="n">x3</span> <span class="n">y3</span><span class="p">)</span>
 
 <span class="ow">or</span>
 
-<span class="p">[</span><span class="n">shpxy</span> <span class="n">precision</span><span class="o">=</span><span class="s2">&quot;2&quot;</span> <span class="n">xh</span><span class="o">=</span><span class="s2">&quot;(&quot;</span> <span class="n">yf</span><span class="o">=</span><span class="s2">&quot;)&quot;</span><span class="p">]</span> <span class="n">will</span> <span class="n">result</span> <span class="ow">in</span><span class="p">:</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span><span class="p">)</span> <span class="p">(</span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">)</span> <span class="p">(</span><span class="n">x3</span><span class="p">,</span><span class="n">y3</span><span class="p">)</span>
+<span class="p">[</span><span class="n">shpxy</span> <span class="n">precision</span><span class="o">=</span><span class="s2">"2"</span> <span class="n">xh</span><span class="o">=</span><span class="s2">"("</span> <span class="n">yf</span><span class="o">=</span><span class="s2">")"</span><span class="p">]</span> <span class="n">will</span> <span class="n">result</span> <span class="ow">in</span><span class="p">:</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span><span class="p">)</span> <span class="p">(</span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">)</span> <span class="p">(</span><span class="n">x3</span><span class="p">,</span><span class="n">y3</span><span class="p">)</span>
 
 <span class="ow">or</span>
 
-<span class="p">[</span><span class="n">shpxy</span> <span class="n">precision</span><span class="o">=</span><span class="s2">&quot;2&quot;</span> <span class="n">xf</span><span class="o">=</span><span class="s2">&quot; &quot;</span> <span class="n">xh</span><span class="o">=</span><span class="s2">&quot;(&quot;</span> <span class="n">yf</span><span class="o">=</span><span class="s2">&quot;)&quot;</span><span class="p">]</span> <span class="n">will</span> <span class="n">result</span> <span class="ow">in</span><span class="p">:</span> <span class="p">(</span><span class="n">x1</span> <span class="n">y1</span><span class="p">)</span> <span class="p">(</span><span class="n">x2</span> <span class="n">y2</span><span class="p">)</span> <span class="p">(</span><span class="n">x3</span> <span class="n">y3</span><span class="p">)</span>
+<span class="p">[</span><span class="n">shpxy</span> <span class="n">precision</span><span class="o">=</span><span class="s2">"2"</span> <span class="n">xf</span><span class="o">=</span><span class="s2">" "</span> <span class="n">xh</span><span class="o">=</span><span class="s2">"("</span> <span class="n">yf</span><span class="o">=</span><span class="s2">")"</span><span class="p">]</span> <span class="n">will</span> <span class="n">result</span> <span class="ow">in</span><span class="p">:</span> <span class="p">(</span><span class="n">x1</span> <span class="n">y1</span><span class="p">)</span> <span class="p">(</span><span class="n">x2</span> <span class="n">y2</span><span class="p">)</span> <span class="p">(</span><span class="n">x3</span> <span class="n">y3</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>And a more complicated example of outputting KML for
@@ -873,11 +881,11 @@ parameters must all be on one line):</p>
     <span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span>
       <span class="o">&lt;</span><span class="n">coordinates</span><span class="o">&gt;</span><span class="p">[</span><span class="n">shplabel</span> <span class="n">proj</span><span class="o">=</span><span class="n">epsg</span><span class="p">:</span><span class="mi">4326</span> <span class="n">precision</span><span class="o">=</span><span class="mi">10</span><span class="p">],</span><span class="mi">0</span><span class="o">&lt;/</span><span class="n">coordinates</span><span class="o">&gt;</span>
     <span class="o">&lt;/</span><span class="n">Point</span><span class="o">&gt;</span>
-    <span class="p">[</span><span class="n">shpxy</span> <span class="n">ph</span><span class="o">=</span><span class="s2">&quot;&lt;Polygon&gt;&lt;tessellate&gt;1&lt;/tessellate&gt;&quot;</span> <span class="n">pf</span><span class="o">=</span><span class="s2">&quot;&lt;/Polygon&gt;&quot;</span> <span class="n">xf</span><span class="o">=</span><span class="s2">&quot;,&quot;</span>
-     <span class="n">xh</span><span class="o">=</span><span class="s2">&quot; &quot;</span> <span class="n">yh</span><span class="o">=</span><span class="s2">&quot; &quot;</span> <span class="n">yf</span><span class="o">=</span><span class="s2">&quot;,0 &quot;</span> <span class="n">orh</span><span class="o">=</span><span class="s2">&quot;&lt;outerBoundaryIs&gt;&lt;LinearRing&gt;&lt;coordinates&gt;&quot;</span>
-     <span class="n">orf</span><span class="o">=</span><span class="s2">&quot;&lt;/coordinates&gt;&lt;/LinearRing&gt;&lt;/outerBoundaryIs&gt;&quot;</span>
-     <span class="n">irh</span><span class="o">=</span><span class="s2">&quot;&lt;innerBoundaryIs&gt;&lt;LinearRing&gt;&lt;coordinates&gt;&quot;</span>
-     <span class="n">irf</span><span class="o">=</span><span class="s2">&quot;&lt;/coordinates&gt;&lt;/LinearRing&gt;&lt;/innerBoundaryIs&gt;&quot;</span> <span class="n">proj</span><span class="o">=</span><span class="n">epsg</span><span class="p">:</span><span class="mi">4326</span>
+    <span class="p">[</span><span class="n">shpxy</span> <span class="n">ph</span><span class="o">=</span><span class="s2">"&lt;Polygon&gt;&lt;tessellate&gt;1&lt;/tessellate&gt;"</span> <span class="n">pf</span><span class="o">=</span><span class="s2">"&lt;/Polygon&gt;"</span> <span class="n">xf</span><span class="o">=</span><span class="s2">","</span>
+     <span class="n">xh</span><span class="o">=</span><span class="s2">" "</span> <span class="n">yh</span><span class="o">=</span><span class="s2">" "</span> <span class="n">yf</span><span class="o">=</span><span class="s2">",0 "</span> <span class="n">orh</span><span class="o">=</span><span class="s2">"&lt;outerBoundaryIs&gt;&lt;LinearRing&gt;&lt;coordinates&gt;"</span>
+     <span class="n">orf</span><span class="o">=</span><span class="s2">"&lt;/coordinates&gt;&lt;/LinearRing&gt;&lt;/outerBoundaryIs&gt;"</span>
+     <span class="n">irh</span><span class="o">=</span><span class="s2">"&lt;innerBoundaryIs&gt;&lt;LinearRing&gt;&lt;coordinates&gt;"</span>
+     <span class="n">irf</span><span class="o">=</span><span class="s2">"&lt;/coordinates&gt;&lt;/LinearRing&gt;&lt;/innerBoundaryIs&gt;"</span> <span class="n">proj</span><span class="o">=</span><span class="n">epsg</span><span class="p">:</span><span class="mi">4326</span>
      <span class="n">precision</span><span class="o">=</span><span class="mi">10</span><span class="p">]</span>
 <span class="o">&lt;/</span><span class="n">MultiGeometry</span><span class="o">&gt;</span>
 </pre></div>
@@ -967,9 +975,12 @@ to the right. Useful to create fixed width strings.</p>
 </li>
 </ul>
 <p>As a simple example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">item</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;area&quot;</span> <span class="n">precision</span><span class="o">=</span><span class="s2">&quot;2&quot;</span> <span class="n">commify</span><span class="o">=</span><span class="s2">&quot;2&quot;</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;Area is $value&quot;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">item</span> <span class="n">name</span><span class="o">=</span><span class="s2">"area"</span> <span class="n">precision</span><span class="o">=</span><span class="s2">"2"</span> <span class="n">commify</span><span class="o">=</span><span class="s2">"2"</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"Area is $value"</span><span class="p">]</span>
 </pre></div>
 </div>
+</dd>
+<dt>[values]</dt><dd><p>All attribute values of the feature in a single comma-delimited string.
+The values are unescaped. Available only when processing query results.</p>
 </dd>
 <dt>[attribute name],[attrribute name_esc],[attribute item name_raw]</dt><dd><p>Attribute name from the data table of a queried layer. Only
 attributes for the active query layers are accessible. Case must
@@ -1037,8 +1048,8 @@ it covers MapServer specific templates (e.g. the [map], [mapext]) and
 user defined templates (e.g. [htmlroot] or [program]) used to store
 application settings.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>&lt;!-- MapServer Template --&gt;
-<span class="linenos"> 2</span>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;
-<span class="linenos"> 3</span>       &quot;http://www.w3.org/TR/html4/transitional.dtd&quot;&gt;
+<span class="linenos"> 2</span>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+<span class="linenos"> 3</span>       "http://www.w3.org/TR/html4/transitional.dtd"&gt;
 <span class="linenos"> 4</span>&lt;html&gt;
 <span class="linenos"> 5</span>  &lt;head&gt;
 <span class="linenos"> 6</span>    &lt;title&gt;MapServer Template Sample&lt;/title&gt;
@@ -1048,19 +1059,19 @@ application settings.</p>
 <span class="linenos">10</span>    MapServer Template Sample&lt;br&gt;
 <span class="linenos">11</span>
 <span class="linenos">12</span>    &lt;!-- The central form the application is based on. --&gt;
-<span class="linenos">13</span>    &lt;form method=&quot;GET&quot; action=&quot;[program]&quot;&gt;
+<span class="linenos">13</span>    &lt;form method="GET" action="[program]"&gt;
 <span class="linenos">14</span>
 <span class="linenos">15</span>    &lt;!-- CGI MapServer applications are server stateless in principle,
-<span class="linenos">16</span>         all information must be &quot;stored&quot; in the client. This includes
+<span class="linenos">16</span>         all information must be "stored" in the client. This includes
 <span class="linenos">17</span>         some basic settings as below.
 <span class="linenos">18</span>         The example is based on the pan and zoom test suite:
 <span class="linenos">19</span>         http://maps.dnr.state.mn.us/mapserver_demos/tests36/           --&gt;
-<span class="linenos">20</span>      &lt;input type=&quot;hidden&quot; name=&quot;map&quot; value=&quot;[map]&quot;&gt;
-<span class="linenos">21</span>      &lt;input type=&quot;hidden&quot; name=&quot;imgext&quot; value=&quot;[mapext]&quot;&gt;
-<span class="linenos">22</span>      &lt;input type=&quot;hidden&quot; name=&quot;imgxy&quot; value=&quot;149.5 199.5&quot;&gt;
-<span class="linenos">23</span>      &lt;input type=&quot;hidden&quot; name=&quot;program&quot; value=&quot;[program]&quot;&gt;
-<span class="linenos">24</span>      &lt;input type=&quot;hidden&quot; name=&quot;htmlroot&quot; value=&quot;[htmlroot]&quot;&gt;
-<span class="linenos">25</span>      &lt;input type=&quot;hidden&quot; name=&quot;map_web&quot; value=&quot;[map_web]&quot;&gt;
+<span class="linenos">20</span>      &lt;input type="hidden" name="map" value="[map]"&gt;
+<span class="linenos">21</span>      &lt;input type="hidden" name="imgext" value="[mapext]"&gt;
+<span class="linenos">22</span>      &lt;input type="hidden" name="imgxy" value="149.5 199.5"&gt;
+<span class="linenos">23</span>      &lt;input type="hidden" name="program" value="[program]"&gt;
+<span class="linenos">24</span>      &lt;input type="hidden" name="htmlroot" value="[htmlroot]"&gt;
+<span class="linenos">25</span>      &lt;input type="hidden" name="map_web" value="[map_web]"&gt;
 <span class="linenos">26</span>
 <span class="linenos">27</span>      &lt;!-- A table for minimal page formatting. --&gt;
 <span class="linenos">28</span>      &lt;table border=0 cellpadding=5&gt;
@@ -1068,11 +1079,11 @@ application settings.</p>
 <span class="linenos">30</span>        &lt;!-- First column: Map and scale bar --&gt;
 <span class="linenos">31</span>        &lt;td align=center&gt;
 <span class="linenos">32</span>          &lt;!-- The map --&gt;
-<span class="linenos">33</span>          &lt;input type=&quot;image&quot; name=&quot;img&quot; src=&quot;[img]&quot;
-<span class="linenos">34</span>                 style=&quot;border:0;width:300;height:400&quot;&gt;
+<span class="linenos">33</span>          &lt;input type="image" name="img" src="[img]"
+<span class="linenos">34</span>                 style="border:0;width:300;height:400"&gt;
 <span class="linenos">35</span>          &lt;br&gt;
 <span class="linenos">36</span>          &lt;!-- The scale bar--&gt;
-<span class="linenos">37</span>          &lt;img src=&quot;[scalebar]&quot; alt=&quot;Scale Bar&quot;&gt;
+<span class="linenos">37</span>          &lt;img src="[scalebar]" alt="Scale Bar"&gt;
 <span class="linenos">38</span>        &lt;/td&gt;
 <span class="linenos">39</span>
 <span class="linenos">40</span>        &lt;!-- Second column: Zoom direction, Legend and Reference --&gt;
@@ -1080,20 +1091,20 @@ application settings.</p>
 <span class="linenos">42</span>          &lt;!-- Zoom direction --&gt;
 <span class="linenos">43</span>          &lt;b&gt;Map Controls&lt;/b&gt;&lt;br&gt;
 <span class="linenos">44</span>          Set your zoom option:&lt;br&gt;
-<span class="linenos">45</span>          &lt;select name=&quot;zoom&quot; size=&quot;1&quot;&gt;
-<span class="linenos">46</span>            &lt;option value=&quot;2&quot; [zoom_2_select]&gt; Zoom in 2 times
-<span class="linenos">47</span>            &lt;option value=&quot;1&quot;  [zoom_1_select]&gt; Recenter Map
-<span class="linenos">48</span>            &lt;option value=&quot;-2&quot; [zoom_-2_select]&gt; Zoom out 2 times
+<span class="linenos">45</span>          &lt;select name="zoom" size="1"&gt;
+<span class="linenos">46</span>            &lt;option value="2" [zoom_2_select]&gt; Zoom in 2 times
+<span class="linenos">47</span>            &lt;option value="1"  [zoom_1_select]&gt; Recenter Map
+<span class="linenos">48</span>            &lt;option value="-2" [zoom_-2_select]&gt; Zoom out 2 times
 <span class="linenos">49</span>          &lt;/select&gt;
 <span class="linenos">50</span>          &lt;br&gt;
 <span class="linenos">51</span>
 <span class="linenos">52</span>          &lt;!-- Legend --&gt;
 <span class="linenos">53</span>          &lt;b&gt;Legend&lt;/b&gt;&lt;br&gt;
-<span class="linenos">54</span>          &lt;img src=&quot;[legend]&quot; alt=&quot;Legend&quot;&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+<span class="linenos">54</span>          &lt;img src="[legend]" alt="Legend"&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
 <span class="linenos">55</span>
 <span class="linenos">56</span>          &lt;!-- Reference map --&gt;
-<span class="linenos">57</span>         &lt;input type=&quot;image&quot; name=&quot;ref&quot; src=&quot;[ref]&quot;
-<span class="linenos">58</span>                style=&quot;border:0;width:150;height:150&quot;&gt;
+<span class="linenos">57</span>         &lt;input type="image" name="ref" src="[ref]"
+<span class="linenos">58</span>                style="border:0;width:150;height:150"&gt;
 <span class="linenos">59</span>        &lt;/td&gt;
 <span class="linenos">60</span>      &lt;/tr&gt;
 <span class="linenos">61</span>      &lt;/table&gt;
@@ -1181,7 +1192,7 @@ application settings.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; <a href="../copyright.html">Telif hakkı</a> 2026, Open Source Geospatial Foundation.
-      Son güncelleme: 2026-07-15.
+      Son güncelleme: 2026-09-06.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>
